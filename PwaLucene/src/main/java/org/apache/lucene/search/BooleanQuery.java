@@ -66,7 +66,7 @@ public class BooleanQuery extends Query {
    * query search.
    * <p>When this parameter becomes a bottleneck for a Query one can use a
    * Filter. For example instead of a {@link PwaClosestQuery} one can use a
-   * {@link ArquivoWebClosestFilter}.
+   * {@link PwaClosestFilter}.
    * <p>Normally the buffers are allocated by the JVM. When using for example
    * {@link org.apache.lucene.store.MMapDirectory} the buffering is left to
    * the operating system.
@@ -378,11 +378,14 @@ public class BooleanQuery extends Query {
 	  return functions;
   }
   
-  private class ArquivoWebWeight extends BooleanWeight2 {
+  /**
+   * Pwa weight   
+   */
+  private class PwaWeight extends BooleanWeight2 {
 
     private Searcher searcher;
 
-    public ArquivoWebWeight(Searcher searcher) throws IOException {
+    public PwaWeight(Searcher searcher) throws IOException {
     	super(searcher);
         this.searcher=searcher;       
     }
@@ -412,7 +415,7 @@ public class BooleanQuery extends Query {
   }
 
     protected Weight createWeight(Searcher searcher) throws IOException {
-	  return new ArquivoWebWeight(searcher);
+	  return new PwaWeight(searcher);
 	  /*
 	  if (0 < minNrShouldMatch) {
 		  // :TODO: should we throw an exception if getUseScorer14 ?

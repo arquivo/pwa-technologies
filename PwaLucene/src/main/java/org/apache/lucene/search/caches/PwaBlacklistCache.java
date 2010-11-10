@@ -37,7 +37,7 @@ public class PwaBlacklistCache implements PwaCache {
 	private final static String CACHE_FILENAME="blacklist.cache";
 	//private final static String ERRORS_FILENAME="errors.urls";
 	private final static int PAGE_CODE_NOT_FOUND=404;
-	private final static int INDEX_ID=3;
+	private final static int INDEX_ID=0;
 	private final static int INC_LOG=100000;
 	//private final static long MAX_TIMEOUT_THREAD=300000; // millisec until timeout of thread
 	private static Object lockObj=new Object();	
