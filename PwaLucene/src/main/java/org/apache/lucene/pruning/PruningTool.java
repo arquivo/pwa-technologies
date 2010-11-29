@@ -48,7 +48,7 @@ public class PruningTool {
   public static int run(String[] args) throws Exception {
     if (args.length < 5) {
       System.err.println("Usage: PruningTool -impl (tf | carmel | arquivo) (-in <path1> [-in <path2> ...]) -out <outPath> -t <NN> [-del f1,f2,..] [-conf <file>]");
-      System.err.println("\t-impl (tf | carmel | arquivo)\timplementation name: TFPruningReader or CarmelPruningReader or ArquivoWebPruningReader");
+      System.err.println("\t-impl (tf | carmel | arquivo)\timplementation name: TFPruningReader or CarmelPruningReader or PwaPruningReader");
       System.err.println("\t-in path\tpath to the input index. Can specify multiple input indexes.");
       System.err.println("\t-out path\toutput path where the output index will be stored.");
       System.err.println("\t-t NN\tdefault threshold value (minimum in-document frequency) for all terms");

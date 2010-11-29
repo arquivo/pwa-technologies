@@ -37,9 +37,6 @@ public class PwaCacheManager {
 		// timestamp ranges
 		cache=new PwaDateCache(reader);
 		caches.put(cache.getFieldName(),cache);	
-		// searching types			  		  	
-		//cache=new ArquivoWebSearchTypesCache(reader,includeExtensions);
-		//caches.put(cache.getFieldName(),cache);	
 		
 		// intialize index stats
 		PwaIndexStats.getInstance(reader);

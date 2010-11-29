@@ -16,7 +16,7 @@ public class PwaPositionsManager {
 
 	private Vector<PwaTerm> terms;
 	private PwaPositions positions[];
-	private ArquivoWebPhraseQueue queue;
+	private PwaPhraseQueue queue;
 	private int minSpanCovUnordered; // minimum span including all query terms
 	private int minSpanCovOrdered; // minimum span including all query terms ordered as submited
 	private int minPairDist; // minimum distance between two query terms	
@@ -33,7 +33,7 @@ public class PwaPositionsManager {
 	public PwaPositionsManager(Vector<PwaTerm> terms) throws IOException {
 		this.terms=terms;
 		if (terms!=null) {					
-			this.queue=new ArquivoWebPhraseQueue(terms.size());
+			this.queue=new PwaPhraseQueue(terms.size());
 			this.positions=new PwaPositions[terms.size()];
 			this.field=terms.get(0).term().field();
 			this.offsetTerms=null;
@@ -180,13 +180,13 @@ public class PwaPositionsManager {
 /**	 
  * PriorityQueue
  */
-class ArquivoWebPhraseQueue extends PriorityQueue {
+class PwaPhraseQueue extends PriorityQueue {
 
 	/**
 	 * Constructor
 	 * @param size queue size
 	 */
-	public ArquivoWebPhraseQueue(int size) {
+	public PwaPhraseQueue(int size) {
 		initialize(size);
 	}
 

@@ -7,7 +7,7 @@ import org.apache.lucene.index.*;
 
 
 /**
- * Equal to ArquivoWebTerm but with a minimum term frequency's threshold
+ * Equal to PwaTerm but with a minimum term frequency's threshold
  * @author Miguel Costa
  */
 public class PwaTermLimited extends PwaTerm {
@@ -37,7 +37,7 @@ public class PwaTermLimited extends PwaTerm {
 				return true;
 			}			
 		}
-	    pointer=-1; // for ArquivoWebTermBase to return false at hasDoc()
+	    pointer=-1; // for PwaTermCommon to return false at hasDoc()
 		return false;
 	}
 	
@@ -55,7 +55,7 @@ public class PwaTermLimited extends PwaTerm {
 				return true;
 			}			
 		}
-		pointer=-1; // for ArquivoWebTermBase to return false at hasDoc()
+		pointer=-1; // for PwaTermCommon to return false at hasDoc()
 		return false;
 	}
 	

@@ -51,12 +51,12 @@ public class PwaRanker {
 			
 				if (functions.hasFunction(funct)) {
 					boost=functions.getBoost(funct);
-					score+= (new PwaTFxIDF(vecTfs,vecIdfs,fieldLength,nDocs)).score() * boost; // "TFxIDF-"+ArquivoWebIndexStats.FIELDS[i]					
+					score+= (new PwaTFxIDF(vecTfs,vecIdfs,fieldLength,nDocs)).score() * boost; // "TFxIDF-"+PwaIndexStats.FIELDS[i]					
 				}
 				funct++;
 				if (functions.hasFunction(funct)) {
 					boost=functions.getBoost(funct);
-					score+= (new PwaBM25(vecTfs,vecIdfs,fieldLength,fieldAvgLength,nDocs)).score() * boost; // "BM25-"+ArquivoWebIndexStats.FIELDS[i]				
+					score+= (new PwaBM25(vecTfs,vecIdfs,fieldLength,fieldAvgLength,nDocs)).score() * boost; // "BM25-"+PwaIndexStats.FIELDS[i]				
 				}
 				funct++;
 				
@@ -77,17 +77,17 @@ public class PwaRanker {
 					posmanagers.get(i).computeDistances(doc);
 					if (functions.hasFunction(funct)) {
 						boost=functions.getBoost(funct);
-						score+= (new PwaMinSpan(posmanagers.get(i).getMinSpanCovOrdered())).score() * boost; // "MinSpanCovOrd-"+ArquivoWebIndexStats.FIELDS[i]
+						score+= (new PwaMinSpan(posmanagers.get(i).getMinSpanCovOrdered())).score() * boost; // "MinSpanCovOrd-"+PwaIndexStats.FIELDS[i]
 					}
 					funct++;
 					if (functions.hasFunction(funct)) {
 						boost=functions.getBoost(funct);
-						score+= (new PwaMinSpan(posmanagers.get(i).getMinSpanCovUnordered())).score() * boost; // "MinSpanCovUnord-"+ArquivoWebIndexStats.FIELDS[i]
+						score+= (new PwaMinSpan(posmanagers.get(i).getMinSpanCovUnordered())).score() * boost; // "MinSpanCovUnord-"+PwaIndexStats.FIELDS[i]
 					}
 					funct++;
 					if (functions.hasFunction(funct)) {
 						boost=functions.getBoost(funct);
-						score+= (new PwaMinSpan(posmanagers.get(i).getMinPairDist())).score() * boost; // "MinPairDist-"+ArquivoWebIndexStats.FIELDS[i]
+						score+= (new PwaMinSpan(posmanagers.get(i).getMinPairDist())).score() * boost; // "MinPairDist-"+PwaIndexStats.FIELDS[i]
 					}
 					funct++;
 				}

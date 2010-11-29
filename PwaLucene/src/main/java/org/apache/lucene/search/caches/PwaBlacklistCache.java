@@ -186,8 +186,7 @@ public class PwaBlacklistCache implements PwaCache {
 	 * @param lasttDoc last document to save
 	 */
 	private void writeList(int firstDoc, int lastDoc) throws IOException {
-		//String fileDir=reader.directory().toString().substring(reader.directory().toString().indexOf('@')+1);
-		String fileDir="/opt/searcher/lixo";
+		String fileDir=reader.directory().toString().substring(reader.directory().toString().indexOf('@')+1);		
 		PrintWriter pw=new PrintWriter(new File(fileDir,CACHE_FILENAME));
 		for (int i=firstDoc;i<lastDoc;i++) {
 			if (docBlackList.get(i)) {
@@ -203,13 +202,7 @@ public class PwaBlacklistCache implements PwaCache {
 	 * @param nThreads number of threads
 	 * @param errorsFile errors filename with HTTP error and URL, or null
 	 */
-	private void identifyIdsFromUrls(int nThreads, String errorsFile) throws IOException {
-		//String fileDir=reader.directory().toString().substring(reader.directory().toString().indexOf('@')+1);
-		/*
-		String fileDir="/opt/searcher/lixo";
-		BufferedReader br = new BufferedReader(new FileReader(new File(fileDir,ERRORS_FILENAME)));
-		*/
-		
+	private void identifyIdsFromUrls(int nThreads, String errorsFile) throws IOException {			
 		idsThread=new ArrayList[nThreads];		
 		for (int i=0;i<nThreads;i++) {
 			idsThread[i]=new ArrayList<Integer>();

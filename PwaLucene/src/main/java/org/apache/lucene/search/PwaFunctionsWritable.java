@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Writable;
 
 
 /**
- * Encapsualtes the ranking functions parameters for RPC communication 
+ * Encapsulates the parameters of ranking functions for RPC communication 
  * @author Miguel Costa
  */
 public class PwaFunctionsWritable implements Writable {

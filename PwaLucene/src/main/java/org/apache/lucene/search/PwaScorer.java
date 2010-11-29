@@ -103,7 +103,7 @@ public class PwaScorer extends Scorer {
 	    		}
 	    		
 	    		termAux=null;
-    			// create ArquivoWebTerm or ArquivoWebPhrase
+    			// create PwaTerm or PwaPhrase
     			if (clauseInside.getQuery() instanceof TermQuery) {
     				termText=termsArray[0].text();				
 	    			
@@ -298,7 +298,7 @@ public class PwaScorer extends Scorer {
 					if (vecTermsAux.get(k) instanceof PwaTerm) { 
 						vecAllTerms.add((PwaTerm)vecTermsAux.get(k));
 					}
-					else { // ArquivoWebPhrase
+					else { // PwaPhrase
 						vecAllTerms.addAll(((PwaPhrase)vecTermsAux.get(k)).getTerms());
 					}
 				}
@@ -418,7 +418,7 @@ public class PwaScorer extends Scorer {
 	 * @param doc document id
 	 * @return
 	 * @throws IOException
-	 * @note a new ArquivoWebScorer should be created for each explain call. This method has lack of efficiency, it is just for debugging purposes. 
+	 * @note a new PwaScorer should be created for each explain call. This method has lack of efficiency, it is just for debugging purposes. 
 	 */
 	public Explanation explain(int doc) throws IOException {		
 		if (!joiner.skipToFromStart(doc)) { 

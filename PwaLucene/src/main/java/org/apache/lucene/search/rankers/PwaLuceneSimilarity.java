@@ -11,7 +11,7 @@ import org.apache.lucene.search.caches.PwaIndexStats;
  */
 public class PwaLuceneSimilarity implements PwaIRankingFunction {
 
-	private float boosts[]={1.0f, 4.0f, 2.0f, 2.0f, 1.5f};   // the same order as ArquivoWebIndexStats.FIELDS[]={"content","url","host","anchor","title"} 
+	private float boosts[]={1.0f, 4.0f, 2.0f, 2.0f, 1.5f};   // the same order as PwaIndexStats.FIELDS[]={"content","url","host","anchor","title"} 
 	private double score;
 	
 	
