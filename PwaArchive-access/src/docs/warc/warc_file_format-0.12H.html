@@ -1,0 +1,1596 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>IIPC Framework Working Group: The WARC File Format (Version 0.12H)</title>
+<meta http-equiv="Expires" content="Wed, 04 Apr 2007 23:50:03 +0000">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="The WARC File Format (Version 0.12H)">
+<meta name="generator" content="xml2rfc v1.32 (http://xml.resource.org/)">
+<style type='text/css'><!--
+        body {
+                font-family: verdana, charcoal, helvetica, arial, sans-serif;
+                font-size: small; color: #000; background-color: #FFF;
+                margin: 2em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+                font-weight: bold; font-style: normal;
+        }
+        h1 { color: #900; background-color: transparent; text-align: right; }
+        h3 { color: #333; background-color: transparent; }
+
+        td.RFCbug {
+                font-size: x-small; text-decoration: none;
+                width: 30px; height: 30px; padding-top: 2px;
+                text-align: justify; vertical-align: middle;
+                background-color: #000;
+        }
+        td.RFCbug span.RFC {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: bold; color: #666;
+        }
+        td.RFCbug span.hotText {
+                font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: normal; text-align: center; color: #FFF;
+        }
+
+        table.TOCbug { width: 30px; height: 15px; }
+        td.TOCbug {
+                text-align: center; width: 30px; height: 15px;
+                color: #FFF; background-color: #900;
+        }
+        td.TOCbug a {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                font-weight: bold; font-size: x-small; text-decoration: none;
+                color: #FFF; background-color: transparent;
+        }
+
+        td.header {
+                font-family: arial, helvetica, sans-serif; font-size: x-small;
+                vertical-align: top; width: 33%;
+                color: #FFF; background-color: #666;
+        }
+        td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+        td.author-text { font-size: x-small; }
+
+        /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+        a.info {
+                /* This is the key. */
+                position: relative;
+                z-index: 24;
+                text-decoration: none;
+        }
+        a.info:hover {
+                z-index: 25;
+                color: #FFF; background-color: #900;
+        }
+        a.info span { display: none; }
+        a.info:hover span.info {
+                /* The span will display just on :hover state. */
+                display: block;
+                position: absolute;
+                font-size: smaller;
+                top: 2em; left: -5em; width: 15em;
+                padding: 2px; border: 1px solid #333;
+                color: #900; background-color: #EEE;
+                text-align: left;
+        }
+
+        a { font-weight: bold; }
+        a:link    { color: #900; background-color: transparent; }
+        a:visited { color: #633; background-color: transparent; }
+        a:active  { color: #633; background-color: transparent; }
+
+        p { margin-left: 2em; margin-right: 2em; }
+        p.copyright { font-size: x-small; }
+        p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+        table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+        td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+        ol.text { margin-left: 2em; margin-right: 2em; }
+        ul.text { margin-left: 2em; margin-right: 2em; }
+        li      { margin-left: 3em; }
+
+        /* RFC-2629 <spanx>s and <artwork>s. */
+        em     { font-style: italic; }
+        strong { font-weight: bold; }
+        dfn    { font-weight: bold; font-style: normal; }
+        cite   { font-weight: normal; font-style: normal; }
+        tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+                font-family: "Courier New", Courier, monospace; font-size: small;
+        }
+        pre {
+                text-align: left; padding: 4px;
+                color: #000; background-color: #CCC;
+        }
+        pre dfn  { color: #900; }
+        pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+        pre .key { color: #33C; font-weight: bold; }
+        pre .id  { color: #900; }
+        pre .str { color: #000; background-color: #CFF; }
+        pre .val { color: #066; }
+        pre .rep { color: #909; }
+        pre .oth { color: #000; background-color: #FCF; }
+        pre .err { background-color: #FCC; }
+
+        /* RFC-2629 <texttable>s. */
+        table.all, table.full, table.headers, table.none {
+                font-size: small; text-align: center; border-width: 2px;
+                vertical-align: top; border-collapse: collapse;
+        }
+        table.all, table.full { border-style: solid; border-color: black; }
+        table.headers, table.none { border-style: none; }
+        th {
+                font-weight: bold; border-color: black;
+                border-width: 2px 2px 3px 2px;
+        }
+        table.all th, table.full th { border-style: solid; }
+        table.headers th { border-style: none none solid none; }
+        table.none th { border-style: none; }
+        table.all td {
+                border-style: solid; border-color: #333;
+                border-width: 1px 2px;
+        }
+        table.full td, table.headers td, table.none td { border-style: none; }
+
+        hr { height: 1px; }
+        hr.insert {
+                width: 80%; border-style: none; border-width: 0;
+                color: #CCC; background-color: #CCC;
+        }
+--></style>
+</head>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">IIPC Framework Working Group</td><td class="header">J. Kunze, Ed.</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">California Digital Library</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">A. Arvidson</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">Kungliga biblioteket
+    (National</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">Library of Sweden)</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">G. Mohr</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">M. Stack</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">Internet Archive</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">March 2007</td></tr>
+</table></td></tr></table>
+<h1><br />The WARC File Format (Version 0.12H)</h1>
+
+<h3>Abstract</h3>
+
+<p>The WARC (Web ARChive) format specifies a method for combining multiple 
+digital resources into an aggregate archival file together with related 
+information. Resources are dated, identified by URIs, and preceded by 
+simple text headers, using MIME entities. 
+By convention, files of this format are named with 
+the extension ".warc" and have the MIME type application/warc. The 
+WARC file format is a revision and generalization of the ARC format 
+used by the Internet Archive to store information blocks harvested by 
+web crawlers. This document specifies version 0.12 of the WARC format.
+</p><a name="toc"></a><br /><hr />
+<h3>Table of Contents</h3>
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+<a href="#anchor2">2.</a>&nbsp;
+Goals<br />
+<a href="#anchor3">3.</a>&nbsp;
+The WARC Record Model<br />
+<a href="#warc_headers">4.</a>&nbsp;
+WARC Headers<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">4.1.</a>&nbsp;
+(required) Content-ID: [content-id]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">4.2.</a>&nbsp;
+(required) Content-Length: [decimal]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">4.3.</a>&nbsp;
+(required) WARC-Date: [w3c-iso8601]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">4.4.</a>&nbsp;
+(required) WARC-Type: [record-type]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">4.5.</a>&nbsp;
+Content-Type: [mime-type]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">4.6.</a>&nbsp;
+WARC-Concurrent-To: [content-ID(s)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor10">4.7.</a>&nbsp;
+WARC-Digest: [algorithm]:[value]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor11">4.8.</a>&nbsp;
+WARC-Content-Digest: [algorithm]:[value]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor12">4.9.</a>&nbsp;
+WARC-IP-Address: [IP-address]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor13">4.10.</a>&nbsp;
+WARC-Related-To: [content-ID(s)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor14">4.11.</a>&nbsp;
+WARC-Subject-URI: [uri]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor15">4.12.</a>&nbsp;
+WARC-Truncated: [reason-token]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor16">4.13.</a>&nbsp;
+WARC-Warcinfo-ID: [content-id]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor17">4.14.</a>&nbsp;
+(warcinfo only) WARC-Filename: [filename]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor18">4.15.</a>&nbsp;
+(revisit or conversion only) WARC-Profile: [uri]<br />
+<a href="#warc_record_types">5.</a>&nbsp;
+WARC Record Types<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor19">5.1.</a>&nbsp;
+'warcinfo'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor20">5.2.</a>&nbsp;
+'response'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor21">5.3.</a>&nbsp;
+'resource'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor22">5.4.</a>&nbsp;
+'request'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor23">5.5.</a>&nbsp;
+'metadata'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor24">5.6.</a>&nbsp;
+'revisit'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor25">5.7.</a>&nbsp;
+'conversion'<br />
+<a href="#truncation">6.</a>&nbsp;
+Truncated Records<br />
+<a href="#anchor26">7.</a>&nbsp;
+WARC Application to Specific Protocols<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor27">7.1.</a>&nbsp;
+HTTP and HTTPS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor28">7.2.</a>&nbsp;
+DNS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor29">7.3.</a>&nbsp;
+Other Resources with URIs, and Other Protocols<br />
+<a href="#anchor30">8.</a>&nbsp;
+Registration of MIME Media Type application/warc<br />
+<a href="#anchor31">9.</a>&nbsp;
+IANA Considerations<br />
+<a href="#anchor32">10.</a>&nbsp;
+Acknowledgments<br />
+<a href="#revisit_profiles">Appendix&nbsp;A.</a>&nbsp;
+Initial 'revisit' profiles<br />
+<a href="#anchor33">Appendix&nbsp;A.1.</a>&nbsp;
+Identical Content Digest<br />
+<a href="#anchor34">Appendix&nbsp;A.2.</a>&nbsp;
+Server Not Modified<br />
+<a href="#conversion_profile">Appendix&nbsp;B.</a>&nbsp;
+Initial 'conversion' profile<br />
+<a href="#anchor35">Appendix&nbsp;B.1.</a>&nbsp;
+Software Command<br />
+<a href="#anchor36">Appendix&nbsp;C.</a>&nbsp;
+Compression Recommendations<br />
+<a href="#anchor37">Appendix&nbsp;C.1.</a>&nbsp;
+Record-at-a-time Compression<br />
+<a href="#anchor38">Appendix&nbsp;C.2.</a>&nbsp;
+GZIP WARC File Name Suffix<br />
+<a href="#anchor39">Appendix&nbsp;D.</a>&nbsp;
+WARC File Name and Size Recommendations<br />
+<a href="#anchor40">Appendix&nbsp;E.</a>&nbsp;
+Examples of WARC Records<br />
+<a href="#anchor41">Appendix&nbsp;E.1.</a>&nbsp;
+Example of 'warcinfo' Record<br />
+<a href="#anchor42">Appendix&nbsp;E.2.</a>&nbsp;
+Example of 'request' Record<br />
+<a href="#example_response">Appendix&nbsp;E.3.</a>&nbsp;
+Example of 'response' Record<br />
+<a href="#anchor43">Appendix&nbsp;E.4.</a>&nbsp;
+Example of 'resource' Record<br />
+<a href="#anchor44">Appendix&nbsp;E.5.</a>&nbsp;
+Example of 'metadata' Record<br />
+<a href="#anchor45">Appendix&nbsp;E.6.</a>&nbsp;
+Example of 'revisit' Record<br />
+<a href="#anchor46">Appendix&nbsp;E.7.</a>&nbsp;
+Example of 'conversion' Record<br />
+<a href="#rfc.references1">11.</a>&nbsp;
+References<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Authors' Addresses<br />
+</p>
+<br clear="all" />
+
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;
+Introduction</h3>
+
+<p>
+Content on the  World Wide Web is ephemeral.  Everyday websites and web pages
+are created, changed, relocated and disappear.  For the past ten years, memory
+institutions have tried to find the most appropriate means of collecting and
+keeping track of this important, transitory material. One approach uses a
+web crawler to take 'snapshots' of the web, or of parts of the web, at
+particular moments in time.  Web crawlers are software programs which browse
+the web in an automated manner according to a set of policies.  A crawler
+starts with a list of URLs to visit.  As it visits each URL, it makes a copy
+of the visited page and then extracts all hyperlinks -- links to other pages,
+images, videos, scripting or style instructions, etc. -- to add to its queue
+of URLs to visit next.  During any given web crawl, a crawler can collect
+millions of pages.  The accumulated captures from many web crawls can run
+into the billions.  An efficient format for storing and preserving the
+captures of large-scale web harvests is critical.  This document describes
+the WARC (Web ARChive) file format.
+
+</p>
+<p>
+The WARC file format offers a convention for concatenating
+multiple resource records, each consisting of a set of simple text headers
+and arbitrary data, into one long file.  The WARC format is a
+revision of the <a class='info' href='#ARC'>ARC File Format<span> (</span><span class='info'>Burner, M. and B. Kahle, &ldquo;The ARC File Format,&rdquo; September&nbsp;1996.</span><span>)</span></a> [ARC] which has
+traditionally been used to store web crawls as sequences of content blocks
+harvested from the World Wide Web.  The ARC format file has been in active
+use by the Internet Archive (IA) since 1996.  Currently over 90 billion
+objects are stored in ARCs at the IA. The ARC format is also being used
+by several national libraries.
+
+</p>
+<p>
+The motivation to revise the ARC format
+arose from the discussion and experiences of the
+<a class='info' href='#IIPC'>International Internet Preservation Consortium
+(IIPC)<span> (</span><span class='info'>, &ldquo;International Internet Preservation Consortium (IIPC),&rdquo; .</span><span>)</span></a> [IIPC], whose members include the national libraries of
+Australia, Canada, Denmark, Finland, France, Iceland, Italy, Norway, Sweden,
+The British Library (UK), The Library of Congress (USA), and the Internet
+Archive (IA).  Input from the California Digital Library and Los Alamos
+National Laboratory, who have also established large repositories, was also
+considered.
+</p>
+<p>In an ARC file, each capture is preceded by a one-line header that
+briefly describes the harvested content and its length. This is directly
+followed by the the retrieval protocol response messages and content.  Only
+the response is recorded. There is no provision for noting the request or for
+adding metadata.  
+
+</p>
+<p>The WARC format generalizes the ARC format to better support the
+harvesting, access, and exchange needs of archiving organizations. Besides the
+primary content currently recorded, the revision accommodates related
+secondary content, such as assigned metadata, abbreviated duplicate detection
+events, and later-date transformations.
+
+</p>
+<p>
+The WARC format is expected to become the standard way to structure, manage
+and store billions of collected web resources. It will be used as the output
+format by web harvesting applications, such as the open-source 
+<a class='info' href='#HERITRIX'>Heritrix<span> (</span><span class='info'>, &ldquo;Heritrix Open Source Archival Web Crawler,&rdquo; .</span><span>)</span></a> [HERITRIX] web crawler, and as an input 
+format for a wide array of cataloging and access tools.  
+
+</p>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;
+Goals</h3>
+
+<p>Goals of the WARC file format include the following.
+</p>
+<ul class="text">
+<li>Ability to store both the payload content and control information
+from mainstream Internet application layer protocols, such as HTTP,
+DNS, and FTP.
+</li>
+<li>Ability to store arbitrary metadata linked to other stored data
+(e.g., subject classifier, discovered language, encoding)
+</li>
+<li>Support for data compression and maintenance of data record
+integrity.
+</li>
+<li>Ability to store all control information from the harvesting
+protocol (e.g., request headers), not just response information.
+</li>
+<li>Ability to store the results of data transformations linked to
+other stored data.
+</li>
+<li>Ability to store a duplicate detection event linked to other stored
+data (to reduce storage in the presence of identical or substantially
+similar resources).
+</li>
+<li>Ability to be extended without disruption to existing functionality
+</li>
+<li>Support handling of overly long records by truncation, where desired
+</li>
+</ul>
+<p>The WARC file format is made sufficiently different from the legacy ARC
+format files so that software tools can unambiguously detect and correctly
+process both WARC and ARC records; given the large amount of existing
+archival data in the previous ARC format, it is important that access and
+use of this legacy not be interrupted when transitioning to the WARC format.
+</p>
+<a name="anchor3"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
+The WARC Record Model</h3>
+
+<p>A WARC format file is the simple concatenation of one or more WARC
+records.  A WARC record consists of a format declaration line, 
+followed by a MIME entity including custom WARC-related headers, ending with 
+two newlines where newlines are CRLF as per other
+Internet standards such as <a class='info' href='#RFC2822'>[RFC2822]<span> (</span><span class='info'>Resnick, P., &ldquo;Internet Message Format,&rdquo; April&nbsp;2001.</span><span>)</span></a>.  The first record in
+a WARC file usually describes the records to follow.  Subsequent records
+contain MIME entities that are either the direct result of a retrieval
+attempt — web pages, inline images, URL redirection information, DNS hostname
+lookup results, standalone files, etc. — or they are synthesized content
+blocks (e.g., metadata, transformed content) that provide additional
+information about archived content. 
+
+</p>
+<p>
+The format of a WARC file can be expressed in IETF Augmented Backus-Naur
+Form (ABNF) grammar (<a class='info' href='#RFC2234'>[RFC2234]<span> (</span><span class='info'>Crocker, D., Ed. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; November&nbsp;1997.</span><span>)</span></a>) as follows.
+(All-caps "core" elements are as defined in RFC2234.)
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+  warc-file   = 1*warc-record
+  warc-record = format-decl CRLF mime-entity CRLF CRLF
+  format-decl = "WARC/0.12"
+  mime-entity = &lt;entity as per RFC2045 section 2.4&gt;
+</pre></div>
+<p>The record <em>format-decl</em> is always the fixed 
+string "WARC/0.12". It appears first in every
+record and hence also begins the WARC file itself. It serves to identify
+the file format and version to outside inspection, and to assist error
+recovery when a process reading a WARC file fails to find the next
+record boundary where expected. Occurrences of this string are not
+definitively the same as record boundaries, since the string may by
+chance occur inside a record.  However, it may still be useful to
+locate such strings when attempting to recover from file corruption
+which renders one or more data-length parameters unreliable.
+The format-decl string may change in future versions, but will always
+begin "WARC/", continue with version numbers, and end at whitespace.
+</p>
+<p>The record <em>mime-entity</em> contains headers and
+usually a body in accordance with <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>. The mime-entity
+must always contain a Content-Length header to determine its end.
+</p>
+<p>The section <a class='info' href='#warc_headers'>WARC Headers<span> (</span><span class='info'>WARC Headers</span><span>)</span></a>
+defines headers, new and applied from relevant standards, which are 
+meaningful for WARC records.
+</p>
+<p>Two CRLF newlines terminate a WARC record.
+</p>
+<p>Every WARC record has a type, reported in a header.  
+There are seven WARC record types: 'warcinfo', 'response',
+'resource', 'request', 'metadata', 'revisit', and 'conversion'. 
+Briefly, their purposes are:
+</p>
+<blockquote class="text"><dl>
+<dt>'warcinfo'</dt>
+<dd>A 'warcinfo' record describes the WARC records 
+ which follow it, and typically appears at the beginning of a WARC file.
+ 
+</dd>
+<dt>'response'</dt>
+<dd>A 'response' record contains an entire protocol
+ response, associated with a given URI at a specific time.
+ 
+</dd>
+<dt>'resource'</dt>
+<dd>A 'resource' record contains a resource, without
+ the full protocol information that typically accompanies a retrieval.
+ 
+</dd>
+<dt>'request'</dt>
+<dd>A 'request' record contains an entire protocol
+ request, as issued to a given URI at a specific time.
+ 
+</dd>
+<dt>'metadata'</dt>
+<dd>A 'metadata' record contains information further
+ describing another record, URI, or retrieval episode. 
+ 
+</dd>
+<dt>'revisit'</dt>
+<dd>A 'revisit' record contains abbreviated content 
+ pertaining to a URI that was a subject of previous records. 
+ 
+</dd>
+<dt>'conversion'</dt>
+<dd>A 'conversion' record contains an alternate
+  version of content originally recorded elsewhere.
+ 
+</dd>
+</dl></blockquote>
+<p>The use and relevant headers for each record type are further described
+at <a class='info' href='#warc_record_types'>WARC Record Types<span> (</span><span class='info'>WARC Record Types</span><span>)</span></a> .
+</p>
+<a name="warc_headers"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+WARC Headers</h3>
+
+<p>Headers within the <em>mime-entity</em> provide
+information about the current record, and allow additional per-record
+information. WARC both reuses appropriate headers from other standards
+and defines its own new headers, beginning "WARC-", for WARC-specific
+purposes.
+</p>
+<a name="anchor4"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
+(required) Content-ID: [content-id]</h3>
+
+<p>An identifier assigned to the current record that is globally unique for its
+period of intended use.  No identifier scheme is mandated by this
+specification, but identifiers should be consistent with the specification
+of Content-ID values in  <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a> (and thus also Message-ID
+values in <a class='info' href='#RFC2822'>[RFC2822]<span> (</span><span class='info'>Resnick, P., &ldquo;Internet Message Format,&rdquo; April&nbsp;2001.</span><span>)</span></a>).
+</p>
+<p>All records must have a Content-ID header. 
+</p>
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+(required) Content-Length: [decimal]</h3>
+
+<p>The number of octets in the entity body, as in <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a>,
+If no body is present, a value of '0' (zero) must be used.
+</p>
+<p>All records must have a Content-Length header.
+</p>
+<a name="anchor6"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
+(required) WARC-Date: [w3c-iso8601]</h3>
+
+<p>A UTC timestamp formatted according to the W3C profile of ISO8601, 
+YYYY-MM-DDThh:mm:ssZ, described at <a class='info' href='#W3CDTF'>[W3CDTF]<span> (</span><span class='info'>, &ldquo;Date and Time Formats (W3C profile of ISO8601),&rdquo; .</span><span>)</span></a>. The
+timestamp should represent the instant that data collection for record
+creation began. Multiple records written as part of a single collection 
+action may share the same WARC-Date, even though the times of their 
+writing will not be exactly synchronized.
+</p>
+<p>All records must have a WARC-Date header.
+</p>
+<a name="anchor7"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.4"></a><h3>4.4.&nbsp;
+(required) WARC-Type: [record-type]</h3>
+
+<p>The type of WARC record: either 'warcinfo', 'response', 'resource',
+'request', 'metadata', 'revisit', or 'conversion'. Types are further 
+described at <a class='info' href='#warc_record_types'>WARC Record Types<span> (</span><span class='info'>WARC Record Types</span><span>)</span></a>. All 
+records must have a WARC-Type header.
+</p>
+<p>A WARC file need not contain any particular record types, though 
+starting all WARC files with a "warcinfo" record is recommended. 
+</p>
+<a name="anchor8"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.5"></a><h3>4.5.&nbsp;
+Content-Type: [mime-type]</h3>
+
+<p>The MIME type <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a> of the information contained in
+the record's content body.  For content in HTTP request and response
+records, this should be 'application/http' as per Section 19.1 of
+<a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a> (or 'application/http; msgtype=request' and
+'application/http; msgtype=response' respectively).  In particular,
+the content-type is not the value of the HTTP Content-Type header in an
+HTTP response but a MIME type to describe the content body (hence
+'application/http' if the content body contains response headers
+and the response itself).
+</p>
+<p>Any record with a non-zero Content-Length must have a Content-Type 
+header.
+</p>
+<a name="anchor9"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.6"></a><h3>4.6.&nbsp;
+WARC-Concurrent-To: [content-ID(s)]</h3>
+
+<p>The Content-IDs of any records created as part of the same operation as
+the current record. Value syntax is the same as the References header of 
+<a class='info' href='#RFC2822'>[RFC2822]<span> (</span><span class='info'>Resnick, P., &ldquo;Internet Message Format,&rdquo; April&nbsp;2001.</span><span>)</span></a>. This header may be used to associate records
+of types 'request', 'response', 'resource', 'metadata', and 'revisit' with 
+one another when they arise from a single collection action. (When so used, 
+any WARC-Concurrent-To association may be considered bidirectional even if 
+the  header only appears on one record.)
+</p>
+<a name="anchor10"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.7"></a><h3>4.7.&nbsp;
+WARC-Digest: [algorithm]:[value]</h3>
+
+<p>An optional parameter indicating the algorithm name and calculated value 
+of a digest applied to the actual mime-entity body of the record.  
+An example is a SHA-1 labeled Base32 (<a class='info' href='#RFC3548'>[RFC3548]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; July&nbsp;2003.</span><span>)</span></a>) value:
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC-Digest: sha1:AB2CD3EF4GH5IJ6KL7MN8OPQ
+</pre></div><p>
+
+This document recommends no particular algorithm.
+</p>
+<p>This header may be used on any WARC record.
+</p>
+<a name="anchor11"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.8"></a><h3>4.8.&nbsp;
+WARC-Content-Digest: [algorithm]:[value]</h3>
+
+<p>An optional parameter indicating the algorithm name and calculated value
+of a digest applied to distinguished content referred to or contained 
+by the record. An example is a SHA-1 labeled Base32 
+(<a class='info' href='#RFC3548'>[RFC3548]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; July&nbsp;2003.</span><span>)</span></a>) value:
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC-Content-Digest: sha1:3EF4GH5IJ6KL7MN8OPQAB2CD
+</pre></div><p>
+
+This document recommends no particular algorithm.
+</p>
+<p>The content of a 'resource' record is the body of the 
+mime-entity. The content of an application/http mime-entity body is its
+message-body (per <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a>). In contrast to 'WARC-Digest',
+this digest value may be for data not actually present in the current 
+record, for example when a content body is left off in accordance with
+a 'revisit' profile (see <a class='info' href='#revisit_profiles'>Initial 'revisit' profiles<span> (</span><span class='info'>Initial 'revisit' profiles</span><span>)</span></a>).
+
+</p>
+<p>This header may be used on WARC records with a distinguished 
+content part.
+</p>
+<a name="anchor12"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.9"></a><h3>4.9.&nbsp;
+WARC-IP-Address: [IP-address]</h3>
+
+<p>The numeric Internet address contacted to retrieve any included
+content. An IPv4 address should be written as a "dotted quad"; an IPv6
+address as per <a class='info' href='#RFC1884'>[RFC1884]<span> (</span><span class='info'>Hinden, R. and S. Deering, &ldquo;IP Version 6 Addressing Architecture,&rdquo; December&nbsp;1995.</span><span>)</span></a>. For an HTTP retrieval, this
+will be the IP address used at retrieval time corresponding to the
+hostname in the record's subject-uri.
+</p>
+<p>This header may be used on all record types except 'conversion'. 
+</p>
+<a name="anchor13"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.10"></a><h3>4.10.&nbsp;
+WARC-Related-To: [content-ID(s)]</h3>
+
+<p>The Content-IDs of any records for which the present record holds
+additional content. Syntax is the same as the References header of 
+<a class='info' href='#RFC2822'>[RFC2822]<span> (</span><span class='info'>Resnick, P., &ldquo;Internet Message Format,&rdquo; April&nbsp;2001.</span><span>)</span></a>. This header may be used to associate 'metadata' 
+records to other records they describe. This header may also be used to 
+associate records of types 'revisit' and 'conversion' with the preceding 
+records which helped determine the present record content.
+</p>
+<a name="anchor14"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.11"></a><h3>4.11.&nbsp;
+WARC-Subject-URI: [uri]</h3>
+
+<p>The original URI whose collection gave rise to the information content
+in this record. In the context of web harvesting, this is the URI that
+was the target of a crawler's retrieval request. Indirectly, such as
+for a 'revisit', 'metadata', or 'conversion' record, it is a copy of
+the WARC-Subject-URI appearing in the original record to which the newer
+record pertains.  The URI in this value should be properly escaped
+according to <a class='info' href='#RFC2396'>[RFC2396]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifiers (URI): Generic Syntax,&rdquo; August&nbsp;1998.</span><span>)</span></a> and written with no internal
+whitespace.
+</p>
+<p>All 'response', 'resource', 'request', 'revisit', and 
+'conversion' records must have a WARC-Subject-URI header. 
+</p>
+<a name="anchor15"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.12"></a><h3>4.12.&nbsp;
+WARC-Truncated: [reason-token]</h3>
+
+<p>When present, indicates that the current record is shorter than the 
+apparent collection-time size of the source material. Possible values indicate 
+the reason for the truncation: 'length' for exceeding a desired length limit; 
+'time' for exceeding a desired time limit; or 'unspecified' for another 
+reason. For example, if the collection of 
+what appeared to be a multi-gigabyte resource was cut short after a transfer
+time limit was reached, the partial resource could be saved to a WARC record
+with this header. 
+ 
+</p>
+<p>This header may be used on any WARC record.
+</p>
+<a name="anchor16"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.13"></a><h3>4.13.&nbsp;
+WARC-Warcinfo-ID: [content-id]</h3>
+
+<p>When present, indicates the Content-ID of the associated 'warcinfo'
+record for this record.  Typically, the Warcinfo-ID parameter is used
+when the context of the applicable 'warcinfo' record is unavailable,
+such as after distributing single records into separate WARC files.
+WARC writing applications (such web crawlers) may choose to record
+this parameter routinely.
+</p>
+<p>The Warcinfo-ID parameter overrides any association with a previously
+occurring (in the WARC) 'warcinfo' record, thus providing a way to protect
+the true association when records are combined from different WARCs.
+Use of this parameter in a record of type 'warcinfo' is undefined and
+reserved for possible future extension.
+ 
+</p>
+<a name="anchor17"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.14"></a><h3>4.14.&nbsp;
+(warcinfo only) WARC-Filename: [filename]</h3>
+
+<p>The filename containing the current 'warcinfo' record.
+</p>
+<p>This header may only be used on 'warcinfo' type records. 
+</p>
+<a name="anchor18"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.15"></a><h3>4.15.&nbsp;
+(revisit or conversion only) WARC-Profile: [uri]</h3>
+
+<p>A URI signifying the kind of analysis and handling applied in a 
+'revisit' or 'conversion' record. (Like an XML namespace, the URI may, but 
+need not, return human-readable or machine-readable documentation.) Only 
+if reading software recognizes the given URI as a supported kind of 
+handling should it attempt to interpret the associated content body.
+</p>
+<p>The appendix <a class='info' href='#revisit_profiles'>Initial 'revisit' profiles<span> (</span><span class='info'>Initial 'revisit' profiles</span><span>)</span></a> defines 
+two initial profile options for the WARC-Profile header for 'revisit' records. 
+The appendix <a class='info' href='#conversion_profile'>Initial 'conversion' profile<span> (</span><span class='info'>Initial 'conversion' profile</span><span>)</span></a> defines one 
+initial profile option for the 'conversion' records.
+</p>
+<p>This header is required on 'revisit' type records and illegal for other 
+record types.
+</p>
+<a name="warc_record_types"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+WARC Record Types</h3>
+
+<p>The purpose and use of each defined record type is described below.
+</p>
+<p>Because new record types that extend the WARC format may be defined in 
+future standards, WARC processing software should skip records of unknown
+type.
+</p>
+<a name="anchor19"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
+'warcinfo'</h3>
+
+<p>A 'warcinfo' record describes the records that follow it, up
+through end of file, end of input, or until next 'warcinfo' record. 
+Typically, this appears once and at the beginning of a WARC file.
+For a web archive, it often contains information about the web crawl
+which generated the following records.
+</p>
+<p>The format of the description is outside the scope of this 
+document. [FIX THIS?]
+</p>
+<p>So that multiple record excerpts from inside WARC files may also be
+valid WARC files, it is not strictly required that the first record of
+a legal WARC be a 'warcinfo' description. Also, to allow the
+concatenation of WARC files into a larger valid WARC file, it is
+allowable for 'warcinfo' records to appear in the middle of a WARC
+file.
+
+</p>
+<a name="anchor20"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.2"></a><h3>5.2.&nbsp;
+'response'</h3>
+
+<p>A 'response' record contains a protocol response, such as a full
+HTTP response including headers and content-body, from a network
+retrieval. Often the payload of such a response reflects the main
+collection objective of the archiving service, whose responsibility it
+is to distinguish payload from protocol headers during subsequent
+processing.
+</p>
+<a name="anchor21"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.3"></a><h3>5.3.&nbsp;
+'resource'</h3>
+
+<p>A 'resource' record contains a resource, without full protocol response
+information. For example: a file directly retrieved from a locally
+accessible repository, or the result of a networked retrieval where
+the protocol information has been discarded.
+</p>
+<a name="anchor22"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.4"></a><h3>5.4.&nbsp;
+'request'</h3>
+
+<p>A 'request' record holds the details of an issued protocol request. In a 
+web crawling context, this would hold the HTTP request. 
+</p>
+<a name="anchor23"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.5"></a><h3>5.5.&nbsp;
+'metadata'</h3>
+
+<p>A 'metadata' record contains content created in order to further describe,
+explain, or accompany a harvested resource, in ways not covered by
+other record types. A 'metadata' record will almost always refer to
+another record of another type, with that other record holding original
+harvested or transformed content. (However, it is allowable for a
+'metadata' record to refer to any record type, including other
+'metadata' records.) Any number of metadata records may be created that
+reference one specific other record.
+</p>
+<p>The format of the metadata is outside the scope of this document. 
+[FIX THIS?]
+</p>
+<p>A 'metadata' record may be associated with other records derived from the
+same collection event using the WARC-Concurrent-To header. A 'metadata' 
+record may be assocaited to another record which it describes using the 
+WARC-Related-To header. 
+</p>
+<a name="anchor24"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.6"></a><h3>5.6.&nbsp;
+'revisit'</h3>
+
+<p>A 'revisit' record describes the revisitation of content already archived,
+and may include only an abbreviated content body which must be
+interpreted relative to a previous record. Most typically, a 'revisit'
+record is used instead of a 'response' or 'resource' record to
+indicate that the content visited was either a complete or substantial
+duplicate of material previously archived.
+</p>
+<p>A 'revisit' record should only be used when interpreting the record
+requires consulting a previous record; other record types should be
+preferred if the current record is understandable standing
+alone. (It is not required that any record of a previously-visited
+URI use 'revisit', only those which require previous external records 
+to interpret.)
+</p>
+<p>The interpretation of a 'revisit' record depends on the URI value of the
+required WARC-Profile header. Two initial values and their 
+interpretation are described in the appendix <a class='info' href='#revisit_profiles'>Initial 'revisit' profiles<span> (</span><span class='info'>Initial 'revisit' profiles</span><span>)</span></a>. A reader which does 
+not recognize the profile URI should not attempt to interpret the 
+enclosing record or associated content body.
+</p>
+<p>Other documents may define other profiles to accomplish other goals,
+such as recording the apparent magnitude of difference from the previous
+visit, or to encode the visited content as a "diff" -- where "diff"
+is the file comparison utility that outputs the differences between
+two files -- of the content previously stored.
+</p>
+<p>The purpose of this record type is to reduce
+storage redundancy when repeatedly retrieving identical or
+little-changed content, while still recording that a revisit occurred,
+plus details about the current state of the visited content relative
+to the archived version.
+</p>
+<a name="anchor25"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.7"></a><h3>5.7.&nbsp;
+'conversion'</h3>
+
+<p>A 'conversion' record contains an alternative version of another record's
+content that was created as the result of an archival
+process. Typically, this is used to hold content transformations that
+maintain viability of content after widely available rendering tools
+for the originally stored format disappear. As needed, the original
+content may be migrated (transformed) to a more viable format in order
+to keep the information usable with current tools while minimizing
+loss of information (intellectual content, look and feel, etc). Any
+number of transformation records may be created that reference a
+specific source record, which may itself contain transformed
+content. Each transformation should result in a freestanding, complete
+record, with no dependency on survival of the original
+record. Metadata records may be used to further describe
+transformation records.
+</p>
+<p>The interpretation of a 'conversion' record depends on the URI value of 
+the required WARC-Profile header. An initial value and its 
+interpretation is described in the appendix 
+<a class='info' href='#conversion_profile'>Initial 'conversion' profile<span> (</span><span class='info'>Initial 'conversion' profile</span><span>)</span></a>.  A reader which does 
+not recognize the profile URI should not attempt to interpret the 
+enclosing record or associated content body.
+</p>
+<p>Other documents may define other conversion profiles to accomplish 
+other goals.
+</p>
+<a name="truncation"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+Truncated Records</h3>
+
+<p>For practical reasons, writers of the WARC format may place limits
+on the time or storage allocated to archiving a single resource. As a
+result, only a truncated portion of the original resource may be
+available for saving into a WARC record.
+</p>
+<p>Any record may indicate that truncation has occurred and give the
+reason by the addition of a named 'WARC-Truncated' header in the record
+header. Acceptable values for this header include 'time' for truncation
+due to exceeding a time limit, 'length' for truncation due to
+exceeding a length limit, and 'unspecified' for other reasons.
+</p>
+<a name="anchor26"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
+WARC Application to Specific Protocols</h3>
+
+<a name="anchor27"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
+HTTP and HTTPS</h3>
+
+<p>A full HTTP or HTTPS response, with protocol information and
+content-body (if any), can be saved verbatim into a WARC file as a
+'response' type record, with a MIME content-type of 'application/http'
+(or 'application/http; msgtype=response').
+</p>
+<p>A full HTTP or HTTPS request, including all request headers and
+content-body (if any), can similarly be saved verbatim into a WARC
+file as a 'request' type record, with a MIME content-type of
+'application/http' (or 'application/http; msgtype=request').
+</p>
+<p>For either a request or response, a 'WARC-IP-Address' header should be
+used to record the network IP address to which the request was
+directed, using the best available DNS information at the time.
+</p>
+<p>Additional metadata about the HTTP or HTTPS transaction may be
+stored in a 'metadata' type record, in a format to be specified
+elsewhere. In particular, information about the secure session in
+which an HTTPS transaction occurs, such as certificates presented or
+consulted and authentication information exchanged, may be stored in
+one or more 'metadata' type records.
+</p>
+<p>The multiple records which pertain to a single HTTP or HTTPS
+logical group of records will all have unique content-id values. In
+order to associate the records, all but one must use
+'WARC-Concurrent-To' headers to refer to another record in the set.
+</p>
+<p>As any mixture of record types may appear for a single collection
+event, and in any order, here is no specific record type which is
+automatically considered primary. Generally, all may refer back to the
+one record which appeared first, but this is not required. (A
+'request' record may refer to a 'response' record or vice-versa;
+either could refer to a 'metadata' record or a 'metadata' record could
+refer to either.) Multiple and bidirectional 'WARC-Concurrent-To'
+headers may appear.
+</p>
+<p>In the case where resources from a website have been harvested or
+otherwise received without performing normal HTTP operations, or where
+HTTP protocol information has been lost, it may be appropriate to
+store the plain content in WARC 'resource' type records, under their
+original WARC-Subject-URI, but using the content MIME type in place of the
+'application/http' type.
+</p>
+<a name="anchor28"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
+DNS</h3>
+
+<p>A request for DNS information can be summarized in a URI in
+accordance with <a class='info' href='#RFC4501'>[RFC4501]<span> (</span><span class='info'>Josefsson, S., &ldquo;Domain Name System Uniform Resource Identifiers,&rdquo; May&nbsp;2006.</span><span>)</span></a>. DNS information as
+retrieved can be represented in
+the formats specified by <a class='info' href='#RFC1035'>[RFC1035]<span> (</span><span class='info'>Mockapetris, P., &ldquo;Domain names - implementation and specification,&rdquo; November&nbsp;1987.</span><span>)</span></a>, <a class='info' href='#RFC2540'>[RFC2540]<span> (</span><span class='info'>Eastlake, D., &ldquo;Detached Domain Name System (DNS) Information,&rdquo; March&nbsp;1999.</span><span>)</span></a>, and <a class='info' href='#RFC4027'>[RFC4027]<span> (</span><span class='info'>Josefsson, S., &ldquo;Domain Name System Media Types,&rdquo; April&nbsp;2005.</span><span>)</span></a>.
+</p>
+<p>The results of a DNS lookup can thus be straightforwardly archived
+in a WARC 'response' record under the appropriate DNS URI and MIME
+type.  If present, the WARC-IP-Address header should be the address of
+the DNS server that provided the DNS record.
+
+</p>
+<a name="anchor29"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.3"></a><h3>7.3.&nbsp;
+Other Resources with URIs, and Other Protocols</h3>
+
+<p>Any resource that can be identified with a URI, even if it is not
+retrieved via an Internet operation, may be archived in a WARC file
+under a 'resource' type record. This includes files that have
+meaningful URIs retrieved from a locally-accessible filesystem or
+other repository.
+</p>
+<p>Specific conventions for other protocols and media types are
+expected to be defined as necessary.  In general, the WARC format
+should be capable of archiving any digital resource which has a URI, a
+specific time of collection, and a discrete length. 
+
+</p>
+<p>The 'request' and 'response' record types should be used for
+verbatim or lossless transcripts of collection activity, including
+protocol information. The 'resource' record type should be used for
+content without any protocol-specific enveloping. Additional
+information about a resource or transaction can be supplied in a
+protocol- or media-appropriate manner with 'metadata' type
+records.
+</p>
+<a name="anchor30"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8"></a><h3>8.&nbsp;
+Registration of MIME Media Type application/warc</h3>
+
+<p>This section describes, as per <a class='info' href='#RFC2048'>[RFC2048]<span> (</span><span class='info'>Freed, N., Klensin, J., and J. Postel, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part Four: Registration Procedures,&rdquo; November&nbsp;1996.</span><span>)</span></a>, the MIME 
+types associated with the WARC format.
+</p>
+<p>MIME media type name: application
+</p>
+<p>MIME subtype names: warc
+</p>
+<p>Required parameters: None
+</p>
+<p>Optional parameters: None
+</p>
+<p>Encoding considerations:
+</p>
+<p>Content of this type is in 'binary' format.
+</p>
+<p>Security considerations:
+</p>
+<p>The WARC record syntax poses no direct risk to computers and
+networks. Implementors need to be aware of source authority and
+trustworthiness of information structured in WARC.  Readers and
+writers subject themselves to all the risks that accompany normal
+operation of data processing services (e.g., message length errors,
+buffer overflow attacks).
+</p>
+<p>Interoperability considerations: None
+</p>
+<p>Published specification: TBD
+</p>
+<p>Applications which use this media type: Large- and small-scale
+archiving
+</p>
+<p>Additional information: None
+</p>
+<p>Person and email address to contact for further information:
+</p>
+<p>Gordon Mohr gojomo@archive.org, John Kunze jak@ucop.edu
+</p>
+<p>Intended usage: COMMON
+</p>
+<p>Author/Change controller: IESG
+</p>
+<a name="anchor31"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.9"></a><h3>9.&nbsp;
+IANA Considerations</h3>
+
+<p>After IESG approval, IANA is expected to register the WARC type
+"application/warc" using the application provided in this document.
+</p>
+<a name="anchor32"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.10"></a><h3>10.&nbsp;
+Acknowledgments</h3>
+
+<p>This document could not have been written without major
+contributions from participants of the International Internet
+Preservation Consortium, especially Steen Christensen, and Julien
+Masanès.
+</p>
+<a name="revisit_profiles"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
+Initial 'revisit' profiles</h3>
+
+<a name="anchor33"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1"></a><h3>Appendix A.1.&nbsp;
+Identical Content Digest</h3>
+
+<p>This 'revisit' profile may be used whenever a subsequent consideration
+of a URI provides content which a strong digest function, such as SHA-1, 
+indicates is identical to a previously recorded version.
+</p>
+<p>To indicate this profile, use the URI:
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+http://netpreserve.org/warc/0.12/revisit/identical-content-digest
+</pre></div><p>
+
+</p>
+<p>To report the content-digest used for comparison, a 'revisit' header
+using this profile MUST include a WARC-Content-Digest, with a value of 
+the digest that was calculated on the content.
+</p>
+<p>A 'revisit' record using this profile may have no content body, in which 
+case a Content-Length of zero must be written. If a content body is present,
+it should be interpreted the same as a 'response' record type for the same 
+URI, but truncated to avoid storing the duplicate content. A 
+WARC-Truncated header with reason 'length' should be used for any 
+identical-digest truncation.
+</p>
+<p>Using a WARC-Related-To header to identify a specific prior record from 
+which the matching content can be retrieved is recommended, to minimize the
+risk of misinterpreting the 'revisit' record.
+</p>
+<a name="anchor34"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.2"></a><h3>Appendix A.2.&nbsp;
+Server Not Modified</h3>
+
+<p>This 'revisit' profile may be used whenever a subsequent consideration
+of a URI encounters an assertion from the providing server that the content
+has not changed, such as an HTTP "304 Not Modified" response.
+</p>
+<p>To indicate this profile, use the URI:
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+http://netpreserve.org/warc/0.12/revisit/server-not-modified
+</pre></div><p>
+
+</p>
+<p>A 'revisit' record using this profile may have no content body, in which 
+case a Content-Length of zero must be written. If a content body is present,
+it should be interpreted the same as a 'response' record type for the same 
+URI, truncated if desired.
+</p>
+<p>Any 'Etag' or 'Last-Modified' header value on the server response should 
+be reported in new headers provided by this profile, "WARC-Etag" or 
+"WARC-Last-Modified" respectively.
+</p>
+<p>Using a WARC-Related-To header to identify a specific prior record from 
+which the unmodified content can be retrieved is recommended, to minimize the
+risk of misinterpreting the 'revisit' record.
+</p>
+<a name="conversion_profile"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
+Initial 'conversion' profile</h3>
+
+<a name="anchor35"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.B.1"></a><h3>Appendix B.1.&nbsp;
+Software Command</h3>
+
+<p>This 'conversion' profile may be used whenever a conversion is affected
+by a software package with a canonical name and version description, invoked
+with a command (or parameters) representable in a single header.
+</p>
+<p>To indicate this profile, use the URI:
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+http://netpreserve.org/warc/0.12/conversion/software-command
+</pre></div><p>
+
+</p>
+<p>To specify the source of the converted content, using a WARC-Related-To
+header referring to the original Content-ID is recommended. 
+</p>
+<p>To report the software used for conversion, use the new header
+specific to this profile WARC-Conversion-Software, with a value of the 
+software name and version.
+</p>
+<p>To report the command (or parameters) used for conversion, use the 
+new header specific to this profile WARC-Conversion-Command, with a value 
+of the command-line invocation (or similar single-line parameter 
+representation) used to create the new version.
+</p>
+<a name="anchor36"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
+Compression Recommendations</h3>
+
+<p>The WARC format defines no internal compression. Whether and how
+WARC files should be compressed is an external decision.
+</p>
+<p>However, experience with the precursor ARC format at the Internet
+Archive has demonstrated that applying simple standard compression can
+result in significant storage savings, while preserving random access
+to individual records.
+</p>
+<p>For this purpose, the GZIP format with customary "deflate"
+compression is recommended, as defined in <a class='info' href='#RFC1950'>[RFC1950]<span> (</span><span class='info'>Deutsch, L. and J-L. Gailly, &ldquo;ZLIB Compressed Data Format Specification version 3.3,&rdquo; May&nbsp;1996.</span><span>)</span></a>, 
+<a class='info' href='#RFC1951'>[RFC1951]<span> (</span><span class='info'>Deutsch, P., &ldquo;DEFLATE Compressed Data Format Specification version 1.3,&rdquo; May&nbsp;1996.</span><span>)</span></a>, and <a class='info' href='#RFC1952'>[RFC1952]<span> (</span><span class='info'>Deutsch, P., Gailly, J-L., Adler, M., Deutsch, L., and G. Randers-Pehrson, &ldquo;GZIP file format specification version 4.3,&rdquo; May&nbsp;1996.</span><span>)</span></a>.
+ Freely available source code implementing this format is
+available, and the technique is free of patent encumberances. The GZIP
+format is also widely used and supported across many free and
+commercial software packages and operating systems.
+</p>
+<p>This section documents recommended, but optional, practices for
+compressing WARC files with GZIP.
+</p>
+<a name="anchor37"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.C.1"></a><h3>Appendix C.1.&nbsp;
+Record-at-a-time Compression</h3>
+
+<p>Per section 2.2 of the GZIP specification, a valid GZIP file
+consists of any number of gzip "members", each independently
+compressed.
+</p>
+<p>Where possible, this property should be exploited to compress each
+record of a WARC file independently. This results in a valid GZIP file
+whose per-record subranges also stand alone as valid GZIP files.
+</p>
+<p>External indexes of WARC file content may then be used to record
+each record's starting position in the GZIP file, allowing for random
+access of individual records without requiring decompression of all
+preceding records.
+</p>
+<p>Note that the application of this convention causes no change to
+the uncompressed contents of an individual WARC record.
+</p>
+<a name="anchor38"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.C.2"></a><h3>Appendix C.2.&nbsp;
+GZIP WARC File Name Suffix</h3>
+
+<p>A gzip compressed WARC file should have the customary ".gz"
+   appended to it, making the complete suffix, ".warc.gz".
+   
+</p>
+<a name="anchor39"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.D"></a><h3>Appendix D.&nbsp;
+WARC File Name and Size Recommendations</h3>
+
+<p>It is helpful to use practices within an institution that make it
+unlikely or impossible to duplicate aggregate WARC file names. The
+convention used inside the Internet Archive with ARC files is to name
+files according to the following pattern:
+</p>
+<p>Prefix-Timestamp-Serial-Crawlhost.warc.gz
+</p>
+<p>Prefix is an abbreviation usually reflective of the project or
+crawl that created this file.  Timestamp is a 14-digit GMT timestamp
+indicating the time the file was initially begun. Serial is an
+increasing serial-number within the process creating the files, often
+(but not necessarily) unique with regard to the Prefix. Crawlhost is
+the domain name or IP address of the machine creating the file.
+</p>
+<p>IIPC member institutions have expressed an interest in adopting a
+common naming strategy, with per-institution unique identifiers to
+assist in marking WARC files with their institution of origin. It is
+proposed that all such WARC file names adhering to this future
+convention begin "iipc".
+</p>
+<p>This specification does not require any particular WARC file naming
+practice, but recommends conventions similar to the above be adopted
+within WARC-creating institutions.  The file name prefix "iipc" should
+be avoided unless participating in the IIPC naming registry.
+</p>
+<p>1GB (10^9 bytes) is recommended as a practical target size for
+WARC files, when record sizes allow. Oversized records may be
+truncated or placed in oversized WARC files, at a
+project's discretion.
+</p>
+<a name="anchor40"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.E"></a><h3>Appendix E.&nbsp;
+Examples of WARC Records</h3>
+
+<p>Examples of each of record-type are provided here. In some cases,
+illustrative data is shown where conventions have not yet been
+specified. Declared content-lengths are approximate, and content-IDs
+and digests shown are plausible random filler.
+</p>
+<a name="anchor41"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.E.1"></a><h3>Appendix E.1.&nbsp;
+Example of 'warcinfo' Record</h3>
+
+<p>The following 'warcinfo' example includes an XML description of the
+enclosing WARC file that is loosely modelled after the descriptions
+currently used in Internet Archive ARC files.  However, this is an
+abbreviated and speculative illustration; the referenced
+WARC-specific XML namespace .http://archive.org/warc/0.12. has not been
+formally defined anywhere, and may not reflect eventual practice with
+WARC files.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC/0.12
+MIME-Version: 1.0
+WARC-Record-Type: warcinfo
+WARC-Date: 2006-09-19T17:20:14Z
+Content-ID: &lt;urn:uuid:d7ae5c10-e6b3-4d27-967d-34780c58ba39&gt;
+Content-Type: text/xml
+Content-Length: 879
+
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;warcmetadata
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:warc="http://archive.org/warc/0.12/"&gt;
+  &lt;warc:software&gt;
+  Heritrix 1.12.0 http://crawler.archive.org
+  &lt;/warc:software&gt;
+  &lt;warc:hostname&gt;crawling017.archive.org&lt;/warc:hostname&gt;
+  &lt;warc:ip&gt;207.241.227.234&lt;/warc:ip&gt;
+  &lt;dcterms:isPartOf&gt;testcrawl-20050708&lt;/dcterms:isPartOf&gt;
+  &lt;dc:description&gt;testcrawl with WARC output&lt;/dc:description&gt;
+  &lt;warc:operator&gt;IA_Admin&lt;/warc:operator&gt;
+  &lt;warc:http-header-user-agent&gt;
+  Mozilla/5.0 (compatible; heritrix/1.4.0 +http://crawler.archive.org)
+  &lt;/warc:http-header-user-agent&gt;
+  &lt;dc:format&gt;WARC file version 0.12&lt;/dc:format&gt;
+  &lt;dcterms:conformsTo xsi:type="dcterms:URI"&gt;
+  http://www.archive.org/documents/WarcFileFormat-0.12.html
+  &lt;/dcterms:conformsTo&gt;
+&lt;/warcmetadata&gt;
+
+
+</pre></div>
+<a name="anchor42"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.E.2"></a><h3>Appendix E.2.&nbsp;
+Example of 'request' Record</h3>
+
+<p>A 'request' record captures the protocol request used to collect a
+resource. For example, to collect the resource
+'http://www.archive.org/images/logoc.jpg', the following 'request'
+record might be generated:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC/0.12
+MIME-Version: 1.0
+WARC-Record-Type: request
+WARC-Subject-URI: http://www.archive.org/images/logoc.jpg
+WARC-Date: 2006-09-19T17:20:24Z
+Content-Length: 236
+Content-ID: &lt;urn:uuid:4885803b-eebd-4b27-a090-144450c11594&gt;
+Content-Type: application/http;msgtype=request
+WARC-Concurrent-To: &lt;urn:uuid:92283950-ef2f-4d72-b224-f54c6ec90bb0&gt;
+
+GET /images/logoc.jpg HTTP/1.0^M
+User-Agent: Mozilla/5.0 (compatible; heritrix/1.10.0)
+From: stack@example.org
+Connection: close
+Referer: http://www.archive.org/
+Host: www.archive.org
+Cookie: PHPSESSID=009d7bb11022f80605aa87e18224d824
+
+
+
+
+</pre></div>
+<p>
+The WARC-Concurrent-To header refer to the related response
+record (See <a class='info' href='#example_response'>Example of 'response' Record<span> (</span><span class='info'>Example of 'response' Record</span><span>)</span></a>).
+</p>
+<a name="example_response"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.E.3"></a><h3>Appendix E.3.&nbsp;
+Example of 'response' Record</h3>
+
+<p>The response record to match the above example request might look
+like the following:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC/0.12
+MIME-Version: 1.0
+WARC-Record-Type: response
+WARC-Subject-URI: http://www.archive.org/images/logoc.jpg
+WARC-Date: 2006-09-19T17:20:24Z
+WARC-Digest: sha1:UZY6ND6CCHXETFVJD2MSS7ZENMWF7KQ2
+WARC-IP-Address: 207.241.233.58
+Content-ID: &lt;urn:uuid:92283950-ef2f-4d72-b224-f54c6ec90bb0&gt;
+Content-Type: application/http;msgtype=response
+Content-Length: 1902
+
+HTTP/1.1 200 OK
+Date: Tue, 19 Sep 2006 17:18:40 GMT
+Server: Apache/2.0.54 (Ubuntu)
+Last-Modified: Mon, 16 Jun 2003 22:28:51 GMT
+ETag: "3e45-67e-2ed02ec0"
+Accept-Ranges: bytes
+Content-Length: 1662
+Connection: close
+Content-Type: image/jpeg
+
+[image/jpeg binary data here]
+
+
+</pre></div>
+<p>Note that the WARC-Date for the 'response' is identical to that
+of the previous 'request' record.  The WARC-IP-Address header value is that
+of the server that generated the response.
+</p>
+<a name="anchor43"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.E.4"></a><h3>Appendix E.4.&nbsp;
+Example of 'resource' Record</h3>
+
+<p>This same file, 'logo.jpg', might be archived internally to an
+organization under its local filesystem name. This could result in a
+'resource' record:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC/0.12
+MIME-Version: 1.0
+WARC-Record-Type: resource
+WARC-Subject-URI: file://var/www/htdoc/images/logoc.jpg
+WARC-Date: 2006-09-19T17:20:24Z
+Content-ID: &lt;urn:uuid:92283950-ef2f-4d72-b224-f54c6ec90bb0&gt;
+Content-Type: image/jpeg
+WARC-Digest: sha1:UZY6ND6CCHXETFVJD2MSS7ZENMWF7KQ2
+Content-Length: 1662
+
+[image/jpeg binary data here]
+
+
+</pre></div>
+<a name="anchor44"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.E.5"></a><h3>Appendix E.5.&nbsp;
+Example of 'metadata' Record</h3>
+
+<p>If some crawl-time metadata should be archived near the above
+<a class='info' href='#example_response'>Example of 'response' Record<span> (</span><span class='info'>Example of 'response' Record</span><span>)</span></a>, a 'metadata'
+record could be used like the following (itself using 'message/rfc822'
+text headers as an ad hoc metadata format):
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC/0.12
+MIME-Version: 1.0
+WARC-Record-Type: metadata
+WARC-Subject-URI: http://www.archive.org/images/logoc.jpg
+WARC-Date: 2006-09-19T17:20:24Z
+Content-ID: &lt;urn:uuid:16da6da0-bcdc-49c3-927e-57494593b943&gt;
+WARC-Related-To: &lt;urn:uuid:92283950-ef2f-4d72-b224-f54c6ec90bb0&gt;
+Content-Type: message/rfc822
+WARC-Digest: sha1:UZY6ND6CCHXETFVJD2MSS7ZENMWF7KQ2
+Content-Length: 59
+
+via: http://www.archive.org/
+pathFromSeed: E
+downloadTimeMS: 565
+
+
+</pre></div>
+<p>Note again the same WARC-Date as the preceding related
+records. A relationship is declared to the preceding 'response' record
+using the WARC-Related-To header, 
+but declaring a relationship to the 'request' would also be legal.
+</p>
+<a name="anchor45"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.E.6"></a><h3>Appendix E.6.&nbsp;
+Example of 'revisit' Record</h3>
+
+<p>If the same URI is later revisited and the content is unchanged, a
+'revisit' record like the following (again with a speculative
+content-type) could be generated:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC/0.12
+MIME-Version: 1.0
+WARC-Record-Type: revisit
+WARC-Subject-URI: http://www.archive.org/images/logoc.jpg
+WARC-Date: 2007-03-06T00:43:35Z
+WARC-Profile: http://netpreserve.org/warc/0.12/server-not-modified
+Content-ID: &lt;urn:uuid:16da6da0-bcdc-49c3-927e-57494593bbbb&gt;
+WARC-Related-To: &lt;urn:uuid:92283950-ef2f-4d72-b224-f54c6ec90bb0&gt;
+Content-Type: message/http
+Content-Length: 226
+
+HTTP/1.x 304 Not Modified
+Date: Tue, 06 Mar 2007 00:43:35 GMT
+Server: Apache/2.0.54 (Ubuntu) PHP/5.0.5-2ubuntu1.4 mod_ssl/2.0.54 OpenSSL/0.9.7g
+Connection: Keep-Alive
+Keep-Alive: timeout=15, max=100
+Etag: "3e45-67e-2ed02ec0"
+
+
+
+</pre></div>
+<p>Reference is made back to the original 'response' record, though
+this is not strictly necessary. A new WARC-Date reflects the 
+time of revisit. 
+</p>
+<a name="anchor46"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.E.7"></a><h3>Appendix E.7.&nbsp;
+Example of 'conversion' Record</h3>
+
+<p>At some future date, the 'image/jpeg' format may no longer be
+considered viable, prompting a conversion of the original archive
+content into a hypothetical new format, 'image/neoimg', which
+generates a 934 byte version of the same image. This could be
+accomodated with a 'conversion' record:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+WARC/0.12
+MIME-Version: 1.0
+WARC-Record-Type: conversion
+WARC-Subject-URI: http://www.archive.org/images/logoc.jpg
+WARC-Date: 2016-09-19T19:00:40Z
+Content-ID: &lt;urn:uuid:16da6da0-bcdc-49c3-927e-57494593dddd&gt;
+WARC-Profile: http://netpreserve.org/warc/0.12/software-command
+WARC-Conversion-Software: Future Converter Pro 2.1
+WARC-Conversion-Command: fconverter -c -d -9
+WARC-Related-To: &lt;urn:uuid:92283950-ef2f-4d72-b224-f54c6ec90bb0&gt;
+WARC-Digest: sha1:XQMRY75YY42ZWC6JAT6KNXKD37F7MOEK
+Content-Type: image/neoimg
+Content-Length: 934
+
+[image/neoimg binary data here]
+
+
+</pre></div>
+<p>An accompanying 'metadata' record, referring to this 'conversion'
+record, could contain additional details about the
+transformation. (Alternatively, new headers in this record could
+serve this role.)
+</p>
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>11.&nbsp;References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="ARC">[ARC]</a></td>
+<td class="author-text">Burner, M. and B. Kahle, &ldquo;<a href="http://www.archive.org/web/researcher/ArcFileFormat.php">The ARC File Format</a>,&rdquo; September&nbsp;1996 (<a href="http://www.archive.org/web/researcher/ArcFileFormat.php">HTML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="HERITRIX">[HERITRIX]</a></td>
+<td class="author-text">&ldquo;<a href="http://crawler.archive.org">Heritrix Open Source Archival Web Crawler</a>&rdquo; (<a href="http://crawler.archive.org">HTML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="IIPC">[IIPC]</a></td>
+<td class="author-text">&ldquo;<a href="http://www.netpreserve.org/">International Internet Preservation Consortium (IIPC)</a>&rdquo; (<a href="http://www.netpreserve.org/">HTML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="W3CDTF">[W3CDTF]</a></td>
+<td class="author-text">&ldquo;<a href="http://www.w3.org/TR/NOTE-datetime">Date and Time Formats (W3C profile of ISO8601)</a>&rdquo; (<a href="http://www.w3.org/TR/NOTE-datetime">HTML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC1035">[RFC1035]</a></td>
+<td class="author-text">Mockapetris, P., &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc1035.txt">Domain names - implementation and specification</a>,&rdquo; STD&nbsp;13, RFC&nbsp;1035, November&nbsp;1987.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC1884">[RFC1884]</a></td>
+<td class="author-text"><a href="mailto:hinden@ipsilon.com">Hinden, R.</a> and <a href="mailto:deering@parc.xerox.com">S. Deering</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc1884.txt">IP Version 6 Addressing Architecture</a>,&rdquo; RFC&nbsp;1884, December&nbsp;1995.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC1950">[RFC1950]</a></td>
+<td class="author-text"><a href="mailto:ghost@aladdin.com">Deutsch, L.</a> and J-L. Gailly, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc1950.txt">ZLIB Compressed Data Format Specification version 3.3</a>,&rdquo; RFC&nbsp;1950, May&nbsp;1996 (<a href="ftp://ftp.isi.edu/in-notes/rfc1950.txt">TXT</a>, <a href="ftp://ftp.isi.edu/in-notes/rfc1950.ps">PS</a>, <a href="ftp://ftp.isi.edu/in-notes/rfc1950.pdf">PDF</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC1951">[RFC1951]</a></td>
+<td class="author-text"><a href="mailto:ghost@aladdin.com">Deutsch, P.</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc1951.txt">DEFLATE Compressed Data Format Specification version 1.3</a>,&rdquo; RFC&nbsp;1951, May&nbsp;1996 (<a href="ftp://ftp.isi.edu/in-notes/rfc1951.txt">TXT</a>, <a href="ftp://ftp.isi.edu/in-notes/rfc1951.ps">PS</a>, <a href="ftp://ftp.isi.edu/in-notes/rfc1951.pdf">PDF</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC1952">[RFC1952]</a></td>
+<td class="author-text"><a href="mailto:ghost@aladdin.com">Deutsch, P.</a>, <a href="mailto:gzip@prep.ai.mit.edu">Gailly, J-L.</a>, <a href="mailto:madler@alumni.caltech.edu">Adler, M.</a>, <a href="mailto:ghost@aladdin.com">Deutsch, L.</a>, and <a href="mailto:randeg@alumni.rpi.edu">G. Randers-Pehrson</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc1952.txt">GZIP file format specification version 4.3</a>,&rdquo; RFC&nbsp;1952, May&nbsp;1996 (<a href="ftp://ftp.isi.edu/in-notes/rfc1952.txt">TXT</a>, <a href="ftp://ftp.isi.edu/in-notes/rfc1952.ps">PS</a>, <a href="ftp://ftp.isi.edu/in-notes/rfc1952.pdf">PDF</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2045">[RFC2045]</a></td>
+<td class="author-text"><a href="mailto:ned@innosoft.com">Freed, N.</a> and <a href="mailto:nsb@nsb.fv.com">N. Borenstein</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies</a>,&rdquo; RFC&nbsp;2045, November&nbsp;1996.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2048">[RFC2048]</a></td>
+<td class="author-text"><a href="mailto:ned@innosoft.com">Freed, N.</a>, <a href="mailto:klensin@mci.net">Klensin, J.</a>, and <a href="mailto:Postel@ISI.EDU">J. Postel</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2048.txt">Multipurpose Internet Mail Extensions (MIME) Part Four: Registration Procedures</a>,&rdquo; BCP&nbsp;13, RFC&nbsp;2048, November&nbsp;1996 (<a href="ftp://ftp.isi.edu/in-notes/rfc2048.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2048.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2048.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2234">[RFC2234]</a></td>
+<td class="author-text"><a href="mailto:dcrocker@imc.org">Crocker, D., Ed.</a> and <a href="mailto:paulo@turnpike.com">P. Overell</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2234.txt">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; RFC&nbsp;2234, November&nbsp;1997 (<a href="ftp://ftp.isi.edu/in-notes/rfc2234.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2234.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2234.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2396">[RFC2396]</a></td>
+<td class="author-text"><a href="mailto:timbl@w3.org">Berners-Lee, T.</a>, <a href="mailto:fielding@ics.uci.edu">Fielding, R.</a>, and <a href="mailto:masinter@parc.xerox.com">L. Masinter</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2396.txt">Uniform Resource Identifiers (URI): Generic Syntax</a>,&rdquo; RFC&nbsp;2396, August&nbsp;1998 (<a href="ftp://ftp.isi.edu/in-notes/rfc2396.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2396.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2396.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2540">[RFC2540]</a></td>
+<td class="author-text"><a href="mailto:dee3@us.ibm.com">Eastlake, D.</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2540.txt">Detached Domain Name System (DNS) Information</a>,&rdquo; RFC&nbsp;2540, March&nbsp;1999.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
+<td class="author-text"><a href="mailto:fielding@ics.uci.edu">Fielding, R.</a>, <a href="mailto:jg@w3.org">Gettys, J.</a>, <a href="mailto:mogul@wrl.dec.com">Mogul, J.</a>, <a href="mailto:frystyk@w3.org">Frystyk, H.</a>, <a href="mailto:masinter@parc.xerox.com">Masinter, L.</a>, <a href="mailto:paulle@microsoft.com">Leach, P.</a>, and <a href="mailto:timbl@w3.org">T. Berners-Lee</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2616.txt">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999 (<a href="ftp://ftp.isi.edu/in-notes/rfc2616.txt">TXT</a>, <a href="ftp://ftp.isi.edu/in-notes/rfc2616.ps">PS</a>, <a href="ftp://ftp.isi.edu/in-notes/rfc2616.pdf">PDF</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2616.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2616.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2822">[RFC2822]</a></td>
+<td class="author-text">Resnick, P., &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2822.txt">Internet Message Format</a>,&rdquo; RFC&nbsp;2822, April&nbsp;2001.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3548">[RFC3548]</a></td>
+<td class="author-text">Josefsson, S., &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc3548.txt">The Base16, Base32, and Base64 Data Encodings</a>,&rdquo; RFC&nbsp;3548, July&nbsp;2003.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4027">[RFC4027]</a></td>
+<td class="author-text">Josefsson, S., &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc4027.txt">Domain Name System Media Types</a>,&rdquo; RFC&nbsp;4027, April&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4501">[RFC4501]</a></td>
+<td class="author-text">Josefsson, S., &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc4501.txt">Domain Name System Uniform Resource Identifiers</a>,&rdquo; RFC&nbsp;4501, May&nbsp;2006.</td></tr>
+</table>
+
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Authors' Addresses</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">John A. Kunze (editor)</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">California Digital Library</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">415 20th St, 4th Floor</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Oakland, CA  94612-3550</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">US</td></tr>
+<tr><td class="author" align="right">Fax:&nbsp;</td>
+<td class="author-text">+1 510-893-5212</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:jak@ucop.edu">jak@ucop.edu</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Allan Arvidson</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Kungliga biblioteket
+    (National Library of Sweden)</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Box 5039</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Stockholm  10241</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">SE</td></tr>
+<tr><td class="author" align="right">Fax:&nbsp;</td>
+<td class="author-text">+46 (0)8 463 4004</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:allan.arvidson@kb.se">allan.arvidson@kb.se</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Gordon Mohr</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Internet Archive</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">4 Funston Ave, Presidio</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">San Francisco, CA  94117</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">US</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:gojomo@archive.org">gojomo@archive.org</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Michael Stack</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Internet Archive</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">4 Funston Ave, Presidio</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">San Francisco, CA  94117</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">US</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:stack@archive.org">stack@archive.org</a></td></tr>
+</table>
+</body></html>

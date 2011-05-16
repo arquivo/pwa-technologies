@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This project overarches projects in the 'projects' subfolder. The
+    main purpose of this project is the hosting of the subprojects and the
+    running of their builds in an order that takes into account dependencies.
+    This top project may also host documentation that applies across
+    subprojects or libraries used by all.
+
+    $Id: project.xml 1447 2007-01-22 19:54:18Z stack-sf $
+ -->
+<project>
+  <!-- the version of maven's project object model -->
+  <pomVersion>3</pomVersion>
+
+  <!-- a unique name for this project -->
+  <id>archive-access</id>
+
+  <!-- a short but descriptive name for the project -->
+  <name>Internet Archive ARC access tools</name>
+
+  <!-- The version of the project under development, e.g.
+       1.1, 1.2, 2.0-SNAPSHOT -->
+  <currentVersion>0.1.0${version.build.suffix}</currentVersion>
+
+  <!-- Details about the organization that 'owns' the project -->
+  <organization>
+    <name>Internet Archive</name>
+    <url>http://www.archive.org/</url>
+    <logo>http://www.archive.org/images/logo.jpg</logo>
+  </organization>
+
+  <!-- the year the project started -->
+  <inceptionYear>2004</inceptionYear>
+
+  <package>org.archive.access</package>
+  <logo >/images/tools.jpg</logo>
+  <description>This project hosts tools for accessing and 
+  manipulating Internet Archive 
+  &lt;a href="http://www.archive.org/web/researcher/ArcFileFormat.php"&gt;ARC files&lt;/a&gt;.</description>
+
+  <!-- a short description of what the project does -->
+  <shortDescription>IA ARC tools</shortDescription>
+
+  <!-- the project home page -->
+  <url>http://archive-access.sourceforge.net</url>
+
+  <issueTrackingUrl>http://sourceforge.net/tracker/?group_id=118427
+  </issueTrackingUrl>
+
+  <siteAddress />
+    <siteDirectory>/home/groups/a/ar/archive-archive/htdocs/</siteDirectory>
+  <distributionDirectory />
+
+  <!-- the version control repository and http url for online access
+       the connection element has the form:
+       scm:<system>:<system specific connection string> -->
+    <repository>
+       <connection>scm:svn:https://archive-access.svn.sourceforge.net/svnroot/archive-access/</connection>
+        <url>https://archive-access.svn.sourceforge.net/svnroot/archive-access/</url>
+    </repository>
+
+  <!-- any mailing lists for the project -->
+    <mailingLists>
+        <mailingList>  
+            <name> Discussion List</name>
+            <subscribe>
+            http://lists.sourceforge.net/lists/listinfo/archive-access-discuss
+            </subscribe>
+            <unsubscribe>
+            http://lists.sourceforge.net/lists/listinfo/archive-access-discuss
+            </unsubscribe>
+            <archive>
+            http://sourceforge.net/mailarchive/forum.php?forum_id=45842
+            </archive>
+        </mailingList>  
+    </mailingLists>
+
+  <!-- who the developers are for the project -->
+  <developers />
+  <licenses />
+
+  <!-- jar files the project is dependent on -->
+  <dependencies/>
+
+  <!-- build information for the project -->
+  <build>
+    <nagEmailAddress>stack@archive.org</nagEmailAddress>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/java</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+    </unitTest>
+    <resources>
+    <resource>
+        <directory>${basedir}/src/resources</directory>
+        <includes>
+            <include>*.xsl</include>
+        </includes>
+    </resource>
+    </resources>
+  </build>
+    <!--List of reports to generate.
+        Some are not working.  Fix.
+     -->
+    <reports>
+        <report>maven-license-plugin</report>
+        <!--Takes a long time. No one looks at it.  Comment in when wanted.
+        <report>maven-changelog-plugin</report>
+        <report>maven-checkstyle-plugin</report>
+        -->
+        <!--
+        <report>maven-jdepend-plugin</report>
+        -->
+        <report>maven-junit-report-plugin</report>
+        <report>maven-jxr-plugin</report>
+        <report>maven-pmd-plugin</report>
+        <report>maven-tasklist-plugin</report>
+        <!--<report>maven-findbugs-plugin</report>
+         -->
+        <!--<report>maven-developer-activity-plugin</report>-->
+        <!--TODO: <report>maven-file-activity-plugin</report>-->
+        <!--TODO: OOME and takes long time.
+            <report>maven-linkcheck-plugin</report>
+         -->
+    </reports>
+</project>

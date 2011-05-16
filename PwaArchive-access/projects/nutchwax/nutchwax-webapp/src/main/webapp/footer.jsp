@@ -1,0 +1,10 @@
+<%
+	String footerPath = "http://"+ request.getServerName() + request.getContextPath();
+%>
+<div id="sponsor">
+   <a href="http://www.fccn.pt"><img src="<%=footerPath%>/img/logo_fccn_small_.png" width="194" height="45" alt="<i18n:message key="sponsorFCCN"/>" title="<i18n:message key="sponsorFCCN"/>" /></a>&nbsp;
+   <a href="http://www.umic.pt"><img src="<%=footerPath%>/img/logo_umic_small_.png" width="105" height="55" alt="<i18n:message key="sponsorUMIC"/>" title="<i18n:message key="sponsorUMIC"/>" /></a>&nbsp;
+   <a href="http://www.qca.pt/pos/posc.asp"><img src="<%=footerPath%>/img/logo_posc_small_.png" width="220" height="40" alt="<i18n:message key="sponsorPOSC"/>" title="<i18n:message key="sponsorPOSC"/>" /></a>&nbsp;
+   <a href="http://ec.europa.eu/regional_policy/funds/feder/index_pt.htm"><img src="<%=footerPath%>/img/ue_feder_.png" width="132" height="45" alt="<i18n:message key="sponsorFEDER"/>" title="<i18n:message key="sponsorFEDER"/>" /></a>&nbsp;
+   <a href="http://www.mctes.pt/"><img src="<%=footerPath%>/img/logo-mctes.jpg" width="254" height="46" alt="<i18n:message key="sponsorMCTES"/>" title="<i18n:message key="sponsorMCTES"/>" /></a>
+</div>

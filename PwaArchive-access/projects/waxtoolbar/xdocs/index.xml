@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<document>
+  <properties>
+    <title>WAXToolbar</title>
+    <author email="oskar dot grenholm at kb dot se">St.Ack</author>
+    <revision>$Id: index.xml 1005 2006-04-27 09:33:02Z bobcat_zed $</revision>
+  </properties>
+  <body>
+    <section name="Introduction">
+        <p>
+          A <a href="http://www.mozilla.com/firefox/">firefox</a> extension to help users with common tasks encountered surfing a web archive. This extension depends on the <a href="../wayback/">open source wayback machine</a>.  Among the features of the WAX Toolbar is a <i>search field</i> for querying the wayback machine OR for searching a full-text NutchWAX index (if one is available). You can also use the toolbar to switch between proxy-mode and the regular Internet; when in proxy-mode you can easily go back and forth in time. <br/><br/>
+          To obtain the firefox extension, see <a href="downloads.html">downloads</a>. Download the WaxToolbar.xpi binary. For further hints on how to configure and use the toolbar, see the <a href="gettingstarted.html">Getting started</a>.
+        </p>
+    </section>
+    <section name="News">
+      <subsection name="Release 0.2.0 - 2006-04-27">
+        <p>
+          First official release. Now available from the <a href="http://sourceforge.net/project/showfiles.php?group_id=118427">Sourceforge Downloads</a> page.
+        </p>  
+      </subsection>
+    </section>
+  </body>
+</document>

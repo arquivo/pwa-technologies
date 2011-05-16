@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<project name="Wax Toolbar" default="createxpi">
+  <target name="createjar">
+    <zip destfile="waxtoolbar.jar" basedir="." includes="content/**" />
+  </target>
+    <property file="build.properties"/>
+
+  <target name="createxpi" depends="createjar">
+    <zip destfile="WaxToolbar-${version}${version.build.suffix}.xpi">
+      <zipfileset dir="." includes="waxtoolbar.jar" prefix="chrome" />
+      <zipfileset dir="." includes="install.rdf" />
+    </zip>
+  </target>
+
+  <target name="clean">
+    <delete>
+        <fileset dir="." includes="waxtoolbar*.jar"/>
+        <fileset dir="." includes="WaxToolbar*.xpi"/>
+     </delete>
+  </target>
+
+</project>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="nutchwax">
+
+<bannerLeft>
+  <name>ARC Tools</name>
+  <src>images/ia_logo.gif</src>
+  <href >http://archive-access.sf.net/</href>
+</bannerLeft>
+
+<bannerRight>
+  <name>ARC Tools</name>
+  <src>images/tools.jpg</src>
+  <href >http://archive-access.sf.net/</href>
+</bannerRight>
+
+<publishDate format="dd MMM yyyy" />
+
+<body>
+
+  <links>
+    <item name="Sourceforge" href="http://sourceforge.net/projects/archive-access/"/>
+    <item name="Heritrix" href="http://crawler.archive.org"/>
+      <item name="Home" href="index.html"/>
+  </links>
+
+    <menu name="Active Projects">
+    <item name="wayback" href="/projects/wayback" />
+    <item name="WAXToolbar" href="/projects/waxtoolbar" />
+    <item name="NutchWAX" href="/projects/nutchwax" />
+    </menu>
+    <menu name="Not-so-active Projects">
+    <item name="libarc" href="http://archive-access.cvs.sourceforge.net/archive-access/archive-access/projects/libarc"/>
+    <item name="infiniteurl" href="/projects/infiniteurl" />
+    <item name="Hedaern" href="http://archive-access.cvs.sourceforge.net/archive-access/archive-access/projects/hedaern"/>
+    <item name="wera" href="/projects/wera" />
+    <item name="Nutch TREC tools" href="/projects/nutch-trec" />
+    </menu>
+
+    <!--Its not possible to change the labels used in reports, not yet anyways.
+    Current ones don't jibe well.  Reports are headed 'Project Documentation'
+    but its only a subset of all documentation.
+    -->
+    ${reports}
+
+    <!--I want to get the sourceforge image in here but not sure how.
+    -->
+
+</body>
+</project>

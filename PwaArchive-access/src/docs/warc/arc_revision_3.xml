@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<article>
+  <title>ARC file Revision 3.0 Proposal</title>
+
+  <articleinfo>
+    <date>$Date: 2005-08-16 03:03:00 +0100 (Tue, 16 Aug 2005) $</date>
+
+    <authorgroup>
+      <author>
+        <affiliation>
+          <orgname>Det Kongelige Bibliotek</orgname>
+        </affiliation>
+
+        <firstname>Steen</firstname>
+
+        <surname>Christensen</surname>
+
+        <email>ssc at kb dot dk</email>
+      </author>
+
+      <author>
+        <affiliation>
+          <orgname>Internet Archive</orgname>
+        </affiliation>
+
+        <firstname>Michael</firstname>
+
+        <surname>Stack</surname>
+
+        <email>stack at archive dot org</email>
+      </author>
+
+      <editor>
+        <affiliation>
+          <orgname>Internet Archive</orgname>
+        </affiliation>
+
+        <firstname>Michael</firstname>
+
+        <surname>Stack</surname>
+
+        <email>stack at archive dot org</email>
+      </editor>
+    </authorgroup>
+
+    <revhistory>
+      <revision>
+        <revnumber>1</revnumber>
+
+        <date>09/09/2004</date>
+
+        <revremark>Initial conversion of <ulink
+        url="http://crawler.archive.org/cgi-bin/wiki.pl?ArcRevisionProposal">wiki
+        working doc.</ulink> to docbook. Added suggested edits suggested by
+        Gordon Mohr (Others made are still up for consideration). This
+        revision is what is being submitted to the IIPC Framework Group for
+        review at their London, 09/20/2004 meeting.</revremark>
+      </revision>
+    </revhistory>
+  </articleinfo>
+
+  <abstract>
+    <para>Proposed Revision to the Internet Archive ARC file format to add
+    metadata, recording of the fetching request and support for content
+    transforms.</para>
+  </abstract>
+
+  <sect1 id="introduction">
+    <title>Introduction</title>
+
+    <para>This document proposes a set of changes to the Internet Archive (IA)
+    ARC file format that directly address requirements drawn up by the <ulink
+    url="http://www.netpreserve.org/">International Internet Preservation
+    Consortium (IIPC)</ulink>. In the main, the IIPC requirements call for the
+    ARC file to support the writing of content metadata, the recording of the
+    request made fetching content, and support for content tranformations. The
+    IA, the formulator of the current ARC file format, is a member of the IIPC
+    and participated in the development of the IIPC Archival Data Format
+    requirements.</para>
+
+    <sect2 id="IIPC_Archival_Data_Format_Requirement">
+      <title>IIPC Archival Data Format Requirements</title>
+
+      <para>Below are listed the key requirements from Section 2 of <ulink
+      url="http://netarkivet.dk/website/publications/Archival_format_requirements-2004.pdf">IIPC
+      Archival Data Format Requirements</ulink> (TODO: This links to a copy.
+      Update):</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>2.1 <ulink url="http://www.rlg.org/longterm/oais.html">Open
+          Archival Information System (OAIS)</ulink> compatible</para>
+        </listitem>
+
+        <listitem>
+          <para>2.3 The format must support all Internet protocols</para>
+        </listitem>
+
+        <listitem>
+          <para>2.4 The format must support metadata</para>
+        </listitem>
+
+        <listitem>
+          <para>2.5 Data integrity must be easy to verify and maintain</para>
+        </listitem>
+
+        <listitem>
+          <para>2.6 It must be possible to retrieve the original bitstream
+          (Request and response).</para>
+        </listitem>
+
+        <listitem>
+          <para>2.11 Support format transformations</para>
+        </listitem>
+
+        <listitem>
+          <para>2.13 Support duplicate reduction</para>
+        </listitem>
+
+        <listitem>
+          <para>2.14 The format should be efficent</para>
+        </listitem>
+      </itemizedlist>
+
+      <sect3 id="Other_Requirements">
+        <title>Other "Requirements"</title>
+
+        <para>Riders on the above IIPC requirements listing that the IA want
+        the ARC revision to support include:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Recording of metadata to support writing of arbitrary
+            crawltime metadata such as operator journal notes.</para>
+          </listitem>
+
+          <listitem>
+            <para>Recording of response SSL certificates and authentication
+            credentials used logging into a site.</para>
+          </listitem>
+        </itemizedlist>
+      </sect3>
+    </sect2>
+
+    <sect2 id="input">
+      <title>Input</title>
+
+      <para>Below we list key documents that fed the development of this
+      proposal:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Report covering <ulink
+          url="http://crawler.archive.org/cgi-bin/wiki.pl?ArcRevisionCopenhagenDiscussion">Discussion
+          of ArcRevision Proposals</ulink>, June 10th, 2004 at the Heritrix
+          Copenhagen Workshop. A listing of ARC proposed changes was
+          presented. This document summarizes what came of the ensuing
+          discussion.</para>
+        </listitem>
+
+        <listitem>
+          <para>ARC file versions 1.0 and 2.0 are described here, <ulink
+          url="http://www.archive.org/web/researcher/ArcFileFormat.php">Arc
+          File Format</ulink>. Version 2.0 was never implemented. An amendment
+          to ARC file version 1.0 (1.1) adding XML metadata to the head of the
+          ARC is described here, <ulink
+          url="http://crawler.archive.org/articles/developer_manual.html#arcs">Internet
+          Archive ARC files</ulink>. Heritrix currently, version 1.0.0, writes
+          ARC 1.1 files. The Alexa crawler, the harvester responsible for the
+          bulk of archive.org repository writes ARC 1.0 files.</para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://www.rlg.org/longterm/oais.html">Open
+          Archival Information System (OAIS) Resources</ulink>, a
+          <quote>...conceptual framework for an archival system dedicated to
+          preserving and maintaining access to digital information over the
+          long term</quote>, informs the IIPC Archival Data Format
+          Requirements document.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+
+    <sect2 id="scope">
+      <title>Scope</title>
+
+      <sect3 id="Suggested_Timelin">
+        <title>Suggested Timeline</title>
+
+        <para>Finished proposal: 09/2004, in time for the London IIPC meeting.
+        Review and edit over the winter. Implementation at least by IA in
+        first quarter of 2005.</para>
+      </sect3>
+
+      <sect3 id="Key_Stakeholder">
+        <title>Key Stakeholders</title>
+
+        <itemizedlist>
+          <listitem>
+            <para><ulink url="http://netpreserve.org/">International Internet
+            Preservation Consortium (IIPC)</ulink></para>
+          </listitem>
+
+          <listitem>
+            <para><ulink url="http://archive.org/">Internet Archive
+            (IA)</ulink></para>
+          </listitem>
+        </itemizedlist>
+      </sect3>
+
+      <sect3 id="Other_Stakeholder">
+        <title>Other Stakeholders</title>
+
+        <para>Users other than the Internet Archive of <ulink
+        url="http://crawler.archive.org/">Heritrix</ulink>, an open-source
+        crawler that writes its fetchings as ARCs.</para>
+      </sect3>
+
+      <sect3 id="Constraint">
+        <title>Constraints</title>
+
+        <para>Below are copied forward from <ulink
+        url="http://crawler.archive.org/cgi-bin/wiki.pl?ArcRevision">ArcRevision</ulink>
+        Copenhagen Discussion document:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Any revision must consider the 400 terrabytes of version 1
+            legacy Internet Archive ARCs stored in San Francisco with a
+            (dated) copy in Alexandria, Egypt and a recent Amsterdam (IA
+            Europe) copy.</para>
+          </listitem>
+
+          <listitem>
+            <para>The proprietary software used manipulating and playing back
+            this ARC legacy, the av_* tools and the <ulink
+            url="http://web.archive.org/collections/web.html">Wayback
+            Machine</ulink>, are not easily changed.</para>
+          </listitem>
+        </itemizedlist>
+      </sect3>
+    </sect2>
+
+    <sect2 id="Acronyms,_Abbreviations_and_Definition">
+      <title>Acronyms, Abbreviations and Definitions</title>
+
+      <sect3 id="ARC_Recor">
+        <title>ARC Record</title>
+
+        <para>An ARC file is made up of concatenated ARC Records. An ARC
+        Record begins with a single line, known as the URL-record or ARC
+        Record metadata line. Here's is the <ulink
+        url="http://www.archive.org/web/researcher/ArcFileFormat.php">Arc ARC
+        Revision 1.0</ulink> definition of the ARC Record metadata
+        line:</para>
+
+        <programlisting>&lt;URL&gt; &lt;IP-address&gt; &lt;Archive-date&gt; &lt;Content-type&gt; &lt;Archive-length&gt;&lt;nl&gt;</programlisting>
+
+        <para>This ARC Record metadata line is immediately followed by the
+        raw, unadulterated content byte-stream, usually HTTP response headers,
+        an empty line, and then the requested page. An ARC Record is the ARC
+        Record metadata line plus recorded content.</para>
+      </sect3>
+    </sect2>
+  </sect1>
+
+  <sect1 id="ARC_Record_Addressin">
+    <title>ARC Record Addressing</title>
+
+    <para>There is a need for uniquely addressing individual ARC Records. For
+    example, this proposal talks of being able to record a pointer to an
+    extant Archive ARC Record in place of content if archiving software
+    determines the content already present in the archive. Such an ARC Record
+    pointer mechanism would take the address of an ARC Record. An ARC Record
+    address would also be used tying metadata to the content described.</para>
+
+    <para>To date, the Internet Archive, the maintainer of the largest
+    repository of ARCs, has queried particular ARC Records using a combination
+    of date and URL. A CGI, the <ulink
+    url="http://www.archive.org/web/web.php">Wayback Machine</ulink>, parses
+    the passed URL path -- e.g
+    http://web.archive.org/web/20010202083300/http://archive.org/ -- to
+    extract date and URL components. Armed with these path-portions, it does a
+    lookup into an index to find which ARC file contains the sought-for ARC
+    Record and at which offset the ARC Record resides.</para>
+
+    <para>Going forward date plus URL will be insufficent distingushing
+    records. At a minimum, a scheme based on these two attributes alone does
+    not allow for uniquely addressing different ARC Record versions of the
+    same content (See <xref linkend="transforms" /> section below). Other
+    issues are that multiple record writes of the URL in the same moment
+    become more likely with whats proposed below, and how to insure
+    identifiers don't clash as ARC Record queries cross institutions.</para>
+
+    <sect2 id="Referenc">
+      <title>Reference</title>
+
+      <para>The below documents were consulted during development of an ARC
+      Record Addressing Scheme.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><ulink url="http://www.faqs.org/rfcs/rfc2396.html">RFC 2396 -
+          Uniform Resource Identifiers (URI): Generic Syntax</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://larry.masinter.net/duri.html">"duri" and
+          "tdb" URN namespaces based on dated URIs</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="http://www.nla.gov.au/padi/topics/36.html">Persistent
+          Identifiers</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="http://www.ietf.org/internet-drafts/draft-kunze-ark-08.txt">The
+          ARK Persistent Identifier Scheme</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://www.w3.org/TR/uri-clarification/">URIs,
+          URLs, and URNs: Clarifications and Recommendations
+          1.0</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://infomesh.net/2001/09/urischemes/">New URI
+          Schemes: 99% Harmful</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="http://www.ariadne.ac.uk/issue24/metadata/intro.html">I am a
+          name and a number</ulink></para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+
+    <sect2 id="The">
+      <title>The ari Scheme</title>
+
+      <para>For writing the unique address of ARC record, we propose a new URI
+      scheme, <emphasis>ari</emphasis> for arc record identifier or archive
+      resource identifier. An ari is defined as a compound of elements found
+      in ARC Record metadata lines. In words, an ari is the ARC Record
+      metadata URL plus the ARC Record metadata (GMT) date of the ARC Record
+      recording plus a serial number. The serial number is currently
+      yet-to-be-specified but for the purposes of this revision of the
+      proposal, let the serial number be three hex digits wide and have it
+      roll over at 0xFFF to begin again at 0x000. The serial number is meant
+      to distingush records written in the same moment (The ARC Record serial
+      number is not currently present on the ARC Record metadata line. Its
+      addition is proposed later below).</para>
+
+      <para>In RFC 'layout form':</para>
+
+      <programlisting>ari: &lt;GMT Recording Date&gt; ; &lt;ARC Record serial no.&gt; ; &lt;ARC Record URI&gt;</programlisting>
+
+      <para>TODO: Formal RFC BNF-like specification which describes what date
+      looks like (<ulink url="http://www.faqs.org/rfcs/rfc822.html">RFC
+      822</ulink> dates?), legal characters and width in IP, etc.</para>
+
+      <sect3 id="Example_ari">
+        <title>Example aris</title>
+
+        <orderedlist>
+          <listitem>
+            <para>ari:20040724100457;1FE;http://www.archive.org/index.html</para>
+          </listitem>
+
+          <listitem>
+            <para>ari:20040728195737;1FF;http://www.dh.gov.uk/PolicyAndGuidance/OrganisationPolicy/Modernisation/NHSPlan/fs/en?CONTENT_ID=4082690&amp;chk=/DU1UD</para>
+          </listitem>
+        </orderedlist>
+      </sect3>
+    </sect2>
+
+    <sect2 id="ari_discussion">
+      <title>Discussion</title>
+
+      <para>The URN-like ari has the following properties:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>An ari is a globally unique ARC Record identifier. The
+          likelihood that two ARC writers are both writing the same URI at the
+          exact same moment using the same ARC Record serial no. is consider
+          too rare of an occurrance to matter.</para>
+        </listitem>
+
+        <listitem>
+          <para>An ari is not "fetchable"/"actionable". You cannot copy an ari
+          URI into your browser location bar and have the browser fetch the
+          pointed-to resource.</para>
+        </listitem>
+
+        <listitem>
+          <para>While the ARC Record URI is effectively redundant information
+          -- the date plus serial no. could be made sufficent to guarantee
+          uniqueness -- its included as a means of verifying addresses and so,
+          without having to resort to metadata, linkages between records can
+          be traced. For example, its possible to look at a metadata ari and
+          see the URI, date, and serial number of the content it describes
+          even if the described record goes missing. Such a scheme where key
+          information about referenced resource is contained inside the
+          pointer makes an indexer's work easier associating records (e.g. If
+          the original record is missing, all subsequent transforms,
+          re-arc'ings, metadata, request headers, etc., can still be found by
+          an indexer by just reading the ARC Record metadata line).</para>
+        </listitem>
+
+        <listitem>
+          <para>ari is similar to the Persistent Identifier used by the
+          Australian Governments National Library's Pandora project. See
+          Appendix: PANDORA Persistent Identifier Standard of <ulink
+          url="http://www.nla.gov.au/nla/staffpaper/2001/cathro3.html">Archiving
+          the Web: The PANDORA Archive at the National Library of
+          Australia</ulink>.</para>
+        </listitem>
+
+        <listitem>
+          <para>'2.3.1 Proxy into HTTP/HTML' of <ulink
+          url="http://www.ietf.org/rfc/rfc2718.txt">RFC2718</ulink> suggests a
+          gateway between HTTP/HTML for any proposed new scheme so common
+          browsers can fetch the new scheme resources. A version of the
+          Internet Archive <ulink
+          url="http://www.archive.org/web/web.php">Wayback Machine</ulink>
+          expanded to accomodate the ARC Record serial number field can be
+          imagined (Currently, if a date is not specified in a Wayback Machine
+          query, the latest is returned. A '*' for date returns all. Same
+          could be the case for the extra serial number field). Another
+          possible wayback-like mapping scheme would rewrite an ari as a
+          fetchable URI by doing the following. Given a gateway named
+          ari.gw.com with a DNS wildcard record in place such that any
+          *.ari.gw.com resolves to ari.gw.com, and given an ari of
+          ari:20040724100457;1FE;http://www.archive.org:80/index.html, the
+          mapping rewrite would produce: <programlisting>http://www.archive.org.80.20040724100457.1FE.ari.gw.com/index.html</programlisting>Rewriting
+          the domain portion of the ari URI component undoes the need for the
+          gateway to rewrite all but absolute links present in the ari record.
+          Here is another example using the same gateway and the long ari
+          given in the ari example no.2 above: <programlisting>http://www.dh.gov.uk.20040728195737.1FE.ari.gw.com/PolicyAndGuidance/OrganisationPolicy/Modernisation/NHSPlan/fs/en?CONTENT_ID=4082690&amp;chk=/DU1UD</programlisting>Such
+          a gateway would work best for programs. A REST-like webservice for
+          delivering ARC Record content might look like this. Humans will
+          prefer the Wayback query interface.</para>
+        </listitem>
+
+        <listitem>
+          <para>Only ARC Records of the proposed version 3.0 can be addressed
+          using aris (Though we might allow that an ari with an empty serial
+          number means pre-3.0 addresses).</para>
+        </listitem>
+
+        <listitem>
+          <para>Here are some criticism of the ari scheme: <orderedlist>
+              <listitem>
+                <para>There will be a tendency to read an ari as "The state of
+                resource X at time Y". For example, using the example no.1 ari
+                address from above, it can be read as "The state of the
+                index.html page on archive org on 07/24/2001 10:04:57". While
+                this reading holds for example no.1, it falls down when an ARC
+                Record's URL is itself an ari (See samples below where we
+                write about Metadata and linkages to content).</para>
+              </listitem>
+
+              <listitem>
+                <para>Aris are cumbersome particularly in their redundant URL
+                data. Having the URL in the ari is like putting a picture of
+                the addressed building on an envelope alongside the address so
+                the postman can say, "yep, thats it", when she arrives. The
+                argument for carrying the date and URL in the identifier is
+                that without having to resort to metadata, even if
+                intermediary records are lost, its still possible to find any
+                referenced records querying with portions of the identifier.
+                If we relaxed some and instead said that an ARC parser can
+                rely on the ARC Record metadata line content rather than on
+                the ari URI alone, then if we add the referred to URL as a new
+                field ('Location' or 'Reference'), an ARC parser will still be
+                able to reconcile records aris would be more amenable. If we
+                did this, the aris cited as examples above would look like
+                ari:20040724100457;1FE and ari:20040728195737;1FF. If we did
+                this, we might as well use <ulink
+                url="http://www.ietf.org/internet-drafts/draft-kunze-ark-08.txt">The
+                ARK Persistent Identifier Scheme</ulink> (Problem: Using such
+                a terse ari or ARK, how would we refer to legacy records in
+                pre-3.0 ARCs?).</para>
+              </listitem>
+            </orderedlist></para>
+        </listitem>
+      </orderedlist>
+    </sect2>
+  </sect1>
+
+  <sect1 id="ARC_file_format_change">
+    <title>ARC file format changes</title>
+
+    <sect2 id="ARC_Record_Metadata_Lin">
+      <title>ARC Record Metadata Line</title>
+
+      <para>Each ARC Record is introduced by a single line of the following
+      format for version 1 ARC files (From <ulink
+      url="http://www.archive.org/web/researcher/ArcFileFormat.php"> [Arc File
+      Format]</ulink>):</para>
+
+      <programlisting>&lt;URL&gt; &lt;IP-address&gt; &lt;Archive-date&gt; &lt;Content-type&gt; &lt;Archive-length&gt;&lt;nl&gt;</programlisting>
+
+      <para>Version 2 was never used but the spec. had the line looking like
+      this:</para>
+
+      <programlisting>&lt;URL&gt; &lt;IP-address&gt; &lt;Archive-date&gt; &lt;Content-type&gt; &lt;Result-code&gt; &lt;Checksum&gt; &lt;Location&gt; &lt;Offset&gt; &lt;Filename&gt; &lt;Archive-length&gt;&lt;nl&gt;</programlisting>
+
+      <para>This proposal for revision 3.0 is for an ARC Record metadata line
+      that looks like:</para>
+
+      <programlisting>&lt;URL&gt; &lt;IP-address&gt; &lt;Archive-date&gt; &lt;Content-type&gt; &lt;Serial number&gt; &lt;Checksum&gt; &lt;Archive-length&gt;&lt;nl&gt;</programlisting>
+
+      <para>The added serial serial number is needed composing the ari address
+      for a record.</para>
+
+      <para>The checksum will include its type as in
+      <constant>urn:sha1:5RT35RT35RT35RT35RT35RT35RT35RT3</constant>. What has
+      been hashed will be described in the first record of the ARC in its
+      metadata: e.g. Content only, or Content + Request headers, etc.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="ARC_Record_Metadata__IIPC_Archival_Data_Form">
+    <title>ARC Record Metadata (IIPC Archival Data Format Requirement
+    2.4)</title>
+
+    <para>ARC Record metadata will be written as distinct new ARC Records. Its
+    allowed that there may be multiple metadata instances for any particular
+    ARC Record instance (and even metadata about metadata); each will be
+    written as a new ARC Record.</para>
+
+    <para>The metadata format is not specified in this proposal. Metadata
+    specification is considered out of scope. In scope is where to add
+    metadata and how its associated with the described content.</para>
+
+    <para>Its entertained that metadata may be written <ulink
+    url="http://www.faqs.org/rfcs/rfc822.html">RFC 822</ulink>-header style of
+    only ASCII characters with long lines continued on the next begun with a
+    space -- See Section 3.1 -- but it could be done as <ulink
+    url="http://www.w3.org/RDF/">RDF (Resource Description Framework)</ulink>.
+    "The Resource Description Framework (RDF) is a language for representing
+    information about resources in the World Wide Web. It is particularly
+    intended for representing metadata about Web resources, such as the title,
+    author, and modification date of a Web page, copyright and licensing
+    information about a Web document, or the availability schedule for some
+    shared resource."</para>
+
+    <para>Metadata could include:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Referrer page.</para>
+      </listitem>
+
+      <listitem>
+        <para>List of the pages' outbound links.</para>
+      </listitem>
+
+      <listitem>
+        <para>The certificate volunteered by the server if communication done
+        over SSL (https) or authentication information used logging in if page
+        required authentication.</para>
+      </listitem>
+
+      <listitem>
+        <para>Content hash with specification of the hashing mechanism used
+        either by prefix or in a separate distinct element.</para>
+      </listitem>
+
+      <listitem>
+        <para>The SSL certificate received setting up a secure
+        connection.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>While metadata will often contain the address of the content
+    described -- e.g. in the RDF about attribute -- its proposed that the
+    linking of metadata and content described be done on the ARC Record
+    metadata line so its not necessary for an ARC parser to interpret metadata
+    making reconciliation of content and its metadata. The proposed technique
+    is to have the metadata ARC Record metadata line URL point at the ARC
+    Record for the content described. For example, given an ARC Record:</para>
+
+    <programlisting>
+    http://www.archive.org/index.html 201.201.201.111 20040724100457 text/html 1FE 3043
+    HTTP/1.1 200 OK
+    Date: Tue, 03 Aug 2004 01:26:42 GMT
+    Server: Apache/2.0.47 (Unix) mod_ssl/2.0.47 OpenSSL/0.9.7c PHP/4.3.4
+    ...</programlisting>
+
+    <para>Its metadata would look like this:</para>
+
+    <programlisting>
+    ari:20040724100457;1FE;http://www.archive.org/index.html 192.168.201.167 20040724100888 application/rdf+xml;arcrecordtype=metadata 1FF 5096
+    &lt;?xml version='1.0'?&gt;
+    &lt;rdf:RDF
+      xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+      xmlns:arc='http://www.archive.org/arc/1.1'&gt;
+    ...</programlisting>
+
+    <para>Subsequent metadata records that describe the same content will be
+    distingushed by date and serial no.</para>
+
+    <para>A perhaps absurd example, metadata about the metadata record above,
+    would have an ARC Record metadata line URL of
+    ari:20040724100888;1FF;ari:20040724100457;1FE;http://www.archive.org/index.html,
+    and so on.</para>
+
+    <para>Resolution of record type and their interlinking is not dependent on
+    the presence or content of metadata.</para>
+
+    <sect2 id="Metadata_ARC_Record_Type">
+      <title>Metadata ARC Record Types</title>
+
+      <para>Metadata ARC Records are distingushed by their ari URL and
+      mimetype. For example, <ulink
+      url="http://www.aaronsw.com/2002/rdf-mediatype.html">application/rdf+xml</ulink>
+      would be the mimetype for rdf metadata and (though a slight perversion)
+      <ulink
+      url="http://www.faqs.org/rfcs/rfc1892.html">text/rfc822-headers</ulink>
+      for <ulink url="http://www.faqs.org/rfcs/rfc822.html">RFC
+      822</ulink>-type metadata.</para>
+
+      <para>An invented, optional qualifier, arcrecordtype may be required
+      (TBD). An optional presence might save parsers having to dip into the
+      metadata to distingush certain like-looking types (More on these below).
+      Possible values would include metadata, duplicate, and transform. For
+      example, a metadata record might have the following type:
+      application/rdf+xml;arcrecordtype=metadata.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="Recording_of_the_Complete_Request__IIPC_Arch">
+    <title>Recording of the Complete Request (IIPC Archival Data Format
+    Requirement 2.6)</title>
+
+    <para>Its proposed that the full request be recorded in a distinct ARC
+    Record, just as we propose doing metadata. Linking of requests and the
+    content fetched will be done as described above for metadata. Requests
+    will be distingushed by the message/http mimetype (See "19.1 Internet
+    Media Type message/http and application/http" of <ulink
+    url="http://www.faqs.org/rfcs/rfc2616.html">RFC2616 (HTTTP)</ulink>). The
+    RFC allows msgtype qualifiers so we can actually write
+    message/http;msgtype=request as the mimetype on requests (Later in this
+    proposal we describe a case where we'll want to make use of the sister
+    message/http;msgtype=response mimetype).</para>
+
+    <sect2 id="xml_discussion">
+      <title>Discussion</title>
+
+      <para>Requests (and responses) cannot be recorded easily INSIDE of
+      metadata. If the metadata form is XML then to guard against XML-illegal
+      characters appearing in the request, the request headers would need to
+      be encoded/escaped or the request data would need to be BASE64 encoded,
+      a transformation done on the original byte stream. Both schemes violate
+      the requirement that we record the original bytestream. While it might
+      be possible to do the headers in <ulink
+      url="http://www.faqs.org/rfcs/rfc822.html">RFC 822</ulink>-type
+      metadata, it seems easier recording the raw requests as their own ARC
+      Record of their own mimetype.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="Duplicate_Reduction__IIPC_Archival_Data_Form">
+    <title>Duplicate Reduction (IIPC Archival Data Format Requirement
+    2.13)</title>
+
+    <sect2 id="duplicate_use_case">
+      <title>Use Case</title>
+
+      <para>A number of websites are harvested on a daily basis, the majority
+      of all pages remain unchanged between successive harvests. In order to
+      save storage space it should not be necessary to save unchanged pages.
+      It must however be possible to record that the page was visited and
+      verified identical to existing version in the archive.</para>
+    </sect2>
+
+    <sect2 id="duplicate_impl">
+      <title>Proposed Implementation</title>
+
+      <para>Recording a pointer to content already extant in the archive will
+      be done by recording the current request and response into distinct ARC
+      Records -- as a record of the attempted fetch -- with a metadata ARC
+      Record that has a pointer back to the archive record we want to avoid
+      duplicating. The below illustration uses pseudo RDF as the metadata
+      format.</para>
+
+      <para>The first time a page is visited 3 records are created:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The response (Currently response headers followed by the
+          content): <programlisting>http://www.archive.org/index.html 201.201.201.111 20040724100457 text/html 1FE 3043
+HTTP/1.1 200 OK
+Date: Tue, 03 Aug 2004 01:26:42 GMT
+Server: Apache/2.0.47 (Unix) mod_ssl/2.0.47 OpenSSL/0.9.7c PHP/4.3.4
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>The metadata: <programlisting>ari:20040724100457;1FE;http://www.archive.org/index.html 192.168.201.167 20040724100888 application/xml+rdf;arcrecordtype=metadata 1FF 5096
+&lt;?xml version='1.0'?&gt;
+&lt;rdf:RDF
+    xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+    xmlns:arc='http://www.archive.org/arc/1.1'&gt;
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>The request: <programlisting>ari:20040724100457;1FE;http://www.archive.org/index.html 192.168.201.167 20040724100999 message/http;msgtype=request 200 3333
+200 OK
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The next time the page is visited, AND the crawler determines the
+      page already extant in the repository, 3 records are created:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The response only (No content. Note special response
+          mimetype): <programlisting>http://www.archive.org/index.html 201.201.201.111 20040724104444 message/http;msgtype=response 210 3043
+HTTP/1.1 200 OK^M Date: Tue, 03 Aug 2004 01:26:42 GMT
+Server: Apache/2.0.47 (Unix) mod_ssl/2.0.47 OpenSSL/0.9.7c PHP/4.3.4
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>The metadata including description that this is a pointer to a
+          duplicate: <programlisting>ari:20040724104444;210;http://www.archive.org/index.html 192.168.201.167 20040724105555 application/xml+rdf;arcrecordtype=duplicate 211 5096
+&lt;?xml version='1.0'?&gt;
+&lt;rdf:RDF
+    xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+    xmlns:arc='http://www.archive.org/arc/1.1'&gt;
+...
+    &lt;dcterms:isVersionOf&gt;http://www.archive.org/index.html
+    &lt;/dcterms:isVersionOf&gt;
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>The request: <programlisting>ari:20040724104444;210;http://www.archive.org/index.html 192.168.201.167 20040724106666 message/http;msgtype=request 212 3333
+200 OK
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+
+  <sect1 id="transforms">
+    <title>Format Transformations (IIPC Archival Data Format Requirement
+    2.11)</title>
+
+    <sect2 id="transform_use_case">
+      <title>Use Case</title>
+
+      <para>A document is harvested in a proprietary text processing format.
+      Support and development of the text processing application stops. In
+      order to maintain the ability to read the information in the stored
+      document, a transformation program is used to create a copy of the
+      document in a supported document format.</para>
+    </sect2>
+
+    <sect2 id="Transformation_Attribute">
+      <title>Transformation Attributes</title>
+
+      <para>Transformations should result in a freestanding, complete record.
+      There should be no dependency on the original record surviving to guard
+      against failure of transformed record on loss of the original.</para>
+    </sect2>
+
+    <sect2 id="transform_impl">
+      <title>Proposed Implementation</title>
+
+      <para>Here is how transformations will work using the metadata
+      vocabulary proposed above. The below illustration uses pseudo RDF as the
+      metadata format.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The initial version: <programlisting>http://www.archive.org/mydocument.doc 201.201.201.111 20040724100457 application/msword 1FE 3043
+HTTP/1.1 200 OK
+Date: Tue, 03 Aug 2004 01:26:42 GMT
+Server: Apache/2.0.47 (Unix) mod_ssl/2.0.47 OpenSSL/0.9.7c PHP/4.3.4
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The transformation process creates 2 new records:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The transformed version: <programlisting>ari:20040724100457;1FE;http://www.archive.org/mydocument.doc 192.168.201.143 20040724100888 application/openoffice.org 200 1024
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>Metadata on the transformation: <programlisting>ari:20040724100888;200;ari:20040724100457;1FE;http://www.archive.org/mydocument.doc 192.168.201.143 20040724109999 application/xml+rdf;arcrecordtype=transform 211 5096
+&lt;?xml version='1.0'?&gt;
+&lt;rdf:RDF
+    xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+    xmlns:arc='http://www.archive.org/arc/1.1'&gt;
+...
+ &lt;dcterms:replaces&gt;ari:20040724100457;C0A8C9A7.1FE;http://www.archive.org/mydocument.doc
+ &lt;/dcterms:replaces&gt;
+...</programlisting></para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+
+  <sect1 id="For_Consideratio">
+    <title>For Consideration</title>
+
+    <sect2 id="Up_the_default_ARC_file_siz">
+      <title>Up the default ARC file size</title>
+
+      <para>Currently the default ARC file size is 100mb. We should consider
+      upping the default size from 100mb to 500mb or to 600mb (CD size). Disks
+      are bigger now. Would mean less files to sling.</para>
+    </sect2>
+
+    <sect2 id="ARC_writers_should_record_GZIP_length_in_cus">
+      <title>ARC writers should record GZIP length in custom GZIP header
+      'extra' header</title>
+
+      <para>ARC writers will need to be amended to write Revision 3.0 arcs.
+      ARC readers will need to be amended to parse the new ARC format. While
+      revisiting both, its been proposed by Tom Emerson that we add an
+      optional gzip header 'extra' field that has in it the GZIP'd record
+      length to facility skipping over ARC Records. See <ulink
+      url="http://www.dreamersrealm.net/tree/blog/2004/07/18/#gzip_size_proposal">GZIPed
+      Records: Stashing the Length</ulink>.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="Miscellaneou">
+    <title>Miscellaneous</title>
+
+    <sect2 id="av___toolse">
+      <title>av_* toolset</title>
+
+      <para>Notes on changes needed in av_* toolset to accomodate new scheme
+      types and new ARC Record metadata line as well as new arc size.</para>
+    </sect2>
+
+    <sect2 id="GZIPping_of_ARC_Record">
+      <title>GZIPping of ARC Records</title>
+
+      <para>TODO: Describe the way arcs are gzipped; that they are not one big
+      gzip member, but a member per record.</para>
+    </sect2>
+
+    <sect2 id="Recording_unfetched_conten">
+      <title>Recording unfetched content</title>
+
+      <para>Describe the Los Alamos Labs use case where ARC Record was not the
+      result of fetching -- i.e. no request headers and the mimetype describes
+      exactly what follows (Los Alamos Labs: See <ulink
+      url="http://groups.yahoo.com/group/archive-crawler/message/530">Message
+      530</ulink>) -- and how aris could be used recording these record
+      types.</para>
+    </sect2>
+
+    <sect2 id="ARC_File_EBN">
+      <title>ARC File EBNF</title>
+
+      <para>TODO: Include formal EBNF description of ARC (To byte
+      level).</para>
+    </sect2>
+  </sect1>
+</article>

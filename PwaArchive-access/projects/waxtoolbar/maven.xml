@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project 
+    xmlns:j="jelly:core" 
+    xmlns:define="jelly:define" 
+    xmlns:doc="doc" 
+    xmlns:artifact="artifact" 
+    xmlns:util="jelly:util" 
+    xmlns:maven="jelly:maven"
+    xmlns:ant="jelly:ant">
+
+    <goal name="jar:jar" >
+        <echo message="This project does not build a jar" />
+    </goal>
+    <preGoal name="clean" >
+        <ant:ant target="clean" />
+    </preGoal>
+    <goal name="xpi">
+        <ant:ant target="createxpi" />
+    </goal>
+    <preGoal name="dist:prepare-bin-filesystem">
+        <attainGoal name="xpi" />
+        <mkdir dir="${maven.build.dir}/xpi/" />
+        <copy todir="${maven.build.dir}/xpi/" >
+          <fileset dir=".">
+            <include name="*.xpi"/>
+          </fileset>
+        </copy>
+    </preGoal>
+    <postGoal name="dist:prepare-bin-filesystem">
+        <copy todir="${maven.dist.bin.assembly.dir}" filtering="false">
+          <fileset dir="${maven.build.dir}/xpi/">
+            <include name="*.xpi"/>
+          </fileset>
+        </copy>
+    </postGoal>
+    <postGoal name="dist:prepare-src-filesystem">
+        <mkdir dir="${maven.dist.src.assembly.dir}/content/" />
+        <copy todir="${maven.dist.src.assembly.dir}/content/" >
+          <fileset dir="content" />
+        </copy>
+        <copy todir="${maven.dist.src.assembly.dir}" filtering="false">
+          <fileset file="*rdf" />
+        </copy>
+    </postGoal>
+
+</project>
