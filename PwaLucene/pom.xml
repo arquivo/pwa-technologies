@@ -4,7 +4,7 @@
   <groupId>pt.arquivoweb</groupId>
   <artifactId>pwalucene</artifactId>
   <name>Lucene extension for engineering searching and ranking models</name>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
   <url>http://arquivo-web.fccn.pt</url>
   <packaging>jar</packaging>
   
@@ -123,21 +123,18 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.2</version>
-      <!-- <scope>test</scope> -->
+      <scope>test</scope> 
     </dependency>    
-    
     <dependency>
       <groupId>org.apache</groupId>
       <artifactId>hadoop</artifactId>
       <version>0.14.5-dev-core</version> 
-      <scope>compile</scope>
     </dependency>
-    
     <dependency>
-	  <groupId>commons-codec</groupId>
-	  <artifactId>commons-codec</artifactId>
-	  <version>1.4</version>		 	  	
-	</dependency>
+       <groupId>commons-codec</groupId>
+       <artifactId>commons-codec</artifactId>
+       <version>1.4</version>		 	  	
+    </dependency>
       	
   </dependencies>
           
