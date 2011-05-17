@@ -21,14 +21,14 @@
   </organization>  
   <developers>
     <developer>
-	 	<name>Miguel Costa</name>
-		<id>miguel.costa</id>
-	        <email>miguel.costa@fccn.pt</email>
-		<roles>
-		  <role>RD engineer</role>
-		</roles>
-		<organization>www.fccn.pt</organization>
-	</developer>		
+      <name>Miguel Costa</name>
+      <id>miguel.costa</id>
+      <email>miguel.costa@fccn.pt</email>
+      <roles>
+        <role>RD engineer</role>
+      </roles>
+      <organization>www.fccn.pt</organization>
+    </developer>		
   </developers>
 
   <build>
