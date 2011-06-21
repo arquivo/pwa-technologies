@@ -62,10 +62,11 @@
                         overwrite="true">
                     <fileset dir="${nutch}/lib" >
                         <include name="xerces*jar" />
-                        <include name="lucene*jar" />
+                        <include name="pwalucene*jar" />
+                        <include name="lucene-misc*jar" />
                         <include name="log4j*jar" />
                         <include name="taglibs-i18n*jar" />
-						<include name="taglibs-log*jar" />
+			<include name="taglibs-log*jar" />
                         <include name="commons-lang*jar" />
                         <include name="commons-logging*jar" />
                         <include name="hadoop*jar" />

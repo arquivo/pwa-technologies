@@ -122,6 +122,7 @@
         <exclude>org.archive.nutchwax:nutchwax-thirdparty</exclude>
         <exclude>org.archive.nutchwax:nutchwax-plugins</exclude>
         <exclude>org.archive.nutchwax:nutchwax-core</exclude>
+        <exclude>org.apache.lucene:lucene-core</exclude>
       </excludes>
     </dependencySet>
   </dependencySets>
