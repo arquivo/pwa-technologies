@@ -297,13 +297,13 @@ is restarted, logs for tasks of same name are overwritten.
 
 <property>
   <name>collection.type</name>
-  <value>multiple</value>
+  <value>normal</value>
   <description>
-    Type of collection for indexing. This has implications mostly during the linkdb and index phases.
-    There are three types:
-     normal - collection having one snapshot. One version per URL at most.
-     trec - collections from TREC (Text REtrieval Conference)
-     multiple - collections having multiple snapshots, requiring the creation of virtual snapshots based on their timestamps. One version per URL and day at most.
+    Type of collection for indexing. This has implications mostly during the LinkDb and Index phases.
+    There are three types of collections:
+      normal - collection from one crawl. It will be handled as one snapshot, where a version is identified by a URL.
+      multiple - collection from multiple crawls. It will be handled as multiple snapshots, where a version is identified by a URL and day.
+      trec - collection from TREC (Text REtrieval Conference)
   </description>
 </property>
 
@@ -331,8 +331,7 @@ is restarted, logs for tasks of same name are overwritten.
   <value>false</value>
   <description>
     Indicates whether the IPC protocol log the call and return information.
-    There are two values: false or true.
-    It should be true only for debuging.
+    There are two values: false or true. It should be true only for debuging.
   </description>
 </property>
 
@@ -393,7 +392,7 @@ is restarted, logs for tasks of same name are overwritten.
   <name>timeout.indexing.document</name>
   <value>120000</value>
   <description>
-    Timeout to parse and index one document. There are parsers that hang, so the thread running it is killed and a new one added to the thread pool.
+    Timeout to parse and index one document. There are parsers that hang, so the running thread is killed and a new one added to the thread pool.
   </description>
 </property>
 
@@ -419,7 +418,7 @@ is restarted, logs for tasks of same name are overwritten.
   <name>database.password</name>
   <value>xxxxx</value>
   <description>
-    Database connection to create virtual snapshots.
+    Database password to create virtual snapshots.
     This is only used when the collection.type = multiple.
   </description>
 </property>
