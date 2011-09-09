@@ -91,4 +91,18 @@ public class PwaFunctionsWritable implements Writable {
     	return functions.get(index);
     }
     
+    
+    /**
+     * Parse string list of ranking functions  
+     * @param s list of ranking functions in format "functionId weight functionId weight ..."
+     * @return new PwaFunctionsWritable object with the ranking functions defined in the list
+     */
+    public static PwaFunctionsWritable parse(String s) {
+    	PwaFunctionsWritable newFunctions=new PwaFunctionsWritable();
+        String parts[]=s.split(" ");
+        for (int i=0;i<parts.length;i+=2) {
+        	newFunctions.addFunction(Integer.parseInt(parts[i]), Float.parseFloat(parts[i+1]));    	  
+        }
+        return newFunctions;
+    }
   }

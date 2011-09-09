@@ -503,8 +503,7 @@ class SegmentReader extends IndexReader {
   public synchronized void norms(String field, byte[] bytes, int offset)
     throws IOException {
 
-	offset*=4; // BUG norm was exchanged by field length
-	  
+	offset*=4; // BUG norm was exchanged by field length  
     Norm norm = (Norm) norms.get(field);
     if (norm == null) {
 	//System.arraycopy(fakeNorms(), 0, bytes, offset, maxDoc()); 
