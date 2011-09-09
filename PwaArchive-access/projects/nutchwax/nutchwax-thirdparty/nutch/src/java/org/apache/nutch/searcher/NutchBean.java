@@ -282,7 +282,7 @@ public class NutchBean
    * @param reverse True if we are to reverse sort by <code>sortField</code>.
    * @param functions Extra parameters     TODO MC
    * @param maxHitsPerVersion maximum hits returned with the same url and different version
-   * @param waybackQuery if true is a query from wayback; otherwise is from nutchwax
+   * @param waybackQuery if true it is a query from wayback; otherwise it is from nutchwax
    * @return Hits the matching hits
    * @throws IOException
    */

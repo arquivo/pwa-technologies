@@ -315,8 +315,8 @@ public class NutchResourceIndex implements ResourceIndex {
    	   String multDet = wbRequest.get(WaybackConstants.REQUEST_MULT_DETAILS);
 	   String docId = wbRequest.get(WaybackConstants.REQUEST_DOC_ID);
 	   String indexId = wbRequest.get(WaybackConstants.REQUEST_INDEX_ID);
-	   /* BUG 0000155 */
-	   		   	
+	   /* BUG 0000155 */	   		   		   	 	   
+	   
        if ((urlStr==null || urlStr.length()<=0) && (docId==null || indexId==null)) {
            throw new BadQueryException("Url is empty.");
        }
@@ -375,7 +375,8 @@ public class NutchResourceIndex implements ResourceIndex {
        // As we are always searching agains an url, a
        // higher perDup/Site will return just more versions
        ms.append("&hitsPerDup=").append(hitsPerPage);
-       ms.append("&hitsPerSite=").append(hitsPerPage);
+       ms.append("&hitsPerSite=").append(hitsPerPage);       
+       ms.append("&waybackQuery=true"); // indicates that this OpenSearch request came from wayback       
                  	   
        /* BUG 0000155 */   	   
    	   if (multDet!=null) {

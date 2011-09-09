@@ -31,5 +31,7 @@ public class Global {
 	public static final String MAX_FULLTEXT_MATCHES_RANKED="max.fulltext.matches.ranked";
 	
 	public static final String MAX_QUERY_TERMS="max.query.terms";
-	public static final String MAX_QUERY_EXTRA_TERMS="max.query.extra.terms";	
+	public static final String MAX_QUERY_EXTRA_TERMS="max.query.extra.terms";
+	
+	public static final String RANKING_FUNCTIONS="ranking.functions";	
 }

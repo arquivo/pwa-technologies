@@ -31,9 +31,6 @@
 
 
 
-
-
-
 <!-- JUST FOR INDEXING/SEARCHING TREC GOV1/GOV2 - COMMENT ALL AFTER THIS LINE -->
 
 <!--
@@ -53,7 +50,7 @@
 <property>
   <name>plugin.includes</name>
   <value>protocol-http|urlfilter-regex|parse-(text|html|trec)|index-(basic|trec)|query-(basic|site|url|host|wax)|summary-lucene|scoring-opic|urlnormalizer-(pass|regex|basic)</value>
-  <description> JUST FOR INDEXING TREC GOV - REMOVE IT since it exist for NUTCHWAX in wax-default.xml
+  <description> JUST FOR INDEXING TREC GOV - REMOVE IT since it exists for NUTCHWAX in wax-default.xml
   Regular expression naming plugin directory names to
   include.  Any plugin not matching this expression is excluded.
   In any case you need at least include the nutch-extensionpoints plugin. By

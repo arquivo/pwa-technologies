@@ -30,30 +30,31 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.xml.parsers.*;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.nutch.global.Global;
 import org.apache.nutch.util.NutchConfiguration;
+import org.apache.lucene.search.PwaFunctionsWritable;
 import org.w3c.dom.*;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
+import javax.xml.parsers.*;
 
 
 /** Present search results using A9's OpenSearch extensions to RSS, plus a few
  * Nutch-specific extensions. */   
 public class OpenSearchServlet extends HttpServlet {
 	
-  private static final Log LOG = LogFactory.getLog(OpenSearchServlet.class);
-  
-  private static final Map NS_MAP = new HashMap();
+  private static final Log LOG = LogFactory.getLog(OpenSearchServlet.class);  
+  private static final Map NS_MAP = new HashMap();  
+  private static PwaFunctionsWritable functions = null;
+  private static int nQueryMatches = 0;
 
   static {
-    NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearchrss/1.0/");
+    NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");                              
     NS_MAP.put("nutch", "http://www.nutch.org/opensearchrss/1.0/");
   }
 
@@ -61,8 +62,10 @@ public class OpenSearchServlet extends HttpServlet {
   static {
     SKIP_DETAILS.add("url");                   // redundant with RSS link
     SKIP_DETAILS.add("title");                 // redundant with RSS title
+    SKIP_DETAILS.add("boost");                
+    SKIP_DETAILS.add("pagerank");                
   }
-
+    
   private NutchBean bean;
   private Configuration conf;
 
@@ -70,7 +73,11 @@ public class OpenSearchServlet extends HttpServlet {
     try {
       this.conf = NutchConfiguration.get(config.getServletContext());
       bean = NutchBean.get(config.getServletContext(), this.conf);
-    } catch (IOException e) {
+
+      functions=PwaFunctionsWritable.parse(this.conf.get(Global.RANKING_FUNCTIONS));            
+      nQueryMatches=Integer.parseInt(this.conf.get(Global.MAX_FULLTEXT_MATCHES_RANKED));
+    } 
+    catch (IOException e) {
       throw new ServletException(e);
     }
   }
@@ -126,10 +133,10 @@ public class OpenSearchServlet extends HttpServlet {
     }     
     
     
-    boolean multipleDetails = request.getParameter("multDet")!=null && request.getParameter("multDet").equals("true"); // indication to request multiple details instead one at the time
+    boolean multipleDetails = request.getParameter("multDet")!=null && request.getParameter("multDet").equals("true"); // indicates that it requests multiple details instead of one at the time
     String sId = request.getParameter("id");
-    String sIndex = request.getParameter("index");
-    
+    String sIndex = request.getParameter("index");       
+    boolean waybackQuery = request.getParameter("waybackQuery")!=null && request.getParameter("waybackQuery").equals("true"); // indicates that is a wayback request
     
     // Make up query string for use later drawing the 'rss' logo.
     String params = "&hitsPerPage=" + hitsPerPage +
@@ -138,7 +145,8 @@ public class OpenSearchServlet extends HttpServlet {
         (dedupField == null ? "" : "&dedupField=" + dedupField)) +
         (multipleDetails==false ? "" : "&multDet=true") +
         (sId==null ? "" : "&id="+sId) +
-        (sIndex==null ? "" : "&index="+sIndex);
+        (sIndex==null ? "" : "&index="+sIndex) +
+        (waybackQuery==false ? "" : "&waybackQuery=true");
 
     Hits hits;
     if (sId!=null && sIndex!=null) { // only want the details of this document with this id in this index
@@ -151,8 +159,14 @@ public class OpenSearchServlet extends HttpServlet {
     	LOG.debug("query: " + queryString);    	
 
     	// execute the query    
-    	try {
-    		hits = bean.search(query, start + hitsPerPage, hitsPerDup, dedupField, sort, reverse, true); // wayback query
+    	try {    		
+    		if (waybackQuery) { // wayback (URL) query   		
+    			hits = bean.search(query, start + hitsPerPage, hitsPerDup, dedupField, sort, reverse, true); 
+    		}
+    		else { // nutchwax (full-text) query    			    			
+    			int hitsPerVersion = 1;    		
+    			hits = bean.search(query, start + hitsPerPage, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);    			
+    		}
     	} 
     	catch (IOException e) {
    			LOG.warn("Search Error", e);    	
@@ -191,29 +205,33 @@ public class OpenSearchServlet extends HttpServlet {
  
       Element rss = addNode(doc, doc, "rss");
       addAttribute(doc, rss, "version", "2.0");
-      addAttribute(doc, rss, "xmlns:opensearch",
-                   (String)NS_MAP.get("opensearch"));
+      addAttribute(doc, rss, "xmlns:opensearch",(String)NS_MAP.get("opensearch"));
+      /*
       addAttribute(doc, rss, "xmlns:nutch", (String)NS_MAP.get("nutch"));
+      */
 
       Element channel = addNode(doc, rss, "channel");
     
-      addNode(doc, channel, "title", "Nutch: " + queryString);
-      addNode(doc, channel, "description", "Nutch search results for query: "
+      addNode(doc, channel, "title", "PWA Search Engine: " + queryString);
+      addNode(doc, channel, "description", "PWA search results for query: "
               + queryString);
+      /*
       addNode(doc, channel, "link",
               base+"/search.jsp"
               +"?query="+urlQuery
               +"&start="+start
               +"&hitsPerDup="+hitsPerDup
               +params);
-
+      */
       addNode(doc, channel, "opensearch", "totalResults", ""+hits.getTotal());
       addNode(doc, channel, "opensearch", "startIndex", ""+start);
       addNode(doc, channel, "opensearch", "itemsPerPage", ""+hitsPerPage);
-
-      addNode(doc, channel, "nutch", "query", queryString);
+      Element queryElem=addNode(doc, channel, "opensearch", "Query", "");
+      addAttribute(doc, queryElem, "role", "request");
+      addAttribute(doc, queryElem, "searchTerms", queryString);
+      addAttribute(doc, queryElem, "startPage", "1");      
     
-
+      /*
       if ((hits.totalIsExact() && end < hits.getTotal()) // more hits to show
           || (!hits.totalIsExact() && (hits.getLength() > start+hitsPerPage))){
         addNode(doc, channel, "nutch", "nextPage", requestUrl
@@ -222,13 +240,16 @@ public class OpenSearchServlet extends HttpServlet {
                 +"&hitsPerDup="+hitsPerDup
                 +params);
       }
+      */
 
+      /*
       if ((!hits.totalIsExact() && (hits.getLength() <= start+hitsPerPage))) {
         addNode(doc, channel, "nutch", "showAllHits", requestUrl
                 +"?query="+urlQuery
                 +"&hitsPerDup="+0
                 +params);
       }
+      */
 
       for (int i = 0; i < length; i++) {
         Hit hit = show[i];
@@ -249,12 +270,18 @@ public class OpenSearchServlet extends HttpServlet {
         if (url!=null)
         	addNode(doc, item, "link", url);
 
-        addNode(doc, item, "nutch", "site", hit.getDedupValue());
-
+        /*
+        addNode(doc, item, "nutch", "site", hit.getDedupValue());        
         addNode(doc, item, "nutch", "cache", base+"/cached.jsp?"+id);
         addNode(doc, item, "nutch", "explain", base+"/explain.jsp?"+id
                 +"&query="+urlQuery+"&lang="+queryLang);
+        */
+        
+        // BUG wayback 0000155 - add docId and index id to use in wayback search to see a page
+        addNode(doc, item, "id", ""+hit.getIndexDocNo());
+        addNode(doc, item, "index", ""+hit.getIndexNo());
 
+        /*
         if (hit.moreFromDupExcluded()) {
           addNode(doc, item, "nutch", "moreFromSite", requestUrl
                   +"?query="
@@ -263,16 +290,13 @@ public class OpenSearchServlet extends HttpServlet {
                   +"&hitsPerSite="+0
                   +params);
         }
+        */
 
         for (int j = 0; j < detail.getLength(); j++) { // add all from detail
           String field = detail.getField(j);
           if (!SKIP_DETAILS.contains(field))
-            addNode(doc, item, "nutch", field, detail.getValue(j));
-        }
-        
-        // BUG wayback 0000155 - add docId and index id to use in wayback search to see a page
-        addNode(doc, item, "nutch", "id", ""+hit.getIndexDocNo());
-        addNode(doc, item, "nutch", "index", ""+hit.getIndexNo());
+            addNode(doc, item, field, detail.getValue(j));
+        }              
       }
 
       // dump DOM tree
@@ -306,11 +330,12 @@ public class OpenSearchServlet extends HttpServlet {
     parent.appendChild(child);
   }
 
-  private static void addNode(Document doc, Node parent,
+  private static Element addNode(Document doc, Node parent,
                               String ns, String name, String text) {
     Element child = doc.createElementNS((String)NS_MAP.get(ns), ns+":"+name);
     child.appendChild(doc.createTextNode(getLegalXml(text)));
     parent.appendChild(child);
+    return child;
   }
 
   private static void addAttribute(Document doc, Element node,

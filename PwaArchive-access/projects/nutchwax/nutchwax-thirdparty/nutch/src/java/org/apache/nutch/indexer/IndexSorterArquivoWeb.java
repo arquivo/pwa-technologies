@@ -199,7 +199,7 @@ public class IndexSorterArquivoWeb extends ToolBase {
       while (oldDoc < oldToNew.length) { 
         int newDoc = oldToNew[oldDoc];
         //if (newDoc != -1) { TODO MC
-          //norms[newDoc] = oldNorms[oldDoc]; TODO MC
+          //norms[newDoc] = oldNorms[oldDoc]; TODO MC 
         System.arraycopy(oldNorms, oldDoc*4, norms, newDoc*4, 4); // TODO MC copy lengths instead of norms
         //} TODO MC
         oldDoc++;
