@@ -47,16 +47,16 @@ import javax.xml.parsers.*;
 /** Present search results using A9's OpenSearch extensions to RSS, plus a few
  * Nutch-specific extensions. */   
 public class OpenSearchServlet extends HttpServlet {
-	
+	 	
   private static final Log LOG = LogFactory.getLog(OpenSearchServlet.class);  
   private static final Map NS_MAP = new HashMap();  
   private static PwaFunctionsWritable functions = null;
   private static int nQueryMatches = 0;
-
+    
   static {
-    NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");                              
-    NS_MAP.put("nutch", "http://www.nutch.org/opensearchrss/1.0/");
-  }
+    NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");                               
+//    NS_MAP.put("nutch", "http://www.nutch.org/opensearchrss/1.0/");
+  }  
 
   private static final Set SKIP_DETAILS = new HashSet();
   static {
@@ -206,6 +206,7 @@ public class OpenSearchServlet extends HttpServlet {
       Element rss = addNode(doc, doc, "rss");
       addAttribute(doc, rss, "version", "2.0");
       addAttribute(doc, rss, "xmlns:opensearch",(String)NS_MAP.get("opensearch"));
+            
       /*
       addAttribute(doc, rss, "xmlns:nutch", (String)NS_MAP.get("nutch"));
       */

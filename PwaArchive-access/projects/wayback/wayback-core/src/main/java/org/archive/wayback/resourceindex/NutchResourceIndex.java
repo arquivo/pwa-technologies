@@ -66,10 +66,7 @@ public class NutchResourceIndex implements ResourceIndex {
 	
    public final static int MAX_RECORDS = 10000; // TODO should be parameterized with the same value of entry maxRRecords in webapps/wayback/WEB-INF/wayback.xml      	 
    private int maxRecords = MAX_RECORDS;  
-
-	
-   private static final String NUTCH_NS =
-       "http://www.nutch.org/opensearchrss/1.0/";
+     
    private String searchUrlBase;
   
    private static final String NUTCH_ARCNAME = "arcname";
@@ -233,7 +230,7 @@ public class NutchResourceIndex implements ResourceIndex {
 		if (host!=null) {
 			result.put(WaybackConstants.RESULT_ORIG_HOST, host);
 		}
-//		result.put(WaybackConstants.RESULT_REDIRECT_URL,getNodeContent(e,""));
+
 		result.put(WaybackConstants.RESULT_REDIRECT_URL,
 				NUTCH_DEFAULT_REDIRECT_URL);
 		String url = getNodeContent(e,NUTCH_CAPTURE_URL);
@@ -396,7 +393,8 @@ public class NutchResourceIndex implements ResourceIndex {
 	
 	// extract the text content of a single nutch: tag under a node
    protected String getNodeNutchContent(Element e, String key) {
-       NodeList nodes = e.getElementsByTagNameNS(NUTCH_NS, key);
+       //NodeList nodes = e.getElementsByTagNameNS(NUTCH_NS, key); TODO remove
+	   NodeList nodes = e.getElementsByTagName(key); 
        String result = null;
        if (nodes != null && nodes.getLength() > 0) {
            result = nodes.item(0).getTextContent();
