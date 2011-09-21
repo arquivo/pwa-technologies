@@ -99,7 +99,7 @@
                     <fileset dir="../nutchwax-plugins/target/wax-plugins" />
                 </copy>
                 <copy todir="target/${artifactId}-${project.version}/WEB-INF/classes" 
-                        overwrite="true">
+                        overwrite="false">
                     <fileset dir="${nutch}/conf" >
                         <exclude name="**/*.template"/>
                         <exclude name="**/log4j.properties"/>
