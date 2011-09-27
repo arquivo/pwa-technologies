@@ -11,6 +11,7 @@
   import="java.util.regex.Matcher"
   import="java.util.regex.Pattern"
 
+  import="org.apache.nutch.global.Global"
   import="org.apache.nutch.html.Entities"
   import="org.apache.nutch.metadata.Nutch"
   import="org.apache.nutch.searcher.*"
@@ -483,13 +484,8 @@ if ( request.getAttribute("query") != null && !request.getAttribute("query").toS
 <%-- Start of result_list <ol> --%>
 <% if (showList) { %>
 <%
-   PwaFunctionsWritable functions=new PwaFunctionsWritable();
-   functions.addFunction(10, 0.023322608715538286f);
-   functions.addFunction(24, 0.59394816155096997f);
-   functions.addFunction(12, 0.34503713094903127f);
-   functions.addFunction(20, 1.2592823789368244f);
-
-   int queryMatches = 10000;
+   PwaFunctionsWritable functions= PwaFunctionsWritable.parse(nutchConf.get(Global.RANKING_FUNCTIONS)); 
+   int queryMatches = Integer.parseInt(nutchConf.get(Global.MAX_FULLTEXT_MATCHES_RANKED));
 
    do {
        try {
