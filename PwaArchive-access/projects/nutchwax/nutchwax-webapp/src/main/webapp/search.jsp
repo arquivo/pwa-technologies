@@ -344,6 +344,7 @@
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link type="text/css" href="css/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
 	<link type="text/css" href="css/style.css" rel="stylesheet" />
+	<link rel="search" type="application/opensearchdescription+xml" title="Arquivo.pt Search" href="opensearch.jsp?l=<%=language%>" />
 	<script	type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="js/ui.datepicker.js"></script>
 	<% if (language.equals("pt")) { %>
