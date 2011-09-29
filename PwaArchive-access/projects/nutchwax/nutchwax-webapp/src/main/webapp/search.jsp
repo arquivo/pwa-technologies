@@ -304,12 +304,6 @@
   // URLEncoder.encode the queryString rather than just use htmlQueryString.
   // The former will take care of other than just html entities in case its
   // needed.
-/*
-  String rss = request.getContextPath() + "/opensearch?query=" +
-      URLEncoder.encode(queryString, "UTF-8") + "&hitsPerDup=" + hitsPerDup +
-      ((start != 0)? "&start=" + start: "") + params;
-*/
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%
