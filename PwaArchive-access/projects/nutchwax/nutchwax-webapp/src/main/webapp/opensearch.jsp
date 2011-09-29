@@ -10,7 +10,7 @@
 <i18n:bundle baseName="org.nutch.jsp.search" locale="<%= new Locale(language) %>"/>
 <c:set var="rootUrl" scope="page" value="http://${pageContext.request.serverName}${pageContext.request.contextPath}"/>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-	<ShortName>Arquivo.pt(<%=language%>)</ShortName>
+	<ShortName><i18n:message key="opensearch.title"><i18n:messageArg value="<%=language"/></i18n:message></ShortName>
 	<LongName><i18n:message key="opensearch.longname"/></LongName>
 	<Description><i18n:message key="opensearch.description"/></Description>
 	<InputEncoding>UTF-8</InputEncoding>
