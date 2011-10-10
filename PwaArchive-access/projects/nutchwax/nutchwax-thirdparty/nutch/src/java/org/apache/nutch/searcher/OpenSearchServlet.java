@@ -23,6 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.nutch.global.Global;
 import org.apache.nutch.util.NutchConfiguration;
+import org.apache.nutch.util.RFC3339Date;
 import org.apache.lucene.search.PwaFunctionsWritable;
 import org.w3c.dom.*;
 import javax.xml.transform.TransformerFactory;
@@ -162,21 +164,22 @@ public class OpenSearchServlet extends HttpServlet {
     if (dateEnd == null || dateEnd.length() == 0) {
     	dateEnd = null;
     }
-    if (dateStart!=null && dateEnd!=null) {
-    	DateFormat dInputFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ssZ");
-    	DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-    	
+    if (dateStart!=null && dateEnd!=null) {    	    	    	
     	try {
-    		Calendar dStart=new GregorianCalendar();
-    		dStart.setTime(dInputFormat.parse(dateStart));
-    		Calendar dEnd=new GregorianCalendar();
-    		dEnd.setTime(dInputFormat.parse(dateEnd));
+    		Date dStart=RFC3339Date.parseRFC3339Date(dateStart);
+    		Date dEnd=RFC3339Date.parseRFC3339Date(dateEnd);
     	
+    		DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     		queryString += " date:"+ dOutputFormat.format(dStart.getTime()) + "-" + dOutputFormat.format(dEnd.getTime());
     	}
     	catch (ParseException e) {
     		// ignore
     	}
+    	/*
+    	catch (IndexOutOfBoundsException e) {
+    		// ignore
+    	}
+    	*/
     }
     
     // wayback parameters
