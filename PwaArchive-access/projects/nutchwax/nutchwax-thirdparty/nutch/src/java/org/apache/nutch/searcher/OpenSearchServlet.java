@@ -20,6 +20,8 @@ package org.apache.nutch.searcher;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Map;
@@ -164,12 +166,17 @@ public class OpenSearchServlet extends HttpServlet {
     	DateFormat dInputFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ssZ");
     	DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     	
-    	Calendar dStart=new GregorianCalendar();
-    	dStart.setTime(dInputFormat.parse(dateStart));
-    	Calendar dEnd=new GregorianCalendar();
-    	dEnd.setTime(dInputFormat.parse(dateEnd));
+    	try {
+    		Calendar dStart=new GregorianCalendar();
+    		dStart.setTime(dInputFormat.parse(dateStart));
+    		Calendar dEnd=new GregorianCalendar();
+    		dEnd.setTime(dInputFormat.parse(dateEnd));
     	
-        queryString += " date:"+ dOutputFormat.format(dStart.getTime()) + "-" + dOutputFormat.format(dEnd.getTime());
+    		queryString += " date:"+ dOutputFormat.format(dStart.getTime()) + "-" + dOutputFormat.format(dEnd.getTime());
+    	}
+    	catch (ParseException e) {
+    		// ignore
+    	}
     }
     
     // wayback parameters
