@@ -19,8 +19,7 @@
   import="org.archive.access.nutch.NutchwaxConfiguration"
   import="org.archive.access.nutch.NutchwaxQuery"
   import="org.archive.access.nutch.NutchwaxBean"
-  import="org.archive.util.ArchiveUtils"
-  import="org.apache.lucene.search.ArquivoWebFunctionsWritable"
+  import="org.apache.lucene.search.PwaFunctionsWritable"
 
 %><%!
   public static final DateFormat FORMAT =
@@ -126,11 +125,14 @@
 <head>
 <title>Internet Archive: <i18n:message key="title"/></title>
 <link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon"/>
-<jsp:include page="/include/style.html"/>
+<!-- <jsp:include page="/include/style.html"/> -->
+<link type="text/css" href="css/style.css" rel="stylesheet" />
 </head>
 
 <body>
-<jsp:include page="/header.html"/>
+<div id="header">
+<%@include file="header.jsp" %>
+</div>
 
  <form name="search" action="searchTests.jsp" method="get">
 
@@ -161,7 +163,7 @@ if (sboosts==null) {
 }
 String boostsArray[]=sboosts.split(" ");
 
-ArquivoWebFunctionsWritable functions=new ArquivoWebFunctionsWritable();
+PwaFunctionsWritable functions=new PwaFunctionsWritable();
 for (int i=0; i<functionsArray.length; i++) {
 	if (!functionsArray[i].equals("")) {
 		functions.addFunction(Integer.parseInt(functionsArray[i]), Float.parseFloat(boostsArray[i]));

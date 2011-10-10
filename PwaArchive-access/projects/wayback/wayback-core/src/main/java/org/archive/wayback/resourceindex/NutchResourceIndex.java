@@ -69,15 +69,17 @@ public class NutchResourceIndex implements ResourceIndex {
      
    private String searchUrlBase;
   
-   private static final String NUTCH_ARCNAME = "arcname";
-   private static final String NUTCH_ARCOFFSET = "arcoffset";
-   private static final String NUTCH_ARCDATE = "tstamp";
-   private static final String NUTCH_ARCDATE_ALT = "arcdate";
-   private static final String NUTCH_DIGEST = "digest";
-   private static final String NUTCH_PRIMARY_TYPE = "primaryType";
-   private static final String NUTCH_SUB_TYPE = "subType";
-   private static final String NUTCH_CAPTURE_HOST = "site";
-   private static final String NUTCH_CAPTURE_URL = "link";
+   private static final String NUTCH_ARCNAME = "pwa:arcname";
+   private static final String NUTCH_ARCOFFSET = "pwa:arcoffset";
+   private static final String NUTCH_ARCDATE = "pwa:tstamp";
+   private static final String NUTCH_ARCDATE_ALT = "pwa:arcdate";
+   private static final String NUTCH_DIGEST = "pwa:digest";
+   private static final String NUTCH_PRIMARY_TYPE = "pwa:primaryType";
+   private static final String NUTCH_SUB_TYPE = "pwa:subType";
+   private static final String NUTCH_CAPTURE_HOST = "pwa:site";
+   private static final String NUTCH_CAPTURE_URL = "pwa:link";   
+   private static final String NUTCH_DOC_ID = "pwa:id";
+   private static final String NUTCH_INDEX_ID = "pwa:index";    
 
    private static final String NUTCH_SEARCH_RESULT_TAG = "item";
    private static final String NUTCH_SEARCH_RESULTS_TAG = "channel";
@@ -231,8 +233,7 @@ public class NutchResourceIndex implements ResourceIndex {
 			result.put(WaybackConstants.RESULT_ORIG_HOST, host);
 		}
 
-		result.put(WaybackConstants.RESULT_REDIRECT_URL,
-				NUTCH_DEFAULT_REDIRECT_URL);
+		result.put(WaybackConstants.RESULT_REDIRECT_URL,NUTCH_DEFAULT_REDIRECT_URL);
 		String url = getNodeContent(e,NUTCH_CAPTURE_URL);
 		if (url!=null) {
 			result.put(WaybackConstants.RESULT_URL, url);
@@ -244,12 +245,12 @@ public class NutchResourceIndex implements ResourceIndex {
 			result.put(WaybackConstants.RESULT_DIGEST_DIFF, digestDiff);
 		}
 		
-		String docId=getNodeNutchContent(e,WaybackConstants.REQUEST_DOC_ID);
+		String docId=getNodeNutchContent(e,NUTCH_DOC_ID);
 		if (docId!=null) {
 			result.put(WaybackConstants.REQUEST_DOC_ID, docId);
 		}
 		
-		String indexId=getNodeNutchContent(e,WaybackConstants.REQUEST_INDEX_ID);
+		String indexId=getNodeNutchContent(e,NUTCH_INDEX_ID);
 		if (indexId!=null) {
 			result.put(WaybackConstants.REQUEST_INDEX_ID, indexId);
 		}

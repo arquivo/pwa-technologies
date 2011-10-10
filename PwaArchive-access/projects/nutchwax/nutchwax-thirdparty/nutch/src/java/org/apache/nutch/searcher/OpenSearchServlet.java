@@ -56,14 +56,27 @@ public class OpenSearchServlet extends HttpServlet {
   static {
     NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");                               
 //    NS_MAP.put("nutch", "http://www.nutch.org/opensearchrss/1.0/");
+    NS_MAP.put("pwa","http://archive.pt/opensearchrss/1.0/"); // TODO MUDAR
   }  
 
-  private static final Set SKIP_DETAILS = new HashSet();
+  private static final Set SKIP_DETAILS = new HashSet(); // skip these fields always
   static {
     SKIP_DETAILS.add("url");                   // redundant with RSS link
     SKIP_DETAILS.add("title");                 // redundant with RSS title
     SKIP_DETAILS.add("boost");                
-    SKIP_DETAILS.add("pagerank");                
+    SKIP_DETAILS.add("pagerank");
+    SKIP_DETAILS.add("inlinks");
+    SKIP_DETAILS.add("outlinks");      
+  }
+  
+  private static final Set SKIP_DETAILS_USER = new HashSet(); // skip these fields when the request is not made by wayback
+  static {
+    SKIP_DETAILS_USER.add("segment");       
+    SKIP_DETAILS_USER.add("date");
+    SKIP_DETAILS_USER.add("encoding");    
+    SKIP_DETAILS_USER.add("collection");
+    SKIP_DETAILS_USER.add("arcname");
+    SKIP_DETAILS_USER.add("arcoffset");        
   }
     
   private NutchBean bean;
@@ -206,7 +219,7 @@ public class OpenSearchServlet extends HttpServlet {
       Element rss = addNode(doc, doc, "rss");
       addAttribute(doc, rss, "version", "2.0");
       addAttribute(doc, rss, "xmlns:opensearch",(String)NS_MAP.get("opensearch"));
-            
+      addAttribute(doc, rss, "xmlns:pwa",(String)NS_MAP.get("pwa"));           
       /*
       addAttribute(doc, rss, "xmlns:nutch", (String)NS_MAP.get("nutch"));
       */
@@ -266,10 +279,10 @@ public class OpenSearchServlet extends HttpServlet {
         Element item = addNode(doc, channel, "item");
 
         if (title!=null)
-        	addNode(doc, item, "title", title);        
+        	addNode(doc, item, "pwa", "title", title);        
         //addNode(doc, item, "description", /*summaries[i].toHtml(false)*/""); // BUG wayback 0000155 - this is unnecessary
         if (url!=null)
-        	addNode(doc, item, "link", url);
+        	addNode(doc, item, "pwa", "link", url);
 
         /*
         addNode(doc, item, "nutch", "site", hit.getDedupValue());        
@@ -279,8 +292,8 @@ public class OpenSearchServlet extends HttpServlet {
         */
         
         // BUG wayback 0000155 - add docId and index id to use in wayback search to see a page
-        addNode(doc, item, "id", ""+hit.getIndexDocNo());
-        addNode(doc, item, "index", ""+hit.getIndexNo());
+        addNode(doc, item, "pwa", "id", ""+hit.getIndexDocNo());
+        addNode(doc, item, "pwa", "index", ""+hit.getIndexNo());
 
         /*
         if (hit.moreFromDupExcluded()) {
@@ -292,11 +305,13 @@ public class OpenSearchServlet extends HttpServlet {
                   +params);
         }
         */
-
+       
         for (int j = 0; j < detail.getLength(); j++) { // add all from detail
-          String field = detail.getField(j);
-          if (!SKIP_DETAILS.contains(field))
-            addNode(doc, item, field, detail.getValue(j));
+        	String field = detail.getField(j);
+        	if ((waybackQuery && !SKIP_DETAILS.contains(field)) || 
+        		  (!waybackQuery && !SKIP_DETAILS_USER.contains(field) && !SKIP_DETAILS.contains(field))) {
+        		addNode(doc, item, "pwa", field, detail.getValue(j));
+        	}          
         }              
       }
 
