@@ -19,6 +19,9 @@ package org.apache.nutch.searcher;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -54,9 +57,10 @@ public class OpenSearchServlet extends HttpServlet {
   private static int nQueryMatches = 0;
     
   static {
-    NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");                               
+    NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");
+    NS_MAP.put("time","http://a9.com/-/opensearch/extensions/time/1.0/");
 //    NS_MAP.put("nutch", "http://www.nutch.org/opensearchrss/1.0/");
-    NS_MAP.put("pwa","http://archive.pt/opensearchrss/1.0/"); // TODO MUDAR
+    NS_MAP.put("pwa","http://archive.pt/opensearchrss/1.0/");
   }  
 
   private static final Set SKIP_DETAILS = new HashSet(); // skip these fields always
@@ -112,12 +116,14 @@ public class OpenSearchServlet extends HttpServlet {
     // the query language
     String queryLang = request.getParameter("lang");
     
-    int start = 0;                                // first hit to display
+    // first hit to display
+    int start = 0;                                
     String startString = request.getParameter("start");
     if (startString != null)
       start = Integer.parseInt(startString);
     
-    int hitsPerPage = 10;                         // number of hits to display
+    // number of hits to display
+    int hitsPerPage = 10;                         
     String hitsString = request.getParameter("hitsPerPage");
     if (hitsString != null)
       hitsPerPage = Integer.parseInt(hitsString);
@@ -145,7 +151,28 @@ public class OpenSearchServlet extends HttpServlet {
         }
     }     
     
+    // date restriction   
+    String dateStart = request.getParameter("dtstart");
+    if (dateStart == null || dateStart.length() == 0) {
+    	dateStart = null;
+    }
+    String dateEnd = request.getParameter("dtend");
+    if (dateEnd == null || dateEnd.length() == 0) {
+    	dateEnd = null;
+    }
+    if (dateStart!=null && dateEnd!=null) {
+    	DateFormat dInputFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ssZ");
+    	DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+    	
+    	Calendar dStart=new GregorianCalendar();
+    	dStart.setTime(dInputFormat.parse(dateStart));
+    	Calendar dEnd=new GregorianCalendar();
+    	dEnd.setTime(dInputFormat.parse(dateEnd));
+    	
+        queryString += " date:"+ dOutputFormat.format(dStart.getTime()) + "-" + dOutputFormat.format(dEnd.getTime());
+    }
     
+    // wayback parameters
     boolean multipleDetails = request.getParameter("multDet")!=null && request.getParameter("multDet").equals("true"); // indicates that it requests multiple details instead of one at the time
     String sId = request.getParameter("id");
     String sIndex = request.getParameter("index");       
@@ -219,7 +246,9 @@ public class OpenSearchServlet extends HttpServlet {
       Element rss = addNode(doc, doc, "rss");
       addAttribute(doc, rss, "version", "2.0");
       addAttribute(doc, rss, "xmlns:opensearch",(String)NS_MAP.get("opensearch"));
-      addAttribute(doc, rss, "xmlns:pwa",(String)NS_MAP.get("pwa"));           
+      addAttribute(doc, rss, "xmlns:time",(String)NS_MAP.get("time"));
+      addAttribute(doc, rss, "xmlns:pwa",(String)NS_MAP.get("pwa"));       
+      
       /*
       addAttribute(doc, rss, "xmlns:nutch", (String)NS_MAP.get("nutch"));
       */
