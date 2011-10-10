@@ -174,12 +174,10 @@ public class OpenSearchServlet extends HttpServlet {
     	}
     	catch (ParseException e) {
     		// ignore
-    	}
-    	/*
+    	}    	
     	catch (IndexOutOfBoundsException e) {
     		// ignore
-    	}
-    	*/
+    	}    	
     }
     
     // wayback parameters
