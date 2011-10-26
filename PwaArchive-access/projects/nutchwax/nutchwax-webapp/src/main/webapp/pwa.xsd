@@ -29,6 +29,7 @@
       <xs:sequence>
         <xs:element ref="title"/>
         <xs:element ref="link"/>
+        <xs:element ref="source"/>
         <xs:element ref="id"/>
         <xs:element ref="index"/>
         <xs:element ref="segment"/>
@@ -55,7 +56,14 @@
   <xs:element name="link" type="xs:anyURI">
     <xs:annotation>
       <xs:documentation>
-         Document's URI.
+         Archived document's URI.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="source" type="xs:anyURI">
+    <xs:annotation>
+      <xs:documentation>
+         Document's original URI.
       </xs:documentation>
     </xs:annotation>
   </xs:element>
