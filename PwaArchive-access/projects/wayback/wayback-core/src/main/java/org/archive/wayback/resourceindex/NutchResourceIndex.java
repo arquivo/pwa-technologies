@@ -77,7 +77,7 @@ public class NutchResourceIndex implements ResourceIndex {
    private static final String NUTCH_PRIMARY_TYPE = "pwa:primaryType";
    private static final String NUTCH_SUB_TYPE = "pwa:subType";
    private static final String NUTCH_CAPTURE_HOST = "pwa:site";
-   private static final String NUTCH_CAPTURE_URL = "pwa:link";   
+   private static final String NUTCH_CAPTURE_URL = "source";   
    private static final String NUTCH_DOC_ID = "pwa:id";
    private static final String NUTCH_INDEX_ID = "pwa:index";    
 
@@ -234,7 +234,7 @@ public class NutchResourceIndex implements ResourceIndex {
 		}
 
 		result.put(WaybackConstants.RESULT_REDIRECT_URL,NUTCH_DEFAULT_REDIRECT_URL);
-		String url = getNodeContent(e,NUTCH_CAPTURE_URL);
+		String url = getAttributeContent(e,NUTCH_CAPTURE_URL,"url");
 		if (url!=null) {
 			result.put(WaybackConstants.RESULT_URL, url);
 		}
@@ -411,6 +411,21 @@ public class NutchResourceIndex implements ResourceIndex {
            result = nodes.item(0).getTextContent();
        }
        return (result == null || result.length() == 0)? null: result;
+   }
+   
+   /**
+    * Get attribute from element
+    * @param e parent element
+    * @param elemKey element name   
+    * @param attrKey attribute name
+    */
+   protected String getAttributeContent(Element e, String elemKey, String attrKey) {
+       NodeList nodes = e.getElementsByTagName(elemKey);
+       String result = null;
+       if (nodes != null && nodes.getLength() > 0) {
+           result = ((Element)nodes.item(0)).getAttribute(attrKey);
+       }
+       return (result == null || result.length() == 0) ? null: result;
    }
 
    // do an HTTP request, plus parse the result into an XML DOM

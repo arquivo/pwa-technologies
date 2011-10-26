@@ -266,7 +266,7 @@ public class OpenSearchServlet extends HttpServlet {
 
       Element channel = addNode(doc, rss, "channel");
     
-      addNode(doc, channel, "title", "PWA Search Engine: " + queryString);
+      addNode(doc, channel, "title", "PWA Search Engine");
       addNode(doc, channel, "description", "PWA search results for query: " + queryString);
       addNode(doc, channel, "link", "http://archive.pt");
       
@@ -323,7 +323,8 @@ public class OpenSearchServlet extends HttpServlet {
         if (url!=null) {
         	String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
         	addNode(doc, item, "link", target);
-        	addNode(doc, item, "source", url);
+        	queryElem=addNode(doc, item, "source", "Original URL of "+title);     	        
+            addAttribute(doc, queryElem, "url", url);                     	
         }
 
         /*
@@ -381,11 +382,12 @@ public class OpenSearchServlet extends HttpServlet {
     return child;
   }
 
-  private static void addNode(Document doc, Node parent,
+  private static Element addNode(Document doc, Node parent,
                               String name, String text) {
     Element child = doc.createElement(name);
     child.appendChild(doc.createTextNode(getLegalXml(text)));
     parent.appendChild(child);
+    return child;
   }
 
   private static Element addNode(Document doc, Node parent,
