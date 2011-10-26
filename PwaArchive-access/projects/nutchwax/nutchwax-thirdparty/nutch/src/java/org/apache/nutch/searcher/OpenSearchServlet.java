@@ -59,6 +59,7 @@ public class OpenSearchServlet extends HttpServlet {
   private static final Map NS_MAP = new HashMap();  
   private static PwaFunctionsWritable functions = null;
   private static int nQueryMatches = 0;
+  private static String collectionsHost=null;
     
   static {
     NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");
@@ -97,6 +98,8 @@ public class OpenSearchServlet extends HttpServlet {
 
       functions=PwaFunctionsWritable.parse(this.conf.get(Global.RANKING_FUNCTIONS));            
       nQueryMatches=Integer.parseInt(this.conf.get(Global.MAX_FULLTEXT_MATCHES_RANKED));
+      
+      collectionsHost = this.conf.get("wax.host", "examples.com");
     } 
     catch (IOException e) {
       throw new ServletException(e);
@@ -308,19 +311,20 @@ public class OpenSearchServlet extends HttpServlet {
         HitDetails detail = details[i];
         String title = detail.getValue("title");
         String url = detail.getValue("url");
-        String id = "idx=" + hit.getIndexNo() + "&id=" + hit.getIndexDocNo();
       
-        if (title == null || title.equals("")) {   // use url for docs w/o title
-          title = url;
-        }
-        
         Element item = addNode(doc, channel, "item");
-
-        if (title!=null)
-        	addNode(doc, item, "title", title);        
+        
+        if (title == null || title.equals("")) {   // use url for docs w/o title
+        	title = url;
+        }
+        addNode(doc, item, "title", title);
+                                     
         //addNode(doc, item, "description", /*summaries[i].toHtml(false)*/""); // BUG wayback 0000155 - this is unnecessary
-        if (url!=null)
-		addNode(doc, item, "link", url);
+        if (url!=null) {
+        	String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
+        	addNode(doc, item, "link", target);
+        	addNode(doc, item, "source", url);
+        }
 
         /*
         addNode(doc, item, "nutch", "site", hit.getDedupValue());        
@@ -360,7 +364,7 @@ public class OpenSearchServlet extends HttpServlet {
       Transformer transformer = transFactory.newTransformer();
       transformer.setOutputProperty("indent", "yes");
       StreamResult result = new StreamResult(response.getOutputStream());      
-      response.setContentType("text/html; charset=UTF-8");      
+      response.setContentType("application/rss+xml; charset=UTF-8");      
       transformer.transform(source, result);
 
     } catch (javax.xml.parsers.ParserConfigurationException e) {
