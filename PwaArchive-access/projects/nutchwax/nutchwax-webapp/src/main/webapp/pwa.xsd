@@ -14,6 +14,7 @@
       <xs:sequence>
         <xs:element ref="title"/>
         <xs:element ref="description"/>
+        <xs:element ref="link"/>
         <xs:element ref="opensearch:totalResults"/>
         <xs:element ref="opensearch:startIndex"/>
         <xs:element ref="opensearch:itemsPerPage"/>

@@ -64,7 +64,7 @@ public class OpenSearchServlet extends HttpServlet {
     NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");
     NS_MAP.put("time","http://a9.com/-/opensearch/extensions/time/1.0/");
 //    NS_MAP.put("nutch", "http://www.nutch.org/opensearchrss/1.0/");
-    NS_MAP.put("pwa","http://archive.pt/opensearchrss/1.0/");
+    NS_MAP.put("pwa","http://arquivo.pt/opensearchrss/1.0/");
   }  
 
   private static final Set SKIP_DETAILS = new HashSet(); // skip these fields always
@@ -264,8 +264,9 @@ public class OpenSearchServlet extends HttpServlet {
       Element channel = addNode(doc, rss, "channel");
     
       addNode(doc, channel, "title", "PWA Search Engine: " + queryString);
-      addNode(doc, channel, "description", "PWA search results for query: "
-              + queryString);
+      addNode(doc, channel, "description", "PWA search results for query: " + queryString);
+      addNode(doc, channel, "link", "http://archive.pt");
+      
       /*
       addNode(doc, channel, "link",
               base+"/search.jsp"
@@ -316,7 +317,7 @@ public class OpenSearchServlet extends HttpServlet {
         Element item = addNode(doc, channel, "item");
 
         if (title!=null)
-        	addNode(doc, item, "pwa", "title", title);        
+        	addNode(doc, item, "title", title);        
         //addNode(doc, item, "description", /*summaries[i].toHtml(false)*/""); // BUG wayback 0000155 - this is unnecessary
         if (url!=null)
         	addNode(doc, item, "pwa", "link", url);
@@ -358,8 +359,8 @@ public class OpenSearchServlet extends HttpServlet {
       TransformerFactory transFactory = TransformerFactory.newInstance();
       Transformer transformer = transFactory.newTransformer();
       transformer.setOutputProperty("indent", "yes");
-      StreamResult result = new StreamResult(response.getOutputStream());
-      response.setContentType("text/xml");
+      StreamResult result = new StreamResult(response.getOutputStream());      
+      response.setContentType("text/html; charset=UTF-8");      
       transformer.transform(source, result);
 
     } catch (javax.xml.parsers.ParserConfigurationException e) {

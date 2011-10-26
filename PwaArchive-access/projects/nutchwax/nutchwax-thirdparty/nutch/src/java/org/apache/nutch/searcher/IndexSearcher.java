@@ -49,8 +49,6 @@ import org.apache.lucene.document.MapFieldSelector;
  * merged index, or a set of indexes. */
 public class IndexSearcher implements Searcher, HitDetailer {
 
-  public final static String INCLUDE_EXTENSIONS_KEY="arquivo.include.types";
-	
   private org.apache.lucene.search.Searcher luceneSearcher;
   private org.apache.lucene.index.IndexReader reader;
   private LuceneQueryOptimizer optimizer;

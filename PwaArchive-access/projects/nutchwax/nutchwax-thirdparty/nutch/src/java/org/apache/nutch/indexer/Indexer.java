@@ -264,12 +264,10 @@ public class Indexer extends ToolBase implements Reducer, Mapper {
     // apply boost to all indexed fields.
     //    doc.setBoost(boost); - it uses the default 1.0f. if set, all fields will have this value boosted
     // store boost for use by explain and dedup
-    doc.add(new Field("boost", Float.toString(boost),
-            Field.Store.YES, Field.Index.NO));
-        
+    doc.add(new Field("boost", Float.toString(boost), Field.Store.YES, Field.Index.NO));        
     doc.add(new Field("inlinks", (inlinks==null) ? "0" : Integer.toString(inlinks.size()), Field.Store.YES, Field.Index.NO)); 
     doc.add(new Field("outlinks", (parseData.getOutlinks()==null) ? "0" : Integer.toString(parseData.getOutlinks().length), Field.Store.YES, Field.Index.NO)); 
-   doc.add(new Field("pagerank", (pagerank==null) ? "0" : Float.toString(pagerank), Field.Store.YES, Field.Index.NO)); 
+    doc.add(new Field("pagerank", (pagerank==null) ? "0" : Float.toString(pagerank), Field.Store.YES, Field.Index.NO)); 
     
     output.collect(key, new ObjectWritable(doc));     
   }
