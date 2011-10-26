@@ -320,7 +320,7 @@ public class OpenSearchServlet extends HttpServlet {
         	addNode(doc, item, "title", title);        
         //addNode(doc, item, "description", /*summaries[i].toHtml(false)*/""); // BUG wayback 0000155 - this is unnecessary
         if (url!=null)
-        	addNode(doc, item, "pwa", "link", url);
+		addNode(doc, item, "link", url);
 
         /*
         addNode(doc, item, "nutch", "site", hit.getDedupValue());        
