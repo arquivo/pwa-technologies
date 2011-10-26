@@ -76,6 +76,7 @@ public class OpenSearchServlet extends HttpServlet {
     SKIP_DETAILS.add("pagerank");
     SKIP_DETAILS.add("inlinks");
     SKIP_DETAILS.add("outlinks");      
+    SKIP_DETAILS.add("domain");    
   }
   
   private static final Set SKIP_DETAILS_USER = new HashSet(); // skip these fields when the request is not made by wayback
