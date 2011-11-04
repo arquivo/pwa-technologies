@@ -6,9 +6,7 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.GregorianCalendar" %>
-<%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.Locale" %>
-<%@ page import="java.util.Enumeration" %>
 <%@ page import="java.util.regex.Matcher" %>
 <%@ page import="java.util.regex.Pattern" %>
 <%@ page import="org.archive.wayback.WaybackConstants" %>
@@ -88,8 +86,6 @@ String searchString = results.getSearchUrl();
 
 Date searchStartDate = results.getStartTimestamp().getDate();
 Date searchEndDate = results.getEndTimestamp().getDate();
-int firstResult = results.getFirstResult();
-int lastResult = results.getLastResult();
 int resultCount = results.getResultsMatching();
 
 //Timestamp searchStartTs = results.getStartTimestamp();
@@ -178,8 +174,6 @@ int numPartitions = partitions.size();
 <!--    RESULT COLUMN DATA -->
    <tr bgcolor="#EBEBEB">
 <%
-	boolean first = false;
-	String lastMD5 = null;
 	int indexColumnWithResults = 0;
 	int totalColumnsWithResults = 0;
 
@@ -220,16 +214,8 @@ int numPartitions = partitions.size();
 			  for(int j = 0; j < partitionResults.size(); j++) {
 			  
 			  	SearchResult result = partitionResults.get(j);
-				String url = result.get(WaybackConstants.RESULT_URL);
 				String captureDate = result.get(WaybackConstants.RESULT_CAPTURE_DATE);
 				Timestamp captureTS = Timestamp.parseBefore(captureDate);
-				String origHost = result.get(WaybackConstants.RESULT_ORIG_HOST);
-				String MD5 = result.get(WaybackConstants.RESULT_MD5_DIGEST);
-				String httpResponse = result.get(WaybackConstants.RESULT_HTTP_CODE);
-				String mimeType = result.get(WaybackConstants.RESULT_MIME_TYPE);
-			
-				String arcFile = result.get(WaybackConstants.RESULT_ARC_FILE);
-				String arcOffset = result.get(WaybackConstants.RESULT_OFFSET);
 			
 				String replayUrl = results.resultToReplayId(result);
 	
