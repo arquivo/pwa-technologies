@@ -1,6 +1,6 @@
 package org.apache.lucene.search.tests;
 
-import org.apache.lucene.search.rankers.PwaLinPagerank;
+import org.apache.lucene.search.rankers.queryindependent.PwaLinPagerank;
 
 import junit.framework.*;
 

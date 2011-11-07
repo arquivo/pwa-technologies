@@ -13,7 +13,7 @@ import org.apache.lucene.index.IndexReader;
 public class PwaCacheManager {
 	
 	/** multiple caches */
-	private static Hashtable<String,PwaCache> caches=null;
+	private static Hashtable<String,PwaICache> caches=null;
 	private static Object lockObj=new Object();
 	private static PwaCacheManager instance=null; // singleton class
 	
@@ -23,10 +23,10 @@ public class PwaCacheManager {
 	 */
 	private PwaCacheManager(IndexReader reader) throws IOException {
 		System.out.println("Initializing caches at "+this.getClass().getSimpleName()+" class.");
-		caches=new Hashtable<String,PwaCache>();
+		caches=new Hashtable<String,PwaICache>();
 		
 		// blacklist of documents
-		PwaCache cache=new PwaBlacklistCache(reader); 		
+		PwaICache cache=new PwaBlacklistCache(reader); 		
 		caches.put(cache.getFieldName(),cache);		
 		// indicates if it is a new version
 		cache=new PwaDigestDiffCache(reader); 

@@ -16,7 +16,7 @@ import java.util.Vector;
  * @author Miguel Costa
  * @deprecated  as of release 1.14; It is not used anymore because not searchable types are pruned from posting lists
  */
-public class PwaSearchTypesCache implements PwaCache {
+public class PwaSearchTypesCache implements PwaICache {
 
 	protected static BitSet validDocs; // bitset indicating the documents with one of the searched types
 	private static Object lockObj=new Object();

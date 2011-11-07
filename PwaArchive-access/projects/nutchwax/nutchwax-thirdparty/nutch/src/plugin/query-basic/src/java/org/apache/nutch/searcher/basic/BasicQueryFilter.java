@@ -98,8 +98,7 @@ public class BasicQueryFilter implements QueryFilter {
   public BooleanQuery filter(Query input, BooleanQuery output) {	  
  	//addTerms(input, output);
     //addSloppyPhrases(input, output); 
-    addTermsNewModel(input, output); // TODO MC
-	//addIncludeExtensions(input, output); // TODO MC
+    addTermsNewModel(input, output);
 
     return output;
   }
@@ -211,60 +210,9 @@ public class BasicQueryFilter implements QueryFilter {
   public Configuration getConf() {
     return this.conf;
   }
-  
+     
   /**
-   * Add include extensions query - TODO MC
-   * @param input query
-   * @param output updated query
-   */
-  private void addIncludeExtensions(Query input, BooleanQuery output) {
-	  
-      Clause[] clauses = input.getClauses();
-
-      // if empty query return
-      if (clauses.length==0) {
-    	  return;
-      }
-      
-	  // examine each clause in the Nutch query and return if query has exacturl: or type:
-      for (int i = 0; i < clauses.length; i++) {
-          if (clauses[i].getField().equals(EXACTURL_FIELD) || clauses[i].getField().equals(TYPE_FIELD) || clauses[i].getField().equals(EXACTURLEXPAND_FIELD)) {
-        	  return;
-          }
-      }
-	  
-      // get extension from $NUTCH_HOME/conf/nutch-site.xml
-	  if (includeExtensions==null) {
-		  Pattern includes = Pattern.compile("\\|");
-		  String value = getConf().get(IndexSearcher.INCLUDE_EXTENSIONS_KEY, "");
-		  includeExtensions = includes.split(value);
-		  System.out.println("Mime types used in results: "+value);
-	  }
-	  if (includeExtensions.length==0) {
-		  return;
-	  }
-		  
-	  
-	  // add type query
-	  /*
-	  BooleanQuery out = new BooleanQuery();
-	  TermQuery tq=null;
-	  for (int i = 0; i < includeExtensions.length; i++) {
-		 tq=new TermQuery(luceneTerm(TYPE_FIELD, new Term(includeExtensions[i])));
-		 //tq.setBoost((float)0);
-	  	 out.add(tq, BooleanClause.Occur.SHOULD);
-	  }
-	  //out.setBoost((float)0); // necessary to add to cache filters - only work a term at a time
-	  */	  
-	  PwaSearchTypesQuery out = new PwaSearchTypesQuery(includeExtensions); // to create a cache filter for the merge of all these types	  
-	  
-	  //output.add(out, BooleanClause.Occur.MUST_NOT);  TO EXCLUDE
-	  output.add(out, BooleanClause.Occur.MUST);  // TO CONSTRAINT	  
-  }
-  
-  
-  /**
-   * Build boolean query of the new ranking model - TODO MC
+   * Build boolean query of the new ranking model
    * @param input query
    * @param output updated query
    */

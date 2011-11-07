@@ -33,6 +33,7 @@ import org.apache.lucene.search.FieldCache;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.MapFieldSelector;
 import org.apache.lucene.search.PwaFunctionsWritable;
 import org.apache.lucene.search.caches.PwaCacheManager;
 import org.apache.lucene.search.caches.PwaUrlRadicalIdCache;
@@ -41,8 +42,6 @@ import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.conf.*;
 import org.apache.nutch.indexer.*;
-
-import org.apache.lucene.document.MapFieldSelector;
 
 
 /** Implements {@link Searcher} and {@link HitDetailer} for either a single
@@ -176,10 +175,9 @@ public class IndexSearcher implements Searcher, HitDetailer {
 		 }	 		
 		 fieldNames=remainingFields.toArray(new String[remainingFields.size()]); // else read from index the remaining fields
 	 }
-	 
-	  //Document doc = luceneSearcher.doc(hit.getIndexDocNo(), new MapFieldSelector(sfields));
-	 Document doc = reader.document(hit.getIndexDocNo(), (fieldNames==null) ? null : new MapFieldSelector(fieldNames));
 
+	 //Document doc = luceneSearcher.doc(hit.getIndexDocNo(), new MapFieldSelector(sfields));
+	 Document doc = reader.document(hit.getIndexDocNo(), (fieldNames==null) ? null : new MapFieldSelector(fieldNames));
 	 Enumeration e = doc.fields();
 	 while (e.hasMoreElements()) {
 	   Field field = (Field)e.nextElement();

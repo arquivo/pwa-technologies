@@ -2,7 +2,7 @@ package org.apache.lucene.search.tests;
 
 import java.util.Vector;
 
-import org.apache.lucene.search.rankers.PwaBM25;
+import org.apache.lucene.search.rankers.querydependent.PwaBM25;
 
 import junit.framework.TestCase;
 

@@ -406,7 +406,7 @@ public class PwaScorer extends Scorer {
 		}
 		else if (scoreType==ScoreType.DATE_SORTED || scoreType==ScoreType.DATE_SORTED_REVERSE) { // results are sorted in TopDocCollector
 			PwaDateCache sortCache=new PwaDateCache(reader);
-			return sortCache.getTimestamp(doc());
+			return sortCache.getTimestamp(doc());			
 		}
 		else { // flat ranking
 			return 1;

@@ -31,7 +31,7 @@ public class PwaIndexStats {
 		fieldLenMap=new HashMap<String,int[]>();		
 		fieldsMap=new HashMap<String,Integer>();
 		long avgFieldLen;
-		long countFieldLenHigherThan0; // this is mostly necessary for anchors, because most documents do not have anchors
+		long countFieldLenHigherThan0; // this is mostly necessary for anchors, because most documents do not have links with anchors
 		int lengths[];
 		byte lengthsRaw[]=null;
 		byte baux[]=new byte[4];

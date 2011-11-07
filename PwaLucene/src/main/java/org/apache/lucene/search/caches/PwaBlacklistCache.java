@@ -32,7 +32,7 @@ import org.apache.lucene.util.Base32;
  * 
  * @note this class can receive a list of errors and redirects from crawler or test all documents
  */
-public class PwaBlacklistCache implements PwaCache {
+public class PwaBlacklistCache implements PwaICache {
 
 	private final static String CACHE_FILENAME="blacklist.cache";
 	//private final static String ERRORS_FILENAME="errors.urls";

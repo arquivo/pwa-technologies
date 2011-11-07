@@ -5,6 +5,8 @@ import java.util.Vector;
 
 import org.apache.lucene.search.caches.PwaIndexStats;
 import org.apache.lucene.search.rankers.*;
+import org.apache.lucene.search.rankers.querydependent.*;
+import org.apache.lucene.search.rankers.queryindependent.*;
 import org.apache.lucene.document.Document;
 
 

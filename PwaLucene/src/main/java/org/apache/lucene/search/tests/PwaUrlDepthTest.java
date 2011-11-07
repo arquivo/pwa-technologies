@@ -2,7 +2,7 @@ package org.apache.lucene.search.tests;
 
 import java.net.MalformedURLException;
 
-import org.apache.lucene.search.rankers.PwaUrlDepth;
+import org.apache.lucene.search.rankers.queryindependent.PwaUrlDepth;
 
 import junit.framework.*;
 
