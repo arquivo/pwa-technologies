@@ -13,7 +13,7 @@
 	</welcome-file-list>	
 	-->		 
 		
-	
+	<!--
 	<servlet>
 	    	<servlet-name>spellchecker</servlet-name>
     		<servlet-class>pt.arquivo.servlets.SpellCheckerServlet</servlet-class>
@@ -42,6 +42,7 @@
 	    	<servlet-name>spellchecker</servlet-name>
     		<url-pattern>/SpellChecker</url-pattern>
   	</servlet-mapping>
+        -->
 
 	<servlet>
     		<servlet-name>querySpellchecker</servlet-name>
