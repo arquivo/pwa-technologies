@@ -139,25 +139,6 @@ public class PwaDateCache implements PwaICache {
 	 * @return timestamp from document
 	 */
 	public long getTimestamp(int doc) {
-// TODO remove
-		/*
-		String fieldNames[]={"date"};
-		long value=-1;
-try {		
-		Document docum = reader.document(doc, new MapFieldSelector(fieldNames));
-		Enumeration e = docum.fields();
-		if (e.hasMoreElements()) {
-		   Field field = (Field)e.nextElement();
-		   //fields.add(field.name());
-		   //values.add(field.stringValue());
-		   value=Long.parseLong(field.stringValue());
-		}
-}
-catch (IOException e) {	
-}
-		return value;
-// TODO remove
-*/		
 		return timestamps[doc];
 	}
 	

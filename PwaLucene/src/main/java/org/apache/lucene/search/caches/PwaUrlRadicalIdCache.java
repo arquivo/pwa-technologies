@@ -8,6 +8,7 @@ import java.io.IOException;
 /**
  * Caches url radical id, indicating the version group
  * @author Miguel Costa
+ * @deprecated  this data is not used anymore. Now, the Broker filters the excess of versions.  
  */
 public class PwaUrlRadicalIdCache extends PwaVersionsCache {
 

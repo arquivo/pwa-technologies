@@ -27,14 +27,16 @@ public class PwaCacheManager {
 		
 		// blacklist of documents
 		PwaICache cache=new PwaBlacklistCache(reader); 		
-		caches.put(cache.getFieldName(),cache);		
+		caches.put(cache.getFieldName(),cache);
+		/* TODO remove - this data is not used anymore
 		// indicates if it is a new version
 		cache=new PwaDigestDiffCache(reader); 
 		caches.put(cache.getFieldName(),cache);		
 		// version group
 		cache=new PwaUrlRadicalIdCache(reader); 	
-		caches.put(cache.getFieldName(),cache);				
-		// timestamp ranges
+		caches.put(cache.getFieldName(),cache);
+		*/				
+		// documents' timestamps
 		cache=new PwaDateCache(reader);
 		caches.put(cache.getFieldName(),cache);	
 		

@@ -19,6 +19,7 @@ import java.util.Enumeration;
 /**
  * Caches digest difference and url radical id, indicating if it is a new version
  * @author Miguel Costa
+ * @deprecated  this data is not used anymore. The Broker filters the excess of versions.  
  */
 public abstract class PwaVersionsCache implements PwaICache {
 

@@ -5,7 +5,7 @@ package org.apache.lucene.search.caches;
  * Generic interface for caches
  * @author Miguel Costa
  */
-public interface PwaCache {
+public interface PwaICache {
 	
 	/**
 	 * Get field name cached

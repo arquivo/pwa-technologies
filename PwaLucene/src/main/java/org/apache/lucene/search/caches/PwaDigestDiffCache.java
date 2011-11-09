@@ -8,6 +8,7 @@ import java.io.IOException;
 /**
  * Cache flag indicating if it is a new document version, using digest difference
  * @author Miguel Costa
+ * @deprecated  this data is not used anymore in the user interface
  */
 public class PwaDigestDiffCache extends PwaVersionsCache {
 
