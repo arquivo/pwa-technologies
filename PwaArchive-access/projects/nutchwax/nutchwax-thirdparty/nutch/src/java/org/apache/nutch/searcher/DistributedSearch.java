@@ -329,8 +329,7 @@ public class DistributedSearch {
               ((reverse || sortField == null)
                ? h.getSortValue().compareTo(maxValue) >= 0
                : h.getSortValue().compareTo(maxValue) <= 0)) {        	         	 
-            queue.add(new Hit(liveIndexNos[i], h.getIndexDocNo(),
-                              h.getSortValue(), h.getDedupValue(), h.getRadicalId()));
+            queue.add(new Hit(liveIndexNos[i], h.getIndexDocNo(), h.getSortValue(), h.getDedupValue()));
             if (queue.size() > numHits) {         // if hit queue overfull
               queue.remove(queue.last());         // remove lowest in hit queue
               maxValue = ((Hit)queue.last()).getSortValue(); // reset maxValue

@@ -251,12 +251,12 @@ public class NutchBean
    * 
    * @param query query
    * @param numHits number of requested hits
-   * @param searcherMaxHits number of matched documents for ranking, or MATCHED_DOCS_CONST_IGNORE to ignore    TODO MC
+   * @param searcherMaxHits number of matched documents for ranking, or MATCHED_DOCS_CONST_IGNORE to ignore   
    * @param maxHitsPerDup the maximum hits returned with matching values, or zero
    * @param dedupField field name to check for duplicates
    * @param sortField Field to sort on (or null if no sorting).
    * @param reverse True if we are to reverse sort by <code>sortField</code>.
-   * @param functions Extra parameters     TODO MC
+   * @param functions Extra parameters   
    * @param maxHitsPerVersion maximum hits returned with the same url and different version
    * @return Hits the matching hits
    * @throws IOException
@@ -275,12 +275,12 @@ public class NutchBean
    * 
    * @param query query
    * @param numHits number of requested hits
-   * @param searcherMaxHits number of matched documents for ranking, or MATCHED_DOCS_CONST_IGNORE to ignore    TODO MC
+   * @param searcherMaxHits number of matched documents for ranking, or MATCHED_DOCS_CONST_IGNORE to ignore   
    * @param maxHitsPerDup the maximum hits returned with matching values, or zero
    * @param dedupField field name to check for duplicates
    * @param sortField Field to sort on (or null if no sorting).
    * @param reverse True if we are to reverse sort by <code>sortField</code>.
-   * @param functions Extra parameters     TODO MC
+   * @param functions Extra parameters    
    * @param maxHitsPerVersion maximum hits returned with the same url and different version
    * @param waybackQuery if true it is a query from wayback; otherwise it is from nutchwax
    * @return Hits the matching hits
@@ -289,7 +289,6 @@ public class NutchBean
   public Hits search(Query query, int numHits, int searcherMaxHits, int maxHitsPerDup, String dedupField,
                      String sortField, boolean reverse, PwaFunctionsWritable functions, int maxHitsPerVersion, boolean waybackQuery) throws IOException {	  
        	  		  
-
 	Hits hits = null; 
 	if (waybackQuery) {
 		hits=searcher.search(query, numHits, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse, functions, maxHitsPerVersion);		
@@ -334,7 +333,6 @@ public class NutchBean
     // remove duplicates block
     long total = hits.getTotal();
     Map dupToHits = new HashMap(); 
-    Map dupToHitsRadicalId = new HashMap(); // BUG 0000187
     List resultList = new ArrayList();
     Set seen = new HashSet();
     List excludedValues = new ArrayList();
@@ -359,7 +357,7 @@ public class NutchBean
           LOG.debug("re-searching for "+numHitsRaw+" raw hits, query: "+optQuery);
         //}
         // hits = searchAux(optQuery, numHitsRaw, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse);  // for TREC 
-        hits = searcher.search(optQuery, numHitsRaw, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse, functions, maxHitsPerVersion);  // TODO TREC        
+        hits = searcher.search(optQuery, numHitsRaw, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse, functions, maxHitsPerVersion);        
         if (numHitsRaw>hits.getTotal()) { // BUG 200608
         	lastRequest=true;
         }
@@ -379,16 +377,10 @@ public class NutchBean
       // get dup hits for its value
       String value = hit.getDedupValue();      
       DupHits dupHits = (DupHits)dupToHits.get(value);       
-      if (dupHits == null)    	  
+      if (dupHits == null) {   	  
         dupToHits.put(value, dupHits = new DupHits());
-      
-      /* BUG 0000187 */
-      long valueRadicalId = hit.getRadicalId();      
-      DupHits dupHitsRadicalId = (DupHits)dupToHitsRadicalId.get(valueRadicalId);  
-      if (dupHitsRadicalId == null)    	  
-    	  dupToHitsRadicalId.put(valueRadicalId, dupHitsRadicalId = new DupHits());
-      /* BUG 0000187 */
-      
+      }
+                 
       // does this hit exceed maxHitsPerDup?
       if (dupHits.size()==maxHitsPerDup ) {      // yes -- then ignore the hit 
         if (!dupHits.maxSizeExceeded) {
@@ -402,22 +394,10 @@ public class NutchBean
           excludedValues.add(value);              // exclude dup
         }
         totalIsExact = false;
-      }
-      else if (dupHitsRadicalId.size()==maxHitsPerVersion) { /* BUG 0000187 */
-    	  if (!dupHitsRadicalId.maxSizeExceeded) {
-
-              // mark prior hits with moreFromDupExcluded
-              for (int i = 0; i < dupHitsRadicalId.size(); i++) {
-                ((Hit)dupHitsRadicalId.get(i)).setMoreFromDupExcluded(true);
-              }
-              dupHitsRadicalId.maxSizeExceeded = true;             
-            }
-            totalIsExact = false;
-      }
+      }    
       else {                                    // no -- then collect the hit
         resultList.add(hit);
-        dupHits.add(hit);
-        dupHitsRadicalId.add(hit); // BUG 0000187
+        dupHits.add(hit);        
 
         // are we done?
         // we need to find one more than asked for, so that we can tell if

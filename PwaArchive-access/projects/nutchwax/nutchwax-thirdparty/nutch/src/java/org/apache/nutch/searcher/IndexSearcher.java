@@ -36,7 +36,6 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.MapFieldSelector;
 import org.apache.lucene.search.PwaFunctionsWritable;
 import org.apache.lucene.search.caches.PwaCacheManager;
-import org.apache.lucene.search.caches.PwaUrlRadicalIdCache;
 
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.*;
@@ -94,16 +93,9 @@ public class IndexSearcher implements Searcher, HitDetailer {
     }
   }
 
-  public Hits search(Query query, int numHits,
-                     String dedupField, String sortField, boolean reverse)
-
-    throws IOException {
-    org.apache.lucene.search.BooleanQuery luceneQuery =
-      this.queryFilters.filter(query);
-    return translateHits
-      (optimizer.optimize(luceneQuery, luceneSearcher, numHits,
-                          sortField, reverse),
-       dedupField, sortField);
+  public Hits search(Query query, int numHits, String dedupField, String sortField, boolean reverse) throws IOException {
+	  org.apache.lucene.search.BooleanQuery luceneQuery = this.queryFilters.filter(query);
+	  return translateHits(optimizer.optimize(luceneQuery, luceneSearcher, numHits, sortField, reverse), dedupField, sortField);
   }
   
 
@@ -190,48 +182,21 @@ public class IndexSearcher implements Searcher, HitDetailer {
   }    
 
   
-  private Hits translateHits(TopDocs topDocs,
-                             String dedupField, String sortField)
+  private Hits translateHits(TopDocs topDocs, String dedupField, String sortField)
     throws IOException {
 
 	String[] dedupValues = null;	
-    if (dedupField != null)   
+    if (dedupField != null) { 
       dedupValues = FieldCache.DEFAULT.getStrings(reader, dedupField);
+    }
     
     ScoreDoc[] scoreDocs = topDocs.scoreDocs;
     int length = scoreDocs.length;
     Hit[] hits = new Hit[length];
-    for (int i = 0; i < length; i++) {
-      
-      int doc = scoreDocs[i].doc;
-      
-      WritableComparable sortValue;               // convert value to writable
-      if (sortField == null) {
-        sortValue = new FloatWritable(scoreDocs[i].score);
-      } 
-      else {
-    	/*
-        Object raw = ((FieldDoc)scoreDocs[i]).fields[0];
-        if (raw instanceof Integer) {
-          sortValue = new IntWritable(((Integer)raw).intValue());
-        } else if (raw instanceof Float) {
-          sortValue = new FloatWritable(((Float)raw).floatValue());
-        } else if (raw instanceof String) {
-          sortValue = new Text((String)raw);
-        } else {
-          throw new RuntimeException("Unknown sort value type!");
-        }
-        */
-    	sortValue = new FloatWritable(scoreDocs[i].score);
-      }
-
-      /* TODO MC - BUG 0000187 */
-      String dedupValue = dedupValues == null ? null : dedupValues[doc];
-      PwaUrlRadicalIdCache radicalIdCache = new PwaUrlRadicalIdCache(reader);      
-      long radicalId = ((Long)radicalIdCache.getValue(doc)).longValue();    	      	       
-      hits[i] = new Hit(doc, sortValue, dedupValue, radicalId);
-      /* TODO MC - BUG 0000187 */
-      // hits[i] = new Hit(doc, sortValue, dedupValue); TODO MC
+    for (int i = 0; i < length; i++) {                
+      WritableComparable sortValue = new FloatWritable(scoreDocs[i].score);        
+      String dedupValue = (dedupValues == null) ? null : dedupValues[scoreDocs[i].doc];
+      hits[i] = new Hit(scoreDocs[i].doc, sortValue, dedupValue);
     }
     return new Hits(topDocs.totalHits, hits);
   }

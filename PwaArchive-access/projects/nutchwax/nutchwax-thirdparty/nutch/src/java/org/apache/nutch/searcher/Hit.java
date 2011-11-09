@@ -31,26 +31,22 @@ public class Hit implements Writable, Comparable {
   private int indexDocNo;                         // index-relative id
   private WritableComparable sortValue;           // value sorted on
   private String dedupValue;                      // value to dedup on
-  private long radicalId;                         // BUG 0000187 - value to remove pages with the same version from results
   private boolean moreFromDupExcluded;
   
 
   public Hit() {}
 
   public Hit(int indexNo, int indexDocNo) {
-    this(indexNo, indexDocNo, null, null, 0);
+    this(indexNo, indexDocNo, null, null);
   }
-  public Hit(int indexNo, int indexDocNo,
-             WritableComparable sortValue,
-             String dedupValue, long radicalId) {
-    this(indexDocNo, sortValue, dedupValue, radicalId);
+  public Hit(int indexNo, int indexDocNo, WritableComparable sortValue, String dedupValue) {
+    this(indexDocNo, sortValue, dedupValue);
     this.indexNo = indexNo;
   }
-  public Hit(int indexDocNo, WritableComparable sortValue, String dedupValue, long radicalId) {
+  public Hit(int indexDocNo, WritableComparable sortValue, String dedupValue) {
     this.indexDocNo = indexDocNo;
     this.sortValue = sortValue;
     this.dedupValue = dedupValue == null ? "" : dedupValue;
-    this.radicalId = radicalId;
   }
 
   /** Return the index number that this hit came from. */
@@ -66,9 +62,6 @@ public class Hit implements Writable, Comparable {
   /** Return the value of the field that hits should be deduplicated on. */
   public String getDedupValue() { return dedupValue; }
   
-  /** Return the radical id of the url that should be deduplicated on. */
-  public long getRadicalId() { return radicalId; } // TODO MC - BUG 0000187
-
   /** True if other, lower-scoring, hits with the same dedup value have been
    * excluded from the list which contains this hit.. */
   public boolean moreFromDupExcluded() { return moreFromDupExcluded; }

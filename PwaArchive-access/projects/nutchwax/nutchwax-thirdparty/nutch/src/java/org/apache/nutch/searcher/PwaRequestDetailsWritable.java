@@ -88,8 +88,7 @@ public class PwaRequestDetailsWritable implements Writable {
     	for (int i=0;i<hits.length;i++) {
     		out.writeInt(hits[i].getIndexDocNo());            // write indexDocNo
     		hits[i].getSortValue().write(out);                // write sortValue
-    		Text.writeString(out, hits[i].getDedupValue());   // write dedupValue
-    		out.writeLong(hits[i].getRadicalId());            // write radicalId
+    		Text.writeString(out, hits[i].getDedupValue());   // write dedupValue    		
     	}    	
     }    
     
@@ -136,9 +135,8 @@ public class PwaRequestDetailsWritable implements Writable {
     		}
     		sortValue.readFields(in);                   // read sortValue
     		String dedupValue = Text.readString(in);    // read dedupValue
-    		long radicalId = in.readLong();             // read radicalId  
     		
-    		hits[i] = new Hit(indexDocNo, sortValue, dedupValue, radicalId);
+    		hits[i] = new Hit(indexDocNo, sortValue, dedupValue);
     	}
     }    
     
