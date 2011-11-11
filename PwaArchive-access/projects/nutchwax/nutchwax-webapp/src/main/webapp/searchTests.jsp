@@ -252,16 +252,21 @@ boosts: <%= sboosts %>
 <h3>URL division Functions: </h3>
   26 - UrlDepth <br>
 <h3>Web-graph based functions: </h3>
-  27 - LinPagerank <br>
-  28 - LinInlinks <br>
-  29 - OPIC <br>
+  27 - Pagerank <br>
+  28 - LinPagerank <br>
+  29 - Inlinks <br>
+  30 - LinInlinks <br>
+  31 - OPIC <br>
 <h3>Temporal features: </h3>
-  30 - Age <br>
-  31 - BoostNewer <br>
-  32 - BoostOlder <br>
-  33 - BoostNewerAndOlder <br>
-  34 - NumberVersions <br>
-  35 - SpanVersions <br>
+  32 - Age (in days) <br>
+  33 - BoostNewer <br>
+  34 - BoostOlder <br>
+  35 - BoostNewerAndOlder <br>
+  36 - TimestampVersion (in days) <br>
+  37 - TimestampOldestVersion (in days) <br>
+  38 - TimestampNewestVersion (in days) <br>
+  39 - NumberVersions <br>
+  40 - SpanVersions (in days) <br>
 </p>
 </div>
 
