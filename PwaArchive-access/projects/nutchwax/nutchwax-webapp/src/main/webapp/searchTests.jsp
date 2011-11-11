@@ -144,12 +144,7 @@ if (queryMatches==null || queryMatches.trim().equals("")) {
 	queryMatches="-2"; // use default
 }
 
-int hitsPerVersion = 1;
-String hitsPerVersionString = request.getParameter("hitsPerVersion");
-if (hitsPerVersionString!=null && hitsPerVersionString.length() > 0) {
-    hitsPerVersion = Integer.parseInt(hitsPerVersionString);
-}
-
+int hitsPerVersion = 1; // this parameter is ignored
 
 String sfunctions =  request.getParameter("sfunctions");
 if (sfunctions==null) {
@@ -174,7 +169,7 @@ for (int i=0; i<functionsArray.length; i++) {
 
 <div style="background: LightGrey">
 <p>
-BOOSTS: <br>
+<h1>BOOSTS:</h1>
 number of query matches: <%= nutchConf.getInt("searcher.max.hits", -1) %> 
 <input name="queryMatches" size=10 maxlength=10 value=<%= queryMatches %>>
 (-1=all;-2=default)
@@ -183,10 +178,12 @@ number of matches returned: <%= hitsPerPage %>
 <input name="hitsPerPage" size=10 maxlength=10 value=<%= hitsPerPage %>>
 (<1000)
 <br>
+<!--
 number of version returned: <%= hitsPerVersion %>
 <input name="hitsPerVersion" size=10 maxlength=10 value=<%= hitsPerVersion %>>
 (>0)
 <br>
+-->
 number of matches from the same site returned: <%= hitsPerDup %>
 <input name="hitsPerDup" size=10 maxlength=10 value=<%= hitsPerDup %>>
 (>0)
@@ -222,43 +219,49 @@ boosts: <%= sboosts %>
 
 <div style="background: LightGrey">
 <p>
-Term-based Functions: <br>
- 0  TF-IDF : content <br> 
- 1  BM-25 : content <br>
- 2  TF-IDF : url <br>
- 3  BM-25 : url <br>
- 4  TF-IDF : host <br>
- 5  BM-25 : host <br>
- 6  TF-IDF : anchor <br>
- 7  BM-25 : anchor <br>
- 8  TF-IDF : title <br>
- 9  BM-25 : title <br>
- 10 Lucene : content + url + host + anchor + title <br>
-<br>
-Term distance Functions: <br>
- 11 MinSpanCovOrd - content <br>
- 12 MinSpanCovUnord - content <br>
- 13 MinPairDist - content <br>
- 14 MinSpanCovOrd - url <br>
- 15 MinSpanCovUnord - url <br>
- 16 MinPairDist - url <br>
- 17 MinSpanCovOrd - host <br>
- 18 MinSpanCovUnord - host <br>
- 19 MinPairDist - host <br>
- 20 MinSpanCovOrd - anchor <br>
- 21 MinSpanCovUnord - anchor <br> 
- 22 MinPairDist - anchor <br>
- 23 MinSpanCovOrd - title <br>
- 24 MinSpanCovUnord - title <br>
- 25 MinPairDist - title <br>
-<br>
-URL division Functions: <br>
- 26 - UrlDepth <br>
-<br>
-Web graph Functions: <br>
- 27 - LinPagerank <br>
- 28 - LinInlinks <br>
- 29 - OPIC <br>
+<h2>Query-dependent feaatures: </h2>
+<h3>Term-weighting functions: </h3>>
+  0  TF-IDF : content <br> 
+  1  BM-25 : content <br>
+  2  TF-IDF : url <br>
+  3  BM-25 : url <br>
+  4  TF-IDF : host <br>
+  5  BM-25 : host <br>
+  6  TF-IDF : anchor <br>
+  7  BM-25 : anchor <br>
+  8  TF-IDF : title <br>
+  9  BM-25 : title <br>
+  10 Lucene : content + url + host + anchor + title <br>
+<h3>Term-distance functions: </h3>
+  11 MinSpanCovOrd - content <br>
+  12 MinSpanCovUnord - content <br>
+  13 MinPairDist - content <br>
+  14 MinSpanCovOrd - url <br>
+  15 MinSpanCovUnord - url <br>
+  16 MinPairDist - url <br>
+  17 MinSpanCovOrd - host <br>
+  18 MinSpanCovUnord - host <br>
+  19 MinPairDist - host <br>
+  20 MinSpanCovOrd - anchor <br>
+  21 MinSpanCovUnord - anchor <br> 
+  22 MinPairDist - anchor <br>
+  23 MinSpanCovOrd - title <br>
+  24 MinSpanCovUnord - title <br>
+  25 MinPairDist - title <br>
+<h2>Query-independent feaatures: </h2>
+<h3>URL division Functions: </h3>
+  26 - UrlDepth <br>
+<h3>Web-graph based functions: </h3>
+  27 - LinPagerank <br>
+  28 - LinInlinks <br>
+  29 - OPIC <br>
+<h3>Temporal features: </h3>
+  30 - Age <br>
+  31 - BoostNewer <br>
+  32 - BoostOlder <br>
+  33 - BoostNewerAndOlder <br>
+  34 - NumberVersions <br>
+  35 - SpanVersions <br>
 </p>
 </div>
 
