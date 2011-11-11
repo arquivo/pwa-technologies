@@ -14,17 +14,18 @@ public class PwaBoostNewerAndOlder implements PwaIRankingFunction {
 	
 	/**
 	 * Constructor
-	 * @param span distance in days	 
-	 * @param maxSpan maximum span in days
+	 * @param docTimestamp document's timestamp	(millisec) 
+	 * @param maxTimestamp timestamp of the newest document in the collection
+	 * @param minTimestamp timestamp of the oldest document in the collection
 	 */
-	public PwaBoostNewerAndOlder(double span, double maxSpan) {
-		double middle=maxSpan/2;
-		if (span<middle) {
-			PwaBoostNewer ranker=new PwaBoostNewer(span,maxSpan);
+	public PwaBoostNewerAndOlder(long docTimestamp, long maxTimestamp, long minTimestamp) {	
+		long middle=(maxTimestamp-minTimestamp)/2;		
+		if (docTimestamp<middle) {
+			PwaBoostOlder ranker=new PwaBoostOlder(docTimestamp, maxTimestamp, minTimestamp);
 			score=ranker.score();
 		}
 		else {
-			PwaBoostOlder ranker=new PwaBoostOlder(span,maxSpan);
+			PwaBoostNewer ranker=new PwaBoostNewer(docTimestamp, maxTimestamp, minTimestamp);
 			score=ranker.score();
 		}				
 	}

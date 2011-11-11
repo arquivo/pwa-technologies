@@ -18,25 +18,22 @@ public class PwaBoostNewerAndOlderTest extends TestCase {
 	protected void tearDown() throws Exception {
 	}
 
-	public void testScore() {						
-		double maxSpan=10000;
-		for (double i=0;i<10;i++) {
-			PwaBoostNewerAndOlder ranker=new PwaBoostNewerAndOlder(i,maxSpan);
-			System.out.println(i+" "+ranker.score());	
-		}
-		for (double i=10;i<100;i+=10) {
-			PwaBoostNewerAndOlder ranker=new PwaBoostNewerAndOlder(i,maxSpan);
-			System.out.println(i+" "+ranker.score());	
-		}
+	public void testScore() {								
+		long maxTimestamp=100;
+		long minTimestamp=0;	
 		
-		for (double i=maxSpan;i>maxSpan-10;i--) {
-			PwaBoostNewerAndOlder ranker=new PwaBoostNewerAndOlder(i,maxSpan);
+		for (long i=0;i<10;i++) {
+			PwaBoostNewerAndOlder ranker=new PwaBoostNewerAndOlder(i,maxTimestamp,minTimestamp);
 			System.out.println(i+" "+ranker.score());	
 		}
-		for (double i=maxSpan-10;i>maxSpan-100;i-=10) {
-			PwaBoostNewerAndOlder ranker=new PwaBoostNewerAndOlder(i,maxSpan);
+		for (long i=10;i<=90;i+=10) {
+			PwaBoostNewerAndOlder ranker=new PwaBoostNewerAndOlder(i,maxTimestamp,minTimestamp);
 			System.out.println(i+" "+ranker.score());	
 		}
+		for (long i=91;i<=100;i++) {
+			PwaBoostNewerAndOlder ranker=new PwaBoostNewerAndOlder(i,maxTimestamp,minTimestamp);
+			System.out.println(i+" "+ranker.score());	
+		}	
 		
 		assertTrue(true);
 	}

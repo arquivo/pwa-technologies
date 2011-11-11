@@ -26,11 +26,8 @@ public class PwaDateCache implements PwaICache {
 	private static Object lockObj=new Object();
 	private static String fieldName="date";
 	private static SimpleDateFormat dformat=null;
-	private static long minTimestamp;
-	private static long maxTimestamp;
-	
-	
-//private static IndexReader reader=null; // TODO remove
+	private static long minTimestamp=Long.MAX_VALUE;
+	private static long maxTimestamp=0;
 	
 	
 	/**
@@ -43,8 +40,6 @@ public class PwaDateCache implements PwaICache {
 		if (timestamps!=null) {
 			return;
 		}
-		
-//this.reader=reader; // TODO remove		
 
 		// load cache once		
 		synchronized(lockObj) {			
@@ -124,7 +119,7 @@ public class PwaDateCache implements PwaICache {
 	}	
 	
 	/**
-	 * Get timestamp from document
+	 * Get timestamp from document (in millisec)
 	 * @param doc document id
 	 * @return timestamp from document
 	 */
@@ -134,28 +129,28 @@ public class PwaDateCache implements PwaICache {
 	}
 
 	/**
-	 * Get timestamp from document
+	 * Get timestamp from document (in millisec)
 	 * @param doc document id
 	 * @return timestamp from document
 	 */
 	public long getTimestamp(int doc) {
-		return timestamps[doc];
+		return timestamps[doc]*1000;
 	}
 	
 	/**
-	 * Get minimum timestamp 
+	 * Get minimum timestamp (in millisec)
 	 * @return minimum timestamp from collection
 	 */
 	public long getMinTimestamp() {
-		return minTimestamp;
+		return minTimestamp*1000;
 	}
 	
 	/**
-	 * Get maximum timestamp 
+	 * Get maximum timestamp (in millisec)
 	 * @return maximum timestamp from collection
 	 */
 	public long getMaxTimestamp() {
-		return maxTimestamp;
+		return maxTimestamp*1000;
 	}
 	
 	
