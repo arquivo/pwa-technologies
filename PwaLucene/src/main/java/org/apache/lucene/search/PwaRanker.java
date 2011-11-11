@@ -64,6 +64,13 @@ public class PwaRanker {
 			
 				if (functions.hasFunction(funct)) {
 					boost=functions.getBoost(funct);
+					for (int j=0;j<vecTfs.size();j++) {
+						score+= vecTfs.get(j) * boost; // sum of the term frequency of each term
+					}
+				}
+				funct++;				
+				if (functions.hasFunction(funct)) {
+					boost=functions.getBoost(funct);
 					score+= (new PwaTFxIDF(vecTfs,vecIdfs,fieldLength,nDocs)).score() * boost; // "TFxIDF-"+PwaIndexStats.FIELDS[i]					
 				}
 				funct++;
@@ -110,11 +117,11 @@ public class PwaRanker {
 			}			
 		}
 		else {
-			funct+=PwaIndexStats.FIELDS.length*2+1+PwaIndexStats.FIELDS.length*3;
+			funct+=PwaIndexStats.FIELDS.length*3+1+PwaIndexStats.FIELDS.length*3;
 		}
 								
         // query independent features
-		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3) || functions.hasFunction(funct+4) || functions.hasFunction(funct+5)) {										
+		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2)) {										
 			Document docMeta=searcher.doc(doc);				
 			if (functions.hasFunction(funct)) {
 				surl=docMeta.get("url");
@@ -122,6 +129,19 @@ public class PwaRanker {
 				score+= (new PwaUrlDepth(surl)).score() * boost; // "UrlDepth"			
 			}
 			funct++;			
+			if (functions.hasFunction(funct)) {
+				String sinlinks=docMeta.get("inlinks");
+				boost=functions.getBoost(funct);
+				score+= Integer.parseInt(sinlinks) * boost; // "Inlinks"
+			}
+			funct++;
+			if (functions.hasFunction(funct)) {
+				String sinlinks=docMeta.get("inlinks");
+				boost=functions.getBoost(funct);
+				score+= (new PwaLinInlinks(Integer.parseInt(sinlinks))).score() * boost; // "LinInlinks"		
+			}
+			funct++;
+			/* do not work properly
 			if (functions.hasFunction(funct)) {
 				String spagerank=docMeta.get("pagerank");
 				boost=functions.getBoost(funct);
@@ -135,26 +155,15 @@ public class PwaRanker {
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {
-				String sinlinks=docMeta.get("inlinks");
-				boost=functions.getBoost(funct);
-				score+= Integer.parseInt(sinlinks) * boost; // "Inlinks"
-			}
-			funct++;
-			if (functions.hasFunction(funct)) {
-				String sinlinks=docMeta.get("inlinks");
-				boost=functions.getBoost(funct);
-				score+= (new PwaLinInlinks(Integer.parseInt(sinlinks))).score() * boost; // "LinInlinks"		
-			}
-			funct++;
-			if (functions.hasFunction(funct)) {
 				String sboost=docMeta.get("boost");
 				boost=functions.getBoost(funct);
 				score+= Float.parseFloat(sboost) * boost; // OPIC
 			}
 			funct++;
+			*/
 		}
 		else {
-			funct+=6;
+			funct+=3;
 		}
 		
 		// temporal features - local timestamps 
@@ -164,11 +173,6 @@ public class PwaRanker {
 			long minTimestamp=cache.getMinTimestamp();
 			long maxTimestamp=cache.getMaxTimestamp();					
 		
-			if (functions.hasFunction(funct)) {
-				boost=functions.getBoost(funct);
-				score+= (new PwaAge(timestamp,queryTimestamp)).score() * boost; // Age in days
-			}
-			funct++;		
 			if (functions.hasFunction(funct)) {
 				boost=functions.getBoost(funct);			
 				score+= (new PwaBoostNewer(timestamp,maxTimestamp,minTimestamp)).score() * boost; // BoostNewer
@@ -184,6 +188,11 @@ public class PwaRanker {
 				score+= (new PwaBoostNewerAndOlder(timestamp,maxTimestamp,minTimestamp)).score() * boost; // BoostNewerAndOlder
 			}
 			funct++;
+			if (functions.hasFunction(funct)) {
+				boost=functions.getBoost(funct);
+				score+= (new PwaAge(timestamp,queryTimestamp)).score() * boost; // Age in days
+			}
+			funct++;				
 			if (functions.hasFunction(funct)) {
 				boost=functions.getBoost(funct);			
 				score+= timestamp / PwaIRankingFunction.DAY_MILLISEC * boost; // Version's timestamp in days
@@ -226,17 +235,17 @@ public class PwaRanker {
 					boost=functions.getBoost(funct);			
 					score+= maxTimestamp / PwaIRankingFunction.DAY_MILLISEC * boost; // Newest version's timestamp in days
 				}
-				funct++;	
-				if (functions.hasFunction(funct)) {
-					boost=functions.getBoost(funct);			
-					score+= nVersions * boost; // NumberVersions
-				}
 				funct++;
 				if (functions.hasFunction(funct)) {
 					boost=functions.getBoost(funct);			
 					score+= (new PwaSpanVersions(maxTimestamp,minTimestamp)).score() * boost; // Days between Versions
 				}
-				funct++;										
+				funct++;
+				if (functions.hasFunction(funct)) {
+					boost=functions.getBoost(funct);			
+					score+= nVersions * boost; // NumberVersions
+				}
+				funct++;													
 			}
 			
 			//cache.close();
@@ -254,13 +263,14 @@ public class PwaRanker {
 	/**
 	 * Display all features	
 	 * @param doc document identifier
+	 * @param queryTimestamp timestamp when the query was submitted
 	 * @param collector ranking features collector
 	 * @param posmanagers query term position into the document 
 	 * @param searcher searcher
 	 * @param functions ranking functions 
 	 * @return explanation
 	 */
-	public static Explanation explain(int doc, PwaRawFeatureCollector collector, Vector<PwaPositionsManager> posmanagers, Searcher searcher, PwaFunctionsWritable functions) throws IOException {			
+	public static Explanation explain(int doc, long queryTimestamp, PwaRawFeatureCollector collector, Vector<PwaPositionsManager> posmanagers, Searcher searcher, PwaFunctionsWritable functions) throws IOException {			
 		Vector<Integer> vecTfs;
 		Vector<Integer> vecIdfs;
 		Vector<String>  vecTermsText;
