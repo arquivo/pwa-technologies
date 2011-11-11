@@ -74,6 +74,8 @@
       <groupId>lucene</groupId>
       <artifactId>lucene-core</artifactId>
       <version>2.1.1-dev</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/lucene-core-2.1.1-dev.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
