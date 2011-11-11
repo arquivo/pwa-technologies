@@ -220,53 +220,55 @@ boosts: <%= sboosts %>
 <div style="background: LightGrey">
 <p>
 <h2>Query-dependent feaatures: </h2>
-<h3>Term-weighting functions: </h3>>
-  0  TF-IDF : content <br> 
-  1  BM-25 : content <br>
-  2  TF-IDF : url <br>
-  3  BM-25 : url <br>
-  4  TF-IDF : host <br>
-  5  BM-25 : host <br>
-  6  TF-IDF : anchor <br>
-  7  BM-25 : anchor <br>
-  8  TF-IDF : title <br>
-  9  BM-25 : title <br>
-  10 Lucene : content + url + host + anchor + title <br>
+<h3>Term-weighting functions: </h3>
+  0 TermFrequency (sum of all terms) : content <br> 
+  1 TF-IDF : content <br> 
+  2 BM-25 : content <br>
+  3 TermFrequency (sum of all terms) : url <br> 
+  4 TF-IDF : url <br>
+  5 BM-25 : url <br>
+  6 TermFrequency (sum of all terms) : host <br> 
+  7 TF-IDF : host <br>
+  8 BM-25 : host <br>
+  9 TermFrequency (sum of all terms) : anchor <br> 
+  10 TF-IDF : anchor <br>
+  11 BM-25 : anchor <br>
+  12 TermFrequency (sum of all terms) : title <br> 
+  13 TF-IDF : title <br>
+  14 BM-25 : title <br>
+  15 Lucene : content + url + host + anchor + title <br>
 <h3>Term-distance functions: </h3>
-  11 MinSpanCovOrd - content <br>
-  12 MinSpanCovUnord - content <br>
-  13 MinPairDist - content <br>
-  14 MinSpanCovOrd - url <br>
-  15 MinSpanCovUnord - url <br>
-  16 MinPairDist - url <br>
-  17 MinSpanCovOrd - host <br>
-  18 MinSpanCovUnord - host <br>
-  19 MinPairDist - host <br>
-  20 MinSpanCovOrd - anchor <br>
-  21 MinSpanCovUnord - anchor <br> 
-  22 MinPairDist - anchor <br>
-  23 MinSpanCovOrd - title <br>
-  24 MinSpanCovUnord - title <br>
-  25 MinPairDist - title <br>
+  16 MinSpanCovOrd - content <br>
+  17 MinSpanCovUnord - content <br>
+  18 MinPairDist - content <br>
+  19 MinSpanCovOrd - url <br>
+  20 MinSpanCovUnord - url <br>
+  21 MinPairDist - url <br>
+  22 MinSpanCovOrd - host <br>
+  23 MinSpanCovUnord - host <br>
+  24 MinPairDist - host <br>
+  25 MinSpanCovOrd - anchor <br>
+  26 MinSpanCovUnord - anchor <br> 
+  27 MinPairDist - anchor <br>
+  28 MinSpanCovOrd - title <br>
+  29 MinSpanCovUnord - title <br>
+  30 MinPairDist - title <br>
 <h2>Query-independent feaatures: </h2>
 <h3>URL division Functions: </h3>
-  26 - UrlDepth <br>
+  31 - UrlDepth <br>
 <h3>Web-graph based functions: </h3>
-  27 - Pagerank <br>
-  28 - LinPagerank <br>
-  29 - Inlinks <br>
-  30 - LinInlinks <br>
-  31 - OPIC <br>
+  32 - Inlinks <br>
+  33 - LinInlinks <br>
 <h3>Temporal features: </h3>
-  32 - Age (in days) <br>
-  33 - BoostNewer <br>
-  34 - BoostOlder <br>
-  35 - BoostNewerAndOlder <br>
-  36 - TimestampVersion (in days) <br>
-  37 - TimestampOldestVersion (in days) <br>
-  38 - TimestampNewestVersion (in days) <br>
-  39 - NumberVersions <br>
-  40 - SpanVersions (in days) <br>
+  34 - BoostNewer <br>
+  35 - BoostOlder <br>
+  36 - BoostNewerAndOlder <br>
+  37 - Age (in days) <br>
+  38 - TimestampVersion (in days) <br>
+  39 - TimestampOldestVersion (in days) <br>
+  40 - TimestampNewestVersion (in days) <br>
+  41 - SpanVersions (in days) <br>
+  42 - NumberVersions <br>
 </p>
 </div>
 
