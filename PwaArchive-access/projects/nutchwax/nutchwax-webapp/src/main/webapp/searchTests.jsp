@@ -205,70 +205,86 @@ boosts: <%= sboosts %>
 
  <input name="query" size=44 value="<%=htmlQueryString%>">
  <input type="hidden" name="hitsPerPage" value="<%=hitsPerPage%>">
- <% if (collection != null) { %>
-    <input type="hidden" name="collection" value="<%=collection%>">
- <% } %>
  <input type="submit" value="<i18n:message key="search"/>">
- <small><a href="http://archive-access.sourceforge.net/projects/nutch/help-queries.html">Help</a></small>
-<% if (sort != null) { %>
+ <% if (sort != null) { %>
     <input type="hidden" name="sort" value="<%=sort%>">
     <input type="hidden" name="reverse" value="<%=reverse%>">
 <% } %>
 
  </form>
 
+
 <div style="background: LightGrey">
 <p>
-<h2>Query-dependent feaatures: </h2>
+<h2>Query-dependent features: </h2>
 <h3>Term-weighting functions: </h3>
   0 TermFrequency (sum of all terms) : content <br> 
-  1 TF-IDF : content <br> 
-  2 BM-25 : content <br>
-  3 TermFrequency (sum of all terms) : url <br> 
-  4 TF-IDF : url <br>
-  5 BM-25 : url <br>
-  6 TermFrequency (sum of all terms) : host <br> 
-  7 TF-IDF : host <br>
-  8 BM-25 : host <br>
-  9 TermFrequency (sum of all terms) : anchor <br> 
-  10 TF-IDF : anchor <br>
-  11 BM-25 : anchor <br>
-  12 TermFrequency (sum of all terms) : title <br> 
-  13 TF-IDF : title <br>
-  14 BM-25 : title <br>
-  15 Lucene : content + url + host + anchor + title <br>
+  1 InverseDocumentFrequency (sum of all terms) : content <br> 
+  2 FieldLength : content <br>
+  3 AverageFieldLength : content <br>
+  4 TF-IDF : content <br> 
+  5 BM-25 : content <br>
+  6 TermFrequency (sum of all terms) : url <br> 
+  7 InverseDocumentFrequency (sum of all terms) : url <br> 
+  8 FieldLength : url <br>
+  9 AverageFieldLength : url <br>
+  10 TF-IDF : url <br> 
+  11 BM-25 : url <br>
+  12 TermFrequency (sum of all terms) : host <br> 
+  13 InverseDocumentFrequency (sum of all terms) : host <br> 
+  14 FieldLength : host <br>
+  15 AverageFieldLength : host <br>
+  16 TF-IDF : host <br> 
+  17 BM-25 : host <br>
+  18 TermFrequency (sum of all terms) : anchor <br> 
+  19 InverseDocumentFrequency (sum of all terms) : anchor <br> 
+  20 FieldLength : anchor <br>
+  21 AverageFieldLength : anchor <br>
+  22 TF-IDF : anchor <br> 
+  23 BM-25 : anchor <br>
+  24 TermFrequency (sum of all terms) : title <br> 
+  25 InverseDocumentFrequency (sum of all terms) : title <br> 
+  26 FieldLength : title <br>
+  27 AverageFieldLength : title <br>
+  28 TF-IDF : title <br> 
+  29 BM-25 : title <br>
+  30 Lucene : content + url + host + anchor + title <br>
 <h3>Term-distance functions: </h3>
-  16 MinSpanCovOrd - content <br>
-  17 MinSpanCovUnord - content <br>
-  18 MinPairDist - content <br>
-  19 MinSpanCovOrd - url <br>
-  20 MinSpanCovUnord - url <br>
-  21 MinPairDist - url <br>
-  22 MinSpanCovOrd - host <br>
-  23 MinSpanCovUnord - host <br>
-  24 MinPairDist - host <br>
-  25 MinSpanCovOrd - anchor <br>
-  26 MinSpanCovUnord - anchor <br> 
-  27 MinPairDist - anchor <br>
-  28 MinSpanCovOrd - title <br>
-  29 MinSpanCovUnord - title <br>
-  30 MinPairDist - title <br>
-<h2>Query-independent feaatures: </h2>
-<h3>URL division Functions: </h3>
-  31 - UrlDepth <br>
+  31 MinSpanCovOrd - content <br>
+  32 MinSpanCovUnord - content <br>
+  33 MinPairDist - content <br>
+  34 MinSpanCovOrd - url <br>
+  35 MinSpanCovUnord - url <br>
+  36 MinPairDist - url <br>
+  37 MinSpanCovOrd - host <br>
+  38 MinSpanCovUnord - host <br>
+  39 MinPairDist - host <br>
+  40 MinSpanCovOrd - anchor <br>
+  41 MinSpanCovUnord - anchor <br> 
+  42 MinPairDist - anchor <br>
+  43 MinSpanCovOrd - title <br>
+  44 MinSpanCovUnord - title <br>
+  45 MinPairDist - title <br>
+<h2>Query-independent features: </h2>
+<h3>URL based Functions: </h3>
+  46 UrlDepth <br>
+  47 UrlSlashes <br>
+  48 UrlLength <br>
 <h3>Web-graph based functions: </h3>
-  32 - Inlinks <br>
-  33 - LinInlinks <br>
+  49 Inlinks <br>
+  50 LinInlinks <br>
 <h3>Temporal features: </h3>
-  34 - BoostNewer <br>
-  35 - BoostOlder <br>
-  36 - BoostNewerAndOlder <br>
-  37 - Age (in days) <br>
-  38 - TimestampVersion (in days) <br>
-  39 - TimestampOldestVersion (in days) <br>
-  40 - TimestampNewestVersion (in days) <br>
-  41 - SpanVersions (in days) <br>
-  42 - NumberVersions <br>
+  51 BoostNewer <br>
+  52 BoostOlder <br>
+  53 BoostNewerAndOlder <br>
+  54 Age (in days) <br>
+  55 TimestampVersion (in days) <br>
+  56 TimestampOldestVersion (in days) <br>
+  57 TimestampNewestVersion (in days) <br>
+  58 SpanVersions (in days) <br>
+  59 SpanVersions (normalized) <br>
+  60 NumberVersions <br>
+  61 NumberVersions (normalized) <br>
 </p>
 </div>
 
@@ -328,9 +344,12 @@ Search took <%= searchTime/1000.0 %> seconds.
 
 
 <br><br>
-
+<ol>
 <%
   for (int i = 0; i < length; i++) {      // display the hits
+%>
+   <li>
+<%  
     Hit hit = show[i];
     HitDetails detail = details[i];
     String title = detail.getValue("title");
@@ -348,19 +367,20 @@ Search took <%= searchTime/1000.0 %> seconds.
     String archiveCollection =  "wayback"; //detail.getValue("collection");
     String url = detail.getValue("url");
     // If the collectionsHost includes a path do not add archiveCollection.
-    // See http://sourceforge.net/tracker/index.php?func=detail&aid=1288990&group_id=118427&atid=681140.
-    String target = null;
-    String allVersions = null;
-    if (collectionsHost.indexOf('/') > 0) {
-        target = "http://" + collectionsHost + "/" + archiveDate + "/" + url;
-        allVersions = "http://" + collectionsHost + "/*/" + url;
-    } else {
-        target = "http://" + collectionsHost + "/" + archiveCollection + "/"
-            + archiveDate + "/" + url;
-        allVersions = "http://" + collectionsHost + "/" + archiveCollection
-            + "/*/" + url;
+    // See http://sourceforge.net/tracker/index.php?func=detail&aid=1288990&group_id=118427&atid=681140.    
+    String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
+    //pageContext.setAttribute("target", target);
+
+    String dateStartString = "";
+    String dateEndString = "";
+    int position=0;
+    String allVersions = "search.jsp?query="+ URLEncoder.encode(url, "UTF-8") +"&dateStart="+ dateStartString + "&dateEnd="+ dateEndString +"&pos="+ String.valueOf(position);	    
+    if (!language.equals("pt")) {
+	allVersions += "&l="+ language;
     }
-    if (title == null || title.trim().equals("")) {      // use url for docs w/o title   // TODO BUG MC - missing trim()
+
+    // use url for docs w/o title
+    if (title == null || title.equals("")) {
       title = url;
     }
     
@@ -390,7 +410,7 @@ Search took <%= searchTime/1000.0 %> seconds.
     <span class="url"><%=Entities.encode(url)%></span>
     <%@ include file="./more.jsp" %>
     -
-    <%=archiveDisplayDate%>
+    <span class="date"><%=archiveDisplayDate%></span>
     -
     <a href="<%=allVersions%>">other versions</a>
     <% if (hit.moreFromDupExcluded()) {
@@ -402,10 +422,13 @@ Search took <%= searchTime/1000.0 %> seconds.
      <%=hit.getDedupValue()%></a>
     <% } %>
     -
-    <a href="explain.jsp?<%=id%>&query=<%=URLEncoder.encode(queryString, "UTF-8")%>">explain</a>
+    <a href="explain.jsp?<%=id%>&query=<%=URLEncoder.encode(queryString, "UTF-8")%>&sfunctions=<%=sfunctions.replace(" ","+")%>&sboosts=<%=sboosts.replace(" ","+")%>">explain</a>
     </small>
-    <br><br>
-<% } %>
+
+   </li>
+<% } 
+%>
+</ol>
 <!--
    Debugging info
 <table border="1">

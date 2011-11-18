@@ -177,7 +177,7 @@ class LuceneQueryOptimizer {
       initTimerThread(this.tickLength);
     }
     
-    this.cacheType = conf.get(Global.CACHE_TYPE);
+    //this.cacheType = conf.get(Global.CACHE_TYPE); TODO remove
   }
 
   public TopDocs optimize(BooleanQuery original,
@@ -186,75 +186,26 @@ class LuceneQueryOptimizer {
     throws IOException {
 
     BooleanQuery query = new BooleanQuery(); 
-    
-    BooleanQuery cacheQuery = new BooleanQuery();
-    BooleanQuery filterQuery = new BooleanQuery();
-    ArrayList filters = new ArrayList();
+    Filter filter = null;
 
     BooleanClause[] clauses = original.getClauses();
     for (int i = 0; i < clauses.length; i++) {
       BooleanClause c = clauses[i];
-      if (c.isRequired()                          // required
-          && c.getQuery().getBoost() == 0.0f) {   // boost is zero
+      if (c.isRequired() && c.getQuery().getBoost() == 0.0f) {   // boost is zero
 
-        if (c.getQuery() instanceof TermQuery     // TermQuery
-            && (searcher.docFreq(((TermQuery)c.getQuery()).getTerm())
-                / (float)searcher.maxDoc()) < threshold) { // beneath threshold
-          query.add(c);                           // don't filterize
-          continue;
-        }
-          
-        if (c.getQuery() instanceof RangeQuery) { // RangeQuery
-         /* TODO MC - handled by ArquivoWebDateRangeCacheFilter class	
-          RangeQuery range = (RangeQuery)c.getQuery();
-          boolean inclusive = range.isInclusive();// convert to RangeFilter
-          Term lower = range.getLowerTerm();
-          Term upper = range.getUpperTerm();
-          filters.add(new RangeFilter(lower!=null?lower.field():upper.field(),
-                                      lower != null ? lower.text() : null,
-                                      upper != null ? upper.text() : null,
-                                      inclusive, inclusive));
-          cacheQuery.add(c.getQuery(), BooleanClause.Occur.MUST); // cache it
-         */
-        	
-          query.add(c); // TODO MC - added for ArquivoWebScorer class to receive it 
-          continue;
-        }       
-
-        // all other query types
-        filterQuery.add(c.getQuery(), BooleanClause.Occur.MUST);  // filter it
-        cacheQuery.add(c.getQuery(), BooleanClause.Occur.MUST);   // cache it        
-        continue;
+    	  	if (c.getQuery() instanceof TermQuery     // TermQuery
+    	  			&& (searcher.docFreq(((TermQuery)c.getQuery()).getTerm()) / (float)searcher.maxDoc()) < threshold) { // beneath threshold
+    	  		query.add(c);                           // don't filter
+    	  		continue;
+    	  	}          
+    	  	if (c.getQuery() instanceof RangeQuery) { // RangeQuery        
+    	  		query.add(c); 
+    	  		continue;
+    	  	}       
+    	  	continue;
       }
 
       query.add(c);                               // query it
-    }
-
-    Filter filter = null;
-    if (cacheType.equals(Global.CACHE_TYPE_CACHED)) {    	
-    	if (cacheQuery.getClauses().length != 0) {
-    		synchronized (cache) {                      // check cache
-    			filter = (Filter)cache.get(cacheQuery);
-    		}
-    		if (filter == null) {                       // miss
-    			if (filterQuery.getClauses().length != 0) // add filterQuery to filters
-    				filters.add(new QueryFilter(filterQuery));
-
-    			if (filters.size() == 1) {                // convert filters to filter
-    				filter = (Filter)filters.get(0);
-    			} else {
-    				filter = new ChainedFilter((Filter[])filters.toArray
-                                     (new Filter[filters.size()]),
-                                     ChainedFilter.AND);
-    			}
-    			if (!(filter instanceof QueryFilter))     // make sure bits are cached
-    				filter = new CachingWrapperFilter(filter);
-        
-    			synchronized (cache) {
-    				cache.put(cacheQuery, filter);          // cache the filter
-    			}
-    		}        
-    	}    
     }
     
     query.setFunctions(original.getFunctions());  
@@ -287,22 +238,12 @@ class LuceneQueryOptimizer {
     }
     TopDocs results = collector.topDocs();
     if (exceeded != null) {                     // limit was exceeded
-    	results.totalHits = (int)                 // must estimate totalHits
-    	(results.totalHits*(searcher.maxDoc()/(float)exceeded.maxDoc));
+    	results.totalHits = (int)(results.totalHits*(searcher.maxDoc()/(float)exceeded.maxDoc)); // estimate totalHits
     } 
     else if (timeExceeded != null) {
-    	// Estimate total hits.
     	results.totalHits = (int)(results.totalHits * (searcher.maxDoc()/(float)timeExceeded.maxDoc));
     }
-    return results;
-    
-    /*
-    } 
-    else {
-    	return searcher.search(query, filter, numHits,
-                             new Sort(sortField, reverse));
-    }
-    */            
+    return results;              
   }
   
 

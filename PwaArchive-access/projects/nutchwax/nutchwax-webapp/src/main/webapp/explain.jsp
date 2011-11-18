@@ -10,7 +10,8 @@
   import="org.apache.nutch.searcher.*"
   import="org.archive.access.nutch.NutchwaxConfiguration"
   import="org.apache.lucene.search.PwaFunctionsWritable"
-%><%
+%>
+<%
   Configuration nutchConf = NutchwaxConfiguration.getConfiguration(application);
   NutchBean bean = NutchBean.get(application, nutchConf);
   // set the character encoding to use when interpreting request values 
@@ -20,9 +21,7 @@
                     Integer.parseInt(request.getParameter("id")));
   HitDetails details = bean.getDetails(hit);
   Query query = Query.parse(request.getParameter("query"), nutchConf);
-  String language =
-    ResourceBundle.getBundle("org.nutch.jsp.explain", request.getLocale())
-    .getLocale().getLanguage();
+  String language = ResourceBundle.getBundle("org.nutch.jsp.explain", request.getLocale()).getLocale().getLanguage();
   String requestURI = HttpUtils.getRequestURL(request).toString();
 %><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <%
@@ -54,12 +53,25 @@
 </i18n:message>
 </h3>
 
-<% /* TODO MC */
-   PwaFunctionsWritable functions=new PwaFunctionsWritable();
-   functions.addFunction(10, 0.023322608715538286f);
-   functions.addFunction(24, 0.59394816155096997f);
-   functions.addFunction(12, 0.34503713094903127f);
-   functions.addFunction(20, 1.2592823789368244f);
+<%
+String sfunctions =  request.getParameter("sfunctions");
+if (sfunctions==null) {
+	sfunctions=""; // use default
+}
+String functionsArray[]=sfunctions.split(" ");
+
+String sboosts =  request.getParameter("sboosts");
+if (sboosts==null) {
+	sboosts=""; // use default
+}
+String boostsArray[]=sboosts.split(" ");
+
+PwaFunctionsWritable functions=new PwaFunctionsWritable();
+for (int i=0; i<functionsArray.length; i++) {
+	if (!functionsArray[i].equals("")) {
+		functions.addFunction(Integer.parseInt(functionsArray[i]), Float.parseFloat(boostsArray[i]));
+	}
+}
 %>
 <%=bean.getExplanation(query, hit, functions)%>
 
