@@ -1,7 +1,6 @@
 package org.apache.lucene.search.tests;
 
-import org.apache.lucene.search.rankers.*;
-import org.apache.lucene.search.rankers.temporal.PwaBoostNewer;
+import org.apache.lucene.search.features.temporal.PwaBoostNewer;
 
 import junit.framework.*;
 

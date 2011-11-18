@@ -14,6 +14,8 @@ import org.apache.lucene.search.filters.PwaFilterChain;
 import org.apache.lucene.search.filters.PwaBlacklistFilter;
 import org.apache.lucene.search.queries.PwaClosestQuery;
 import org.apache.lucene.search.queries.PwaSortQuery;
+import org.apache.lucene.search.features.PwaLinearRankingModel;
+import org.apache.lucene.search.features.PwaScores;
 
 
 /**
@@ -246,7 +248,7 @@ public class PwaScorer extends Scorer {
 	 * Prepares joiner, mergers and filters for matching documents
 	 * @param isOnlyPhrasesForRank indicates if query has only phrases or not 
 	 * @param htableMergers
-	 * @param htableMergersExtra
+	 * @param htableMergersExtradouble score=0;
 	 * @param htableMergersExclude
 	 * @param htableMergersExtraExclude
 	 * @param htablePositions
@@ -403,8 +405,9 @@ public class PwaScorer extends Scorer {
 	public float score() throws IOException {				
 		if (scoreType==ScoreType.NORMAL) {		  
 			PwaRawFeatureCollector collector=new PwaRawFeatureCollector(reader);
-			joiner.collectFeatures(doc(),collector);							
-			return PwaRanker.score(doc(),queryTimestamp,collector,joiner.getPositionsManager(),searcher,functions);
+			joiner.collectFeatures(doc(),collector);		
+			PwaScores scores=PwaScorerFeatures.score(doc(),queryTimestamp,collector,joiner.getPositionsManager(),searcher,functions);
+			return (new PwaLinearRankingModel()).score(functions, scores); // TODO parameterize the ranking model in the future
 		}
 		else if (scoreType==ScoreType.DATE_SORTED || scoreType==ScoreType.DATE_SORTED_REVERSE) { // results are sorted in TopDocCollector
 			PwaDateCache sortCache=new PwaDateCache(reader);
@@ -431,8 +434,8 @@ public class PwaScorer extends Scorer {
 		}	
 		  		  		 
 		PwaRawFeatureCollector collector=new PwaRawFeatureCollector(reader);
-		joiner.collectFeatures(doc(),collector);		
-		return PwaRanker.explain(doc(),collector,joiner.getPositionsManager(),searcher,functions);		
+		joiner.collectFeatures(doc(),collector);					
+		return PwaScorerFeatures.explain(doc(),queryTimestamp,collector,joiner.getPositionsManager(),searcher,functions);		       	
 	}
 	  	  
 	/**

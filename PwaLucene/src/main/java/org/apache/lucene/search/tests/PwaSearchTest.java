@@ -5,7 +5,7 @@ import org.apache.lucene.index.*;
 import org.apache.lucene.search.*;    
 import org.apache.lucene.search.caches.PwaCacheManager;
 import org.apache.lucene.search.caches.PwaIndexStats;
-import org.apache.lucene.search.rankers.*;
+import org.apache.lucene.search.features.*;
 
 import java.io.*;
 

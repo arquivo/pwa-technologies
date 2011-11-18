@@ -2,31 +2,33 @@ package org.apache.lucene.search;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.lucene.search.caches.PwaDateCache;
 import org.apache.lucene.search.caches.PwaIndexStats;
+import org.apache.lucene.search.features.*;
+import org.apache.lucene.search.features.querydependent.*;
+import org.apache.lucene.search.features.queryindependent.*;
+import org.apache.lucene.search.features.temporal.*;
 import org.apache.lucene.search.memcached.*;
-import org.apache.lucene.search.rankers.PwaIRankingFunction;
-import org.apache.lucene.search.rankers.querydependent.*;
-import org.apache.lucene.search.rankers.queryindependent.*;
-import org.apache.lucene.search.rankers.temporal.*;
 import org.apache.lucene.document.Document;
 
 
 /**
- * Ranking model
+ * Scores ranking features
  * @author Miguel Costa
- * 
- * @note having all in the same class enables to optimize processing and choose a linear or non-linear model
  */
-public class PwaRanker {
+public class PwaScorerFeatures {
 	
 	private final static String BOOST_LABEL="boost";	
 	
 	private final static String MEMCACHED_ADDRESSES="127.0.0.1:11111";
 	private static Memcached cache=null;
+	private static int maxVersions;
+	private static int maxSpan;
 	
 		
 	/**
@@ -39,9 +41,8 @@ public class PwaRanker {
 	 * @param functions ranking functions 
 	 * @return ranking score
 	 */
-	public static float score(int doc, long queryTimestamp, PwaRawFeatureCollector collector, Vector<PwaPositionsManager> posmanagers, Searcher searcher, PwaFunctionsWritable functions) throws IOException {
-		float score=0;		
-		float boost;
+	public static PwaScores score(int doc, long queryTimestamp, PwaRawFeatureCollector collector, Vector<PwaPositionsManager> posmanagers, Searcher searcher, PwaFunctionsWritable functions) throws IOException {		
+		PwaScores scores=new PwaScores();		
 		int nDocs=collector.getNumDocs();
 		Vector<Integer> vecTfs;
 		Vector<Integer> vecIdfs;
@@ -63,20 +64,35 @@ public class PwaRanker {
 				fieldAvgLength=collector.getFieldAvgLength(PwaIndexStats.FIELDS[i]);			
 			
 				if (functions.hasFunction(funct)) {
-					boost=functions.getBoost(funct);
-					for (int j=0;j<vecTfs.size();j++) {
-						score+= vecTfs.get(j) * boost; // sum of the term frequency of each term
+					float score=0;
+					for (int j=0;j<vecTfs.size();j++) {	// for all terms					
+						score+= vecTfs.get(j); 
 					}
+					scores.addScore(funct, score); // sum of the frequency of each term
+				}
+				funct++;								
+				if (functions.hasFunction(funct)) {
+					float score=0;
+					for (int j=0;j<vecIdfs.size();j++) {	// for all terms					
+						score+= vecIdfs.get(j); 
+					}
+					scores.addScore(funct, score); // sum of the inverse document frequency of each term
+				}
+				funct++;							
+				if (functions.hasFunction(funct)) {
+					scores.addScore(funct, fieldLength); // field length			
 				}
 				funct++;				
 				if (functions.hasFunction(funct)) {
-					boost=functions.getBoost(funct);
-					score+= (new PwaTFxIDF(vecTfs,vecIdfs,fieldLength,nDocs)).score() * boost; // "TFxIDF-"+PwaIndexStats.FIELDS[i]					
+					scores.addScore(funct, (float)fieldAvgLength); // field average length			
+				}
+				funct++;								
+				if (functions.hasFunction(funct)) {
+					scores.addScore(funct, (new PwaTFxIDF(vecTfs,vecIdfs,fieldLength,nDocs)).score()); // "TFxIDF-"+PwaIndexStats.FIELDS[i] 					
 				}
 				funct++;
 				if (functions.hasFunction(funct)) {
-					boost=functions.getBoost(funct);
-					score+= (new PwaBM25(vecTfs,vecIdfs,fieldLength,fieldAvgLength,nDocs)).score() * boost; // "BM25-"+PwaIndexStats.FIELDS[i]				
+					scores.addScore(funct, (new PwaBM25(vecTfs,vecIdfs,fieldLength,fieldAvgLength,nDocs)).score()); // "BM25-"+PwaIndexStats.FIELDS[i]				
 				}
 				funct++;
 				
@@ -85,9 +101,8 @@ public class PwaRanker {
 				idfPerField.add(collector.getFieldIdfs(PwaIndexStats.FIELDS[i]));
 				nTermsPerField.add(collector.getFieldLength(PwaIndexStats.FIELDS[i]));							
 			}	
-			if (functions.hasFunction(funct)) {
-				boost=functions.getBoost(funct);
-				score+= (new PwaLuceneSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score() * boost; // Lucene
+			if (functions.hasFunction(funct)) {				
+				scores.addScore(funct, (new PwaLuceneSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Lucene
 			}
 			funct++;
 
@@ -95,19 +110,16 @@ public class PwaRanker {
 			for (int i=0;i<PwaIndexStats.FIELDS.length;i++) { // or for (i=0;i<posmanagers.length;i++) {  // per field
 				if (posmanagers.size()>0 && (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2))) {					
 					posmanagers.get(i).computeDistances(doc);
-					if (functions.hasFunction(funct)) {
-						boost=functions.getBoost(funct);
-						score+= (new PwaMinSpan(posmanagers.get(i).getMinSpanCovOrdered())).score() * boost; // "MinSpanCovOrd-"+PwaIndexStats.FIELDS[i]
+					if (functions.hasFunction(funct)) {						
+						scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinSpanCovOrdered())).score()); // "MinSpanCovOrd-"+PwaIndexStats.FIELDS[i]
 					}
 					funct++;
-					if (functions.hasFunction(funct)) {
-						boost=functions.getBoost(funct);
-						score+= (new PwaMinSpan(posmanagers.get(i).getMinSpanCovUnordered())).score() * boost; // "MinSpanCovUnord-"+PwaIndexStats.FIELDS[i]
+					if (functions.hasFunction(funct)) {						
+						scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinSpanCovUnordered())).score()); // "MinSpanCovUnord-"+PwaIndexStats.FIELDS[i]
 					}
 					funct++;
-					if (functions.hasFunction(funct)) {
-						boost=functions.getBoost(funct);
-						score+= (new PwaMinSpan(posmanagers.get(i).getMinPairDist())).score() * boost; // "MinPairDist-"+PwaIndexStats.FIELDS[i]
+					if (functions.hasFunction(funct)) {						
+						scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinPairDist())).score()); // "MinPairDist-"+PwaIndexStats.FIELDS[i]
 					}
 					funct++;
 				}
@@ -117,28 +129,35 @@ public class PwaRanker {
 			}			
 		}
 		else {
-			funct+=PwaIndexStats.FIELDS.length*3+1+PwaIndexStats.FIELDS.length*3;
+			funct+=PwaIndexStats.FIELDS.length*6+1+PwaIndexStats.FIELDS.length*3;
 		}
 								
         // query independent features
-		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2)) {										
+		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3) || functions.hasFunction(funct+4)) {										
 			Document docMeta=searcher.doc(doc);				
 			if (functions.hasFunction(funct)) {
-				surl=docMeta.get("url");
-				boost=functions.getBoost(funct);
-				score+= (new PwaUrlDepth(surl)).score() * boost; // "UrlDepth"			
+				surl=docMeta.get("url");				
+				scores.addScore(funct, (new PwaUrlDepth(surl)).score()); // "UrlDepth"				
+			}
+			funct++;				
+			if (functions.hasFunction(funct)) {
+				surl=docMeta.get("url");									
+				scores.addScore(funct, (new PwaUrlSlashes(surl)).score()); // "PwaUrlSlashes"				
 			}
 			funct++;			
 			if (functions.hasFunction(funct)) {
+				surl=docMeta.get("url");									
+				scores.addScore(funct, surl.length()); // "URLLength"				
+			}
+			funct++;								
+			if (functions.hasFunction(funct)) {
 				String sinlinks=docMeta.get("inlinks");
-				boost=functions.getBoost(funct);
-				score+= Integer.parseInt(sinlinks) * boost; // "Inlinks"
+				scores.addScore(funct, Integer.parseInt(sinlinks)); // "Inlinks"				
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {
 				String sinlinks=docMeta.get("inlinks");
-				boost=functions.getBoost(funct);
-				score+= (new PwaLinInlinks(Integer.parseInt(sinlinks))).score() * boost; // "LinInlinks"		
+				scores.addScore(funct, (new PwaLinInlinks(Integer.parseInt(sinlinks))).score()); // "LinInlinks"				
 			}
 			funct++;
 			/* do not work properly
@@ -163,48 +182,47 @@ public class PwaRanker {
 			*/
 		}
 		else {
-			funct+=3;
+			funct+=5;
 		}
 		
 		// temporal features - local timestamps 
-		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3) || functions.hasFunction(funct+4)) {
+		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3) || functions.hasFunction(funct+4) || functions.hasFunction(funct+5)) {
 			PwaDateCache cache=new PwaDateCache(null); // already initialized
 			long timestamp=cache.getTimestamp(doc);
 			long minTimestamp=cache.getMinTimestamp();
 			long maxTimestamp=cache.getMaxTimestamp();					
 		
-			if (functions.hasFunction(funct)) {
-				boost=functions.getBoost(funct);			
-				score+= (new PwaBoostNewer(timestamp,maxTimestamp,minTimestamp)).score() * boost; // BoostNewer
+			if (functions.hasFunction(funct)) {				
+				scores.addScore(funct, (new PwaBoostNewer(timestamp,maxTimestamp,minTimestamp)).score()); // BoostNewer				
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {
-				boost=functions.getBoost(funct);			
-				score+= (new PwaBoostOlder(timestamp,maxTimestamp,minTimestamp)).score() * boost; // BoostOlder
+				scores.addScore(funct, (new PwaBoostOlder(timestamp,maxTimestamp,minTimestamp)).score()); // BoostOlder
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {
-				boost=functions.getBoost(funct);			
-				score+= (new PwaBoostNewerAndOlder(timestamp,maxTimestamp,minTimestamp)).score() * boost; // BoostNewerAndOlder
+				scores.addScore(funct, (new PwaBoostNewerAndOlder(timestamp,maxTimestamp,minTimestamp)).score()); // BoostNewerAndOlder
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {
-				boost=functions.getBoost(funct);
-				score+= (new PwaAge(timestamp,queryTimestamp)).score() * boost; // Age in days
+				scores.addScore(funct, (new PwaAge(timestamp,queryTimestamp)).score()); // Age in days
 			}
 			funct++;				
-			if (functions.hasFunction(funct)) {
-				boost=functions.getBoost(funct);			
-				score+= timestamp / PwaIRankingFunction.DAY_MILLISEC * boost; // Version's timestamp in days
+			if (functions.hasFunction(funct)) {		
+				scores.addScore(funct, timestamp / PwaIRankingFunction.DAY_MILLISEC); // Version's timestamp in days
+			}
+			funct++;			
+			if (functions.hasFunction(funct)) {		
+				scores.addScore(funct, queryTimestamp / PwaIRankingFunction.DAY_MILLISEC); // Query issue time in days
 			}
 			funct++;
 		}
 		else {
-			funct+=5;
+			funct+=6;
 		}
 		
 		// temporal features - global timestamps
-		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3)) {
+		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3) || functions.hasFunction(funct+4) || functions.hasFunction(funct+5)) {
 			if (surl==null) {
 				Document docMeta=searcher.doc(doc);				
 				surl=docMeta.get("url");
@@ -213,50 +231,57 @@ public class PwaRanker {
 			try {
 				if (cache==null) {
 					cache=new Memcached(MEMCACHED_ADDRESSES); // [address1=127.0.0.1:8091] [address2] ... [addressn]
+					maxVersions=(Integer)cache.get(MemcachedTransactions.MAX_VERSIONS);
+					maxSpan=(Integer)cache.get(MemcachedTransactions.MAX_SPAN);
 				}
 			
 				String key=MemcachedTransactions.getUrlKey(surl);					
 				row=cache.getRow(key);
 			}
-			catch (IOException e) { // error communicating with memcached. It will try to reconnect.
+			catch (ConnectException e) { // error communicating with memcached. It will try to reconnect.
 				// ignore
-			}			
+			}
+			catch (IOException e) { 
+				// ignore
+			}						
 			if (row!=null) {
 				int nVersions=row.getNVersions();				
 				long minTimestamp=MemcachedTransactions.intToLongdate(row.getMin());
 				long maxTimestamp=MemcachedTransactions.intToLongdate(row.getMax());					
 								
 				if (functions.hasFunction(funct)) {
-					boost=functions.getBoost(funct);			
-					score+= minTimestamp / PwaIRankingFunction.DAY_MILLISEC * boost; // Oldest version's timestamp in days
+					scores.addScore(funct, minTimestamp / PwaIRankingFunction.DAY_MILLISEC); // Oldest version's timestamp in days
 				}
 				funct++;				
-				if (functions.hasFunction(funct)) {
-					boost=functions.getBoost(funct);			
-					score+= maxTimestamp / PwaIRankingFunction.DAY_MILLISEC * boost; // Newest version's timestamp in days
+				if (functions.hasFunction(funct)) {						
+					scores.addScore(funct, maxTimestamp / PwaIRankingFunction.DAY_MILLISEC ); // Newest version's timestamp in days
 				}
 				funct++;
-				if (functions.hasFunction(funct)) {
-					boost=functions.getBoost(funct);			
-					score+= (new PwaSpanVersions(maxTimestamp,minTimestamp)).score() * boost; // Days between Versions
+				if (functions.hasFunction(funct)) {						
+					scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score()); // Days between Versions
+				}
+				funct++;				
+				if (functions.hasFunction(funct)) {						
+					scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score() / ((maxSpan>0) ? maxSpan : 1)); // Span between Versions normalized
+				}
+				funct++;				
+				if (functions.hasFunction(funct)) {							
+					scores.addScore(funct, nVersions); // NumberVersions
+				}
+				funct++;																	
+				if (functions.hasFunction(funct)) {							
+					scores.addScore(funct, nVersions / maxVersions); // NumberVersions normalized
 				}
 				funct++;
-				if (functions.hasFunction(funct)) {
-					boost=functions.getBoost(funct);			
-					score+= nVersions * boost; // NumberVersions
-				}
-				funct++;													
 			}
 			
 			//cache.close();
 		}
 		else {
-			funct+=4;
-		}
+			funct+=6;
+		}			
 		
-		//TODO PwaTimePointDivergence(double nQuertMatchesInT, double nQueryMatches, double nDocumentsInT, double nDocuments) VARIAS GRANULARIDADES
-		
-		return score;
+		return scores;
 	}
 		
 	
@@ -270,7 +295,47 @@ public class PwaRanker {
 	 * @param functions ranking functions 
 	 * @return explanation
 	 */
-	public static Explanation explain(int doc, long queryTimestamp, PwaRawFeatureCollector collector, Vector<PwaPositionsManager> posmanagers, Searcher searcher, PwaFunctionsWritable functions) throws IOException {			
+	public static Explanation explain(int doc, long queryTimestamp, PwaRawFeatureCollector collector, Vector<PwaPositionsManager> posmanagers, Searcher searcher, PwaFunctionsWritable functions) throws IOException {					
+		int key;		
+		StringBuffer bufValue=new StringBuffer("Feature values of document "+doc+": <span class=\"features\">"); // feature values
+		StringBuffer bufBoost=new StringBuffer("Feature boosts of document "+doc+": "); // feature boosts
+		StringBuffer bufFinal=new StringBuffer("Feature values*boosts of document "+doc+": "); // feature final scores
+		PwaScores scores=score(doc, queryTimestamp, collector, posmanagers, searcher, functions);
+		
+		Vector<Integer> vecKeys = new Vector<Integer>(functions.keySet());
+		Collections.sort(vecKeys);
+		for(int i=0;i<vecKeys.size();i++) {			
+    		key=vecKeys.get(i);             
+    		bufValue.append(" "+key+":"+scores.getScore(key));    
+    		bufBoost.append(" "+key+":"+functions.getBoost(key));
+    		bufFinal.append(" "+key+":"+scores.getScore(key)*functions.getBoost(key));
+        }
+		bufValue.append("</span>");
+		Explanation allExpl = new Explanation(0,bufValue.toString());		   	
+		Explanation expAux = new Explanation(0,bufBoost.toString());
+		allExpl.addDetail(expAux);
+		expAux = new Explanation(0,bufFinal.toString());
+		allExpl.addDetail(expAux);
+		return allExpl;
+		
+		/*
+		Explanation allExpl = new Explanation(doc,"Document");
+		Explanation expAux = null;
+		int key;				
+		
+		PwaScores scores=score(doc, queryTimestamp, collector, posmanagers, searcher, functions);
+		
+		Vector<Integer> vecKeys = new Vector<Integer>(functions.keySet());
+		Collections.sort(vecKeys);
+		for(int i=0;i<vecKeys.size();i++) {			
+    		key=vecKeys.get(i);             		
+    		expAux=getExplainPart(new Explanation(scores.getScore(key),""+key),functions,key);    		
+    		allExpl.addDetail(expAux);
+        }		
+		return allExpl;
+		*/
+				
+		/* TODO remove		
 		Vector<Integer> vecTfs;
 		Vector<Integer> vecIdfs;
 		Vector<String>  vecTermsText;
@@ -280,7 +345,7 @@ public class PwaRanker {
 		Vector<Vector<Integer>> tfPerField=new Vector<Vector<Integer>>();
 		Vector<Vector<Integer>> idfPerField=new Vector<Vector<Integer>>();
 		Vector<Integer> nTermsPerField=new Vector<Integer>();
-		Explanation allExpl = new Explanation(doc,"Document");
+		Explanation allExpl = new Explanation(doc,"Document")
 		Explanation expAux;
 		int funct=0;
 							
@@ -387,8 +452,7 @@ public class PwaRanker {
 		}
 		
 		return allExpl;
-		
-		// TODO add the temporal features
+		*/
 	}		
 	
 	/**

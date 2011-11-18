@@ -8,7 +8,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.MapFieldSelector;
 import org.apache.lucene.search.caches.PwaCacheManager;
 import org.apache.lucene.search.caches.PwaIndexStats;
-import org.apache.lucene.search.rankers.*;
+import org.apache.lucene.search.features.*;
 
 import java.io.*;
 import java.text.SimpleDateFormat;

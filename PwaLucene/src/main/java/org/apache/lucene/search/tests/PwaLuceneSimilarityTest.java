@@ -2,7 +2,7 @@ package org.apache.lucene.search.tests;
 
 import java.util.Vector;
 
-import org.apache.lucene.search.rankers.querydependent.PwaLuceneSimilarity;
+import org.apache.lucene.search.features.querydependent.PwaLuceneSimilarity;
 
 import junit.framework.TestCase;
 

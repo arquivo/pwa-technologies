@@ -7,7 +7,10 @@ java -Xmx12G -classpath ~/workspace/pwa-technologies/PwaLucene/target/pwalucene-
 java -Xmx12G -classpath ~/workspace/pwa-technologies/PwaLucene/target/pwalucene-1.0.0-SNAPSHOT.jar:/home/nutchwax/.m2/repository/junit/junit/3.8.2/junit-3.8.2.jar:/home/nutchwax/.m2/repository/org/apache/hadoop/0.14.5-dev-core/hadoop-0.14.5-dev-core.jar junit.textui.TestRunner org.apache.lucene.search.tests.PwaDateDistributionSearchTest
 
 
-java -Xmx12G -classpath /home/nutchwax/workspace/pwa-technologies/PwaLucene/target/pwalucene-1.0.0-SNAPSHOT.jar:/home/nutchwax/.m2/repository/junit/junit/3.8.2/junit-3.8.2.jar:/home/nutchwax/.m2/repository/org/apache/hadoop/0.14.5-dev-core/hadoop-0.14.5-dev-core.jar:/home/nutchwax/.m2/repository/spy/spymemcached/2.7.3/spymemcached-2.7.3.jar:/home/nutchwax/.m2/repository/commons-codec/commons-codec/1.5/commons-codec-1.5.jar org.apache.lucene.search.memcached.LoadDatabase load /data/arcs/outputsRoteiro2/index 127.0.0.1:11111
+java -Xmx1G -classpath /home/nutchwax/workspace/pwa-technologies/PwaLucene/target/pwalucene-1.0.0-SNAPSHOT.jar:/home/nutchwax/.m2/repository/junit/junit/3.8.2/junit-3.8.2.jar:/home/nutchwax/.m2/repository/org/apache/hadoop/0.14.5-dev-core/hadoop-0.14.5-dev-core.jar:/home/nutchwax/.m2/repository/spy/spymemcached/2.7.3/spymemcached-2.7.3.jar:/home/nutchwax/.m2/repository/commons-codec/commons-codec/1.5/commons-codec-1.5.jar org.apache.lucene.search.memcached.MemcachedTransactions load /data/arcs/outputsRoteiro2/index 127.0.0.1:11111
  
  
 java -Xmx12G -classpath target/classes/:/home/nutchwax/.m2/repository/junit/junit/3.8.2/junit-3.8.2.jar:/home/nutchwax/workspace/lucene-2.1.0/build/lucene-core-2.1.1-dev.jar:/home/nutchwax/.m2/repository/log4j/log4j/1.2.14/log4j-1.2.14.jar junit.textui.TestRunner  org.apache.lucene.search.spell.TestArquivoWebSpellChecker
+
+
+java -classpath /home/nutchwax/workspace/pwa-technologies/PwaLucene/target/pwalucene-1.0.0-SNAPSHOT.jar:/home/nutchwax/.m2/repository/org/jsoup/jsoup/1.6.1/jsoup-1.6.1.jar:/home/nutchwax/.m2/repository/postgresql/postgresql/8.3-604.jdbc4/postgresql-8.3-604.jdbc4.jar org.apache.lucene.search.assessments.QueryResultsScrapper queries/queries1 0 30+5 1+1 //t3.tomba.fccn.pt/nutchwax nutchwax xxxxx

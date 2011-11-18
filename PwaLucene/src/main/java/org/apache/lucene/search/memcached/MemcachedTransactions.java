@@ -7,6 +7,7 @@ import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.MapFieldSelector;
+import org.apache.lucene.search.features.PwaIRankingFunction;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 //import org.apache.lucene.util.Base32;
@@ -30,7 +31,11 @@ public class MemcachedTransactions {
 	// mime sub-stypes
 	private final static String SUBTYPES[]={"html","plain","pdf","postscript","xml","x-shockwave-flash","xhtml+xml","sgml","msword","mspowerpoint","vnd","vnd.ms-powerpoint","rtf","richtext"};		
 	private final static long DUMP_FACTOR=10000000;
-
+	private final static String COLLECTION_STORED="STORED";
+	public final static String MAX_VERSIONS="MAX_VERSIONS";
+	public final static String MAX_SPAN="MAX_SPAN";
+	
+	
     private static SimpleDateFormat dformat=new SimpleDateFormat("yyyyMMdd");	
     
 	private static MessageDigest md = null;
@@ -53,13 +58,21 @@ public class MemcachedTransactions {
 		Memcached cache=new Memcached(addresses);
 		// check if it this collection is already stored in memcached		
 		
-		String value=(String)cache.get(collectionId);
+		String value=(String)cache.get(collectionId);	
 		if (value!=null) {
 			System.out.println("Collection is already stored in memcached.");
 			cache.close();
 			return;
 		}
-		cache.set(collectionId,new String("STORED"));		
+		cache.set(collectionId,COLLECTION_STORED);	
+		Integer maxVersions=(Integer)cache.get(MAX_VERSIONS);
+		if (maxVersions==null) {
+			maxVersions=1;
+		}
+		Integer maxSpan=(Integer)cache.get(MAX_SPAN);
+		if (maxSpan==null) {
+			maxSpan=0;
+		}
 		
 		Document doc=null;	      
 		long count=0;
@@ -113,13 +126,25 @@ public class MemcachedTransactions {
 						cache.addRow(url,row);								
 						count++;
 						if (count%DUMP_FACTOR==0) {
-							System.out.println("Stored in DB "+count+" urls.");							
+							System.out.println("Stored "+count+" urls.");							
 						}
 					}
 					else {					       
 						int minDate=(row.getMin()<idate) ? row.getMin() : idate;
-						int maxDate=(row.getMax()>idate) ? row.getMax() : idate;															      					       row=new UrlRow(row.getNVersions()+1,minDate,maxDate);
-						cache.replaceRow(url,row);								
+						int maxDate=(row.getMax()>idate) ? row.getMax() : idate;	
+						row=new UrlRow(row.getNVersions()+1,minDate,maxDate);
+						cache.replaceRow(url,row);		
+								
+						// set maxVersions and maxSpan
+						if (row.getNVersions()>maxVersions) {
+							maxVersions=row.getNVersions();
+						}			
+						long lMaxDate=intToLongdate(maxDate);
+						long lMinDate=intToLongdate(minDate);
+						float span=(lMaxDate-lMinDate)/PwaIRankingFunction.DAY_MILLISEC;
+						if (span>maxSpan) {
+							maxSpan=(int)span;
+						}
 					}
 				} 
 				catch (IllegalArgumentException ex) { // "Key is too long (maxlen = 250)" 
@@ -128,10 +153,16 @@ public class MemcachedTransactions {
 			}
 		} 				
 		
+		// store data			
+		cache.set(MAX_VERSIONS,maxVersions);
+		cache.set(MAX_SPAN,maxSpan);
+					
 		// store in database				    			
 		System.out.println("Stored "+count+" urls in memcached.");
 		System.out.println(countWrongType+" urls with wrong mime type filtered.");
 		System.out.println(countDynamic+" dynamic urls filtered.");
+		System.out.println(maxVersions+" is the maximum number of versions."); 
+		System.out.println(maxSpan+" is the maximum span between versions.");
 		cache.close();
 	}	
 	
@@ -166,7 +197,7 @@ public class MemcachedTransactions {
 	}
 	
 	/**
-	 * Convert date in a 4 bytes integer to a 8 bytes long
+	 * Convert date from a 4 bytes integer to a 8 bytes long
 	 * @param date
 	 * @return
 	 */
