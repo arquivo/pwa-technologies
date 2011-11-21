@@ -177,7 +177,7 @@ class LuceneQueryOptimizer {
       initTimerThread(this.tickLength);
     }
     
-    //this.cacheType = conf.get(Global.CACHE_TYPE); TODO remove
+    //this.cacheType = conf.get(Global.CACHE_TYPE); TODO remove  
   }
 
   public TopDocs optimize(BooleanQuery original,
@@ -214,7 +214,7 @@ class LuceneQueryOptimizer {
     }
     
     // print query
-    LOG.debug("Query:"+query.toString());   
+    LOG.info("Query:"+query.toString());   
     
     //if (sortField == null && !reverse) {
 

@@ -406,9 +406,8 @@ public class Nutchwax
     
   protected void doVersion(final String [] args) throws Exception {
 	  JobConf job = getJobConf();	  
-	  String collectionType = job.get(Global.COLLECTION_TYPE);
-	  String cacheType = job.get(Global.CACHE_TYPE);
-	  System.out.println("Collection type:"+collectionType+" Cache type:"+cacheType);
+	  String collectionType = job.get(Global.COLLECTION_TYPE);	  
+	  System.out.println("Collection type:"+collectionType);
   }  
     
   protected void doJob(final String jobName, final String [] args)

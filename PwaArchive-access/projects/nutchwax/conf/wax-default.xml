@@ -308,17 +308,6 @@ is restarted, logs for tasks of same name are overwritten.
 </property>
 
 <property>
-  <name>cache.type</name>
-  <value>not.cached</value>
-  <description>
-    Indicates whether results should be cached. This uses a Lucene's Filter, which is a BitSet that does not keep the ranking of resuts. Therefore, it should be used only for tests.
-    There are two types:
-     cached - it caches results
-     not.cached - it does not cache results
-  </description>
-</property>
-
-<property>
   <name>timeout.index.servers.alive</name>
   <value>120000</value>
   <description>

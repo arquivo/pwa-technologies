@@ -21,11 +21,7 @@ public class Global {
 	
 	public static final String TIMEOUT_INDEX_SERVERS_ALIVE="timeout.index.servers.alive";
 	public static final String TIMEOUT_INDEX_SERVERS_RESPONSE="timeout.index.servers.response";
-	public static final String TIMEOUT_INDEXING_DOCUMENT="timeout.indexing.document";
-	
-	public static final String CACHE_TYPE="cache.type";
-	public static final String CACHE_TYPE_CACHED="cached";
-	public static final String CACHE_TYPE_NOTCACHED="not.cached";
+	public static final String TIMEOUT_INDEXING_DOCUMENT="timeout.indexing.document";	
 		
 	public static final String MAX_FULLTEXT_MATCHES_RETURNED="max.fulltext.matches.returned";
 	public static final String MAX_FULLTEXT_MATCHES_RANKED="max.fulltext.matches.ranked";
