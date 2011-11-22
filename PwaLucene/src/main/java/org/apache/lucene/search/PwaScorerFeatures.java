@@ -105,6 +105,10 @@ public class PwaScorerFeatures {
 				scores.addScore(funct, (new PwaLuceneSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Lucene
 			}
 			funct++;
+			if (functions.hasFunction(funct)) {				
+				scores.addScore(funct, (new PwaNutchSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Nutch
+			}
+			funct++;
 
 			// term distance features
 			for (int i=0;i<PwaIndexStats.FIELDS.length;i++) { // or for (i=0;i<posmanagers.length;i++) {  // per field
@@ -129,7 +133,7 @@ public class PwaScorerFeatures {
 			}			
 		}
 		else {
-			funct+=PwaIndexStats.FIELDS.length*6+1+PwaIndexStats.FIELDS.length*3;
+			funct+=PwaIndexStats.FIELDS.length*6 + 2 + PwaIndexStats.FIELDS.length*3;
 		}
 								
         // query independent features

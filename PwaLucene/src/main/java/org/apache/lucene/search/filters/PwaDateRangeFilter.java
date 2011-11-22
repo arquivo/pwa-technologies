@@ -40,8 +40,8 @@ public class PwaDateRangeFilter extends PwaFilter {
 	public PwaDateRangeFilter(PwaSearchableCommon searchable, IndexReader reader, String minTimestamp, String maxTimestamp) throws IOException {
 		super(searchable);
 		this.cache = new PwaDateCache(reader);
-		this.minTimestamp = Long.parseLong(minTimestamp);		      
-		this.maxTimestamp = Long.parseLong(maxTimestamp);	
+		this.minTimestamp = Long.parseLong(minTimestamp)*1000;		      
+		this.maxTimestamp = Long.parseLong(maxTimestamp)*1000;
 	}
 
 	/**

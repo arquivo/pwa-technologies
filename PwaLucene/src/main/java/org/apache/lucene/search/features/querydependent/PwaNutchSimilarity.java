@@ -7,10 +7,10 @@ import org.apache.lucene.search.features.PwaIRankingFunction;
 
 
 /**
- * Lucene IR function (@see Similarity and NutchSimilarity class and API)
+ * Nutch IR function (@see Similarity and NutchSimilarity class and API)
  * @author Miguel Costa
  */
-public class PwaLuceneSimilarity implements PwaIRankingFunction {
+public class PwaNutchSimilarity implements PwaIRankingFunction {
 
 	private float boosts[]={1.0f, 4.0f, 2.0f, 2.0f, 1.5f};   // the same order as PwaIndexStats.FIELDS[]={"content","url","host","anchor","title"} 
 	private float score;
@@ -23,7 +23,7 @@ public class PwaLuceneSimilarity implements PwaIRankingFunction {
 	 * @param nTermsPerField number of all terms per field 
 	 * @param nDocs number of all documents in collection	 
 	 */
-	public PwaLuceneSimilarity(Vector<Vector<Integer>> tfPerField, Vector<Vector<Integer>> idfPerField, Vector<Integer> nTermsPerField, int nDocs) {
+	public PwaNutchSimilarity(Vector<Vector<Integer>> tfPerField, Vector<Vector<Integer>> idfPerField, Vector<Integer> nTermsPerField, int nDocs) {
 		double tfNorm;
 		double idfNorm;			
 		Vector<Integer> tf;
@@ -42,7 +42,7 @@ public class PwaLuceneSimilarity implements PwaIRankingFunction {
 					idfNorm= 1+Math.log((double)nDocs/(double)(idf.get(i)+1));
 					sumOfSquaredWeights+= Math.pow(idfNorm, 2);
 					idfNorm= Math.pow(idfNorm, 2); // idfNorm*idfNorm				
-					score+= tfNorm * idfNorm* norm(PwaIndexStats.FIELDS[j],nTerms,boosts[j]);
+					score+= tfNorm * idfNorm * norm(PwaIndexStats.FIELDS[j],nTerms,boosts[j]);
 					
 				}
 			}	
@@ -59,12 +59,35 @@ public class PwaLuceneSimilarity implements PwaIRankingFunction {
 	}
 	
 	
+	/**
+	 * 
+	 * Nutch code
+	 * 
+	 */
+	
+	private static final int MIN_CONTENT_LENGTH = 1000;
+
+	private float nutchLengthNorm(String fieldName, int numTokens) {           
+		if ("url".equals(fieldName)) {                // URL: prefer short
+			return 1.0f / numTokens;                    // use linear normalization
+		} 
+		else if ("anchor".equals(fieldName)) {      // Anchor: prefer more
+			return (float)(1.0/Math.log(Math.E+numTokens)); // use log
+		} 
+		else if ("content".equals(fieldName)) {     // Content: penalize short
+			return lengthNorm(fieldName, Math.max(numTokens, MIN_CONTENT_LENGTH));
+		} 
+		else {                                      // use default
+			return lengthNorm(fieldName, numTokens);
+		}
+	}
+
 	private float lengthNorm(String fieldName, int numTerms) {
 		return (float)(1.0 / Math.sqrt(numTerms));
 	}
 		
 	private float norm(String field, int nTerms, float boost) { // see this computation in DocumentWriter
-		return lengthNorm(field,nTerms) * boost;		
+		return nutchLengthNorm(field,nTerms) * boost;		
 	}	
 		
 	public float queryNorm(double sumOfSquaredWeights) {
