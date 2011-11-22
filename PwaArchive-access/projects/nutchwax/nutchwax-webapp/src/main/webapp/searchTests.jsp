@@ -249,42 +249,43 @@ boosts: <%= sboosts %>
   28 TF-IDF : title <br> 
   29 BM-25 : title <br>
   30 Lucene : content + url + host + anchor + title <br>
+  31 Nutch : content + url + host + anchor + title <br>
 <h3>Term-distance functions: </h3>
-  31 MinSpanCovOrd - content <br>
-  32 MinSpanCovUnord - content <br>
-  33 MinPairDist - content <br>
-  34 MinSpanCovOrd - url <br>
-  35 MinSpanCovUnord - url <br>
-  36 MinPairDist - url <br>
-  37 MinSpanCovOrd - host <br>
-  38 MinSpanCovUnord - host <br>
-  39 MinPairDist - host <br>
-  40 MinSpanCovOrd - anchor <br>
-  41 MinSpanCovUnord - anchor <br> 
-  42 MinPairDist - anchor <br>
-  43 MinSpanCovOrd - title <br>
-  44 MinSpanCovUnord - title <br>
-  45 MinPairDist - title <br>
+  32 MinSpanCovOrd - content <br>
+  33 MinSpanCovUnord - content <br>
+  34 MinPairDist - content <br>
+  35 MinSpanCovOrd - url <br>
+  36 MinSpanCovUnord - url <br>
+  37 MinPairDist - url <br>
+  38 MinSpanCovOrd - host <br>
+  39 MinSpanCovUnord - host <br>
+  40 MinPairDist - host <br>
+  41 MinSpanCovOrd - anchor <br>
+  42 MinSpanCovUnord - anchor <br> 
+  43 MinPairDist - anchor <br>
+  44 MinSpanCovOrd - title <br>
+  45 MinSpanCovUnord - title <br>
+  46 MinPairDist - title <br>
 <h2>Query-independent features: </h2>
 <h3>URL based Functions: </h3>
-  46 UrlDepth <br>
-  47 UrlSlashes <br>
-  48 UrlLength <br>
+  47 UrlDepth <br>
+  48 UrlSlashes <br>
+  49 UrlLength <br>
 <h3>Web-graph based functions: </h3>
-  49 Inlinks <br>
-  50 LinInlinks <br>
+  50 Inlinks <br>
+  51 LinInlinks <br>
 <h3>Temporal features: </h3>
-  51 BoostNewer <br>
-  52 BoostOlder <br>
-  53 BoostNewerAndOlder <br>
-  54 Age (in days) <br>
-  55 TimestampVersion (in days) <br>
-  56 TimestampOldestVersion (in days) <br>
-  57 TimestampNewestVersion (in days) <br>
-  58 SpanVersions (in days) <br>
-  59 SpanVersions (normalized) <br>
-  60 NumberVersions <br>
-  61 NumberVersions (normalized) <br>
+  52 BoostNewer <br>
+  53 BoostOlder <br>
+  54 BoostNewerAndOlder <br>
+  55 Age (in days) <br>
+  56 TimestampVersion (in days) <br>
+  57 TimestampOldestVersion (in days) <br>
+  58 TimestampNewestVersion (in days) <br>
+  59 SpanVersions (in days) <br>
+  60 SpanVersions (normalized) <br>
+  61 NumberVersions <br>
+  62 NumberVersions (normalized) <br>
 </p>
 </div>
 
