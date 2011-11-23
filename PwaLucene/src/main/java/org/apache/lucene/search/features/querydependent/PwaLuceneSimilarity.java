@@ -42,7 +42,7 @@ public class PwaLuceneSimilarity implements PwaIRankingFunction {
 					idfNorm= 1+Math.log((double)nDocs/(double)(idf.get(i)+1));
 					sumOfSquaredWeights+= Math.pow(idfNorm, 2);
 					idfNorm= Math.pow(idfNorm, 2); // idfNorm*idfNorm				
-					score+= tfNorm * idfNorm* norm(PwaIndexStats.FIELDS[j],nTerms,boosts[j]);
+					score+= tfNorm * idfNorm * norm(PwaIndexStats.FIELDS[j],nTerms,boosts[j]);
 					
 				}
 			}	

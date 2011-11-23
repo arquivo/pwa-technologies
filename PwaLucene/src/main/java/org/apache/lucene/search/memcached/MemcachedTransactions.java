@@ -215,7 +215,7 @@ public class MemcachedTransactions {
 	 * @param args arguments
 	 */
 	public static void main(String[] args) throws Exception {							
-		String usage="usage: load [index path] [address1=127.0.0.1:8091] [address2] ... [addressn]";
+		String usage="usage: load [index path] [address1=127.0.0.1:11211] [address2] ... [addressn]";
 		
 		if (args.length<3) {
 			System.out.println(usage);

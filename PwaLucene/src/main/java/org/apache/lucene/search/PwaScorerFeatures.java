@@ -25,7 +25,8 @@ public class PwaScorerFeatures {
 	
 	private final static String BOOST_LABEL="boost";	
 	
-	private final static String MEMCACHED_ADDRESSES="127.0.0.1:11111";
+	//private final static String MEMCACHED_ADDRESSES="127.0.0.1:11111"; memcached
+	private final static String MEMCACHED_ADDRESSES="127.0.0.1:11211"; //membase
 	private static Memcached cache=null;
 	private static int maxVersions;
 	private static int maxSpan;
