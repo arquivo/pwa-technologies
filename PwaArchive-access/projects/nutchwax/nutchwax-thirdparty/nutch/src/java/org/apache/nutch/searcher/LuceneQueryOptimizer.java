@@ -78,7 +78,11 @@ class LuceneQueryOptimizer {
         timeCounter++;
         try {
           Thread.sleep(tick);
-        } catch (InterruptedException ie) {};
+        } 
+        catch (InterruptedException ie) 
+        {
+        	// ignore
+        };
       }
     }
   }
@@ -90,10 +94,10 @@ class LuceneQueryOptimizer {
     }
   }
   
-
   private static class TimeExceeded extends RuntimeException {
     public long maxTime;
     private int maxDoc;
+    
     public TimeExceeded(long maxTime, int maxDoc) {
       super("Exceeded search time: " + maxTime + " ms.");
       this.maxTime = maxTime;
@@ -101,6 +105,7 @@ class LuceneQueryOptimizer {
     }
   }
 
+  
   private static class LimitedCollector extends TopDocCollector {
     private int maxHits;
     private int maxTicks;
@@ -108,8 +113,7 @@ class LuceneQueryOptimizer {
     private TimerThread timer;
     private int curTicks;
 
-    public LimitedCollector(int numHits, int maxHits, int maxTicks,
-            TimerThread timer, boolean reverse) {
+    public LimitedCollector(int numHits, int maxHits, int maxTicks, TimerThread timer, boolean reverse) {
       super(numHits, reverse);
       this.maxHits = maxHits;
       this.maxTicks = maxTicks;
@@ -133,12 +137,14 @@ class LuceneQueryOptimizer {
       }
       super.collect(doc, score);
     }
-  }  private static class LimitExceeded extends RuntimeException {
+  }  
+  
+  private static class LimitExceeded extends RuntimeException {
     private int maxDoc;
     public LimitExceeded(int maxDoc) { this.maxDoc = maxDoc; }    
   }
   
-  private LinkedHashMap cache;                   // an LRU cache of QueryFilter
+  
   private float threshold;
   private int searcherMaxHits;
   private int tickLength;
@@ -158,14 +164,8 @@ class LuceneQueryOptimizer {
    */
   public LuceneQueryOptimizer(Configuration conf) {
     final int cacheSize = conf.getInt("searcher.filter.cache.size", 16);
-    this.threshold = conf.getFloat("searcher.filter.cache.threshold",
-        0.05f);
-    this.searcherMaxHits = conf.getInt("searcher.max.hits", -1);
-    this.cache = new LinkedHashMap(cacheSize, 0.75f, true) {
-      protected boolean removeEldestEntry(Map.Entry eldest) {
-        return size() > cacheSize; // limit size of cache
-      }
-    };
+    this.threshold = conf.getFloat("searcher.filter.cache.threshold", 0.05f);
+    this.searcherMaxHits = conf.getInt("searcher.max.hits", -1);    
     this.tickLength = conf.getInt("searcher.max.time.tick_length", 200);
     this.maxTickCount = conf.getInt("searcher.max.time.tick_count", -1);
     this.timeoutResponse = conf.getInt(Global.TIMEOUT_INDEX_SERVERS_RESPONSE, -1);
@@ -174,17 +174,11 @@ class LuceneQueryOptimizer {
     	this.tickLength=1000;
     }       
     if (this.maxTickCount > 0) {
-      initTimerThread(this.tickLength);
-    }
-    
-    //this.cacheType = conf.get(Global.CACHE_TYPE); TODO remove  
+    	initTimerThread(this.tickLength);
+    }       
   }
 
-  public TopDocs optimize(BooleanQuery original,
-                          Searcher searcher, int numHits,
-                          String sortField, boolean reverse)
-    throws IOException {
-
+  public TopDocs optimize(BooleanQuery original, Searcher searcher, int numHits, String sortField, boolean reverse) throws IOException {
     BooleanQuery query = new BooleanQuery(); 
     Filter filter = null;
 
@@ -195,17 +189,15 @@ class LuceneQueryOptimizer {
 
     	  	if (c.getQuery() instanceof TermQuery     // TermQuery
     	  			&& (searcher.docFreq(((TermQuery)c.getQuery()).getTerm()) / (float)searcher.maxDoc()) < threshold) { // beneath threshold
-    	  		query.add(c);                           // don't filter
-    	  		continue;
+    	  		query.add(c);                          
     	  	}          
-    	  	if (c.getQuery() instanceof RangeQuery) { // RangeQuery        
-    	  		query.add(c); 
-    	  		continue;
+    	  	else if (c.getQuery() instanceof RangeQuery) { // RangeQuery        
+    	  		query.add(c);     	  		
     	  	}       
-    	  	continue;
       }
-
-      query.add(c);                               // query it
+      else {
+    	  query.add(c);                               // query it
+      }
     }
     
     query.setFunctions(original.getFunctions());  
@@ -216,8 +208,6 @@ class LuceneQueryOptimizer {
     // print query
     LOG.info("Query:"+query.toString());   
     
-    //if (sortField == null && !reverse) {
-
     // no hit limit
     if (this.searcherMaxHits <= 0 && timerThread == null)  {
     	return searcher.search(query, filter, numHits);
