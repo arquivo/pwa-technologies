@@ -7,6 +7,8 @@ h2 { font-size: 1.6em; color: #5e8400; }
 a { color: #005db4; }
 a:visited { color: purple; }
 
+em {font-style: normal; font-weight: bold; }
+
 dl { font-size: 1.2em; margin-top: 10px; }
 dt { font-weight: bold; }
 dd { margin: 0 0 10px 2em; }
@@ -208,6 +210,8 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 /* Resultado pesquisa */
 #conteudo-resultado { max-width: 778px; padding-top: 38px; clear: both; }
 
+#conteudo-resultado .spell { font-size: 1.4em; color: #f44800; margin-bottom: 0.5em; }
+
 #conteudo-resultado #first-column { font-size: 1.2em; width: 159px; float: left; }
 #conteudo-resultado #first-column a { text-decoration: underline; }
 #conteudo-resultado #first-column p { color: #555555; padding-top: 4px; }
@@ -223,7 +227,7 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 
 #conteudo-resultado h1 { overflow: hidden; text-indent: -9999px; position: absolute; }
 
-#conteudo-resultado #resultados-lista h2 { font-size: 1.6em; display: block; padding-bottom: 1px; }
+#conteudo-resultado #resultados-lista h2 { font-size: 1.6em; display: inline; padding-bottom: 1px; }
 #conteudo-resultado #resultados-lista h2 a { text-decoration: underline; }
 
 #conteudo-resultado #resultados-lista h3 { font-size: 1.6em; display: block; padding-bottom: 1px; }
