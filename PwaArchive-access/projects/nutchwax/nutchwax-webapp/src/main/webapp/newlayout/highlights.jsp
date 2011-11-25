@@ -146,7 +146,7 @@
                                 <div class="next"><a href="seguinte.html" title="Seguinte"><fmt:message key⁼'highlight.pager.next'/><img src="img/arrow-right.gif" alt="<fmt:message key='highlight.pager.next.alt'/>" /></a></div>
                         </div>
 			--%>
-                        <div class="voltar">&lt; <a href="voltar.html" title="<fmt:message key='highlights.return.alt'/>"><fmt:message key='highlights.return'/></a></div>
+                        <div class="voltar">&lt; <a href="index.jsp" title="<fmt:message key='highlights.return.alt'/>"><fmt:message key='highlights.return'/></a></div>
                 </div>
 
 			</div>

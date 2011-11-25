@@ -45,13 +45,13 @@
                                         <img src="img/logo.gif" alt="<fmt:message key='header.logo.alt'/>" width="400" height="96" />
                                 </div>
                                 <div id="search-home">
-                                        <form id="loginForm" action="../search.jsp?" name="loginForm" method="get">
+                                        <form id="loginForm" action="search.jsp?" name="loginForm" method="get">
                                                 <fieldset>
                                                         <label for="txtSearch">&nbsp;</label>
-                                                        <input class="search-inputtext" type="text" size="15" value="&nbsp;" name="query" id="txtSearch" accesskey="t" />
+                                                        <input class="search-inputtext" type="text" size="15" value="" name="query" id="txtSearch" accesskey="t" />
                                                         <input type="reset" src="img/search-resetbutton.html" value="&nbsp;" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
                                                         <input type="submit" value="Pesquisar no arquivo" alt="Pesquisar no arquivo" class="home-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
-                                                        <a href="pesquisa-avancada.html" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>
+                                                        <a href="advanced.jsp" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>
                                                 </fieldset>
                                         </form>
                                 </div>
@@ -120,7 +120,7 @@
                                                 </div>
                                         </div>
 
-					<a href="destaques.html" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
+					<a href="highlights.jsp" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
                                 </div>
                         </div>
 
