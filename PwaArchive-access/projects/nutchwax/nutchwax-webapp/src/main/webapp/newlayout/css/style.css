@@ -13,6 +13,7 @@ dd { margin: 0 0 10px 2em; }
 
 cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 
+.clear {clear: both; }
 .wrap { width: 1002px; margin: 0 auto; /* position: relative; 110715 */ min-height: 100%; clear: both; }
 .wrap-footer { width: 960px; position: relative; min-height: 100%; clear: both; margin: 0 auto; }
 
