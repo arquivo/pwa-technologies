@@ -87,7 +87,8 @@ public class MemcachedTransactions {
 
 		// read index
 		System.out.println("Reading index with "+reader.maxDoc()+" documents ...");		
-		for (int i=0;i<reader.maxDoc();i++) {																																																				      int idate=-1;
+		for (int i=0;i<reader.maxDoc();i++) {																																																				      
+			int idate=-1;
 			String url=null;
 			String subtype=null;
 

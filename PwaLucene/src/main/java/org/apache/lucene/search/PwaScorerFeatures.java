@@ -25,8 +25,8 @@ public class PwaScorerFeatures {
 	
 	private final static String BOOST_LABEL="boost";	
 	
-	//private final static String MEMCACHED_ADDRESSES="127.0.0.1:11111"; memcached
-	private final static String MEMCACHED_ADDRESSES="127.0.0.1:11211"; //membase
+	private final static String MEMCACHED_ADDRESSES="127.0.0.1:11111"; //memcached
+	//private final static String MEMCACHED_ADDRESSES="127.0.0.1:11211"; //membase
 	private static Memcached cache=null;
 	private static int maxVersions;
 	private static int maxSpan;
@@ -228,10 +228,12 @@ public class PwaScorerFeatures {
 		
 		// temporal features - global timestamps
 		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3) || functions.hasFunction(funct+4) || functions.hasFunction(funct+5)) {
+			Document docMeta=null;
 			if (surl==null) {
-				Document docMeta=searcher.doc(doc);				
+				docMeta=searcher.doc(doc);				
 				surl=docMeta.get("url");
 			}	
+			
 			UrlRow row=null;
 			try {
 				if (cache==null) {
@@ -248,38 +250,46 @@ public class PwaScorerFeatures {
 			}
 			catch (IOException e) { 
 				// ignore
-			}						
-			if (row!=null) {
-				int nVersions=row.getNVersions();				
-				long minTimestamp=MemcachedTransactions.intToLongdate(row.getMin());
-				long maxTimestamp=MemcachedTransactions.intToLongdate(row.getMax());					
-								
-				if (functions.hasFunction(funct)) {
-					scores.addScore(funct, minTimestamp / PwaIRankingFunction.DAY_MILLISEC); // Oldest version's timestamp in days
+			}				
+			if (row==null) { // for urls discarded such as dynamics (there are not space to store everything)		
+				if (docMeta==null) {
+					docMeta=searcher.doc(doc);
+					surl=docMeta.get("url");
 				}
-				funct++;				
-				if (functions.hasFunction(funct)) {						
-					scores.addScore(funct, maxTimestamp / PwaIRankingFunction.DAY_MILLISEC ); // Newest version's timestamp in days
-				}
-				funct++;
-				if (functions.hasFunction(funct)) {						
-					scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score()); // Days between Versions
-				}
-				funct++;				
-				if (functions.hasFunction(funct)) {						
-					scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score() / ((maxSpan>0) ? maxSpan : 1)); // Span between Versions normalized
-				}
-				funct++;				
-				if (functions.hasFunction(funct)) {							
-					scores.addScore(funct, nVersions); // NumberVersions
-				}
-				funct++;																	
-				if (functions.hasFunction(funct)) {							
-					scores.addScore(funct, nVersions / maxVersions); // NumberVersions normalized
-				}
-				funct++;
+				int idate=MemcachedTransactions.stringdateToInt(docMeta.get("date"));	
+				row=new UrlRow(1,idate,idate);
+				System.out.println("URL "+surl+" not cached."); // TODO remove
 			}
-			
+						
+			int nVersions=row.getNVersions();				
+			long minTimestamp=MemcachedTransactions.intToLongdate(row.getMin());
+			long maxTimestamp=MemcachedTransactions.intToLongdate(row.getMax());					
+								
+			if (functions.hasFunction(funct)) {
+				scores.addScore(funct, minTimestamp / PwaIRankingFunction.DAY_MILLISEC); // Oldest version's timestamp in days
+			}
+			funct++;				
+			if (functions.hasFunction(funct)) {						
+				scores.addScore(funct, maxTimestamp / PwaIRankingFunction.DAY_MILLISEC ); // Newest version's timestamp in days
+			}
+			funct++;
+			if (functions.hasFunction(funct)) {						
+				scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score()); // Days between Versions
+			}
+			funct++;				
+			if (functions.hasFunction(funct)) {						
+				scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score() / ((maxSpan>0) ? maxSpan : 1)); // Span between Versions normalized
+			}
+			funct++;				
+			if (functions.hasFunction(funct)) {							
+				scores.addScore(funct, nVersions); // NumberVersions
+			}
+			funct++;																	
+			if (functions.hasFunction(funct)) {							
+				scores.addScore(funct, nVersions / maxVersions); // NumberVersions normalized
+			}
+			funct++;
+						
 			//cache.close();
 		}
 		else {
