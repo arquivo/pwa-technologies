@@ -28,6 +28,12 @@
     			<property name="captureJsp" value="/jsp/innerCalendarResults.jsp" />
     		</bean>
 	</property>
+	<property name="newquery">
+    		<bean class="org.archive.wayback.query.Renderer">
+    			<property name="captureJsp" value="/jsp/newInnerCalendarResults.jsp" />
+    		</bean>
+	</property>
+
    	<property name="replay">
       		<bean class="org.archive.wayback.archivalurl.ArchivalUrlReplayDispatcher">
         		<property name="serverSideRendering" value="false" />
@@ -60,6 +66,12 @@
     			<property name="captureJsp" value="/jsp/innerCalendarResults.jsp" />
     		</bean>
 	</property>
+    	<property name="newquery">
+    		<bean class="org.archive.wayback.query.Renderer">
+    			<property name="captureJsp" value="/jsp/newInnerCalendarResults.jsp" />
+    		</bean>
+	</property>
+
    	<property name="replay">
       		<bean class="org.archive.wayback.archivalurl.ArchivalUrlReplayDispatcher">
         		<property name="serverSideRendering" value="false" />
