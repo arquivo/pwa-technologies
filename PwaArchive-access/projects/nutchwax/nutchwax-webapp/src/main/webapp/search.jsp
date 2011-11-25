@@ -438,7 +438,7 @@ if ( request.getAttribute("query") != null && !request.getAttribute("query").toS
 				pageContext.setAttribute("seeHistory", seeHistory);
 			%>
 			<c:catch var="exception">
-				<c:import url="http://${collectionsHost}/query">
+				<c:import url="http://${collectionsHost}/newquery">
 					<c:param name="type" value="urlquery" />
 					<c:param name="url" value="${urlQueryParam}" />
 					<c:param name="aliases" value="true" />
