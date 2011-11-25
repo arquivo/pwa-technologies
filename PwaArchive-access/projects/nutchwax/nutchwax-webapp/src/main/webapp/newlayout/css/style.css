@@ -128,6 +128,16 @@ cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 #conteudo-termos ol li p { font-size: 1em; color: #000000; padding-bottom: 9px; font-weight: normal; }
 #conteudo-termos ol li ol { padding: 0 0 4px 25px; font-weight: bold; font-size: 1.2em; }
 
+#conteudo-erro { padding: 18px 0 33px 159px; clear: both; max-width: 619px; }
+#conteudo-erro h3, #conteudo-erro h4 { font-weight: bold; padding: 33px 0 19px; color: #000000; }
+#conteudo-erro h3 { font-size: 1.6em; }
+#conteudo-erro h4 { font-size: 1.3em; font-weight: bold;  }
+#conteudo-erro a:link { color: #005DB4; }
+#conteudo-erro p { font-size: 1.2em; line-height: 15px; margin-bottom: 10px; }
+#conteudo-erro ul { list-style: square url("../img/ul.png"); padding: 11px 0 0 33px; color: #5e8400; }
+#conteudo-erro ul li { font-size: 1.2em; color: #000000; padding-bottom: 4px; }
+#conteudo-erro img {margin: 4em 0 0 98px}
+
 .ultima-modificacao { padding: 0 0 41px 159px; }
 .ultima-modificacao p { font-size: 1em; color: #555555; }
 
