@@ -74,16 +74,6 @@ cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 #info a { font-size: 1.2em; text-decoration: underline; }
 .green { font-size: 1.4em; color: #5e8400; display: block; padding-bottom: 4px;  }
 
-.pagination { border-bottom: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; clear: both; color: #005DB4; font-size: 1.4em; height: 30px; margin: 0 25px; vertical-align: middle; width: 935px; }
-.pagination .pages { float: left; padding-top: 7px; text-align: center; width: 635px; }
-.pagination .pages li { padding: 0 7px; display: inline; color: #000000; }
-.pagination .previous { float: left; padding-top: 7px; width: 150px; padding-bottom: 4px; }
-.pagination .previous img { float: left; padding-left: 46px; padding-right: 12px; margin-top: -2px; }
-.pagination .next { float: left; padding-top: 7px; text-align: right; width: 150px; }
-.pagination .next img { float: right; padding-left: 11px; padding-right: 47px; margin-top: -2px; }
-.pagination a:hover { text-decoration: underline; }
-.pagination a { text-decoration: none; }
-
 .voltar, .voltar-erro {  color: #005DB4; display: block; padding-top: 19px; text-align: left; }
 .voltar { margin: 0 25px; }
 .voltar a, .voltar-erro a { font-size: 1.2em; }
@@ -243,14 +233,15 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 li.grouped { padding-left: 38px; }
 
 /* Resultado pesquisa: Paginação */
-#conteudo-resultado .pagination { border-bottom: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; clear: both; color: #005DB4; display: table-cell; font-size: 1.4em; font-weight: bold; height: 30px; vertical-align: middle; }
-#conteudo-resultado .pagination .pages li { padding: 0 7px; display: inline; color: #000000; }
-#conteudo-resultado .pagination .previous img { float: left; padding-left: 46px; padding-right: 12px; margin-top: -2px;}
-#conteudo-resultado .pagination .next img { float: right; padding-left: 11px; padding-right: 47px; margin-top: -2px; }
-#conteudo-resultado .pagination a:hover { text-decoration: underline; }
-#conteudo-resultado .pagination a { text-decoration: none; }
-#conteudo-resultado .pagination .previous, #conteudo-resultado .pagination .next { width: 137px; }
-#conteudo-resultado .pagination .pages { max-width: 331px; }
+.pagination { border-bottom: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; clear: both; color: #000; display: table-cell; font-size: 1.4em; font-weight: bold; height: 30px; vertical-align: middle; text-align: center; width: 935px; }
+.pagination li { display: inline-block; color #000; height: 25px; padding-top: 8px; }
+.pagination .current { padding: 0 10px; }
+.pagination a { text-decoration: none; padding: 10px; }
+.pagination a:hover { text-decoration: underline; }
+.pagination .next { float: none; background: url(../img/arrow-right.gif) no-repeat center right; }
+.pagination .next a { padding-right: 22px; }
+.pagination .previous {float: none; background: url(../img/arrow-left.gif) no-repeat center left; }
+.pagination .previous a { padding-left: 22px; }
 
 #search-header { width: 812px; padding-top: 17px; float: left; }
 #search-header fieldset#pesquisar label { display: none; }
@@ -268,17 +259,9 @@ li.grouped { padding-left: 38px; }
 #search-header .search-withTip { float: left; }
 
 /* Pesquisa erro */
-#conteudo-pesquisa-erro { max-width: 778px; padding-top: 38px; clear: both; }
-#conteudo-pesquisa-erro #first-column { font-size: 1.2em; width: 159px; float: left; }
-#conteudo-pesquisa-erro #first-column a { text-decoration: underline; }
-#conteudo-pesquisa-erro #first-column p { color: #555555; padding-top: 4px; }
-
-#conteudo-pesquisa-erro #second-column { width: 619px; float: left; }
-#conteudo-pesquisa-erro #resultados-url { font-size: 1.2em; background-color: #ebf7ff; border-top: 1px solid #add4ff; padding: 3px 0 6px; text-align: center; }
-#conteudo-pesquisa-erro #resultados-url a { text-decoration: underline; }
-
-#conteudo-pesquisa-erro #second-column h1 { font-size: 1.4em; padding: 27px 0 0; color: #000000; }
-#conteudo-pesquisa-erro #second-column h2 { font-size: 1.4em; font-weight: bold; padding-bottom: 28px; color: #000000; }
+#conteudo-pesquisa-erro { width: 619px; margin-left: 159px; }
+#conteudo-pesquisa-erro h2 { font-size: 1.4em; color: #000000; }
+#conteudo-pesquisa-erro h3 { font-size: 1.4em; font-weight: bold; padding-bottom: 28px; color: #000000; }
 
 #sugerimos-que { background-color: #F2F2F2; width: auto; }
 #sugerimos-que p { font-size: 1.4em; padding: 11px 0 16px 10px; font-weight: bold; }
