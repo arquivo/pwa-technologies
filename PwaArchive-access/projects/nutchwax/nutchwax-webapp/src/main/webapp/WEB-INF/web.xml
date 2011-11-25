@@ -49,7 +49,7 @@
 
 <context-param>
 	<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
-	<param-value>org.nutch.jsp.help</param-value>
+	<param-value>pt.arquivo.i18n.Default</param-value>
 </context-param>
 <context-param>
 	<param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
