@@ -82,11 +82,9 @@
 		var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
 	</script>
 	<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
-	<%-- TODO: can i remove? <script type="text/javascript" src="js/jquery-ui-1.7.2.custom.min.js"></script> --%>
 	<script type="text/javascript" src="js/ui.datepicker.js"></script>
 	<script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
 	<script type="text/javascript" src="js/configs.js"></script>
-	<%-- TODO: Missing JS references --%>
 </head>
 <body>
 	<%@ include file="include/topbar.jsp" %>
@@ -103,177 +101,146 @@
 					<h2><fmt:message key='advanced.subtitle'/></h2>
 				</div>
 			</div>
-<%-- TODO: parameter processing code --%>
-<%-- TODO: fill fields from request --%>
-<%-- TODO: read parameterized default date --%>
 			<div id="conteudo-pesquisa">
-				<div class="pesquisar-por">
-	                                <p class="titulo"><fmt:message key='advanced.form-title'/></p>
-                                        <input type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="search-submit" name="btnSubmitTop" id="btnSubmitTop" accesskey="e" />
-                                </div>
-
-				<form method="get" action="http://www.wingmanid.com/arquivo-pt/search.jsp">
-					<div>
-						<fieldset id="words">
-							<legend><fmt:message key='advanced.terms'/></legend>
-							<div class="box-content">
-								<div id="label-palavras-1">
-									<label for="adv_and"><fmt:message key='advanced.terms.all'/></label>
-									<div class="withTip">
-										<input type="text" id="adv_and" name="adv_and" value="<%=and.toString()%>" />
-										<br />
-										<span class="tip"><fmt:message key='advanced.terms.all.hint'/></span>
-									</div>
-									<div style="clear: both"></div>
+				<form method="get" action="search.jsp">
+					<div class="pesquisar-por">
+	                                	<p class="titulo"><fmt:message key='advanced.form-title'/></p>
+	                                        <input type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="search-submit" name="btnSubmitTop" id="btnSubmitTop" accesskey="e" />
+	                                </div>
+					<fieldset id="words">
+						<legend><fmt:message key='advanced.terms'/></legend>
+						<div class="box-content">
+							<div id="label-palavras-1">
+								<label for="adv_and"><fmt:message key='advanced.terms.all'/></label>
+								<div class="withTip">
+									<input type="text" id="adv_and" name="adv_and" value="<%=and.toString()%>" />
+									<br />
+									<span class="tip"><fmt:message key='advanced.terms.all.hint'/></span>
 								</div>
+								<div class="clear"></div>
+							</div>
 
-								<div id="label-palavras-2">
-									<label for="adv_phr"><fmt:message key='advanced.terms.phrase'/></label>
-									<div class="withTip">
-										<input type="text" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
-										<br />
-										<span class="tip"><fmt:message key='advanced.terms.phrase.hint'/></span>
-									</div>
-									<div style="clear: both"></div>
+							<div id="label-palavras-2">
+								<label for="adv_phr"><fmt:message key='advanced.terms.phrase'/></label>
+								<div class="withTip">
+									<input type="text" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
+									<br />
+									<span class="tip"><fmt:message key='advanced.terms.phrase.hint'/></span>
 								</div>
+								<div class="clear"></div>
+							</div>
 
-								<div id="label-palavras-3">
-									<label for="adv_not"><fmt:message key='advanced.terms.not'/></label>
-									<div class="withTip">
-										<input type="text" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
-										<br />
-										<span class="tip"><fmt:message key='advanced.terms.not.hint'/></span>
-									</div>
+							<div id="label-palavras-3">
+								<label for="adv_not"><fmt:message key='advanced.terms.not'/></label>
+								<div class="withTip">
+									<input type="text" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
+									<br />
+									<span class="tip"><fmt:message key='advanced.terms.not.hint'/></span>
 								</div>
 							</div>
-						</fieldset>
-					</div>
+						</div>
+					</fieldset>
 
-					<div>
-						<fieldset id="date">
-							<legend><fmt:message key='advanced.date'/></legend>
-							<div class="box-content">
-								<div id="label-data-1">
-									<label for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
-									<div class="withTip">
-										<input type="text" id="dateStart_top" name="dateStart" value="01/01/1996" />
-									</div>
-
-									<label id="labelDateEnd" for="dateEnd_top"><fmt:message key='advanced.date.to'/></label>
-									<div class="withTip">
-										<input type="text" id="dateEnd_top" name="dateEnd" value="31/12/2010" />
-									</div>
+					<fieldset id="date">
+						<legend><fmt:message key='advanced.date'/></legend>
+						<div class="box-content">
+							<div id="label-data-1">
+								<label for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
+								<div class="withTip">
+									<input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" />
 								</div>
-								<div id="label-data-2">
-									<label for="sort"><fmt:message key='advanced.sort'/></label>
-									<select id="sort" name="sort">
-										<%--
-										<option value="relevance" selected="selected"><fmt:message key='advanced.sort.relevance'/></option>
+
+								<label id="labelDateEnd" for="dateEnd_top"><fmt:message key='advanced.date.to'/></label>
+								<div class="withTip">
+									<input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
+								</div>
+							</div>
+							<div id="label-data-2">
+								<label for="sort"><fmt:message key='advanced.sort'/></label>
+								<select id="sort" name="sort">
+									<%
+									if (sortType == null) {		// use the default sorting behavior %>
+										<option value="relevance" selected="selected"><fmt:message key="advanced.sort.relevance"/></option>
+									<% } else{ %>
+										<option value="relevance"><fmt:message key="advanced.sort.relevance"/></option>
+									<% }
+									if ("date".equals(sortType) && sortReverse) { %>
+										<option value="new" selected="selected"><fmt:message key='advanced.sort.new'/></option>
+									<%} else {%>
 										<option value="new"><fmt:message key='advanced.sort.new'/></option>
+									<%}%>
+									<%
+									if ("date".equals(sortType) && !sortReverse) {%>
+										<option value="old" selected="selected"><fmt:message key='advanced.sort.old'/></option>
+									<%} else {%>
 										<option value="old"><fmt:message key='advanced.sort.old'/></option>
-										--%>
-										<%
-										if (sortType == null) {		// use the default sorting behavior %>
-											<option value="relevance" selected="selected"><fmt:message key="advanced.sort.relevance"/></option>
-										<% } else{ %>
-											<option value="relevance"><fmt:message key="relevance"/></option>
-										<% }
-										if ("date".equals(sortType) && sortReverse) { %>
-											<option value="new" selected="selected"><fmt:message key='advanced.sort.new'/></option>
-										<%} else {%>
-											<option value="new"><fmt:message key='advanced.sort.new'/></option>
-										<%}%>
-										<%
-										if ("date".equals(sortType) && !sortReverse) {%>
-											<option value="old" selected="selected"><fmt:message key='advanced.sort.old'/></option>
-										<%} else {%>
-											<option value="old"><fmt:message key='advanced.sort.old'/></option>
-										<%}%>
-									</select>
-								</div>
-							</div>
-						</fieldset>
-					</div>
+									<%}%>
+								</select>
+					</fieldset>
 
-					<div>
-						<fieldset id="format">
-							<legend><fmt:message key='advanced.format'/></legend>
-							<div class="box-content">
-								<div id="label-format-1">
-									<label for="formatType"><fmt:message key='advanced.format.label'/></label>
-									<select id="formatType" name="format">
-									<%
-										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
-										String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
+					<fieldset id="format">
+						<legend><fmt:message key='advanced.format'/></legend>
+						<div class="box-content">
+							<div id="label-format-1">
+								<label for="formatType"><fmt:message key='advanced.format.label'/></label>
+								<select id="formatType" name="format">
+								<%
+									String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
+									String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
 
-										if (format == null || "all".equals(format)) {%>
-											<option value="all" selected="selected"><fmt:message key='advanced.format.all'/></option>
-										<%} else {%>
-											<option value="all"><fmt:message key='advanced.format.all'/></option>
-										<%}
-
-										for (int i=0; i < mimeList.length; i++) {
-											if (mimeList[i].equals(format)) {
-												out.print("<option value=\""+ mimeList[i] +"\" selected=\"selected\">"+ mimeListDetail[i] +"</option>");
-											} else {
-												out.print("<option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</option>");
-											}
-										}
-									%>
-									<%--
+									if (format == null || "all".equals(format)) {%>
+										<option value="all" selected="selected"><fmt:message key='advanced.format.all'/></option>
+									<%} else {%>
 										<option value="all"><fmt:message key='advanced.format.all'/></option>
-										<option value="pdf"><fmt:message key='advanced.format.pdf'/></option>
-										<option value="ps"><fmt:message key='advanced.format.ps'/></option>
-										<option value="html"><fmt:message key='advanced.format.html'/></option>
-										<option value="xls"><fmt:message key='advanced.format.excel'/></option>
-										<option value="ppt"><fmt:message key='advanced.format.powerpoint'/></option>
-										<option value="doc"><fmt:message key='advanced.format.word'/></option>
-										<option value="rtf"><fmt:message key='advanced.format.rtf'/></option>
---%>
-									</select>
-								</div>
-							</div>
-						</fieldset>
-					</div>
+									<%}
 
-					<div>
-						<fieldset id="domains">
-							<legend><fmt:message key='advanced.website'/></legend>
-							<div class="box-content">
-								<div id="label-domains-1">
-									<label for="site"><fmt:message key='advanced.website.label'/></label>
-									<div class="withTip">
-										<input type="text" id="site" name="site" value="<%=site%>" /><br />
-										<span class="tip"><fmt:message key='advanced.website.hint'/></span>
-									</div>
-									<div class="clear"></div>
-								</div>
-							</div>
-						</fieldset>
-					</div>
-
-					<div>
-						<fieldset id="num_result_fieldset">
-							<legend><fmt:message key='advanced.results'/></legend>
-							<div class="box-content">
-								<div id="label-num-result-fieldset-1">
-									<label for="num-result"><fmt:message key='advanced.results.label'/></label>
-									<select id="num-result" name="hitsPerPage">
-									<%
-									int[] hitsPerPageValues = {10, 20, 30, 50, 100};
-									for (int i=0; i < hitsPerPageValues.length; i++) {
-										if (hitsPerPage == hitsPerPageValues[i]) {
-											out.print("<option selected=\"selected\">"+ hitsPerPageValues[i] +"</option>");
+									for (int i=0; i < mimeList.length; i++) {
+										if (mimeList[i].equals(format)) {
+											out.print("<option value=\""+ mimeList[i] +"\" selected=\"selected\">"+ mimeListDetail[i] +"</option>");
 										} else {
-											out.print("<option>"+ hitsPerPageValues[i] +"</option>");
+											out.print("<option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</option>");
 										}
-									}%>
-									</select>
-									<fmt:message key='advanced.results.label2'/>
-								</div>
+									}
+								%>
+								</select>
 							</div>
-						</fieldset>
-					</div>
+						</div>
+					</fieldset>
+
+					<fieldset id="domains">
+						<legend><fmt:message key='advanced.website'/></legend>
+						<div class="box-content">
+							<div id="label-domains-1">
+								<label for="site"><fmt:message key='advanced.website.label'/></label>
+								<div class="withTip">
+									<input type="text" id="site" name="site" value="<%=site%>" /><br />
+									<span class="tip"><fmt:message key='advanced.website.hint'/></span>
+								</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+					</fieldset>
+
+					<fieldset id="num_result_fieldset">
+						<legend><fmt:message key='advanced.results'/></legend>
+						<div class="box-content">
+							<div id="label-num-result-fieldset-1">
+								<label for="num-result"><fmt:message key='advanced.results.label'/></label>
+								<select id="num-result" name="hitsPerPage">
+								<%
+								int[] hitsPerPageValues = {10, 20, 30, 50, 100};
+								for (int i=0; i < hitsPerPageValues.length; i++) {
+									if (hitsPerPage == hitsPerPageValues[i]) {
+										out.print("<option selected=\"selected\">"+ hitsPerPageValues[i] +"</option>");
+									} else {
+										out.print("<option>"+ hitsPerPageValues[i] +"</option>");
+									}
+								}%>
+								</select>
+								<fmt:message key='advanced.results.label2'/>
+							</div>
+						</div>
+					</fieldset>
 
 					<div id="bottom-submit">
 						<input type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="search-submit" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" />

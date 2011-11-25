@@ -55,7 +55,7 @@ cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 /* Button: Pesquisa avançada */
 .home-submit { font-size: 1.6em; }
 .search-submit { font-size: 1.4em; }
-.home-submit, .search-submit { float: right; background: url("../img/search-submit.gif") no-repeat scroll 0 0 transparent; color: #FFFFFF; height: 36px; text-align: center; text-decoration: none; width: 193px; }
+.home-submit, .search-submit { float: right; background: url("../img/search-submit.gif") no-repeat scroll 0 0 transparent; color: #FFFFFF; height: 36px; text-align: center; text-decoration: none; width: 193px; cursor: pointer; }
 .home-submit:hover, .search-submit:hover  { background-position: 0 -36px; }
 .home-submit:active, .search-submit:active { background-position: 0 -72px; }
 
@@ -165,7 +165,7 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 .sub-title-pesquisa { font-size: 1.4em; padding: 13px 0 30px; clear: both; }
 #conteudo-pesquisa { clear: both; padding-left: 159px; max-width: 619px; }
 #conteudo-pesquisa .titulo { display: table-cell; font-size: 1.6em; font-weight: bold; vertical-align: middle; padding-top: 4px; float: left; }
-#conteudo-pesquisa .pesquisar-por { border-top: 4px solid #EFEFEF; padding-top: 4px; }
+#conteudo-pesquisa .pesquisar-por { height: 40px; border-top: 4px solid #EFEFEF; padding-top: 4px; }
 #conteudo-pesquisa .box-title { background-color: #efefef; font-size: 1.4em; padding: 8px 0 8px 8px; font-weight: bold; }
 #conteudo-pesquisa .box-content { background-color: #f7f7f7; margin-bottom: 2px; margin-right: -1px; }
 #conteudo-pesquisa .box-content-title { background-color: #efefef; width: 100%; display: block; }
