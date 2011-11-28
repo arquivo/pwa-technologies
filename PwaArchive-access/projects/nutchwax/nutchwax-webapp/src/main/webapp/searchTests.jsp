@@ -278,14 +278,15 @@ boosts: <%= sboosts %>
   52 BoostNewer <br>
   53 BoostOlder <br>
   54 BoostNewerAndOlder <br>
-  55 Age (in days) <br>
-  56 TimestampVersion (in days) <br>
-  57 TimestampOldestVersion (in days) <br>
-  58 TimestampNewestVersion (in days) <br>
-  59 SpanVersions (in days) <br>
-  60 SpanVersions (normalized) <br>
-  61 NumberVersions <br>
-  62 NumberVersions (normalized) <br>
+  55 Age - from query (in days) <br>
+  56 QueryIssueTime (in days) <br>
+  57 TimestampVersion (in days) <br>
+  58 TimestampOldestVersion (in days) <br>
+  59 TimestampNewestVersion (in days) <br>
+  60 SpanVersions (in days) <br>
+  61 SpanVersions (normalized) <br>
+  62 NumberVersions <br>
+  63 NumberVersions (normalized) <br>
 </p>
 </div>
 
