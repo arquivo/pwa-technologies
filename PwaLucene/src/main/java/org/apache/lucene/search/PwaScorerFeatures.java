@@ -214,13 +214,13 @@ public class PwaScorerFeatures {
 			}
 			funct++;				
 			if (functions.hasFunction(funct)) {		
-				scores.addScore(funct, timestamp / PwaIRankingFunction.DAY_MILLISEC); // Version's timestamp in days
-			}
-			funct++;			
-			if (functions.hasFunction(funct)) {		
 				scores.addScore(funct, queryTimestamp / PwaIRankingFunction.DAY_MILLISEC); // Query issue time in days
 			}
 			funct++;
+			if (functions.hasFunction(funct)) {		
+				scores.addScore(funct, timestamp / PwaIRankingFunction.DAY_MILLISEC); // Version's timestamp in days
+			}
+			funct++;			
 		}
 		else {
 			funct+=6;
@@ -258,7 +258,7 @@ public class PwaScorerFeatures {
 				}
 				int idate=MemcachedTransactions.stringdateToInt(docMeta.get("date"));	
 				row=new UrlRow(1,idate,idate);
-System.out.println("URL "+surl+" not cached."); // TODO remove
+				//System.out.println("URL "+surl+" not in memcached."); // TODO remove
 			}
 						
 			int nVersions=row.getNVersions();				
