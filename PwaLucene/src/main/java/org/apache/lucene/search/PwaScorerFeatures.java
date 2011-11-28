@@ -214,11 +214,11 @@ public class PwaScorerFeatures {
 			}
 			funct++;				
 			if (functions.hasFunction(funct)) {		
-				scores.addScore(funct, queryTimestamp / PwaIRankingFunction.DAY_MILLISEC); // Query issue time in days
+				scores.addScore(funct, ((float)queryTimestamp) / PwaIRankingFunction.DAY_MILLISEC); // Query issue time in days
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {		
-				scores.addScore(funct, timestamp / PwaIRankingFunction.DAY_MILLISEC); // Version's timestamp in days
+				scores.addScore(funct, ((float)timestamp) / PwaIRankingFunction.DAY_MILLISEC); // Version's timestamp in days
 			}
 			funct++;			
 		}
@@ -258,7 +258,6 @@ public class PwaScorerFeatures {
 				}
 				int idate=MemcachedTransactions.stringdateToInt(docMeta.get("date"));	
 				row=new UrlRow(1,idate,idate);
-				//System.out.println("URL "+surl+" not in memcached."); // TODO remove
 			}
 						
 			int nVersions=row.getNVersions();				
@@ -266,11 +265,11 @@ public class PwaScorerFeatures {
 			long maxTimestamp=MemcachedTransactions.intToLongdate(row.getMax());					
 								
 			if (functions.hasFunction(funct)) {
-				scores.addScore(funct, minTimestamp / PwaIRankingFunction.DAY_MILLISEC); // Oldest version's timestamp in days
+				scores.addScore(funct, ((float)minTimestamp) / PwaIRankingFunction.DAY_MILLISEC); // Oldest version's timestamp in days
 			}
 			funct++;				
 			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, maxTimestamp / PwaIRankingFunction.DAY_MILLISEC ); // Newest version's timestamp in days
+				scores.addScore(funct, ((float)maxTimestamp) / PwaIRankingFunction.DAY_MILLISEC ); // Newest version's timestamp in days
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {						
@@ -278,7 +277,7 @@ public class PwaScorerFeatures {
 			}
 			funct++;				
 			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score() / ((maxSpan>0) ? maxSpan : 1)); // Span between Versions normalized
+				scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score() / ((maxSpan>0) ? ((float)maxSpan) : 1)); // Span between Versions normalized
 			}
 			funct++;				
 			if (functions.hasFunction(funct)) {							
@@ -286,7 +285,7 @@ public class PwaScorerFeatures {
 			}
 			funct++;																	
 			if (functions.hasFunction(funct)) {							
-				scores.addScore(funct, nVersions / maxVersions); // NumberVersions normalized
+				scores.addScore(funct, ((float)nVersions) / ((float)maxVersions)); // NumberVersions normalized
 			}
 			funct++;
 						
