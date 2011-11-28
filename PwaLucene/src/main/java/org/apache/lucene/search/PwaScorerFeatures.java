@@ -258,7 +258,7 @@ public class PwaScorerFeatures {
 				}
 				int idate=MemcachedTransactions.stringdateToInt(docMeta.get("date"));	
 				row=new UrlRow(1,idate,idate);
-				System.out.println("URL "+surl+" not cached."); // TODO remove
+System.out.println("URL "+surl+" not cached."); // TODO remove
 			}
 						
 			int nVersions=row.getNVersions();				
