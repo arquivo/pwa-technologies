@@ -127,17 +127,14 @@ for (int i = 0; i < numPartitions; i++) {
 	%>
 	<div class="clear">&nbsp;</div>
 	<div id="resultados-url">
-	<%-- TODO: i18n --%>
-	Pretende, em alternativa, ver resultados de páginas que contém o texto: <a href="ver-resultados" title='Pretende, em alternativa, ver resultados de páginas que contém o texto: "<%=searchUrl%>"?'>"<%=searchString%>"</a>?
+	<fmt:message key='grid.suggestion'><fmt:param value='<%=searchUrl%>'/><fmt:param value='<%=searchString%>'/></fmt:message>
 	</div>
 </c:if>
 
-<%-- TODO: i18n --%>
 <div class="wrap">
 	<div id="intro">
-	<h1>Versões da página web guardadas no arquivo</h1>
-        <span class="texto-1">Foram gravadas no arquivo <%=resultCount%> versões da página <%=searchString%> entre <fmt:message key='searchResults'><fmt:param value="<%=searchStartDate%>" /><fmt:param value="<%=searchEndDate%>"/></fmt:message>.</span>
-        <span class="texto-2">Note que uma actualização da página no arquivo pode ser uma cópia da actualização anterior.</span>
+	<h1><fmt:message key='grid.title'/></h1>
+        <span class="texto-1"><fmt:message key='grid.subtitle'><fmt:param value='<%=resultCount%>'/><fmt:param value='<%=searchString%>'/><fmt:param value="<%=searchStartDate%>"/><fmt:param value="<%=searchEndDate%>"/></fmt:message></span>
 	</div>
 </div>
 
@@ -241,13 +238,13 @@ for (int i = 0; i < numPartitions; i++) {
 <table class="mais-resultados">
 <thead>
 	<tr>
-		<th class="mais-resultados-title"><fmt:message key='grid.result.link.title'/></th>
+		<th class="mais-resultados-title"><fmt:message key='grid.embargo.title'/></th>
 	</tr>
 </thead>
 <tbody>
 	<tr>
 		<td valign="top" class="mais-resultados">
-		<!-- Mais resultados -->
+		<%-- More --%>
 			<span>
 			<fmt:message key='grid.embargo.info'/>
 			<c:choose>
