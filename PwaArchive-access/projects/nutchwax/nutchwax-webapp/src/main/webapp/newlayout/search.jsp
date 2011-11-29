@@ -620,12 +620,12 @@
 
          %>
 	<div class="omitted-results">
-		<fmt:message key="abcdef"><fmt:param value="<%=noDupQuery%>"/></fmt:message>.
+		<fmt:message key="search.results.omitted"><fmt:param value="<%=noDupQuery%>"/></fmt:message>.
 	</div>
 <% } %>
 
 
-<% if (hitsTotal >= 1) { %>              <%-- Start Pager IF --%>
+<% if (hitsTotal >= 1 && !usedWayback) { %>              <%-- Start Pager IF --%>
 <div class="pagination">
 
 <ul>
