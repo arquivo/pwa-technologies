@@ -232,6 +232,8 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 #conteudo-resultado #resultados-lista .url { padding-bottom: 19px; font-size: 1.4em; text-decoration: none; color: #5e8400; font-weight: normal; display: block; }
 li.grouped { padding-left: 38px; }
 
+.omitted-results { font-size: 1.4em; margin-bottom: 2em; padding: 0.5em; background-color: #EBF7FF; }
+
 /* Resultado pesquisa: Paginação */
 .pagination { border-bottom: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; clear: both; color: #000; display: table-cell; font-size: 1.4em; font-weight: bold; height: 30px; vertical-align: middle; text-align: center; width: 935px; }
 .pagination li { display: inline-block; color #000; height: 25px; padding-top: 8px; }
