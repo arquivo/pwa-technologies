@@ -45,7 +45,8 @@
                                         <img src="img/logo.gif" alt="<fmt:message key='header.logo.alt'/>" width="400" height="96" />
                                 </div>
                                 <div id="search-home">
-                                        <form id="loginForm" action="search.jsp?" name="loginForm" method="get">
+                                        <form id="loginForm" action="search.jsp" name="loginForm" method="get">
+						<input type="hidden" name="l" value="<%= language %>" />
                                                 <fieldset>
                                                         <label for="txtSearch">&nbsp;</label>
                                                         <input class="search-inputtext" type="text" size="15" value="" name="query" id="txtSearch" accesskey="t" />

@@ -103,6 +103,7 @@
 			</div>
 			<div id="conteudo-pesquisa">
 				<form method="get" action="search.jsp">
+					<input type="hidden" name="l" value="<%= language %>" />
 					<div class="pesquisar-por">
 	                                	<p class="titulo"><fmt:message key='advanced.form-title'/></p>
 	                                        <input type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="search-submit" name="btnSubmitTop" id="btnSubmitTop" accesskey="e" />

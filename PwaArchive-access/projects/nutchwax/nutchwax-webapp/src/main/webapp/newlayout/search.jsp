@@ -340,6 +340,7 @@
 				</div>
 				<div id="search-header">
 						<form id="loginForm" action="search.jsp" name="loginForm" method="get">
+							<input type="hidden" name="l" value="<%= language %>" />
 							<fieldset id="pesquisar">
 								<label for="txtSearch">&nbsp;</label>
 								<input class="search-inputtext" type="text" size="15" value="<%=htmlQueryString%>" name="query" id="txtSearch" accesskey="t" />
