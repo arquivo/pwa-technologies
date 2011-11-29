@@ -5,33 +5,38 @@
 			<div class="links-content">
 				<p class="links-title"><fmt:message key="footer.section.help"/></p>
 				<ul>
-					<li><a href="como-usar.html"><fmt:message key="footer.section.help.howto-use"/></a></li>
-					<li><a href="perguntas-frequentes.html"><fmt:message key="footer.section.help.faq"/></a></li>
+					<li><fmt:message key='footer.section.help.help'/></li>
+					<li><fmt:message key='footer.section.help.faq'/></li>
+					<li><fmt:message key='footer.section.help.contact'/></a></li>
 				</ul>
 			</div>
 			<div class="links-content">
 				<p class="links-title"><fmt:message key="footer.section.about"/></p>
 				<ul>
-					<li><a href="objectivos.html"><fmt:message key="footer.section.about.objectives"/></a></li>
-					<li><a href="equipa.html"><fmt:message key="footer.section.about.team"/></a></li>
-					<li><a href="publicacoes.html"><fmt:message key="footer.section.about.publications"/></a></li>
+					<li><fmt:message key="footer.section.about.objectives"/></li>
+					<li><fmt:message key="footer.section.about.publications"/></li>
+					<li><a href="https://educast.fccn.pt/vod/channels/oo6w8h76i"><fmt:message key='footer.section.about.videos'/></a></li>
+					<li><a href="terms-conditions.jsp?l=<%=language%>"><fmt:message key='footer.section.about.terms-conditions'/></a></li>
 				</ul>
 			</div>
 			<div class="links-content">
 				<p class="links-title"><fmt:message key="footer.section.collaboration"/></p>
 				<ul>
-					<li><a href="sugerir-sitio-web.html"><fmt:message key="footer.section.collaboration.suggest-website"/></a></li>
-					<li><a href="recomendacoes.html"><fmt:message key="footer.section.collaboration.tips"/></a></li>
-					<li><a href="fornecer-conteudos.html"><fmt:message key="footer.section.collaboration.giving"/></a></li>
-					<li><a href="projectos-academicos.html"><fmt:message key="footer.section.collaboration.projects"/></a></li>
-					<li><a href="divulgacao.html"><fmt:message key="footer.section.collaboration.divulgation"/></a></li>
+					<li><fmt:message key="footer.section.collaboration.suggest-website"/></li>
+					<li><fmt:message key="footer.section.collaboration.recommendations"/></li>
+					<li><fmt:message key="footer.section.collaboration.giving"/></li>
+					<li><fmt:message key="footer.section.collaboration.divulgation"/></li>
+					<li><fmt:message key="footer.section.collaboration.projects"/></li>
 				</ul>
 			</div>
 			<div class="links-content">
 				<p class="links-title"><fmt:message key="footer.section.social"/></p>
 				<ul>
-					<li><a href="http://twitter.com/#!/PT_WebArchive"><fmt:message key="footer.section.social.twitter"/></a></li>
+					<li><fmt:message key="footer.section.social.twitter"/></li>
 					<li><a href="http://www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
+					<li><a href="http://www.linkedin.com/groups/Portuguese-Web-Archive-2175739"><fmt:message key='footer.section.social.linkedin'/></a></li>
+					<li><a href="http://sobre.arquivo.pt/news/aggregator/RSS?set_language=<%=language%>"><fmt:message key='footer.section.social.rss'/></a></li>
+					<li><fmt:message key='footer.section.social.newsletter'/></li>
 				</ul>
 			</div>
 		</div>
