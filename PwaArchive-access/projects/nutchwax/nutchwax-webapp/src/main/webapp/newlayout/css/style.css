@@ -281,7 +281,6 @@ li.grouped { padding-left: 38px; }
 #intro { width: 619px; text-align: left; float: left; margin: 0 25px; padding-left: 159px; }
 #intro h1 { font-size: 2.6em; padding: 22px 0 13px; }
 #intro .texto-1 { font-size: 1.4em; display: block; line-height: 20px; }
-#intro .texto-2 { font-size: 1.2em; display: block; padding-top: 2px; }
 
 #conteudo-versoes table { border-collapse: collapse; }
 #conteudo-versoes tr td, #conteudo-versoes tr th { white-space: nowrap; vertical-align: top; background-color: #f7f7f7; font-size: 1.2em; color: #005db4; color: #000000; text-align: center; border-left: 2px solid #efefef; border-right: 2px solid #efefef; }

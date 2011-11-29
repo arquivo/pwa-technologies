@@ -68,8 +68,8 @@
                                 </div>
 		</div>
 		<div id="main-home">
-                                <h3>Alguns momentos relevantes registados no arquivo</h3>
-                                <h4>Navegue por momentos que ficaram para a história.</h4>
+                                <h3><fmt:message key='home.examples.title'/></h3>
+                                <h4><fmt:message key='home.examples.subtitle'/></h4>
 
                                 <div class="boxes-home" id="boxes">
 					<%-- Let the box be clickable. Not just that one text --%>
