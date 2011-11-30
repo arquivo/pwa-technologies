@@ -561,7 +561,9 @@
 %>
         <div id="search_stats"></div>
         <div id="no_results">
-		<c:redirect url='index.jsp'/>
+		<c:redirect url='index.jsp'>
+			<c:param name='l' value='${language}'/>
+		</c:redirect>
 	</div>
         <% } else { %>
 	<div id="conteudo-pesquisa-erro">
