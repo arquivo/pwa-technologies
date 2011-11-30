@@ -35,6 +35,7 @@
 	<meta name="Keywords" content="<fmt:message key='home.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='home.meta.description'/>" />
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
+	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
 </head>
 <body>
