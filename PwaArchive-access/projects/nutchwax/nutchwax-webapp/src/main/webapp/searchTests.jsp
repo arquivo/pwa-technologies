@@ -415,6 +415,7 @@ Search took <%= searchTime/1000.0 %> seconds.
     <span class="date"><%=archiveDisplayDate%></span>
     -
     <a href="<%=allVersions%>">other versions</a>
+    <!--
     <% if (hit.moreFromDupExcluded()) {
     String more =
     "query="+URLEncoder.encode("site:"+hit.getDedupValue()+" "+queryString, "UTF-8")
@@ -423,6 +424,7 @@ Search took <%= searchTime/1000.0 %> seconds.
     <a href="searchTests.jsp?<%=more%>"><i18n:message key="moreFrom"/>
      <%=hit.getDedupValue()%></a>
     <% } %>
+    -->
     -
     <a href="explain.jsp?<%=id%>&query=<%=URLEncoder.encode(queryString, "UTF-8")%>&sfunctions=<%=sfunctions.replace(" ","+")%>&sboosts=<%=sboosts.replace(" ","+")%>">explain</a>
     </small>
