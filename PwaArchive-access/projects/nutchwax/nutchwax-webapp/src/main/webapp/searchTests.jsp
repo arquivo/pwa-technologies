@@ -275,18 +275,18 @@ boosts: <%= sboosts %>
   50 Inlinks <br>
   51 LinInlinks <br>
 <h3>Temporal features: </h3>
-  52 BoostNewer <br>
-  53 BoostOlder <br>
-  54 BoostNewerAndOlder <br>
-  55 Age - from query (in days) <br>
-  56 QueryIssueTime (in days) <br>
-  57 TimestampVersion (in days) <br>
-  58 TimestampOldestVersion (in days) <br>
-  59 TimestampNewestVersion (in days) <br>
-  60 SpanVersions (in days) <br>
-  61 SpanVersions (normalized) <br>
-  62 NumberVersions <br>
-  63 NumberVersions (normalized) <br>
+  52 QueryIssueTime (in days) <br>
+  53 Age - from query time (in days) <br>
+  54 TimestampVersion (in days) <br>
+  55 TimestampOldestVersion (in days) <br>
+  56 TimestampNewestVersion (in days) <br>
+  57 SpanVersions (in days) <br>
+  58 SpanVersions (normalized) <br>
+  59 NumberVersions <br>
+  60 NumberVersions (normalized) <br>
+  61 BoostNewer <br>
+  62 BoostOlder <br>
+  63 BoostNewerAndOlder <br>
 </p>
 </div>
 
