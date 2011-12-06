@@ -7,7 +7,7 @@
 				<ul>
 					<li><fmt:message key='footer.section.help.help'/></li>
 					<li><fmt:message key='footer.section.help.faq'/></li>
-					<li><fmt:message key='footer.section.help.contact'/></a></li>
+					<li><fmt:message key='footer.section.help.contact'/></li>
 				</ul>
 			</div>
 			<div class="links-content">

@@ -177,6 +177,8 @@
 										<option value="old"><fmt:message key='advanced.sort.old'/></option>
 									<%}%>
 								</select>
+							</div>
+						</div>
 					</fieldset>
 
 					<fieldset id="format">
