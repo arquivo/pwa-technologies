@@ -76,7 +76,7 @@
 					<%-- Let the box be clickable. Not just that one text --%>
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/box-josesaramago.gif" alt="<fmt:message key='home.examples.1.alt'/>" width="82" height="80" />
+                                                        <img src="img/box-josesaramago.png" alt="<fmt:message key='home.examples.1.alt'/>" width="82" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
@@ -88,7 +88,7 @@
 
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/box-josesaramago.gif" alt="<fmt:message key='home.examples.2.alt'/>" width="82" height="80" />
+                                                        <img src="img/box-josesaramago.png" alt="<fmt:message key='home.examples.2.alt'/>" width="82" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
@@ -100,7 +100,7 @@
 
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/box-josesaramago.gif" alt="<fmt:message key='home.examples.3.alt'/>" width="82" height="80" />
+                                                        <img src="img/box-josesaramago.png" alt="<fmt:message key='home.examples.3.alt'/>" width="82" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
@@ -112,7 +112,7 @@
 
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/box-josesaramago.gif" alt="<fmt:message key='home.examples.4.alt'/>" width="82" height="80" />
+                                                        <img src="img/box-josesaramago.png" alt="<fmt:message key='home.examples.4.alt'/>" width="82" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">

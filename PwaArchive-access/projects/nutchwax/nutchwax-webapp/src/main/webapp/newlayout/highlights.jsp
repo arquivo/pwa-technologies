@@ -58,7 +58,7 @@
 				<div class="boxes" id="boxes">
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.1.link.title'/>"><img src="img/box-josesaramago.gif" alt="<fmt:message key='highlight.1.alt'/>" width="82" height="80" /></a>
+                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.1.link.title'/>"><img src="img/box-josesaramago.png" alt="<fmt:message key='highlight.1.alt'/>" width="82" height="80" /></a>
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
@@ -69,7 +69,7 @@
                                         </div>
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.2.link.title'/>"><img src="img/box-josesaramago.gif" alt="<fmt:message key='highlight.2.alt'/>" width="82" height="80" /></a>
+                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.2.link.title'/>"><img src="img/box-josesaramago.png" alt="<fmt:message key='highlight.2.alt'/>" width="82" height="80" /></a>
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
@@ -80,7 +80,7 @@
                                         </div>
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.3.link.title'/>"><img src="img/box-josesaramago.gif" alt="<fmt:message key='highlight.3.alt'/>" width="82" height="80" /></a>
+                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.3.link.title'/>"><img src="img/box-josesaramago.png" alt="<fmt:message key='highlight.3.alt'/>" width="82" height="80" /></a>
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
@@ -91,7 +91,7 @@
                                         </div>
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.4.link.title'/>"><img src="img/box-josesaramago.gif" alt="<fmt:message key='highlight.4.alt'/>" width="82" height="80" /></a>
+                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.4.link.title'/>"><img src="img/box-josesaramago.png" alt="<fmt:message key='highlight.4.alt'/>" width="82" height="80" /></a>
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
@@ -102,7 +102,7 @@
                                         </div>
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.5.link.title'/>"><img src="img/box-josesaramago.gif" alt="<fmt:message key='highlight.5.alt'/>" width="82" height="80" /></a>
+                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.5.link.title'/>"><img src="img/box-josesaramago.png" alt="<fmt:message key='highlight.5.alt'/>" width="82" height="80" /></a>
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
@@ -113,7 +113,7 @@
                                         </div>
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.6.link.title'/>"><img src="img/box-josesaramago.gif" alt="<fmt:message key='highlight.6.alt'/>" width="82" height="80" /></a>
+                                                        <a href="jose-saramago.html" title="<fmt:message key='highlight.6.link.title'/>"><img src="img/box-josesaramago.png" alt="<fmt:message key='highlight.6.alt'/>" width="82" height="80" /></a>
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
