@@ -27,9 +27,11 @@ public class PwaScorerFeatures {
 	
 	private final static String MEMCACHED_ADDRESSES="193.136.192.57:11111"; //memcached TODO parameterize
 	//private final static String MEMCACHED_ADDRESSES="127.0.0.1:11211"; //membase
-	private static Memcached cache=null;
+	private static Memcached memcache=null;
 	private static int maxVersions;
-	private static int maxSpan;
+	private static int maxSpan;	
+	private static long minTimestamp;
+	private static long maxTimestamp;
 	
 		
 	/**
@@ -188,15 +190,109 @@ public class PwaScorerFeatures {
 		}
 		else {
 			funct+=5;
-		}
+		}								
 		
-		// temporal features - local timestamps 
-		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3) || functions.hasFunction(funct+4) || functions.hasFunction(funct+5)) {
+		// temporal features - local timestamps
+		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2)) {
 			PwaDateCache cache=new PwaDateCache(null); // already initialized
 			long timestamp=cache.getTimestamp(doc);
-			long minTimestamp=cache.getMinTimestamp();
-			long maxTimestamp=cache.getMaxTimestamp();					
+			//long minTimestamp=cache.getMinTimestamp();
+			//long maxTimestamp=cache.getMaxTimestamp();											
+			
+			if (functions.hasFunction(funct)) {		
+				scores.addScore(funct, ((float)queryTimestamp) / PwaIRankingFunction.DAY_MILLISEC); // Query issue time in days
+			}
+			funct++;			
+			if (functions.hasFunction(funct)) {
+				scores.addScore(funct, (new PwaAge(timestamp,queryTimestamp)).score()); // Age in days from query issue time
+			}
+			funct++;				
+			if (functions.hasFunction(funct)) {		
+				scores.addScore(funct, ((float)timestamp) / PwaIRankingFunction.DAY_MILLISEC); // Version's timestamp in days
+			}
+			funct++;			
+		}
+		else {
+			funct+=3;
+		}
 		
+		// temporal features - global timestamps
+		boolean temporalGlobalUsed=false;
+		for (int i=funct; !temporalGlobalUsed && i<funct+9; i++) {
+			if (functions.hasFunction(i)) {
+				temporalGlobalUsed=true;
+			}
+		}		
+		if (temporalGlobalUsed) {									
+			PwaDateCache cache=new PwaDateCache(null); // already initialized
+			long timestamp=cache.getTimestamp(doc);
+			
+			int nVersionsURL;				
+			long minTimestampURL;
+			long maxTimestampURL;						
+			UrlRow row=null;
+			
+			try {
+				if (memcache==null) {
+					memcache=new Memcached(MEMCACHED_ADDRESSES); // [address1=127.0.0.1:8091] [address2] ... [addressn]
+					maxVersions=(Integer)memcache.get(MemcachedTransactions.MAX_VERSIONS);
+					maxSpan=(Integer)memcache.get(MemcachedTransactions.MAX_SPAN);
+					int minDate=(Integer)memcache.get(MemcachedTransactions.MIN_DATE);
+					minTimestamp=MemcachedTransactions.intToLongdate(minDate);
+					int maxDate=(Integer)memcache.get(MemcachedTransactions.MAX_DATE);
+					maxTimestamp=MemcachedTransactions.intToLongdate(maxDate);					
+				}
+				
+				if (surl==null) {
+					Document docMeta=searcher.doc(doc);
+					surl=docMeta.get("url");												
+				}
+															
+				String key=MemcachedTransactions.getUrlKey(surl);					
+				row=memcache.getRow(key);
+			}
+			catch (ConnectException e) { // error communicating with memcached. It will try to reconnect.
+				// ignore
+			}
+			catch (IOException e) { 
+				// ignore
+			}				
+				
+			if (row==null) { // for urls discarded such as dynamics (there are not space to store everything)
+				nVersionsURL=1;				
+				minTimestampURL=timestamp;
+				maxTimestampURL=timestamp;					
+			}
+			else {
+				nVersionsURL=row.getNVersions();				
+				minTimestampURL=MemcachedTransactions.intToLongdate(row.getMin());
+				maxTimestampURL=MemcachedTransactions.intToLongdate(row.getMax());
+			}
+								
+			if (functions.hasFunction(funct)) {
+				scores.addScore(funct, ((float)minTimestampURL) / PwaIRankingFunction.DAY_MILLISEC); // Oldest version's timestamp in days
+			}
+			funct++;				
+			if (functions.hasFunction(funct)) {						
+				scores.addScore(funct, ((float)maxTimestampURL) / PwaIRankingFunction.DAY_MILLISEC ); // Newest version's timestamp in days
+			}
+			funct++;
+			if (functions.hasFunction(funct)) {						
+				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL)).score()); // Days between Versions
+			}
+			funct++;				
+			if (functions.hasFunction(funct)) {						
+				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL)).score() / ((maxSpan>0) ? ((float)maxSpan) : 1)); // Span (days) between Versions normalized
+			}
+			funct++;				
+			if (functions.hasFunction(funct)) {							
+				scores.addScore(funct, nVersionsURL); // NumberVersions
+			}
+			funct++;																	
+			if (functions.hasFunction(funct)) {							
+				scores.addScore(funct, ((float)nVersionsURL) / ((float)maxVersions)); // NumberVersions normalized
+			}
+			funct++;			
 			if (functions.hasFunction(funct)) {				
 				scores.addScore(funct, (new PwaBoostNewer(timestamp,maxTimestamp,minTimestamp)).score()); // BoostNewer				
 			}
@@ -209,90 +305,11 @@ public class PwaScorerFeatures {
 				scores.addScore(funct, (new PwaBoostNewerAndOlder(timestamp,maxTimestamp,minTimestamp)).score()); // BoostNewerAndOlder
 			}
 			funct++;
-			if (functions.hasFunction(funct)) {
-				scores.addScore(funct, (new PwaAge(timestamp,queryTimestamp)).score()); // Age in days
-			}
-			funct++;				
-			if (functions.hasFunction(funct)) {		
-				scores.addScore(funct, ((float)queryTimestamp) / PwaIRankingFunction.DAY_MILLISEC); // Query issue time in days
-			}
-			funct++;
-			if (functions.hasFunction(funct)) {		
-				scores.addScore(funct, ((float)timestamp) / PwaIRankingFunction.DAY_MILLISEC); // Version's timestamp in days
-			}
-			funct++;			
-		}
-		else {
-			funct+=6;
-		}
-		
-		// temporal features - global timestamps
-		if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2) || functions.hasFunction(funct+3) || functions.hasFunction(funct+4) || functions.hasFunction(funct+5)) {
-			Document docMeta=null;
-			if (surl==null) {
-				docMeta=searcher.doc(doc);				
-				surl=docMeta.get("url");
-			}	
-			
-			UrlRow row=null;
-			try {
-				if (cache==null) {
-					cache=new Memcached(MEMCACHED_ADDRESSES); // [address1=127.0.0.1:8091] [address2] ... [addressn]
-					maxVersions=(Integer)cache.get(MemcachedTransactions.MAX_VERSIONS);
-					maxSpan=(Integer)cache.get(MemcachedTransactions.MAX_SPAN);
-				}
-			
-				String key=MemcachedTransactions.getUrlKey(surl);					
-				row=cache.getRow(key);
-			}
-			catch (ConnectException e) { // error communicating with memcached. It will try to reconnect.
-				// ignore
-			}
-			catch (IOException e) { 
-				// ignore
-			}				
-			if (row==null) { // for urls discarded such as dynamics (there are not space to store everything)		
-				if (docMeta==null) {
-					docMeta=searcher.doc(doc);
-					surl=docMeta.get("url");
-				}
-				int idate=MemcachedTransactions.stringdateToInt(docMeta.get("date"));	
-				row=new UrlRow(1,idate,idate);
-			}
-						
-			int nVersions=row.getNVersions();				
-			long minTimestamp=MemcachedTransactions.intToLongdate(row.getMin());
-			long maxTimestamp=MemcachedTransactions.intToLongdate(row.getMax());					
-								
-			if (functions.hasFunction(funct)) {
-				scores.addScore(funct, ((float)minTimestamp) / PwaIRankingFunction.DAY_MILLISEC); // Oldest version's timestamp in days
-			}
-			funct++;				
-			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, ((float)maxTimestamp) / PwaIRankingFunction.DAY_MILLISEC ); // Newest version's timestamp in days
-			}
-			funct++;
-			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score()); // Days between Versions
-			}
-			funct++;				
-			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, (new PwaSpanVersions(maxTimestamp,minTimestamp)).score() / ((maxSpan>0) ? ((float)maxSpan) : 1)); // Span between Versions normalized
-			}
-			funct++;				
-			if (functions.hasFunction(funct)) {							
-				scores.addScore(funct, nVersions); // NumberVersions
-			}
-			funct++;																	
-			if (functions.hasFunction(funct)) {							
-				scores.addScore(funct, ((float)nVersions) / ((float)maxVersions)); // NumberVersions normalized
-			}
-			funct++;
 						
 			//cache.close();
 		}
 		else {
-			funct+=6;
+			funct+=9;
 		}			
 		
 		return scores;

@@ -33,7 +33,9 @@ public class MemcachedTransactions {
 	private final static long DUMP_FACTOR=10000000;
 	private final static String COLLECTION_STORED="STORED";
 	public final static String MAX_VERSIONS="MAX_VERSIONS";
-	public final static String MAX_SPAN="MAX_SPAN";
+	public final static String MAX_SPAN="MAX_SPAN";	
+	public final static String MIN_DATE="MIN_DATE";
+	public final static String MAX_DATE="MAX_DATE";
 	
 	
     private static SimpleDateFormat dformat=new SimpleDateFormat("yyyyMMdd");	
@@ -72,7 +74,15 @@ public class MemcachedTransactions {
 		Integer maxSpan=(Integer)cache.get(MAX_SPAN);
 		if (maxSpan==null) {
 			maxSpan=0;
+		}		
+		Integer minDate=(Integer)cache.get(MIN_DATE);
+		if (minDate==null) {
+			minDate=Integer.MAX_VALUE;;
 		}
+		Integer maxDate=(Integer)cache.get(MAX_DATE);
+		if (maxDate==null) {
+			maxDate=0;
+		}		
 		
 		Document doc=null;	      
 		long count=0;
@@ -129,22 +139,38 @@ public class MemcachedTransactions {
 						if (count%DUMP_FACTOR==0) {
 							System.out.println("Stored "+count+" urls.");							
 						}
+						
+						// set global minDate and MaxDate
+						if (idate>maxDate) {
+							maxDate=idate;
+						}
+						if (idate<minDate) {
+							minDate=idate;
+						}
 					}
 					else {					       
-						int minDate=(row.getMin()<idate) ? row.getMin() : idate;
-						int maxDate=(row.getMax()>idate) ? row.getMax() : idate;	
-						row=new UrlRow(row.getNVersions()+1,minDate,maxDate);
+						int minDateURL=(row.getMin()<idate) ? row.getMin() : idate;
+						int maxDateURL=(row.getMax()>idate) ? row.getMax() : idate;	
+						row=new UrlRow(row.getNVersions()+1,minDateURL,maxDateURL);
 						cache.replaceRow(url,row);		
 								
 						// set maxVersions and maxSpan
 						if (row.getNVersions()>maxVersions) {
 							maxVersions=row.getNVersions();
 						}			
-						long lMaxDate=intToLongdate(maxDate);
-						long lMinDate=intToLongdate(minDate);
-						float span=(lMaxDate-lMinDate)/PwaIRankingFunction.DAY_MILLISEC;
+						long lMaxDateURL=intToLongdate(maxDateURL);
+						long lMinDateURL=intToLongdate(minDateURL);
+						float span=(lMaxDateURL-lMinDateURL)/PwaIRankingFunction.DAY_MILLISEC;
 						if (span>maxSpan) {
 							maxSpan=(int)span;
+						}
+						
+						// set global minDate and MaxDate
+						if (maxDateURL>maxDate) {
+							maxDate=maxDateURL;
+						}
+						if (minDateURL<minDate) {
+							minDate=minDateURL;
 						}
 					}
 				} 
@@ -157,6 +183,8 @@ public class MemcachedTransactions {
 		// store data			
 		cache.set(MAX_VERSIONS,maxVersions);
 		cache.set(MAX_SPAN,maxSpan);
+		cache.set(MIN_DATE,minDate);
+		cache.set(MAX_DATE,maxDate);		
 					
 		// store in database				    			
 		System.out.println("Stored "+count+" urls in memcached.");
@@ -164,6 +192,8 @@ public class MemcachedTransactions {
 		System.out.println(countDynamic+" dynamic urls filtered.");
 		System.out.println(maxVersions+" is the maximum number of versions."); 
 		System.out.println(maxSpan+" is the maximum span between versions.");
+		System.out.println(minDate+" is the minimum date of a version.");
+		System.out.println(maxDate+" is the maximum date of a version.");
 		cache.close();
 	}	
 	
