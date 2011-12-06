@@ -45,7 +45,7 @@
 			<div id="header">
 				<div id="logo">
 					<a href="index.jsp" title="<fmt:message key='header.logo.link'/>">
-						<img src="img/logo-2.gif" alt="<fmt:message key='header.logo.alt'/>" width="122" height="90" />
+						<img src="img/logo-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="125" height="90" />
 					</a>
 				</div>
 				<div id="info-texto-termos">
