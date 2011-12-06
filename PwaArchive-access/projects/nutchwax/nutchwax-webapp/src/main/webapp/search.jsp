@@ -438,7 +438,7 @@ if ( request.getAttribute("query") != null && !request.getAttribute("query").toS
 				pageContext.setAttribute("seeHistory", seeHistory);
 			%>
 			<c:catch var="exception">
-				<c:import url="http://${collectionsHost}/newquery">
+				<c:import url="http://${collectionsHost}/query">
 					<c:param name="type" value="urlquery" />
 					<c:param name="url" value="${urlQueryParam}" />
 					<c:param name="aliases" value="true" />
@@ -452,6 +452,7 @@ if ( request.getAttribute("query") != null && !request.getAttribute("query").toS
 				<% hitsTotal = 1; %>
 			</c:catch>
 			<c:if test="${not empty exception}">
+				<% bean.LOG.error("Error while accessing to wayback: "+ pageContext.getAttribute("exception")); %>
 				<%-- paint the empty stats bar --%>
 				<div id="search_stats"></div>
 			</c:if>

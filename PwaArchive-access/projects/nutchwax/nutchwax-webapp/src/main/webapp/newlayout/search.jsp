@@ -473,7 +473,7 @@
                                 <% hitsTotal = 1; %>
                         </c:catch>
                         <c:if test="${not empty exception}">
-				<% bean.LOG.error("Error while accessing to wayback"); %>
+				<% bean.LOG.error("Error while accessing to wayback: "+ pageContext.getAttribute("exception")); %>
 				<div id="conteudo-resultado"> <%-- START OF: conteudo-resultado --%>
 				<div id="first-column">
 				        &nbsp;
