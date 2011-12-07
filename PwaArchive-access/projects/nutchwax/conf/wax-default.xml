@@ -107,7 +107,10 @@ below by adding overrides to hadoop-site.xml
 <property>
   <name>searcher.max.hits</name>
   <value>1000</value>
-  <description>If positive, search stops after this many hits are
+  <description>
+  THIS IS NO LONGER USED. INSTEAD WE USE max.fulltext.matches.ranked
+
+  If positive, search stops after this many hits are
   found.  Setting this to small, positive values (e.g., 1000) can make
   searches much faster.  With a sorted index, the quality of the hits
   suffers little.
@@ -414,48 +417,10 @@ is restarted, logs for tasks of same name are overwritten.
 
 <property>
   <name>ranking.functions</name>
-  <value>10 0.023322608715538286 24 0.59394816155096997 12 0.34503713094903127 20 1.2592823789368244</value>
+  <value>31 0.023322608715538286 45 0.59394816155096997 33 0.34503713094903127 41 1.2592823789368244</value>
   <description>
     Sets the ranking functions and their weights to compute the ranking of the matching documents. Format is functionId weight functionId weight ...
-    There are several functions:
-      Term-based Functions: 
-        0  TF-IDF : content 
-        1  BM-25 : content 
-        2  TF-IDF : url 
-        3  BM-25 : url 
-        4  TF-IDF : host 
-        5  BM-25 : host 
-        6  TF-IDF : anchor 
-        7  BM-25 : anchor 
-        8  TF-IDF : title 
-        9  BM-25 : title 
-       10 Lucene : content + url + host + anchor + title 
-
-      Term distance Functions: 
-       11 MinSpanCovOrd - content 
-       12 MinSpanCovUnord - content 
-       13 MinPairDist - content 
-       14 MinSpanCovOrd - url 
-       15 MinSpanCovUnord - url 
-       16 MinPairDist - url 
-       17 MinSpanCovOrd - host 
-       18 MinSpanCovUnord - host 
-       19 MinPairDist - host 
-       20 MinSpanCovOrd - anchor 
-       21 MinSpanCovUnord - anchor 
-       22 MinPairDist - anchor 
-       23 MinSpanCovOrd - title 
-       24 MinSpanCovUnord - title 
-       25 MinPairDist - title 
-
-      URL division Functions: 
-       26 - UrlDepth 
- 
-      Web graph Functions: 
-       27 - LinPagerank 
-       28 - LinInlinks 
-       29 - OPIC 
-
+    There are 64 functions enumerated in searchTests.jsp.
   </description>
 </property>
 

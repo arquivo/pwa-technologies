@@ -146,7 +146,7 @@ class LuceneQueryOptimizer {
   
   
   private float threshold;
-  private int searcherMaxHits;
+  private int maxFulltextMatchesRanked;
   private int tickLength;
   private int maxTickCount;  
   private int timeoutResponse;
@@ -164,10 +164,10 @@ class LuceneQueryOptimizer {
    */
   public LuceneQueryOptimizer(Configuration conf) {
     final int cacheSize = conf.getInt("searcher.filter.cache.size", 16);
-    this.threshold = conf.getFloat("searcher.filter.cache.threshold", 0.05f);
-    this.searcherMaxHits = conf.getInt("searcher.max.hits", -1);    
+    this.threshold = conf.getFloat("searcher.filter.cache.threshold", 0.05f);       
     this.tickLength = conf.getInt("searcher.max.time.tick_length", 200);
     this.maxTickCount = conf.getInt("searcher.max.time.tick_count", -1);
+    this.maxFulltextMatchesRanked = conf.getInt(Global.MAX_FULLTEXT_MATCHES_RANKED, -1);
     this.timeoutResponse = conf.getInt(Global.TIMEOUT_INDEX_SERVERS_RESPONSE, -1);
     if (timeoutResponse>0) { 
     	this.maxTickCount=timeoutResponse;
@@ -209,12 +209,12 @@ class LuceneQueryOptimizer {
     LOG.info("Query:"+query.toString());   
     
     // no hit limit
-    if (this.searcherMaxHits <= 0 && timerThread == null)  {
+    if (this.maxFulltextMatchesRanked <= 0 && timerThread == null)  {
     	return searcher.search(query, filter, numHits);
     }
 
     // hits limited in time or in count -- use a LimitedCollector
-    LimitedCollector collector = new LimitedCollector(numHits, searcherMaxHits, maxTickCount, timerThread, (sortField!=null) ? !reverse : reverse);
+    LimitedCollector collector = new LimitedCollector(numHits, maxFulltextMatchesRanked, maxTickCount, timerThread, (sortField!=null) ? !reverse : reverse);
     LimitExceeded exceeded = null;
     TimeExceeded timeExceeded = null;
     try {
@@ -239,11 +239,11 @@ class LuceneQueryOptimizer {
 
   /** 
    * @param numHits number of top results
-   * @param searcherMaxHits number of matched documents for ranking
+   * @param maxFulltextMatchesRanked number of matched documents for ranking
    */
-  public TopDocs optimize(BooleanQuery original, Searcher searcher, int numHits, int searcherMaxHits, String sortField, boolean reverse) throws IOException {
-	  if (searcherMaxHits!=NutchBean.MATCHED_DOCS_CONST_IGNORE) {
-		  this.searcherMaxHits=searcherMaxHits;
+  public TopDocs optimize(BooleanQuery original, Searcher searcher, int numHits, int maxFulltextMatchesRanked, String sortField, boolean reverse) throws IOException {
+	  if (maxFulltextMatchesRanked!=NutchBean.MATCHED_DOCS_CONST_IGNORE) {
+		  this.maxFulltextMatchesRanked=maxFulltextMatchesRanked;
 	  }
 	  return optimize(original, searcher, numHits, sortField, reverse);
   }

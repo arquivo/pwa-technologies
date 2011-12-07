@@ -20,6 +20,7 @@
   import="org.archive.access.nutch.NutchwaxQuery"
   import="org.archive.access.nutch.NutchwaxBean"
   import="org.apache.lucene.search.PwaFunctionsWritable"
+  import="org.apache.nutch.global.Global"
 
 %><%!
   public static final DateFormat FORMAT =
@@ -170,9 +171,9 @@ for (int i=0; i<functionsArray.length; i++) {
 <div style="background: LightGrey">
 <p>
 <h1>BOOSTS:</h1>
-number of query matches: <%= nutchConf.getInt("searcher.max.hits", -1) %> 
+number of query matches: <%= nutchConf.getInt(Global.MAX_FULLTEXT_MATCHES_RANKED, -1) %> 
 <input name="queryMatches" size=10 maxlength=10 value=<%= queryMatches %>>
-(-1=all;-2=default)
+(-1=all; -2=default)
 <br>
 number of matches returned: <%= hitsPerPage %>
 <input name="hitsPerPage" size=10 maxlength=10 value=<%= hitsPerPage %>>
