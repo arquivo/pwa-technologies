@@ -30,7 +30,17 @@
           <warSourceDirectory>src/main/webapp</warSourceDirectory>                    
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
-          </archive>
+          </archive>                   
+          <webResources>
+    		<resource>
+      			<directory>${project.basedir}/lib</directory>
+        		<targetPath>WEB-INF/lib</targetPath>
+        		<filtering>true</filtering>
+        		<includes>
+           			<include>**/*.jar</include>
+        		</includes>
+    		</resource>
+  		  </webResources>                   
         </configuration>
       </plugin>
       <plugin>
@@ -40,9 +50,10 @@
           <source>1.5</source>
           <target>1.5</target>
         </configuration>
-      </plugin>
-    </plugins>
+      </plugin>     
+    </plugins>    
   </build>
+    
   <dependencies>
 	<dependency>
       <groupId>log4j</groupId>
