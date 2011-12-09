@@ -177,7 +177,7 @@ number of query matches: <%= nutchConf.getInt(Global.MAX_FULLTEXT_MATCHES_RANKED
 <br>
 number of matches returned: <%= hitsPerPage %>
 <input name="hitsPerPage" size=10 maxlength=10 value=<%= hitsPerPage %>>
-(<1000)
+(<=100)
 <br>
 <!--
 number of version returned: <%= hitsPerVersion %>
@@ -205,7 +205,6 @@ boosts: <%= sboosts %>
 <!- TODO ranking tests -->
 
  <input name="query" size=44 value="<%=htmlQueryString%>">
- <input type="hidden" name="hitsPerPage" value="<%=hitsPerPage%>">
  <input type="submit" value="<i18n:message key="search"/>">
  <% if (sort != null) { %>
     <input type="hidden" name="sort" value="<%=sort%>">
@@ -250,44 +249,46 @@ boosts: <%= sboosts %>
   28 TF-IDF : title <br> 
   29 BM-25 : title <br>
   30 Lucene : content + url + host + anchor + title <br>
-  31 Nutch : content + url + host + anchor + title <br>
+  31 Lucene normalized : content + url + host + anchor + title <br>
+  32 Nutch : content + url + host + anchor + title <br>
+  33 Nutch normalized : content + url + host + anchor + title <br>
 <h3>Term-distance functions: </h3>
-  32 MinSpanCovOrd - content <br>
-  33 MinSpanCovUnord - content <br>
-  34 MinPairDist - content <br>
-  35 MinSpanCovOrd - url <br>
-  36 MinSpanCovUnord - url <br>
-  37 MinPairDist - url <br>
-  38 MinSpanCovOrd - host <br>
-  39 MinSpanCovUnord - host <br>
-  40 MinPairDist - host <br>
-  41 MinSpanCovOrd - anchor <br>
-  42 MinSpanCovUnord - anchor <br> 
-  43 MinPairDist - anchor <br>
-  44 MinSpanCovOrd - title <br>
-  45 MinSpanCovUnord - title <br>
-  46 MinPairDist - title <br>
+  34 MinSpanCovOrd - content <br>
+  35 MinSpanCovUnord - content <br>
+  36 MinPairDist - content <br>
+  37 MinSpanCovOrd - url <br>
+  38 MinSpanCovUnord - url <br>
+  39 MinPairDist - url <br>
+  40 MinSpanCovOrd - host <br>
+  41 MinSpanCovUnord - host <br>
+  42 MinPairDist - host <br>
+  43 MinSpanCovOrd - anchor <br>
+  44 MinSpanCovUnord - anchor <br> 
+  45 MinPairDist - anchor <br>
+  46 MinSpanCovOrd - title <br>
+  47 MinSpanCovUnord - title <br>
+  48 MinPairDist - title <br>
 <h2>Query-independent features: </h2>
 <h3>URL based Functions: </h3>
-  47 UrlDepth <br>
-  48 UrlSlashes <br>
-  49 UrlLength <br>
+  49 UrlDepth <br>
+  50 UrlSlashes <br>
+  51 UrlLength <br>
 <h3>Web-graph based functions: </h3>
-  50 Inlinks <br>
-  51 LinInlinks <br>
+  52 Inlinks <br>
+  53 LinInlinks <br>
 <h3>Temporal features: </h3>
-  52 QueryIssueTime (in days) <br>
-  53 Age - from query time (in days) <br>
-  54 TimestampVersion (in days) <br>
-  55 TimestampOldestVersion (in days) <br>
-  56 TimestampNewestVersion (in days) <br>
-  57 SpanVersions (in days) <br>
-  58 SpanVersions (normalized) <br>
-  59 NumberVersions <br>
-  60 NumberVersions (normalized) <br>
-  61 BoostNewer <br>
-  62 BoostOlder <br>
-  63 BoostNewerAndOlder <br>
+  54 QueryIssueTime (in days) <br>
+  55 Age - from query time (in days) <br>
+  56 TimestampVersion (in days) <br>
+  57 TimestampOldestVersion (in days) <br>
+  58 TimestampNewestVersion (in days) <br>
+  59 SpanVersions (in days) <br>
+  60 SpanVersions (normalized) <br>
+  61 NumberVersions <br>
+  62 NumberVersions (normalized) <br>
+  63 BoostNewer <br>
+  64 BoostOlder <br>
+  65 BoostNewerAndOlder <br>
 </p>
 </div>
 
