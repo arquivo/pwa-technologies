@@ -25,7 +25,7 @@ public class PwaBoostNewerTest extends TestCase {
 			PwaBoostNewer ranker=new PwaBoostNewer(i,maxTimestamp,minTimestamp);
 			System.out.println(i+" "+ranker.score());	
 		}
-		for (long i=10;i<100;i+=10) {
+		for (long i=10;i<=100;i+=10) {
 			PwaBoostNewer ranker=new PwaBoostNewer(i,maxTimestamp,minTimestamp);			
 			System.out.println(i+" "+ranker.score());	
 		}

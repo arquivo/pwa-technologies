@@ -26,7 +26,7 @@ public class PwaNutchSimilarityNormalized implements PwaIRankingFunction {
 	public PwaNutchSimilarityNormalized(Vector<Vector<Integer>> tfPerField, Vector<Vector<Integer>> idfPerField, Vector<Integer> nTermsPerField, int nDocs) {
 		similarity=new PwaNutchSimilarity(tfPerField, idfPerField, nTermsPerField, nDocs);
 		score=similarity.score();
-		//score=MAX_SCORE-score;
+		score=MAX_SCORE-score;
 		score=(float)Math.pow(Math.E, -1*score/MAX_SCORE);				
 	}		
 	

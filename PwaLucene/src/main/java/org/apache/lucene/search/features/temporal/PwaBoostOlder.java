@@ -23,13 +23,15 @@ public class PwaBoostOlder implements PwaIRankingFunction {
 		maxSpan/= DAY_MILLISEC; // span in days
 		float span=docTimestamp-minTimestamp;
 		span/= DAY_MILLISEC; // span in days
-		score=(float)Math.pow(Math.E, -1*span/maxSpan);				
+		score=(float)Math.pow(Math.E, -1*span/maxSpan);						
 	}	
 	
+	/*
 	public PwaBoostOlder(double span, double maxSpan) {			
 		span=maxSpan-span;		
-		score=(float)Math.pow(Math.E, -1*span/maxSpan);				
+		score=(float)Math.pow(Math.E, -1*span/maxSpan);					
 	}
+	*/
 	
 	/**
 	 * Return score

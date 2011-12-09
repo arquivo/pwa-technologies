@@ -25,7 +25,7 @@ public class PwaBoostOlderTest extends TestCase {
 			PwaBoostOlder ranker=new PwaBoostOlder(i,maxTimestamp,minTimestamp);
 			System.out.println(i+" "+ranker.score());	
 		}
-		for (long i=10;i<100;i+=10) {
+		for (long i=10;i<=100;i+=10) {
 			PwaBoostOlder ranker=new PwaBoostOlder(i,maxTimestamp,minTimestamp);
 			System.out.println(i+" "+ranker.score());	
 		}

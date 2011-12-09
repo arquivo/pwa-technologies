@@ -26,7 +26,7 @@ public class PwaLuceneSimilarityNormalized implements PwaIRankingFunction {
 	public PwaLuceneSimilarityNormalized(Vector<Vector<Integer>> tfPerField, Vector<Vector<Integer>> idfPerField, Vector<Integer> nTermsPerField, int nDocs) {
 		similarity=new PwaLuceneSimilarity(tfPerField, idfPerField, nTermsPerField, nDocs);
 		score=similarity.score();
-		//score=MAX_SCORE-score;
+		score=MAX_SCORE-score;
 		score=(float)Math.pow(Math.E, -1*score/MAX_SCORE);				
 	}		
 	
