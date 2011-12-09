@@ -19,7 +19,7 @@ public class PwaBoostNewerAndOlder implements PwaIRankingFunction {
 	 * @param minTimestamp timestamp of the oldest document in the collection
 	 */
 	public PwaBoostNewerAndOlder(long docTimestamp, long maxTimestamp, long minTimestamp) {	
-		long middle=(maxTimestamp-minTimestamp)/2;		
+		long middle=(maxTimestamp+minTimestamp)/2;		
 		if (docTimestamp<middle) {
 			PwaBoostOlder ranker=new PwaBoostOlder(docTimestamp, maxTimestamp, minTimestamp);
 			score=ranker.score();

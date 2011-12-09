@@ -11,7 +11,7 @@ import org.apache.lucene.search.features.PwaIRankingFunction;
  */
 public class PwaNutchSimilarityNormalized implements PwaIRankingFunction {
 
-	private final static float MAX_SCORE=236; // max score within 1000 queries extracted from query logs and submitted to the system
+	private final static float MAX_SCORE=113; // max score within 1000 queries extracted from query logs and submitted to the system
 	private float score;
 	private PwaNutchSimilarity similarity;
 	
