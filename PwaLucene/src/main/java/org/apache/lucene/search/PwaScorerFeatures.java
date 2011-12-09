@@ -109,7 +109,15 @@ public class PwaScorerFeatures {
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {				
+				scores.addScore(funct, (new PwaLuceneSimilarityNormalized(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Lucene normalized
+			}
+			funct++;
+			if (functions.hasFunction(funct)) {				
 				scores.addScore(funct, (new PwaNutchSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Nutch
+			}
+			funct++;
+			if (functions.hasFunction(funct)) {				
+				scores.addScore(funct, (new PwaNutchSimilarityNormalized(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Nutch normalized
 			}
 			funct++;
 
@@ -136,7 +144,7 @@ public class PwaScorerFeatures {
 			}			
 		}
 		else {
-			funct+=PwaIndexStats.FIELDS.length*6 + 2 + PwaIndexStats.FIELDS.length*3;
+			funct+=PwaIndexStats.FIELDS.length*6 + 4 + PwaIndexStats.FIELDS.length*3;
 		}
 								
         // query independent features
