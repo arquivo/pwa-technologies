@@ -44,8 +44,8 @@
 	<div id="empresa">
 		<div class="wrap-footer">
 			<a href="http://www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" ><img src="img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="183" height="46" id="fccn" /></a>&nbsp;
-			<a href="http://www.min-edu.pt/" title="<fmt:message key='footer.sponsor.mec'/>"><img src="img/logo-mec.png" alt="<fmt:message key='footer.sponsor.mec.alt'/>" width="98" height="19" /></a>&nbsp;
 			<a href="http://www.umic.pt/" title="<fmt:message key='footer.sponsor.umic'/>"><img src="img/logo-umic.png" alt="<fmt:message key='footer.sponsor.umic.alt'/>" width="56" height="29" /></a>&nbsp;
+			<a href="http://www.min-edu.pt/" title="<fmt:message key='footer.sponsor.mec'/>"><img src="img/logo-mec.png" alt="<fmt:message key='footer.sponsor.mec.alt'/>" width="98" height="19" /></a>&nbsp;
 			<a href="http://www.qca.pt/pos/posc.asp" title="<fmt:message key='footer.sponsor.posc'/>"><img src="img/logo-pos.gif" alt="<fmt:message key='footer.sponsor.posc.alt'/>" width="148" height="22" /></a>
 		</div>
 	</div>
