@@ -43,7 +43,7 @@
 	<div class="wrap">
 		<div id="header-home">
                                 <div id="logo-home">
-                                        <img src="img/logo.gif" alt="<fmt:message key='header.logo.alt'/>" width="400" height="96" />
+                                        <img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="400" height="105" />
                                 </div>
                                 <div id="search-home">
                                         <form id="loginForm" action="search.jsp" name="loginForm" method="get">
