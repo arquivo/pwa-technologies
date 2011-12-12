@@ -91,8 +91,8 @@ cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 #footer #empresa #fccn { padding-left: 0; float: left; }
 
 /* Homepage */
-.mascara-img { position: relative; padding: 15px; width: 82px; float: left; }
-.mascara-img-gr { background:url('../img/box-mask.png') no-repeat center; width: 82px; height: 80px; position: absolute; top: 0px; left: 0px; padding: 15px; }
+.mascara-img { position: relative; padding: 15px; width: 80px; float: left; }
+.mascara-img-gr { background:url('../img/box-mask.png') no-repeat center; width: 80px; height: 80px; position: absolute; top: 0px; left: 0px; padding: 15px; }
 
 .boxes-home { min-height: 245px; padding: 25px 0 20px;  }
 .boxes { min-height: 245px; padding: 39px 0 20px; }
@@ -101,6 +101,8 @@ cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 .boxes-home .box .box-info a, .boxes .box .box-info a { font-size: 2.1em; padding: 11px 0 0 9px; text-decoration: underline; display: block; }
 .boxes-home .box .box-info .box-sub-title, .boxes .box .box-info .box-sub-title { font-size: 1.4em;  padding: 1px 0 0 9px; }
 .boxes-home .box .box-info p, .boxes .box .box-info p { font-size: 1.2em; padding-left: 9px; }
+.boxes-home .box-info { width: 340px; }
+.boxes-home .box-info .box-sub-title { line-height: 1.2em; }
 
 #pesquisa-avancada, #ver-destaques { color: #005DB4; float: right; font-size: 1.1em; }
 #pesquisa-avancada { padding: 3px 0 0 0; }

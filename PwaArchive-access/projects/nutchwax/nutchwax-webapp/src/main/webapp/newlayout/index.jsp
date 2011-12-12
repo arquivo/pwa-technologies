@@ -72,55 +72,57 @@
                                 <h3><fmt:message key='home.examples.title'/></h3>
                                 <h4><fmt:message key='home.examples.subtitle'/></h4>
 
+				<fmt:bundle basename='pt.arquivo.i18n.Highlights'>
                                 <div class="boxes-home" id="boxes">
 					<%-- Let the box be clickable. Not just that one text --%>
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/box-josesaramago.png" alt="<fmt:message key='home.examples.1.alt'/>" width="82" height="80" />
+                                                        <img src="img/highlights/saramago.png" alt="<fmt:message key='highlight.saramago.alt'/>" width="80" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='home.examples.1.link.title'/>"><fmt:message key='home.examples.1.title'/></a>
-                                                        <p class="box-sub-title"><fmt:message key='home.examples.1.description'/></p>
-                                                        <p><fmt:message key='home.examples.1.description2'/></p>
+                                                        <a href="/wayback/wayback/id1101166index0?l=<%=language%>" title="<fmt:message key='highlight.saramago.link.title'/>"><fmt:message key='highlight.saramago.title'/></a>
+                                                        <p class="box-sub-title"><fmt:message key='highlight.saramago.description'/></p>
+                                                        <p><fmt:message key='highlight.saramago.description2'/></p>
                                                 </div>
                                         </div>
 
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/box-josesaramago.png" alt="<fmt:message key='home.examples.2.alt'/>" width="82" height="80" />
+                                                        <img src="img/highlights/expo98.gif" alt="<fmt:message key='highlight.expo98.alt'/>" width="80" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='home.examples.2.link.title'/>"><fmt:message key='home.examples.2.title'/></a>
-                                                        <p class="box-sub-title"><fmt:message key='home.examples.2.description'/></p>
-                                                        <p><fmt:message key='home.examples.2.description2'/></p>
+                                                        <a href="/wayback/wayback/id4705954index0?l=<%=language%>" title="<fmt:message key='highlight.expo98.link.title'/>"><fmt:message key='highlight.expo98.title'/></a>
+                                                        <p class="box-sub-title"><fmt:message key='highlight.expo98.description'/></p>
+                                                        <p><fmt:message key='highlight.expo98.description2'/></p>
                                                 </div>
                                         </div>
 
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/box-josesaramago.png" alt="<fmt:message key='home.examples.3.alt'/>" width="82" height="80" />
+                                                        <img src="img/highlights/euro2004.png" alt="<fmt:message key='highlight.euro2004.alt'/>" width="80" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='home.examples.3.link.title'/>"><fmt:message key='home.examples.3.title'/></a>
-                                                        <p class="box-sub-title"><fmt:message key='home.examples.3.description'/></p>
-                                                        <p><fmt:message key='home.examples.3.description2'/></p>
+                                                        <a href="/wayback/wayback/id4390263index3?l=<%=language%>" title="<fmt:message key='highlight.euro2004.link.title'/>"><fmt:message key='highlight.euro2004.title'/></a>
+                                                        <p class="box-sub-title"><fmt:message key='highlight.euro2004.description'/></p>
+                                                        <p><fmt:message key='highlight.euro2004.description2'/></p>
                                                 </div>
                                         </div>
 
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/box-josesaramago.png" alt="<fmt:message key='home.examples.4.alt'/>" width="82" height="80" />
+                                                        <img src="img/highlights/figo.png" alt="<fmt:message key='highlight.figo.alt'/>" width="80" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="jose-saramago.html" title="<fmt:message key='home.examples.4.link.title'/>"><fmt:message key='home.examples.4.title'/></a>
-                                                        <p class="box-sub-title"><fmt:message key='home.examples.4.description'/></p>
-                                                        <p><fmt:message key='home.examples.4.description2'/></p>
+                                                        <a href="/wayback/wayback/id87775634index0?l=<%=language%>" title="<fmt:message key='highlight.figo.link.title'/>"><fmt:message key='highlight.figo.title'/></a>
+                                                        <p class="box-sub-title"><fmt:message key='highlight.figo.description'/></p>
+                                                        <p><fmt:message key='highlight.figo.description2'/></p>
                                                 </div>
                                         </div>
+					</fmt:bundle>
 
 					<a href="highlights.jsp" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
                                 </div>
