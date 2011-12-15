@@ -124,7 +124,7 @@ public class RegexSpellcheckerServlet extends HttpServlet {
 
 				if ( !isOperator( match ) ) {
 					try {
-						allSuggestions = SpellChecker.suggestSimilarAspell(match, lang, 1, reader, FIELD, minFreq, timesFreq, dictPath);
+						allSuggestions = SpellChecker.suggestSimilarHunspell(match, lang, 1, reader, FIELD, minFreq, timesFreq, dictPath);
 		
 						if ( allSuggestions.length > 0 ) {
 							// only add word to suggestion if it is different
