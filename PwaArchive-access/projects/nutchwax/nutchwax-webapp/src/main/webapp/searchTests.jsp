@@ -276,7 +276,7 @@ boosts: <%= sboosts %>
 <h3>Web-graph based functions: </h3>
   52 Inlinks <br>
   53 LinInlinks <br>
-<h3>Temporal features: </h3>
+<h2>Temporal features: </h2>
   54 QueryIssueTime (in days) <br>
   55 Age - from query time (in days) <br>
   56 TimestampVersion (in days) <br>
