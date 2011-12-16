@@ -1,25 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <%@ page
 	session="true"
 	contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"	
 
+	import="java.io.File"
 	import="java.net.URLDecoder"
 	import="java.util.Calendar"
 	import="java.util.Date"
 	import="java.util.GregorianCalendar"
-	import="java.util.Locale"
-	import="java.util.ResourceBundle"
-	import="java.util.regex.Matcher"
 	import="java.util.regex.Pattern"
-	import="java.text.DateFormatSymbols"
-	import="java.text.SimpleDateFormat"
-	import="org.apache.nutch.html.Entities"
+	import="java.util.regex.Matcher"
 %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
 <%@ include file="include/logging_params.jsp" %>
-<%@ include file="include/simple_params_processing.jsp" %>
 <%@ include file="include/i18n.jsp" %>
-<i18n:bundle baseName="org.nutch.jsp.advanced" locale="<%= new Locale(language) %>"/>
+<%@ include file="include/simple-params-processing.jsp" %>
+<fmt:setLocale value="<%=language%>"/>
 
 <%!	//To please the compiler since logging need those -- check [search.jsp]
 	private static int hitsTotal = -10;		// the value -10 will be used to mark as being "advanced search"
@@ -28,7 +27,7 @@
 %>
 <%
 	SimpleDateFormat paramDateFormat = new SimpleDateFormat("dd/mm/yyyy");
-	Calendar dateStart = new GregorianCalendar();
+	Calendar dateStart = new GregorianCalendar( );
 	dateStart.setTimeInMillis( paramDateFormat.parse(dateStartString).getTime() );
 	Calendar dateEnd = new GregorianCalendar();
 	dateEnd.setTimeInMillis( paramDateFormat.parse(dateEndString).getTime() );
@@ -38,11 +37,10 @@
   Calendar DATE_END = new GregorianCalendar();
   DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) );
   DATE_END.set( Calendar.MONTH, 12-1 );
-  DATE_END.set( Calendar.DAY_OF_MONTH, 31 );
+  DATE_END.set( Calendar.DAY_OF_MONTH, 10 );
   DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
   DATE_END.set( Calendar.MINUTE, 59 );
   DATE_END.set( Calendar.SECOND, 59 );
-
 
   try {
         String offsetDateString = getServletContext().getInitParameter("embargo-offset");
@@ -66,216 +64,197 @@
 %>
 
 <%---------------------- Start of HTML ---------------------------%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="<%=language%>" xml:lang="<%=language%>">
+
+<%-- TODO: define XML lang --%>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<%@ include file="include/metadata.jsp" %>
-	<title><i18n:message key="title"/></title>
+	<title><fmt:message key='advanced.meta.title'/></title>
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+	<%-- TODO: define META lang --%>
+	<meta http-equiv="Content-Language" content="pt-PT" />
+	<meta name="Keywords" content="<fmt:message key='advanced.meta.keywords'/>" />
+	<meta name="Description" content="<fmt:message key='advanced.meta.description'/>" />
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
-	<link type="text/css" href="css/jquery-ui-1.7.2.custom.css" rel="stylesheet"/>
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
+	<script type="text/javascript">
+		var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
+		var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
+	</script>
 	<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="js/ui.datepicker.js"></script>
-<% if (language.equals("pt")) { %>
 	<script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
-<% } %>
-	<script type="text/javascript">
-                var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
-                var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
-        </script>
 	<script type="text/javascript" src="js/configs.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/advanced.css" />
 </head>
-<body class="oneColElsCtrHdr">
-
-<div id="header">
-	<%@include file="header.jsp" %>
-        <div id="title">
-                <h1><i18n:message key="header"/></h1>
-        </div>
-</div>
-<div class="info_bar"></div>
-<div id="utilities">
-
-	<a href="<c:url value="">
-			<c:param name='query' value='${param.query}'/>
-			<c:param name='dateStart' value='${param.dateStart}'/>
-			<c:param name='dateEnd' value='${param.dateEnd}'/>
-			<c:if test="${ (empty param.l) || (param.l eq 'pt') }">
-				<c:param name='l' value='en'/>
-			</c:if>
-		</c:url>"><i18n:message key="otherLang"/></a>
-	|
-        <c:choose>
-                <c:when test="${ param.l eq 'en' }">
-                        <a href="http://sobre.arquivo.pt/faq/advanced-search"><i18n:message key="help"/></a>
-                </c:when>
-                <c:otherwise>
-                        <a href="http://sobre.arquivo.pt/perguntas-frequentes/pesquisa-avancada"><i18n:message key="help"/></a>
-                </c:otherwise>
-        </c:choose>
-        |
-        <a href="<c:url value='http://sobre.arquivo.pt/'><c:param name='set_language' value='${language}'/></c:url>"><i18n:message key="about"/></a>
-</div>
-<%--<div id="main_content">--%>
-
-<div id="container">
-
-  <div id="mainContent" class="spacing">
-    <form method="get" action="search.jsp">
-	<input type="hidden" name="l" value="<%=language%>" />
-    	<div id="sub-title">
-    	    <h3><i18n:message key="formTitle"/></h3>
-		    <input type="submit" value="<i18n:message key="submit"/>" />
-        </div>
-    	<div>
-        	<fieldset id="words">
-            	<legend><i18n:message key="words"/></legend>
-		<div>
-	                <label for="adv_and"><i18n:message key="withWords"/></label>
-			<div class="withTip">
-	        	       	<input type="text" id="adv_and" name="adv_and" value="<%=and.toString()%>" />
-				<br />
-				<span class="tip"><i18n:message key="withWordsTip"/></span>
+<body>
+	<%@ include file="include/topbar.jsp" %>
+	<div class="wrap">
+		<div id="main">
+			<div id="header">
+				<div id="logo">
+					<a href="index.jsp" title="<fmt:message key='header.logo.link'/>">
+						<img src="img/logo-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="125" height="90" />
+					</a>
+				</div>
+				<div id="info-texto-termos">
+					<h1><fmt:message key='advanced.title'/></h1>
+					<h2><fmt:message key='advanced.subtitle'/></h2>
+				</div>
 			</div>
-			<div style="clear: both"></div>
-		</div>
-		<div class="line-spacing spacing">
-	                <label for="adv_phr"><i18n:message key="withPhrase"/></label>
-			<div class="withTip">
-	                	<input type="text" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
-				<br />
-				<span class="tip"><i18n:message key="withPhraseTip"/></span>
-			</div>
-			<div style="clear: both"></div>
-		</div>
-		<div class="spacing">
-	                <label for="adv_not"><i18n:message key="withoutWords"/></label>
-			<div class="withTip">
-                		<input type="text" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
-				<br />
-				<span class="tip"><i18n:message key="withoutWordsTip"/></span>
-			</div>
-		</div>
-            </fieldset>
-        </div>
-        <div>
-        	<fieldset id="date">
-            	<legend><i18n:message key="date"/></legend>
-                <label for="dateStart_top"><i18n:message key="intervalStart"/></label>
-                <div class="withTip">
-                	<input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" /><br />
-    	            <span class="tip"><i18n:message key="tip"/></span>
-                </div>
-                <label id="labelDateEnd" for="dateEnd_top"><i18n:message key="intervalEnd"/></label>
-                <div class="withTip">
-	                <input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" /> <br />
-	                <span class="tip"><i18n:message key="tip"/></span>
-                </div>
-                <div class="spacing"></div>
-                <div>
-                <label for="sort"><i18n:message key="sort"/></label>
-		<select id="sort" name="sort">
-			<%	
-			if (sortType == null) {			//use the default sorting behavior - relevance %>
-				<option value="relevance" selected="selected"><i18n:message key="relevance"/></option>
-			<% } else { %>
-				<option value="relevance"><i18n:message key="relevance"/></option>
-			<% }
-				if ("date".equals(sortType) && sortReverse) {
-			%>
-				<option value="new" selected="selected"><i18n:message key="newFirst"/></option>	
-				<% } else { %>
-				<option value="new"><i18n:message key="newFirst"/></option>
-				<% }
-				if ("date".equals(sortType) && !sortReverse) {
-				%>
-				<option value="old" selected="selected"><i18n:message key="oldFirst"/></option>
-				<% } else { %>
-				<option value="old"><i18n:message key="oldFirst"/></option>
-				<% } %>
-		</select>
-                </div>
-            </fieldset>
-        </div>
-        <div>
-        	<fieldset id="format">	
-            	<legend><i18n:message key="format"/></legend>
-		<label for="formatType"><i18n:message key="formatLabel"/></label>
-		<select id="formatType" name="format">
-		<%
-			String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rtf"};
-			String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)",
-				"HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)",
-				"Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
+			<div id="conteudo-pesquisa">
+				<form method="get" action="search.jsp">
+					<input type="hidden" name="l" value="<%= language %>" />
+					<div class="pesquisar-por">
+	                                	<p class="titulo"><fmt:message key='advanced.form-title'/></p>
+	                                        <input type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="search-submit" name="btnSubmitTop" id="btnSubmitTop" accesskey="e" />
+	                                </div>
+					<fieldset id="words">
+						<legend><fmt:message key='advanced.terms'/></legend>
+						<div class="box-content">
+							<div id="label-palavras-1">
+								<label for="adv_and"><fmt:message key='advanced.terms.all'/></label>
+								<div class="withTip">
+									<input type="text" id="adv_and" name="adv_and" value="<%=and.toString()%>" />
+									<br />
+									<span class="tip"><fmt:message key='advanced.terms.all.hint'/></span>
+								</div>
+								<div class="clear"></div>
+							</div>
 
-			if ("relevance".equals(format)) {
-			%>
-				<option value="all" selected="selected"><i18n:message key="allFormats"/></option>
-			<% } else { %>
-				<option value="all"><i18n:message key="allFormats"/></option>
-			<%		
-			}
+							<div id="label-palavras-2">
+								<label for="adv_phr"><fmt:message key='advanced.terms.phrase'/></label>
+								<div class="withTip">
+									<input type="text" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
+									<br />
+									<span class="tip"><fmt:message key='advanced.terms.phrase.hint'/></span>
+								</div>
+								<div class="clear"></div>
+							</div>
 
-			for (int i = 0; i < mimeList.length; i++) {
-				if (mimeList[i].equals(format)) {
-					out.print("<option value=\""+ mimeList[i] +"\" selected=\"selected\">"+ mimeListDetail[i] +"</option>");
-				} else {
-					out.print("<option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</option>");
-				}
-			}
-		%>
-		</select>
-            </fieldset>
-        </div>
-        <div>
-        	<fieldset id="domains" class="no-margin">
-            	<legend><i18n:message key="website"/></legend>
-                <label for="site"><i18n:message key="withAddress"/></label>
-                <div class="withTip">
-                	<input type="url" id="site" name="site" value="<%=site%>"/><br />
-	                <span class="tip"><i18n:message key="addressExample"/></span>
+							<div id="label-palavras-3">
+								<label for="adv_not"><fmt:message key='advanced.terms.not'/></label>
+								<div class="withTip">
+									<input type="text" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
+									<br />
+									<span class="tip"><fmt:message key='advanced.terms.not.hint'/></span>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+
+					<fieldset id="date">
+						<legend><fmt:message key='advanced.date'/></legend>
+						<div class="box-content">
+							<div id="label-data-1">
+								<label for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
+								<div class="withTip">
+									<input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" />
+								</div>
+
+								<label id="labelDateEnd" for="dateEnd_top"><fmt:message key='advanced.date.to'/></label>
+								<div class="withTip">
+									<input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
+								</div>
+							</div>
+							<div id="label-data-2">
+								<label for="sort"><fmt:message key='advanced.sort'/></label>
+								<select id="sort" name="sort">
+									<%
+									if (sortType == null) {		// use the default sorting behavior %>
+										<option value="relevance" selected="selected"><fmt:message key="advanced.sort.relevance"/></option>
+									<% } else{ %>
+										<option value="relevance"><fmt:message key="advanced.sort.relevance"/></option>
+									<% }
+									if ("date".equals(sortType) && sortReverse) { %>
+										<option value="new" selected="selected"><fmt:message key='advanced.sort.new'/></option>
+									<%} else {%>
+										<option value="new"><fmt:message key='advanced.sort.new'/></option>
+									<%}%>
+									<%
+									if ("date".equals(sortType) && !sortReverse) {%>
+										<option value="old" selected="selected"><fmt:message key='advanced.sort.old'/></option>
+									<%} else {%>
+										<option value="old"><fmt:message key='advanced.sort.old'/></option>
+									<%}%>
+								</select>
+							</div>
+						</div>
+					</fieldset>
+
+					<fieldset id="format">
+						<legend><fmt:message key='advanced.format'/></legend>
+						<div class="box-content">
+							<div id="label-format-1">
+								<label for="formatType"><fmt:message key='advanced.format.label'/></label>
+								<select id="formatType" name="format">
+								<%
+									String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
+									String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
+
+									if (format == null || "all".equals(format)) {%>
+										<option value="all" selected="selected"><fmt:message key='advanced.format.all'/></option>
+									<%} else {%>
+										<option value="all"><fmt:message key='advanced.format.all'/></option>
+									<%}
+
+									for (int i=0; i < mimeList.length; i++) {
+										if (mimeList[i].equals(format)) {
+											out.print("<option value=\""+ mimeList[i] +"\" selected=\"selected\">"+ mimeListDetail[i] +"</option>");
+										} else {
+											out.print("<option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</option>");
+										}
+									}
+								%>
+								</select>
+							</div>
+						</div>
+					</fieldset>
+
+					<fieldset id="domains">
+						<legend><fmt:message key='advanced.website'/></legend>
+						<div class="box-content">
+							<div id="label-domains-1">
+								<label for="site"><fmt:message key='advanced.website.label'/></label>
+								<div class="withTip">
+									<input type="text" id="site" name="site" value="<%=site%>" /><br />
+									<span class="tip"><fmt:message key='advanced.website.hint'/></span>
+								</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+					</fieldset>
+
+					<fieldset id="num_result_fieldset">
+						<legend><fmt:message key='advanced.results'/></legend>
+						<div class="box-content">
+							<div id="label-num-result-fieldset-1">
+								<label for="num-result"><fmt:message key='advanced.results.label'/></label>
+								<select id="num-result" name="hitsPerPage">
+								<%
+								int[] hitsPerPageValues = {10, 20, 30, 50, 100};
+								for (int i=0; i < hitsPerPageValues.length; i++) {
+									if (hitsPerPage == hitsPerPageValues[i]) {
+										out.print("<option selected=\"selected\">"+ hitsPerPageValues[i] +"</option>");
+									} else {
+										out.print("<option>"+ hitsPerPageValues[i] +"</option>");
+									}
+								}%>
+								</select>
+								<fmt:message key='advanced.results.label2'/>
+							</div>
+						</div>
+					</fieldset>
+
+					<div id="bottom-submit">
+						<input type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="search-submit" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" />
+					</div>
+				</form>
+                        </div>
                 </div>
-            </fieldset>
-        </div>
-	<div>
-		<fieldset id="num_result_fieldset">
-			<legend><i18n:message key="resultsNumber"/></legend>
-			<label for="num_result"><i18n:message key="resultsNumberShow"/></label>
-			<select id="num_result" name="hitsPerPage">
-			<% int[] hitsPerPageValues = {10, 20, 30, 50, 100};
-				for (int i = 0; i < hitsPerPageValues.length; i++) {
-					if (hitsPerPage == hitsPerPageValues[i]) {
-						out.print("<option selected=\"selected\">"+ hitsPerPageValues[i]+"</option>");
-					} else {
-						out.print("<option>"+ hitsPerPageValues[i]+ "</option>");
-					}	
-				}
-			%>
-			</select>
-			<i18n:message key="resultsNumberLabel"/>
-		</fieldset>
+<%-- end copy --%>
 	</div>
-        <div id="bottom-submit">
-		<input type="submit" value="<i18n:message key="submit"/>" />
-        </div>
-    </form>
-	<!-- end #mainContent --></div>
-    <div style="padding-bottom: 2em"></div>
-    <hr class="spacing" />
-<!-- end #container --></div>
-<%-- Google Analytics tracking code --%>
-<script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-21825027-1']);
-	_gaq.push(['_setDomainName', '.arquivo.pt']);
-	_gaq.push(['_trackPageview']);
-	(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-</script>
+<%@include file="include/footer.jsp" %>
+<%@include file="include/analytics.jsp" %>
 </body>
 </html>
 
