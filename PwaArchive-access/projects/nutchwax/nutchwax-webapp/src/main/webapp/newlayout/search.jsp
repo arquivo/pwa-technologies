@@ -31,6 +31,9 @@
 	import="org.archive.access.nutch.NutchwaxQuery"
 	import="org.archive.access.nutch.NutchwaxConfiguration"
 %>
+<% // Set the character encoding to use when interpreting request values.
+  request.setCharacterEncoding("UTF-8");
+%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
 <%@ include file="include/logging_params.jsp" %>
@@ -94,9 +97,6 @@
 %>
 <%-- Handle the url parameters --%>
 <%
-  // Set the character encoding to use when interpreting request values 
-  request.setCharacterEncoding("UTF-8");
-
   // get query from request
   String queryString = request.getParameter("query");
   if ( queryString != null ) {
