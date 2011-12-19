@@ -39,12 +39,12 @@
 
 <error-page>
   <error-code>404</error-code>
-  <location>/newlayout/not-found-404.jsp</location>
+  <location>not-found-404.jsp</location>
 </error-page>
 
 <error-page>
   <error-code>500</error-code>
-  <location>/newlayout/internal-error-500.jsp</location>
+  <location>internal-error-500.jsp</location>
 </error-page>
 
 <context-param>
