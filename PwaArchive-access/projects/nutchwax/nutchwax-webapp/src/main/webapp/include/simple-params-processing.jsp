@@ -6,7 +6,6 @@ final String QUERY_REGEX =  "(-?&quot;.*?&quot;|\\S+)+";
 
 StringBuilder and = new StringBuilder();
 StringBuilder phrase = new StringBuilder();
-phrase.append("abc");
 StringBuilder not = new StringBuilder();
 int hitsPerPage = request.getParameter("hitsPerPage") != null ? Integer.parseInt(request.getParameter("hitsPerPage")) : 10;
 String format = null;

@@ -51,9 +51,9 @@
                                                 <fieldset>
                                                         <label for="txtSearch">&nbsp;</label>
                                                         <input class="search-inputtext" type="text" size="15" value="" name="query" id="txtSearch" accesskey="t" />
-                                                        <input type="reset" src="img/search-resetbutton.html" value="&nbsp;" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
-                                                        <input type="submit" value="Pesquisar no arquivo" alt="Pesquisar no arquivo" class="home-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
-                                                        <a href="advanced.jsp" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>
+                                                        <input type="reset" value="&nbsp;" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
+                                                        <input type="submit" value="<fmt:message key='home.submit'/>" class="home-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
+                                                        <a href="advanced.jsp?l=<%=language%>" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>
                                                 </fieldset>
                                         </form>
                                 </div>
@@ -64,7 +64,7 @@
                                                 <h1><fmt:message key='home.title'/></h1>
                                                 <h2><fmt:message key='home.subtitle'/></h2>
                                                 <p class="green"><fmt:message key='home.description'/></p>
-                                                <a href="conheca-o-projecto.html" title="<fmt:message key='home.know-more.link'/>"><fmt:message key='home.know-more'/></a>
+                                                <a href="http://sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>"><fmt:message key='home.know-more'/></a>
                                         </div>
                                 </div>
 		</div>

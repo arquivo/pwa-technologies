@@ -13,7 +13,7 @@
 			<div class="links-content">
 				<p class="links-title"><fmt:message key="footer.section.about"/></p>
 				<ul>
-					<li><fmt:message key="footer.section.about.objectives"/></li>
+					<li><fmt:message key="footer.section.about.goals"/></li>
 					<li><fmt:message key="footer.section.about.publications"/></li>
 					<li><a href="https://educast.fccn.pt/vod/channels/oo6w8h76i"><fmt:message key='footer.section.about.videos'/></a></li>
 					<li><a href="terms-conditions.jsp?l=<%=language%>"><fmt:message key='footer.section.about.terms-conditions'/></a></li>
