@@ -42,11 +42,7 @@
 	<div class="wrap">
 		<div id="main">
 			<div id="header">
-				<div id="logo">
-					<a href="index.jsp" title="<fmt:message key='header.logo.link'/>">
-						<img src="img/logo-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="125" height="90" />
-					</a>
-				</div>
+				<%@ include file="include/logo.jsp" %>
 				<div id="info-texto">
 					<h1><fmt:message key='highlights.title'/></h1>
 					<h2><fmt:message key='highlights.subtitle'/></h2>
@@ -166,7 +162,7 @@
                                 <div class="next"><a href="seguinte.html" title="Seguinte"><fmt:message key⁼'highlight.pager.next'/><img src="img/arrow-right.gif" alt="<fmt:message key='highlight.pager.next.alt'/>" /></a></div>
                         </div>
 			--%>
-                        <div class="voltar">&lt; <a href="index.jsp" title="<fmt:message key='highlights.return.alt'/>"><fmt:message key='highlights.return'/></a></div>
+                        <div class="voltar">&lt; <a href="index.jsp?l=<%=language%>" title="<fmt:message key='highlights.return.alt'/>"><fmt:message key='highlights.return'/></a></div>
                 </div>
 	</div>
 <%@include file="include/footer.jsp" %>

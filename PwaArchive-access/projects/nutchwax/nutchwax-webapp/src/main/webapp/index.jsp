@@ -124,7 +124,7 @@
                                         </div>
 					</fmt:bundle>
 
-					<a href="highlights.jsp" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
+					<a href="highlights.jsp?l=<%=language%>" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
                                 </div>
                         </div>
 

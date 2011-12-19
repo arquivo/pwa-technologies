@@ -43,11 +43,7 @@
 	<div class="wrap">
 		<div id="main">
 			<div id="header">
-				<div id="logo">
-					<a href="index.jsp" title="<fmt:message key='header.logo.link'/>">
-						<img src="img/logo-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="125" height="90" />
-					</a>
-				</div>
+				<%@ include file="include/logo.jsp" %>
 				<div id="info-texto-termos">
 					<h1><fmt:message key='sample.title'/></h1>
 					<h2><fmt:message key='sample.subtitle'/></h2>
