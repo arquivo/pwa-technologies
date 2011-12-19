@@ -117,15 +117,10 @@
               showSummary = !caching.equals(Nutch.CACHING_FORBIDDEN_ALL);
             }
 
-            Date date = new Date(Long.valueOf(detail.getValue("date")).longValue()*1000);
-            String archiveDate = FORMAT.format(date);
-            String archiveDisplayDate = DISPLAY_FORMAT.format(date);
+            Date archiveDate = new Date(Long.valueOf(detail.getValue("date")).longValue()*1000);
             String archiveCollection = detail.getValue("collection");
             String url = detail.getValue("url");
 
-            if (archiveDisplayDate.startsWith("0") )
-                archiveDisplayDate = archiveDisplayDate.substring(1);
-		
 	    // If the collectionsHost includes a path do not add archiveCollection.
             // See http://sourceforge.net/tracker/index.php?func=detail&aid=1288990&group_id=118427&atid=681140.
             String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
@@ -265,7 +260,7 @@
             <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2>
 	    <br />
 		<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
-		<span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= dateEnd.getTime()%>'/></fmt:message></span> - <a class="outras-datas" href="<%=allVersions%>"><fmt:message key='search.result.history'/></a>
+		<span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span> - <a class="outras-datas" href="<%=allVersions%>"><fmt:message key='search.result.history'/></a>
             <% showSummary=true; //to show always summaries %>
             <% if (!"".equals(summary) && showSummary) { %>
             <br /><span class="resumo"><%=summary%></span>

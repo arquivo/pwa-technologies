@@ -53,9 +53,6 @@
 	private static final String COLLECTION_QUERY_PARAM_KEY = COLLECTION_KEY + ":";
 	private static final Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
 %>
-<%
-  DateFormat DISPLAY_FORMAT = new SimpleDateFormat("dd MMMMMMMM, yyyy", new Locale(language));
-%>
 <%-- Get the application beans --%>
 <%
   Configuration nutchConf = NutchwaxConfiguration.getConfiguration(application);
