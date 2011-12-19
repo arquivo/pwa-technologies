@@ -264,6 +264,7 @@ li.grouped { padding-left: 38px; }
 
 /* Pesquisa erro */
 #conteudo-pesquisa-erro { width: 619px; margin-left: 159px; }
+#main #conteudo-pesquisa-erro { margin-left: 0; }
 #conteudo-pesquisa-erro h2 { font-size: 1.4em; color: #000000; }
 #conteudo-pesquisa-erro h3 { font-size: 1.4em; font-weight: bold; padding-bottom: 28px; color: #000000; }
 
