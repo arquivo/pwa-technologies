@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-2.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/hadoop-0.12.2-core.jar"/>
+	<classpathentry kind="lib" path="lib/nutchwax-core-0.11.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="lib/nutch-0.9.jar"/>
+	<classpathentry kind="lib" path="lib/wayback-core-0.9.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/heritrix-1.14.1.jar"/>
+	<classpathentry kind="lib" path="lib/archive-mapred-0.2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

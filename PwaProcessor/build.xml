@@ -1,0 +1,94 @@
+<!--
+Arquivo da Web Portuguesa
+http://arquivo-web.fccn.pt/
+-->
+<project name="ArquivoWebProcessor" default="all" basedir=".">
+
+  <property file="build.properties"/>
+ 
+  <property name="build.home"    value="${basedir}/build"/>
+  <property name="dist.home"     value="${basedir}/dist"/>
+  <property name="docs.home"     value="${basedir}/docs"/>
+  <property name="src.home"      value="${basedir}/src"/>
+
+  <property name="compile.debug"       value="true"/>
+  <property name="compile.deprecation" value="false"/>
+  <property name="compile.optimize"    value="true"/>
+
+	
+  <path id="compile.classpath">
+    <pathelement location="${basedir}/plugins"/>
+    <fileset dir="${basedir}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+
+  <target name="all" depends="clean,compile,dist"
+   description="Clean build and dist directories."/>
+
+  <target name="clean"
+   description="Delete old build and dist directories">
+    <delete dir="${build.home}"/>
+    <delete dir="${dist.home}"/>
+  </target>
+	
+  <target name="prepare">	
+	<mkdir dir="${build.home}"/>
+  	<mkdir dir="${dist.home}"/>
+  </target>
+
+	
+  <target name="compile" depends="prepare"
+   description="Compile Java sources">
+
+    <javac srcdir="${src.home}"
+          destdir="${build.home}/"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+    </javac>
+
+    <!-- Copy application resources -->
+    <copy  todir="${build.home}/lib">
+      <fileset dir="${basedir}/lib" />
+    </copy>
+  	
+    <copy  todir="${build.home}/plugins">
+      <fileset dir="${basedir}/plugins" />
+    </copy>
+  	
+  	<copy  todir="${build.home}/META-INF">
+  	  <fileset file="${basedir}/META-INF/MANIFEST.MF" />
+    </copy>
+  	
+  	<copy  todir="${build.home}/">
+  	  <fileset dir="${basedir}/META-INF">
+	  	<include name="*.xml"/>  	    
+  	  </fileset> 	
+  	</copy>  	  
+  </target>
+
+
+  <target name="dist" depends="compile,javadoc"
+   description="Create binary distribution as jar file">
+
+    <jar jarfile="${dist.home}/${app.name}-${app.version}.jar"
+         basedir="${build.home}"
+         manifest="META-INF/MANIFEST.MF" />
+  </target>
+
+
+  <target name="javadoc" depends="compile"
+   description="Create Javadoc API documentation">
+
+  	<mkdir dir="${build.home}/docs"/>
+    <javadoc sourcepath="${src.home}/main/java"
+                destdir="${build.home}/docs/api"
+           packagenames="*">
+      <classpath refid="compile.classpath"/>
+    </javadoc>
+  </target>
+
+</project>
