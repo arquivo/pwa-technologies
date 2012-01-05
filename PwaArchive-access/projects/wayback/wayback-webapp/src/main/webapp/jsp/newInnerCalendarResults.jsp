@@ -22,11 +22,15 @@
 <%@ page import="org.springframework.beans.factory.xml.XmlBeanFactory" %>
 <%@ page import="org.springframework.core.io.FileSystemResource" %>
 <%@ page import="org.springframework.core.io.Resource" %>
+<%@ page import="org.apache.log4j.Logger" %>
+<%@ page import="org.apache.log4j.Level" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%!
+	static Logger logger = Logger.getLogger("newInnerCalendar.jsp");
+
 	private static final Pattern OFFSET_PARAMETER = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
 
         /* Get the replay URI prefix during servelet initialization */
@@ -86,7 +90,19 @@ String searchString = results.getSearchUrl();
 
 Date searchStartDate = results.getStartTimestamp().getDate();
 Date searchEndDate = results.getEndTimestamp().getDate();
-int resultCount = results.getResultsMatching();
+int totalResults = results.getResultsMatching();
+
+/*** Logging of request parameters ***/
+if (logger.isEnabledFor(Level.DEBUG)) {
+    logger.debug("--- DEBUG VALUES ---");
+	logger.debug("RESULT COUNT: \t"+ totalResults);
+	logger.debug("LANG: \t\t"+ language);
+	logger.debug("START DATE: \t"+ searchStartDate);
+	logger.debug("END DATE: \t\t"+ searchEndDate);
+	logger.debug("SID: \t\t"+ sid);
+	logger.debug("--- -------------- ---");
+}
+/*** end of logging ***/
 
 ArrayList<ResultsPartition> partitions = ResultsPartitionsFactory.get(
 		results.getResults(),results.getWbRequest());
@@ -134,7 +150,7 @@ for (int i = 0; i < numPartitions; i++) {
 <div class="wrap">
 	<div id="intro">
 	<h1><fmt:message key='grid.title'/></h1>
-        <span class="texto-1"><fmt:message key='grid.subtitle'><fmt:param value='<%=resultCount%>'/><fmt:param value='<%=searchString%>'/><fmt:param value="<%=searchStartDate%>"/><fmt:param value="<%=searchEndDate%>"/></fmt:message></span>
+        <span class="texto-1"><fmt:message key='grid.subtitle'><fmt:param value='<%=totalResults%>'/><fmt:param value='<%=searchString%>'/><fmt:param value="<%=searchStartDate%>"/><fmt:param value="<%=searchEndDate%>"/></fmt:message></span>
 	</div>
 </div>
 
@@ -163,7 +179,6 @@ for (int i = 0; i < numPartitions; i++) {
 
 <!--    RESULT COLUMN DATA -->
 <tbody>
-   <tr>
 <%
 	int totalColumnsWithResults = 0;
 
@@ -177,6 +192,15 @@ for (int i = 0; i < numPartitions; i++) {
 			totalColumnsWithResults++;
 		}
 	}
+
+	/*** Logging of response variables ***/
+	if (logger.isEnabledFor(Level.DEBUG)) {
+		logger.debug("--- DEBUG VALUES ---");
+		logger.debug("# OF COLUMNS: \t"+ numPartitions);
+		logger.debug("COLs WITH RESULTS: \t"+ totalColumnsWithResults);
+		logger.debug("--- ------------ ---");
+	}
+	/*** ***************************** ***/
 
 	// Sort each year results and put them in grid object
 	ArrayList<ArrayList<SearchResult>> gridPartitionResults = new ArrayList<ArrayList<SearchResult>>(numPartitions);
@@ -197,9 +221,24 @@ for (int i = 0; i < numPartitions; i++) {
 		}
 	}
 
-	int resultCounter = 0;
-	while (resultCounter < resultCount) {
+	/*** Debug info: values for grid filling ***/
+	if (logger.isEnabledFor(Level.DEBUG)) {
+		logger.debug("--- FILLING GRID ---");
+		logger.debug("--- Presenting "+ totalResults +" results in "
+			+ totalColumnsWithResults +" of "+ numPartitions +" columns.");
+	}
+
+	int resultCounter = 0;			// track the number of versions already processed
+	int line = 0;				    // track the grid line we are processing
+	while (resultCounter < totalResults) {
 		%><tr><%
+
+		/*** Debug info: filling grid line ***/
+		if (logger.isEnabledFor(Level.DEBUG)) {
+			logger.debug(resultCounter +" versions already displayed. ");
+			logger.debug("STARTING LINE: "+ line);
+		}
+
 		int indexColumnWithResults = 0;
 		for (int i = 0; i < numPartitions; i++) {
 			ResultsPartition partition = (ResultsPartition) partitions.get(i);
@@ -208,16 +247,16 @@ for (int i = 0; i < numPartitions; i++) {
 			if (column.size() > 0)
 				indexColumnWithResults++;
 
-			if (column.size() > 0 && column.size() > resultCounter) {
-				SearchResult result = column.get(resultCounter);
+			if (column.size() > 0 && column.size() > line) {
+				SearchResult result = column.get(line);
 
 				String captureDate = result.get(WaybackConstants.RESULT_CAPTURE_DATE);
                                 Timestamp captureTS = Timestamp.parseBefore(captureDate);
 		
 				String replayUrl = results.resultToReplayId(result);
-				// Add logging parameters
+				// Add URL parameters for HTTP log
 				replayUrl += "?year="+ partition.getTitle()		// the column of the selected result
-					+"&r_pos="+ (resultCounter+1) 			// the result's position on the column
+					+"&r_pos="+ (line+1)	 			// the result's position on the column
 					+"&r_t="+ partition.resultsCount() 		// how many results in the column
 					+"&col_pos="+ indexColumnWithResults		// Which of the columns with results we are on
 					+"&col_tot="+ totalColumnsWithResults		// How many year columns have results
@@ -232,8 +271,10 @@ for (int i = 0; i < numPartitions; i++) {
 			}
 		}
 		%></tr><%
+		line++;
 	}
 %>
+</tbody>
 </table>
 <table class="mais-resultados">
 <thead>
