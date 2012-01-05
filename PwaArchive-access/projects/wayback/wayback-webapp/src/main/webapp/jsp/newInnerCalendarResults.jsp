@@ -263,7 +263,7 @@ for (int i = 0; i < numPartitions; i++) {
 					+"&l="+ language
 					+"&sid="+ sid;					// Session ID
 				%>
-				<td><a href="<%=replayURIPrefix%><%=replayUrl%>" title="<fmt:message key='grid.result.link.title'><param value='<%=captureTS.getDate()%>'/></fmt:message>"><fmt:message key='grid.result.link.text'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message></a></td>
+				<td><a href="<%=replayURIPrefix%><%=replayUrl%>" title="<fmt:message key='grid.result.link.title'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message>"><fmt:message key='grid.result.link.text'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message></a></td>
 				<%
 				resultCounter++;
 			} else {
