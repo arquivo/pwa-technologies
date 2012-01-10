@@ -123,20 +123,28 @@ public class PwaScorerFeatures {
 
 			// term distance features
 			for (int i=0;i<PwaIndexStats.FIELDS.length;i++) { // or for (i=0;i<posmanagers.length;i++) {  // per field
-				if (posmanagers.size()>0 && (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2))) {					
-					posmanagers.get(i).computeDistances(doc);
-					if (functions.hasFunction(funct)) {						
-						scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinSpanCovOrdered())).score()); // "MinSpanCovOrd-"+PwaIndexStats.FIELDS[i]
+				if (functions.hasFunction(funct) || functions.hasFunction(funct+1) || functions.hasFunction(funct+2)) {					
+					if (posmanagers.size()>0) { 					
+						posmanagers.get(i).computeDistances(doc);
+						if (functions.hasFunction(funct)) {						
+							scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinSpanCovOrdered())).score()); // "MinSpanCovOrd-"+PwaIndexStats.FIELDS[i]
+						}
+						funct++;
+						if (functions.hasFunction(funct)) {						
+							scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinSpanCovUnordered())).score()); // "MinSpanCovUnord-"+PwaIndexStats.FIELDS[i]
+						}
+						funct++;
+						if (functions.hasFunction(funct)) {						
+							scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinPairDist())).score()); // "MinPairDist-"+PwaIndexStats.FIELDS[i]
+						}
+						funct++;
 					}
-					funct++;
-					if (functions.hasFunction(funct)) {						
-						scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinSpanCovUnordered())).score()); // "MinSpanCovUnord-"+PwaIndexStats.FIELDS[i]
+					else {
+						scores.addScore(funct,0);						
+						scores.addScore(funct+1,0);						
+						scores.addScore(funct+2,0);
+						funct+=3;
 					}
-					funct++;
-					if (functions.hasFunction(funct)) {						
-						scores.addScore(funct, (new PwaMinSpan(posmanagers.get(i).getMinPairDist())).score()); // "MinPairDist-"+PwaIndexStats.FIELDS[i]
-					}
-					funct++;
 				}
 				else {
 					funct+=3;
