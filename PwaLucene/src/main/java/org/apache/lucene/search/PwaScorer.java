@@ -24,8 +24,7 @@ import org.apache.lucene.search.features.PwaScores;
  */
 public class PwaScorer extends Scorer {
 	
-	//private final static int MIN_TF_ANCHORS=4; // minimum number of terms that occur only in the anchor field when matching a document	
-	private final static int MIN_TF_ANCHORS=1;  // minimum number of terms that occur only in the anchor field when matching a document
+	private final static int MIN_TF_ANCHORS=4; // minimum number of terms that occur only in the anchor field when matching a document	
 	private static enum ScoreType {NORMAL, FLAT, ONLY_ONE, DATE_SORTED, DATE_SORTED_REVERSE};
 	private BooleanQuery query; 
 	private Searcher searcher;   
