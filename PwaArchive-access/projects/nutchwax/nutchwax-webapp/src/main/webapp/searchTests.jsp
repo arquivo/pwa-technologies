@@ -23,10 +23,9 @@
   import="org.apache.nutch.global.Global"
 
 %><%!
-  public static final DateFormat FORMAT =
-    new SimpleDateFormat("yyyyMMddHHmmss");
-  public static final DateFormat DISPLAY_FORMAT =
-    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+  //private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
+  private static final DateFormat FORMAT =  new SimpleDateFormat("yyyyMMddHHmmss");
+  private static final DateFormat DISPLAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   private static final String COLLECTION_KEY = "collection";
   private static final String COLLECTION_QUERY_PARAM_KEY = COLLECTION_KEY + ":";
 %><%
@@ -95,6 +94,59 @@
   String params = "&hitsPerPage=" + hitsPerPage +
     (sort == null ? "" : "&sort=" + sort + (reverse? "&reverse=true": "") +
     (dedupField == null ? "" : "&dedupField=" + dedupField));
+
+
+
+  /*** Start date ***/
+  Calendar dateStart = null;
+  SimpleDateFormat inputDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+
+  if ( request.getParameter("dateStart") != null && !request.getParameter("dateStart").equals("") ) {
+        try {
+		dateStart=new GregorianCalendar();
+                dateStart.setTime( inputDateFormatter.parse(request.getParameter("dateStart")) );
+        } 
+        catch (NullPointerException e) {
+                bean.LOG.debug("Invalid Start Date:"+ request.getParameter("dateStart") +"|");
+        }
+  }
+
+  /*** End date ***/
+  Calendar dateEnd = null;
+
+  if ( request.getParameter("dateEnd") != null && !request.getParameter("dateEnd").equals("") ) {
+        try {
+		dateEnd=new GregorianCalendar();
+                dateEnd.setTime( inputDateFormatter.parse(request.getParameter("dateEnd")) );
+                // be sure to set the end date to the very last second of that day.
+                dateEnd.set( Calendar.HOUR_OF_DAY, 23 );
+                dateEnd.set( Calendar.MINUTE, 59 );
+                dateEnd.set( Calendar.SECOND, 59 );
+        } 
+        catch (NullPointerException e) {
+                bean.LOG.debug("Invalid End Date:"+ request.getParameter("dateEnd") +"|");
+        }
+  }
+
+
+  String dateStartString = "";
+  String dateEndString = "";
+
+  /*** Switch dates if start GT end ***/
+  // TODO - check if start date is GT end
+  /*** Add dates to nutch query ***/
+  if (queryString!=null && queryString!="" && dateStart!=null && dateEnd!=null) {
+        queryString += " date:"+ FORMAT.format( dateStart.getTime() );
+        queryString += "-";
+        queryString += FORMAT.format( dateEnd.getTime() );
+
+	dateStartString = inputDateFormatter.format( dateStart.getTime() );
+	dateEndString = inputDateFormatter.format( dateEnd.getTime() );
+  } 
+  else {
+        queryString = "";
+  }
+	
     
   Query query = NutchwaxQuery.parse(queryString, nutchConf);
   bean.LOG.info("query: " + query.toString());
@@ -127,13 +179,10 @@
 <title>Internet Archive: <i18n:message key="title"/></title>
 <link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon"/>
 <!-- <jsp:include page="/include/style.html"/> -->
-<link type="text/css" href="css/style.css" rel="stylesheet" />
+<!-- <link type="text/css" href="css/style.css" rel="stylesheet" /> -->
 </head>
 
 <body>
-<div id="header">
-<%@include file="header.jsp" %>
-</div>
 
  <form name="search" action="searchTests.jsp" method="get">
 
@@ -375,10 +424,15 @@ Search took <%= searchTime/1000.0 %> seconds.
     String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
     //pageContext.setAttribute("target", target);
 
-    String dateStartString = "";
-    String dateEndString = "";
-    int position=0;
-    String allVersions = "search.jsp?query="+ URLEncoder.encode(url, "UTF-8") +"&dateStart="+ dateStartString + "&dateEnd="+ dateEndString +"&pos="+ String.valueOf(position);	    
+    int position = i; 
+    String allVersions = null;
+    if (dateStart!=null && dateEnd!=null) {    
+	allVersions = "search.jsp?query="+ URLEncoder.encode(url, "UTF-8") +"&dateStart="+ dateStartString + "&dateEnd="+ dateEndString +"&pos="+ String.valueOf(position);	    
+    }
+    else { 
+    	allVersions = "search.jsp?query="+ URLEncoder.encode(url, "UTF-8") +"&pos="+ String.valueOf(position);	    
+    }
+
     if (!language.equals("pt")) {
 	allVersions += "&l="+ language;
     }
