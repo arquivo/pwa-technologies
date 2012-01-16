@@ -143,10 +143,6 @@
 	dateStartString = inputDateFormatter.format( dateStart.getTime() );
 	dateEndString = inputDateFormatter.format( dateEnd.getTime() );
   } 
-  else {
-        queryString = "";
-  }
-	
     
   Query query = NutchwaxQuery.parse(queryString, nutchConf);
   bean.LOG.info("query: " + query.toString());
