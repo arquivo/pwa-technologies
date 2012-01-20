@@ -54,15 +54,22 @@ public class PwaScorerFeatures {
 		Vector<Vector<Integer>> tfPerField=new Vector<Vector<Integer>>();
 		Vector<Vector<Integer>> idfPerField=new Vector<Vector<Integer>>();
 		Vector<Integer> nTermsPerField=new Vector<Integer>();	
+		//Vector<Double> avgNTermsPerField=new Vector<Double>();
+				
+		Vector<Integer> sumVecTfs=null;
+		Vector<Integer> sumVecIdfs=null;
+		Integer sumFieldLength=new Integer(0);	
+		Double sumfieldAvgLength=new Double(0);		
+		
 		int funct=0; // function index		
 		String surl=null; // URL string 
 				
 		// query dependent features
 		if (!collector.isEmpty()) {
-			// term features
+			// term weight features
 			for (int i=0;i<PwaIndexStats.FIELDS.length;i++) {				
-				vecTfs=collector.getFieldTfs(PwaIndexStats.FIELDS[i]); // vector of all query terms	
-				vecIdfs=collector.getFieldIdfs(PwaIndexStats.FIELDS[i]); // vector of all query terms						
+				vecTfs=collector.getFieldTfs(PwaIndexStats.FIELDS[i]); // vector of all query terms	for tf per term
+				vecIdfs=collector.getFieldIdfs(PwaIndexStats.FIELDS[i]); // vector of all query terms for idf per term		
 				fieldLength=collector.getFieldLength(PwaIndexStats.FIELDS[i]);
 				fieldAvgLength=collector.getFieldAvgLength(PwaIndexStats.FIELDS[i]);			
 			
@@ -98,26 +105,49 @@ public class PwaScorerFeatures {
 					scores.addScore(funct, (new PwaBM25(vecTfs,vecIdfs,fieldLength,fieldAvgLength,nDocs)).score()); // "BM25-"+PwaIndexStats.FIELDS[i]				
 				}
 				funct++;
+														
+				// add values to vectors for term weighting functions using all fields
+				tfPerField.add(vecTfs);
+				idfPerField.add(vecIdfs);
+				nTermsPerField.add(fieldLength);					
+				//avgNTermsPerField.add(fieldAvgLength);
 				
-				// add values to vectors for lucene
-				tfPerField.add(collector.getFieldTfs(PwaIndexStats.FIELDS[i]));
-				idfPerField.add(collector.getFieldIdfs(PwaIndexStats.FIELDS[i]));
-				nTermsPerField.add(collector.getFieldLength(PwaIndexStats.FIELDS[i]));							
+				if (sumVecTfs==null) { // i==0
+					sumVecTfs=(Vector<Integer>)vecTfs.clone();
+					sumVecIdfs=(Vector<Integer>)vecIdfs.clone();
+				}
+				else {
+					for (int j=0;j<vecTfs.size();j++) {
+						sumVecTfs.set(j,sumVecTfs.get(j)+vecTfs.get(j));
+						sumVecIdfs.set(j,sumVecIdfs.get(j)+vecIdfs.get(j));
+					}
+				}
+				sumFieldLength+=fieldLength;
+				sumfieldAvgLength+=fieldAvgLength;							
 			}	
+			// term weight features using all fields at once
+			if (functions.hasFunction(funct)) {
+				scores.addScore(funct, (new PwaTFxIDF(sumVecTfs,sumVecIdfs,sumFieldLength,nDocs)).score()); // "TFxIDF-" + all fields 					
+			}
+			funct++;
+			if (functions.hasFunction(funct)) {
+				scores.addScore(funct, (new PwaBM25(sumVecTfs,sumVecIdfs,sumFieldLength,sumfieldAvgLength,nDocs)).score()); // "BM25-" + all fields				
+			}
+			funct++;				
 			if (functions.hasFunction(funct)) {				
-				scores.addScore(funct, (new PwaLuceneSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Lucene
+				scores.addScore(funct, (new PwaLuceneSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Lucene + all fields
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {				
-				scores.addScore(funct, (new PwaLuceneSimilarityNormalized(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Lucene normalized
+				scores.addScore(funct, (new PwaLuceneSimilarityNormalized(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Lucene normalized + all fields
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {				
-				scores.addScore(funct, (new PwaNutchSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Nutch
+				scores.addScore(funct, (new PwaNutchSimilarity(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Nutch + all fields
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {				
-				scores.addScore(funct, (new PwaNutchSimilarityNormalized(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Nutch normalized
+				scores.addScore(funct, (new PwaNutchSimilarityNormalized(tfPerField,idfPerField,nTermsPerField,nDocs)).score()); // Nutch normalized + all fields
 			}
 			funct++;
 
@@ -152,7 +182,7 @@ public class PwaScorerFeatures {
 			}			
 		}
 		else {
-			funct+=PwaIndexStats.FIELDS.length*6 + 4 + PwaIndexStats.FIELDS.length*3;
+			funct+=PwaIndexStats.FIELDS.length*6 + 6 + PwaIndexStats.FIELDS.length*3;
 		}
 								
         // query independent features
@@ -283,8 +313,8 @@ public class PwaScorerFeatures {
 				nVersionsURL=row.getNVersions();				
 				minTimestampURL=MemcachedTransactions.intToLongdate(row.getMin());
 				maxTimestampURL=MemcachedTransactions.intToLongdate(row.getMax());
-			}
-								
+			}																
+			
 			if (functions.hasFunction(funct)) {
 				scores.addScore(funct, ((float)minTimestampURL) / PwaIRankingFunction.DAY_MILLISEC); // Oldest version's timestamp in days
 			}
@@ -294,11 +324,11 @@ public class PwaScorerFeatures {
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL)).score()); // Days between Versions
+				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL)).score()); // Days between oldest and newest versions
 			}
 			funct++;				
 			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL)).score() / ((maxSpan>0) ? ((float)maxSpan) : 1)); // Span (days) between Versions normalized
+				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL)).score() / ((maxSpan>0) ? ((float)maxSpan) : 1)); // Days between oldest and newest versions normalized
 			}
 			funct++;				
 			if (functions.hasFunction(funct)) {							

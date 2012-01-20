@@ -7,6 +7,7 @@ import org.apache.lucene.search.features.PwaIRankingFunction;
 
 /**
  * Scores with a normalized exponential decay. 
+ * @note this type of normalization is better for comparing values between different queries than dividing all scores by the best one, which would be always 1 independently of its performance
  * @author Miguel Costa
  */
 public class PwaLuceneSimilarityNormalized implements PwaIRankingFunction {
