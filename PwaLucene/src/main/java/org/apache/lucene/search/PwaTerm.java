@@ -46,7 +46,7 @@ public class PwaTerm extends PwaTermCommon {
 	 * @param collector features collector
 	 */
 	public void collectEmptyFeatures(int doc, PwaRawFeatureCollector collector) throws IOException {
-		collector.addTerm(term(),0,0,0);
+		collector.addTerm(term(),0,idf(),length());
 	}
 		
 	/**
@@ -82,7 +82,7 @@ public class PwaTerm extends PwaTermCommon {
 			
 			while (ppos.next() && ppos.doc<doc()) {}; // jump to the right doc
 		}
-		else { // BUG nutchwax 0000591
+		else { // BUGFIX nutchwax 0000591
 			if (ppos.doc<doc()) { // avoid to advance when the document is this
 				while (ppos.next() && ppos.doc<doc()); // jump to the right doc
 			}
