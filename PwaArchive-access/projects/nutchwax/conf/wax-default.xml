@@ -417,7 +417,7 @@ is restarted, logs for tasks of same name are overwritten.
 
 <property>
   <name>ranking.functions</name>
-  <value>32 0.023322608715538286 47 0.59394816155096997 35 0.34503713094903127 43 1.2592823789368244</value>
+  <value>34 0.023322608715538286 49 0.59394816155096997 37 0.34503713094903127 45 1.2592823789368244</value>
   <description>
     Sets the ranking functions and their weights to compute the ranking of the matching documents. Format is functionId weight functionId weight ...
     There are 64 functions enumerated in searchTests.jsp.

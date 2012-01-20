@@ -293,47 +293,49 @@ boosts: <%= sboosts %>
   27 AverageFieldLength : title <br>
   28 TF-IDF : title <br> 
   29 BM-25 : title <br>
-  30 Lucene : content + url + host + anchor + title <br>
-  31 Lucene normalized : content + url + host + anchor + title <br>
-  32 Nutch : content + url + host + anchor + title <br>
-  33 Nutch normalized : content + url + host + anchor + title <br>
+  30 TF-IDF : content + url + host + anchor + title <br>
+  31 BM-25 : content + url + host + anchor + title <br>
+  32 Lucene : content + url + host + anchor + title <br>
+  33 Lucene normalized : content + url + host + anchor + title <br>
+  34 Nutch : content + url + host + anchor + title <br>
+  35 Nutch normalized : content + url + host + anchor + title <br>
 <h3>Term-distance functions: </h3>
-  34 MinSpanCovOrd - content <br>
-  35 MinSpanCovUnord - content <br>
-  36 MinPairDist - content <br>
-  37 MinSpanCovOrd - url <br>
-  38 MinSpanCovUnord - url <br>
-  39 MinPairDist - url <br>
-  40 MinSpanCovOrd - host <br>
-  41 MinSpanCovUnord - host <br>
-  42 MinPairDist - host <br>
-  43 MinSpanCovOrd - anchor <br>
-  44 MinSpanCovUnord - anchor <br> 
-  45 MinPairDist - anchor <br>
-  46 MinSpanCovOrd - title <br>
-  47 MinSpanCovUnord - title <br>
-  48 MinPairDist - title <br>
+  36 MinSpanCovOrd - content <br>
+  37 MinSpanCovUnord - content <br>
+  38 MinPairDist - content <br>
+  39 MinSpanCovOrd - url <br>
+  40 MinSpanCovUnord - url <br>
+  41 MinPairDist - url <br>
+  42 MinSpanCovOrd - host <br>
+  43 MinSpanCovUnord - host <br>
+  44 MinPairDist - host <br>
+  45 MinSpanCovOrd - anchor <br>
+  46 MinSpanCovUnord - anchor <br> 
+  47 MinPairDist - anchor <br>
+  48 MinSpanCovOrd - title <br>
+  49 MinSpanCovUnord - title <br>
+  50 MinPairDist - title <br>
 <h2>Query-independent features: </h2>
 <h3>URL based Functions: </h3>
-  49 UrlDepth <br>
-  50 UrlSlashes <br>
-  51 UrlLength <br>
+  51 UrlDepth <br>
+  52 UrlSlashes <br>
+  53 UrlLength <br>
 <h3>Web-graph based functions: </h3>
-  52 Inlinks <br>
-  53 LinInlinks <br>
+  54 Inlinks <br>
+  55 LinInlinks <br>
 <h2>Temporal features: </h2>
-  54 QueryIssueTime (in days) <br>
-  55 Age - from query time (in days) <br>
-  56 TimestampVersion (in days) <br>
-  57 TimestampOldestVersion (in days) <br>
-  58 TimestampNewestVersion (in days) <br>
-  59 SpanVersions (in days) <br>
-  60 SpanVersions (normalized) <br>
-  61 NumberVersions <br>
-  62 NumberVersions (normalized) <br>
-  63 BoostNewer <br>
-  64 BoostOlder <br>
-  65 BoostNewerAndOlder <br>
+  56 QueryIssueTime (in days) <br>
+  57 Age - from query time (in days) <br>
+  58 TimestampVersion (in days) <br>
+  59 TimestampOldestVersion (in days) <br>
+  60 TimestampNewestVersion (in days) <br>
+  61 SpanVersions (in days) <br>
+  62 SpanVersions (normalized) <br>
+  63 NumberVersions <br>
+  64 NumberVersions (normalized) <br>
+  65 BoostNewer <br>
+  66 BoostOlder <br>
+  67 BoostNewerAndOlder <br>
 </p>
 </div>
 
