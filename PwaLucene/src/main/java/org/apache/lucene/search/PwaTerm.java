@@ -46,7 +46,7 @@ public class PwaTerm extends PwaTermCommon {
 	 * @param collector features collector
 	 */
 	public void collectEmptyFeatures(int doc, PwaRawFeatureCollector collector) throws IOException {
-		collector.addTerm(term(),0,idf(),length());
+		collector.addTerm(term(),0,idf(),0);
 	}
 		
 	/**
