@@ -324,21 +324,21 @@ public class PwaScorerFeatures {
 			}
 			funct++;
 			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL)).score()); // Days between oldest and newest versions
+				scores.addScore(funct, ((float)maxTimestampURL-minTimestampURL) / PwaIRankingFunction.DAY_MILLISEC ); // Days between oldest and newest versions						
 			}
-			funct++;				
+			funct++;									
 			if (functions.hasFunction(funct)) {						
-				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL)).score() / ((maxSpan>0) ? ((float)maxSpan) : 1)); // Days between oldest and newest versions normalized
-			}
-			funct++;				
+				scores.addScore(funct, (new PwaSpanVersions(maxTimestampURL,minTimestampURL,maxSpan)).score()); // Days between oldest and newest versions normalized
+			}			
+			funct++;							
 			if (functions.hasFunction(funct)) {							
 				scores.addScore(funct, nVersionsURL); // NumberVersions
 			}
-			funct++;																	
+			funct++;					
 			if (functions.hasFunction(funct)) {							
-				scores.addScore(funct, ((float)nVersionsURL) / ((float)maxVersions)); // NumberVersions normalized
+				scores.addScore(funct, (new PwaNumberVersions(nVersionsURL,maxVersions)).score()); // NumberVersions normalized
 			}
-			funct++;			
+			funct++;									
 			if (functions.hasFunction(funct)) {				
 				scores.addScore(funct, (new PwaBoostNewer(timestamp,maxTimestamp,minTimestamp)).score()); // BoostNewer				
 			}
