@@ -302,6 +302,7 @@ public class PwaScorerFeatures {
 			}
 			catch (IOException e) { 
 				// ignore
+				System.err.println("Memcache Exception: "+e.getMessage());
 			}				
 				
 			if (row==null) { // for urls discarded such as dynamics (there are not space to store everything)
@@ -338,7 +339,7 @@ public class PwaScorerFeatures {
 			if (functions.hasFunction(funct)) {							
 				scores.addScore(funct, (new PwaNumberVersions(nVersionsURL,maxVersions)).score()); // NumberVersions normalized
 			}
-			funct++;									
+			funct++; 									
 			if (functions.hasFunction(funct)) {				
 				scores.addScore(funct, (new PwaBoostNewer(timestamp,maxTimestamp,minTimestamp)).score()); // BoostNewer				
 			}
