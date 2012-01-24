@@ -13,17 +13,16 @@ import java.util.concurrent.TimeUnit;
  * @author Miguel Costa
  */
 public class Memcached {
-			
-	private MemcachedClient client = null;
-		
+				
+	private MemcachedClient client = null;		
 	
 	/**
 	 * 
 	 * @param addresses
 	 * @throws IOException 
 	 */
-	public Memcached(String addresses) throws IOException {				
-		client = new MemcachedClient(new BinaryConnectionFactory(), AddrUtil.getAddresses(addresses));		
+	public Memcached(String addresses) throws IOException {		
+		client = new MemcachedClient(new PwaBinaryConnectionFactory(), AddrUtil.getAddresses(addresses));		
 	              //AddrUtil.getAddresses("server1:11211 server2:11211"));	    	    
 	    System.out.println("Connected to servers at "+addresses);
 	}
