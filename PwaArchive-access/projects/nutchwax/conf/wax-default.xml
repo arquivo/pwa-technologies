@@ -364,7 +364,7 @@ is restarted, logs for tasks of same name are overwritten.
 
 <property>
   <name>max.fulltext.matches.returned</name>
-  <value>100</value>
+  <value>1000</value>
   <description>
     Maximum number of full-text query results that index servers return (after all results are ranked and collapsed).
     This is necessary just for performance reasons and to avoid DoS.

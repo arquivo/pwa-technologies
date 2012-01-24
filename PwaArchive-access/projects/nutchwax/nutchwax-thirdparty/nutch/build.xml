@@ -94,6 +94,12 @@
   <target name="compile" depends="compile-core, compile-plugins"/>
 
   <target name="compile-core" depends="init">
+  	
+  	<!--
+  	<property name="d" refid="classpath"/>
+    <echo>classpath = ${d}</echo>
+	-->
+  	
  	<javac 
      encoding="${build.encoding}" 
      srcdir="${src.dir}"
