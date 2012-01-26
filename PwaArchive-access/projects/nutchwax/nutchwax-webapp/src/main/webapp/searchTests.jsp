@@ -37,6 +37,14 @@
 
   bean.LOG.info("query request from " + request.getRemoteAddr());
 
+
+  // get info if summary should be presented from request
+  String summaryString = request.getParameter("summary");  
+  boolean showSummary = true;
+  if (summaryString!=null && summaryString.equals("false")) {
+    showSummary=false;
+  }
+
   // get query from request
   String queryString = request.getParameter("query");
   if (queryString == null) {
@@ -232,7 +240,7 @@ number of version returned: <%= hitsPerVersion %>
 -->
 number of matches from the same site returned: <%= hitsPerDup %>
 <input name="hitsPerDup" size=10 maxlength=10 value=<%= hitsPerDup %>>
-(>0)
+(0 shows all)
 <br>
 <br>
 
@@ -387,7 +395,10 @@ Search took <%= searchTime/1000.0 %> seconds.
 
    Hit[] show = hits.getHits(start, realEnd-start);
    HitDetails[] details = bean.getDetails(show);
-   Summary[] summaries = bean.getSummary(details, query);
+   Summary[] summaries = null;
+   if (showSummary) {
+	summaries=bean.getSummary(details, query);
+   }
    bean.LOG.info("total hits: " + hits.getTotal());
 
    String collectionsHost = nutchConf.get("wax.host", "examples.com");
@@ -407,8 +418,7 @@ Search took <%= searchTime/1000.0 %> seconds.
     String id = "idx=" + hit.getIndexNo() + "&id=" + hit.getIndexDocNo();
 
     String caching = detail.getValue("cache");
-    boolean showSummary = true;
-    if (caching != null) {
+    if (caching!=null && showSummary==true) {
       showSummary = !caching.equals(Nutch.CACHING_FORBIDDEN_ALL);
     }
 
@@ -441,22 +451,27 @@ Search took <%= searchTime/1000.0 %> seconds.
     }
     
     // Build the summary
-    StringBuffer sum = new StringBuffer();
-    Fragment[] fragments = summaries[i].getFragments();
-    for (int j=0; j<fragments.length; j++) {
-      if (fragments[j].isHighlight()) {
-        sum.append("<span class=\"highlight\">")
-           .append(Entities.encode(fragments[j].getText()))
-           .append("</span>");
-      } else if (fragments[j].isEllipsis()) {
-        sum.append("<span class=\"ellipsis\"> ... </span>");
-      } else {
-        sum.append(Entities.encode(fragments[j].getText()));
-      }
-    }
-    String summary = sum.toString();
-
+    String summary = "";
+    if (showSummary) {
+	    StringBuffer sum = new StringBuffer();
+	    Fragment[] fragments = summaries[i].getFragments();
+	    for (int j=0; j<fragments.length; j++) {
+	      if (fragments[j].isHighlight()) {
+	        sum.append("<span class=\"highlight\">")
+	           .append(Entities.encode(fragments[j].getText()))
+	           .append("</span>");
+	      } 
+	      else if (fragments[j].isEllipsis()) {
+	        sum.append("<span class=\"ellipsis\"> ... </span>");
+	      } 
+	      else {
+	        sum.append(Entities.encode(fragments[j].getText()));
+	      }
+	    }
+	    summary = sum.toString();
+    }	
     %>
+
     <b><a href="<%=target%>"><%=Entities.encode(title)%></a></b>
     <% if (!"".equals(summary) && showSummary) { %>
     <br><%=summary%>
