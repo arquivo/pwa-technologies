@@ -11,5 +11,12 @@ public class PwaBinaryConnectionFactory extends BinaryConnectionFactory {
 	/**
      * Default operation timeout in milliseconds.
      */
-    public static final long DEFAULT_OPERATION_TIMEOUT = 10000;
+    public static final long NEW_DEFAULT_OPERATION_TIMEOUT = 5000;
+    
+    /* (non-Javadoc)
+	 * @see net.spy.memcached.ConnectionFactory#getOperationTimeout()
+	 */
+	public long getOperationTimeout() {
+		return NEW_DEFAULT_OPERATION_TIMEOUT;
+	}
 }
