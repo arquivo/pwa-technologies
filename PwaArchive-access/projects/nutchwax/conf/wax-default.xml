@@ -337,7 +337,7 @@ is restarted, logs for tasks of same name are overwritten.
 
 <property>
   <name>timeout.index.servers.response</name>
-  <value>30</value>
+  <value>60</value>
   <description>
     Timeout in seconds for index servers to respond a query.
     -1 indicates that it should be used the "searcher.max.time.tick_count" value from nutch-default.xml.
