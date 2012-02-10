@@ -93,7 +93,6 @@
     <module>projects/wayback</module>
     <module>projects/nutchwax</module>
     <module>projects/nutch-trec</module>
-    <module>projects/wera</module>
     <module>projects/waxtoolbar</module>
   </modules>
 
