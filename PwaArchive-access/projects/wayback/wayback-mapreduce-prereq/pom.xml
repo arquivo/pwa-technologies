@@ -38,8 +38,7 @@
     <dependency>
       <groupId>org.apache</groupId>
       <artifactId>hadoop</artifactId>
-<!--      <version>0.12.2-core</version> -->
-      <version>0.14.5-dev-core</version> <!-- TODO MC -->
+      <version>0.14.5-dev-core</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
