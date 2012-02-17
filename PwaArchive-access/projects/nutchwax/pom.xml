@@ -158,7 +158,7 @@
     <dependency>
       <groupId>org.archive.wayback</groupId>
       <artifactId>wayback-core</artifactId>
-      <version>0.9.0-SNAPSHOT</version>
+     <version>1.2.1</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
