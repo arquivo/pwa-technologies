@@ -86,12 +86,12 @@
     </prerequisites>
 
   <modules>
-    <module>projects/infiniteurl</module>
+    <!-- <module>projects/infiniteurl</module> -->
     <module>projects/mapred</module>
     <module>projects/wayback</module>
     <module>projects/nutchwax</module>
-    <module>projects/nutch-trec</module>
-    <module>projects/waxtoolbar</module>
+    <!-- <module>projects/nutch-trec</module> -->
+    <!--    <module>projects/waxtoolbar</module>-->
   </modules>
 
     <distributionManagement>

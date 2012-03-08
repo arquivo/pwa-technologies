@@ -75,6 +75,7 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/postgresql-8.3-604.jdbc4.jar</systemPath>
     </dependency>
+
   </dependencies>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>

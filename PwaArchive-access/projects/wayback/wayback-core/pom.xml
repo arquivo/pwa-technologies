@@ -200,6 +200,11 @@
               <scope>system</scope>
               <systemPath>${project.basedir}/lib/javaswf-CVS-SNAPSHOT-1.jar</systemPath>
         </dependency>
+        <dependency>
+             <groupId>commons-httpclient</groupId>
+             <artifactId>commons-httpclient</artifactId>
+             <version>3.0.1</version>
+        </dependency>
 
     <dependency>
       <groupId>org.archive.access-control</groupId>

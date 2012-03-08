@@ -66,11 +66,12 @@
                         <include name="lucene-misc*jar" />
                         <include name="log4j*jar" />
                         <include name="taglibs-i18n*jar" />
-			<include name="taglibs-log*jar" />
+            			<include name="taglibs-log*jar" />
                         <include name="commons-lang*jar" />
                         <include name="commons-logging*jar" />
                         <include name="hadoop*jar" />
                         <include name="dom4j*jar" />
+                        <include name="commons-*jar" />
                     </fileset>
                     <fileset dir="${nutch}/build" >
                         <include name="nutch*jar" />
