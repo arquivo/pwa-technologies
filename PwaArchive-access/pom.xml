@@ -22,11 +22,9 @@
   <artifactId>archive-access</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>ARC Tools</name>
-  <description>This project hosts tools for accessing and manipulating Internet
-  Archive 
-  &lt;a href="http://www.archive.org/web/researcher/ArcFileFormat.php"&gt;ARC files&lt;/a&gt;.</description>
-  <url>http://archive-access.sf.net</url>
+  <name>Portuguese Web Archive source code</name>
+  <description>This project hosts the code used by the Portuguese Web Archive(PWA) for its service. The mission of the PWA is to preserve websites important for the Portuguese Web community.</description>
+  <url>http://code.google.com/p/pwa-technologies/</url>
   <inceptionYear>2004</inceptionYear>
 
     <licenses>
@@ -37,16 +35,16 @@
        </license>
     </licenses>
   <organization>
-    <name>Internet Archive</name>
-    <url>http://www.archive.org/</url>
+    <name>Portuguese Web Archive</name>
+    <url>http://archive.pt</url>
   </organization>
   <issueManagement>
-    <system>SourceForge</system>
-    <url>http://sourceforge.net/tracker/?group_id=118427</url>
+    <system>Google Code</system>
+    <url>http://code.google.com/p/pwa-technologies/issues/list</url>
   </issueManagement>
   <ciManagement>
-    <system>continuum</system>
-    <url>http://builds.archive.org:8081/continuum/</url>
+    <system>Jenkins</system>
+    <url>http://t6.tomba.fccn.pt/jenkins/</url>
   </ciManagement>
     <mailingLists>
         <mailingList>  
@@ -78,9 +76,9 @@
     </mailingLists>
 
     <scm>
-       <connection>scm:svn:https://archive-access.svn.sourceforge.net/svnroot/archive-access/trunk/archive-access/</connection>
+       <connection>scm:svn:https://pwa-technologies.googlecode.com/svn/trunk/</connection>
        <tag>HEAD</tag>
-        <url>https://archive-access.svn.sourceforge.net/svnroot/archive-access/trunk/archive-access/</url>
+       <url>https://pwa-technologies.googlecode.com/svn/trunk/</url>
     </scm>
 
     <prerequisites>
