@@ -88,6 +88,7 @@ cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 #footer #links .links-content a:hover { text-decoration: underline; }
 #footer #empresa { background-color: #ebeef0; height: 70px; text-align: right; padding-left: 25px; }
 #footer #empresa img { padding: 13px; }
+#footer #empresa map { display: inline-block; }
 #footer #empresa #fccn { padding-left: 0; float: left; }
 
 /* Homepage */
