@@ -107,6 +107,18 @@
       <url>http://builds.archive.org:8080/maven2</url>
       <layout>default</layout>
     </repository>
+    <repository>
+        <id>lib</id>
+        <name>lib</name>
+        <releases>
+            <enabled>true</enabled>
+            <checksumPolicy>ignore</checksumPolicy>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <url>file://${project.basedir}/../../../lib</url>
+    </repository>
   </repositories>
 
   <pluginRepositories>
