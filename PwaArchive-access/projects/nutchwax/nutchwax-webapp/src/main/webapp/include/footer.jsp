@@ -16,7 +16,7 @@
                     <li><fmt:message key="footer.section.about.goals"/></li>
                     <li><fmt:message key="footer.section.about.publications"/></li>
                     <li><a href="https://educast.fccn.pt/vod/channels/oo6w8h76i"><fmt:message key='footer.section.about.videos'/></a></li>
-                    <li><a href="terms-conditions.jsp?l=<%=language%>"><fmt:message key='footer.section.about.terms-conditions'/></a></li>
+                    <li><a id="terms-conditions" href="terms-conditions.jsp?l=<%=language%>"><fmt:message key='footer.section.about.terms-conditions'/></a></li>
                 </ul>
             </div>
             <div class="links-content">
