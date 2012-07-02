@@ -31,7 +31,7 @@ public class PwaBlacklistFilter extends PwaFilter {
 	 */	
 	public PwaBlacklistFilter(PwaSearchableCommon searchable, IndexReader reader) throws IOException {
 		super(searchable);
-		this.cache = new PwaBlacklistCache(reader);
+		this.cache = new PwaBlacklistCache(reader,null); // the PwaBlacklistCache will use the blacklist configuration (file path) from initialization
 	}
 	
 	

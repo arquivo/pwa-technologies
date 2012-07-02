@@ -8,6 +8,7 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.util.Base32;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,8 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.BitSet;
 import java.util.ArrayList;
 
-import org.apache.lucene.util.Base32;
-
+import org.apache.hadoop.fs.Path;
 
 
 /**
@@ -52,20 +52,21 @@ public class PwaBlacklistCache implements PwaICache {
 	 * Constructor	 
 	 * @param reader index reader	 
 	 * @param searcher index searcher
+	 * @param blacklistDir blacklist directory 
 	 * @throws IOException
 	 */
-	public PwaBlacklistCache(IndexReader reader, Searcher searcher) throws IOException {
-		this(reader);
+	public PwaBlacklistCache(IndexReader reader, Searcher searcher, Path blacklistDir) throws IOException {
+		this(reader, blacklistDir);
 		this.searcher=searcher;
 	}
 	
 	/**
 	 * Constructor
-	 * @param searchable documents stream
 	 * @param reader index reader
+	 * @param blacklistDir blacklist directory 
 	 * @throws IOException
 	 */
-	public PwaBlacklistCache(IndexReader reader) throws IOException {		
+	public PwaBlacklistCache(IndexReader reader, Path blacklistDir) throws IOException {		
 		if (docBlackList!=null) {
 			return;
 		}
@@ -78,9 +79,16 @@ public class PwaBlacklistCache implements PwaICache {
 			this.reader=reader;			
 			
 			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class.");			
-			docBlackList=new BitSet(reader.maxDoc());							
-			String fileDir=reader.directory().toString().substring(reader.directory().toString().indexOf('@')+1);
-			BufferedReader br = new BufferedReader(new FileReader(new File(fileDir,CACHE_FILENAME)));
+			docBlackList=new BitSet(reader.maxDoc());	
+									
+			String fileDir=null;
+			if (blacklistDir==null) {
+				fileDir=reader.directory().toString().substring(reader.directory().toString().indexOf('@')+1);								
+			}	
+			else {
+				fileDir=blacklistDir.toString();
+			}
+			BufferedReader br = new BufferedReader(new FileReader(new File(fileDir,CACHE_FILENAME)));					
 			String line;
 			int nfields=1;
 			
@@ -96,7 +104,7 @@ public class PwaBlacklistCache implements PwaICache {
 			}			
 			br.close();
 			
-			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class ended.");
+			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class ended. The file is at "+fileDir);
 		}			
 	}
 			
@@ -288,7 +296,7 @@ public class PwaBlacklistCache implements PwaICache {
 		Directory idx = FSDirectory.getDirectory(args[0], false);
 		org.apache.lucene.index.IndexReader reader=IndexReader.open(idx);		
 		org.apache.lucene.search.Searcher searcher = new IndexSearcher(idx);
-		PwaBlacklistCache cache=new PwaBlacklistCache(reader,searcher);				
+		PwaBlacklistCache cache=new PwaBlacklistCache(reader,searcher,null);				
 		cache.writeCache(args[1],Integer.parseInt(args[2]),Integer.parseInt(args[3]),Integer.parseInt(args[4]), args.length==6 ? args[5] : null);
 		searcher.close();
 		reader.close();				

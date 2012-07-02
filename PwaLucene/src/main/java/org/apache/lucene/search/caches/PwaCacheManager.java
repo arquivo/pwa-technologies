@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 
 import org.apache.lucene.index.IndexReader;
+import org.apache.hadoop.fs.Path;
 
 
 /**
@@ -19,14 +20,16 @@ public class PwaCacheManager {
 	
 	
 	/**
-	 * Constructor
+	 * Constructor	 
+	 * @param reader index reader
+	 * @param blacklistDir blacklist directory
 	 */
-	private PwaCacheManager(IndexReader reader) throws IOException {
+	private PwaCacheManager(IndexReader reader, Path blacklistDir) throws IOException {
 		System.out.println("Initializing caches at "+this.getClass().getSimpleName()+" class.");
 		caches=new Hashtable<String,PwaICache>();
 		
 		// blacklist of documents
-		PwaICache cache=new PwaBlacklistCache(reader); 		
+		PwaICache cache=new PwaBlacklistCache(reader,blacklistDir); 		
 		caches.put(cache.getFieldName(),cache);
 		/* TODO remove - this data is not used anymore
 		// indicates if it is a new version
@@ -55,6 +58,17 @@ public class PwaCacheManager {
 	 * @throws IOException
 	 */
 	public static PwaCacheManager getInstance(IndexReader reader) throws IOException {
+		return getInstance(reader,null);
+	}
+	
+	/**
+	 * Get instance
+	 * @param reader index reader
+	 * @param blacklistDir blacklist directory
+	 * @return
+	 * @throws IOException
+	 */
+	public static PwaCacheManager getInstance(IndexReader reader, Path blacklistDir) throws IOException {
 		if (instance!=null) {
 			return instance;
 		}
@@ -63,7 +77,7 @@ public class PwaCacheManager {
 			if (instance!=null) {
 				return instance;
 			}
-			instance=new PwaCacheManager(reader);			
+			instance=new PwaCacheManager(reader,blacklistDir);			
 		}
 		return instance;
 	}
