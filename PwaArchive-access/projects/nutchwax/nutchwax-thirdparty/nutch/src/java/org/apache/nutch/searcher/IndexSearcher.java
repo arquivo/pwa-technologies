@@ -56,25 +56,25 @@ public class IndexSearcher implements Searcher, HitDetailer {
   private PwaCacheManager cache;
 
   /** Construct given a number of indexes. */
-  public IndexSearcher(Path[] indexDirs, Configuration conf) throws IOException {
+  public IndexSearcher(Path[] indexDirs, Configuration conf, Path blacklistDir) throws IOException {
     IndexReader[] readers = new IndexReader[indexDirs.length];
     this.conf = conf;
     this.fs = FileSystem.get(conf);
     for (int i = 0; i < indexDirs.length; i++) {
       readers[i] = IndexReader.open(getDirectory(indexDirs[i]));
     }
-    init(new MultiReader(readers), conf);
+    init(new MultiReader(readers), conf, blacklistDir);
   }
 
   /** Construct given a single merged index. */
-  public IndexSearcher(Path index,  Configuration conf)
+  public IndexSearcher(Path index,  Configuration conf, Path blacklistDir)
     throws IOException {
     this.conf = conf;
     this.fs = FileSystem.get(conf);
-    init(IndexReader.open(getDirectory(index)), conf);
+    init(IndexReader.open(getDirectory(index)), conf, blacklistDir);
   }
 
-  private void init(IndexReader reader, Configuration conf) throws IOException {
+  private void init(IndexReader reader, Configuration conf, Path blacklistDir) throws IOException {
     this.reader = reader;
     this.luceneSearcher = new org.apache.lucene.search.IndexSearcher(reader);
     this.luceneSearcher.setSimilarity(new NutchSimilarity());
@@ -82,7 +82,7 @@ public class IndexSearcher implements Searcher, HitDetailer {
     this.queryFilters = new QueryFilters(conf);
     
     // read all caches     		
-    cache=PwaCacheManager.getInstance(reader);
+    cache=PwaCacheManager.getInstance(reader,blacklistDir);
   }
 
   private Directory getDirectory(Path file) throws IOException {

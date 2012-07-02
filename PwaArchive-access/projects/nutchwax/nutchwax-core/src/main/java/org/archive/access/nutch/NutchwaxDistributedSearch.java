@@ -53,19 +53,22 @@ public class NutchwaxDistributedSearch
 		public static void main(String[] args) throws Exception
 		{
 			String usage =
-				"NutchwaxDistributedSearch$Server <port> <index dir>";
+				"NutchwaxDistributedSearch$Server <port> <index dir> <blacklist dir>";
 
-			if (args.length == 0 || args.length > 2)
-			{
+			if (args.length == 0 || args.length > 3) {
 				System.err.println(usage);
 				System.exit(-1);
 			}
 
 			int port = Integer.parseInt(args[0]);
 			Path directory = new Path(args[1]);
+			Path blacklistDir = null;
+			if (args.length==3 && args[2]!=null) {
+				blacklistDir = new Path(args[2]);
+			}
 
 			Configuration conf = NutchwaxConfiguration.getConfiguration();
-			NutchBean bean = new NutchBean(conf, directory);
+			NutchBean bean = new NutchBean(conf, directory, blacklistDir);
 			int numHandlers=conf.getInt(Global.NUMBER_HANDLERS, -1);
 		    boolean ipcVerbose=conf.getBoolean(Global.IPC_VERBOSE, false);
 

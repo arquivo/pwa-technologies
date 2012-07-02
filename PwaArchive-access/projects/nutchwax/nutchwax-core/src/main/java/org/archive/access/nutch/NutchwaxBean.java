@@ -22,9 +22,9 @@ import org.apache.nutch.searcher.PwaRequestSummaryWritable;
   */
 public class NutchwaxBean extends NutchBean
 {
-  public NutchwaxBean(Configuration conf, Path dir) throws IOException
+  public NutchwaxBean(Configuration conf, Path dir, Path blacklistDir) throws IOException
   {
-    super(conf, dir);
+    super(conf, dir, blacklistDir);
   }
 
   public NutchwaxBean(Configuration conf) throws IOException
@@ -37,11 +37,8 @@ public class NutchwaxBean extends NutchBean
   {
     NutchBean bean = (NutchBean)app.getAttribute("nutchBean");
     
-    if (bean == null)
-    {
-      //if (LOG.isInfoEnabled()) {
-        LOG.info("creating new bean");
-      //}
+    if (bean == null) {    
+      LOG.info("creating new bean");      
       
       // Get the NutchwaxBean in there.
       bean = new NutchwaxBean(conf);

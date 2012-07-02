@@ -63,27 +63,31 @@ public class DistributedSearch {
 
     /** Runs a search server. */
     public static void main(String[] args) throws Exception {
-      String usage = "DistributedSearch$Server <port> <index dir>";
+      String usage = "DistributedSearch$Server <port> <index dir> <blacklist dir>";
 
-      if (args.length == 0 || args.length > 2) {
+      if (args.length == 0 || args.length > 3) {
         System.err.println(usage);
         System.exit(-1);
       }
 
       int port = Integer.parseInt(args[0]);
       Path directory = new Path(args[1]);
+      Path blacklistDir = null;
+      if (args.length==3 && args[2]!=null) {
+    	  blacklistDir = new Path(args[2]);
+	  }
 
       Configuration conf = NutchConfiguration.create();
-
-      org.apache.hadoop.ipc.Server server = getServer(conf, directory, port);
+      org.apache.hadoop.ipc.Server server = getServer(conf, directory, port, blacklistDir);           
+      
       server.start();
       server.join();
     }
     
-    static org.apache.hadoop.ipc.Server getServer(Configuration conf, Path directory, int port) throws IOException{      
+    static org.apache.hadoop.ipc.Server getServer(Configuration conf, Path directory, int port, Path blacklistDir) throws IOException{      
       int numHandlers=conf.getInt(Global.NUMBER_HANDLERS, -1);
       boolean ipcVerbose=conf.getBoolean(Global.IPC_VERBOSE, false);
-      NutchBean bean = new NutchBean(conf, directory);
+      NutchBean bean = new NutchBean(conf, directory, blacklistDir);
       return RPC.getServer(bean, "0.0.0.0", port, numHandlers, ipcVerbose, conf);
     }
 

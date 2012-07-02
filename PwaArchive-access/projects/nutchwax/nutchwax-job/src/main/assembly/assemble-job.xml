@@ -76,6 +76,7 @@
         <include>jakarta-oro*</include>
         <include>xerces*</include>
         <include>concurrent*</include>
+        <include>archive-commons*</include>
       </includes>
     </fileSet>
     <!--
