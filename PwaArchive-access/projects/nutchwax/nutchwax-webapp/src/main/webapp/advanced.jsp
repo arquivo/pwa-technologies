@@ -83,7 +83,9 @@
 	</script>
 	<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="js/ui.datepicker.js"></script>
+    <% if (language.equals("pt")) { /* load PT i18n for datepicker */ %>
 	<script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
+    <% } %>
 	<script type="text/javascript" src="js/configs.js"></script>
 </head>
 <body>
