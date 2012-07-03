@@ -37,6 +37,7 @@
             			<value>/replay/ArchiveComment.jsp</value>
             			<value>/replay/ClientSideJSInsert.jsp</value>
             			<value>/replay/Disclaimer.jsp</value>
+                        <value>/replay/analytics.jsp</value>
           		</list>
         		</property>
       		</bean>
@@ -70,6 +71,7 @@
             			<value>/replay/ArchiveComment.jsp</value>
             			<value>/replay/ClientSideJSInsert.jsp</value>
             			<value>/replay/Disclaimer.jsp</value>
+                        <value>/replay/analytics.jsp</value>
           		</list>
         		</property>
       		</bean>
