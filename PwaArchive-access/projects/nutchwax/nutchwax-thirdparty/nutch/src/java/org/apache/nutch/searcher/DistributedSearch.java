@@ -72,22 +72,22 @@ public class DistributedSearch {
 
       int port = Integer.parseInt(args[0]);
       Path directory = new Path(args[1]);
-      Path blacklistDir = null;
+      File blacklistFile = null;
       if (args.length==3 && args[2]!=null) {
-    	  blacklistDir = new Path(args[2]);
+    	  blacklistFile = new File(args[2]);
 	  }
 
       Configuration conf = NutchConfiguration.create();
-      org.apache.hadoop.ipc.Server server = getServer(conf, directory, port, blacklistDir);           
+      org.apache.hadoop.ipc.Server server = getServer(conf, directory, port, blacklistFile);           
       
       server.start();
       server.join();
     }
     
-    static org.apache.hadoop.ipc.Server getServer(Configuration conf, Path directory, int port, Path blacklistDir) throws IOException{      
+    static org.apache.hadoop.ipc.Server getServer(Configuration conf, Path directory, int port, File blacklistFile) throws IOException{      
       int numHandlers=conf.getInt(Global.NUMBER_HANDLERS, -1);
       boolean ipcVerbose=conf.getBoolean(Global.IPC_VERBOSE, false);
-      NutchBean bean = new NutchBean(conf, directory, blacklistDir);
+      NutchBean bean = new NutchBean(conf, directory, blacklistFile);
       return RPC.getServer(bean, "0.0.0.0", port, numHandlers, ipcVerbose, conf);
     }
 

@@ -1,6 +1,7 @@
 package org.archive.access.nutch;
 
 import java.io.IOException;
+import java.io.File;
 
 import javax.servlet.ServletContext;
 
@@ -22,9 +23,9 @@ import org.apache.nutch.searcher.PwaRequestSummaryWritable;
   */
 public class NutchwaxBean extends NutchBean
 {
-  public NutchwaxBean(Configuration conf, Path dir, Path blacklistDir) throws IOException
+  public NutchwaxBean(Configuration conf, Path dir, File blacklistFile) throws IOException
   {
-    super(conf, dir, blacklistDir);
+    super(conf, dir, blacklistFile);
   }
 
   public NutchwaxBean(Configuration conf) throws IOException

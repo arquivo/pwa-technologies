@@ -107,7 +107,7 @@ public class NutchBean
    * @param dir
    * @throws IOException
    */
-  public NutchBean(Configuration conf, Path dir, Path blacklistDir) throws IOException {
+  public NutchBean(Configuration conf, Path dir, File blacklistFile) throws IOException {
 	    this.conf = conf;
         this.fs = FileSystem.get(this.conf);
         if (dir == null) {
@@ -120,7 +120,7 @@ public class NutchBean
         } 
         else {
             init(new Path(dir, "index"), new Path(dir, "indexes"), new Path(
-                    dir, "segments"), new Path(dir, "linkdb"), blacklistDir);
+                    dir, "segments"), new Path(dir, "linkdb"), blacklistFile);
         }
                        
     	this.maxFulltextMatchesReturned = conf.getInt(Global.MAX_FULLTEXT_MATCHES_RETURNED, -1);
@@ -129,13 +129,13 @@ public class NutchBean
     	this.maxQueryExtraTerms = conf.getInt(Global.MAX_QUERY_EXTRA_TERMS, -1);
     }
 
-  private void init(Path indexDir, Path indexesDir, Path segmentsDir, Path linkDb, Path blacklistDir)
+  private void init(Path indexDir, Path indexesDir, Path segmentsDir, Path linkDb, File blacklistFile)
     throws IOException {
 	  
     IndexSearcher indexSearcher;
     if (this.fs.exists(indexDir)) {
         LOG.info("opening merged index in " + indexDir);
-        indexSearcher = new IndexSearcher(indexDir, this.conf, blacklistDir);
+        indexSearcher = new IndexSearcher(indexDir, this.conf, blacklistFile);
     } 
     else {
         LOG.info("opening indexes in " + indexesDir);
@@ -154,7 +154,7 @@ public class NutchBean
         	directories[i]=(Path)vDirs.remove(0);
         }
       
-        indexSearcher = new IndexSearcher(directories, this.conf, blacklistDir);
+        indexSearcher = new IndexSearcher(directories, this.conf, blacklistFile);
     }
 
     LOG.info("opening segments in " + segmentsDir);    

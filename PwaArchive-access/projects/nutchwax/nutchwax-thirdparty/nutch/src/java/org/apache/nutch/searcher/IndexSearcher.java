@@ -18,6 +18,7 @@
 package org.apache.nutch.searcher;
 
 import java.io.IOException;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -56,25 +57,25 @@ public class IndexSearcher implements Searcher, HitDetailer {
   private PwaCacheManager cache;
 
   /** Construct given a number of indexes. */
-  public IndexSearcher(Path[] indexDirs, Configuration conf, Path blacklistDir) throws IOException {
+  public IndexSearcher(Path[] indexDirs, Configuration conf, File blacklistFile) throws IOException {
     IndexReader[] readers = new IndexReader[indexDirs.length];
     this.conf = conf;
     this.fs = FileSystem.get(conf);
     for (int i = 0; i < indexDirs.length; i++) {
       readers[i] = IndexReader.open(getDirectory(indexDirs[i]));
     }
-    init(new MultiReader(readers), conf, blacklistDir);
+    init(new MultiReader(readers), conf, blacklistFile);
   }
 
   /** Construct given a single merged index. */
-  public IndexSearcher(Path index,  Configuration conf, Path blacklistDir)
+  public IndexSearcher(Path index,  Configuration conf, File blacklistFile)
     throws IOException {
     this.conf = conf;
     this.fs = FileSystem.get(conf);
-    init(IndexReader.open(getDirectory(index)), conf, blacklistDir);
+    init(IndexReader.open(getDirectory(index)), conf, blacklistFile);
   }
 
-  private void init(IndexReader reader, Configuration conf, Path blacklistDir) throws IOException {
+  private void init(IndexReader reader, Configuration conf, File blacklistFile) throws IOException {
     this.reader = reader;
     this.luceneSearcher = new org.apache.lucene.search.IndexSearcher(reader);
     this.luceneSearcher.setSimilarity(new NutchSimilarity());
@@ -82,7 +83,7 @@ public class IndexSearcher implements Searcher, HitDetailer {
     this.queryFilters = new QueryFilters(conf);
     
     // read all caches     		
-    cache=PwaCacheManager.getInstance(reader,blacklistDir);
+    cache=PwaCacheManager.getInstance(reader,blacklistFile);
   }
 
   private Directory getDirectory(Path file) throws IOException {
