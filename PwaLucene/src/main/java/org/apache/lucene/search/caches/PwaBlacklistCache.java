@@ -76,7 +76,7 @@ public class PwaBlacklistCache implements PwaICache {
 			}
 			this.reader=reader;			
 			
-			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class.");			
+			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class. The file is at "+blacklistFile.getAbsolutePath());			
 			docBlackList=new BitSet(reader.maxDoc());	
 												
 			if (blacklistFile==null) {
@@ -99,7 +99,7 @@ public class PwaBlacklistCache implements PwaICache {
 			}			
 			br.close();
 			
-			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class ended. The file is at "+blacklistFile.getAbsolutePath());
+			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class ended.");
 		}			
 	}
 			
