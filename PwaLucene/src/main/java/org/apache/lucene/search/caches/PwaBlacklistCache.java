@@ -23,8 +23,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.BitSet;
 import java.util.ArrayList;
 
-import org.apache.hadoop.fs.Path;
-
 
 /**
  * Identify and cache pages that should be discarded
@@ -55,8 +53,8 @@ public class PwaBlacklistCache implements PwaICache {
 	 * @param blacklistDir blacklist directory 
 	 * @throws IOException
 	 */
-	public PwaBlacklistCache(IndexReader reader, Searcher searcher, Path blacklistDir) throws IOException {
-		this(reader, blacklistDir);
+	public PwaBlacklistCache(IndexReader reader, Searcher searcher, File blacklistFile) throws IOException {
+		this(reader, blacklistFile);
 		this.searcher=searcher;
 	}
 	
@@ -66,7 +64,7 @@ public class PwaBlacklistCache implements PwaICache {
 	 * @param blacklistDir blacklist directory 
 	 * @throws IOException
 	 */
-	public PwaBlacklistCache(IndexReader reader, Path blacklistDir) throws IOException {		
+	public PwaBlacklistCache(IndexReader reader, File blacklistFile) throws IOException {		
 		if (docBlackList!=null) {
 			return;
 		}
@@ -80,15 +78,12 @@ public class PwaBlacklistCache implements PwaICache {
 			
 			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class.");			
 			docBlackList=new BitSet(reader.maxDoc());	
-									
-			String fileDir=null;
-			if (blacklistDir==null) {
-				fileDir=reader.directory().toString().substring(reader.directory().toString().indexOf('@')+1);								
+												
+			if (blacklistFile==null) {
+				String fileDir=reader.directory().toString().substring(reader.directory().toString().indexOf('@')+1);
+				blacklistFile=new File(fileDir,CACHE_FILENAME);
 			}	
-			else {
-				fileDir=blacklistDir.toString();
-			}
-			BufferedReader br = new BufferedReader(new FileReader(new File(fileDir,CACHE_FILENAME)));					
+			BufferedReader br = new BufferedReader(new FileReader(blacklistFile));					
 			String line;
 			int nfields=1;
 			
@@ -104,7 +99,7 @@ public class PwaBlacklistCache implements PwaICache {
 			}			
 			br.close();
 			
-			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class ended. The file is at "+fileDir);
+			System.out.println("Loading blacklist to RAM at "+this.getClass().getSimpleName()+" class ended. The file is at "+blacklistFile.getAbsolutePath());
 		}			
 	}
 			
