@@ -365,3 +365,6 @@ li.grouped { padding-left: 38px; }
 .sombra { background: url("../img/barra-sombra.png") repeat-x scroll 0 bottom transparent; float: left; width: 100%; min-width: 100%; position: absolute; z-index: 1000; margin-top: 24px; }
 .sombra-exp-1 { background: url("../img/barra-sombra.png") repeat-x scroll 0 bottom transparent; float: right; margin-top: 55px; position: absolute; width: 1104px; z-index: 1000; margin-left: 158px; right: 4px; }
 .sombra-exp-2 { background: url("../img/barra-sombra-vert.png") repeat-y scroll 0 bottom transparent; float: right; left: 154px; margin-top: 67px; position: absolute; z-index: 1000; }
+
+.left { float: left}
+.rigth { float: right}

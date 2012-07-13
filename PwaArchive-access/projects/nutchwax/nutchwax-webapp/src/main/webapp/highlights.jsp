@@ -162,7 +162,14 @@
                                 <div class="next"><a href="seguinte.html" title="Seguinte"><fmt:message key⁼'highlight.pager.next'/><img src="img/arrow-right.gif" alt="<fmt:message key='highlight.pager.next.alt'/>" /></a></div>
                         </div>
 			--%>
-                        <div class="voltar">&lt; <a href="index.jsp?l=<%=language%>" title="<fmt:message key='highlights.return.alt'/>"><fmt:message key='highlights.return'/></a></div>
+                        <div class="voltar">
+                            <div class="left">
+                                &lt; <a href="index.jsp?l=<%=language%>" title="<fmt:message key='highlights.return.alt'/>"><fmt:message key='highlights.return'/></a>
+                            </div>
+                            <div class="rigth">
+                                <a href="<fmt:message key='highlights.more.href'/>" title="<fmt:message key='highlights.more.alt'/>"><fmt:message key='highlights.more'/></a>
+                            </div>
+                        </div>
                 </div>
 	</div>
 <%@include file="include/footer.jsp" %>
