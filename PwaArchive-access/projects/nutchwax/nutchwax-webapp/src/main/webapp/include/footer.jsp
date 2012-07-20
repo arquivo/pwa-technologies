@@ -43,13 +43,17 @@
     </div>
     <div id="empresa">
         <div class="wrap-footer">
-            <a href="http://www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" ><img src="img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="183" height="46" id="fccn" /></a>&nbsp;
-            <img usemap="#logomap" alt="<fmt:message key='footer.sponsor.gov.alt'/>" src="img/mec-web.png" width="243" height="40"/>
+            <a href="http://www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" >
+                <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="183" height="46" id="fccn" />
+            </a>&nbsp;
+            <img usemap="#logomap" alt="<fmt:message key='footer.sponsor.gov.alt'/>" src="<c:out value="${pageContext.servletContext.contextPath}" />/img/mec-web.png" width="243" height="40"/>
             <map id="logomap" name="logomap">
                 <area title="<fmt:message key='footer.sponsor.gov'/>" href="http://www.portugal.gov.pt/" coords="0,0,138,40" shape="rect"/>
                 <area title="<fmt:message key='footer.sponsor.mec'/>" href="http://www.portugal.gov.pt/pt/os-ministerios/ministerio-da-educacao-e-ciencia.aspx" coords="141,0,243,40" shape="rect"/>
             </map>
-            <a href="http://www.qca.pt/pos/posc.asp" title="<fmt:message key='footer.sponsor.posc'/>"><img src="img/logo-pos.gif" alt="<fmt:message key='footer.sponsor.posc.alt'/>" width="148" height="22" /></a>
+            <a href="http://www.qca.pt/pos/posc.asp" title="<fmt:message key='footer.sponsor.posc'/>">
+                <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-pos.gif" alt="<fmt:message key='footer.sponsor.posc.alt'/>" width="148" height="22" />
+            </a>
         </div>
     </div>
 </div>
