@@ -5,5 +5,5 @@ package pt.arquivo.logs.arquivo;
  * @author Miguel Costa
  */
 public interface IClickProcessor {
-	public ClickEntry exec(String queryPartsField0, String queryPartsField1);
+	ClickEntry exec(String queryPartsField0, String queryPartsField1);
 }
