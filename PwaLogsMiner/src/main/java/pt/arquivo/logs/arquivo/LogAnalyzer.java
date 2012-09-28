@@ -2,7 +2,6 @@
 package pt.arquivo.logs.arquivo;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -11,8 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-//import java.util.regex.Pattern;
-
 
 /**
  * Analyze search logs from the Portuguese Web Archive

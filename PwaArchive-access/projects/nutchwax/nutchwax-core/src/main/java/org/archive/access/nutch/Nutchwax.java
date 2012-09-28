@@ -49,7 +49,6 @@ import org.archive.access.nutch.jobs.NutchwaxCrawlDb;
 import org.archive.access.nutch.jobs.NutchwaxIndexer;
 import org.archive.access.nutch.jobs.NutchwaxLinkDb;
 import org.archive.access.nutch.jobs.NutchwaxPagerank;   
-import org.apache.nutch.crawl.LinkDb; 
 import org.archive.util.ArchiveUtils;
 import org.apache.nutch.global.Global;
 

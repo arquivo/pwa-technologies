@@ -1,7 +1,6 @@
 package org.archive.access.nutch.jobs.graph;
 
 import java.io.*;
-import org.apache.commons.logging.Log;
 import it.unimi.dsi.law.rank.PageRank.*;
 import it.unimi.dsi.law.rank.*;
 import it.unimi.dsi.webgraph.ImmutableGraph;

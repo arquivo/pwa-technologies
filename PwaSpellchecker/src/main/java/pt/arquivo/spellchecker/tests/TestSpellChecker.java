@@ -1,17 +1,13 @@
 package pt.arquivo.spellchecker.tests;
 
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.spell.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.RAMDirectory;
 
 import pt.arquivo.spellchecker.SpellChecker;
-import pt.arquivo.spellchecker.StringDifferences;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 

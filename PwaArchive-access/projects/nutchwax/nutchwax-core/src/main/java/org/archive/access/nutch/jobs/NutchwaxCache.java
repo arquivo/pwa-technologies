@@ -1,11 +1,8 @@
 package org.archive.access.nutch.jobs;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 import java.util.regex.*;
-import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,7 +11,6 @@ import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.io.compress.*;
-import org.apache.hadoop.io.IntWritable; 
 import org.apache.nutch.parse.*;
 import org.apache.nutch.util.*;
 import org.archive.access.nutch.*;

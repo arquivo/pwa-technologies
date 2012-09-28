@@ -28,13 +28,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.Enumeration;
-import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.logging.Log;

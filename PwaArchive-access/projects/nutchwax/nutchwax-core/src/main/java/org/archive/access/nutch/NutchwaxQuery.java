@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.Text;
 import org.apache.nutch.searcher.Query;
 import org.archive.util.Base32;
 import org.archive.util.TextUtils;

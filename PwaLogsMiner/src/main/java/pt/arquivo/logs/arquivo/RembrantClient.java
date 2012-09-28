@@ -6,15 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.HashSet;
-
 
 /**
  * Uses Rembrant (xldb.fc.ul.pt/wiki/Rembrandt) to count the percentage of query logs with temporal expressions

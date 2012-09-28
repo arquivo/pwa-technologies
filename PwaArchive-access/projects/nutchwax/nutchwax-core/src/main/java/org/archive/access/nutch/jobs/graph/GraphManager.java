@@ -2,8 +2,6 @@ package org.archive.access.nutch.jobs.graph;
 
 import it.unimi.dsi.webgraph.*;
 import it.unimi.dsi.fastutil.ints.*;	    
-import it.unimi.dsi.logging.ProgressLogger;
-import it.unimi.dsi.webgraph.Stats;
 import java.io.*;
 import java.util.*;
 

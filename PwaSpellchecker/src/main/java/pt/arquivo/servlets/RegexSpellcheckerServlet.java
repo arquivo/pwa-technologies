@@ -3,7 +3,6 @@ package pt.arquivo.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.StringBuffer;
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 

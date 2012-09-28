@@ -3,8 +3,6 @@ package pt.arquivo.logs.arquivo;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
-
 
 /**
  * URL clicks for a query

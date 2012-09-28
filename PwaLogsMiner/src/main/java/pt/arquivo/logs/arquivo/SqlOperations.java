@@ -1,7 +1,6 @@
 package pt.arquivo.logs.arquivo;
 
 import java.sql.*;   // All we need for JDBC
-import java.sql.Date;
 import java.text.*;
 import java.io.*;
 import java.util.*;

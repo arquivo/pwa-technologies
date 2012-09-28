@@ -1,9 +1,5 @@
 package org.archive.access.nutch.jobs;
 
-import it.unimi.dsi.law.rank.PageRank;
-import it.unimi.dsi.law.rank.PageRankPowerMethod;
-import it.unimi.dsi.law.rank.PageRank.IterationNumberStoppingCriterion;
-import it.unimi.dsi.law.rank.PageRank.NormDeltaStoppingCriterion;
 import it.unimi.dsi.webgraph.*;
 
 import java.io.*;
@@ -11,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.regex.*;
-import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

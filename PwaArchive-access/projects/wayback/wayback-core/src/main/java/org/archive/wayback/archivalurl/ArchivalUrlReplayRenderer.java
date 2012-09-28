@@ -49,8 +49,6 @@ import org.archive.wayback.replay.HttpHeaderProcessor;
 import org.archive.wayback.replay.HttpHeaderOperation;
 import org.archive.wayback.util.url.UrlOperations;
 
-import org.archive.wayback.WaybackConstants;
-
 /**
  * ReplayRenderer responsible for marking up HTML pages so they replay in
  * ArchivalUrl context:

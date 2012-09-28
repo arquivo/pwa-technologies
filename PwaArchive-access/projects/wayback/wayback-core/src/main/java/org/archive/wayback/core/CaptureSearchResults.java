@@ -24,9 +24,7 @@
  */
 package org.archive.wayback.core;
 
-import java.text.ParseException;
 import java.util.Iterator;
-
 import org.archive.wayback.WaybackConstants;
 
 /**

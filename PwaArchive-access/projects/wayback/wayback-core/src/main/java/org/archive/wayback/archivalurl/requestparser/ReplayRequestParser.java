@@ -24,7 +24,6 @@
  */
 package org.archive.wayback.archivalurl.requestparser;
 
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

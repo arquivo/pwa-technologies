@@ -30,7 +30,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
-import java.text.ParseException;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
