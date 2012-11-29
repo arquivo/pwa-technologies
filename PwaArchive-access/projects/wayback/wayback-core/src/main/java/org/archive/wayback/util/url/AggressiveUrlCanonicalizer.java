@@ -367,7 +367,7 @@ public class AggressiveUrlCanonicalizer implements UrlCanonicalizer {
 		}
 		// place default '0' in case none specified:
 		if(columns.size() == 0) {
-			columns.add(new Integer(1));
+			columns.add(1);
 		}
 		
 		// convert to int[]:

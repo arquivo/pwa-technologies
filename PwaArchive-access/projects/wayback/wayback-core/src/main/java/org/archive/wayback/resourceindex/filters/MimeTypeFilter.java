@@ -47,7 +47,7 @@ public class MimeTypeFilter implements ObjectFilter<SearchResult> {
 		if(validMimes == null) {
 			validMimes = new HashMap<String, Integer>();
 		}
-		validMimes.put(mime.toLowerCase(),new Integer(1));
+		validMimes.put(mime.toLowerCase(), 1);
 	}
 
 	/* (non-Javadoc)

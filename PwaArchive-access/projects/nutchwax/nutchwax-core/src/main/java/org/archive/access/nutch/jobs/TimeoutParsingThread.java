@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 public class TimeoutParsingThread extends Thread {
 	
 	private final Log LOG = LogFactory.getLog(TimeoutParsingThread.class);
-	private final Integer lock = new Integer(999); // don't use global objects, since they can be shared by the compiler; use unique objects
+	private final Integer lock = 999; // TODO: don't use global objects, since they can be shared by the compiler; use unique objects
 		
 	private boolean done; // if thread should finish 	
 	private long id; // thread id
