@@ -158,30 +158,22 @@ public class RequestMapper {
 		try {
 			accessPointClass = Class.forName(ACCESS_POINT_CLASSNAME);
 			Map beanMap = factory.getBeansOfType(accessPointClass);
-			Iterator beanNameItr = beanMap.keySet().iterator();
-			Collection accessPoints = beanMap.values();
-			while(beanNameItr.hasNext()) {
-				String apName = (String) beanNameItr.next();
-				AccessPoint ap = (AccessPoint) beanMap.get(apName);
-				try {
-					LOGGER.info("Shutting down AccessPoint " + apName);
-					ap.shutdown();
-					LOGGER.info("Successfully shut down " + apName);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			for(Object o : accessPoints) {
-				if(o instanceof AccessPoint) {
-					AccessPoint ap = (AccessPoint) o;
-					try {
-						ap.shutdown();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			
+
+            Iterator<Map.Entry<String,AccessPoint>> beanNameItr = beanMap.entrySet().iterator();
+            while(beanNameItr.hasNext()) {
+                Map.Entry<String,AccessPoint> bean = beanNameItr.next();
+                String apName = bean.getKey();
+                AccessPoint ap = bean.getValue();
+
+                try {
+                    LOGGER.info("Shutting down AccessPoint "+ apName);
+                    ap.shutdown();
+                    LOGGER.info("Successfully shut down "+ apName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

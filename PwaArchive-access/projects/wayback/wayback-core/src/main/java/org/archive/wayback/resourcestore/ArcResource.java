@@ -91,18 +91,20 @@ public class ArcResource extends Resource {
 			// ARC_META_PREFIX
 			@SuppressWarnings("unchecked")
 			Map<String,Object> headerMetaMap = arcRecord.getMetaData().getHeaderFields();
-			Set<String> keys = headerMetaMap.keySet();
-			Iterator<String> itr = keys.iterator();
-			while(itr.hasNext()) {
-				String metaKey = itr.next();
-				Object value = headerMetaMap.get(metaKey);
-				String metaValue = "";
-				if(value != null) {
-					metaValue = value.toString();
-				}
-				metaData.put(ARC_META_PREFIX + metaKey,metaValue);
-			}
-		
+
+            Iterator<Map.Entry<String,Object>> itr = headerMetaMap.entrySet().iterator();
+            while(itr.hasNext()) {
+                Map.Entry<String,Object> entry = itr.next();
+                String metaKey = entry.getKey();
+                Object value = entry.getValue();
+
+                String metaValue = "";
+                if(metaValue != null) {
+                    metaValue = metaValue.toString();
+                }
+                metaData.put(ARC_META_PREFIX + metaKey, metaValue);
+            }
+
 			parsedHeader = true;			
 		}
 	}

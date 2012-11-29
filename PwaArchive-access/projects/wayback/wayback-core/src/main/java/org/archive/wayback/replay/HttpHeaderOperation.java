@@ -82,10 +82,12 @@ public class HttpHeaderOperation {
 		// copy all HTTP headers, as-is, sending "" instead of nulls.
 		Map<String,String> headers = resource.getHttpHeaders();
 		if (headers != null) {
-			Iterator<String> itr = headers.keySet().iterator();
+            Iterator<Map.Entry<String,String>> itr = headers.entrySet().iterator();
 			while(itr.hasNext()) {
-				String key = itr.next();
-				String value = headers.get(key);
+                Map.Entry<String,String> entry = itr.next();
+				String key = entry.getKey();
+				String value = entry.getValue();
+
 				value = (value == null) ? "" : value;
 				filter.filter(output, key, value, uriConverter, result);
 			}
@@ -99,10 +101,12 @@ public class HttpHeaderOperation {
 	 */
 	public static void sendHeaders(Map<String,String> headers, 
 			HttpServletResponse response) {
-		Iterator<String> itr = headers.keySet().iterator();
+        Iterator<Map.Entry<String,String>> itr = headers.entrySet().iterator();
 		while(itr.hasNext()) {
-			String key = itr.next();
-			String value = headers.get(key);
+            Map.Entry<String,String> entry = itr.next();
+			String key = entry.getKey();
+			String value = entry.getValue();
+
 			value = (value == null) ? "" : value;
 			response.setHeader(key,value);
 		}
