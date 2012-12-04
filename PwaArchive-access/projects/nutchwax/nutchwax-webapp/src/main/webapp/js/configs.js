@@ -25,36 +25,36 @@ $(document).ready( function() {
                                 $.extend({
                                         changeMonth: true,
                                         changeYear: true,
-					dateFormat: 'dd/mm/yy',
+					                    dateFormat: 'dd/mm/yy',
                                         minDate: min,
                                         maxDate: max,
                                         yearRange: '-15:+15',
-                                	showOn: 'button',
+                                	    showOn: 'button',
                                         showButtonPanel: true,
                                         currentText: 'OK',
                                         fuzzySelection: false,
                                         buttonImageOnly: true,
                                         buttonImage: 'img/calendar.gif',
-                                        buttonText: 'Calendário - data inicial'
-				})
+                                        buttonText: 'Calendário - data inicial',
+                				})
                         );
 		
                         $('#dateEnd_top, #dateEnd_bottom').datepicker(
                                 $.extend({
                                         changeMonth: true,
                                         changeYear: true,
-					dateFormat: 'dd/mm/yy',
+                    					dateFormat: 'dd/mm/yy',
                                         minDate: min,
                                         maxDate: max,
                                         yearRange: '-15:+15',
-                                	showOn: 'button',
+                                    	showOn: 'button',
                                         showButtonPanel: true,
                                         currentText: 'OK',
                                         fuzzySelection: true,
                                         buttonImageOnly: true,
                                         buttonImage: 'img/calendar.gif',
                                         buttonText: 'Calendário - data final'
-				})
+                				})
                         );
 
                         $(".ui-datepicker-trigger").mouseover(function() {
