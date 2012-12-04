@@ -63,7 +63,53 @@ $(document).ready( function() {
 
                 });
 
-	/* Search feedback for slow searches/page views */
+    /**
+     * Visully differentiate the dates that were changed by the user
+     */
+
+    /* Parse so the date format is similar to the one of the day picker */
+    function parseDate(d) {
+        function pad(n) {
+            return (n < 10 ? '0'+n : n);
+        };
+
+        return pad(d.getDate()) + '/'
+            + pad(d.getMonth()+1) + '/'
+            + d.getFullYear();
+    }
+
+    /* Verify if the date in the input was changed */
+    function userChangedDate(target, monitoredDate) {
+        var changedDate = $(target).val();
+        var parsedDate = parseDate(monitoredDate);
+
+        if (changedDate !== parsedDate) {
+            $(target).addClass("changed");
+        } else {
+            $(target).removeClass("changed");
+        }
+    }
+
+    /* Trigger for changes on the start date input */
+    $("#dateStart_top").change(function() {
+        var that = this;
+        userChangedDate(that, minDate);
+    });
+
+    /* Trigger for changes on the end date input */
+    $("#dateEnd_top").change(function() {
+        var that = this;
+        userChangedDate(that, maxDate);
+    });
+
+    /* Verify if the dates were previously changed by the user */
+    userChangedDate($("#dateStart_top"), minDate);
+    userChangedDate("#dateEnd_top", maxDate);
+
+
+	/**
+     * Search feedback for slow searches/page views
+     */
 	var timeout = 2000;	
 
 	$("h3 a").click( function(event){
@@ -89,6 +135,10 @@ $(document).ready( function() {
         	setTimeout( addLoader, timeout, $(this) );
 	});
 
+
+    /**
+     * query spellchecking
+     */
 	var params = getUrlVars();
 
 	if ( params['query'] !== undefined && params['query'] !== '' ) {
