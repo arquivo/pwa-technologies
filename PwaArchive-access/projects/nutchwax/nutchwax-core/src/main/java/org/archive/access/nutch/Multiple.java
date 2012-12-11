@@ -215,7 +215,7 @@ public class Multiple extends ToolBase implements Mapper
       
       job.setNumMapTasks(lines.size());
       
-      return splits.toArray(new LineInputSplit [0]);
+      return splits.toArray(new LineInputSplit [splits.size()]);
     }
     
     private void addFileLines(final List<String> lines, final FileSystem fs,

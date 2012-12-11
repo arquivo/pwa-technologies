@@ -222,7 +222,7 @@ public class TaskLogInputFormat implements InputFormat {
     for (int i = 0; i < numSplits; i++) {
       is.add(new TaskLogSplit());
     }
-    return is.toArray(new InputSplit[] {});
+    return is.toArray(new InputSplit[is.size()]);
   }
 
   public void validateInput(JobConf job) throws IOException {
