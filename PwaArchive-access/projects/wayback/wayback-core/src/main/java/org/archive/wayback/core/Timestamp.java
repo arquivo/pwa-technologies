@@ -215,15 +215,22 @@ public class Timestamp {
 	 *         Timestamp. eg: "Jan 13, 1999"
 	 */
 	public String prettyDate() {
-		String year = dateStr.substring(0, 4);
+		StringBuilder prettyDate = new StringBuilder();
 		String month = dateStr.substring(4, 6);
-		String day = dateStr.substring(6, 8);
 		int monthInt = Integer.parseInt(month) - 1;
 		String prettyMonth = "UNK";
+
 		if ((monthInt >= 0) && (monthInt < months.length)) {
 			prettyMonth = months[monthInt];
 		}
-		return prettyMonth + " " + day + ", " + year;
+
+		prettyDate.append(prettyMonth);                 // month
+		prettyDate.append(" ");
+		prettyDate.append(dateStr.substring(0, 4));     // day
+		prettyDate.append(", ");
+		prettyDate.append(dateStr.substring(6, 8));     // year
+
+		return prettyDate.toString();
 	}
 
 	/**
@@ -252,15 +259,15 @@ public class Timestamp {
 	
 	private static String frontZeroPad(final String input, final int digits) {
 		int missing = digits - input.length();
-		String padded = "";
+		StringBuilder padded = new StringBuilder();
 		for(int i = 0; i < missing; i++) {
-			padded += "0";
+			padded.append("0");
 		}
-		padded += input;
-		return padded;
+		padded.append(input);
+		return padded.toString();
 	}
 	private static String frontZeroPad(final int input, final int digits) {
-		return frontZeroPad(String.valueOf(input)	,digits);
+		return frontZeroPad(String.valueOf(input), digits);
 	}
 	
 	private static Calendar getCalendar() {
@@ -300,25 +307,29 @@ public class Timestamp {
 		
 		return cal;
 	}
+
 	private static String calendarToDateStr(Calendar cal) {
-		return frontZeroPad(cal.get(Calendar.YEAR),4) +
-			frontZeroPad(cal.get(Calendar.MONTH) + 1 ,2) +
-			frontZeroPad(cal.get(Calendar.DAY_OF_MONTH),2) +
-			frontZeroPad(cal.get(Calendar.HOUR_OF_DAY),2) +
-			frontZeroPad(cal.get(Calendar.MINUTE),2) +
-			frontZeroPad(cal.get(Calendar.SECOND),2);
+		StringBuilder date = new StringBuilder();
+
+		date.append(frontZeroPad(cal.get(Calendar.YEAR),4));
+		date.append(frontZeroPad(cal.get(Calendar.MONTH) + 1 ,2));
+		date.append(frontZeroPad(cal.get(Calendar.DAY_OF_MONTH),2));
+		date.append(frontZeroPad(cal.get(Calendar.HOUR_OF_DAY),2));
+		date.append(frontZeroPad(cal.get(Calendar.MINUTE),2));
+		date.append(frontZeroPad(cal.get(Calendar.SECOND),2));
+
+		return date.toString();
 	}
-	
 
 	private static String padDigits(String input, String min, String max, 
 			String missing) {
 		if(input == null) {
 			input = "";
 		}
-		String finalDigits = "";
+		StringBuilder finalDigits = new StringBuilder();
 		for(int i = 0; i < missing.length(); i++) {
 			if(input.length() <= i) {
-				finalDigits = finalDigits +	missing.charAt(i);
+				finalDigits.append(missing.charAt(i));
 			} else {
 				char inc = input.charAt(i);
 				char maxc = max.charAt(i);
@@ -328,11 +339,11 @@ public class Timestamp {
 				} else if (inc < minc) {
 					inc = minc;
 				}
-				finalDigits = finalDigits + inc;
+				finalDigits.append(inc);
 			}
 		}
 		
-		return finalDigits;
+		return finalDigits.toString();
 	}
 	
 	private static String boundDigits(String input, String min, String max) {
@@ -348,7 +359,8 @@ public class Timestamp {
 	// check each of YEAR, MONTH, DAY, HOUR, MINUTE, SECOND to make sure they
 	// are not too large or too small, factoring in the month, leap years, etc.
 	private static String boundTimestamp(String input) {
-		String boundTimestamp = "";
+		StringBuilder boundTimestamp = new StringBuilder();
+
 		if(input == null) {
 			input = "";
 		}
@@ -356,12 +368,12 @@ public class Timestamp {
 		Calendar tmpCal = getCalendar();
 		tmpCal.setTime(new Date());
 
-		boundTimestamp = boundDigits(input.substring(0,4),
-				YEAR_LOWER_LIMIT,YEAR_UPPER_LIMIT);
+		boundTimestamp.append(boundDigits(input.substring(0,4),
+				YEAR_LOWER_LIMIT,YEAR_UPPER_LIMIT));
 
 		// MAKE SURE THE MONTH IS WITHIN LEGAL BOUNDARIES:
-		boundTimestamp += boundDigits(input.substring(4,6),
-				MONTH_LOWER_LIMIT,MONTH_UPPER_LIMIT);
+		boundTimestamp.append(boundDigits(input.substring(4,6),
+				MONTH_LOWER_LIMIT,MONTH_UPPER_LIMIT));
 		
 		// NOW DEPENDING ON THE YEAR + MONTH, MAKE SURE THE DAY OF MONTH IS
 		// WITHIN LEGAL BOUNDARIES:
@@ -377,22 +389,22 @@ public class Timestamp {
 		if(maxDayOfMonth.length() == 1) {
 			maxDayOfMonth = "0" + maxDayOfMonth;
 		}
-		boundTimestamp += boundDigits(input.substring(6,8),
-				DAY_LOWER_LIMIT,maxDayOfMonth);
+		boundTimestamp.append(boundDigits(input.substring(6,8),
+				DAY_LOWER_LIMIT,maxDayOfMonth));
 		
 		// MAKE SURE THE HOUR IS WITHIN LEGAL BOUNDARIES:
-		boundTimestamp += boundDigits(input.substring(8,10),
-				HOUR_LOWER_LIMIT,HOUR_UPPER_LIMIT);
+		boundTimestamp.append(boundDigits(input.substring(8,10),
+				HOUR_LOWER_LIMIT,HOUR_UPPER_LIMIT));
 		
 		// MAKE SURE THE MINUTE IS WITHIN LEGAL BOUNDARIES:
-		boundTimestamp += boundDigits(input.substring(10,12),
-				MINUTE_LOWER_LIMIT,MINUTE_UPPER_LIMIT);
+		boundTimestamp.append(boundDigits(input.substring(10,12),
+				MINUTE_LOWER_LIMIT,MINUTE_UPPER_LIMIT));
 		
 		// MAKE SURE THE SECOND IS WITHIN LEGAL BOUNDARIES:
-		boundTimestamp += boundDigits(input.substring(12,14),
-				SECOND_LOWER_LIMIT,SECOND_UPPER_LIMIT);
+		boundTimestamp.append(boundDigits(input.substring(12,14),
+				SECOND_LOWER_LIMIT,SECOND_UPPER_LIMIT));
 
-		return boundTimestamp;		
+		return boundTimestamp.toString();
 	}
 	
 	/**

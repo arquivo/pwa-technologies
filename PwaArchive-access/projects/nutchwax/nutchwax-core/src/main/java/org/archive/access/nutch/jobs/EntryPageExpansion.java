@@ -56,42 +56,52 @@ public class EntryPageExpansion {
 		}
 		
 		// add authority
-		String prefix1=url.getProtocol()+"://";			
-		String prefix2=prefix1;
+		StringBuilder prefix1=new StringBuilder();
+		prefix1.append(url.getProtocol());
+		prefix1.append("://");
+		StringBuilder prefix2=new StringBuilder(prefix1.toString());
 		if (url.getAuthority().startsWith("www.")) {
-			prefix1+=url.getAuthority();
-			prefix2+=url.getAuthority().substring(4);
+			prefix1.append(url.getAuthority());
+			prefix2.append(url.getAuthority().substring(4));
 		}
 		else {
-			prefix1+="www."+url.getAuthority();
-			prefix2+=url.getAuthority();
+			prefix1.append("www.");
+			prefix1.append(url.getAuthority());
+			prefix2.append(url.getAuthority());
 		}
 		
 		// add path			
 		for (int i=0;i<parts.length;i++) {
 			if (!parts[i].equals("") && (i<parts.length-1 || parts[parts.length-1].indexOf('.')==-1 || entryFiles.length==2)) { // ignore last file if it is an entry file
-				prefix1+="/"+parts[i];				
-				prefix2+="/"+parts[i];				
+				prefix1.append("/");
+				prefix1.append(parts[i]);
+				prefix2.append("/");
+				prefix2.append(parts[i]);
 			}			
 		}	
 							
 		// add file + query
 		if (entryFiles.length!=2) {				
 			for (int i=0;i<pathOfEntryFiles.length;i++) {
-				entryFiles[i*2]=prefix1+pathOfEntryFiles[i];
-				entryFiles[i*2+1]=prefix2+pathOfEntryFiles[i];
+				entryFiles[i*2]=prefix1.toString()+pathOfEntryFiles[i];
+				entryFiles[i*2+1]=prefix2.toString()+pathOfEntryFiles[i];
 			}
 		}
 		else {			
 			if (urlPath.length()>0 && urlPath.charAt(urlPath.length()-1)=='/') {
-				prefix1+="/";
-				prefix2+="/";
-			}		
-			entryFiles[0]=prefix1+(url.getQuery()!=null ? "?"+url.getQuery() : "");
-			entryFiles[1]=prefix2+(url.getQuery()!=null ? "?"+url.getQuery() : "");
+				prefix1.append("/");
+				prefix2.append("/");
+			}
+			if (url.getQuery() != null) {
+				prefix1.append("?");
+				prefix1.append(url.getQuery());
+				prefix2.append("?");
+				prefix2.append(url.getQuery());
+			}
+			entryFiles[0]=prefix1.toString();
+			entryFiles[1]=prefix2.toString();
 		}
 		return entryFiles;			
-		//return new String[]{surl};
 	}
 	
 	
@@ -124,32 +134,37 @@ public class EntryPageExpansion {
 		}
 		
 		// add authority
-		String prefix1=url.getProtocol()+"://";		
+		StringBuilder prefix1=new StringBuilder();
+		prefix1.append(url.getProtocol());
+		prefix1.append("://");
+
 		if (url.getAuthority().startsWith("www.")) {			
-			prefix1+=url.getAuthority().substring(4);
+			prefix1.append(url.getAuthority().substring(4));
 		}
 		else {
-			prefix1+=url.getAuthority();
+			prefix1.append(url.getAuthority());
 		}
 		
 		// add path			
 		for (int i=0;i<parts.length;i++) {
 			if (!parts[i].equals("") && (i<parts.length-1 || parts[parts.length-1].indexOf('.')==-1 || !isExpand)) { // ignore last file if it is an entry file
-				prefix1+="/"+parts[i];											
+				prefix1.append("/");
+				prefix1.append(parts[i]);
 			}			
 		}
 				
 		// add query
 		if (!isExpand) {
 			if (urlPath.length()>0 && urlPath.charAt(urlPath.length()-1)=='/') {
-				prefix1+="/";		
+				prefix1.append("/");
 			}					
 			if (url.getQuery()!=null) {
-				prefix1+="?"+url.getQuery();
+				prefix1.append("?");
+				prefix1.append(url.getQuery());
 			}
 		}
 	
-		return prefix1;
+		return prefix1.toString();
 	}
 		
 	/**
