@@ -121,7 +121,7 @@ public class NutchwaxQuery
        			sb.append(encoded);
     		}
     		else {
-    			sb.append(" exacturl:"+encoded);
+                       sb.append(" exacturl:").append(encoded);
     		}
     	}
     	sb.append(m.group(3));
@@ -135,7 +135,7 @@ public class NutchwaxQuery
        			sb.append(encoded);
     		}
     		else {
-    			sb.append(" exacturlexpand:"+encoded);
+                       sb.append(" exacturlexpand:").append(encoded);
     		}
     	}
         sb.append(mexpand.group(3));
@@ -143,9 +143,9 @@ public class NutchwaxQuery
     else { // TODO MC - BUG nutchwax 0000357 
     	sb.append(mexpandmin.group(1).substring(0, mexpandmin.group(1).length()-4)); // remove "min:" and use only exacturlexpand   	
     	String encoded = Base32.encode(md.digest(mexpandmin.group(2).getBytes()));    	
-    	sb.append(":"+encoded);    	
+        sb.append(":").append(encoded);
     	encoded = Base32.encode(md.digest((mexpandmin.group(2)+"/").getBytes()));        
-    	sb.append(" exacturlexpand:"+encoded);
+        sb.append(" exacturlexpand:").append(encoded);
     	sb.append(mexpandmin.group(3));    	   
     }
 

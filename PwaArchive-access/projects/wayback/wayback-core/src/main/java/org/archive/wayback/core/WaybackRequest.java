@@ -322,7 +322,7 @@ public class WaybackRequest {
 			if (queryString.length() > 0) {
 				queryString.append(" ");
 			}
-			queryString.append(key + ":" + val);
+			queryString.append(key).append(":").append(val);
 		}
 		String escapedQuery = queryString.toString();
 
