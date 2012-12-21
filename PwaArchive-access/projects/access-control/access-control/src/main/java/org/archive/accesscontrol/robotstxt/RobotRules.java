@@ -97,7 +97,7 @@ public class RobotRules {
             	br.close();
             	br = null;
             } else {
-                int commentIndex = read.indexOf("#");
+                int commentIndex = read.indexOf('#');
                 if (commentIndex > -1) {
                     // Strip trailing comment
                     read = read.substring(0, commentIndex);

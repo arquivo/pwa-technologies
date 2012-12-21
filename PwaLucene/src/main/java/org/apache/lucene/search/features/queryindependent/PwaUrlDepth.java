@@ -26,7 +26,7 @@ public class PwaUrlDepth implements PwaIRankingFunction {
 			score=3;
 			return;
 		}	
-		if (urlParts[urlParts.length-1].indexOf(".")!=-1) { // file
+		if (urlParts[urlParts.length-1].indexOf('.')!=-1) { // file
 			score=0;
 			return;
 		}

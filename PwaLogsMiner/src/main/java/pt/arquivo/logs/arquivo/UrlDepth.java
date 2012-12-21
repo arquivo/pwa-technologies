@@ -30,7 +30,7 @@ public class UrlDepth {
 		if (urlParts.length==1+c) { // domain			
 			return 0;
 		}	
-		if (urlParts[urlParts.length-1].indexOf(".")!=-1) { // file
+		if (urlParts[urlParts.length-1].indexOf('.')!=-1) { // file
 			return 3;			
 		}
 		if (urlParts.length==2+c) { // domain plus one directory

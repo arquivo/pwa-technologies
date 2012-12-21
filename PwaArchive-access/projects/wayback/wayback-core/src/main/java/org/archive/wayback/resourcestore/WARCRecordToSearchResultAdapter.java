@@ -90,7 +90,7 @@ implements Adapter<WARCRecord,SearchResult>{
 	}
 	
 	private static String transformHTTPMime(final String input) {
-		int semiIdx = input.indexOf(";");
+		int semiIdx = input.indexOf(';');
 		if(semiIdx > 0) {
 			return input.substring(0,semiIdx).trim();
 		}

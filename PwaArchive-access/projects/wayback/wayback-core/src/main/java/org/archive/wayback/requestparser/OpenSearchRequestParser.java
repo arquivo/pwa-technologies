@@ -134,7 +134,7 @@ public class OpenSearchRequestParser extends BaseRequestParser {
 		String[] parts = WHITESPACE_PATTERN.split(query);
 		for (int i = 0; i < parts.length; i++) {
 			String token = parts[i];
-			int colonIndex = token.indexOf(":");
+			int colonIndex = token.indexOf(':');
 			if (colonIndex == -1) {
 				throw new BadQueryException("Bad search token(" + token + ")");
 			}

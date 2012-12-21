@@ -250,8 +250,8 @@ public class RulesController extends AbstractController {
      * Ensure scheme has a double slash. eg replaces "http:/blah" with "http://blah"
      */ 
 	private String fixupSchemeSlashes(String surt) {
-		if (surt.indexOf(":/(") == surt.indexOf(":")) {
-    		int i = surt.indexOf(":");
+		if (surt.indexOf(":/(") == surt.indexOf(':')) {
+			int i = surt.indexOf(':');
     		surt = surt.substring(0, i + 1) + "/" + surt.substring(i+1);
     	}
 		return surt;

@@ -219,7 +219,7 @@ public class AggressiveUrlCanonicalizer implements UrlCanonicalizer {
 				searchUrl = searchUrl + "/";
 			}
 		} else {
-			if (-1 == searchUrl.indexOf("/")) {
+			if (-1 == searchUrl.indexOf('/')) {
 				searchUrl = searchUrl + "/";
 			}
 			searchUrl = "http://" + searchUrl;

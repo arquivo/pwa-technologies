@@ -114,7 +114,7 @@ public class SpellChecker  {
    * @throws InterruptedException
    */
   private static String[] suggestSimilarSpell(String word, String lang, int numSug, IndexReader ir, String field, int minFreq, int timesFreq, String dictPath, String scomm) throws IOException, InterruptedException {
-	  if (word.indexOf("-")!=-1) { // ignore words with hifens
+	  if (word.indexOf('-')!=-1) { // ignore words with hifens
 		  return new String[] { };  
 	  }	  
 	  word=word.toLowerCase();

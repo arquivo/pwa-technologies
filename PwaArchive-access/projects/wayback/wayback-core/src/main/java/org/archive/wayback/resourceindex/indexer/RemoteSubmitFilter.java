@@ -144,7 +144,7 @@ public class RemoteSubmitFilter implements Filter  {
 			ServletException {
 
 		String reqURI = request.getRequestURI();
-		int lastSlashIdx = reqURI.lastIndexOf("/");
+		int lastSlashIdx = reqURI.lastIndexOf('/');
 		if (lastSlashIdx == -1) {
 			return false;
 		}

@@ -59,7 +59,7 @@ public abstract class NutchHttpServlet extends HttpServlet {
 
     String relPath = null;
 
-    if (path.indexOf("/", (path.startsWith("/") ? 1 : 0)) != -1) {
+    if (path.indexOf('/', (path.startsWith("/") ? 1 : 0)) != -1) {
       relPath = path.substring(path
           .indexOf('/', (path.startsWith("/") ? 1 : 0)));
     }

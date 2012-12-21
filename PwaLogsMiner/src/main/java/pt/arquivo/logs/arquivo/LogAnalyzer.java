@@ -668,7 +668,7 @@ public class LogAnalyzer {
 			UserAction action=null; 				
 			boolean ignore=false;
 			if (query.startsWith("/search.jsp?")) { // it is a nutchwax query
-				query=query.substring(query.indexOf("?")+1);	
+				query=query.substring(query.indexOf('?')+1);
 								
 				if (query.indexOf("&"+SHOW_VERSIONS_KEY+"=true")!=-1 && query.indexOf("&"+SHOW_VERSIONS_POS_KEY+"=")!=-1) { // must have the hist=true and pos=
 					action=UserAction.HIST_CLICK;		
@@ -693,7 +693,7 @@ public class LogAnalyzer {
 					System.exit(1);
 				}				
 				String page=matcher.group(0);				    							
-				query=query.substring(query.indexOf("?")+1);				
+				query=query.substring(query.indexOf('?')+1);
 								
 				if (query.matches(".*\\&?"+WAYBACK_POS_KEY+"="+".*") /*&& !lastQuery.equals("")*/) {
 					incMapValue(waybackPagesSawAux,page);					

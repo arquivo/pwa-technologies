@@ -549,7 +549,7 @@ public final class NGramSpeller {
         break;
       }
 
-      if (t.text().indexOf("-") >= 0) {
+      if (t.text().indexOf('-') >= 0) {
         continue;
       }
 

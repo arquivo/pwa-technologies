@@ -309,7 +309,7 @@ public class RobotRulesParser implements Configurable {
       String line= lineParser.nextToken();
 
       // trim out comments and whitespace
-      int hashPos= line.indexOf("#");
+      int hashPos= line.indexOf('#');
       if (hashPos >= 0) 
         line= line.substring(0, hashPos);
       line= line.trim();
@@ -328,7 +328,7 @@ public class RobotRulesParser implements Configurable {
         }
         doneAgents= false;
 
-        String agentNames= line.substring(line.indexOf(":") + 1);
+        String agentNames= line.substring(line.indexOf(':') + 1);
         agentNames= agentNames.trim();
         StringTokenizer agentTokenizer= new StringTokenizer(agentNames);
 
@@ -353,7 +353,7 @@ public class RobotRulesParser implements Configurable {
                   && (line.substring(0, 9).equalsIgnoreCase("Disallow:")) ) {
 
         doneAgents= true;
-        String path= line.substring(line.indexOf(":") + 1);
+        String path= line.substring(line.indexOf(':') + 1);
         path= path.trim();
         try {
           path= URLDecoder.decode(path, CHARACTER_ENCODING);
@@ -375,7 +375,7 @@ public class RobotRulesParser implements Configurable {
                   && (line.substring(0, 6).equalsIgnoreCase("Allow:")) ) {
 
         doneAgents= true;
-        String path= line.substring(line.indexOf(":") + 1);
+        String path= line.substring(line.indexOf(':') + 1);
         path= path.trim();
 
         if (path.length() == 0) { 

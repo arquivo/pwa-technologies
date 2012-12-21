@@ -132,7 +132,7 @@ public class AccessControlClient {
 
     protected String getSurtAuthority(String surt) {
         int indexOfOpen = surt.indexOf("://(");
-        int indexOfClose = surt.indexOf(")");
+        int indexOfClose = surt.indexOf(')');
         if (indexOfOpen == -1 || indexOfClose == -1
                 || ((indexOfOpen + 4) >= indexOfClose)) {
             return surt;
@@ -142,7 +142,7 @@ public class AccessControlClient {
 
     protected static String getScheme(String surt) {
         int i = surt.indexOf("://");
-        int j = surt.indexOf(":");
+        int j = surt.indexOf(':');
         if (i >= 0 && i == j) {
             return surt.substring(0, i + 3);
         } else {

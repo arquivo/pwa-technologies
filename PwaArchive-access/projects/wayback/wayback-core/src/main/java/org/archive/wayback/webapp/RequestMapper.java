@@ -90,10 +90,10 @@ public class RequestMapper {
 		}
 		String collection = "";
 		if(requestPath.startsWith("/")) {
-			int secondSlash = requestPath.indexOf("/",1);
+			int secondSlash = requestPath.indexOf('/',1);
 			if(secondSlash != -1) {
 				collection = PORT_SEPARATOR + 
-					requestPath.substring(1,requestPath.indexOf("/",1));
+					requestPath.substring(1,requestPath.indexOf('/',1));
 			} else {
 				collection = PORT_SEPARATOR + requestPath.substring(1);
 			}

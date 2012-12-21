@@ -51,8 +51,8 @@ public class ResourceServlet extends NutchHttpServlet {
 
     if (path != null && path.length() >= PATH.length()) {
       String stripped = path.substring(PATH.length());
-      if (stripped.indexOf("/") != -1) {
-        pluginid = stripped.substring(0, stripped.indexOf("/"));
+      if (stripped.indexOf('/') != -1) {
+        pluginid = stripped.substring(0, stripped.indexOf('/'));
       }
     }
     return pluginid;

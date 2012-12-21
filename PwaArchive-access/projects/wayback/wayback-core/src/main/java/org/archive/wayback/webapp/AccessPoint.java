@@ -96,7 +96,7 @@ public class AccessPoint implements RequestContext, BeanNameAware {
 	public void setBeanName(String beanName) {
 		// TODO Auto-generated method stub
 		this.contextName = "";
-		int idx = beanName.indexOf(":");
+		int idx = beanName.indexOf(':');
 		if(idx > -1) {
 			contextPort = Integer.valueOf(beanName.substring(0,idx));
 			contextName = beanName.substring(idx + 1);

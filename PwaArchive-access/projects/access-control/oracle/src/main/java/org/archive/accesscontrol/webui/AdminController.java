@@ -77,7 +77,7 @@ public class AdminController extends AbstractController {
             surt = SURT.fromURI(surt);
         }
         
-        if (surt.endsWith(",)") && surt.indexOf(")") == surt.length()-1) {
+        if (surt.endsWith(",)") && surt.indexOf(')') == surt.length()-1) {
             surt = surt + "/";
         }
         

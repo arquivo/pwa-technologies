@@ -795,9 +795,9 @@ public class LogAnalyzer {
 			//endsInAmp=true;
 			index1=line.indexOf(SESSIONID_KEY);
 			if (index1!=-1) {
-				index2=line.indexOf("&", index1);
+				index2=line.indexOf('&', index1);
 				if (index2==-1) {
-					index2=line.indexOf(" ", index1);
+					index2=line.indexOf(' ', index1);
 					//endsInAmp=false;
 				}
 				try {
