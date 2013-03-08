@@ -150,6 +150,7 @@ $(document).ready( function() {
 
 		$.get( spellchecker, function (data) {
 			var correctionText = $.trim( $(data).filter('#correction').html() );
+            correctionText = $('<p>'+ correctionText +'</p>').text();
 			var correctionUrl = window.location.pathname +"?";
 
 			if ( queryParam !== correctionText) {
@@ -165,7 +166,7 @@ $(document).ready( function() {
 				correctionUrl = correctionUrl.replace("%3C%2Fem%3E","");
 
 				$('.suggestion').html('<a href="'+ correctionUrl +'"></a>');
-				$('.suggestion a').html( correctionText );
+				$('.suggestion a').html( $('<p>'+ correctionText +'</p>').text() );
 
 				$('.spell').removeClass('hidden');
 			}
