@@ -94,7 +94,7 @@ public class SpellChecker  {
   }
   
   public static String[] suggestSimilarHunspell(String word, String lang, int numSug, IndexReader ir, String field, int minFreq, int timesFreq, String dictPath) throws IOException, InterruptedException {
-	  String scomm="echo "+word+" | /usr/local/bin/hunspell -a -d "+dictPath+"/"+lang;
+	  String scomm="echo "+word+" | /usr/bin/hunspell -a -d "+dictPath+"/"+lang;
 	  return suggestSimilarSpell(word, lang, numSug, ir, field, minFreq, timesFreq, dictPath, scomm);
   }
   
