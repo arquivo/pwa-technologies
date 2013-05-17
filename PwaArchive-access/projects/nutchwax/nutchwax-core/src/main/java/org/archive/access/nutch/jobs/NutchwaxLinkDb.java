@@ -88,6 +88,7 @@ public class NutchwaxLinkDb extends LinkDb
     }
      
     this.collectionType = job.get(Global.DATABASE_CONNECTION);    
+         LOG.debug("Collection type: " + collectionType + ", requested key: " + Global.COLLECTION_TYPE);
     if (collectionType.equals(Global.COLLECTION_TYPE_MULTIPLE)) {    
     	this.databaseConnection=job.get(Global.DATABASE_CONNECTION);
     	this.databaseUsername=job.get(Global.DATABASE_USERNAME);
@@ -99,6 +100,7 @@ public class NutchwaxLinkDb extends LinkDb
     	}
     	catch (Exception e) {
     		LOG.error("Error connecting to database: "+e.getMessage());    	
+            LOG.error("Error connecting to database: "+e.toString());
     		sqlsearcher=null;
     	}    
     }
@@ -110,6 +112,7 @@ public class NutchwaxLinkDb extends LinkDb
   {
     String collection = Nutchwax.getCollectionFromWaxKey(key);
     
+    LOG.debug("Collection name is " + collection + " key: " + key);
     if (collection == null)
     {
       LOG.info("Collection is null in key -- skipping " + key);
@@ -208,11 +211,13 @@ public class NutchwaxLinkDb extends LinkDb
       if (collectionType.equals(Global.COLLECTION_TYPE_MULTIPLE)) {
     	  try {    		  
     	  	  String toUrlNearTimestamp = sqlsearcher.selectNearTimestamp(toUrl, fromUrlTimestamp);
+    		LOG.debug("LinkDB: toUrlNearTimestamp: " + toUrlNearTimestamp + " toUrl:" + toUrl + " fromUrlTimestamp " + fromUrlTimestamp);
     		  if (toUrlNearTimestamp!=null) {
     			      			  
     			 String fromUrlNearTimestamp = sqlsearcher.selectNearTimestamp(fromUrl, toUrlNearTimestamp); // see if the 'from url' is the closest of this document
-    			 if (fromUrlNearTimestamp.equals(fromUrlTimestamp)) { // if A is the closest of B and vice-versa -> 1-1 relation
-    				 LOG.info("LinkDB: from:"+key.toString()+" to:"+Nutchwax.generateWaxKey(toUrl, SqlSearcher.getCollectionNameWithTimestamp(fromUrlCriginalColectionName,toUrlNearTimestamp)));
+                 LOG.debug("LinkDB: fromUrlNearTimestamp: " + fromUrlNearTimestamp + " fromUrlTimestamp:" + fromUrlTimestamp + "fromURL: " + fromUrl);
+    			 if (fromUrlNearTimestamp != null && fromUrlNearTimestamp.equals(fromUrlTimestamp)) { // if A is the closest of B and vice-versa -> 1-1 relation
+    				 LOG.debug("LinkDB: from:"+key.toString()+" to:"+Nutchwax.generateWaxKey(toUrl, SqlSearcher.getCollectionNameWithTimestamp(fromUrlCriginalColectionName,toUrlNearTimestamp)));
         			 output.collect(Nutchwax.generateWaxKey(toUrl, SqlSearcher.getCollectionNameWithTimestamp(fromUrlCriginalColectionName,toUrlNearTimestamp)), inlinks);          		          		 
     			 }    			 
           	  }
