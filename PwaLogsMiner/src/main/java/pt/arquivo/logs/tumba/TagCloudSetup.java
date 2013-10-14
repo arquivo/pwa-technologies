@@ -13,6 +13,7 @@ import java.io.IOException;
  */
 public class TagCloudSetup {
 
+	private static final int MIN_TIMES=2;
 	
 	/**
 	 * Create file for tag cloud generator
@@ -27,7 +28,7 @@ public class TagCloudSetup {
 											
 			String parts[]=line.split("\\s");
 			int times=Integer.parseInt(parts[parts.length-1]);
-			if (times<10) {
+			if (times<MIN_TIMES) {
 				return;
 			}
 			for (int k=0;k<times;k++) {
