@@ -1,7 +1,7 @@
 #!/bin/sh                                                                                                                                 
 #author:dgomes                                                                                                                   
 #USAGE: generateItems.sh CRAWL_NAME DIRECTORY_OF_THE_CRAWL COLLECTION
-#output format: ITEMNAME FILENAME MD5                                                                                       
+#output format: ITEMNAME FILENAME MD5                                                                                      
 #verifies number of arguments                                   
 if [ $# -ne 1 ]; then
   echo "Usage: $0 CONFIG_FILE"
