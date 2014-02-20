@@ -1,1 +1,0 @@
-check InternetArchive/generateItems.sh
