@@ -29,6 +29,7 @@ IAS3
 
 IA Meta-data API
 	 - http://archive.org/advancedsearch.php
+		- Example to get all items that compose crawl EAWP1: https://archive.org/advancedsearch.php?q=pwacrawlid%3AEAWP1&fl%5B%5D=identifier&sort%5B%5D=&sort%5B%5D=&sort%5B%5D=&rows=50&page=1&callback=callback&save=yes&output=tables
      - http://archive.org/help/json.php 
 	 - http://blog.archive.org/2013/07/04/metadata-api/
 
