@@ -1,7 +1,7 @@
-This scripts were developed to facilitated the upload of Heritrix crawls to the Internet Archive using the IAS3 API. Folow these steps:
+This scripts were developed to facilitated the upload of Heritrix crawls to the Internet Archive using the IAS3 API. Follow these steps:
 
 1. Define the crawl meta-data at the config file (check example at configItemsEAWP1.cfg)
-2. Generate 10GB item for the crawl using generateItems.sh
+2. Generate 10GB items for the crawl using generateItems.sh (100 ARCs of 100 MB in each item)
 3. Upload the items to the Internet Archive using uploadItems.sh.
 
 Additional documentation:

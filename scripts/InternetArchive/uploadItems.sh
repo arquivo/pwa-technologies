@@ -1,6 +1,9 @@
 #!/bin/sh                                          
 #author:dgomes            
 #USAGE: uploadItems.sh CONFIG_FILE
+# IAS3 access keys must be set on environment (~/.bashrc)
+# AWS_ACCESS_KEY_ID
+# AWS_SECRET_ACCESS
                                             
 if [ $# -ne 1 ]; then
   echo "Usage: $0 CONFIG_FILE"

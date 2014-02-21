@@ -1,7 +1,10 @@
 #!/bin/sh                                                                                                                                 
 #author:dgomes                                                                                                                   
 #USAGE: generateItems.sh CRAWL_NAME DIRECTORY_OF_THE_CRAWL COLLECTION
-#output format: ITEMNAME FILENAME MD5                                      
+#output format: ITEMNAME FILENAME MD5  
+# IAS3 access keys must be set on environment (~/.bashrc)
+# AWS_ACCESS_KEY_ID
+# AWS_SECRET_ACCESS                                    
 if [ $# -ne 1 ]; then
   echo "Usage: $0 CONFIG_FILE"
   exit 127
@@ -16,7 +19,7 @@ OUTPUTFILE=$OUTPUTFILE
 
 #list arc files                                           
 cd "$DIRECTORY_OF_THE_CRAWL"
-ls -m1 -X *.arc.gz > crawlFiles.txt
+ls -m1 -X *.arc.gz > /tmp/crawlFiles.txt
 nuploadedfiles=0
 
 #create item 
@@ -36,6 +39,6 @@ do
 MD5=`md5sum $FILENAME | awk '{ print $1 }'`
 echo "$ITEMNAME $FILENAME $MD5" >> $OUTPUTFILE
 nuploadedfiles=$[$nuploadedfiles +1]
-done < crawlFiles.txt
+done < /tmp/crawlFiles.txt
 
 
