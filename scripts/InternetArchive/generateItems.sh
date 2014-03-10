@@ -1,5 +1,5 @@
-#!/bin/sh                                                                                                                                 
-#author:dgomes                                                                                                                   
+#!/bin/sh      
+#author:dgomes                                                                                            
 #USAGE: generateItems.sh CRAWL_NAME DIRECTORY_OF_THE_CRAWL COLLECTION
 #output format: ITEMNAME FILENAME MD5  
 # IAS3 access keys must be set on environment (~/.bashrc)
