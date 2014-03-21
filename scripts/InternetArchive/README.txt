@@ -26,17 +26,8 @@ Nr. of ARC files in documentation (private: http://wiki.priv.fccn.pt/Recolhas)
 # change config file to new OUTPUTFILE=/shareT2/scripts/IAExchange/itemsForAWP4AWP4chkpt5.recover
 # repeat uploadItems.sh
 
-old:
-# cat configItemsAWP4chkpt5.upload |grep 'Item:'| sed 's/.*Item: //g'|sed 's/; Arcfilename://g' > itemsForAWP4AWP4chkpt5.recover
-
-
-
-
-
-
 3.3 Count errors and compare with recover file
 # cat configItemsAWP4chkpt5.upload|grep Error|wc; cat itemsForAWP4AWP4chkpt5.recover|wc
-
 
 4. Compare number of uploaded items with 
 e.g. https://archive.org/search.php?query=pwacrawlid%3AAWP4
@@ -77,6 +68,8 @@ IA Meta-data API
 		- Example to get all items that compose crawl EAWP1: https://archive.org/advancedsearch.php?q=pwacrawlid%3AEAWP1&fl%5B%5D=identifier&sort%5B%5D=&sort%5B%5D=&sort%5B%5D=&rows=50&page=1&callback=callback&save=yes&output=tables
      - http://archive.org/help/json.php 
 	 - http://blog.archive.org/2013/07/04/metadata-api/
+IA How Archive.org items are structured
+	 http://blog.archive.org/2011/03/31/how-archive-org-items-are-structured/
 
 		
 Portuguese Web Archive collection
