@@ -22,7 +22,7 @@ export itemname=$(echo "$fileprops"|cut -d " " -f 1)
 export arcfilename=$(echo "$fileprops"|cut -d " " -f 2)
 export md5=$(echo "$fileprops"|cut -d " " -f 3)
 
-OPTS="-s --location --write-out %{http_code}"
+OPTS="-s -m 300s --location --write-out %{http_code}"
 UPLOAD="--upload-file $DIRECTORY_OF_THE_CRAWL/$arcfilename http://s3.us.archive.org/$itemname/$arcfilename"
 
 #upload using curl and had meta-data
