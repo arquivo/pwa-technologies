@@ -2,13 +2,17 @@
 
 This scripts were developed to facilitated the upload of Heritrix crawls to the Internet Archive using the IAS3 API. Follow these steps:
 
-1. Define the crawl meta-data at the config file (check example at configItemsAWP4.cfg). 
+1. Define the crawl meta-data at the config file (check example at /svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg). 
 
 If a crawl was performed in parallel by several machines or has ARC files on different directories must generate a different config upload file for each subcrawl to avoid itemname conflicts (e.g. configItemsAWP4.cfg  for ARC files in /AWP4-PT-20090520152848009 and configItemsAWP4chkpt5.cfg for ARC files in AWP4-PT-Recuperacao-chkpt5-20090622153514762). The ARC files of a given crawl will be aggregate by the custom field "pwacrawlid".
 e.g. configItemsAWP4.cfg for ARCS in /svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg
 
 1.1. Store config file for later access (e.g. on svn)
 e.g. #svn add /svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg
+
+1.2. Set .bashrc environment variables for IAS3 login. 
+export AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY
 
 2. Generate 10GB items for the crawl using generateItems.sh (100 ARCs of 100 MB in each item)
 e.g. #./svnGCodeInternetArchive/generateItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg
@@ -19,7 +23,7 @@ e.g.
 http://wiki.priv.fccn.pt/Recolhas; forth line.
 
 3. Upload the items to the Internet Archive using uploadItems.sh.
-e.g. #uploadItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg >configItemsAWP4.upload &
+e.g. #./svnGCodeInternetArchive/uploadItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg >configItemsAWP4.upload &
 
 3.1 Verify that all ARC files were uploaded OK
 # cat configItemsAWP4.upload|grep OK|wc

@@ -19,7 +19,10 @@ OUTPUTFILE=$OUTPUTFILE
 
 #list arc files                                           
 cd "$DIRECTORY_OF_THE_CRAWL"
-ls -m1 -X *.arc.gz > /tmp/crawlFiles.txt
+#ls -m1 -X *.arc.gz > /tmp/crawlFiles.txt
+#to crawls spread across several subdirectories use: find . -name *.arc.gz
+find . -name *.arc.gz > /tmp/crawlFiles.txt
+
 nuploadedfiles=0
 
 #create item 

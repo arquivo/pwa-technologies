@@ -19,11 +19,13 @@ do
 fileprops="$line"
 #read file information
 export itemname=$(echo "$fileprops"|cut -d " " -f 1)
-export arcfilename=$(echo "$fileprops"|cut -d " " -f 2)
+export arcfilepath=$(echo "$fileprops"|cut -d " " -f 2)
+#only ARC file name
+export arcfilename=$(echo "$fileprops"|cut -d " " -f 2|sed 's/.*\///g')
 export md5=$(echo "$fileprops"|cut -d " " -f 3)
 
 OPTS="-s -m 300s --location --write-out %{http_code}"
-UPLOAD="--upload-file $DIRECTORY_OF_THE_CRAWL/$arcfilename http://s3.us.archive.org/$itemname/$arcfilename"
+UPLOAD="--upload-file $DIRECTORY_OF_THE_CRAWL/$arcfilepath http://s3.us.archive.org/$itemname/$arcfilename"
 
 #upload using curl and had meta-data
 #replace access key: check is values are correctly passed on bash
@@ -39,8 +41,8 @@ sleep 300s
 response=$(/usr/bin/curl $OPTS --header "authorization:LOW $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" --header 'x-amz-auto-make-bucket:1' --header 'x-archive-meta-mediatype:web' --header "x-archive-meta01-collection: $COLLECTION" --header "x-archive-meta-pwacrawlid: $x_archive_meta_pwacrawlid" --header "x-archive-meta-external-identifier: $x_archive_meta_external_identifier" --header "x-archive-meta-creator:$x_archive_meta_creator"  --header "x-archive-meta-contributor:$x_archive_meta_contributor" --header "x-archive-meta-title:$x_archive_meta_title" --header "x-archive-meta-coverage: $x_archive_meta_coverage" --header "Content-MD5: $md5" --header "x-archive-meta-description: $x_archive_meta_description" --header "x-archive-meta-language: $x_archive_meta_language" --header "x-archive-meta-subject: $x_archive_meta_subject" --header "x-archive-meta-notes: $x_archive_meta_notes" --header "x-archive-meta-credits: $x_archive_meta_credits" --header "x-archive-meta-date: $x_archive_meta_date" $WOUT $UPLOAD)
 fi
 
-if [ "$response" == "200" ]; then echo $(date)" $itemname $arcfilename $md5: OK"
-else echo $(date)", Error message after retry: $response. RECOVER_ARC_FILE:$itemname $arcfilename $md5"
+if [ "$response" == "200" ]; then echo $(date)" $itemname $arcfilepath $md5: OK"
+else echo $(date)", Error message after retry: $response. RECOVER_ARC_FILE:$itemname $arcfilepath $md5"
 fi
  
 done < "$OUTPUTFILE"
