@@ -21,7 +21,7 @@ OUTPUTFILE=$OUTPUTFILE
 cd "$DIRECTORY_OF_THE_CRAWL"
 #ls -m1 -X *.arc.gz > /tmp/crawlFiles.txt
 #to crawls spread across several subdirectories use: find . -name *.arc.gz
-find . -name *.arc.gz > /tmp/crawlFiles.txt
+find . -name *.arc.gz > /tmp/crawlFiles$CRAWL_NAME.txt
 
 nuploadedfiles=0
 
@@ -42,6 +42,6 @@ do
 MD5=`md5sum $FILENAME | awk '{ print $1 }'`
 echo "$ITEMNAME $FILENAME $MD5" >> $OUTPUTFILE
 nuploadedfiles=$[$nuploadedfiles +1]
-done < /tmp/crawlFiles.txt
+done < /tmp/crawlFiles$CRAWL_NAME.txt
 
 
