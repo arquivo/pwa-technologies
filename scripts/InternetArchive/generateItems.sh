@@ -24,24 +24,23 @@ cd "$DIRECTORY_OF_THE_CRAWL"
 find . -name *.arc.gz > /tmp/crawlFiles$CRAWL_NAME.txt
 
 nuploadedfiles=0
+count=0
 
 #create item 
 while read line 
 do
         FILENAME=$line
         if [[ "$nuploadedfiles" -gt 99 ]] || [[ "$nuploadedfiles" == 0 ]]; then
-        #get date for item name                                                                            
-        #NOTE: this depends on the crawl file format. May have to be adapted                                                                  
-        ITEMDATE=$(echo "$FILENAME"|cut -d "-" -f 2)
-        #item name                                
-        ITEMNAME="$COLLECTION-$CRAWL_NAME$YEAR-$ITEMDATE"
+        count=$((count + 1))
+		ITEMNR=$count
+		#item name                                
+        ITEMNAME="$COLLECTION-$CRAWL_NAME$YEAR-$ITEMNR"
 		nuploadedfiles=0
         fi
-
 #generate md5                                 
 MD5=`md5sum $FILENAME | awk '{ print $1 }'`
 echo "$ITEMNAME $FILENAME $MD5" >> $OUTPUTFILE
-nuploadedfiles=$[$nuploadedfiles +1]
+nuploadedfiles=$((nuploadedfiles + 1))
 done < /tmp/crawlFiles$CRAWL_NAME.txt
 
 
