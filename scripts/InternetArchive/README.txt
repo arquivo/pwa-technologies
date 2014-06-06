@@ -2,47 +2,47 @@
 
 This scripts were developed to facilitated the upload of Heritrix crawls to the Internet Archive using the IAS3 API. Follow these steps:
 
-1. Define the crawl meta-data at the config file (check example at /svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg). 
+1. Define the crawl meta-data at the config file (check example at /svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg). 
 
-If a crawl was performed in parallel by several machines or has ARC files on different directories must generate a different config upload file for each subcrawl to avoid itemname conflicts (e.g. configItemsAWP4.cfg  for ARC files in /AWP4-PT-20090520152848009 and configItemsAWP4chkpt5.cfg for ARC files in AWP4-PT-Recuperacao-chkpt5-20090622153514762). The ARC files of a given crawl will be aggregate by the custom field "pwacrawlid".
-e.g. configItemsAWP4.cfg for ARCS in /svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg
+If a crawl was performed in parallel by several machines or has ARC files on different directories must generate a different config upload file for each subcrawl to avoid itemname conflicts (e.g. configItems$CRAWL_NAME.cfg  for ARC files in /$CRAWL_NAME-PT-20090520152848009 and configItems$CRAWL_NAMEchkpt5.cfg for ARC files in $CRAWL_NAME-PT-Recuperacao-chkpt5-20090622153514762). The ARC files of a given crawl will be aggregate by the custom field "pwacrawlid".
+e.g. configItems$CRAWL_NAME.cfg for ARCS in /svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg
 
 1.1. Store config file for later access (e.g. on svn)
-e.g. #svn add /svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg
+e.g. #svn add /svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg
 
 1.2. Set .bashrc environment variables for IAS3 login. 
 export AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY
 
 2. Generate 10GB items for the crawl using generateItems.sh (100 ARCs of 100 MB in each item)
-e.g. #./svnGCodeInternetArchive/generateItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg
+e.g. #./svnGCodeInternetArchive/generateItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg
 
 2.1. Check if the nr. of items on $OUTPUTFILE matches the number of files on /tmp/crawlFiles.txt and nr. of ARC files on $DIRECTORY_OF_THE_CRAWL nr. of ARC files on documentation about crawl meta-data  (column Número de arcs on http://wiki.priv.fccn.pt/Recolhas). 
 e.g. 
-#cat itemsForAWP4 | grep "arc.gz" |wc; cat itemsForAWP4|wc; cat /tmp/crawlFiles.txt|wc. 
+#cat itemsFor$CRAWL_NAME | grep "arc.gz" |wc; cat itemsFor$CRAWL_NAME|wc; cat /tmp/crawlFiles.txt|wc. 
 http://wiki.priv.fccn.pt/Recolhas; forth line.
 
 3. Upload the items to the Internet Archive using uploadItems.sh.
-e.g. #./svnGCodeInternetArchive/uploadItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItemsAWP4.cfg >configItemsAWP4.upload &
+e.g. #./svnGCodeInternetArchive/uploadItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg &
 
 3.1 Verify that all ARC files were uploaded OK
-# cat configItemsAWP4.upload|grep OK|wc
+# cat configItems$CRAWL_NAME.upload|grep OK|wc
 Nr. of ARC files in documentation (private: http://wiki.priv.fccn.pt/Recolhas)
 
 3.1.1 In case of errors, extract failed Items and ARC files to be recovered
-# cat configItemsAWP4chkpt5.upload |grep 'RECOVER_ARC_FILE:'| sed 's/.*RECOVER_ARC_FILE://g' > itemsForAWP4chkpt5.recover
-# change config file to new OUTPUTFILE=/shareT2/scripts/IAExchange/itemsForAWP4AWP4chkpt5.recover
+# cat configItems$CRAWL_NAME.upload |grep 'RECOVER_ARC_FILE:'| sed 's/.*RECOVER_ARC_FILE://g' > itemsFor$CRAWL_NAMEchkpt5.recover
+# change config file to new OUTPUTFILE=/shareT2/scripts/IAExchange/itemsFor$CRAWL_NAME$CRAWL_NAMEchkpt5.recover
 # repeat uploadItems.sh
 
 3.3 Count errors and compare with recover file
-# cat configItemsAWP4chkpt5.upload|grep Error|wc; cat itemsForAWP4AWP4chkpt5.recover|wc
+# cat configItems$CRAWL_NAME.upload|grep Error|wc; cat itemsFor$CRAWL_NAME$CRAWL_NAME.recover|wc
 
 4. Compare number of uploaded items with 
-e.g. https://archive.org/search.php?query=pwacrawlid%3AAWP4
-#cat itemsForAWP4| cut -d " " -f 1|sort -u|wc
+e.g. https://archive.org/search.php?query=pwacrawlid%3A$CRAWL_NAME
+#cat itemsFor$CRAWL_NAME| cut -d " " -f 1|sort -u|wc
 
 4.1. Update documentation on Wiki (http://wiki.priv.fccn.pt/Recolhas; column "Replica on Internet Archive"). Insert link to IA query with custom field "pwacrawlid:$x_archive_meta_pwacrawlid" that returns all items of the crawl through https://archive.org/advancedsearch.php.
-e.g. "Done. [https://archive.org/advancedsearch.php?q=pwacrawlid%3AAWP4&fl%5B%5D=identifier&sort%5B%5D=&sort%5B%5D=&sort%5B%5D=&rows=50&page=1&callback=callback&save=yes&output=tables List of the NUMBER_OF_ITEMS that compose AWP4 crawl. Query custom field: "pwacrawlid:AWP4"]"
+e.g. "Done. [https://archive.org/advancedsearch.php?q=pwacrawlid%3A$CRAWL_NAME&fl%5B%5D=identifier&sort%5B%5D=&sort%5B%5D=&sort%5B%5D=&rows=50&page=1&callback=callback&save=yes&output=tables List of the NUMBER_OF_ITEMS that compose $CRAWL_NAME crawl. Query custom field: "pwacrawlid:$CRAWL_NAME"]"
 
 == Downloading Portuguese Web Archive content from the Internet Archive ==
 
@@ -51,8 +51,8 @@ Crawled content can be downloaded using one of the following methods. Remember t
 Download one item:
 - ia Python command to download files from each item: IN TEST 
 	https://github.com/jjjake/ia-wrapper/blob/master/README.rst
-	- E.g. to download item with identifier portuguese-web-archive-AWP42009-20090522035123
-	# ia download portuguese-web-archive-AWP42009-20090522035123
+	- E.g. to download item with identifier portuguese-web-archive-$CRAWL_NAME2009-20090522035123
+	# ia download portuguese-web-archive-$CRAWL_NAME2009-20090522035123
 - Torrent files to download files from each item
 	- A torrent file exists for each and every item of a crawl. The URL to retrieve the torrent files for the items is formatted like so: https://archive.org/download/{ITEM_NAME}/{ITEM_NAME}_archive.torrent 
 
@@ -63,7 +63,7 @@ Download an item list:
 Download content based on meta-data. If you just have the "pwacrawlid" or other metadata field and you want to identify relevant items to download:
 - Wget to download in bulk: http://blog.archive.org/2012/04/26/downloading-in-bulk-using-wget/
 - ia Pyhon command and parallel: IN TEST
-	- E.g. # ia search 'subject:(pwacrawlid:AWP4)' | parallel 'ia download {}'
+	- E.g. # ia search 'subject:(pwacrawlid:$CRAWL_NAME)' | parallel 'ia download {}'
 
 	
 Additional documentation:
