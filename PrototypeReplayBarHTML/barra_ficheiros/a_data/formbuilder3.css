@@ -1,0 +1,69 @@
+.fb3area {
+	/*text-align: center;*/
+}
+.fb3area *{
+	/*text-align: left;*/
+}
+.fb3col {
+	vertical-align: top;
+	display: inline-block;
+	*float: left;
+	padding: 5px;
+}
+.fb3sep {
+	clear: both;
+	padding: 5px 0 0 0;
+	margin: 0 0 5px 0;
+	border-bottom: 1px dotted #e5e5e5;
+}
+.fb3label {
+	font-weight: bold;
+}
+.fb3label.fb3top {
+	clear: both;
+	width: auto;
+}
+.fb3label.fb3left {
+	vertical-align: top;
+	display: inline-block;
+	*float: left;
+	width: 28%;
+}
+.fb3ast {
+	color: red;
+}
+.fb3field input, .fb3field select, .fb3field textarea {
+	width: 100%;
+}
+.fb3field.fb3top {
+	clear: both;
+	width: auto;
+}
+.fb3field.fb3left {
+	vertical-align: top;
+	display: inline-block;
+	max-width: 70%;
+	width: 70%;
+}
+.fb3field.fb3checkbox input,.fb3field.fb3radio input {
+	width: auto !important;
+}
+.fb3row {
+	margin-bottom: 10px;
+}
+.fb3error {
+	border: 1px solid red;
+	background: lightpink;
+}
+.fb3codpostal1 {
+	width: 50px !important;
+	margin: 0 !important;
+}
+.fb3codpostalsep {
+	display: inline;
+	margin: 0 5px;
+}
+.fb3codpostal2 {
+	width: 30px !important;
+	margin: 0 !important;
+}
