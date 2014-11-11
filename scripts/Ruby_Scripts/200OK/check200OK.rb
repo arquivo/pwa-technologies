@@ -1,4 +1,4 @@
-#
+#!/usr/bin/env ruby
 #Input: 
 #   This script needs a file called URL wich provides the URL's list.
 #Output: 
@@ -9,12 +9,18 @@
 #
 require 'open-uri'
 $FileName= '/shareT2/backups/configs/BlackList/URLsConfigurationList'
+$Reportfilename= "report"
+time = Time.new
+target=open($Reportfilename,'a')
+target.write(time)
+target.write("\n")
 File.open($FileName).each do |url|
     begin
-#    puts url
         response = open(url).status
         tobePrinted=url+ ' is online.'
         puts tobePrinted.gsub("\n","")
+        target.write(tobePrinted)
+        target.write("\n")
         SystemExit.new(2,"#{url} is not on proper way")
     rescue => e
         if e.message == "404 Not Found"
@@ -22,3 +28,4 @@ File.open($FileName).each do |url|
         end
     end
 end
+
