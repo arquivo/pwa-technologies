@@ -1,4 +1,5 @@
 #
+#Developed by PWA
 #Input: 
 #   This script needs a file called URL wich provides the URL's list.
 #Output: 
@@ -11,25 +12,21 @@ class ParseTabelaPrincipal
 require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
-$FileName= 'URL'
-$Result_filename = "Result"
-$BrokenLinks_filename="BrokenLinks"
-$ResultRules_filename="ResultRules"
-$Wiki_filename="wikiFile"
+#Begin declaration of files used
+$FileName= '/shareT2/backups/configs/httpd/Brookers/URLsBlackList' # This is the name of the file tobe imported for processing URL
+$Result_filename = "Result" # Files processed succesfuly 
+$BrokenLinks_filename="BrokenLinks" # This is where are located the URLs that had problems
+$ResultRules_filename="ResultRules" # File with rules to add on apache
+$Wiki_filename="wikiFile" # File with wiki format
+#End declaration of files used
 $ArquivoPT='http://arquivo.pt/wayback/wayback/'
 $waybackMachine_array=Array.new
-$PWA_array=Array.new
 $PWAIndex=String.new
 $waybackMachine=Array.new
-$Errors=String.new
-$WaybackMachineFileResult= 'WaybackResult'
 def Initialize(url)
     @url = url
 end
 def clearFiles()
-    if File.file?($WaybackMachineFileResult)
-        File.delete($WaybackMachineFileResult)
-    end
     if File.file?($BrokenLinks_filename)
         File.delete($BrokenLinks_filename)
     end
@@ -61,12 +58,6 @@ end
 def setWaybackArray()
 $waybackMachine_array.clear
 end
-def getPWArray()
-$PWA_array
-end
-def setPWArray()
-$PWA_array.clear
-end
 def createLineRules(array,delimiter)
     array.each do |aux| # if contains indexed pages
         processArray((aux[0..aux.index(delimiter).to_i-1]))
@@ -77,24 +68,27 @@ def printRulesOnfile(linesTobePrint,initURL)
     i=0
     isHTTP=true
     target = open($ResultRules_filename, 'a')
-    target.write("# Wayback URL query: #{@url}")
-    target.write("   RewriteRule ^#{$waybackMachineALL}#{initURL} - [R=404,NC,L]\n")
+    target.write("\n\n\n#Wayback URL query: #{@url}")
+    target.write("   RewriteRule ^#{$waybackMachineALL}#{initURL} - [R=404,NC,L]".gsub("\n",""))
     if initURL.include? "http://"
-        target.write("   RewriteRule ^#{$waybackMachineALL}#{initURL.split("http://").last}")
+        target.write("\n")
+        target.write("   RewriteRule ^#{$waybackMachineALL}#{initURL.split("http://").last} - [R=404,NC,L]".gsub("\n",""))
     else
-        target.write("   RewriteRule ^#{$waybackMachineALL}http:\/\/#{initURL}")
+        target.write("\n")
+        target.write("   RewriteRule ^#{$waybackMachineALL}http:\/\/#{initURL} - [R=404,NC,L]".gsub("\n",""))
         isHTTP=false
     end
-    target.write("#PWA URL query\n")
+    target.write("\n#PWA URL query")
     linesTobePrint.each do |aux| # if contains indexed pages
         target_result = open($Result_filename,'a')
         target_aux = open($Wiki_filename,'a')
         target_result.write(@url)
-        target.write("\n   RewriteRule ^/#{aux[0..aux.index('?').to_i-1]}")
+        target.write("\n") 
+        target.write("   RewriteRule ^/#{aux[0..aux.index('?').to_i-1]} - [R=404,NC,L]".gsub("\n",""))
         unless $waybackMachine.nil?
             target_aux.write("|- \n")
             if isHTTP
-                target_aux.write("|http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]} ||  #{$waybackMachine[i]}#{initURL}\n #{$waybackMachine[i]}#{initURL.split("http://").last}\n}")
+                target_aux.write("|http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]} ||  #{$waybackMachine[i]}#{initURL}\n #{$waybackMachine[i]}#{initURL.split("http://").last}\n")
             else
                 target_aux.write("|http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]} || #{$waybackMachine[i]}http://#{initURL}\n #{$waybackMachine[i]}#{initURL}\n")
             end
@@ -104,6 +98,7 @@ def printRulesOnfile(linesTobePrint,initURL)
 end
 def printUrlWithID(linesTobePrint,initURL)
     linesTobePrint.each do |aux| 
+        $PWAIndex="http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]}"
         $PWAIndex="http://p58.arquivo.pt:8080/#{aux[0..aux.index('?').to_i-1]}"
         makeWayBack
     end
