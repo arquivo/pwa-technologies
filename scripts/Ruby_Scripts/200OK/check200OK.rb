@@ -9,7 +9,7 @@
 #
 require 'open-uri'
 $FileName= '/shareT2/backups/configs/BlackList/URLsConfigurationList'
-$Reportfilename= "report"
+$Reportfilename= "/var/log/Blacklist_report"
 time = Time.new
 target=open($Reportfilename,'a')
 target.write(time)
