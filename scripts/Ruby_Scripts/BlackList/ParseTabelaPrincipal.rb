@@ -88,9 +88,11 @@ def printRulesOnfile(linesTobePrint,initURL)
         unless $waybackMachine.nil?
             target_aux.write("|- \n")
             if isHTTP
-                target_aux.write("|http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]} ||  #{$waybackMachine[i]}#{initURL}\n #{$waybackMachine[i]}#{initURL.split("http://").last}\n")
+                target_aux.write("|http://p58.arquivo.pt/#{aux[0..aux.index('?').to_i-1]} ||  p58.#{$waybackMachine[i].split("http://").last}#{initURL}\n p58.#{$waybackMachine[i].split("http://").last}#{initURL.split("http://").last}\n")
+                target_aux.write("|http://p62.arquivo.pt/#{aux[0..aux.index('?').to_i-1]} ||  p62.#{$waybackMachine[i].split("http://").last}#{initURL}\n p62.#{$waybackMachine[i].split("http://").last}#{initURL.split("http://").last}\n")
             else
-                target_aux.write("|http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]} || #{$waybackMachine[i]}http://#{initURL}\n #{$waybackMachine[i]}#{initURL}\n")
+                target_aux.write("|http://p58.arquivo.pt/#{aux[0..aux.index('?').to_i-1]} || p58.#{$waybackMachine[i].split("http://").last}http://#{initURL}\n p58.#{$waybackMachine[i].split("http://").last}#{initURL}\n")
+                target_aux.write("|http://p62.arquivo.pt/#{aux[0..aux.index('?').to_i-1]} || p62.#{$waybackMachine[i].split("http://").last}http://#{initURL}\n p62.#{$waybackMachine[i].split("http://").last}#{initURL}\n")
             end
             i+=1
         end
@@ -99,7 +101,7 @@ end
 def printUrlWithID(linesTobePrint,initURL)
     linesTobePrint.each do |aux| 
         $PWAIndex="http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]}"
-        $PWAIndex="http://p58.arquivo.pt:8080/#{aux[0..aux.index('?').to_i-1]}"
+        #$PWAIndex="http://p58.arquivo.pt:8080/#{aux[0..aux.index('?').to_i-1]}"
         makeWayBack
     end
 end
