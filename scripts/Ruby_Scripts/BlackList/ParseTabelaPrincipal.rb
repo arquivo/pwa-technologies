@@ -99,7 +99,7 @@ end
 def printUrlWithID(linesTobePrint,initURL)
     linesTobePrint.each do |aux| 
         $PWAIndex="http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]}"
-        $PWAIndex="http://p58.arquivo.pt:8080/#{aux[0..aux.index('?').to_i-1]}"
+#        $PWAIndex="http://p58.arquivo.pt:8080/#{aux[0..aux.index('?').to_i-1]}"
         makeWayBack
     end
 end
