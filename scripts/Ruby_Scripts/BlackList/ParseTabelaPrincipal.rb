@@ -12,6 +12,7 @@ class ParseTabelaPrincipal
 require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
+require 'net/http'
 #Begin declaration of files used
 $FileName= '/shareT2/backups/configs/httpd/Brookers/URLsBlackList' # This is the name of the file tobe imported for processing URL
 $Result_filename = "Result" # Files processed succesfuly 
@@ -40,7 +41,13 @@ def clearFiles()
         File.delete($Wiki_filename)
     end
 end
-
+def processArray (array)
+    aux = Array.new
+    array.each do |url|
+        aux.push(url.split('?').first)
+    end
+    aux
+end
 def ParsePage(symbolTobeFind,splitSymbol)
    doc = Nokogiri::HTML(open(@url))
    link_arr = Array.new
@@ -50,6 +57,7 @@ def ParsePage(symbolTobeFind,splitSymbol)
       link_arr =link 
       link_arr.delete_at 0
    end
+   link_arr = check200OK processArray link_arr
    link_arr
 end
 def getWaybackArray()
@@ -88,9 +96,9 @@ def printRulesOnfile(linesTobePrint,initURL)
         unless $waybackMachine.nil?
             target_aux.write("|- \n")
             if isHTTP
-                 target_aux.write("|http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]} ||  #{$waybackMachine[i]}#{initURL}\n #{$waybackMachine[i]}#{initURL.split("http://").last}\n}")
+                 target_aux.write("|http://arquivo.pt/#{aux} ||  #{$waybackMachine[i]}#{initURL}\n#{$waybackMachine[i]}/#{initURL.split("http://").last}\n}")
             else
-                 target_aux.write("|http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]} || #{$waybackMachine[i]}http://#{initURL}\n #{$waybackMachine[i]}#{initURL}\n")
+                target_aux.write("|http://arquivo.pt/#{aux} || #{$waybackMachine[i]}http://#{initURL}\n#{$waybackMachine[i]}/#{initURL}\n")
             end
             i+=1
         end
@@ -98,8 +106,8 @@ def printRulesOnfile(linesTobePrint,initURL)
 end
 def printUrlWithID(linesTobePrint,initURL)
     linesTobePrint.each do |aux| 
-        $PWAIndex="http://arquivo.pt/#{aux[0..aux.index('?').to_i-1]}"
-        $PWAIndex="http://p58.arquivo.pt:8080/#{aux[0..aux.index('?').to_i-1]}"
+        $PWAIndex="http://arquivo.pt/#{aux}"
+        #$PWAIndex="http://p58.arquivo.pt:8080/#{aux[0..aux.index('?').to_i-1]}"
         makeWayBack
     end
 end
@@ -109,8 +117,8 @@ def makeWayBack
         doc = Nokogiri::HTML(open($PWAIndex))
         aux = doc.to_s
         i=aux.index('sWayBackCGI').to_i
-        $waybackMachine.push(aux[i..i+72].split("\"").last)
-        $waybackMachineALL=aux[i+41..i+57].split("\"").last+"(\.*)/"
+        $waybackMachine.push(aux[i..i+63].split("\"").last)
+        $waybackMachineALL=aux[i+32..i+63].split("\"").last+"(\.*)/"
         rescue Exception => e
             puts e.message 
             puts  "An error occured in  the url: #{$PWAIndex}, this have to be done manualy"
@@ -128,4 +136,19 @@ def printBrokenLinks()
     target.write("# URL: #{@url}")
 end
 
+end
+
+
+
+def check200OK link_arr
+aux = Array.new
+    link_arr.each do |url|
+          url_performed ="http://arquivo.pt/#{url}"
+            response =Net::HTTP.get_response(URI.parse(url_performed))
+            if response.code =="200"
+                aux.push(url)
+            end    
+    end
+    puts "there are #{aux.length} new urls to be added on the blacklist"
+    aux
 end
