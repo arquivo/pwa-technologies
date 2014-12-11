@@ -11,9 +11,11 @@ require 'open-uri'
 $FileName= '/shareT2/backups/configs/BlackList/URLsConfigurationList'
 $Reportfilename= "/var/log/Blacklist_report"
 def response (url)
+result=false
     begin
         response = open(url).status
-        tobePrinted=url+ ' is online.'
+        tobePrinted='URL NOT BLOCKED: '+ url
+        result=true
         puts tobePrinted.gsub("\n","")
         target.write(tobePrinted)
         target.write("\n")
@@ -23,6 +25,7 @@ def response (url)
             SystemExit.new(0,"#{url} is putting in the dark")
         end
     end
+result
 end
 
 
@@ -33,6 +36,7 @@ target.write(time)
 target.write("\n")
 isnotDoneBoth=true
 firstCycle=true
+isnotBlocked=false
 File.open($FileName).each do |url|
     while isnotDoneBoth do
             urlPerformed=""
@@ -44,7 +48,13 @@ File.open($FileName).each do |url|
                     firstCycle=true
                     isnotDoneBoth=false
                 end
-                response (urlPerformed)
+                aux = response(urlPerformed)
+                unless isnotBlocked 
+                    isnotBlocked=aux
+                end
      end
         isnotDoneBoth=true
+end
+unless isnotBlocked 
+   puts ("ALL BLOCKED")
 end
