@@ -1,0 +1,46 @@
+#!/bin/sh
+
+#verifies number of arguments
+if [ $# -ne 3 ]; then
+  echo Usage: $0 JOB_NAME HERITRIX_DIRECTORY BACKUP_DIRECTORY
+  exit 127
+fi
+
+JOB=$1
+HERITRIXDIR=$2
+BACKUPDIR=$3
+DATE=`date +%d%m%Y\-%H\-%M`
+
+if [ -d $HERITRIXDIR/jobs/$JOB/$BACKUPDIR ]; then
+#do nothing
+ echo > /dev/null
+else
+  cd $HERITRIXDIR/jobs/$JOB/
+  mkdir $BACKUPDIR
+fi
+
+if [ -d $HERITRIXDIR/jobs/$JOB/$BACKUPDIR/$DATE ]; then
+#do nothing
+  echo > /dev/null
+else
+  cd $HERITRIXDIR/jobs/$JOB/$BACKUPDIR
+  mkdir $DATE
+fi
+
+#copy files to dir created (backup directory)
+cp $HERITRIXDIR/jobs/$JOB/*.txt $HERITRIXDIR/jobs/$JOB/$BACKUPDIR/$DATE
+#cp $HERITRIXDIR/jobs/$JOB/*.log $HERITRIXDIR/jobs/$JOB/$BACKUPDIR/$DATE
+cp -r $HERITRIXDIR/jobs/$JOB/logs 
+$HERITRIXDIR/jobs/$JOB/$BACKUPDIR/$DATE
+
+#log sar and iostat
+sar > $HERITRIXDIR/jobs/$JOB/$BACKUPDIR/$DATE/sar.log
+iostat -x > $HERITRIXDIR/jobs/$JOB/$BACKUPDIR/$DATE/iostat.log
+
+#create tar
+cd $HERITRIXDIR/jobs/$JOB/$BACKUPDIR
+tar czpf $JOB\-$DATE.tar.gz $DATE
+
+#remove dir
+rm -rf $DATE
+

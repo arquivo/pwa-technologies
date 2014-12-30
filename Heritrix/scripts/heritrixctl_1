@@ -1,0 +1,30 @@
+export HERITRIX_HOME=/home/heritrix/heritrix-1.14.3_1
+#export JAVA_HOME=/usr/java/jdk1.6.0_04/jre
+export JAVA_HOME=/usr/java/default/jre
+export JMX_PORT=8851
+
+#/usr/java/jdk1.5.0_14/jre
+#export JAVA_OPTS="-Xmx3072m"
+#export JAVA_OPTS="-d64 -Xmx6g"
+export JAVA_OPTS="-d64 -Xmx4g"
+export JMX_PORT="8888"
+
+# Load configs:   
+# USERNAME=something
+# PASSWORD=something
+. heritrixctl_1.config
+
+if [ $# = 1 ]
+then
+  if [ $1 = "global" ]
+  then
+    echo "Heritrix will be started at all adresses available"
+    $HERITRIX_HOME/bin/heritrix --bind=/ --admin=$USERNAME:$PASSWORD
+  else
+    #PARAMETER NOT ACCEPTED
+    echo "Usage: `basename $0` [global]"
+  fi
+else
+  echo "Heritrix will be started at localhost"
+  $HERITRIX_HOME/bin/heritrix --admin=$USERNAME:$PASSWORD
+fi
