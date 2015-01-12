@@ -44,6 +44,7 @@ import org.apache.nutch.util.NutchConfiguration;
 import org.apache.nutch.util.RFC3339Date;
 import org.apache.lucene.search.PwaFunctionsWritable;
 import org.w3c.dom.*;
+
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
@@ -60,7 +61,10 @@ public class OpenSearchServlet extends HttpServlet {
   private static PwaFunctionsWritable functions = null;
   private static int nQueryMatches = 0;
   private static String collectionsHost=null;
-    
+  private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
+  private static final DateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+  SimpleDateFormat inputDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+  Calendar DATE_END = new GregorianCalendar();
   static {
     NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");
     NS_MAP.put("time","http://a9.com/-/opensearch/extensions/time/1.0/");
@@ -91,7 +95,6 @@ public class OpenSearchServlet extends HttpServlet {
     
   private NutchBean bean;
   private Configuration conf;
-
   public void init(ServletConfig config) throws ServletException {
     try {
       this.conf = NutchConfiguration.get(config.getServletContext());
@@ -113,14 +116,36 @@ public class OpenSearchServlet extends HttpServlet {
     //if (NutchBean.LOG.isInfoEnabled()) {
       LOG.debug("query request from " + request.getRemoteAddr());
     //}
-
+      
+      /*
+       * The follow comment code was developed to support querying by URL through Opensearch
+       * */
+      Calendar DATE_END = new GregorianCalendar();
+      DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) );
+      DATE_END.set( Calendar.MONTH, 12-1 );
+      DATE_END.set( Calendar.DAY_OF_MONTH, 31 );
+      DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
+      DATE_END.set( Calendar.MINUTE, 59 );
+      DATE_END.set( Calendar.SECOND, 59 );
+      String dateEndString = FORMAT.format( DATE_END.getTime() );
+//      Query queryNutch = null;
+//      String s = "date:19960101000000-20131231235959 exacturlexpand:http://tirith.esoterica.pt/~lms/BurgoNews/burgonews.html";
+//      	queryNutch = NutchwaxQuery.parse(s, this.conf);
+//      queryString= queryNutch.toString();
+      
+      
+      
     // get parameters from request
     request.setCharacterEncoding("UTF-8");
+    
+    
     String queryString = request.getParameter("query");
+    
     if (queryString == null)
       queryString = "";
-    String urlQuery = URLEncoder.encode(queryString, "UTF-8");
     
+   String urlQuery = URLEncoder.encode(queryString, "UTF-8");
+   urlQuery= URLEncoder.encode(queryString,"UTF-8");
     // the query language
     String queryLang = request.getParameter("lang");
     
@@ -190,6 +215,17 @@ public class OpenSearchServlet extends HttpServlet {
     String sIndex = request.getParameter("index");       
     boolean waybackQuery = request.getParameter("waybackQuery")!=null && request.getParameter("waybackQuery").equals("true"); // indicates that is a wayback request
     
+    
+    // To support querying opensearch by  url 
+    String queryStringOpensearchWayback=null;
+    boolean isOpensearhWayback=false;
+    if (!waybackQuery && !queryString.contains("exacturlexpand:") && queryString.contains("http://")) {
+    	
+    	String s = "date:19960101000000-"+dateEndString+" exacturlexpand:"+queryString;
+    	queryStringOpensearchWayback= request.getParameter(s);
+    	isOpensearhWayback=true;
+    }
+    
     // Make up query string for use later drawing the 'rss' logo.
     String params = "&hitsPerPage=" + hitsPerPage +
         (queryLang == null ? "" : "&lang=" + queryLang) +
@@ -207,8 +243,16 @@ public class OpenSearchServlet extends HttpServlet {
     	hits = new Hits(1,oneHit);
     }
     else { // search hits
-    	Query query = Query.parse(queryString, queryLang, this.conf);
-    	LOG.debug("query: " + queryString);    	
+    	Query query=null;
+    	if (isOpensearhWayback){
+    		query = Query.parse(queryStringOpensearchWayback, queryLang, this.conf);
+    		LOG.debug("query: " + queryStringOpensearchWayback);	
+    	}
+    	else{
+    		query = Query.parse(queryString, queryLang, this.conf);
+    		LOG.debug("query: " + queryString);
+    	}
+    	    	
 
     	// execute the query    
     	try {    		
