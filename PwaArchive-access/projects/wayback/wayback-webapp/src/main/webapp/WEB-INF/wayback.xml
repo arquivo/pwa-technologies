@@ -25,7 +25,7 @@
     	</property>
     	<property name="query">
     		<bean class="org.archive.wayback.query.Renderer">
-    			<property name="captureJsp" value="/jsp/innerCalendarResults.jsp" />
+    			<property name="captureJsp" value="/jsp/newInnerCalendarResults.jsp" />
     		</bean>
 	</property>
 
@@ -59,7 +59,7 @@
     	</property>
     	<property name="query">
     		<bean class="org.archive.wayback.query.Renderer">
-    			<property name="captureJsp" value="/jsp/innerCalendarResults.jsp" />
+    			<property name="captureJsp" value="/jsp/newInnerCalendarResults.jsp" />
     		</bean>
 	</property>
 
