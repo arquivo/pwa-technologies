@@ -120,10 +120,12 @@
             Date archiveDate = new Date(Long.valueOf(detail.getValue("date")).longValue()*1000);
             String archiveCollection = detail.getValue("collection");
             String url = detail.getValue("url");
-
+            SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMddhhmmss");
 	    // If the collectionsHost includes a path do not add archiveCollection.
             // See http://sourceforge.net/tracker/index.php?func=detail&aid=1288990&group_id=118427&atid=681140.
-            String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
+            //String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
+	    // Changed to return in wayback query format
+              String target = "http://"+ collectionsHost +"/"+ ft.format(archiveDate)  +"/"+ url;
             pageContext.setAttribute("target", target);
             allVersions = "search.jsp?query="+ URLEncoder.encode(url, "UTF-8") +"&dateStart="+ dateStartString + "&dateEnd="+ dateEndString +"&pos="+ String.valueOf(position);
 
@@ -257,7 +259,10 @@
                 <%} }%>
 
 
-            <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2>
+            <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
+            <!-- Changed to return in wayback query format -->
+            
+            <h2><a href="<c:url value='${target}'></c:url>"><%=title%></a></h2>
 	    <br />
 		<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
 		<span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span> - <a class="outras-datas" href="<%=allVersions%>"><fmt:message key='search.result.history'/></a>

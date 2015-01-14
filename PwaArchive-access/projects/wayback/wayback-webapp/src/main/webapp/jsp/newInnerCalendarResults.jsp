@@ -253,17 +253,18 @@ for (int i = 0; i < numPartitions; i++) {
 				String captureDate = result.get(WaybackConstants.RESULT_CAPTURE_DATE);
                                 Timestamp captureTS = Timestamp.parseBefore(captureDate);
 		
-				String replayUrl = results.resultToReplayId(result);
+				String replayUrl = results.resultToReplayUrl(result);
 				// Add URL parameters for HTTP log
-				replayUrl += "?year="+ partition.getTitle()		// the column of the selected result
-					+"&r_pos="+ (line+1)	 			// the result's position on the column
-					+"&r_t="+ partition.resultsCount() 		// how many results in the column
-					+"&col_pos="+ indexColumnWithResults		// Which of the columns with results we are on
-					+"&col_tot="+ totalColumnsWithResults		// How many year columns have results
-					+"&l="+ language
-					+"&sid="+ sid;					// Session ID
+// 				replayUrl += "?year="+ partition.getTitle()		// the column of the selected result
+// 					+"&r_pos="+ (line+1)	 			// the result's position on the column
+// 					+"&r_t="+ partition.resultsCount() 		// how many results in the column
+// 					+"&col_pos="+ indexColumnWithResults		// Which of the columns with results we are on
+// 					+"&col_tot="+ totalColumnsWithResults		// How many year columns have results
+// 					+"&l="+ language
+// 					+"&sid="+ sid;					// Session ID
 				%>
-				<td><a href="<%=replayURIPrefix%><%=replayUrl%>" title="<fmt:message key='grid.result.link.title'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message>"><fmt:message key='grid.result.link.text'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message></a></td>
+				<!-- <td><a href="<%=replayURIPrefix%><%=replayUrl%>" title="<fmt:message key='grid.result.link.title'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message>"><fmt:message key='grid.result.link.text'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message></a></td> -->
+				<td><a href="<%=replayUrl%>" title="<fmt:message key='grid.result.link.title'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message>"><fmt:message key='grid.result.link.text'><fmt:param value='<%=captureTS.getDate()%>'/></fmt:message></a></td>
 				<%
 				resultCounter++;
 			} else {

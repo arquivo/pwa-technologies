@@ -49,7 +49,6 @@ int numPartitions = partitions.size();
 </table>
 <br>
 
-
 <table border="0" width="100%">
    <tr bgcolor="#CCCCCC">
       <td colspan="<%= numPartitions %>" align="center" class="mainCalendar">
