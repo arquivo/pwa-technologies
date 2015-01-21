@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletConfig;
@@ -62,8 +64,9 @@ public class OpenSearchServlet extends HttpServlet {
   private static int nQueryMatches = 0;
   private static String collectionsHost=null;
   private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
-  private static final DateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+  private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
   SimpleDateFormat inputDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+  private static Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
   Calendar DATE_END = new GregorianCalendar();
   static {
     NS_MAP.put("opensearch", "http://a9.com/-/spec/opensearch/1.1/");
@@ -117,9 +120,6 @@ public class OpenSearchServlet extends HttpServlet {
       LOG.debug("query request from " + request.getRemoteAddr());
     //}
       
-      /*
-       * The follow comment code was developed to support querying by URL through Opensearch
-       * */
       Calendar DATE_END = new GregorianCalendar();
       DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) );
       DATE_END.set( Calendar.MONTH, 12-1 );
@@ -128,17 +128,13 @@ public class OpenSearchServlet extends HttpServlet {
       DATE_END.set( Calendar.MINUTE, 59 );
       DATE_END.set( Calendar.SECOND, 59 );
       String dateEndString = FORMAT.format( DATE_END.getTime() );
-//      Query queryNutch = null;
-//      String s = "date:19960101000000-20131231235959 exacturlexpand:http://tirith.esoterica.pt/~lms/BurgoNews/burgonews.html";
-//      	queryNutch = NutchwaxQuery.parse(s, this.conf);
-//      queryString= queryNutch.toString();
       
       
       
     // get parameters from request
     request.setCharacterEncoding("UTF-8");
     
-    
+   
     String queryString = request.getParameter("query");
     
     if (queryString == null)
@@ -216,16 +212,26 @@ public class OpenSearchServlet extends HttpServlet {
     boolean waybackQuery = request.getParameter("waybackQuery")!=null && request.getParameter("waybackQuery").equals("true"); // indicates that is a wayback request
     
     
-    // To support querying opensearch by  url 
+    // To support querying opensearch by  url
+    // Lucene index format
     String queryStringOpensearchWayback=null;
     boolean isOpensearhWayback=false;
-    if (!waybackQuery && !queryString.contains("exacturlexpand:") && queryString.contains("http://")) {
+    int urlLength =queryString.length();
+    boolean urlMatch = false;
+    urlMatch= URL_PATTERN.matcher(queryString.toString()).matches();
+    String urlQueryParam=null;
+    
+    if (!waybackQuery && urlMatch ) {
+    	if (!queryString.startsWith("http://") && !queryString.startsWith("https://") ) {
+            urlQueryParam = "http://" + queryString;
+    	}
+    	else
+    		urlQueryParam=queryString;
     	
-    	String s = "date:19960101000000-"+dateEndString+" exacturlexpand:"+queryString;
+    	String s = "date:19960101000000-"+dateEndString+" exacturlexpand:"+urlQueryParam;
     	queryStringOpensearchWayback= request.getParameter(s);
     	isOpensearhWayback=true;
     }
-    
     // Make up query string for use later drawing the 'rss' logo.
     String params = "&hitsPerPage=" + hitsPerPage +
         (queryLang == null ? "" : "&lang=" + queryLang) +
@@ -365,11 +371,23 @@ public class OpenSearchServlet extends HttpServlet {
         addNode(doc, item, "title", title);
                                      
         //addNode(doc, item, "description", /*summaries[i].toHtml(false)*/""); // BUG wayback 0000155 - this is unnecessary
+        String date = detail.getValue("tstamp");
+        Date datet= null;
+        		try{
+        			datet = FORMAT.parse(date);
+        	        
+        	    }
+        	    catch ( Exception ex ){
+        	        System.out.println(ex);
+        	    }
         if (url!=null) {
-        	String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
-        	addNode(doc, item, "link", target);
+        	// Lucene index format
+        	//String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
+        	
         	queryElem=addNode(doc, item, "source", "Original URL of "+title);     	        
-            addAttribute(doc, queryElem, "url", url);                     	
+            addAttribute(doc, queryElem, "url", url);
+            String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
+            addNode(doc, item, "link", target);
         }
 
         /*
