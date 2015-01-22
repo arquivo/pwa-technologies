@@ -42,6 +42,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.nutch.global.Global;
+import org.apache.nutch.parse.Parse;
 import org.apache.nutch.util.NutchConfiguration;
 import org.apache.nutch.util.RFC3339Date;
 import org.apache.lucene.search.PwaFunctionsWritable;
@@ -65,6 +66,7 @@ public class OpenSearchServlet extends HttpServlet {
   private static String collectionsHost=null;
   private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
   private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+  private static final SimpleDateFormat FORMATVIEW = new SimpleDateFormat("yyyy/MM/dd");
   SimpleDateFormat inputDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
   private static Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
   Calendar DATE_END = new GregorianCalendar();
@@ -253,6 +255,7 @@ public class OpenSearchServlet extends HttpServlet {
     	if (isOpensearhWayback){
     		query = Query.parse(queryStringOpensearchWayback, queryLang, this.conf);
     		LOG.debug("query: " + queryStringOpensearchWayback);	
+    		sort = "relevance";
     	}
     	else{
     		query = Query.parse(queryString, queryLang, this.conf);
@@ -262,12 +265,13 @@ public class OpenSearchServlet extends HttpServlet {
 
     	// execute the query    
     	try {    		
-    		if (waybackQuery) { // wayback (URL) query   		
+    		if (waybackQuery) { // wayback (URL) query
+    			
     			hits = bean.search(query, start + hitsPerPage, hitsPerDup, dedupField, sort, reverse, true); 
     		}
     		else { // nutchwax (full-text) query    			    			
     			int hitsPerVersion = 1;    		
-    			hits = bean.search(query, start + hitsPerPage, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);    			
+    			hits = bean.search(query, start + hitsPerPage, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
     		}
     	} 
     	catch (IOException e) {
@@ -361,6 +365,7 @@ public class OpenSearchServlet extends HttpServlet {
         Hit hit = show[i];
         HitDetails detail = details[i];
         String title = detail.getValue("title");
+        
         String url = detail.getValue("url");
       
         Element item = addNode(doc, channel, "item");
@@ -377,8 +382,8 @@ public class OpenSearchServlet extends HttpServlet {
         			datet = FORMAT.parse(date);
         	        
         	    }
-        	    catch ( Exception ex ){
-        	        System.out.println(ex);
+        	    catch ( ParseException e ){
+        	    	LOG.error(e);
         	    }
         if (url!=null) {
         	// Lucene index format
@@ -387,6 +392,8 @@ public class OpenSearchServlet extends HttpServlet {
         	queryElem=addNode(doc, item, "source", "Original URL of "+title);     	        
             addAttribute(doc, queryElem, "url", url);
             String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
+            if(isOpensearhWayback)
+            	addNode(doc, item, "title", FORMATVIEW.format(datet).toString());
             addNode(doc, item, "link", target);
         }
 
