@@ -8,7 +8,7 @@
   <version>1.0.0</version>
   <url>http://arquivo-web.fccn.pt</url>
   <packaging>war</packaging>
- 
+  
   <developers>
     <developer>
 	 	<name>Miguel Costa</name>
@@ -21,24 +21,28 @@
 	</developer>		
   </developers>
   
+  <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>  
+    
   <build>
     <finalName>pwalogsminer-${project.version}</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
-        <configuration>
+        <configuration>             
           <warSourceDirectory>src/main/webapp</warSourceDirectory>                    
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
         </configuration>
-      </plugin>
+      </plugin>      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>1.5</source>
-          <target>1.5</target>
+          <target>1.5</target>            
         </configuration>
       </plugin>
     </plugins>
@@ -79,7 +83,7 @@
       <groupId>postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>8.3-606.jdbc4</version>
-	</dependency>	
+    </dependency>	
   </dependencies>
 </project>
 

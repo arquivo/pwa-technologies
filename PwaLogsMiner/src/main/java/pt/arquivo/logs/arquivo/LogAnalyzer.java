@@ -2,7 +2,6 @@
 package pt.arquivo.logs.arquivo;
 
 import java.io.*;
-import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -28,26 +27,26 @@ public class LogAnalyzer {
     private static enum StatsComputed {ALL, FULL_TEXT, URL};
     private static StatsComputed statsComputed=StatsComputed.ALL; // TODO parameterize
     //private final static String dateRangeFilter[]={"01/Apr/2011","01/Jul/2011"}; // TODO parameterize filter
-    private final static String dateRangeFilter[]={"10/Jan/2011","10/Jul/2011"}; // TODO parameterize filter
+    private final static String dateRangeFilter[]={"18/Jun/2014","31/Dec/2014"}; // TODO parameterize filter
 	
-	// SQL variables
-	private final static boolean LOGS_TO_SQL=false; // create entries in database	
-	private final static int     LIMIT_LEN_FIELD=500; // maximum length of field
-	private final static String  DUPLICATE_KEY_MESSAGE="duplicate key violates unique constraint";
-	
-	private final static SimpleDateFormat dformat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss z",Locale.US);
-	private final static SimpleDateFormat dsimpleformat = new SimpleDateFormat("dd/MMM/yyyy",Locale.US);
-	private static final String URL_QUERY_PATTERN_WITH_TERMS = "(^|.+ +)((https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#]*)*\\/?)($| +).*"; // implementation used on PWA - David
-	private static final String URL_QUERY_PATTERN = "^[\\s]*((https?|ftp|file)://)?([-a-zA-Z0-9_]+\\.)+([a-zA-Z]{2,6})(:[0-9]{2,5})?(\\/[-a-zÁ„ı‚ÍÙA-Z«√’¬ ‘0-9+&@#/%=~_|!:,;*?$.]*)*[\\s]*$";
-	private static final String URL_QUERY_PATTERN_WITH_QUOTES = "^[\\s]*\"[\\s]*((https?|ftp|file)://)?([-a-zA-Z0-9_]+\\.)+([a-zA-Z]{2,6})(:[0-9]{2,5})?(\\/[-a-zÁ„ı‚ÍÙA-Z«√’¬ ‘0-9+&@#/%=~_|!:,;*?$.]*)*[\\s]*\"[\\s]*$";		
-		
-	// filters
-	//private final static String entryFilters[]={"Pesquisar.x","Pesquisar.y","Submit.x","Submit.y","Submit2.x","Submit2.y","tumbaSubmit.x","tumbaSubmit.y","dict","I1.x","I1.y","I2.x","I2.y","I3.x","I3.y","I4.x","I4.y","query_id"};
-	private final static String queryFilters[]={"","watchdog","monit","fccn","expo98","euro 2004","eleiÁıes","http://www.ul.pt/","www.fccn.pt","http://www.fccn.pt",
-		"http://arquivo-web.fccn.pt/tools/history-of-this-page-button/history-of-this-page-installation-firefox","http://arquivo-web.fccn.pt/tools/history-of-this-page-button/history-of-this-page-button?set_language=en"};
-	private final static String toolsQueryFilters[]={"history-of-this-page-button","botao-historico-desta-pagina","bookmarklet-pro-firefox"};	
-	private final static String advancedQueryFilters[]={"site:","\"","-","type:","sort:new","sort:old"};
-	private final static String stopwords[]={"a","e","o","as","os","da","de","do","das","des","dos","em","na","no","nas","nos"};
+    // SQL variables
+    private final static boolean LOGS_TO_SQL=false; // create entries in database	
+    private final static int     LIMIT_LEN_FIELD=500; // maximum length of field
+    private final static String  DUPLICATE_KEY_MESSAGE="duplicate key violates unique constraint";
+
+    private final static SimpleDateFormat dformat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss z",Locale.US);
+    private final static SimpleDateFormat dsimpleformat = new SimpleDateFormat("dd/MMM/yyyy",Locale.US);
+    private static final String URL_QUERY_PATTERN_WITH_TERMS = "(^|.+ +)((https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#]*)*\\/?)($| +).*"; // implementation used on PWA - David
+    private static final String URL_QUERY_PATTERN = "^[\\s]*((https?|ftp|file)://)?([-a-zA-Z0-9_]+\\.)+([a-zA-Z]{2,6})(:[0-9]{2,5})?(\\/[-a-z√ß√£√µ√¢√™√¥A-Z√á√É√ï√Ç√ä√î0-9+&@#/%=~_|!:,;*?$.]*)*[\\s]*$";
+    private static final String URL_QUERY_PATTERN_WITH_QUOTES = "^[\\s]*\"[\\s]*((https?|ftp|file)://)?([-a-zA-Z0-9_]+\\.)+([a-zA-Z]{2,6})(:[0-9]{2,5})?(\\/[-a-z√ß√£√µ√¢√™√¥A-Z√á√É√ï√Ç√ä√î0-9+&@#/%=~_|!:,;*?$.]*)*[\\s]*\"[\\s]*$";
+
+    // filters
+    //private final static String entryFilters[]={"Pesquisar.x","Pesquisar.y","Submit.x","Submit.y","Submit2.x","Submit2.y","tumbaSubmit.x","tumbaSubmit.y","dict","I1.x","I1.y","I2.x","I2.y","I3.x","I3.y","I4.x","I4.y","query_id"};
+    private final static String queryFilters[]={"","watchdog","monit","fccn","expo98","euro 2004","elei√ß√µes","http://www.ul.pt/","www.fccn.pt","http://www.fccn.pt",
+    "http://arquivo-web.fccn.pt/tools/history-of-this-page-button/history-of-this-page-installation-firefox","http://arquivo-web.fccn.pt/tools/history-of-this-page-button/history-of-this-page-button?set_language=en"};
+    private final static String toolsQueryFilters[]={"history-of-this-page-button","botao-historico-desta-pagina","bookmarklet-pro-firefox"};	
+    private final static String advancedQueryFilters[]={"site:","\"","-","type:","sort:new","sort:old"};
+    private final static String stopwords[]={"a","e","o","as","os","da","de","do","das","des","dos","em","na","no","nas","nos"};
     private final static String ipDomainFilters[]={"193.136.44.","193.136.192.","193.136.7."}; // domains: corp, machines, nagios    //
     private final static String ipFilters[]={}; // bots not identified        
     private final static String botsFilters[]={"crawler","spider","bot"};
@@ -92,7 +91,7 @@ public class LogAnalyzer {
     private final static int    N_SESSION_TIME_BINS=SESSION_TIME_BINS.length;
     private final static int    N_USERS_SESSIONS_RANGE=10;
     private final static int    FIRST_YEAR=1996;
-    private final static int    LAST_YEAR=2010;
+    private final static int    LAST_YEAR=2014;
     private final static int    FIRST_MONTH=1;
     private final static int    LAST_MONTH=12;
     private final static int    FIRST_DAY=1;

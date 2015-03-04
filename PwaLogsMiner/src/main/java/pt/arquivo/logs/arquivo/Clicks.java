@@ -44,7 +44,8 @@ public class Clicks {
 		}		
 		// sanity check
 		if (numResults!=queryClicks.getNumResults()) { // this value varies as we add more collections
-			throw new RuntimeException("sanity check failed in query "+query+": numResults1: "+numResults+", numResults2: "+queryClicks.getNumResults());
+                    System.err.println("sanity check failed in query "+query+": numResults1: "+numResults+", numResults2: "+queryClicks.getNumResults());
+                    //throw new RuntimeException("sanity check failed in query "+query+": numResults1: "+numResults+", numResults2: "+queryClicks.getNumResults());
 		}
 		
 		queryClicks.addUrlClick(url,rank,sessionId,clickOrderinSession,clickOrderinQueryofSession);	

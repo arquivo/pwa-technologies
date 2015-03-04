@@ -16,18 +16,23 @@ public class QueryClicksSorter {
 	static Object[] sortQueryClicks(HashMap<String,QueryClicks> queryMap) {
 		Object entriesArray[] = queryMap.entrySet().toArray();
 		Arrays.sort(entriesArray, new Comparator(){
-			public int compare(Object o1,Object o2) {	
-				Map.Entry<String,QueryClicks> entry1=(Map.Entry<String,QueryClicks>)o1;
-				Map.Entry<String,QueryClicks> entry2=(Map.Entry<String,QueryClicks>)o2;
+                    public int compare(Object o1,Object o2) {	
+                            Map.Entry<String,QueryClicks> entry1=(Map.Entry<String,QueryClicks>)o1;
+                            Map.Entry<String,QueryClicks> entry2=(Map.Entry<String,QueryClicks>)o2;
 
-				int value1=entry1.getValue().getNumClicks();
-				int value2=entry2.getValue().getNumClicks();
+                            int value1=entry1.getValue().getNumClicks();
+                            int value2=entry2.getValue().getNumClicks();
 
-				if (value1>value2) {
-					return -1;
-				}				
-				return 1;
-			}
+                            if (value1 > value2) {
+                                return -1;
+                            }
+                            else if (value1 == value2) {
+                                return 0;
+                            }
+                            else {
+                                return 1;   
+                            }                            
+                    }
 		});	 
 		return entriesArray;
 	}	
