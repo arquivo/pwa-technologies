@@ -14,6 +14,15 @@
   <url-pattern>/opensearch</url-pattern>
 </servlet-mapping>
 
+<servlet>
+  <servlet-name>NutchwaxTimemap</servlet-name>
+  <servlet-class>org.archive.access.nutch.NutchwaxTimemapServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>NutchwaxTimemap</servlet-name>
+  <url-pattern>/timemap</url-pattern>
+</servlet-mapping>
+
 <welcome-file-list>
   <welcome-file>index.jsp</welcome-file>
 </welcome-file-list>

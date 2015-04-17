@@ -387,8 +387,9 @@ public class OpenSearchServlet extends HttpServlet {
         	    }
         if (url!=null) {
         	// Lucene index format
-        	//String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
+        	String infoIndex = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
         	
+        	LOG.info("Index Information " + infoIndex);
         	queryElem=addNode(doc, item, "source", "Original URL of "+title);     	        
             addAttribute(doc, queryElem, "url", url);
             String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
