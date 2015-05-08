@@ -52,89 +52,89 @@
 			<fmt:bundle basename='pt.arquivo.i18n.Highlights'>
 			<div id="boxes" class="boxes">
 				<div class="box">
-					<div class="mascara-img">
-						<a href="/wayback/wayback/id1101166index0?l=<%=language%>" title="<fmt:message key='highlight.saramago.link.title'/>"><img src="img/highlights/saramago.png" alt="<fmt:message key='highlight.saramago.alt'/>" width="80" height="80" /></a>
+					<div class="mascara-img">						
+						<img src="img/highlights/saramago.png" alt="<fmt:message key='highlight.saramago.alt'/>" width="80" height="80" />
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/id1101166index0?l=<%=language%>" title="<fmt:message key='highlight.saramago.link.title'/>"><fmt:message key='highlight.saramago.title'/></a>
+						<a href="/wayback/wayback/19980205082901/http://www.caleida.pt/saramago/" title="<fmt:message key='highlight.saramago.link.title'/>"><fmt:message key='highlight.saramago.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.saramago.description'/></p>
 						<p><fmt:message key='highlight.saramago.description2'/></p>
 					</div>
 				</div>
 				<div class="box">
-					<div class="mascara-img">
-						<a href="/wayback/wayback/id4705954index0?l=<%=language%>" title="<fmt:message key='highlight.expo98.link.title'/>"><img src="img/highlights/expo98.gif" alt="<fmt:message key='highlight.expo98.alt'/>" width="80" height="80" /></a>
+					<div class="mascara-img">						
+						<img src="img/highlights/expo98.gif" alt="<fmt:message key='highlight.expo98.alt'/>" width="80" height="80" />
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/id4705954index0?l=<%=language%>" title="<fmt:message key='highlight.expo98.link.title'/>"><fmt:message key='highlight.expo98.title'/></a>
+						<a href="/wayback/wayback/20000823154833/http://www.parquedasnacoes.pt/pt/expo98/" title="<fmt:message key='highlight.expo98.link.title'/>"><fmt:message key='highlight.expo98.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.expo98.description'/></p>
 						<p><fmt:message key='highlight.expo98.description2'/></p>
 					</div>
 				</div>
 				<div class="box">
 					<div class="mascara-img">
-						<a href="/wayback/wayback/id4390263index3?l=<%=language%>" title="<fmt:message key='highlight.euro2004.link.title'/>"><img src="img/highlights/euro2004.png" alt="<fmt:message key='highlight.euro2004.alt'/>" width="80" height="80" /></a>
+						<img src="img/highlights/euro2004.png" alt="<fmt:message key='highlight.euro2004.alt'/>" width="80" height="80" />
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/id4390263index3?l=<%=language%>" title="<fmt:message key='highlight.euro2004.link.title'/>"><fmt:message key='highlight.euro2004.title'/></a>
+						<a href="/wayback/wayback/20040525212736/http://euro2004.clix.pt/" title="<fmt:message key='highlight.euro2004.link.title'/>"><fmt:message key='highlight.euro2004.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.euro2004.description'/></p>
 						<p><fmt:message key='highlight.euro2004.description2'/></p>
 					</div>
 				</div>
 				<div class="box">
 					<div class="mascara-img">
-						<a href="/wayback/wayback/id87775634index0?l=<%=language%>" title="<fmt:message key='highlight.figo.link.title'/>"><img src="img/highlights/figo.png" alt="<fmt:message key='highlight.figo.alt'/>" width="80" height="80" /></a>
+						<img src="img/highlights/figo.png" alt="<fmt:message key='highlight.figo.alt'/>" width="80" height="80" />
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/id87775634index0?l=<%=language%>" title="<fmt:message key='highlight.figo.link.title'/>"><fmt:message key='highlight.figo.title'/></a>
+						<a href="/wayback/wayback/20011230091638/http://www.ojogo.pt/17-300/artigo145049.htm" title="<fmt:message key='highlight.figo.link.title'/>"><fmt:message key='highlight.figo.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.figo.description'/></p>
 						<p><fmt:message key='highlight.figo.description2'/></p>
 					</div>
 				</div>
 				<div class="box">
 					<div class="mascara-img">
-						<a href="/wayback/wayback/id94index1?l=<%=language%>" title="<fmt:message key='highlight.publico.link.title'/>"><img src="img/highlights/publico.png" alt="<fmt:message key='highlight.publico.alt'/>" width="80" height="80" /></a>
+						<img src="img/highlights/publico.png" alt="<fmt:message key='highlight.publico.alt'/>" width="80" height="80" />
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/id94index1?l=<%=language%>" title="<fmt:message key='highlight.publico.link.title'/>"><fmt:message key='highlight.publico.title'/></a>
+						<a href="http://arquivo.pt/wayback/wayback/19961013182712/http://www.publico.pt/" title="<fmt:message key='highlight.publico.link.title'/>"><fmt:message key='highlight.publico.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.publico.description'/></p>
 						<p><fmt:message key='highlight.publico.description2'/></p>
 					</div>
 				</div>
 				<div class="box">
 					<div class="mascara-img">
-						<a href="/wayback/wayback/id39index1?l=<%=language%>" title="<fmt:message key='highlight.sapo.link.title'/>"><img src="img/highlights/sapo.png" alt="<fmt:message key='highlight.sapo.alt'/>" width="80" height="80" /></a>
+						<img src="img/highlights/sapo.png" alt="<fmt:message key='highlight.sapo.alt'/>" width="80" height="80" />
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/id39index1?l=<%=language%>" title="<fmt:message key='highlight.sapo.link.title'/>"><fmt:message key='highlight.sapo.title'/></a>
+						<a href="/wayback/wayback/19961013150238/http://sapo.ua.pt/" title="<fmt:message key='highlight.sapo.link.title'/>"><fmt:message key='highlight.sapo.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.sapo.description'/></p>
 						<p><fmt:message key='highlight.sapo.description2'/></p>
 					</div>
 				</div>
 				<div class="box">
 					<div class="mascara-img">
-						<a href="/wayback/wayback/id4447index1?l=<%=language%>" title="<fmt:message key='highlight.tim-berners-lee.link.title'/>"><img src="img/highlights/tim-berners-lee.png" alt="<fmt:message key='highlight.tim-berners-lee.alt'/>" width="80" height="80" /></a>
+						<img src="img/highlights/tim-berners-lee.png" alt="<fmt:message key='highlight.tim-berners-lee.alt'/>" width="80" height="80" />
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/id4447index1?l=<%=language%>" title="<fmt:message key='highlight.tim-berners-lee.link.title'/>"><fmt:message key='highlight.tim-berners-lee.title'/></a>
+						<a href="/wayback/wayback/19961013213258/http://www.w3.org/pub/WWW/People/Berners-Lee/" title="<fmt:message key='highlight.tim-berners-lee.link.title'/>"><fmt:message key='highlight.tim-berners-lee.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.tim-berners-lee.description'/></p>
 						<p><fmt:message key='highlight.tim-berners-lee.description2'/></p>
 					</div>
 				</div>
 				<div class="box">
 					<div class="mascara-img">
-						<a href="/wayback/wayback/id23306629index0?l=<%=language%>" title="<fmt:message key='highlight.presidential2001.link.title'/>"><img src="img/highlights/presidential2001.gif" alt="<fmt:message key='highlight.presidential2001.alt'/>" width="80" height="80" /></a>
+						<img src="img/highlights/presidential2001.gif" alt="<fmt:message key='highlight.presidential2001.alt'/>" width="80" height="80" />
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/id23306629index0?l=<%=language%>" title="<fmt:message key='highlight.presidential2001.link.title'/>"><fmt:message key='highlight.presidential2001.title'/></a>
+						<a href="/wayback/wayback/20010330011529/http://www.presidenciais.iscte.pt/" title="<fmt:message key='highlight.presidential2001.link.title'/>"><fmt:message key='highlight.presidential2001.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.presidential2001.description'/></p>
 						<p><fmt:message key='highlight.presidential2001.description2'/></p>
 					</div>
