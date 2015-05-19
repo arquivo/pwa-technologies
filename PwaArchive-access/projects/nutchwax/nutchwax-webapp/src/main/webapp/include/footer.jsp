@@ -36,7 +36,7 @@
                     <li><a href="http://www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
                     <li><a href="http://www.linkedin.com/groups/Portuguese-Web-Archive-2175739"><fmt:message key='footer.section.social.linkedin'/></a></li>
                     <li><a href="http://sobre.arquivo.pt/news/aggregator/RSS?set_language=<%=language%>"><fmt:message key='footer.section.social.rss'/></a></li>
-                    <li><fmt:message key='footer.section.social.newsletter'/></li>
+                   <!-- <li><fmt:message key='footer.section.social.newsletter'/></li>-->
                 </ul>
             </div>
         </div>
