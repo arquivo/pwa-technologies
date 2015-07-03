@@ -7,6 +7,9 @@ You need to have to create a Custom Search Engine and Developer Key, and replace
 
 Configuracao e obten
 https://console.developers.google.com
+
+
+Author: Daniel Bicho
 '''
 
 import sys
