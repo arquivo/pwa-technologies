@@ -2,40 +2,62 @@
 
 This scripts were developed to facilitated the upload of Heritrix crawls to the Internet Archive using the IAS3 API. Follow these steps:
 
-1. Define the crawl meta-data at the config file (check example at /svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg). 
+1. Define the crawl meta-data at the config file (check example at /pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg). 
 
 If a crawl was performed in parallel by several machines or has ARC files on different directories must generate a different config upload file for each subcrawl to avoid itemname conflicts (e.g. configItems$CRAWL_NAME.cfg  for ARC files in /$CRAWL_NAME-PT-20090520152848009 and configItems$CRAWL_NAMEchkpt5.cfg for ARC files in $CRAWL_NAME-PT-Recuperacao-chkpt5-20090622153514762). The ARC files of a given crawl will be aggregate by the custom field "pwacrawlid".
-e.g. configItems$CRAWL_NAME.cfg for ARCS in /svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg
+e.g. configItems$CRAWL_NAME.cfg for ARCS in /pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg
 
-1.1. Store config file for later access (e.g. on svn)
-e.g. #svn add /svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg
+1.1. Store config file for later access (e.g. on git)
+e.g.
+	git add ./pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg
+	git commit -m "new config files for AWP15, AWP17 and AWP17"
+	git remote add origin https://github.com/arquivo/pwa-technologies.git
+
 
 1.2. Set .bashrc environment variables for IAS3 login. 
 export AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY
+#To have log formats always using dates in English format because the sed command does not work properly with latin charsets
+export LANG=en_US.UTF-8
+
+e.g. #cp /shareT2/scripts/IAExchange/.bashrc ~
 
 2. Generate 10GB items for the crawl using generateItems.sh (100 ARCs of 100 MB in each item)
-e.g. #./svnGCodeInternetArchive/generateItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg
+e.g. #./pwa-technologies/scripts/InternetArchive/generateItems.sh ./pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg 2>&1 1>generateItems$CRAWL_NAME.out &
 
-2.1. Check if the nr. of items on $OUTPUTFILE matches the number of files on /tmp/crawlFiles.txt and nr. of ARC files on $DIRECTORY_OF_THE_CRAWL nr. of ARC files on documentation about crawl meta-data  (column Número de arcs on http://wiki.priv.fccn.pt/Recolhas). 
+2.1. Check if the nr. of items on $OUTPUTFILE matches the nr. of ARC files on $DIRECTORY_OF_THE_CRAWL nr. of ARC files on documentation about crawl meta-data  (column Número de arcs on http://wiki.priv.fccn.pt/Recolhas). 
 e.g. 
-#cat itemsFor$CRAWL_NAME | grep "arc.gz" |wc; cat itemsFor$CRAWL_NAME|wc; cat /tmp/crawlFiles.txt|wc. 
-http://wiki.priv.fccn.pt/Recolhas; forth line.
+#cd $DIRECTORY_OF_THE_CRAWL; find -iname *.arc.gz |wc; cd $IA; cat itemsForAWP17| grep .arc.gz | wc
+http://wiki.priv.fccn.pt/Recolhas; forth column.
 
 3. Upload the items to the Internet Archive using uploadItems.sh.
-e.g. #./svnGCodeInternetArchive/uploadItems.sh ./svnGCodeInternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg &
+e.g. #./pwa-technologies/scripts/InternetArchive/uploadItems.sh ./pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg 2>&1 1>uploadItems$CRAWL_NAME.out &
 
 3.1 Verify that all ARC files were uploaded OK
 # cat configItems$CRAWL_NAME.upload|grep OK|wc
 Nr. of ARC files in documentation (private: http://wiki.priv.fccn.pt/Recolhas)
 
 3.1.1 In case of errors, extract failed Items and ARC files to be recovered
-# cat configItems$CRAWL_NAME.upload |grep 'RECOVER_ARC_FILE:'| sed 's/.*RECOVER_ARC_FILE://g' > itemsFor$CRAWL_NAMEchkpt5.recover
-# change config file to new OUTPUTFILE=/shareT2/scripts/IAExchange/itemsFor$CRAWL_NAME$CRAWL_NAMEchkpt5.recover
+
+backup logs
+#tar -cvzf ./finished/uploadLogs$CRAWL_NAME$'-'(date +"%d-%m-%Y").tar.gz ./configItems$CRAWL_NAME.upload ./uploadItems$CRAWL_NAME.out ./itemsFor$CRAWL_NAME ./itemsFor$CRAWL_NAME.recover
+
+get items to re-upload
+BUG WITH "Sáb" on log message: "S<E1>b Jul 5 00:06:44 WEST 2014, Error message after retry: 100. RECOVER_ARC_FILE:portuguese-web-archive-AWP122011-1 ./arcs/1/16/IAH-20120125101649-08516-p13.arquivo.pt.arc.gz 9c06804a7b758fdb4b71ef2787194c68"
+
+# cat configItems$CRAWL_NAME.upload |grep 'RECOVER_ARC_FILE:'| sed 's/.*RECOVER_ARC_FILE://g' > itemsFor$CRAWL_NAME.recover
+
+Bug fix: use the command below if the host is using ISO-8859-1 for log output. Command sed does not work properly with dates using latin charsets. The machines should use en_US.UTF-8.
+# cat configItems$CRAWL_NAME.upload |grep 'RECOVER_ARC_FILE:'| LANG=C.ISO-8859-1 sed 's/.*RECOVER_ARC_FILE://g'66 > itemsFor$CRAWL_NAME.recover
+
+
+change config file nano #./pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg OUTPUTFILE=/shareT2/scripts/IAExchange/itemsFor$CRAWL_NAME.recover
+
+repeat upload with new config file
 # repeat uploadItems.sh
 
 3.3 Count errors and compare with recover file
-# cat configItems$CRAWL_NAME.upload|grep Error|wc; cat itemsFor$CRAWL_NAME$CRAWL_NAME.recover|wc
+# cat configItems$CRAWL_NAME.upload|grep OK|wc; cat itemsFor$CRAWL_NAME.recover|wc
 
 4. Compare number of uploaded items with 
 e.g. https://archive.org/search.php?query=pwacrawlid%3A$CRAWL_NAME
