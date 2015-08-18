@@ -1,6 +1,7 @@
 #!/bin/sh                                          
 #author:dgomes            
-#USAGE: uploadItems.sh CONFIG_FILE
+#USAGE: uploadItems.sh CONFIG_FILE 
+# Sleep 30s between errors should be a configurable parameter
 # IAS3 access keys must be set on environment (~/.bashrc)
 # AWS_ACCESS_KEY_ID
 # AWS_SECRET_ACCESS
@@ -28,7 +29,9 @@ export arcfilepath=$(echo "$fileprops"|cut -d " " -f 2)
 export arcfilename=$(echo "$fileprops"|cut -d " " -f 2|sed 's/.*\///g')
 export md5=$(echo "$fileprops"|cut -d " " -f 3)
 
-OPTS="-s -m 300s --location --write-out %{http_code}"
+#Added option -H "Expect:" on 25 June 2015
+#Increased -m from 30s to 60s on 18 August 2015 to try to avoid 000 or 100 responses
+OPTS="-s -m 60s --location --write-out %{http_code} -H "Expect:"" 
 UPLOAD="--upload-file $DIRECTORY_OF_THE_CRAWL/$arcfilepath http://s3.us.archive.org/$itemname/$arcfilename"
 
 #upload using curl and had meta-data
@@ -39,9 +42,9 @@ response=$(/usr/bin/curl $OPTS --header "authorization:LOW $AWS_ACCESS_KEY_ID:$A
 
 #check md5 and write log messages
 if [ "$response" != "200" ]; then 
-# Something went wrong. Wait 5 minutes and then retry.
-echo $(date)", Error on upload: sleeping for 300s" >> $logfile
-sleep 300s
+# Something went wrong. Wait 30s and then retry.
+echo $(date)", Error on upload: $response, sleeping for 30s" >> $logfile
+sleep 30s
 response=$(/usr/bin/curl -vvv $OPTS --header "authorization:LOW $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" --header 'x-amz-auto-make-bucket:1' --header 'x-archive-meta-mediatype:web' --header "x-archive-meta01-collection: $COLLECTION" --header "x-archive-meta-pwacrawlid: $x_archive_meta_pwacrawlid" --header "x-archive-meta-external-identifier: $x_archive_meta_external_identifier" --header "x-archive-meta-creator:$x_archive_meta_creator"  --header "x-archive-meta-contributor:$x_archive_meta_contributor" --header "x-archive-meta-title:$x_archive_meta_title" --header "x-archive-meta-coverage: $x_archive_meta_coverage" --header "Content-MD5: $md5" --header "x-archive-meta-description: $x_archive_meta_description" --header "x-archive-meta-language: $x_archive_meta_language" --header "x-archive-meta-subject: $x_archive_meta_subject" --header "x-archive-meta-notes: $x_archive_meta_notes" --header "x-archive-meta-credits: $x_archive_meta_credits" --header "x-archive-meta-date: $x_archive_meta_date" $WOUT $UPLOAD)
 fi
 
