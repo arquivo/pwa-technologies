@@ -305,7 +305,7 @@
         </snapshots>
         <id>internetarchive</id>
         <name>Internet Archive Maven Repository</name>
-        <url>http://builds.archive.org:8080/maven2</url>
+        <url>http://builds.archive.org/maven2</url>
         <layout>default</layout>
     </repository>
     <repository>
@@ -328,7 +328,7 @@
       <pluginRepository>
           <id>agilejava-repository</id>
           <name>Agilejava Repository</name>
-          <url>http://agilejava.com/maven</url>
+          <url>http://central.maven.org/maven2</url>
           <layout>default</layout>
           <releases>
               <enabled>true</enabled>

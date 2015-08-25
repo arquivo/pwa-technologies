@@ -1,0 +1,15 @@
+org/archive/wayback/core/TimestampTest.class
+org/archive/wayback/resourceindex/distributed/AlphaPartitionedIndexTest.class
+org/archive/wayback/accesscontrol/staticmap/StaticMapExclusionFilterTest.class
+org/archive/wayback/util/IPRangeTest.class
+org/archive/wayback/accesscontrol/robotstxt/RobotExclusionFilterTest.class
+org/archive/wayback/util/url/AggressiveUrlCanonicalizerTest.class
+org/archive/wayback/util/FileDownloaderTest.class
+org/archive/wayback/accesscontrol/ExternalExcluderTest.class
+org/archive/wayback/replay/TagMagixTest.class
+org/archive/wayback/resourcestore/http/FileLocationDBTest.class
+org/archive/wayback/util/url/UrlOperationsTest.class
+org/archive/wayback/resourcestore/http/FileLocationDBLogTest.class
+org/archive/wayback/util/operator/BooleanOperatorTest.class
+org/archive/wayback/surt/SURTTokenizerTest.class
+org/archive/wayback/util/CachedFileTest.class

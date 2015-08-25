@@ -1,0 +1,3 @@
+org/archive/wayback/resourceindex/indexer/hadoop/Driver.class
+org/archive/wayback/resourceindex/indexer/hadoop/AlphaPartitioner.class
+org/archive/wayback/resourceindex/indexer/hadoop/Driver$MapClass.class
