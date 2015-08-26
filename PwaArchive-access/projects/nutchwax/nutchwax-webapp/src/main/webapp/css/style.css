@@ -368,3 +368,13 @@ li.grouped { padding-left: 38px; }
 
 .left { float: left}
 .rigth { float: right}
+
+/*--- Update 26/08/2015 --- */
+
+#info-texto-home { text-align: center; margin: 30px 0; width: 560px; }
+#header-home h1 { font-size: 3em; line-height: 1.5em; }
+#main-home h3 { font-size: 2.5em; }
+#main-home h3,
+#main-home h4 { text-align: center; width: 940px; }
+#main-home h3 {border-top: 1px solid #EEE; margin-top: 25px; padding-top: 25px; }
+#main-home { padding-top: 25px; }
