@@ -1,5 +1,5 @@
 <div id="language">
-	<img src="img/experimental.png" alt="<fmt:message key='topbar.experimental.alt'/>" width="123" height="124" />
+<!--	<img src="img/experimental.png" alt="<fmt:message key='topbar.experimental.alt'/>" width="123" height="124" /> -->
 	<div class="wrap">
 		<ul>
 			<li><a href="<c:url value='http://sobre.arquivo.pt/'><c:param name='set_language' value='${language}'/></c:url>" title="<fmt:message key='topbar.help'/>" class="ajuda"><fmt:message key='topbar.help'/></a></li>
