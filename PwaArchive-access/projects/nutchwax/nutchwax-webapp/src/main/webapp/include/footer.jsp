@@ -52,7 +52,7 @@
                 <area title="<fmt:message key='footer.sponsor.mec'/>" href="http://www.portugal.gov.pt/pt/os-ministerios/ministerio-da-educacao-e-ciencia.aspx" coords="141,0,243,40" shape="rect"/>
             </map>
 <!--
-            <a href="http://www.qca.pt/pos/posc.asp" title="<fmt:message key='footer.sponsor.posc'/>">
+            <a href="http://www.qca.pt/pos/posc.asp" title="<fmt:message key='footer.sponsor.posc'/>"
                 <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-pos.gif" alt="<fmt:message key='footer.sponsor.posc.alt'/>" width="148" height="22" />
             </a>
 -->
