@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-    <div id="empresa">
+    <!--<div id="empresa">
         <div class="wrap-footer">
             <a href="http://www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" >
                 <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="183" height="46" id="fccn" />
@@ -55,5 +55,5 @@
                 <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-pos.gif" alt="<fmt:message key='footer.sponsor.posc.alt'/>" width="148" height="22" />
             </a>
         </div>
-    </div>
+    </div>-->
 </div>

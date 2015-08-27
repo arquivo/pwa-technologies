@@ -31,12 +31,12 @@
     <property name="java.class.version" value="51.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="os.version" value="2.6.32-504.el6.x86_64"/>
-    <property name="user.home" value="/home/nutchwax"/>
+    <property name="user.home" value="/root"/>
     <property name="user.timezone" value="Portugal"/>
     <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
     <property name="file.encoding" value="UTF-8"/>
     <property name="java.specification.version" value="1.7"/>
-    <property name="user.name" value="nutchwax"/>
+    <property name="user.name" value="root"/>
     <property name="java.class.path" value="/opt/apache-maven-3.2.5/boot/plexus-classworlds-2.5.2.jar"/>
     <property name="java.vm.specification.version" value="1.7"/>
     <property name="sun.arch.data.model" value="64"/>
@@ -58,8 +58,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.002" classname="org.archive.wayback.replay.TagMagixTest" name="testFindAttr"/>
-  <testcase time="0.006" classname="org.archive.wayback.replay.TagMagixTest" name="testFindAttrWhere"/>
+  <testcase time="0.003" classname="org.archive.wayback.replay.TagMagixTest" name="testFindAttr"/>
+  <testcase time="0.005" classname="org.archive.wayback.replay.TagMagixTest" name="testFindAttrWhere"/>
   <testcase time="0.001" classname="org.archive.wayback.replay.TagMagixTest" name="testFindEndOfFirst"/>
   <testcase time="0.008" classname="org.archive.wayback.replay.TagMagixTest" name="testMarkupTag"/>
   <testcase time="0.001" classname="org.archive.wayback.replay.TagMagixTest" name="testCSSMarkup"/>
