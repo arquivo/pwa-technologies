@@ -9,7 +9,6 @@
                     <li><fmt:message key="footer.section.about.pages-examples"/></li>
                     <li><fmt:message key="footer.section.about.press"/></li>
                     <li><fmt:message key="footer.section.about.services"/></li>
-                    <!--<li><fmt:message key="footer.section.about.code> </li>-->
                     <li><a id="terms-conditions" href="terms-conditions.jsp?l=<%=language%>"><fmt:message key='footer.section.about.terms-conditions'/></a></li>
                 </ul>
             </div>
