@@ -5,6 +5,7 @@
    		<div class="links-content">
                 <p class="links-title"><fmt:message key="footer.section.about"/></p>
                 <ul>
+                    <li><fmt:message key="footer.section.about.objectives"/></li>
                     <li><fmt:message key="footer.section.about.publications"/></li>
                     <li><fmt:message key="footer.section.about.pages-examples"/></li>
                     <li><fmt:message key="footer.section.about.press"/></li>
@@ -28,7 +29,6 @@
                 <ul>
                     <li><fmt:message key='footer.section.help.search'/></li>
                     <li><fmt:message key='footer.section.help.advanced-search'/></li>
-                    <li><fmt:message key='footer.section.help.acess'/></li>
                     <li><fmt:message key='footer.section.help.crawl'/></li>
                     <li><fmt:message key='footer.section.help.help'/></li>
                     <li><fmt:message key='footer.section.help.faq'/></li>
