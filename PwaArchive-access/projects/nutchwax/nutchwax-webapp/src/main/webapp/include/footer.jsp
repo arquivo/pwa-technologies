@@ -13,6 +13,19 @@
                     <li><a id="terms-conditions" href="terms-conditions.jsp?l=<%=language%>"><fmt:message key='footer.section.about.terms-conditions'/></a></li>
                 </ul>
             </div>
+ 		<div class="links-content">
+                <p class="links-title"><fmt:message key="footer.section.social"/></p>
+                <ul>
+                    <li><fmt:message key="footer.section.social.news"/></li>
+                    <li><a href="http://sobre.arquivo.pt/news/aggregator/RSS?set_language=<%=language%>"><fmt:message key='footer.section.social.rss'/></a></li>
+                    <li><fmt:message key="footer.section.social.twitter"/></li>
+                    <li><a href="http://www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
+                   <!-- <li><a href="http://www.linkedin.com/groups/Portuguese-Web-Archive-2175739"><fmt:message key='footer.section.social.linkedin'/></a></li> -->
+                    <li><a href="http://sobre.arquivo.pt/news/aggregator/RSS?set_language=<%=language%>"><fmt:message key='footer.section.social.rss'/></a></li>
+                   <!-- <li><fmt:message key='footer.section.social.newsletter'/></li>-->
+                </ul>
+            </div>
+
     		<div class="links-content">
                 <p class="links-title"><fmt:message key="footer.section.collaboration"/></p>
                 <ul>
@@ -29,20 +42,11 @@
                 <ul>
                     <li><fmt:message key='footer.section.help.search'/></li>
                     <li><fmt:message key='footer.section.help.advanced-search'/></li>
+                    <li><fmt:message key='footer.section.help.access'/></li>
                     <li><fmt:message key='footer.section.help.crawl'/></li>
                     <li><fmt:message key='footer.section.help.help'/></li>
                     <li><fmt:message key='footer.section.help.faq'/></li>
                     <li><fmt:message key='footer.section.help.contact'/></li>
-                </ul>
-            </div>
-            <div class="links-content">
-                <p class="links-title"><fmt:message key="footer.section.social"/></p>
-                <ul>
-                    <li><fmt:message key="footer.section.social.twitter"/></li>
-                    <li><a href="http://www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
-                   <!-- <li><a href="http://www.linkedin.com/groups/Portuguese-Web-Archive-2175739"><fmt:message key='footer.section.social.linkedin'/></a></li> -->
-                    <li><a href="http://sobre.arquivo.pt/news/aggregator/RSS?set_language=<%=language%>"><fmt:message key='footer.section.social.rss'/></a></li>
-                   <!-- <li><fmt:message key='footer.section.social.newsletter'/></li>-->
                 </ul>
             </div>
         </div>
