@@ -10,7 +10,7 @@
                     <li><fmt:message key="footer.section.about.pages-examples"/></li>
                     <li><fmt:message key="footer.section.about.press"/></li>
                     <li><fmt:message key="footer.section.about.services"/></li>
-                    <li><a id="terms-conditions" href="terms-conditions.jsp?l=<%=language%>"><fmt:message key='footer.section.about.terms-conditions'/></a></li>
+                    <li><fmt:message key='footer.section.about.terms-conditions'/></li>
                 </ul>
             </div>
  		<div class="links-content">
