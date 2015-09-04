@@ -378,3 +378,8 @@ li.grouped { padding-left: 38px; }
 #main-home h4 { text-align: center; width: 940px; }
 #main-home h3 {border-top: 1px solid #EEE; margin-top: 25px; padding-top: 25px; }
 #main-home { padding-top: 25px; }
+
+/*---- Update 04/09/2015 ---*/
+#txtSearch { color: #999; }
+#txtSearch:focus { color: #000; }
+

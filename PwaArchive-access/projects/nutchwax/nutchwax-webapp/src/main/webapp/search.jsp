@@ -339,7 +339,7 @@
 							<input type="hidden" name="l" value="<%= language %>" />
 							<fieldset id="pesquisar">
 								<label for="txtSearch">&nbsp;</label>
-								<input class="search-inputtext" type="text" size="15" value="<%=htmlQueryString%>" name="query" id="txtSearch" accesskey="t" />
+								<input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' " name="query" id="txtSearch" accesskey="t" />
 								<input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
 								<input type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
 								<%

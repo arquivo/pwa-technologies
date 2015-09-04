@@ -50,7 +50,7 @@
 						<input type="hidden" name="l" value="<%= language %>" />
                                                 <fieldset>
                                                         <label for="txtSearch">&nbsp;</label>
-                                                        <input class="search-inputtext" type="text" size="15" value="" name="query" id="txtSearch" accesskey="t" />
+                                                        <input class="search-inputtext" type="text" size="15" value="<fmt:message key='search.value'/>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' "  name="query" id="txtSearch" accesskey="t" />
                                                         <input type="reset" value="&nbsp;" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
                                                         <input type="submit" value="<fmt:message key='home.submit'/>" class="home-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
                                                         <a href="advanced.jsp?l=<%=language%>" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>
