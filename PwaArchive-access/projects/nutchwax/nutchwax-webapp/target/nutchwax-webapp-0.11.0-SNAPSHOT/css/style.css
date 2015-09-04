@@ -382,4 +382,5 @@ li.grouped { padding-left: 38px; }
 /*---- Update 04/09/2015 ---*/
 #txtSearch { color: #999; }
 #txtSearch:focus { color: #000; }
+#conteudo-versoes tr th, #conteudo-versoes .inactivo { min-width: 64px;}
 
