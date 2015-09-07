@@ -1468,14 +1468,14 @@ $.extend(Datepicker.prototype, {
 			var year = 0;
 			var endYear = 0;
 			if (years.length != 2) {
-				year = drawYear - 10;
-				endYear = drawYear + 10;
+				year = drawYear - 20;
+				endYear = drawYear + 20;
 			} else if (years[0].charAt(0) == '+' || years[0].charAt(0) == '-') {
-				year = drawYear + parseInt(years[0], 10);
-				endYear = drawYear + parseInt(years[1], 10);
+				year = drawYear + parseInt(years[0], 20);
+				endYear = drawYear + parseInt(years[1], 20);
 			} else {
-				year = parseInt(years[0], 10);
-				endYear = parseInt(years[1], 10);
+				year = parseInt(years[0], 20);
+				endYear = parseInt(years[1], 20);
 			}
 			year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
 			endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
