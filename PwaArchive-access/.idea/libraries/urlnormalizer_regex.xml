@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="urlnormalizer-regex">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/urlnormalizer-regex/urlnormalizer-regex.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="commons-2.0.21">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org/archive/heritrix/commons/2.0.2/commons-2.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

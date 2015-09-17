@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="parse-trec3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/parse-trec/parse-trec.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

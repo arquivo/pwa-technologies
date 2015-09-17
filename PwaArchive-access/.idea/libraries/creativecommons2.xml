@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="creativecommons2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/creativecommons/creativecommons.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

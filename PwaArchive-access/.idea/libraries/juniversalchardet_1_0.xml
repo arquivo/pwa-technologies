@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="juniversalchardet-1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org/mozilla/juniversalchardet/1.0/juniversalchardet-1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

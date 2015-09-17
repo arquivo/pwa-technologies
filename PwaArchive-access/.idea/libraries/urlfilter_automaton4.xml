@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="urlfilter-automaton4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/target/nutchwax-webapp-0.11.0-SNAPSHOT/WEB-INF/classes/plugins/urlfilter-automaton/automaton.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/target/nutchwax-webapp-0.11.0-SNAPSHOT/WEB-INF/classes/plugins/urlfilter-automaton/urlfilter-automaton.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="index-wax3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/target/nutchwax-webapp-0.11.0-SNAPSHOT/WEB-INF/classes/wax-plugins/index-wax/index-wax.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="query-anchor">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/query-anchor/query-anchor.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="parse-mspowerpoint3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/parse-mspowerpoint/parse-mspowerpoint.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

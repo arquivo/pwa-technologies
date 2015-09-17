@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="parse-rss">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/parse-rss/parse-rss.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/parse-rss/commons-feedparser-0.6-fork.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/parse-rss/xmlrpc-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

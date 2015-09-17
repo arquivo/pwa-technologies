@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="nutchwax-core-0.11.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="ontology" level="project" />
+    <orderEntry type="library" name="lib11" level="project" />
+    <orderEntry type="library" name="ontology1" level="project" />
+    <orderEntry type="library" name="nutch-0.9" level="project" />
+    <orderEntry type="library" name="nutchwax-thirdparty-0.11.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="target" level="project" />
+    <orderEntry type="library" name="lib12" level="project" />
+    <orderEntry type="library" name="nutchwax-job-0.11.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="lib2" level="project" />
+    <orderEntry type="library" name="lib5" level="project" />
+    <orderEntry type="library" name="lib7" level="project" />
+    <orderEntry type="library" name="lib15" level="project" />
+    <orderEntry type="library" name="nutch-0.91" level="project" />
+    <orderEntry type="library" name="lib3" level="project" />
+    <orderEntry type="library" name="lib10" level="project" />
+    <orderEntry type="module" module-name="nutch" />
+    <orderEntry type="module" module-name="main4" />
+  </component>
+</module>

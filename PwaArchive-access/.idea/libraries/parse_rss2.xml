@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="parse-rss2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/parse-rss/parse-rss.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="urlnormalizer-pass3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/plugins/urlnormalizer-pass/urlnormalizer-pass.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

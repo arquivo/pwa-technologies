@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="query-site1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/query-site/query-site.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

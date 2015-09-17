@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="parse-pdf3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/parse-pdf/parse-pdf.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

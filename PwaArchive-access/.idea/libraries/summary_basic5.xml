@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="summary-basic5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/summary-basic/summary-basic.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

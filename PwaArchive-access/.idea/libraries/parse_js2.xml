@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="parse-js2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/parse-js/parse-js.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

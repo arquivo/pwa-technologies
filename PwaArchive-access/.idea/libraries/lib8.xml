@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib8">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/lib-xml/lib/xercesImpl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/lib-xml/lib/saxpath.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/lib-xml/lib/jaxen-jdom.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/lib-xml/lib/jaxen-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/lib-xml/lib/jdom.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

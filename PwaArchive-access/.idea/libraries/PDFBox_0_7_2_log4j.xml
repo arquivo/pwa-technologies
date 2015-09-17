@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="PDFBox-0.7.2-log4j">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/src/plugin/parse-pdf/lib/PDFBox-0.7.2-log4j.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
