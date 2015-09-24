@@ -116,23 +116,6 @@ for (int i = 0; i < numPartitions; i++) {
 }
 
 %>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-        	$(".tabela-principal").width($(document).width()-163);
-                	if ($(document).width() == 1090) var tamanho = 163; /* 1024x768 */
-                        else var tamanho = 0;
-
-                        $("#resultados-lista").css({'width' : $(document).width() + tamanho,'max-width' : $(document).width() + tamanho});
-                        $(".mais-resultados").height($(".tabela-principal").height()-50);
-
-                        $(window).resize(function() {
-                        	$(".tabela-principal").width($(window).width()-163);
-                                $("#resultados-lista").css({'width' : $(document).width(),'max-width' : $(document).width()});
-                        });
-	});
-</script>
-
 <c:if test="${not param.hist}">
 	<%
 	String searchUrl = "search.jsp?query=";
@@ -173,6 +156,9 @@ for (int i = 0; i < numPartitions; i++) {
 		<%= partition.getTitle() %><span class="versoes-num"><%=partition.resultsCount()%></span>
 			</th>
 	<%}%>
+	
+		<th class="mais-resultados-title"><fmt:message key='grid.embargo.title'/></th>
+	
 			</tr>
 			</thead>
 <!--    /RESULT COLUMN HEADERS -->
@@ -270,23 +256,15 @@ for (int i = 0; i < numPartitions; i++) {
 			} else {
 				%><td>&nbsp;</td><%
 			}
+			
 		}
-		%></tr><%
-		line++;
-	}
-%>
-</tbody>
-</table>
-<table class="mais-resultados">
-<thead>
-	<tr>
-		<th class="mais-resultados-title"><fmt:message key='grid.embargo.title'/></th>
-	</tr>
-</thead>
-<tbody>
-	<tr>
-		<td valign="top" class="mais-resultados">
+
+		if (resultCounter == totalResults){ %>
+	
 		<%-- More --%>
+		
+
+		<td valign="top" class="mais-resultados">
 			<span>
 			<fmt:message key='grid.embargo.info'/>
 			<c:choose>
@@ -299,10 +277,13 @@ for (int i = 0; i < numPartitions; i++) {
                         </c:choose>
 			</span>
 		</td>
-	</tr>
+		<%
+			}
+	%></tr><%
+		line++;
+	 } %>
 </tbody>
 </table>
-
 
 
 <%

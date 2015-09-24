@@ -393,3 +393,12 @@ li.grouped { padding-left: 38px; }
 #header-home { padding-top: 50px; }
 #main-home { padding-top: 0; }
 #main-home h3 { border: 0; }
+
+/*---- Update 23/09/2015 ----*/
+#resultados-lista .tabela-principal { width: 100%; }
+#resultados-lista .tabela-principal th { min-width: 40px; }
+#resultados-lista .tabela-principal th.mais-resultados-title { min-width: 180px; }
+#conteudo-versoes .mais-resultados { padding: 0 5px 5px; }
+#conteudo-versoes .mais-resultados,
+#conteudo-versoes .mais-resultados span { text-align: center; }
+	

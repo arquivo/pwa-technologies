@@ -272,6 +272,7 @@ public class OpenSearchServlet extends HttpServlet {
     		else { // nutchwax (full-text) query    			    			
     			int hitsPerVersion = 1;    		
     			hits = bean.search(query, start + hitsPerPage, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
+    			
     		}
     	} 
     	catch (IOException e) {
@@ -296,7 +297,7 @@ public class OpenSearchServlet extends HttpServlet {
     	PwaRequestDetailsWritable detailsWritable=new PwaRequestDetailsWritable();
     	//detailsWritable.setFields(null);
     	detailsWritable.setFields(new String[]{"digestDiff","tstamp"});
-    	detailsWritable.setHits(show);            	
+    	detailsWritable.setHits(show);
     	details = bean.getDetails(detailsWritable);
     }
     

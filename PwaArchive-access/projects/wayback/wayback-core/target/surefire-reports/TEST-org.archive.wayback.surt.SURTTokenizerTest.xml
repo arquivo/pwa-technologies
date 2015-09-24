@@ -58,14 +58,14 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.067" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testSlashPathTrailingSlash"/>
-  <testcase time="0" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testSlashPathTwoDirs"/>
-  <testcase time="0.001" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testSlashPathTwoDirsTrailingSlash"/>
-  <testcase time="0" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testSlashPath"/>
+  <testcase time="0.066" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testSlashPathTrailingSlash"/>
+  <testcase time="0.001" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testSlashPathTwoDirs"/>
+  <testcase time="0" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testSlashPathTwoDirsTrailingSlash"/>
+  <testcase time="0.001" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testSlashPath"/>
   <testcase time="0" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testEmptyPath"/>
   <testcase time="0.001" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testEmptyPathMore"/>
-  <testcase time="0" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testShortPathHash"/>
-  <testcase time="0.001" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testCGI1"/>
+  <testcase time="0.001" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testShortPathHash"/>
+  <testcase time="0" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testCGI1"/>
   <testcase time="0.001" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testPort"/>
   <testcase time="0.001" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testLogin"/>
   <testcase time="0" classname="org.archive.wayback.surt.SURTTokenizerTest" name="testLoginPass"/>
