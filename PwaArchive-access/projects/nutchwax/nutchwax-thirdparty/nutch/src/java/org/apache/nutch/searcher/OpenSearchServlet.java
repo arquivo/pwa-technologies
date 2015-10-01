@@ -368,7 +368,8 @@ public class OpenSearchServlet extends HttpServlet {
         String title = detail.getValue("title");
         
         String url = detail.getValue("url");
-      
+        String arcname = detail.getValue("arcname");
+        String arcoffset = detail.getValue("arcoffset");
         Element item = addNode(doc, channel, "item");
         
         if (title == null || title.equals("")) {   // use url for docs w/o title
@@ -391,7 +392,7 @@ public class OpenSearchServlet extends HttpServlet {
         	String infoIndex = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
         	
         	LOG.info("Index Information " + infoIndex);
-        	queryElem=addNode(doc, item, "source", "Original URL of "+title);     	        
+        	queryElem=addNode(doc, item, "source", "Original URL of "+title);
             addAttribute(doc, queryElem, "url", url);
             String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
             if(isOpensearhWayback)
@@ -409,7 +410,8 @@ public class OpenSearchServlet extends HttpServlet {
         // BUG wayback 0000155 - add docId and index id to use in wayback search to see a page
         addNode(doc, item, "pwa", "id", ""+hit.getIndexDocNo());
         addNode(doc, item, "pwa", "index", ""+hit.getIndexNo());
-
+        addNode(doc, item, "pwa", "arcname", ""+arcname);
+        addNode(doc, item, "pwa", "arcoffset", ""+arcoffset	);
         /*
         if (hit.moreFromDupExcluded()) {
           addNode(doc, item, "nutch", "moreFromSite", requestUrl
