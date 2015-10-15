@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang.StringEscapeUtils"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%@ page import="org.archive.wayback.core.UIResults" %>
@@ -89,7 +90,7 @@ String serverRoot = results.getServerPrefix();
 													</font> 
 													<input type="hidden" name="type" value="urlquery"/>
 													<input type="hidden" name="multDet" value="<%= multDet %>"/>
-													<input type="text" name="url" value="http://" size="24" maxlength="256"/>
+													<input type="text" name="url" value=<%= StringEscapeUtils.escapeHtml(url) %> size="24" maxlength="256"/>
 													&nbsp;
 												</b> 
 												<select name="date" size="1">
