@@ -69,8 +69,9 @@ String serverRoot = results.getServerPrefix();
 												        url="http://";
 												}
 									
-												//url=new String(url.getBytes("ISO8859-1"),"UTF8"); // TODO MC charset BUG
-
+												url=new String(url.getBytes("ISO8859-1"),"UTF-8"); // TODO MC charset BUG
+                                                                                                                                                                                              
+                                                                                                
 											        String date = request.getParameter("date");
 												if (date==null) {
 												        date=fmt.format("UIGlobal.selectYearAll");
@@ -88,7 +89,7 @@ String serverRoot = results.getServerPrefix();
 													</font> 
 													<input type="hidden" name="type" value="urlquery"/>
 													<input type="hidden" name="multDet" value="<%= multDet %>"/>
-													<input type="text" name="url" value="<%= url %>" size="24" maxlength="256"/>
+													<input type="text" name="url" value="http://" size="24" maxlength="256"/>
 													&nbsp;
 												</b> 
 												<select name="date" size="1">
