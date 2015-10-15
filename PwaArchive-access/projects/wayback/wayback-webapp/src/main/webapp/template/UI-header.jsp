@@ -69,7 +69,7 @@ String serverRoot = results.getServerPrefix();
 												        url="http://";
 												}
 									
-												url=new String(url.getBytes("ISO8859-1"),"UTF8"); // TODO MC charset BUG
+												//url=new String(url.getBytes("ISO8859-1"),"UTF8"); // TODO MC charset BUG
 
 											        String date = request.getParameter("date");
 												if (date==null) {
