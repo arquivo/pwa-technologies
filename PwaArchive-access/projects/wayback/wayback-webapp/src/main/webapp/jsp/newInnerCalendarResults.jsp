@@ -143,6 +143,7 @@ for (int i = 0; i < numPartitions; i++) {
         	<table class="tabela-principal">
 <!--	RESULT COLUMN HEADERS -->
                 	<thead>
+                	
 			<tr>
 <%
 	for(int i = 0; i < numPartitions; i++) {
@@ -263,8 +264,8 @@ for (int i = 0; i < numPartitions; i++) {
 	
 		<%-- More --%>
 		
-
-		<td valign="top" class="mais-resultados">
+<td valign="top" class="mais-resultados">
+		
 			<span>
 			<fmt:message key='grid.embargo.info'/>
 			<c:choose>

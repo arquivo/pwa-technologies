@@ -16,5 +16,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/nutchwax-plugins"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/nutchwax-thirdparty"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/nutchwax-webapp"/>
+	<classpathentry exported="true" kind="lib" path="/pwalucene"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

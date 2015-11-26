@@ -38,7 +38,7 @@ public class PwaDateClosestFilter extends PwaFilter {
 	public PwaDateClosestFilter(PwaSearchableCommon searchable, IndexReader reader, String timestamp) throws IOException {
 		super(searchable);
 		this.cache = new PwaDateCache(reader);
-		this.timestamp = Long.parseLong(timestamp);		      
+		this.timestamp = Long.parseLong(timestamp)*1000;		      
 		this.docClosest = -1;
 	}
 
@@ -69,9 +69,10 @@ public class PwaDateClosestFilter extends PwaFilter {
 		
 		long minDiff=Long.MAX_VALUE;
 		while (searchable.next()) {
-			if (docClosest==-1 || Math.abs(cache.getTimestamp(searchable.doc())-timestamp)<minDiff) {
+			Long mindDiff_aux = Math.abs(cache.getTimestamp(searchable.doc())-timestamp);
+			if (docClosest==-1 || mindDiff_aux<minDiff) {
 				docClosest=searchable.doc();
-				minDiff=Math.abs(cache.getTimestamp(searchable.doc())-timestamp);
+				minDiff=mindDiff_aux;
 			}		
 		}	
 		
