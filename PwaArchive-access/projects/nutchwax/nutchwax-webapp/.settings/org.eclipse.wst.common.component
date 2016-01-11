@@ -13,9 +13,6 @@
         <dependent-module archiveName="wayback-core-1.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/wayback-core/wayback-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="archive-mapred-0.2.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/archive-mapred/archive-mapred">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="nutchwax-webapp"/>
         <property name="java-output-path" value="/nutchwax-webapp/target/classes"/>
     </wb-module>
