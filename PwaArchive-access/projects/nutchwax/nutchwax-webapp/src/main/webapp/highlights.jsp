@@ -57,7 +57,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/19980205082901/http://www.caleida.pt/saramago/" title="<fmt:message key='highlight.saramago.link.title'/>"><fmt:message key='highlight.saramago.title'/></a>
+						<a href="/wayback/19980205082901/http://www.caleida.pt/saramago/" title="<fmt:message key='highlight.saramago.link.title'/>"><fmt:message key='highlight.saramago.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.saramago.description'/></p>
 						<p><fmt:message key='highlight.saramago.description2'/></p>
 					</div>
@@ -68,7 +68,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/20000823154833/http://www.parquedasnacoes.pt/pt/expo98/" title="<fmt:message key='highlight.expo98.link.title'/>"><fmt:message key='highlight.expo98.title'/></a>
+						<a href="/wayback/20000823154833/http://www.parquedasnacoes.pt/pt/expo98/" title="<fmt:message key='highlight.expo98.link.title'/>"><fmt:message key='highlight.expo98.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.expo98.description'/></p>
 						<p><fmt:message key='highlight.expo98.description2'/></p>
 					</div>
@@ -79,7 +79,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/20040525212736/http://euro2004.clix.pt/" title="<fmt:message key='highlight.euro2004.link.title'/>"><fmt:message key='highlight.euro2004.title'/></a>
+						<a href="/wayback/20040525212736/http://euro2004.clix.pt/" title="<fmt:message key='highlight.euro2004.link.title'/>"><fmt:message key='highlight.euro2004.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.euro2004.description'/></p>
 						<p><fmt:message key='highlight.euro2004.description2'/></p>
 					</div>
@@ -90,7 +90,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/20011230091638/http://www.ojogo.pt/17-300/artigo145049.htm" title="<fmt:message key='highlight.figo.link.title'/>"><fmt:message key='highlight.figo.title'/></a>
+						<a href="/wayback/20011230091638/http://www.ojogo.pt/17-300/artigo145049.htm" title="<fmt:message key='highlight.figo.link.title'/>"><fmt:message key='highlight.figo.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.figo.description'/></p>
 						<p><fmt:message key='highlight.figo.description2'/></p>
 					</div>
@@ -101,7 +101,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="http://arquivo.pt/wayback/wayback/19961013182712/http://www.publico.pt/" title="<fmt:message key='highlight.publico.link.title'/>"><fmt:message key='highlight.publico.title'/></a>
+						<a href="http://arquivo.pt/wayback/19961013182712/http://www.publico.pt/" title="<fmt:message key='highlight.publico.link.title'/>"><fmt:message key='highlight.publico.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.publico.description'/></p>
 						<p><fmt:message key='highlight.publico.description2'/></p>
 					</div>
@@ -112,7 +112,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/19961013150238/http://sapo.ua.pt/" title="<fmt:message key='highlight.sapo.link.title'/>"><fmt:message key='highlight.sapo.title'/></a>
+						<a href="/wayback/19961013150238/http://sapo.ua.pt/" title="<fmt:message key='highlight.sapo.link.title'/>"><fmt:message key='highlight.sapo.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.sapo.description'/></p>
 						<p><fmt:message key='highlight.sapo.description2'/></p>
 					</div>
@@ -123,7 +123,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/19961013213258/http://www.w3.org/pub/WWW/People/Berners-Lee/" title="<fmt:message key='highlight.tim-berners-lee.link.title'/>"><fmt:message key='highlight.tim-berners-lee.title'/></a>
+						<a href="/wayback/19961013213258/http://www.w3.org/pub/WWW/People/Berners-Lee/" title="<fmt:message key='highlight.tim-berners-lee.link.title'/>"><fmt:message key='highlight.tim-berners-lee.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.tim-berners-lee.description'/></p>
 						<p><fmt:message key='highlight.tim-berners-lee.description2'/></p>
 					</div>
@@ -134,7 +134,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="/wayback/wayback/20010330011529/http://www.presidenciais.iscte.pt/" title="<fmt:message key='highlight.presidential2001.link.title'/>"><fmt:message key='highlight.presidential2001.title'/></a>
+						<a href="/wayback/20010330011529/http://www.presidenciais.iscte.pt/" title="<fmt:message key='highlight.presidential2001.link.title'/>"><fmt:message key='highlight.presidential2001.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.presidential2001.description'/></p>
 						<p><fmt:message key='highlight.presidential2001.description2'/></p>
 					</div>

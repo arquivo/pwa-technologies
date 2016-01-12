@@ -41,7 +41,7 @@
     <property name="java.vm.specification.version" value="1.7"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="/opt/jdk1.7.0_79/jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher install -e"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher install"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="en"/>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
@@ -58,6 +58,6 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.023" classname="org.archive.wayback.resourceindex.distributed.AlphaPartitionedIndexTest" name="testGroupBalance"/>
-  <testcase time="0.03" classname="org.archive.wayback.resourceindex.distributed.AlphaPartitionedIndexTest" name="testFindRange"/>
+  <testcase time="0.024" classname="org.archive.wayback.resourceindex.distributed.AlphaPartitionedIndexTest" name="testGroupBalance"/>
+  <testcase time="0.029" classname="org.archive.wayback.resourceindex.distributed.AlphaPartitionedIndexTest" name="testFindRange"/>
 </testsuite>

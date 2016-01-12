@@ -82,7 +82,7 @@
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="/wayback/wayback/19980205082901/http://www.caleida.pt/saramago/" title="<fmt:message key='highlight.saramago.link.title'/>"><fmt:message key='highlight.saramago.title'/></a>
+                                                        <a href="/wayback/19980205082901/http://www.caleida.pt/saramago/" title="<fmt:message key='highlight.saramago.link.title'/>"><fmt:message key='highlight.saramago.title'/></a>
                                                         <p class="box-sub-title"><fmt:message key='highlight.saramago.description'/></p>
                                                         <p><fmt:message key='highlight.saramago.description2'/></p>
                                                 </div>
@@ -94,7 +94,7 @@
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-							<a href="/wayback/wayback/20000823154833/http://www.parquedasnacoes.pt/pt/expo98/" title="<fmt:message key='highlight.expo98.link.title'/>"><fmt:message key='highlight.expo98.title'/></a>
+							<a href="/wayback/20000823154833/http://www.parquedasnacoes.pt/pt/expo98/" title="<fmt:message key='highlight.expo98.link.title'/>"><fmt:message key='highlight.expo98.title'/></a>
                                                         <p class="box-sub-title"><fmt:message key='highlight.expo98.description'/></p>
                                                         <p><fmt:message key='highlight.expo98.description2'/></p>
                                                 </div>
@@ -106,7 +106,7 @@
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="/wayback/wayback/20040525212736/http://euro2004.clix.pt/" title="<fmt:message key='highlight.euro2004.link.title'/>"><fmt:message key='highlight.euro2004.title'/></a>
+                                                        <a href="/wayback/20040525212736/http://euro2004.clix.pt/" title="<fmt:message key='highlight.euro2004.link.title'/>"><fmt:message key='highlight.euro2004.title'/></a>
                                                         <p class="box-sub-title"><fmt:message key='highlight.euro2004.description'/></p>
                                                         <p><fmt:message key='highlight.euro2004.description2'/></p>
                                                 </div>
@@ -118,7 +118,7 @@
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="/wayback/wayback/20011230091638/http://www.ojogo.pt/17-300/artigo145049.htm" title="<fmt:message key='highlight.figo.link.title'/>"><fmt:message key='highlight.figo.title'/></a>
+                                                        <a href="/wayback/20011230091638/http://www.ojogo.pt/17-300/artigo145049.htm" title="<fmt:message key='highlight.figo.link.title'/>"><fmt:message key='highlight.figo.title'/></a>
                                                         <p class="box-sub-title"><fmt:message key='highlight.figo.description'/></p>
                                                         <p><fmt:message key='highlight.figo.description2'/></p>
                                                 </div>
