@@ -124,8 +124,21 @@
                                                 </div>
                                         </div>
 					</fmt:bundle>
+					
+					
+<!--Inspect the language for returning the proper highlight page  -->
+<c:choose>
+  <c:when test="${language == 'pt'}">
+   <a href="http://sobre.arquivo.pt/sobre/paginas-de-exemplo-no-arquivo-da-web-portuguesa" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
+  </c:when>
+  <c:otherwise>
+    <a href=" http://sobre.arquivo.pt/about-the-archive/example-pages-in-the-portuguese-web-archive" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
+  </c:otherwise>
+</c:choose>
 
-					<a href="highlights.jsp?l=<%=language%>" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
+
+
+					
                                 </div>
                         </div>
 
