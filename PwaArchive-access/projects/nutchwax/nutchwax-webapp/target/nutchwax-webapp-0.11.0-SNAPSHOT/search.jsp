@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<%@page import="java.net.URL"%>
 <%@ page
 	session="true"
 	contentType="text/html; charset=UTF-8"
@@ -95,9 +96,18 @@
 <%-- Handle the url parameters --%>
 <%
   // get query from request
+  
   String queryString = request.getParameter("query");
+	URL url_aux=new URL(queryString);
+	String path=url_aux.getPath();
+	String hostname=url_aux.getHost().toLowerCase();
+	String protocol=url_aux.getProtocol();
+	queryString= protocol+"://"+hostname+path;
+	bean.LOG.debug("\n\n URL:"+queryString+"\n\n");
+	
   if ( queryString != null ) {
         queryString = queryString.trim();
+       
   } else {
         // Check if the 'query' params exists
         // else check if the advanced params exist and process them
@@ -286,7 +296,23 @@
             collection;
       }
   }
-
+  /* if (urlQueryParam.contains("http://")){ 
+  	aux=urlQueryParam.replace("http://","");
+  	vect_aux= aux.split("/");				         
+  	aux_1=vect_aux[0];
+   	bean.LOG.debug("\n\n Aux: "+"http://"+aux_1.toLowerCase()+"/"+vect_aux[1]+"\n");
+   	urlQueryParam= "http://"+aux_1.toLowerCase()+"/"+vect_aux[1];
+   }
+  
+  if (urlQueryParam.contains("https://")){ 
+   	 aux=urlQueryParam.replace("https://","");
+   	 vect_aux= aux.split("/");				         
+   	aux_1=vect_aux[0];
+   	bean.LOG.debug("\n\n Aux: "+"https://"+aux_1.toLowerCase()+"/"+vect_aux[1]+"\n");
+   	urlQueryParam= "https://"+aux_1.toLowerCase()+"/"+vect_aux[1];
+   }            
+   */
+  
   // Prepare the query values to be presented on the page, preserving the session
   String htmlQueryString = "";
 
@@ -435,7 +461,9 @@
 				                        // option: (2)
 				                        showList = false;
 				                        usedWayback = true;
-						
+				                        
+				      
+				        
 							pageContext.setAttribute("dateStartWayback", FORMAT.format( dateStart.getTime() ) );
                         pageContext.setAttribute("dateEndWayback", FORMAT.format( dateEnd.getTime() ) );
 
