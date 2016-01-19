@@ -99,19 +99,11 @@
   
   String queryString = request.getParameter("query");
 
-/*
-hostname is not case sensitive, thereby it has to be written with lower case
-the bellow provide a solution to this problem
-arquivo.PT will be equal to arquivo.pt
-*/
-	URL url_queryString=new URL(queryString);
-	String path=url_queryString.getPath();
-	String hostname=url_queryString.getHost().toLowerCase();
-	String protocol=url_queryString.getProtocol();
-	queryString= protocol+"://"+hostname+path;
+
 	
   if ( queryString != null ) {
         queryString = queryString.trim();
+        
        
   } else {
         // Check if the 'query' params exists
@@ -454,8 +446,21 @@ arquivo.PT will be equal to arquivo.pt
 			        	        if (!urlQuery.startsWith("http://") && !urlQuery.startsWith("https://") ) {
 				                        urlQueryParam = "http://" + urlQueryParam;
 			                	}
-						
-						pageContext.setAttribute("urlQueryParam", urlQueryParam);
+			        	        /*
+			        	        hostname is not case sensitive, thereby it has to be written with lower case
+			        	        the bellow provide a solution to this problem
+			        	        arquivo.PT will be equal to arquivo.pt
+			        	        Converts hostname to small letters
+			        	        */
+			        	        URL url_queryString=new URL(urlQueryParam);
+			        	        String path=url_queryString.getPath();
+			        	        String hostname=url_queryString.getHost().toLowerCase();
+			        	        String protocol=url_queryString.getProtocol();
+			        	        urlQueryParam= protocol+"://"+hostname+path;
+			        	        
+			        			queryString=urlQueryParam;
+			        			
+								pageContext.setAttribute("urlQueryParam", urlQueryParam);
 
 				                allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
 				                if (!language.equals("pt")) {
