@@ -18,6 +18,7 @@
 package org.apache.nutch.searcher;
 
 import java.io.IOException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -141,6 +142,10 @@ public class OpenSearchServlet extends HttpServlet {
     
     if (queryString == null)
       queryString = "";
+   
+  
+   
+    
     
    String urlQuery = URLEncoder.encode(queryString, "UTF-8");
    urlQuery= URLEncoder.encode(queryString,"UTF-8");

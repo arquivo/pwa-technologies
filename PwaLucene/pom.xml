@@ -145,13 +145,14 @@
      <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.2</version>
+      <version>4.2</version>
     </dependency>    
     <dependency>
       <groupId>org.apache</groupId>
       <artifactId>hadoop</artifactId>
       <version>0.14.5-dev-core</version> 
     </dependency>
+    
     <dependency>
        <groupId>commons-codec</groupId>
        <artifactId>commons-codec</artifactId>
