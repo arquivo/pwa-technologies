@@ -52,7 +52,7 @@
 
 	private static final String COLLECTION_KEY = "collection";
 	private static final String COLLECTION_QUERY_PARAM_KEY = COLLECTION_KEY + ":";
-	private static final Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
+	private static final Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-zA-Z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
 %>
 <%-- Get the application beans --%>
 <%
@@ -450,6 +450,7 @@
 			        	        hostname is not case sensitive, thereby it has to be written with lower case
 			        	        the bellow provide a solution to this problem
 			        	        arquivo.PT will be equal to arquivo.pt
+			        	        Converts hostname to small letters
 			        	        */
 			        	        URL url_queryString=new URL(urlQueryParam);
 			        	        String path=url_queryString.getPath();
@@ -458,7 +459,7 @@
 			        	        urlQueryParam= protocol+"://"+hostname+path;
 			        	        
 			        			queryString=urlQueryParam;
-			        			request.setAttribute("query", queryString.trim());
+			        			
 								pageContext.setAttribute("urlQueryParam", urlQueryParam);
 
 				                allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
