@@ -1,0 +1,143 @@
+<html>
+ <head>
+   <title>Selenium Grid - Get Started!</title>
+   <link rel="stylesheet" type="text/css" href="stylesheets/site.css" />
+ </head>
+
+<body>
+  <div class="header">
+    <a href="index.html"><img alt="Selenium_grid_logo_large" src="images/selenium-grid-logo-large.png"/></a>
+    Get Started!
+  </div>
+
+  <div class="section">
+    <h2>Java</h2>
+    <div class="content">
+      <p>
+        To run Selenium Grid, you need a valid Java 5+ JDK install on your system.
+      </p>
+      <h3>Mac OS X</h3>   
+        <p>
+         If you are running Mac OS X you can safely skip this step &mdash; the 
+         system comes with a 
+         ready-to-use Java runtime and development environment.
+        </p>
+
+        <p class="note">
+          Need more detailed instructions? Check out our step-by-step
+	  installation instructions for 
+	  <a href="step_by_step_installation_instructions_for_osx.html">Mac OS X</a>.
+        </p>
+
+      <h3>Ubuntu</h3>
+        <p>
+          If you are running Ubuntu 8.04 "Hardy Heron", the easier way to install the JDK
+          is to run:
+        </p>
+        <pre>sudo apt-get install sun-java6-jdk</pre>
+
+      <h3>Other Systems</h3>
+        <p>
+         Download <a href="http://www.java.com/en/download/index.jsp">Java 6 JDK</a>,
+         install it on your file system and make sure it is in your <code>PATH</code>:
+         <pre>$ <strong>java -version</strong>
+java version "1.6.0"
+Java(TM) SE Runtime Environment (build 1.6.0-b105)
+Java HotSpot(TM) Server VM (build 1.6.0-b105, mixed mode)</pre>
+        </p>
+
+    </div>
+  </div>
+  
+<div class="section">
+  <h2>Ant</h2>
+    <div class="content">
+
+      <p>
+        To run Selenium Grid, you need Ant 1.7+ to be installed on your system.
+      </p>
+      <h3>Mac OS X</h3>
+       <p class="note">
+         If you are running Mac OS X 10.5 (Leopard) you can safely skip 
+         this step &mdash; the system comes with Ant 1.7.0 pre-installed.
+       </p><p>
+         If you are running an older version on Mac OS X you still need to
+         install Ant 1.7: the pre-installed Ant version is too much behind.
+         Follow the instructions described in the "Other Systems" section.
+       </p>
+
+      <h3>Ubuntu</h3>
+        <p>
+          If you are running Ubuntu 8.04 "Hardy Heron", the easier way to install Ant 1.7
+          is to run:
+        </p>
+        <pre>sudo apt-get install ant ant-optional</pre>
+      
+      <h3>Other Systems</h3>
+      <p>
+        Install <a href="http://ant.apache.org/bindownload.cgi">Ant 1.7.x</a>
+        and make sure it is in your <code>PATH</code>:
+        <ol>
+          <li>
+            Download the 
+            <a href="http://mirror.olnevhost.net/pub/apache/ant/binaries/apache-ant-1.7.1-bin.zip">binary
+            distribution</a>.
+          </li><li>
+            Unpack the binary distribution in the directory of your choice.
+          </li><li>
+            Add <code>&lt;where you unpacked the zip file&gt;/apache-ant-1.7.0/bin</code>
+            to your <code>PATH</code> environment variable.
+          </li><li>
+            Check that your Ant installation is OK:
+            <pre>$ <strong>ant&nbsp;-version</strong>
+Apache Ant version <strong>1.7.0</strong> compiled on December 13 2006</pre>
+          </li>
+        </ol>
+      </p>
+     <p class="note">
+        If you feel adventurous, Selenium Grid also comes with alternative
+        launchers, based on <a href="http://docs.rubyrake.org/">Rake</a>. 
+      </p>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2>Selenium Grid</h2>
+    <div class="content">
+      <p>
+        Download Selenium Grid 
+        <a href="download.html">latest binary distribution</a>
+        and unpack it on your computer.
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Check</h2>
+    <div class="content">
+      Go at the root of selenium grid directory and validate your installation:
+      <pre>$ cd selenium-grid-1.0
+$ <strong>ant sanity-check</strong></pre>
+</pre>      
+
+      <p class="note">
+        Need more detailed instructions? Check out our step-by-step
+        installation instructions for 
+        <a href="step_by_step_installation_instructions_for_osx.html">Mac OS X</a>.
+      </p>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2>Demo</h2>
+    <div class="content">
+      <p>
+        At this point the best way to get up to speed with Selenium Grid usage 
+        and concepts is to <a href="run_the_demo.html">run the Demo</a>.
+      </p>
+
+    </div>
+  </div>
+
+</body> 
+</html>

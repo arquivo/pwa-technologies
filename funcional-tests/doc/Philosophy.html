@@ -1,0 +1,57 @@
+<html>
+<head>
+  <title>Selenium Grid Philosophy</title>
+  <link href="resources/Selenium Grid.css" rel="stylesheet" type="text/css" media="all">
+</head>
+<body>
+  <h1>Selenium Grid Philosophy</h1>
+
+  <h3>One Remote Control = One browser = One Environment</h3>
+    <p>
+      The rationale is:
+    </p>
+    <ul>
+      <li>This simplifies dramatically the remote control reservation/stickiness process
+      <li>Easy to get something out the door quickly if we rely on this assumption on the
+      short run
+      <li>More than one IE instance for the same remote control does not work
+      <li>Remote control is not very stable and need to be restarted quite often.
+      The restart has less impact if only one browser is running at a time.
+      <li>You can still scale by running multiple remote control on the same machine
+      <li>This way each remote control can offer different environment capabilities on the
+      same box. e.g "IE 7 on Windows" and "Firefox on Windows".
+   </ul>
+
+  <h2>You are the one in control</h2>
+
+    <h3>The same test can run locally on a traditional remote control or remotely on the Selenium grid</h3>
+      <ul>
+        <li>
+          The selenium test can run the same locally with a "classic" selenium setup or talking to the
+   selenium grid => Tests are written as usual using your favorite selenium client driver
+   (ruby, python, java, ...). This makes it easy to troubleshoot failing tests.
+        </li><li>
+           The selenium test itself is in charge on test isolation : reusing the same browser across test,
+   rolling back database to a known state, etc. This is because the person writing the test
+   is the only person who knows what makes sense for a specific web application and which
+   tradeoff he is willing to take between test isis the only one
+   aware
+        </li>
+      </ul>
+
+  <h2>Lessons learned</h2>
+
+    <ul>
+      <li>Remote Control are not very robust, the need to be restarted regularly</li>
+      <li>Running more than one IE on a remote control is not a good idea</li>
+      <li>
+        Two _major_ factors for the performance of your selenium test suite are:
+        <ol>
+          <li>Performance of the web server under test</li>
+          <li>Performance of the network between the remote control and the web site under test</li>
+        </ol>
+      </li>
+    </ul>
+    
+</body>
+</html>     

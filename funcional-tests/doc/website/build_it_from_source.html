@@ -1,0 +1,55 @@
+<html>
+<head>
+  <title>Selenium Grid - Build it from Source!</title>
+  <link rel="stylesheet" type="text/css" href="stylesheets/site.css" />
+</head>
+<body>
+  <div class="header">
+    <a href="index.html"><img alt="Selenium_grid_logo_large" src="images/selenium-grid-logo-large.png"/></a>
+    Build it from Source!!
+  </div>
+ 
+  <div class="section"> 
+    <h2>Install Ant and Java</h2>
+    <div class="content">
+      <p>
+        Install Ant and Java as described in 
+        <a href="get_started.html">Get Started</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="section"> 
+    <h2>Get Some Fresh Code</h2>
+    <div class="content">
+      <p>
+	    <code>$ git clone git://github.com/ph7/selenium-grid.git Selenium-Grid</code>
+      </p>
+    </div>
+  </div>
+
+  <div class="section"> 
+    <h2>Validate your Install</h2>
+    <div class="content">
+      <pre>$ cd &lt;project root&gt;
+$ ant sanity-check</pre>
+    </div>
+  </div>
+
+  <div class="section"> 
+    <h2>Package a new Distribution</h2>
+    <div class="content">
+      Run the build to make sure that it passes on your box:
+      <pre>$ ant dist</pre>
+
+      <p>
+	    You will then find a new distribution under the <code>target</code>
+	    directory (zip and tar formats).
+	 </p>
+    </div>
+  </div>
+
+</div>      
+
+</body>
+</html>   

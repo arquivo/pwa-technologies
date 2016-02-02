@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <title>Selenium Grid - Setting Up Selenium Grid on EC2 (Amazon Elastic Compute Cloud)</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/site.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/document.css">
+  </head>
+  <body>
+    <div class="header">
+      <a href="index.html"><img alt="Selenium_grid_logo_large" src="images/selenium-grid-logo-large.png"/></a>
+       Setting Up Selenium Grid on EC2<br/>(Amazon Elastic Compute Cloud)
+    </div>
+
+  <p>
+    Here are detailed, step by step instructions, on how to install
+    and setup your EC2 environment for testing with Selenium Grid
+  </p>
+
+    <p class="note">
+	  The current EC2 automation assumes a UNIX plaform (Mac OS X, Linux
+	  Solaris, BSD). Windows users can still use the 
+	  <a href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1276&amp;categoryID=116">Official EC2 Image for Selenium Grid 1.0</a>
+	  but the built-in automation is not likely to work.
+	</p>
+
+  <h2 id="acquire-ec2-account">Step 1: Acquire a Valid Amazon EC2 Account and Associated Credentials</h2>
+
+    <h3 id="ec2-signup">Step 1a: Signup for Amazon Accounts(AWS and EC2)</h2>
+      <ol>
+        <li>
+          <strong>Create an Amazon Web Service Account (AWS)</strong>
+          <p>
+            Go to <a href="http://www.amazon.com/aws">http://www.amazon.com/aws</a> and click on the 
+            <q>Sign up for AWS</q> link in the upper right.  
+            Complete all the information required for Amazon AWS registration.
+          </p>
+        </li><li>	
+	  <strong>Create an Amazon Compute Cloud Account (EC2)</strong>
+          <p>
+            If you are not already logged into your AWS account, click on the following link and logging into your account.
+            <a href="http://www.amazon.com/aws">http://www.amazon.com/aws</a>
+          </p>
+          <ul>
+              <li>Goto the bottom of your AWS home page and click on the link <q>Explore Our WebServices</q></li>
+              <li>Navigate to the bottom of the page and click on the link <q>Amazon Elastic Compute Cloud (Amazon EC2)</q></li>
+              <li>In the upper right corner, click on the link <q>Sign up for this Web Service</q>.  You will need a 
+      credit card for this service as it is a pay-for-use service.</li> 
+          </ul>
+        </li>
+      </ol>  	
+	
+    <h3 id="generate-ec2-certificates">Step 1b: Create Web Service Access Keys and X.509 Certificate</h2>
+      <p>
+        Once your AWS account has been created and you have added the EC2 web service to your account
+        navigate back to your AWS Home account.
+      </p>
+      <p>
+        If you are not already logged into your AWS account, click on the following link and logging into your account.
+        <a href="http://www.amazon.com/aws">http://www.amazon.com/aws</a>
+      </p>
+    <ul>
+      <li>In the upper right corner click on the link "Your Web Service Account" and select the option "AWS Access Identifiers"</li>
+      <li>Navigate to the section "Access Key ID and Secret Access Key."  On the right side of the page you will be able to see
+    your Your Access Id Key and Your Secret Access Key (see image below)</li>
+      <li>To generate your X.509 Certificate, scroll down to the next section and click on the link Create New</li>
+      <li>Follow the directions for creating your new certificate and private key.  At the end of the process download the private key and save it</li>  
+      <li>Download the certificate and save it</li>
+      <li>In your home directory, create a directory ".ec2" and copy private key and the certificate to this directory. Make sure the content of this directory can only been seen by you, as any user that can access these files will be able to use your Amazon AWS account and add charges to your credit card.</p> 
+      <li>Retrieve your AWS Account Id.  In the upper right corner click on the link "Your Web Service Account" and select the option "AWS Account Activity"</li> 
+    </ul>
+
+  <h2 id="ec2-tools">Step 2: Install and Configure Amazon EC2 API Command Line Tools</h2>
+
+    <h3 id="verify-jdk">Step 2a: Verify That JDK 1.5 or Higher is Installed</h2>
+      <p>
+        The Amazon EC2 command line tools require either a JDK/JRE 1.5 or higher.  
+        You can double-check what version you have installed on your computer 
+        by openning a terminal window and 
+        running <code>java -version</code>
+      </p>
+      <img style="margin-left: 5em;" src="images/java_version_osx_screenshot.png" />
+      <p>
+        The command output should indicate that a 1.5 version of the JDK
+        is available. If not, update your JDK  to 1.5
+      </p>
+
+    <h3 id="download-ec2-tools">Step 2b: Download EC2 API Command Line Tools</h2>
+    <p>
+      Once your accounts have been created and your certificates have been download the 
+      link to <a href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351&categoryID=88">EC2 Command Line Tools</a>.
+    </p>
+    <p>
+      Extract the downloaded file on your computer. 
+      Please take note of the directory where the tools have been extracted, you are going to need this information in a second.
+    </p>
+
+    <h3 id="setting-up-your-environment">Setup your environment</h3>
+      <p>
+        Your must set the following environment variables:
+	  </p><dl>
+		<dt><code>EC2_HOME</code></dt>
+                  <dd>Should point to the directory where you installed EC2 API tools (root location)</dd>
+		</dd><dt><code>EC2_PRIVATE_KEY</code></dt>
+		  <dd>
+		    Should point to your EC2 private key file. 
+			e.g. <code>export EC2_PRIVATE_KEY=/somewhere/pk-5CCEI7ODBPYGRXYOAZWGPVCG5LJ6HLGE.pem</code>
+		  </dd>
+		<dt><code>EC2_CERT</code></dt>
+		  <dd>
+		    Should point to your EC2 certificate file. 
+			e.g. <code>export EC2_CERT=/somewhere/cert-5CCEI7ODBPYGRXYOAZWGPVCG5LJ6HLGE.pem</code>
+		  </dd>
+		<dt><code>EC2_KEYPAIR</code></dt>
+		  <dd>
+		    Should point to your EC2 keypair file. 
+			e.g. <code>export EC2_KEYPAIR=/somewhere/id_rsa-gsg-keypair.pem</code>
+		  </dd>
+		<dt><code>EC2_KEYPAIR_NAME</code></dt>
+		  <dd>
+		    Should be the <em>name</em> of your EC2 keypair. 
+			e.g. <code>export EC2_KEYPAIR_NAME=gsg-keypair</code>
+		  </dd>
+	  </dl>
+
+      <p>You must also add <code>${EC2_HOME}/bin</code> to your <code>PATH</code></p>.
+
+    <h3 id="checking-ec2-tools">Check Your Installation</h3>
+      <p>
+        At this point you should be able to successfully run the following 
+        commands:
+      </p>
+
+     <pre>$ <strong>ec2-version</strong>
+	1.2-13740 2007-08-29
+$ <strong>ec2-describe-images -a | grep selenium-grid</strong>
+IMAGE	ami-780fea11	selenium-grid-1.0/image.manifest.xml	069216575636	available	public	
+</pre>	
+      <p>
+	  Pay special attention to your EC2 private key, certificate, and the
+	  name of the keypair you generate.
+      </p>		
+
+   <h3 id="ec2-documentation">Additional References</h2>
+    <p>
+      For more detail instructions or for trouble shooting, consult the EC2 Getting Started Guide for more information
+      
+      Once your AWS account has been created and you have added the 2 web services (S3 and EC2) to your account
+      <a href="http://docs.amazonwebservices.com/AWSEC2/2008-02-01/GettingStartedGuide/?ref=get-started">Amazon Elastic Compute Cloud Getting Started Guide</a>
+    </p>
+
+
+  <h2>Installing Capistrano</h2>
+      <p>
+        You will need to install 
+        <a href="http://www.capify.org/">Capistrano</a> to take advance 
+        of Selenium Grid EC2 automation.
+      </p>
+      <p class="note">
+	    On Ubuntu:<br><br>
+	    <code>sudo apt-get install ruby rubygems<br>
+              sudo gem install capistrano -y</code>
+	  </p><p>
+	  </p><p class="note">
+        On OS X 10.5 (Leopard):<br><br>
+	    <code>sudo gem install capistrano -y</code>
+	  </p><p>
+	  </p><p>
+	    Installation for other platforms is documented on
+	    <a href="http://capify.org/install">Capistrano website</a>.
+	  </p>
+	
+  <h2>Install Selenium Grid</h2>
+    <p>
+      <a href="get_started.html">Install the latest Selenium Grid distribution</a> 
+      if you haven't done it already.
+    </p>
+
+  <p>You are now ready to run <a href="run_the_demo_on_ec2.html">Selenium
+     Grid Demo on EC2</p>
+	
+</body>
+</html>

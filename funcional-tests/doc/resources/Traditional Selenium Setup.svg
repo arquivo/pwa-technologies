@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1052.3622"
+   height="744.09448"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.45"
+   version="1.0"
+   sodipodi:docbase="/media/Window/selenium_grid/doc/resources"
+   sodipodi:docname="Traditional Selenium Setup.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/Local/Users/Philippe/Projects/Selenium Grid/doc/resources/Traditional Selenium Setup - Small.png"
+   inkscape:export-xdpi="85.179291"
+   inkscape:export-ydpi="85.179291"
+   sodipodi:modified="TRUE">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="TriangleOutL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleOutL"
+       style="overflow:visible">
+      <path
+         id="path7211"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleInL"
+       style="overflow:visible">
+      <path
+         id="path7220"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="RazorWire"
+       id="RazorWire"
+       refX="0"
+       refY="0"
+       orient="auto">
+       style=&quot;overflow:visible&quot;&gt;
+      <path
+   id="path7139"
+   transform="scale(0.8,0.8)"
+   style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.1pt"
+   d="M 0.022727273,-0.74009011 L 0.022727273,0.69740989 L -7.7585227,3.0099099 L 10.678977,3.0099099 L 3.4914773,0.69740989 L 3.4914773,-0.74009011 L 10.741477,-2.8963401 L -7.7272727,-2.8963401 L 0.022727273,-0.74009011 z " />
+</marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="573.56568"
+     inkscape:cy="403.67393"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     width="1052.3622px"
+     height="744.09448px"
+     inkscape:window-width="1295"
+     inkscape:window-height="689"
+     inkscape:window-x="2"
+     inkscape:window-y="72" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3156"
+       transform="translate(18.214285,31.428572)">
+      <path
+         id="path2178"
+         d="M 245.70089,199.78574 C 201.53755,199.78574 165.69484,222.05156 165.69484,249.46073 C 165.69484,276.8699 201.53755,299.11158 245.70089,299.11158 C 289.86423,299.11158 325.70694,276.8699 325.70694,249.46073 C 325.70694,222.05156 289.86423,199.78573 245.70089,199.78574 z "
+         style="opacity:1;fill:#2831aa;fill-opacity:0.81920902;stroke:#f20018;stroke-width:0.08788963;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3152"
+         y="256.23734"
+         x="192.14285"
+         style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+           y="256.23734"
+           x="192.14285"
+           id="tspan3154"
+           sodipodi:role="line">Selenium Test</tspan></text>
+    </g>
+    <g
+       id="g3175"
+       transform="translate(-1.7857146,45.714286)">
+      <path
+         style="fill:#2831aa;fill-opacity:0.81920902;stroke:#f20018;stroke-width:0.08788963;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 265.70089,328.35717 C 221.53755,328.35717 185.69484,350.62299 185.69484,378.03216 C 185.69484,405.44133 221.53755,427.68301 265.70089,427.68301 C 309.86423,427.68301 345.70694,405.44133 345.70694,378.03216 C 345.70694,350.62299 309.86423,328.35716 265.70089,328.35717 z "
+         id="path3163" />
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         x="265"
+         y="375.52307"
+         id="text3165"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3167"
+           x="265"
+           y="375.52307"
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans">Web Application</tspan><tspan
+           sodipodi:role="line"
+           x="265"
+           y="393.02307"
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans"
+           id="tspan3169">under test</tspan></text>
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.70000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.7, 1.7;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 427.85714,501.23734 C 426.42857,212.66591 424.28571,175.52306 424.28571,175.52306"
+       id="path3183"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="278.29807"
+       y="191.52821"
+       id="text4154"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="278.29807"
+         y="191.52821"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans"
+         id="tspan4158">Application Specific</tspan></text>
+    <g
+       id="g4179"
+       transform="translate(291.08482,-97.142858)">
+      <path
+         style="fill:#aa287c;fill-opacity:0.81920902;stroke:#f20018;stroke-width:0.08788963;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 265.70089,328.35717 C 221.53755,328.35717 185.69484,350.62299 185.69484,378.03216 C 185.69484,405.44133 221.53755,427.68301 265.70089,427.68301 C 309.86423,427.68301 345.70694,405.44133 345.70694,378.03216 C 345.70694,350.62299 309.86423,328.35716 265.70089,328.35717 z "
+         id="path4181" />
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         x="265"
+         y="375.52307"
+         id="text4183"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="265"
+           y="375.52307"
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans"
+           id="tspan4187">Selenium</tspan><tspan
+           sodipodi:role="line"
+           x="265"
+           y="393.02307"
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans"
+           id="tspan6129">Remote Control</tspan></text>
+    </g>
+    <g
+       id="g6131"
+       transform="translate(287.51339,52.142856)">
+      <path
+         style="fill:#aa287c;fill-opacity:0.81920902;stroke:#f20018;stroke-width:0.08788963;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 269.27232,321.9286 C 225.10898,321.9286 189.26627,344.19442 189.26627,371.60359 C 189.26627,399.01276 225.10898,421.25444 269.27232,421.25444 C 313.43566,421.25444 349.27837,399.01276 349.27837,371.60359 C 349.27837,344.19442 313.43566,321.92859 269.27232,321.9286 z "
+         id="path6133" />
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         x="265"
+         y="375.52307"
+         id="text6135"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="265"
+           y="375.52307"
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans"
+           id="tspan6139">Browser</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="560.44092"
+       y="188.67108"
+       id="text6143"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="560.44092"
+         y="188.67108"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans"
+         id="tspan6145">Application Agnostic</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#TriangleOutL);marker-start:url(#TriangleInL)"
+       d="M 350.71429,281.95162 C 444.28571,279.80877 470,279.80877 470,279.80877"
+       id="path6147"
+       sodipodi:nodetypes="cc" />
+    <path
+       sodipodi:nodetypes="cc"
+       id="path7320"
+       d="M 352.85715,431.95162 C 447.85714,429.80877 472.14286,429.80877 472.14286,429.80877"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#TriangleInL);marker-end:url(#TriangleOutL);stroke-opacity:1" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#TriangleInL);marker-end:url(#TriangleOutL);stroke-opacity:1"
+       d="M 556.49188,338.87203 C 556.49187,353.15775 557.20616,366.72917 557.20616,366.72917"
+       id="path7322"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g8299"
+       transform="translate(36.428571,25.714286)">
+      <rect
+         ry="17.014351"
+         y="64.16127"
+         x="200.06676"
+         height="34.866417"
+         width="357.00928"
+         id="rect7324"
+         style="opacity:1;fill:#5d755c;fill-opacity:0.81920902;stroke:#846e70;stroke-width:1.83358252;stroke-miterlimit:4;stroke-dasharray:1.83358245, 1.83358245;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text8295"
+         y="88.671074"
+         x="386.86948"
+         style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           id="tspan8297"
+           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans"
+           y="88.671074"
+           x="386.86948"
+           sodipodi:role="line">Traditional Selenium Setup</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="372.14285"
+       y="271.95163"
+       id="text2193"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2195"
+         x="372.14285"
+         y="271.95163">selenese</tspan></text>
+    <g
+       id="g8511"
+       transform="translate(-119.71429,-91.428571)">
+      <path
+         id="rect4613"
+         d="M 805,398.375 L 805,490.53125 L 972.15625,490.53125 L 972.15625,475.53125 L 987.15625,475.53125 L 987.15625,398.375 L 805,398.375 z M 987.09375,475.65625 L 972.15625,490.65625 C 975.68439,487.35531 987.09375,475.65625 987.09375,475.65625 z "
+         style="opacity:1;fill:#ffe47f;fill-opacity:0.60526315;stroke:#000000;stroke-opacity:1" />
+      <text
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         y="440.12109"
+         x="820.80859"
+         sodipodi:linespacing="125%"
+         id="text8505"
+         xml:space="preserve"><tspan
+           sodipodi:role="line"
+           id="tspan8507"
+           y="440.12109"
+           x="820.80859">Slow. Usually the bottleneck </tspan><tspan
+           sodipodi:role="line"
+           y="455.12109"
+           x="820.80859"
+           id="tspan8509">of your Selenium Test Suite.</tspan></text>
+    </g>
+  </g>
+</svg>
