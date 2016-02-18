@@ -1,0 +1,38 @@
+#
+# Generate documentation to be published on Selenium Grid website  
+#
+
+task :default => [ :generate_markdown, :copy_stylesheets, :copy_javascripts, :copy_images, :copy_pages]
+
+OUTPUT_DIR = File.expand_path("../../../Selenium Grid Website/src/main/webapp")
+
+task :copy_images do
+  mkdir_p File.join(OUTPUT_DIR, "images")
+  sh %Q{cp -rf images/* "#{File.join(OUTPUT_DIR, 'images')}"}
+  mkdir_p File.join(OUTPUT_DIR, "diagrams")
+  cp Dir["diagrams/**/*.png"], File.join(OUTPUT_DIR, "diagrams")
+end
+
+task :copy_pages do
+  cp Dir["./*.html"], OUTPUT_DIR
+  cp Dir["./*.rss"], OUTPUT_DIR
+end
+
+task :copy_stylesheets do
+  mkdir_p File.join(OUTPUT_DIR, "stylesheets")
+  cp Dir["stylesheets/*"], File.join(OUTPUT_DIR, "stylesheets")
+end
+
+task :copy_javascripts do
+  mkdir_p File.join(OUTPUT_DIR, "javascripts")
+  cp Dir["javascripts/*"], File.join(OUTPUT_DIR, "javascripts")
+end
+
+
+task :generate_markdown do
+  Dir["*.markdown"].each {|file| sh "maruku #{file}"}
+end
+
+task :'images:generate' do
+  sh "convert -size 1x400 gradient:white-#781435 images/background_start_tracks.png"
+end

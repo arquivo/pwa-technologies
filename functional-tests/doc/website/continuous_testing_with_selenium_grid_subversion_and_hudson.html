@@ -1,0 +1,147 @@
+<html>
+ <head>
+   <title>Selenium Grid - Continuous Integration with Hudson</title>
+   <link rel="stylesheet" type="text/css" href="stylesheets/site.css" />
+   <link rel="stylesheet" type="text/css" href="stylesheets/document.css" />
+   <meta name="Author" content="Amit Easow">
+ </head>
+ <body>
+<html>
+</head>
+   <div class="header">
+     <a href="index.html"><img alt="Selenium_grid_logo_large" src="images/selenium-grid-logo-large.png"/></a>
+     Continuous Integration with Hudson
+   </div>
+<body>
+  <i>by <a href="http://www.linkedin.com/pub/5/752/a17">Amit Easow</a></i>
+
+  <h2>To give you a little history</h2>
+  <p>Before I discovered Selenium grid and Hudson, I put in place a system for continuous testing using Selenium scripts written in HTML, Cruise Control for continuous integration and Subversion for version control of software code.</p>
+  <h2>Prerequisites:</h2>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Subversion (http://subversion.tigris.org/getting.html)</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Selenium Grid (http://selenium-grid.seleniumhq.org/)</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Hudson (https://hudson.dev.java.net/)</li>
+</ul>
+<p class="p2">Download and install Selenium Grid. Run the sample demo to get a
+feel of what you are working with. I decided to teach myself ruby and what better way to do that than to play with an open source system, which recommends it.</p>
+<p class="p1"><b>Running the test cases locally<span class="Apple-converted-space">√†</span></b></p>
+<p class="p2">After downloading the selenium grid project, I renamed it to seleniumSystemTests. Then I created my testSuite directory using the code in the examples/ruby directory, as a reference. Copy the Rake file and the equivalent of the spec_helper file from the examples/ruby directory to the testSuite directory. Modify the URL for application under test, in the spec_helper file equivalent.</p>
+<p class="p3"><span class="s1">application_host = ENV[</span>'SELENIUM_APPLICATION_HOST'<span class="s1">] ||</span> "www.comcast.net"</p>
+<p class="p4"><br></p>
+<p class="p2">I added my test cases in the testSuite directory and was able to run the test suite locally by following the steps below</p>
+<p class="p2">In the first terminal (Mac OS X)</p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">cd seleniumSystemTests</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">rake hub:start</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Open http://localhost:4444/console to see the supported browsers</li>
+</ul>
+<p class="p2">In the second terminal</p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">cd seleniumSystemTests</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">rake rc:start_all</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">In the console above you will see 15 remote controls available</li>
+</ul>
+<p class="p2">In the third terminal</p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">cd seleniumSystemTests/testSuite</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">rake tests:run_in_parallel</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">See the tests cases run in parallel on Firefox browsers</li>
+</ul>
+<h2>Add the seleniumSystemTests project into subversion</h2>
+<p class="p5"><span class="s2">svn import seleniumSystemTests </span>https://&lt;svn_server_url&gt;/path/to/repo/seleniumSystemTests<span class="s3"> -m "Checking in the selenium project"</span><span class="s4"><span class="Apple-converted-space">√†</span></span></p>
+<h2>Running the test cases remotely</h2>
+<p class="p2">Now that the test cases are running successfully with the hub and remote controls running on the same local machine, the next logical step is to run the hub and remote controls on separate machines.</p>
+<p class="p2">Machine A:<span class="Apple-converted-space">√†</span></p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Download the seleniumSystemTests project</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">cd seleniumSystemTests</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">rake hub:start</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Open http://localhost:4444/console to see the browsers supported</li>
+</ul>
+<p class="p2">Machine B:</p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Check out the seleniumSystemTests project</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">cd seleniumSystemTests</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">rake HOST=&lt;MachineB_IP_address&gt; HUB_URL=http://&lt;MachineA_IP_address&gt;:4444 rc:start_all</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">In the console above you will see 15 remote controls available</li>
+</ul>
+<p class="p2">Go back to Machine A (continuing from where we left off)</p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Open http://localhost:4444/console to see the 15 browsers available</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Open another terminal to the testSuite directory and run the test cases</li>
+</ul>
+<p class="p2">rake tests:run_in_parallel</p>
+<p class="p2">FAIL!!!!!</p>
+<p class="p2">This is because the remote control server is set to localhost. Open the testSuite directory and find the spec_helper file equivalent. Modify it to say</p>
+<p class="p6">remote_control_server = ENV[<span class="s5">'SELENIUM_RC_HOST'</span>] ||<span class="s5"> "&lt;machineA_url&gt;"</span> <span class="Apple-converted-space">√† √†</span></p>
+<p class="p7"><br></p>
+<h2>Running the test cases remotely and continuously</h2>
+<p class="p2">Now that the test cases are running remotely, the next logical step is to integrate it with Hudson to run it continuously. Sign into Hudson and configure it as below.</p>
+<p class="p2"><b>First create a node called Selenium Grid</b></p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">On the Hudson main page, click Manage Hudson link</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Click on Manage Nodes link</li>
+</ul>
+<img src="images/Hudson - New Job.png" />
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Click New Node link</li>
+</ul>
+
+<img src="images/Hudson - New Node.png" />
+
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Give the node a name, like Selenium Grid</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Choose Dumb Slave and click Ok button</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">For Name, enter Selenium Grid</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">For Description, enter Selenium Grid<span class="Apple-converted-space">√†</span></li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">For # of executors, enter 1</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">For Remote FS root, enter your root directory path (/Users/&lt;your_username&gt;)</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Leave Labels blank</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">For Usage, choose Leave this machine for tied jobs only</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">For Launch method, choose Launch slave methods via JNLP</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">For Availability, choose Keep this slave on-line as much as possible</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Click Save button</li>
+</ul>
+<img src="images/Hudson - Node Configuration.png" />
+<p class="p9"><br></p>
+<p class="p2">Secondly create a Hudson project to run the test cases regularly</p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">From the Hudson home page, click New Job link.</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Give the new job a name, like seleniumSystemTests<span class="Apple-converted-space">√†</span></li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Choose <span class="s6">Build a free-style software project</span> option and click Ok button</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Tie this project to the node named ‚Selenium Grid‚</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Choose subversion option and enter the SVN repo URL</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Set the build to run 5 min past every hour</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Enter the commands to execute the tests</li>
+</ul>
+<p class="p2">cd testSuite</p>
+<p class="p2">rake tests:run_in_parallel</p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Click ‚E-mail notification‚ option and enter your email address</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">By default, the system is set to send you an email only when the build breaks</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Click ‚Save‚ button</li>
+</ul>
+<img src="images/Hudson - Config First Half.png" />
+<br/>
+<img src="images/Hudson - Config Second Half.png" />
+
+<p class="p2">Finally, click the Build Now button and sit back.<span class="Apple-converted-space">√†</span></p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Under Build History find the first build run.<span class="Apple-converted-space">√†</span></li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Click the currently running build link</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Click Console Output link<span class="Apple-converted-space">√†</span></li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">See the test cases run and the Success message appears at the end</li>
+</ul>
+<p class="p10"><br></p>
+<p class="p2">Hope this helps. Now you will receive an email only when the build breaks. In that case, once you open the URL in the email click the Console Output link. Now you can debug the problem.</p>
+<h2>Running the test cases remotely and continuously</h2>
+<p class="p2">Now that the tests are running continuously against the web application on an hourly basis, the next logic step I am going to take is to run it against more environments. Right now the test cases were running against the Mac/FF environment. Mac/Safari, Windows/IE and Windows/FF are on my list. From my initial investigation it looks like this should work by adding more parameters, indicating the browser and operating system being used, while starting up the remote control and while running the test cases.</p>
+<p class="p2">Further logical steps include</p>
+<ul class="ul1">
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">When new code is checked into subversion, Hudson should automatically deploy the application build to a web server</li>
+  <li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times">Once this completes, a trigger goes off in the Hudson seleniumSystemTests project that imports any new test cases added to subversion. Then it runs the test cases against the new version of the web application.</li>
+</ul>
+<p class="p2">Look out for further posts when I put the final pieces in place.</p>
+</body>
+</html>

@@ -1,0 +1,97 @@
+p.toc {
+  font: bold 2em "Lucida Grande", Verdana, sans-serif;
+  color: #740F31;
+  margin-left: 1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
+  border-left: .5em solid #740F31;
+}
+
+div.maruku_toc ul li {
+  list-style-type: none;
+}
+
+div.maruku_toc ul li a {
+  font: bold 1.4em Cochin, serif;
+  color: black;	
+}
+
+div.maruku_toc ul li ul {
+  margin: 0 0 1em 0;
+}
+
+div.maruku_toc ul li ul li {
+  list-style-type: decimal;
+}
+
+div.maruku_toc ul li ul li ul li {
+  list-style-type: lower-alpha;
+}
+
+div.maruku_toc ul li ul li a {
+  font-size: 1.2em;
+  font-family: "Lucida Grande", Verdana, sans-serif;
+  font-weight: normal;
+}
+
+h1 {
+   font: bold 2em "Optima", serif;
+   padding: .2em .2em 0 .2em;
+   margin-left: .5em;
+   margin-right: 2em;   
+   margin-top: 1.5em;
+   margin-bottom: 1em;
+   border-bottom: solid thick #740F31;
+ }
+
+h2 {
+   font: bold 1.4em "Optima", Verdana, sans-serif;
+   padding: .2em .2em .2em .5em;
+   border: 0;
+   color: #740F31;
+   border-left: .5em solid #740F31;
+   background: none;
+   margin-left: 1.3em;
+}
+
+ h3 {
+   font: bold italic 1.3em Times, Times, serif;
+   padding: .2em .2em;
+   border: 0;
+   color: #222;
+   background: none;
+   margin-left: 1.8em;
+ }
+
+blockquote p:before {
+  content: "\201C";
+}
+blockquote p:after {
+  content: "\201D";
+}
+
+blockquote {
+  margin-left: 2em;	
+}
+
+blockquote p {
+  color:  #740F31;
+  font: italic 1.2em "Optima", serif;
+}
+
+pre {
+  background:#EEEEEE none repeat scroll 0 0;
+  border:1px solid #DDDDDD;
+  font-family: monospace;
+  padding: 0.5em;
+  white-space: pre-wrap;
+}
+
+p {
+	max-width: 40em;	
+}
+
+p, pre {
+  margin-left: 4em;
+  margin-right: 4em;
+}

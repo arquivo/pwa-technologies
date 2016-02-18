@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="p18.arquivo.pt" name="pt.fccn.arquivo.tests.AllTests" tests="8" time="265.264" timestamp="2016-02-18T15:48:32">
+  <properties>
+    <property name="java.vendor" value="Oracle Corporation" />
+    <property name="env.SELINUX_USE_CURRENT_RANGE" value="" />
+    <property name="env.LESSOPEN" value="||/usr/bin/lesspipe.sh %s" />
+    <property name="lib.dir" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/lib" />
+    <property name="ant.file.funcional-tests" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/build.xml" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+    <property name="os.name" value="Linux" />
+    <property name="sun.boot.class.path" value="/opt/jdk1.7.0_79/jre/lib/resources.jar:/opt/jdk1.7.0_79/jre/lib/rt.jar:/opt/jdk1.7.0_79/jre/lib/sunrsasign.jar:/opt/jdk1.7.0_79/jre/lib/jsse.jar:/opt/jdk1.7.0_79/jre/lib/jce.jar:/opt/jdk1.7.0_79/jre/lib/charsets.jar:/opt/jdk1.7.0_79/jre/lib/jfr.jar:/opt/jdk1.7.0_79/jre/classes" />
+    <property name="test.reports.dir" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/test-reports" />
+    <property name="env.PWD" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests" />
+    <property name="env.LANG" value="en_US.UTF-8" />
+    <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+    <property name="ant.home" value="/usr/share/ant" />
+    <property name="java.runtime.version" value="1.7.0_79-b15" />
+    <property name="env.HISTSIZE" value="1000" />
+    <property name="env.DISPLAY" value="localhost:10.0" />
+    <property name="local-browser" value="firefox" />
+    <property name="user.name" value="nutchwax" />
+    <property name="test.browser" value="firefox" />
+    <property name="env.USER" value="nutchwax" />
+    <property name="env.HISTCONTROL" value="ignoredups" />
+    <property name="env.SHELL" value="/bin/bash" />
+    <property name="env.SSH_TTY" value="/dev/pts/0" />
+    <property name="env.NLSPATH" value="/usr/dt/lib/nls/msg/%L/%N.cat" />
+    <property name="env.LC_ADDRESS" value="pt_PT.UTF-8" />
+    <property name="test-website" value="http://p2.arquivo.pt" />
+    <property name="build.dir" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/build" />
+    <property name="env.PATH" value="/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/nutchwax/bin:/usr/lib/jvm/jdk1.7.0_79/bin:/opt/apache-maven-3.2.5/bin" />
+    <property name="user.language" value="en" />
+    <property name="env.LC_MONETARY" value="pt_PT.UTF-8" />
+    <property name="sun.boot.library.path" value="/opt/jdk1.7.0_79/jre/lib/amd64" />
+    <property name="env.SSH_CONNECTION" value="193.136.44.27 34160 193.136.192.172 22" />
+    <property name="ant.project.name" value="funcional-tests" />
+    <property name="java.version" value="1.7.0_79" />
+    <property name="env.SSH_CLIENT" value="193.136.44.27 34160 22" />
+    <property name="version" value="SNAPSHOT" />
+    <property name="seleniumHost" value="localhost" />
+    <property name="user.timezone" value="" />
+    <property name="hubPollerIntervalInSeconds" value="30" />
+    <property name="prop.test" value="${env.PROP_TEST}" />
+    <property name="sun.arch.data.model" value="64" />
+    <property name="env.SELINUX_ROLE_REQUESTED" value="" />
+    <property name="java.endorsed.dirs" value="/opt/jdk1.7.0_79/jre/lib/endorsed" />
+    <property name="sun.cpu.isalist" value="" />
+    <property name="env.LC_PAPER" value="pt_PT.UTF-8" />
+    <property name="sun.jnu.encoding" value="UTF-8" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="env.SHLVL" value="1" />
+    <property name="file.separator" value="/" />
+    <property name="env.HOSTNAME" value="p18.arquivo.pt" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="java.class.version" value="51.0" />
+    <property name="user.country" value="US" />
+    <property name="java.home" value="/opt/jdk1.7.0_79/jre" />
+    <property name="dist.dir" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/dist" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="env.CATALINA_HOME" value="/home/wayback/searcher/apache-tomcat-8.0.30" />
+    <property name="env.LOGNAME" value="nutchwax" />
+    <property name="ant.file" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/build.xml" />
+    <property name="os.version" value="2.6.32-504.el6.x86_64" />
+    <property name="env.G_BROKEN_FILENAMES" value="1" />
+    <property name="path.separator" value=":" />
+    <property name="java.vm.version" value="24.79-b02" />
+    <property name="ant.library.dir" value="/usr/share/ant/lib" />
+    <property name="env.LC_TELEPHONE" value="pt_PT.UTF-8" />
+    <property name="env.JAVA_HOME" value="/usr/lib/jvm/jdk1.7.0_79" />
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+    <property name="env.TERM" value="screen" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+    <property name="testcase" value="pt.fccn.arquivo.tests.AllTests" />
+    <property name="env.LC_MEASUREMENT" value="pt_PT.UTF-8" />
+    <property name="user.home" value="/home/nutchwax" />
+    <property name="java.specification.vendor" value="Oracle Corporation" />
+    <property name="env.CLASSPATH" value="" />
+    <property name="test.dir" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/test" />
+    <property name="java.vendor.url" value="http://java.oracle.com/" />
+    <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+    <property name="java.vm.vendor" value="Oracle Corporation" />
+    <property name="test.url" value="http://arquivo.pt" />
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+    <property name="ant.version" value="Apache Ant version 1.7.1 compiled on August 24 2010" />
+    <property name="java.class.path" value="/usr/share/java/ant.jar:/usr/share/java/ant-launcher.jar:/usr/share/java/jaxp_parser_impl.jar:/usr/share/java/xml-commons-apis.jar:/usr/share/java/ivy.jar:/usr/share/java/junit.jar:/usr/share/java/ant/ant-junit.jar:/usr/share/java/ant/ant-nodeps.jar:/usr/share/java/jaxp_transform_impl.jar:/usr/share/java/ant/ant-trax.jar:/usr/share/java/xalan-j2-serializer.jar:/usr/lib/jvm/jdk1.7.0_79/lib/tools.jar:/usr/lib/jvm/jdk1.7.0_79/lib/tools.jar:/usr/share/ant/lib/ant-trax.jar:/usr/share/ant/lib/ant-junit.jar:/usr/share/ant/lib/ant-nodeps.jar:/usr/share/ant/lib/ant-launcher.jar:/usr/share/ant/lib/ant-bootstrap.jar:/usr/share/ant/lib/ant.jar" />
+    <property name="sun.java.command" value="org.apache.tools.ant.launch.Launcher -cp  test -Dtestcase=pt.fccn.arquivo.tests.AllTests -Dtest.url=http://arquivo.pt" />
+    <property name="seleniumPort" value="4444" />
+    <property name="env.CVS_RSH" value="ssh" />
+    <property name="env.XFILESEARCHPATH" value="/usr/dt/app-defaults/%L/Dt" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="java.vm.specification.version" value="1.7" />
+    <property name="sun.os.patch.level" value="unknown" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="test-OS" value="Windows 2003" />
+    <property name="env.HOME" value="/home/nutchwax" />
+    <property name="java.io.tmpdir" value="/tmp" />
+    <property name="env.LS_COLORS" value="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.tbz=01;31:*.tbz2=01;31:*.bz=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:" />
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+    <property name="os.arch" value="amd64" />
+    <property name="java.ext.dirs" value="/opt/jdk1.7.0_79/jre/lib/ext:/usr/java/packages/lib/ext" />
+    <property name="env.MAVEN_HOME" value="/opt/apache-maven-3.2.5" />
+    <property name="user.dir" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests" />
+    <property name="line.separator" value="
+" />
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+    <property name="local-browser-version" value="38" />
+    <property name="env.LC_NUMERIC" value="pt_PT.UTF-8" />
+    <property name="basedir" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests" />
+    <property name="ant.java.version" value="1.6" />
+    <property name="env.SELINUX_LEVEL_REQUESTED" value="" />
+    <property name="ant.core.lib" value="/usr/share/java/ant-1.7.1.jar" />
+    <property name="serverlib.path" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/server/selenium-server-standalone-2.48.2.jar" />
+    <property name="env.LC_TIME" value="pt_PT.UTF-8" />
+    <property name="file.encoding" value="UTF-8" />
+    <property name="env.MAIL" value="/var/spool/mail/nutchwax" />
+    <property name="env.LC_IDENTIFICATION" value="pt_PT.UTF-8" />
+    <property name="java.specification.version" value="1.7" />
+    <property name="src.dir" value="/home/nutchwax/workspace/pwa-technologies/funcional-tests/src" />
+    <property name="bool.test-locally" value="true" />
+    <property name="env.LC_NAME" value="pt_PT.UTF-8" />
+  </properties>
+  <testcase classname="pt.fccn.arquivo.tests.TestSearchOneTerm" name="testSearchOneTerm" time="4.433" />
+  <testcase classname="pt.fccn.arquivo.tests.HighlightsTest" name="highlightLinkTest" time="13.35" />
+  <testcase classname="pt.fccn.arquivo.tests.TermsAndConditionsTest" name="termsAndConditionsTest" time="4.237" />
+  <testcase classname="pt.fccn.arquivo.tests.TestSponsorImage" name="test" time="1.057" />
+  <testcase classname="pt.fccn.arquivo.tests.TestSearchOneTermOpenSearch" name="testSearchOneTermOpenSearch" time="3.563" />
+  <testcase classname="pt.fccn.arquivo.tests.TestArcproxy" name="TestArcproxy" time="199.325" />
+  <testcase classname="pt.fccn.arquivo.tests.AdvancedTest" name="AdvancedTest" time="5.419" />
+  <testcase classname="pt.fccn.arquivo.tests.UrlsearchTest" name="AdvancedTest" time="5.673" />
+  <system-out><![CDATA[Run test localy
+Running testSearchOneTerm. 
+Run test localy
+Running HighlightsTest. 
+Run test localy
+Running TermsAndConditionsTest. 
+Run test localy
+Running TestSponsorImage. 
+Run test localy
+Running TestSearchOneTermOpenSearch. 
+Run test localy
+Running TestArcproxy. 
+Run test localy
+Running AdvancedTest. 
+Run test localy
+Running UrlsearchTest. 
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

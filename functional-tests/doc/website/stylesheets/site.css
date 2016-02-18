@@ -1,0 +1,74 @@
+/*
+ * Global stylesheet for Selenium Grid website.
+ */
+
+body {
+  font: 12pt "Lucida Grande", "Verdana", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+div.header {
+  text-align: center;
+  font: bold 3em "Didot", "Georgia", serif;
+  padding: 0;
+  margin: 1em 1em 2.4em 0;
+}
+
+div.header img {
+  padding: 0;
+  margin: -.8em 1em 0 .4em;
+  vertical-align: top;
+  float: left;
+}
+
+div.header a, div.header a img {
+  border: 0;
+}
+
+div.section {
+  clear: both;
+  margin: -3em 1em;
+}
+         
+div.section h2 {
+  float: left;
+  width: 15%;
+  border: 0;
+  padding: 0;
+  margin: -0.3em 2em 2.5em 0;
+  color: black;
+  font: bold 2em "Optima", Verdana, sans-serif;
+  background: none;
+}
+
+div.section div.content h3 {
+  margin: 0em 1em .5em 0em;
+  color: #740F31;
+  font: bold 1.2em "Lucida Grande", Verdana, sans-serif;
+}
+
+div.section div.content {
+  float: left;
+  width: 70%;
+  border: 0;
+  padding: 0;
+  margin: 0 0 2em 0;     
+}
+
+div.section div.content p {
+  margin-top: .3em;
+}
+
+p.note {
+ background: #ffffa6;
+ padding: .6em .8em;
+ border: thin solid #9c9c4e;
+}
+
+.todo {
+  color: red;
+  background: yellow;
+  padding: .5em;
+}
+ 

@@ -1,0 +1,82 @@
+body {
+  font: 11pt "Lucida Grande", Verdana, sans-serif;
+  margin-left: 1em;
+}
+
+h2 {
+  font: bold 2.1em "Optima", Verdana, sans-serif;
+  padding: .2em .2em .2em .5em;
+  border: 0;
+  color: #740F31;
+  border-left: .5em solid #740F31;
+  background: none;
+  margin-left: 1.3em;
+}
+
+ h3 {
+  font: bold 2em "Optima", serif;
+  padding: .2em .2em 0 .2em;
+  margin: 1.5em 2em 1em 1.5em;
+  border-bottom: solid thick #740F31;
+  
+ }
+    
+img {
+  border-style: none;
+  margin-left: 5em;
+}
+
+a, a:link, a:visited {
+    color: #507ec0;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #507ec0;
+    text-decoration: underline;
+}
+
+p, ul, ol, dl, pre {
+  font-size: 1em;  
+  margin-left: 5em;
+  max-width: 50em;
+}
+
+ul p, ul pre, ol p, ol pre, p pre {
+    margin-left: .2em;
+}
+
+pre.command {
+  background:#EEEEEE none repeat scroll 0 0;
+  border:1px solid #DDDDDD;
+  font-family: monospace;
+  padding: 0.5em;
+  white-space: pre-wrap;
+}
+
+div.screenshot {
+	font-size: 1em;
+	margin: .5em 6em;
+	padding: .5em 1em;
+	border: thin dotted gray;
+	background: ghostwhite;
+}
+
+div.screenshot p {
+  font-weight: bold;
+}
+
+img.screenshot {
+  padding: .8em 5em;
+}
+
+code {
+  font-size: 1em;
+  font-family: Consolas, monospace;
+}
+
+  p.note {
+    background: #ffffa6;
+    padding: .6em .8em;
+    border: thin solid #9c9c4e;
+  }

@@ -1,0 +1,228 @@
+<html>
+ <head>
+   <title>Selenium Grid - Run the Demo</title>
+   <link rel="stylesheet" type="text/css" href="stylesheets/site.css" />
+   <link rel="stylesheet" type="text/css" href="stylesheets/document.css" />
+ </head>
+ <body>
+ 
+   <div class="header">
+     <a href="index.html"><img alt="Selenium_grid_logo_large" src="images/selenium-grid-logo-large.png"/></a>
+     Run the Demo
+   </div>
+   
+  <h2 id="requirements">Requirements</h2>
+
+    <p>
+      To run the demo you will need to complete the steps described
+      in <q><a href="get_started.html">Getting Started</a></q>.
+    </p>
+    <p>
+      If Firefox is not available on your machine you will also need 
+      <a href="http://www.mozilla.com/en-US/firefox">to install it</a>.
+    </p>
+    <p class="note">
+      Note: I recommend quitting all running instances of the Firefox
+      browser before running the demo. Sometimes Selenium has trouble
+      launching Firefox when an instance is already running.
+    </p>
+    <p>
+      All commands in this document must to be launched from the root of 
+      Selenium Grid binary distribution directory (probably named
+      <code>selenium-grid-0.9.x</code>).
+    </p>
+
+  <h2 id="run-in-sequence">Running the Tests in Sequence on Firefox on a Single Machine</h2>
+
+<p>Go to the selenium distribution directory and launch in a new terminal: </p>
+
+<pre class="command"><code>ant launch-hub</code></pre>
+
+<p>Check out that the Hub is running by looking at its console in a browser:</p>
+
+<p><a href="http://localhost:4444/console">http://localhost:4444/console</a></p>
+
+<p>In a new terminal on the same machine, launch: </p>
+
+<pre class="command"><code>ant launch-remote-control</code></pre>
+
+<p>In a browser, go back to the Hub&#8217;s console at <a href="http://localhost:4444/console">http://localhost:4444/console</a>. Now you should have one remote control listed as available. You should see something like: </p>
+
+<div class="screenshot">
+  <p>Available Remote Controls</p>
+  <table border="1">
+    <tr><th>Host</th><th>Port</th><th>Environment</th></tr>
+    <tr><td>localhost</td><td>5555</td><td>*firefox</td></tr>
+  </table>
+</div>
+
+<p>Then run in a new terminal:</p>
+
+<pre><code>ant run-demo-in-sequence
+</code></pre>
+
+<p>Four Selenium tests will then run in sequence against your remote control. Take note of how long it took to run the whole test suite &#8211; this will give you a baseline. To be honest, there is nothing really exciting about this part of the demo. You can achieve exactly the same thing with a traditional remote control. This is just to get you started, since the whole point of the Selenium grid is to run tests in parallel. That&#8217;s exactly what we are going to do next. </p>
+
+<p>Note: if you want to understand what the selenium test is about, or what is going on under the cover, have a look at the <code>demo</code> sub-project in the source code. </p>
+
+  <h2 id="run-in-parallel">Running the Tests in Parallel on Firefox on a Single Machine</h2>
+
+    <p>First make sure that you already have the Hub and a remote control running. If not, follow the instructions described in the <a href="#tests_in_sequence">Running the Tests in Sequence</a> section. </p>
+
+<p>Now let&#8217;s start three more remote control instances. Launch them in separate terminals: </p>
+
+<pre><code>    ant -Dport=5556 launch-remote-control
+    ant -Dport=5557 launch-remote-control
+    ant -Dport=5558 launch-remote-control
+</code></pre>
+
+<p>You should now see a total of four remote controls available in the Hub console http://localhost:4444/console: </p>
+
+<div class="screenshot">
+  <p>Available Remote Controls</p>
+  <table border='1'>
+  <tr> <th>Host</th> <th>Port</th> <th>Environment</th> </tr>
+  <tr> <td>localhost</td> <td>5555</td> <td>*firefox</td> </tr> <tr>
+  <tr><td>localhost</td> <td>5556</td> <td>*firefox</td> </tr>
+  <tr> <td>localhost</td> <td>5557</td> <td>*firefox</td> </tr>
+  <tr> <td>localhost</td> <td>5558</td> <td>*firefox</td> </tr>
+  </table>
+</div>
+
+<p>Launch the tests in parallel in a new terminal: </p>
+
+<pre><code>ant run-demo-in-parallel
+</code></pre>
+
+<p>The total run time should be significantly lower than when running the test in sequence. </p>
+
+<p>You can then experiment with bringing down one or two remote controls and check that the total run time is directly proportional to the number of available remote controls. </p>
+
+  <h2 id="run-distributed">Running the Tests in Parallel on Multiple Machines</h2>
+
+<p>Until now we have been running the hub and the remote controls on the same machine. This was quick and easy to set up, but ultimately we want to run the remote controls on multiple machines. Now let&#8217;s try to distribute the whole grid on 3 different machines. </p>
+
+<p>Let&#8217;s consider the following setup:</p>
+
+<p><a href="diagrams/Multiple%20Machine%20Demo%20Setup.png" title="Click for larger image"><img src="diagrams/Multiple%20Machine%20Demo%20Setup%20-%20Small.png" alt=""/></a></p>
+
+<p>In this setup one machine (<code>hub.seleniumhq.org</code>) will run the Hub and drive the selenium tests. The two other machines will run the remote controls (2 remote controls per machine).</p>
+
+<p>If you cannot assign neat host names like rc1.seleniumhq.org for your tests, specity the appropriate TCP/IP number instead.</p>
+
+<p>On each machine, run commands similar to the ones described in the diagram above. Of course you will need to change the host names (or TCP/IP number) to match the one for your own machine. </p>
+
+<p>This setup illustrates that you can run the hub and the remote controls on arbitrary machines. When you do so though, you need to provide a lot more information when launching a remote control. You need to launch it with: </p>
+
+<pre><code>ant -Dport=&lt;port&gt; -Dhost=&lt;hostname&gt; -DhubURL=&lt;hub url&gt; launch-remote-control
+</code></pre>
+
+<p>Where:</p>
+
+<p><code>port</code>
+    Port that the remote control will be listening at. Must be unique on the machine the remote control runs on.
+<code>hostname</code>
+     Hostname or IP address of the machine the remote control runs on. Must be visible from the Hub machine. Note: this information could be inferred as it is always referring to the machine the remote control runs on. It might not be required in future versions of the Selenium Grid. 
+<code>hub url</code>
+     Which hub the remote control should register/unregister to. If the hub is running on hostname <code>my.hub.com</code>, this URL will be <code>http://my.hub.com:4444</code></p>
+
+<p>Once you are successful in replicating a setup similar to the one described above, point your browser to the Hub console (<code>http://hub.seleniumhq.org:4444/console</code>). Check that all the remote controls did register properly. Available remote controls list should be similar to: </p>
+
+<div class="screenshot">
+                  <p>Available Remote Controls</p>
+                  <table border='1'>
+                      <tr> <th>Host</th> <th>Port</th> <th>Environment</th> </tr>
+                      <tr> <td>rc1.seleniumhq.org</td> <td>5555</td> <td>*firefox</td> </tr>
+
+                      <tr> <td>rc1.seleniumhq.org</td> <td>5556</td> <td>*firefox</td> </tr>
+                      <tr> <td>rc2.seleniumhq.org</td> <td>5555</td> <td>*firefox</td> </tr>
+
+                      <tr> <td>rc2.seleniumhq.org</td> <td>5556</td> <td>*firefox</td> </tr>
+                  </table>
+              </div>
+
+<p>You can then launch the tests and enjoy the dance of browsers popping up on the two machines:</p>
+
+<pre><code>ant run-demo-in-parallel
+</code></pre>
+
+<p>The total run time is likely to be slighly higher than when running the tests in parallel on the same machine but still significantly faster than when running the tests in sequence. As you scale the number of remote controls upward to the point of stressing a single RC machine, as you would expect, the performance advantage moves towards a distributed environment. </p>
+
+  <h2 id="run-for-multiple-environments">Running the Tests with Remote Controls Providing Different Environments</h2>
+
+<p>Until now we have distributed the remote controls, but all of them were equivalent. For instance, when the Selenium test was openning a new session for the Firefox browser, it had no idea whether it ended up running on Windows, Linux or Mac OS. </p>
+
+<p>Maybe this is exactly what you want to achieve. However it might end up being hard to figure out that a specific Selenium test is failing one time out of ten just because it exercises a bug only happening on Mac OS. In any case, if you want better control over the environment your tests run on, you can use the Selenium Hub Environments. </p>
+
+<p>The idea is simple: </p>
+
+<ol>
+<li><p>When you start a Remote Control you define which  environment it provides to the Hub. Let&#8217;s say <code>Firefox on Windows</code>: </p>
+
+<p>ant -Denvironment=&#8221;Firefox on Windows&#8221; launch-remote-control</p></li>
+<li><p>In your Selenium test, when instantiating the Selenium driver, pass the Hub environment in lieu of the browser string: </p></li>
+</ol>
+
+<p>For instance, if you are writing your tests in Java change the following:</p>
+
+<pre><code>new DefaultSelenium("localhost", 4444, **'*firefox'**, 'http://amazon.com');
+</code></pre>
+
+<p>to: </p>
+
+<pre><code>new DefaultSelenium("localhost", 4444, **'Firefox on Windows'**, 'http://amazon.com');
+</code></pre>
+
+<p>The Selenium Hub will then make sure to provide the test with a remote control that registered with this specific Hub environment. It will also substitute the browser string on the fly before invoking the actual remote control. In this way you can use any official distribution of the Selenium control in your Grid &#8211; no modifications are required. </p>
+
+<p>Let&#8217;s be a little bit more concrete and consider the following setup:</p>
+
+<p><a href="diagrams/Multiple%20Environment%20Demo%20Setup.png" title="Click for larger image"><img src="diagrams/Multiple%20Environment%20Demo%20Setup%20-%20Small.png" alt=""/></a></p>
+
+<p>In this setup <code>rc1.seleniumhq.org</code> starts 2 remote controls providing the <code>Firefox on Windows</code> Hub Environment. In contrast, <code>rc2.seleniumhq.org</code> registers 2 remote controls providing the <code>Firefox on OS X</code> Hub Environment. </p>
+
+<p>Now try to replicate the setup described above. Keep in mind that the remote controls can register with whatever environment they fancy. It is their reponsibility to play nice with the Hub. This means that even if you are running the demo on Linux, you can totally start remote controls pretending to provide the <code>Firefox on Windows</code> or <code>Firefox on OS X</code> environment. </p>
+
+<p>Once all this is started, take a look at the Selenium Hub console. You should see something like: </p>
+
+<div class="screenshot">
+                <p>Available Remote Controls</p>
+                <table border='1'>
+                    <tr> <th>Host</th> <th>Port</th> <th>Environment</th> </tr>
+
+                    <tr> <td>rc1.seleniumhq.org</td> <td>5555</td> <td>Firefox on Windows</td> </tr>
+                    <tr> <td>rc1.seleniumhq.org</td> <td>5556</td> <td>Firefox on Windows</td> </tr>
+
+                    <tr> <td>rc2.seleniumhq.org</td> <td>5555</td> <td>Firefox on OS X</td> </tr>
+                    <tr> <td>rc2.seleniumhq.org</td> <td>5556</td> <td>Firefox on OS X</td> </tr>
+
+                </table>
+                </div>
+
+    <p>
+      We are now going to run in parallel a Selenium test suite that runs the same test but requiring
+      different browsers. The test suite consists of 2 tests requesting explicitly the
+      <code>Firefox on Windows</code> environment and one test requesting the
+      <code>Firefox on OS X</code> environment.
+    </p><p>
+      So the first 2 tests will run only on the machine registering its remote controls as providing
+      <code>Firefox on Windows</code>. The last one will run only on the machine registering its remote
+      controls as providing <code>Firefox on OS X</code>. You can make sure that this is what is
+      hapenning by running:
+    </p>
+    <pre><code>ant run-demo-for-multiple-environments</code></pre>
+
+  <h2>What's Next?</h2>
+
+    <p>
+      You are now familiar with Selenium Grid usage and concepts. In case you have not done it yet,
+      take a look at the demo code (you will find it in the <code>demo</code> sub-folder of the
+      source distribution). Then deploy your own Selenium Grid at work and get it to run your
+      functional suite in a fraction of the original time. You do not need a million machines
+      to get started. Five powerful machines running 10+ remote controls each should suffice to
+      divide your build time by 50!
+    </p>
+
+
+</body>
+</html>

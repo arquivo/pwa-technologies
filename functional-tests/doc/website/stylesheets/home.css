@@ -1,0 +1,219 @@
+/*
+ * Stylesheet for Selenium Grid website home page.
+ */
+
+body {
+  background: #ddd;
+}
+
+table#topics {
+  border: thin solid #444;
+  background: white;
+  margin: 0 3em;
+  border-spacing: 0 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+
+  -webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+}
+
+table#topics thead {
+}
+
+table#topics thead tr td {
+  width: 16%;
+  border-right: solid thin #666;
+  border-bottom: solid thin #666;
+  padding: .5em 1em 1.2em 1em;
+  vertical-align: top;
+
+  -webkit-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+}
+
+table#topics thead tr td h2 {
+  padding: 0 0 .3em 0;
+  margin: 0;
+  font-size: 1.1em;
+}
+
+table#topics thead tr td img {
+  float: left;
+  margin-right: .5em;
+  margin-top: .2em;
+  width: 56px;
+}
+
+table#topics thead tr td p {
+  clear: left;
+  padding: 0;
+  margin: 0;
+  color: #444;
+  font-size: .9em;
+  font-style: italic;
+}
+
+table#topics thead tr td div.content {
+  display: none;
+}
+
+table#topics tbody tr {
+  height: 30em;
+  vertical-align: top;
+}
+
+table#topics tbody tr td h3 {
+  font-size: 1.4em;
+}
+
+table#topics tbody tr td p {
+  margin-left: 2em;
+  font-size: 1em;
+  color: #111;
+}
+
+table#topics tbody tr td#displayed-content {
+  padding: 2em 2em;
+}
+
+object.video {
+  float: right;
+  margin: 2em 1em 1em 1em;
+}
+
+div.marketing-banner {
+  margin: 1.5em 2em 0 3em; 
+  text-align: center
+}
+
+div.marketing-banner img {
+  float: left;
+  margin: -0.2em 2em 1.5em 0;
+  padding: 0;
+}
+
+div.marketing-banner p {
+  font: 1.25em "Optima", Verdana, sans-serif;
+  padding: 0 3em 0 3em;
+  text-align: left;
+  margin: 0 0 0 10em;
+}
+
+div.marketing-banner p.tagline {
+  color: black;
+  font: bold 2.2em "Chalkboard", "Georgia", serif;
+  padding: 0;
+  margin: 0 0 .3em 0;
+}
+
+div#news {
+  text-align: center;
+  margin: 1.3em auto 1.3em auto;
+  width: 20em;
+}
+
+div#news,
+div#news a {
+  color: #740F31;
+  font-style: bold;
+}
+
+/* Color Scheme from http://www.colourlovers.com/palette/270694/The_Rainbow_Song_I */
+
+table#tracks {
+  margin: 1em 0 3em 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+tr {
+  border-bottom: solid thin white;
+}
+
+td.track-header {
+  background: url("../images/Track Header Background.png") center right no-repeat;
+  width: 18em;
+  text-align: center;
+  padding-top: 1.3em;
+}
+
+td.track-content {
+  height: 7em;
+  padding: 1em 1em;
+}
+
+td.track-header h2 {
+  color: white;
+  font: bold 2em "Optima", Verdana, sans-serif;
+  font-size: 2em;
+  text-align: left;
+  padding-left: .5em;
+  text-shadow: .1em .1em .2em #222;
+}
+
+tr#get-started {
+  background: white url("../images/background_started.png") repeat-x; 
+}
+
+
+tr#get-better {
+  background: white url("../images/background_better.png") repeat-x; 
+}
+
+tr#feedback {
+  background: white url("../images/background_feedback.png") repeat-x; 
+}
+
+tr#participate {
+  background: white url("../images/background_participate.png") repeat-x; 
+}
+
+table#tracks tr td ul {
+  float: left;
+  list-style: none inside;
+  margin: 0 3em 0 1em;
+  padding: 0;
+}
+
+table#tracks tr td ul li {
+  padding: .4em 0;
+}
+
+table#start-tracks tr td ul li a {
+  color: #0E3062;
+  font-size: 1em;
+}
+
+div.section {
+  clear: both;
+  margin: 0;
+}
+      
+div.section h2 {
+  float: left;
+  width: 15%;
+  border: 0;
+  padding: 0;
+  margin: 0 0 2.5em 1em;
+  color: black;
+  font: bold 2em "Optima", Verdana, sans-serif;
+  background: none;
+  text-shadow: .1em .1em .2em #222;
+}
+
+div.section div.content {
+  float: left;
+  width: 70%;
+  border: 0;
+  padding: 0;
+  margin: 0 0 2em 0;     
+  font-size: 1em;
+}
+
+div.section div.content p {
+  margin-top: .3em;
+  max-width: 40em;
+}
