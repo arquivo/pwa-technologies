@@ -1,0 +1,72 @@
+/*
+ * Stylesheet dedicated to integration with layout on seleniumhq.org
+ */
+
+body {
+  text-align: center;
+}
+
+#ads {
+  background-color: rgb(153, 204, 255);
+  text-align: center;
+  padding:5px;
+}
+
+#top-menu {
+  color: #999;
+  text-align: center;
+  font-size: .8em;
+  padding-top: 0;
+  padding-bottom: 1.5em;
+}
+
+#top-menu ul li {
+ display: inline;
+ border-left: 1px solid #000000;
+ padding-left: 3px;
+}
+
+#top-menu ul li.last {
+   padding-right: 3px;
+   border-right: 1px solid #000000;
+}
+
+#top-menu ul li a {
+ color: black;
+}
+
+div#content {
+ margin: 0 0 0 0;
+ padding: 0;
+ text-align: left;
+}
+
+div#content * {
+  text-align: left;
+}
+
+table#start-tracks ul, table#start-tracks ul li, table#start-tracks ul li a {
+  text-align: center;
+}
+
+div#seleniumhq-project-list {
+  text-align: left;
+}
+
+div#seleniumhq-project-list ul {
+  list-style-type: none;
+}
+
+div#seleniumhq-project-list ul li a {
+  color: #222;
+}
+
+div#footer {
+  clear: both;
+  color: #666;
+  padding: 1em 0;
+}
+
+div#actual-content div.section {
+   clear: none;
+}

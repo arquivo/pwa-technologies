@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<project name="funcional-tests" basedir=".">
+  <description>Plata test plataform</description>
+  <property file="${basedir}/project.properties"/>
+  <property name="version" value="SNAPSHOT"/>
+  <property name="test-website" value="http://p2.arquivo.pt"/>
+  <property name="seleniumHost" value="localhost"/>
+  <property name="seleniumPort" value="4444"/>
+  <property name="test-OS" value="Windows 2003"/>
+  <property name="local-browser" value="firefox"/>
+  <property name="local-browser-version" value="38"/>
+  <property name="hubPollerIntervalInSeconds" value="30"/>
+  <property environment="env"/>
+  <property name="src.dir" location="src"/>
+  <property name="test.dir" location="test"/>
+  <property name="build.dir" location="build"/>
+  <property name="lib.dir" location="lib"/>
+  <property name="dist.dir" location="dist"/>
+  <property name="test.reports.dir" location="test-reports"/>
+  <path id="test.classpath">
+    <pathelement location="${build.dir}/classes"/>
+    <pathelement location="${build.dir}/test"/>
+    <fileset dir="lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  <target name="init">
+    <mkdir dir="${build.dir}/classes"/>
+    <mkdir dir="${dist.dir}"/>
+  </target>
+  <target name="clean" depends="init, test-clean">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+  <target name="test-clean" depends="test-init">
+    <delete dir="${build.dir}/test"/>
+    <delete dir="${test.reports.dir}"/>
+    <delete dir="${test.reports.dir}/html"/>
+  </target>
+  <target name="compile" depends="init" description="Compiles the source code">
+    <javac srcdir="src" destdir="build/classes" includeAntRuntime="no">
+      <classpath refid="test.classpath"/>
+    </javac>
+  </target>
+  <target name="test-init">
+    <mkdir dir="${build.dir}/test"/>
+    <delete dir="${test.reports.dir}"/>
+    <delete dir="${test.reports.dir}/html"/>
+    <mkdir dir="${test.reports.dir}"/>
+    <mkdir dir="${test.reports.dir}/html"/>
+  </target>
+  <target name="test-compile" depends="compile, test-init">
+    <javac destdir="${build.dir}/test" debug="on" srcdir="${test.dir}" includeAntRuntime="no" encoding="utf-8" deprecation="yes">
+      <classpath refid="test.classpath"/>
+    </javac>
+    <!-- copies non-java, non-class files that may be needed for tests -->
+    <copy todir="${build.dir}/test">
+      <fileset dir="${test.dir}" excludes="**/*.java"/>
+    </copy>
+  </target>
+  <!-- Selenium Server -->
+  <!-- Updated to 2.33
+  <property name="serverlib.path" location="server/selenium-server-standalone-2.15.0.jar"/>
+  <property name="serverlib.path" location="server/selenium-server-standalone-2.25.0.jar"/>
+  <property name="serverlib.path" location="server/selenium-server-standalone-2.33.0.jar"/>
+  <property name="serverlib.path" location="server/selenium-server-standalone-2.35.0.jar"/>
+  <property name="serverlib.path" location="server/selenium-server-standalone-2.42.2.jar"/>
+
+	  <property name="serverlib.path" location="server/selenium-server-standalone-2.47.1.jar"/>
+	  -->
+  <property name="serverlib.path" location="server/selenium-server-standalone-2.48.2.jar"/>
+  <target name="launch-server" description="Launch Selenium Server">
+    <java jar="${serverlib.path}" fork="true" failonerror="true">
+      <sysproperty key="http.proxyHost" value="${http.proxyHost}"/>
+      <sysproperty key="http.proxyPort" value="${http.proxyPort}"/>
+      <sysproperty key="https.proxyHost" value="${https.proxyHost}"/>
+      <sysproperty key="https.proxyPort" value="${https.proxyPort}"/>
+    </java>
+  </target>
+  <target name="setup-test">
+    <condition property="bool.test-locally">
+      <not>
+        <and>
+          <isset property="remote.saucelabs.user"/>
+          <isset property="remote.saucelabs.key"/>
+        </and>
+      </not>
+    </condition>
+    <property name="prop.test" value="${env.PROP_TEST}"/>
+  </target>
+  <target name="defined-browser" if="env.SELENIUM_BROWSER">
+	<property name="test.browser" value="${env.SELENIUM_BROWSER}"/>
+  </target>
+  <target name="undefined-browser" unless="env.SELENIUM_BROWSER">
+	<property name="test.browser" value="${local-browser}"/>
+  </target>
+  <target name="defined-browser-version" if="env.SELENIUM_BROWSER_VERSION">
+	<property name="test.browser.version" value="${env.SELENIUM_BROWSER_VERSION}"/>
+  </target>
+  <target name="undefined-browser-version" unless="env.SELENIUM_BROWSER_VERSION">
+	<property name="test.browser.version" value="${local-browser-version}"/>
+  </target>
+  <target name="defined-OS" if="env.SELENIUM_BROWSER_OS">
+	<property name="test.os" value="${env.SELENIUM_BROWSER_OS}"/>
+  </target>
+  <target name="undefined-OS" unless="env.SELENIUM_BROWSER_OS">
+	<property name="test.os" value="${test-OS}"/>
+  </target>
+  <target name="defined-url" if="env.SELENIUM_TEST_URL">
+	<property name="test.url" value="${env.SELENIUM_TEST_URL}"/>
+  </target>
+  <target name="undefined-url" unless="test.url">
+  <fail message="URL is not set!" />
+  <!--<property name="test.url" value="${test-website}"/>-->
+  </target>
+  <target name="local-test" 
+      depends="setup-test,test-compile,defined-browser,undefined-browser,defined-url,undefined-url"
+      if="bool.test-locally">
+    <echo>-------------------------------------------------------------------------------------</echo>
+    <echo>| Running Selenium testcases locally.</echo>
+    <echo>| Please make sure that:</echo>
+    <echo>|	  1) The Selenium Server is runing (use "ant launch-server")</echo>
+    <echo>|</echo>
+    <echo>| Variables:</echo>
+    <echo>|   * URL: ${test.url}</echo>
+    <echo>|   * Browser: ${test.browser}</echo>
+    <echo>-------------------------------------------------------------------------------------</echo>
+    <echo>| To run individual testcases by running:</echo>
+    <echo>| &gt; ant test -Dtestcase=&lt;fully-qualified-classname&gt;</echo>
+    <echo>| # ant test -Dtestcase=pt.fccn.arquivo.tests.CollectionsTest</echo>
+    <echo>-------------------------------------------------------------------------------------</echo>
+      <junit printsummary="true" errorProperty="test.failed" failureProperty="test.failed">
+      <classpath refid="test.classpath"/>
+      <sysproperty key="test.browser" value="${test.browser}"/>
+      <sysproperty key="test.url" value="${test.url}"/>
+      <sysproperty key="test.project.name" value="${ant.project.name} ${testcase}"/>
+      <formatter type="brief" usefile="false"/>
+      <formatter type="xml"/>
+      <!-- run individual testcases by running:
+                        > ant test -Dtestcase=<fully-qualified-classname>
+                        -->
+      <test name="${testcase}" todir="${test.reports.dir}" if="testcase"/>
+      <batchtest todir="${test.reports.dir}" unless="testcase">
+        <fileset dir="${build.dir}/test" includes="**/*Test.class"/>
+      </batchtest>
+    </junit>
+  </target>
+  <target name="remote-test"
+      depends="setup-test,test-compile,defined-browser,undefined-browser,defined-browser-version,undefined-browser-version,defined-OS,undefined-OS,defined-url,undefined-url"
+      unless="bool.test-locally">
+    <echo>-------------------------------------------------------------------------------------</echo>
+    <echo>| Running Selenium testcases remotely on SauceLabs.</echo>
+    <echo>|</echo>
+    <echo>| SauceLabs username: ${remote.saucelabs.user}</echo>
+    <echo>|</echo>
+    <echo>| Variables:</echo>
+    <echo>|   * URL: ${test.url}</echo>
+    <echo>|   * Browser: ${test.browser}</echo>
+    <echo>|   * Browser Version: ${test.browser.version}</echo>
+    <echo>|   * OS: ${test.os}</echo>
+    <echo>-------------------------------------------------------------------------------------</echo>
+    <echo>| To run individual testcases by running:</echo>
+    <echo>| &gt; ant test -Dtestcase=&lt;fully-qualified-classname&gt;</echo>
+    <echo>| # ant test -Dtestcase=pt.fccn.arquivo.tests.CollectionsTest</echo>
+    <echo>-------------------------------------------------------------------------------------</echo>
+    <junit printsummary="true" errorProperty="test.failed" failureProperty="test.failed">
+      <classpath refid="test.classpath"/>
+      <sysproperty key="test.project.name" value="${ant.project.name} ${testcase}" />
+      <sysproperty key="test.url" value="${test.url}"/>
+      <sysproperty key="test.os" value="${test.os}"/>
+      <sysproperty key="test.browser" value="${test.browser}"/>
+      <sysproperty key="test.browser.version" value="${test.browser.version}"/>
+      <sysproperty key="test.remote.access.user" value="${remote.saucelabs.user}"/>
+      <sysproperty key="test.remote.access.key" value="${remote.saucelabs.key}"/>
+      <sysproperty key="test.runRemote" value="true"/>
+      <formatter type="brief" usefile="false"/>
+      <formatter type="xml"/>
+      <!-- run individual testcases by running:
+                        > ant test -Dtestcase=<fully-qualified-classname>
+                        -->
+      <test name="${testcase}" todir="${test.reports.dir}" if="testcase"/>
+      <batchtest todir="${test.reports.dir}" unless="testcase">
+        <fileset dir="${build.dir}/test" includes="**/*Test.class"/>
+      </batchtest>
+    </junit>
+  </target>
+  <target name="test" depends="setup-test,local-test,remote-test" description="Execute the plataform of tests">
+    <junitreport todir="${test.reports.dir}">
+      <fileset dir="${test.reports.dir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${test.reports.dir}/html"/>
+    </junitreport>
+  </target>
+  <target name="help"  description="Display Help for using plata tests">
+    <echo>-------------------------------------------------------------------------------------</echo>
+    <echo>| ${ant.project.name}</echo>
+    <echo>|====================================================================================</echo>
+    <echo>| Use "&gt; ant test" to run Selenium all the selenium tests in ./test</echo>
+    <echo>| You can run remotely on SauceLabs if you configure the environment variables:</echo>
+    <echo>|   * SAUCE_ONDEMAND_USERNAME</echo>
+    <echo>|   * SAUCE_ONDEMAND_ACCESS_KEY</echo>
+    <echo>| If those variables aren't available, the tests will be run locally provided that</echo>
+    <echo>| there is a selenium server runing("ant launch-server") and at least one slave("ant launch-slave")</echo>
+    <echo>|</echo>
+    <echo>| You can also run individual tests using the runtime parameter "testcase":</echo>
+    <echo>|   &gt; ant test -Dtestcase=&lt;classname&gt;</echo>
+    <echo>|   &gt; ant test -Dtestcase=pt.fccn.arquivo.tests.CollectionsTest</echo>
+    <echo>-------------------------------------------------------------------------------------</echo>
+  </target>
+
+</project>

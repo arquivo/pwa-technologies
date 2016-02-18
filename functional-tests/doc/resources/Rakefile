@@ -1,0 +1,18 @@
+def export_png(file, width, postfix)
+ sh "inkscape --export-png=\"../website/diagrams/#{file}#{postfix}.png\" --export-width=#{width} --export-background-opacity=0 \"#{file}.svg\""
+end
+
+def export_diagram(file)
+  export_png file, 700, " - Small"
+  export_png file, 1024, ""
+end
+
+task :default => :export
+
+task :export do
+  export_diagram "Requesting a Specific Environment"
+   export_diagram "Multiple Environments Demo Setup"
+   export_diagram "Selenium Grid Setup"
+   export_diagram "Multiple Machine Demo Setup"
+   export_diagram "Traditional Selenium Setup"
+end
