@@ -110,7 +110,7 @@ public class Arcproxyinspection {
 						date_p58=getIdDate(broker_p58,id);
 						DateList.add(date_p58); //Contains every dates of web content fetched from the file
 						title_p62=getIdTitle(broker_p62, id,Url);
-						date_p62=getIdDate(broker_p62,id);
+						date_p62=getIdDate(broker_p62,id);						
 						if (date_p58 !=null && date_p62 !=null && !isPredProd){
 							//If occurs same pages with different titles or dates
 							if (!date_p58.equals(date_p62) && !title_p58.equals(title_p62)){
@@ -129,7 +129,7 @@ public class Arcproxyinspection {
 							}
 							
 							else
-								result = false;
+								result = true;
 						}
 					}
 					else {
