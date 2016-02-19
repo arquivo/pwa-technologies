@@ -41,6 +41,11 @@ Nr. of ARC files in documentation (private: http://wiki.priv.fccn.pt/Recolhas)
 backup logs
 #tar -cvzf ./finished/uploadLogs$CRAWL_NAME'-'$(date +"%d-%m-%Y").tar.gz ./configItems$CRAWL_NAME.upload ./uploadItems$CRAWL_NAME.out ./itemsFor$CRAWL_NAME ./itemsFor$CRAWL_NAME.recover
 
+clean logs
+#mkdir ./finished/uploadLogs$CRAWL_NAME'-'$(date +"%d-%m-%Y"); mv ./configItems$CRAWL_NAME.upload ./uploadItems$CRAWL_NAME.out ./itemsFor$CRAWL_NAME ./itemsFor$CRAWL_NAME.recover ./finished/uploadLogs$CRAWL_NAME'-'$(date +"%d-%m-%Y")
+
+
+
 get items to re-upload
 BUG WITH "Sáb" on log message: "S<E1>b Jul 5 00:06:44 WEST 2014, Error message after retry: 100. RECOVER_ARC_FILE:portuguese-web-archive-AWP122011-1 ./arcs/1/16/IAH-20120125101649-08516-p13.arquivo.pt.arc.gz 9c06804a7b758fdb4b71ef2787194c68"
 
