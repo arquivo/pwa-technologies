@@ -19,8 +19,7 @@ export AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY
 #To have log formats always using dates in English format because the sed command does not work properly with latin charsets
 export LANG=en_US.UTF-8
-
-e.g. #cp /shareT2/scripts/IAExchange/.bashrc ~
+e.g. #cp /shareP19/scripts/IAExchange/.bashrc ~
 
 2. Generate 10GB items for the crawl using generateItems.sh (100 ARCs of 100 MB in each item)
 e.g. #./pwa-technologies/scripts/InternetArchive/generateItems.sh ./pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg 2>&1 1>generateItems$CRAWL_NAME.out &
@@ -40,12 +39,7 @@ Nr. of ARC files in documentation (private: http://wiki.priv.fccn.pt/Recolhas)
 3.1.1 In case of errors, extract failed Items and ARC files to be recovered
 
 backup logs
-#mkdir ./finished/uploadLogs$CRAWL_NAME'-'$(date +"%d-%m-%Y"); mv ./configItems$CRAWL_NAME.upload ./uploadItems$CRAWL_NAME.out ./itemsFor$CRAWL_NAME ./itemsFor$CRAWL_NAME.recover ./finished/uploadLogs$CRAWL_NAME'-'$(date +"%d-%m-%Y")
-OR
 #tar -cvzf ./finished/uploadLogs$CRAWL_NAME'-'$(date +"%d-%m-%Y").tar.gz ./configItems$CRAWL_NAME.upload ./uploadItems$CRAWL_NAME.out ./itemsFor$CRAWL_NAME ./itemsFor$CRAWL_NAME.recover
-
-
-
 
 get items to re-upload
 BUG WITH "Sáb" on log message: "S<E1>b Jul 5 00:06:44 WEST 2014, Error message after retry: 100. RECOVER_ARC_FILE:portuguese-web-archive-AWP122011-1 ./arcs/1/16/IAH-20120125101649-08516-p13.arquivo.pt.arc.gz 9c06804a7b758fdb4b71ef2787194c68"
@@ -56,7 +50,7 @@ Bug fix: use the command below if the host is using ISO-8859-1 for log output. C
 # cat configItems$CRAWL_NAME.upload |grep 'RECOVER_ARC_FILE:'| LANG=C.ISO-8859-1 sed 's/.*RECOVER_ARC_FILE://g'66 > itemsFor$CRAWL_NAME.recover
 
 
-change config file nano #./pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg OUTPUTFILE=/shareT2/scripts/IAExchange/itemsFor$CRAWL_NAME.recover
+change config file nano #./pwa-technologies/scripts/InternetArchive/crawlConfigFiles/configItems$CRAWL_NAME.cfg OUTPUTFILE=/shareP19/scripts/IAExchange/itemsFor$CRAWL_NAME.recover
 
 repeat upload with new config file
 # repeat uploadItems.sh
