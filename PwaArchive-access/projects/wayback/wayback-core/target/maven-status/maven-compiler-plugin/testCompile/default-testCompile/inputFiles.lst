@@ -1,0 +1,15 @@
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/util/FileDownloaderTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/util/CachedFileTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/util/IPRangeTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/resourcestore/http/FileLocationDBTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/accesscontrol/robotstxt/RobotExclusionFilterTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/resourceindex/distributed/AlphaPartitionedIndexTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/util/operator/BooleanOperatorTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/accesscontrol/staticmap/StaticMapExclusionFilterTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/accesscontrol/ExternalExcluderTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/util/url/AggressiveUrlCanonicalizerTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/util/url/UrlOperationsTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/replay/TagMagixTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/resourcestore/http/FileLocationDBLogTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/core/TimestampTest.java
+/home/nutchwax/workspace/pwa-technologies/PwaArchive-access/projects/wayback/wayback-core/src/test/java/org/archive/wayback/surt/SURTTokenizerTest.java

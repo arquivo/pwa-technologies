@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="ontology">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/ontology/icu4j_2_6_1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/ontology/ontology.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/ontology/commons-logging-1.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/ontology/jena-2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

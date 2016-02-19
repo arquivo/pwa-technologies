@@ -1,0 +1,127 @@
+<html>
+ <head>
+   <title>Selenium Grid - Step by Step Installation Instructions for Mac OS X</title>
+   <link rel="stylesheet" type="text/css" href="stylesheets/site.css" />
+   <link rel="stylesheet" type="text/css" href="stylesheets/document.css" />
+ </head>
+ <body>
+ 
+   <div class="header">
+     <a href="index.html"><img alt="Selenium_grid_logo_large" src="images/selenium-grid-logo-large.png"/></a>
+     Step by Step Installation Instructions for Windows
+   </div>
+   
+  <p>
+	Here are detailed, step by step instructions, on how to install
+	Selenium Grid on an Windows machine.
+  </p>
+
+  <h2 id="jdk">Step 1: Verify That JDK 1.5 is Installed</h2>
+
+    <p>
+      Ensure that the JDK 1.5 is installed on your machine.  Open a terminal window 
+      (DOS Prompt) and run the following command to check your version 
+      <code>java&nbsp;-version</code>
+    </p>
+    <img style="margin-left: 5em;" src="images/java_version_win_screenshot.png" />
+    <p>
+    If the JDK is not installed or it is not the correct version please goto the
+    following site to download 
+    </p>  
+
+
+  <h2 id="ant">Step 2: Install Ant 1.7</h2>
+
+    <p>
+	  Check that you have the right Ant version (1.7) by running in a terminal:
+      <code>ant -version</code>
+	</p>
+
+    <img style="margin-left: 5em;" src="images/ant_version_win_screenshot.png" />
+
+    <p>
+	  If Ant version 1.7 is installed you can go directly to step 3; otherwise,
+	  you will need to download Ant version 1.7 as described in the next step
+	</p>
+    
+    <h3 id="installing_ant">Step 2a: Installing Ant 1.7</h3>
+
+     <ol>
+	   <li>
+	     Download Ant version 1.7 from 
+	     <a href="http://mirror.olnevhost.net/pub/apache/ant/binaries/apache-ant-1.7.1-bin.zip">http://mirror.olnevhost.net/pub/apache/ant/binaries/apache-ant-1.7.1-bin.zip</a>	
+	   </li>
+       <li>
+       <p>
+	     Once it has been downloaded, unzip the file in a 
+	     directory on your local system. For instance under 
+	     <code>C:\Applications\Java\apache-ant-1.7.1</code>:
+		</p>
+	   </li>
+	   <li>
+		 <p>
+           You then need to modify your <code>PATH</code> so that your
+           system picks up the right Ant launcher. Right click on the My
+           Computer icon and edit the system enviroment variables. 
+         </p>
+         <ol style="list-style-type: lower-latin;">
+	       <li>
+	       	 Click on the <code>PATH</code> system variable to see the 
+	       	 current PATH
+		     <img src="images/check_path_win_screenshot.png" />
+           </li>
+           <li>  
+           	 Modify it to include the latest version of Ant 1.7
+		     <img src="images/update_path_win_screenshot.png" />
+	       </li>
+	       <li>
+		     Save the <code>PATH</code> variable file 
+		   </li><li>
+		     To ensure that the latest Path variable is up to date exit from the current
+		     Terminal and re-open a new terminal. Run the following command in the new
+		     terminal and ensure that the latest version of Ant 1.7 is correctly configured.
+		     <img src="images/ant_version_win_screenshot.png" />
+		   </li><li>
+			   From now on, execute all commands from this terminal window
+		   </li>			
+	     </ol>
+	     </p>
+	   </li>
+     </ol>
+
+  <h2 id="installing_selenium_grid">Step 3: Installing Selenium Grid</h2>
+
+    <ol>
+      <li>
+	    Download the latest version of Selenium Grid from
+	    <a href="http://selenium-grid.seleniumhq.org/download.html">http://selenium-grid.seleniumhq.org/download.html</a>
+	    <br/><br/>
+	  </li>
+
+	  <li>
+        Unzip the file into a directory of your choosing 
+		(say <code>C:\Applications\Java</code>).
+		We will refer to the directory where Selenium Grid is installed as
+		"Selenium Grid Home". For instance if you unzipped the distribution
+		within <code>C:\Applications\Java</code>, your Selenium Grid Home is
+		<code>C:\Applications\Java\selenium-grid-1.0.4</code>.
+      </li>
+
+      <li>
+	    <p>
+          Verify the Selenium Grid install: from the terminal window 
+          go to the Selenium Grid home directory and run:
+          <code> ant sanity-check</code>
+        <p>
+		<img src="images/sanity_check_win_screenshot.png" />
+        <p>If the build is successful, you are all set!</p>
+      </li>
+
+      <li>
+	    Congratulations, it now time to put Selenium Grid to work and
+	    <a href="run_the_demo.html">run the demo</a>!
+	  </li>
+
+</body>
+
+</html>

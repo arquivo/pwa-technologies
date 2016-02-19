@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <title>Selenium Grid - Using Selenium Grid on EC2 (Amazon Elastic Compute Cloud)</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/site.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/document.css">
+  </head>
+  <body>
+	 <div class="header">
+     <a href="index.html"><img alt="Selenium_grid_logo_large" src="images/selenium-grid-logo-large.png"/></a>
+	     Using Selenium Grid on EC2 <br/>(Amazon Elastic Compute Cloud)
+	 </div>
+	
+  <h2>Booting your first Selenium Grid on EC2</h2>
+
+    <p>
+	  Go to the <code>examples/ec2</code> directory within the Selenium
+	  Grid distribution and check that everything works as expected:
+	  </p><pre>cap ec2:check_settings</pre>
+	
+	<p>
+	  Edit the <code>Capfile</code> to reflect the number of EC2 instances
+	  that you are willing to launch. The relevant line is
+	  </p><pre>set :remote_control_farms_count, 5</pre>
+	<p>
+	  Boot all your EC2 instances with:
+	  </p><pre>cap grid:boot</pre>
+	<p>
+	  Be patient, booting EC2 instances can take a while...
+	</p><p>
+      You can then view the current state of your Selenium Grid with
+      </p><pre>cap grid:info</pre>
+    
+
+  <h2>Starting Selenium Grid Services</h2>
+    <p>
+	  You can start Selenium Grid Hub, Remote Controls and VNC on the
+	  EC2 grid you just booted with:
+	  </p><pre>cap grid:start</pre>
+	
+	
+  <h2>Visualizing what is happening</h2>
+    <p>
+	  You can view the Selenium Grid Hub Console with:
+	  </p><pre>cap hub:console</pre>
+	<p>
+	  You can also VNC to all the Remote Controls with:
+	  </p><pre>cap rc:view</pre>
+	
+
+ <h2>Running The demo against the your EC2 Grid</h2>
+   <p>
+	 To run Selenium tests against the EC2 grid you need to know the
+	 DNS name of the Selenium Grid Hub. You can discover it by running:
+     </p><pre>cap grid:info</pre>
+   <p>
+	 From know let's assume the Hub DNS name is 
+	<code>ec2-67-202-25-36.compute-1.amazonaws.com</code>
+   </p>	
+   <p>
+	 You can then navigate back to the root of Selenium Grid distribution:
+	 </p><pre>cd ../..</pre>
+   <p>
+	... and run the demo with:
+	</p><pre> ant -DseleniumHost=ec2-67-202-25-36.compute-1.amazonaws.com  run-demo-in-parallel</pre>
+   <p>
+	You can then visualize browsers running the tests in your VNC windows.
+   </p>
+
+ <h2>Shutting Down the Grid</h2>
+   <p>
+	Once you are done experimenting with Selenium Grid on EC2 you can
+	shutdown all the EC2 instances (and stop be charged for it) with:
+	</p><pre>cap grid:shutdown</pre>
+   <p>
+	You can double-check that everything has been stopped properly:
+	</p><pre>ec2-describe-instances | grep running</pre>
+   
+
+  <h2>What's next?</h2>
+    <p>
+	  Stay tuned for more documentation on Selenium Grid integration
+	  with EC2. In the meantime you can explore other feature by
+	  running in the <code>examples/ec2</code> directory:
+	  </p><pre>$ cap -T<br>	cap ec2:check_settings # Check EC2 related configuration.<br>	cap grid:boot          # Boot EC2 Instances for a Selenium Grid of 1 Hub and ...<br>	cap grid:info          # Display infoemation about current Selenium Grid<br>	cap grid:shutdown      # Shutdown EC2 Instance used to run Selenium Hub.<br>	cap grid:start         # Start Selenium Grid Hub.<br>	cap grid:stop          # Stop Selenium Grid Hub.<br>	cap hub:boot           # Boot a new EC2 Instance to Run Selenium Grid Hub.<br>	cap hub:console        # Open Selenium Grid Hub Console in a browser.<br>	cap hub:logs           # View Selenium Grid Hub logs.<br>	cap hub:restart        # (Re)start Selenium Grid Hub.<br>	cap hub:shutdown       # Shutdown EC2 Instance used to run Selenium Hub.<br>	cap hub:start          # Start Selenium Grid Hub.<br>	cap hub:stop           # Stop Selenium Grid Hub.<br>	cap invoke             # Invoke a single command on the remote servers.<br>	cap rc:boot            # Boot a new EC2 Instance to run a collection of Selen...<br>	cap rc:restart         # (Re)start Remote Controls for all farms.<br>	cap rc:shutdown        # Shutdown all EC2 Instances used to run Selenium Grid...<br>	cap rc:start           # Start Remote Controls for all farms.<br>	cap rc:stop            # Stop Remote Controls for all farms.<br>	cap rc:view            # Visualize what is happening in Remote Control Farms ...<br>	cap rc:vnc:start       # Start VNC server on all Remote Control Farms<br>	</pre>
+    
+
+</body></html>

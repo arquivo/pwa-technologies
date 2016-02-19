@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="microformats-reltag1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/microformats-reltag/microformats-reltag.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

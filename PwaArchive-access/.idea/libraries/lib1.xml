@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/violinstrings-1.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/commons-collections-3.1-patched.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/carrot2-snowball-stemmers.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/Jama-1.0.1-patched.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/carrot2-filter-lingo.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/carrot2-local-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/commons-pool-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/carrot2-util-tokenizer.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/src/plugin/clustering-carrot2/lib/carrot2-util-common.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

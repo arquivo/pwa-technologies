@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="urlfilter-suffix2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/urlfilter-suffix/urlfilter-suffix.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

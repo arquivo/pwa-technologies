@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="wayback-core-1.2.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-core/target/wayback-core-1.2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

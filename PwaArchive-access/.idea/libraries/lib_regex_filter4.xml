@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="lib-regex-filter4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/plugins/lib-regex-filter/lib-regex-filter.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="query-title3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/target/wax-plugins/query-title/query-title.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

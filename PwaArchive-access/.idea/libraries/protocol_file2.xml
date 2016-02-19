@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="protocol-file2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/protocol-file/protocol-file.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

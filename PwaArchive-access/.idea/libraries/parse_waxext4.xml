@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="parse-waxext4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-plugins/target/wax-plugins/parse-waxext/parse-waxext.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

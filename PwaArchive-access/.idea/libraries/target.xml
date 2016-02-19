@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="target">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/target/nutchwax-core-0.11.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/target/nutchwax-job-0.11.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/target/nutchwax-plugins-0.11.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/target/nutchwax-thirdparty-0.11.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

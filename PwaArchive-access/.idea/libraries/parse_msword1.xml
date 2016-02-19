@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="parse-msword1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/parse-msword/parse-msword.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

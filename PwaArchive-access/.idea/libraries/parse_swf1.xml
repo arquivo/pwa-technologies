@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="parse-swf1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/parse-swf/javaswf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/parse-swf/parse-swf.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
