@@ -1,5 +1,5 @@
 #!/bin/bash
-export DISPLAY=:0
+export DISPLAY=:99 # Display port number of Xvfb
 cd /root/pwa-technologies/functional-tests/
 plataResult=`/usr/bin/ant test -Dtestcase=pt.fccn.arquivo.tests.AllTests -Dtest.url=http://arquivo.pt  | grep "Failures: 0, Errors: 0"`
 
