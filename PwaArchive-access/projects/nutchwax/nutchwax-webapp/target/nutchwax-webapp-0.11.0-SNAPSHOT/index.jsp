@@ -68,7 +68,9 @@
                                         </div>
                                 </div>
 		</div>
-		<div id="video-home"><iframe width="480" height="270" src="https://www.youtube.com/embed/2HEudlXPV4o?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe></div>
+		
+		<!-- <div id="video-home"><iframe width="480" height="270" src="https://www.youtube.com/embed/2HEudlXPV4o?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe></div>-->
+		<div id="video-home"><iframe width="480" height="270" src="<fmt:message key='home.video'/>" frameborder="0" allowfullscreen></iframe></div>
 		<div id="main-home">
                                 <h3><fmt:message key='home.examples.title'/></h3>
                                 <h4><fmt:message key='home.examples.subtitle'/></h4>
@@ -114,7 +116,7 @@
 
                                         <div class="box">
                                                 <div class="mascara-img">
-                                                        <img src="img/highlights/figo.png" alt="<fmt:message key='highlight.figo.alt'/>" width="80" height="80" />
+                                                        <img src="img/highlights/figo.jpg" alt="<fmt:message key='highlight.figo.alt'/>" width="80" height="80" />
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">

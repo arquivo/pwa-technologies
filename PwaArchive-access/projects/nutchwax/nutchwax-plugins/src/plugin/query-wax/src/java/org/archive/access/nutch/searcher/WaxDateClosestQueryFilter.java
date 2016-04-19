@@ -81,7 +81,6 @@ public class WaxDateClosestQueryFilter implements QueryFilter
   {
     // Examine each clause in the Nutch query
     Clause [] clauses = input.getClauses();
-    LOGGER.info("NANDO");
     for (int i = 0; i < clauses.length; i++)
     {
       Clause c = clauses[i];
