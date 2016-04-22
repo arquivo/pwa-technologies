@@ -458,8 +458,13 @@
 			        	        String protocol=url_queryString.getProtocol();
 			        	        urlQueryParam= protocol+"://"+hostname+path;
 			        	        
-			        			queryString=urlQueryParam;
+			        	        //This coment must be removed and the follow line has problems
+			        			//if (usedWayback)
+			        				
+			        				/*************************************/
+			        	        queryString=urlQueryParam;
 			        			
+			        	        /*************************************************/
 								pageContext.setAttribute("urlQueryParam", urlQueryParam);
 
 				                allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");

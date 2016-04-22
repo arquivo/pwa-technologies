@@ -24,7 +24,7 @@ public class PwaNumberVersionsTest extends TestCase {
 		PwaNumberVersions ranker=new PwaNumberVersions(nVersions, maxVersions);			
 		System.out.println(""+ranker.score());
 		assertEquals(ranker.score(),(float)2/(float)3);
-			
+		System.out.println("\n\n ********Vai fazer BUMM!************\n\n");
 		nVersions=1000;		
 		maxVersions=1000;		
 		ranker=new PwaNumberVersions(nVersions, maxVersions);			

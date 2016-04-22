@@ -458,7 +458,8 @@
 			        	        String protocol=url_queryString.getProtocol();
 			        	        urlQueryParam= protocol+"://"+hostname+path;
 			        	        
-			        			queryString=urlQueryParam;
+			        	        //This coment must be removed and the follow line has problems
+			        			//queryString=urlQueryParam; Tes
 			        			
 								pageContext.setAttribute("urlQueryParam", urlQueryParam);
 
