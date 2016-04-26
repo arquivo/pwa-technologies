@@ -58,9 +58,9 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.002" classname="org.archive.wayback.util.IPRangeTest" name="testBitOn"/>
+  <testcase time="0.001" classname="org.archive.wayback.util.IPRangeTest" name="testBitOn"/>
   <testcase time="0.001" classname="org.archive.wayback.util.IPRangeTest" name="testParse"/>
-  <testcase time="0" classname="org.archive.wayback.util.IPRangeTest" name="testMask"/>
+  <testcase time="0.001" classname="org.archive.wayback.util.IPRangeTest" name="testMask"/>
   <testcase time="0.001" classname="org.archive.wayback.util.IPRangeTest" name="testContains"/>
   <testcase time="0" classname="org.archive.wayback.util.IPRangeTest" name="testBitString"/>
 </testsuite>

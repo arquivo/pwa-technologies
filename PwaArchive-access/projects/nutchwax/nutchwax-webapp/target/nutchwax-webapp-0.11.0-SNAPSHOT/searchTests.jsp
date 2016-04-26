@@ -182,7 +182,7 @@
 <head>
 <title>Internet Archive: <i18n:message key="title"/></title>
 <link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon"/>
-<!-- <jsp:include page="/include/style.html"/> -->
+<%-- <jsp:include page="/include/style.html"/> --%>
 <!-- <link type="text/css" href="css/style.css" rel="stylesheet" /> -->
 </head>
 

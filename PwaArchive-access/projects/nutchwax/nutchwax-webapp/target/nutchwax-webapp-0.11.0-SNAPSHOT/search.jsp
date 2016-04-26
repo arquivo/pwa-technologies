@@ -446,21 +446,6 @@
 			        	        if (!urlQuery.startsWith("http://") && !urlQuery.startsWith("https://") ) {
 				                        urlQueryParam = "http://" + urlQueryParam;
 			                	}
-			        	        /*
-			        	        hostname is not case sensitive, thereby it has to be written with lower case
-			        	        the bellow provide a solution to this problem
-			        	        arquivo.PT will be equal to arquivo.pt
-			        	        Converts hostname to small letters
-			        	        */
-			        	        URL url_queryString=new URL(urlQueryParam);
-			        	        String path=url_queryString.getPath();
-			        	        String hostname=url_queryString.getHost().toLowerCase();
-			        	        String protocol=url_queryString.getProtocol();
-			        	        urlQueryParam= protocol+"://"+hostname+path;
-			        	        
-			        	        //This coment must be removed and the follow line has problems
-			        			//queryString=urlQueryParam; Tes
-			        			
 								pageContext.setAttribute("urlQueryParam", urlQueryParam);
 
 				                allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
@@ -473,8 +458,24 @@
 				                        showList = false;
 				                        usedWayback = true;
 				                        
-				      
-				        
+				                        /*
+					        	        hostname is not case sensitive, thereby it has to be written with lower case
+					        	        the bellow provide a solution to this problem
+					        	        arquivo.PT will be equal to arquivo.pt
+					        	        Converts hostname to small letters
+					        	        */
+					        	        URL url_queryString=new URL(urlQueryParam);
+					        	        String path=url_queryString.getPath();
+					        	        String hostname=url_queryString.getHost().toLowerCase();
+					        	        String protocol=url_queryString.getProtocol();
+					        	        urlQueryParam= protocol+"://"+hostname+path;
+					        	        
+					        				/*************************************/
+					        	        queryString=urlQueryParam;
+					        			
+					        	        /*************************************************/
+										pageContext.setAttribute("urlQueryParam", urlQueryParam);
+										allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
 							pageContext.setAttribute("dateStartWayback", FORMAT.format( dateStart.getTime() ) );
                         pageContext.setAttribute("dateEndWayback", FORMAT.format( dateEnd.getTime() ) );
 
