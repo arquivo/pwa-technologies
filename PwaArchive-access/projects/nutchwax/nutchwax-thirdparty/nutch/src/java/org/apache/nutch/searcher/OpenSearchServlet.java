@@ -228,7 +228,7 @@ public class OpenSearchServlet extends HttpServlet {
     urlMatch= URL_PATTERN.matcher(queryString.toString()).matches();
     String urlQueryParam=null;
     
-    if (!waybackQuery && urlMatch ) {
+    if (!waybackQuery && urlMatch  && !queryString.contains("site:")) {
     	if (!queryString.startsWith("http://") && !queryString.startsWith("https://") ) {
             urlQueryParam = "http://" + queryString;
     	}
@@ -238,6 +238,11 @@ public class OpenSearchServlet extends HttpServlet {
     	String s = "date:19960101000000-"+dateEndString+" exacturlexpand:"+urlQueryParam;
     	queryStringOpensearchWayback= request.getParameter(s);
     	isOpensearhWayback=true;
+    }
+    else if (queryString.contains("site:")){// if it contains site: is also a full-text search
+    	hitsPerDup = 0;
+    	queryString= queryString.replaceAll("site:http://", "site:");
+    	queryString = queryString.replaceAll("site:https://", "site:");
     }
     // Make up query string for use later drawing the 'rss' logo.
     String params = "&hitsPerPage=" + hitsPerPage +
