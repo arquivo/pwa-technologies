@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<topics>
+	<topic number="1" type="navigational">
+		<query>público</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1996</start>
+			<end format="dd/mm/yyyy">31/12/2000</end>
+		</period>
+		<description lang="en">
+			Público newspaper between 1996 and 2000.
+		</description>
+		<description lang="pt">
+			Jornal Público entre 1996 e 2000.
+		</description>
+	</topic>
+	<topic number="2" type="navigational">
+		<query>expo 98</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1998</start>
+			<end format="dd/mm/yyyy">31/12/1998</end>
+		</period>
+		<description lang="en">
+			Lisbon 1998 World Exposition during that year.
+		</description>
+		<description lang="pt">
+			Exposição mundial de Lisboa durante 1998.
+		</description>
+	</topic>
+	<topic number="3" type="navigational">
+		<query>benfica</query>
+		<period />
+		<description lang="en">
+			Sport Lisboa e Benfica sports club.
+		</description>
+		<description lang="pt">
+			Clube desportivo Sport Lisboa e Benfica.
+		</description>
+	</topic>
+	<topic number="4" type="navigational">
+		<query>cavaco silva</query>
+		<period />
+		<description lang="en">
+			The politician Cavaco Silva.
+		</description>
+		<description lang="pt">
+			O político Cavaco Silva.
+		</description>
+	</topic>
+	<topic number="5" type="navigational">
+		<query>universidade de lisboa</query>
+		<period />
+		<description lang="en">
+			University of Lisbon.
+		</description>
+		<description lang="pt">
+			Universidade de Lisboa.
+		</description>
+	</topic>
+	<topic number="6" type="navigational">
+		<query>josé saramago</query>
+		<period />
+		<description lang="en">			
+			José Saramago, winner of the Nobel Prize of Literature in 1998. 
+		</description>
+		<description lang="pt">			
+			José Saramago, vencedor do prémio Nobel de Literatura em 1998.
+		</description>
+	</topic>
+	<topic number="7" type="navigational">
+		<query>câmara municipal do marco de canaveses</query>
+		<period />
+		<description lang="en">
+			City council of Marco de Canaveses.
+		</description>
+		<description lang="pt">
+			Câmara municipal do Marco de Canaveses.
+		</description>
+	</topic>
+	<topic number="8" type="navigational">
+		<query>primeiro ministro</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/2005</start>
+			<end format="dd/mm/yyyy">31/12/2009</end>
+		</period>
+		<description lang="en">
+			Prime Minister between 2005 and 2009, which was José Sócrates.
+		</description>
+			<description lang="pt">
+			Primeiro ministro entre 2005 e 2009, que foi José Sócrates.
+		</description>
+	</topic>
+	<topic number="9" type="navigational">
+		<query>festival da canção</query>
+		<period />
+		<description lang="en">
+			Song Festival.
+		</description>
+		<description lang="pt">
+			Festival da canção.
+		</description>
+	</topic>
+	<topic number="10" type="navigational">
+		<query>finanças</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/2007</start>
+			<end format="dd/mm/yyyy">31/12/2009</end>
+		</period>
+		<description lang="en">
+			Finance Ministry between 2007 and 2009.
+		</description>
+		<description lang="pt">
+			Ministério das Finanças entre 2007 e 2009.
+		</description>
+	</topic>
+	<topic number="11" type="navigational">
+		<query>federação de kickboxing</query>
+		<period />
+		<description lang="en">
+			Portuguese Kickboxing Federation.
+		</description>
+		<description lang="pt">
+			Federação Portuguesa de Kickboxing.
+		</description>
+	</topic>
+	<topic number="12" type="navigational">
+		<query>volkswagen</query>
+		<period />
+		<description lang="en">
+			Volkswagen automobile manufacturer.
+		</description>
+		<description lang="pt">
+			Fabricante de automóveis Volkswagen.
+		</description>
+	</topic>
+	<topic number="13" type="navigational">
+		<query>telepizza</query>
+		<period />
+		<description lang="en">
+			Pizza restaurant Telepizza.
+		</description>
+		<description lang="pt">
+			Restaurante de pizzas Telepizza.
+		</description>
+	</topic>
+	<topic number="14" type="navigational">
+		<query>hospital barreiro</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1996</start>
+			<end format="dd/mm/yyyy">31/12/2007</end>
+		</period>
+		<description lang="en">
+			Hospital located in Barreiro city between 1996 and 2007.
+		</description>
+		<description lang="pt">
+			Hospital localizado na cidade do Barreiro entre 1996 and 2007.
+		</description>
+	</topic>
+	<topic number="15" type="navigational">
+		<query>fernando pessoa</query>
+		<period />
+		<description lang="en">
+			Poet and writer Fernando Pessoa.
+		</description>
+		<description lang="pt">
+			Poeta e escritor Fernando Pessoa.
+		</description>
+	</topic>
+	<topic number="16" type="navigational">
+		<query>google</query>
+		<period />			
+		<description lang="en">
+			Google's search engine.
+		</description>
+		<description lang="pt">
+			Motor de pesquisa Google.
+		</description>
+	</topic>
+	<topic number="17" type="navigational">
+		<query>adelaide ferreira</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1996</start>
+			<end format="dd/mm/yyyy">31/12/2005</end>
+		</period>
+		<description lang="en">
+			Singer Adelaide Ferreira between 1996 and 2005.
+		</description>
+		<description lang="pt">
+			Cantora Adelaide Ferreira entre 1996 e 2005.
+		</description>
+	</topic>
+	<topic number="18" type="navigational">
+		<query>porto aveiro</query>
+		<period />
+		<description lang="en">
+			Port of Aveiro.
+		</description>
+		<description lang="pt">
+			Porto de Aveiro.
+		</description>
+	</topic>
+	<topic number="19" type="navigational">
+		<query>porto de lisboa</query>
+		<period />
+		<description lang="en">
+			Port of Lisbon.
+		</description>
+		<description lang="pt">
+			Porto de Lisboa.
+		</description>
+	</topic>
+	<topic number="20" type="navigational">
+		<query>embaixada do brasil</query>
+		<period />
+		<description lang="en">
+			Brazilian Embassy in Portugal.
+		</description>
+		<description lang="pt">
+			Embaixada do Brasil em Portugal.
+		</description>
+	</topic>
+	<topic number="21" type="navigational">
+		<query>teatro dona maria segunda</query>
+		<period />
+		<description lang="en">
+			Dona Maria Segunda national theatre.
+		</description>
+		<description lang="pt">			
+			Teatro nacional Dona Maria Segunda.
+		</description>
+	</topic>
+	<topic number="22" type="navigational">
+		<query>notícias de leiria</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1996</start>
+			<end format="dd/mm/yyyy">31/12/2003</end>
+		</period>
+		<description lang="en">
+			Notícias de Leiria newspaper between 1996 and 2003.
+		</description>
+		<description lang="pt">
+			Jornal Notícias de Leiria entre 1996 e 2003.
+		</description>
+	</topic>
+	<topic number="23" type="navigational">
+		<query>horários soflusa</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/2003</start>
+			<end format="dd/mm/yyyy">31/12/2006</end>
+		</period>
+		<description lang="en">
+			Schedules of the river transport company Soflusa between 2003 and 2006.
+		</description>
+		<description lang="pt">
+			Horários dos transportes fluviais da empresa Soflusa entre 2003 e 2006.
+		</description>
+	</topic>
+	<topic number="24" type="navigational">
+		<query>restaurantes público</query>
+		<period />
+		<description lang="en">
+			Restaurants section in Público newspaper.
+		</description>
+		<description lang="pt">
+			Seção de restaurantes do jornal Público.
+		</description>
+	</topic>
+	<topic number="25" type="navigational">
+		<query>icat projectos</query>				
+		<period />
+		<description lang="en">
+			Projects of the Institute of Applied Science and Technology.							
+		</description>
+		<description lang="pt">
+			Projectos do Instituto de Ciência Aplicada e Tecnologia.
+		</description>
+	</topic>
+	<topic number="26" type="navigational">
+		<query>centro Jacques Delors</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1996</start>
+			<end format="dd/mm/yyyy">31/12/1999</end>
+		</period>
+		<description lang="en">			
+			Jacques Delors Information Centre between 1996 and 1999.
+		</description>
+		<description lang="pt">
+			Centro de informação Jacques Delors entre 1996 e 1999.
+		</description>
+	</topic>	
+	<topic number="27" type="navigational">
+		<query>Santana Lopes</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/2004</start>
+			<end format="dd/mm/yyyy">31/12/2005</end>
+		</period>		
+		<description lang="en">		
+			Prime Minister between 2004 and 2005, which was Pedro Santana Lopes.			
+		</description>
+		<description lang="pt">
+			Primeiro ministro entre 2004 e 2005, que foi Pedro Santana Lopes.			
+		</description>						
+	</topic>	
+	<topic number="28" type="navigational">
+		<query>assembleia da república</query>
+		<period />
+		<description lang="en">
+			Assembly of the Republic (parliament).			
+		</description>
+		<description lang="pt">
+			Assembleia da República.
+		</description>
+	</topic>	
+	<topic number="29" type="navigational">
+		<query>feup</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1996</start>
+			<end format="dd/mm/yyyy">31/12/2000</end>
+		</period>
+		<description lang="en">
+			Faculty of Engineering of the University of Porto between 1996 and 2000.		
+		</description>
+		<description lang="pt">
+			Faculdade de Engenharia da Universidade do Porto entre 1996 and 2000.
+		</description>
+	</topic>		
+	<topic number="30" type="navigational">
+		<query>pedro abrunhosa</query>
+		<period />
+		<description lang="en">
+			Singer Pedro Abrunhosa.
+		</description>
+		<description lang="pt">
+			Cantor Pedro Abrunhosa.
+		</description>
+	</topic>	
+	<topic number="31" type="navigational">
+		<query>marinha</query>
+		<period />
+		<description lang="en">			
+			Navy. 
+		</description>
+		<description lang="pt">			
+			Marinha.
+		</description>
+	</topic>	
+	<topic number="32" type="navigational">
+		<query>rock in rio</query>
+		<period />
+		<description lang="en">
+			Rock in Rio music festival.
+		</description>
+		<description lang="pt">
+			Festival de música Rock in Rio.
+		</description>
+	</topic>	
+	<topic number="33" type="navigational">
+		<query>cavalo lusitano</query>
+		<period />
+		<description lang="en">					
+			Portuguese Association of the Lusitano thoroughbred horse.			
+		</description>
+		<description lang="pt">
+			Associação Portuguesa do Cavalo Puro Sangue Lusitano.
+		</description>
+	</topic>	
+	<topic number="34" type="navigational">
+		<query>moviflor</query>
+		<period />
+		<description lang="en">
+			Moviflor shop.
+		</description>
+		<description lang="pt">
+			Lojas Moviflor.
+		</description>
+	</topic>		
+	<topic number="35" type="navigational">
+		<query>giatsi isel</query>
+		<period />
+		<description lang="en">			
+			Group of Applied Research in Technology and Information Systems of ISEL.
+		</description>
+		<description lang="pt">
+			Grupo de Investigação Aplicada em Tecnologias e Sistemas de Informação do ISEL.
+		</description>
+	</topic>		
+	<topic number="36" type="navigational">
+		<query>instituto ricardo jorge</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/2007</start>
+			<end format="dd/mm/yyyy">31/12/2009</end>
+		</period>	
+		<description lang="en">
+			The National Institute of Health Dr. Ricardo Jorge between 2007 and 2009.
+		</description>
+		<description lang="pt">
+			Instituto Nacional de Saúde Doutor Ricardo Jorge entre 2007 e 2009.
+		</description>
+	</topic>	
+	<topic number="37" type="navigational">
+		<query>dns</query>
+		<period />
+		<description lang="en">
+			Domain Name System.
+		</description>
+		<description lang="pt">
+			Sistema de Nomes de Domínio.
+		</description>
+	</topic>
+	<topic number="38" type="navigational">
+		<query>olx</query>
+		<period />
+		<description lang="en">
+			Olx classified ads portal.		
+		</description>
+		<description lang="pt">
+			Portal de anúncios classificados Olx.			
+		</description>
+	</topic>		
+	<topic number="39" type="navigational">
+		<query>ordem dos engenheiros</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/2007</start>
+			<end format="dd/mm/yyyy">31/12/2010</end>
+		</period>
+		<description lang="en">
+			The Order of Engineers between 2007 e 2010.
+		</description>
+		<description lang="pt">
+			Ordem dos engenheiros entre 2007 e 2010.
+		</description>
+	</topic>	
+	<topic number="40" type="navigational">
+		<query>net surf</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1996</start>
+			<end format="dd/mm/yyyy">31/12/2001</end>
+		</period>		
+		<description lang="en">			
+			Net Surf company that distributes strategy games between 1996 and 2001.
+		</description>
+		<description lang="pt">
+			Companhia Net Surf distribuidora de jogos de estratégia entre 1996 e 2001.
+		</description>
+	</topic>	
+	<topic number="41" type="navigational">
+		<query>escola profissional chaves</query>
+		<period />			
+		<description lang="en">
+			Professional school of Chaves.
+		</description>
+		<description lang="pt">
+			Escola profissional de Chaves.
+		</description>
+	</topic>	
+	<topic number="42" type="navigational">
+		<query>misericórdia de fafe</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/2000</start>
+			<end format="dd/mm/yyyy">31/12/2009</end>
+		</period>
+		<description lang="en">			
+			Holy House of mercy of Fafe between 2000 and 2009.
+		</description>
+		<description lang="pt">
+			Santa Casa da Misericórdia de Fafe entre 2000 e 2009.
+		</description>
+	</topic>	
+	<topic number="43" type="navigational">
+		<query>bolsa emprego sapo</query>
+		<period />
+		<description lang="en">
+			Public employment pool of SAPO portal.
+		</description>
+		<description lang="pt">
+			Bolsa de emprego do portal SAPO.
+		</description>
+	</topic>	
+	<topic number="44" type="navigational">
+		<query>timeout arte</query>
+		<period />
+		<description lang="en">
+			Art section from Timeout magazine.
+		</description>
+		<description lang="pt">
+			Secção de arte da revista Timeout.
+		</description>
+	</topic>
+	<topic number="45" type="navigational">
+		<query>serviços consulado angola</query>
+		<period />
+		<description lang="en">
+			Consular services of the Republic of Angola.
+		</description>
+		<description lang="pt">
+			Serviços do consulado da República de Angola.
+		</description>
+	</topic>	
+	<topic number="46" type="navigational">
+		<query>embaixada da estónia</query>
+		<period />
+		<description lang="en">
+			Estonian embassy.
+		</description>
+		<description lang="pt">			
+			Embaixada da Estónia.
+		</description>
+	</topic>
+	<topic number="47" type="navigational">
+		<query>lpcpcc</query>
+ 		<period>
+			<start format="dd/mm/yyyy">01/01/1996</start>
+			<end format="dd/mm/yyyy">31/12/2003</end>
+		</period>
+		<description lang="en">
+			Portuguese league of owners and breeders of racing horses between 1996 and 2003.
+		</description>
+		<description lang="pt">
+			Liga Portuguesa de criadores e proprietarios de cavalos de corrida entre 1996 e 2003.
+		</description>
+	</topic>
+	<topic number="48" type="navigational">
+		<query>arquidiocese évora paróquias oeste</query>
+		<period />
+		<description lang="en">
+			West zone of the archdiocese of Évora.
+		</description>
+		<description lang="pt">
+			Zona pastoral Oeste da arquidiocese de Évora.
+		</description>
+	</topic>
+	<topic number="49" type="navigational">
+		<query>rádio douro sul</query>
+		<period>
+			<start format="dd/mm/yyyy">01/01/1997</start>
+			<end format="dd/mm/yyyy">31/12/1997</end>
+		</period>
+		<description lang="en">
+			Douro Sul radio in 1997.
+		</description>
+		<description lang="pt">
+			Rádio Douro Sul em 1997.
+		</description>
+	</topic>
+	<topic number="50" type="navigational">
+		<query>instituto da energia</query>				
+		<period />
+		<description lang="en">
+			Energy institute.							
+		</description>
+		<description lang="pt">
+			Instituto da energia.
+		</description>
+	</topic>
+</topics>
