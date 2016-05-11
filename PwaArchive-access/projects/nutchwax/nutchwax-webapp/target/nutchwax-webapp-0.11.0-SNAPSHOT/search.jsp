@@ -68,7 +68,7 @@
   DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
   DATE_END.set( Calendar.MINUTE, 59 );
   DATE_END.set( Calendar.SECOND, 59 );
-
+  int queryStringParameter= 0;
 
   /** Read the embargo offset value from the configuration page. If not present, default to: -1 year */
   try {
@@ -98,12 +98,12 @@
   // get query from request
   
   String queryString = request.getParameter("query");
-
+String[] aux_split=null;
 
 	
   if ( queryString != null ) {
         queryString = queryString.trim();
-        
+        	
        
   } else {
         // Check if the 'query' params exists
@@ -129,7 +129,12 @@
                 queryString += " ";
         }
         if (request.getParameter("site") != null && request.getParameter("site") != "") {
-                queryString += "site:";
+                /*
+                
+                To solve issue #132
+                
+                */
+        		queryString += "site:";
                 String siteParameter = request.getParameter("site");
                 if (siteParameter.startsWith("http://")) {
                         queryString += siteParameter.substring("http://".length());
@@ -138,6 +143,19 @@
                 } else {
                         queryString += siteParameter;
                 }
+                /*queryStringParameter = queryString.length();
+                if (siteParameter.startsWith("http://") && siteParameter.startsWith("https://")) {
+                	queryString +=NutchwaxQuery.encodeExacturl("exacturlexpand:"+siteParameter);
+                } else {
+                	 queryString +=NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+siteParameter);
+                       // queryString += "exacturlexpand:http://"+siteParameter;
+                }
+                String aux = request.getParameter("site");
+                bean.LOG.debug("\nQueryString : "+ queryString+"\n*****************************\n");
+                String aux_ ="exacturlexpand:http://"+aux;
+              	aux = NutchwaxQuery.encodeExacturl(aux_);*/
+                
+                bean.LOG.debug("\nQueryString exactExpand URL: "+ siteParameter+"\n*****************************\n");
                 queryString += " ";
         }
         if (request.getParameter("format") != null && request.getParameter("format") != "" && !request.getParameter("format").equals("all")) {
@@ -205,7 +223,7 @@
   if (hitsPerVersionString != null && hitsPerVersionString.length() > 0) {
         hitsPerVersion = Integer.parseInt(hitsPerVersionString);
   }
-
+  
   if (queryString.contains("site:")) {
         hitsPerDup = 0;
 
@@ -293,22 +311,6 @@
             collection;
       }
   }
-  /* if (urlQueryParam.contains("http://")){ 
-  	aux=urlQueryParam.replace("http://","");
-  	vect_aux= aux.split("/");				         
-  	aux_1=vect_aux[0];
-   	bean.LOG.debug("\n\n Aux: "+"http://"+aux_1.toLowerCase()+"/"+vect_aux[1]+"\n");
-   	urlQueryParam= "http://"+aux_1.toLowerCase()+"/"+vect_aux[1];
-   }
-  
-  if (urlQueryParam.contains("https://")){ 
-   	 aux=urlQueryParam.replace("https://","");
-   	 vect_aux= aux.split("/");				         
-   	aux_1=vect_aux[0];
-   	bean.LOG.debug("\n\n Aux: "+"https://"+aux_1.toLowerCase()+"/"+vect_aux[1]+"\n");
-   	urlQueryParam= "https://"+aux_1.toLowerCase()+"/"+vect_aux[1];
-   }            
-   */
   
   // Prepare the query values to be presented on the page, preserving the session
   String htmlQueryString = "";
@@ -431,7 +433,7 @@
 				long hitsTotal = 0;
 				boolean hitsTotalIsExact = false;
 				Query query = null;
-
+				String queryExactExpand=null;
 				String collectionsHost = nutchConf.get("wax.host", "examples.com");
 				pageContext.setAttribute("collectionsHost", collectionsHost);
 
@@ -527,8 +529,23 @@
 						} else {
 							// option: (3)
 				                        showList = true;
+										
 				                        showTip = urlMatch.group(1);
-				                        query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
+				                        if (queryString.contains("site:")){
+					                        aux_split = queryString.split(" ");
+					                        bean.LOG.info("aux_split: "+aux_split);
+					                        String queryString_aux="";
+					                        for (int i =0; i<aux_split.length;i++){
+					                     	   if (aux_split[i].contains("site:")){
+					                     		   aux_split[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+aux_split[i].replace("site:", ""));
+					                     	   }
+					                     	  queryString_aux+=" "+aux_split[i];
+					                        }
+													
+					                        			query = NutchwaxQuery.parse(queryString_aux, nutchConf);    //create the query object
+				                        }
+				                        else
+				                        	query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
 				                        bean.LOG.debug("query: " + query.toString());
 						}
 					} else {

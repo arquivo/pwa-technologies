@@ -58,10 +58,10 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.003" classname="org.archive.wayback.replay.TagMagixTest" name="testCSSMarkup"/>
+  <testcase time="0.004" classname="org.archive.wayback.replay.TagMagixTest" name="testCSSMarkup"/>
   <testcase time="0.008" classname="org.archive.wayback.replay.TagMagixTest" name="testMarkupTag"/>
   <testcase time="0.001" classname="org.archive.wayback.replay.TagMagixTest" name="testFindAttr"/>
   <testcase time="0.001" classname="org.archive.wayback.replay.TagMagixTest" name="testFindEndOfFirst"/>
   <testcase time="0.006" classname="org.archive.wayback.replay.TagMagixTest" name="testStyleUrlMarkup"/>
-  <testcase time="0.006" classname="org.archive.wayback.replay.TagMagixTest" name="testFindAttrWhere"/>
+  <testcase time="0.005" classname="org.archive.wayback.replay.TagMagixTest" name="testFindAttrWhere"/>
 </testsuite>
