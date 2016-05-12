@@ -98,7 +98,7 @@
   // get query from request
   
   String queryString = request.getParameter("query");
-String[] aux_split=null;
+String[] queryString_splitted=null;
 
 	
   if ( queryString != null ) {
@@ -531,18 +531,17 @@ String[] aux_split=null;
 				                        showList = true;
 										
 				                        showTip = urlMatch.group(1);
-				                        if (queryString.contains("site:")){
-					                        aux_split = queryString.split(" ");
-					                        bean.LOG.info("aux_split: "+aux_split);
-					                        String queryString_aux="";
-					                        for (int i =0; i<aux_split.length;i++){
-					                     	   if (aux_split[i].contains("site:")){
-					                     		   aux_split[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+aux_split[i].replace("site:", ""));
+				                        if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
+				                        	queryString_splitted = queryString.split(" ");
+					                        String queryString_expanded="";
+					                        for (int i =0; i<queryString_splitted.length;i++){
+					                     	   if (queryString_splitted[i].contains("site:")){
+					                     		  queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i].replace("site:", ""));
 					                     	   }
-					                     	  queryString_aux+=" "+aux_split[i];
+					                     	  queryString_expanded+=" "+queryString_splitted[i];
 					                        }
 													
-					                        			query = NutchwaxQuery.parse(queryString_aux, nutchConf);    //create the query object
+					                        			query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
 				                        }
 				                        else
 				                        	query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
