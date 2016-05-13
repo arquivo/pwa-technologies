@@ -191,7 +191,8 @@
             }
 
             if ( url.length() > 80) {
-                url = url.substring(0, 77) + "...";
+                String newUrl = url.substring(0, 40) + "..."+ url.substring((url.length()-37),url.length());
+                url = newUrl;
             }
 
             // Build the summary

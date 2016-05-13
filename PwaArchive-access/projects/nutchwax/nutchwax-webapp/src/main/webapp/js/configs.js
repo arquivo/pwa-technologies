@@ -80,21 +80,9 @@ $(document).ready( function() {
 
     /* Verify if the date in the input was changed */
     function userChangedDate(target, monitoredDate) {
- 	var changedDate = $(target).val();
+        var changedDate = $(target).val();
         var parsedDate = parseDate(monitoredDate);
-        var matcher = changedDate.match(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/); // regex for dd/mm/yyyy
-        var selector = $(target).attr('id');;
-        
-        
-        if (matcher == null ){ // If the date is malformed fell up the input box with the standard date
-            changedDate = parsedDate;
-            if (selector == "dateStart_top"){
-                document.getElementById('dateStart_top').value = changedDate;
-            }
-            else if (selector == "dateEnd_top") {
-                document.getElementById('dateEnd_top').value = changedDate;
-            }
-        }        
+
         if (changedDate !== parsedDate) {
             $(target).addClass("changed");
         } else {

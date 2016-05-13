@@ -68,7 +68,7 @@
   DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
   DATE_END.set( Calendar.MINUTE, 59 );
   DATE_END.set( Calendar.SECOND, 59 );
-  int queryStringParameter= 0;
+
 
   /** Read the embargo offset value from the configuration page. If not present, default to: -1 year */
   try {
@@ -93,17 +93,20 @@
         bean.LOG.error("Embargo offset parameter isn't present");
   }
 %>
+
+
+
 <%-- Handle the url parameters --%>
 <%
   // get query from request
   
   String queryString = request.getParameter("query");
-String[] queryString_splitted=null;
+
 
 	
   if ( queryString != null ) {
         queryString = queryString.trim();
-        	
+        
        
   } else {
         // Check if the 'query' params exists
@@ -129,12 +132,7 @@ String[] queryString_splitted=null;
                 queryString += " ";
         }
         if (request.getParameter("site") != null && request.getParameter("site") != "") {
-                /*
-                
-                To solve issue #132
-                
-                */
-        		queryString += "site:";
+                queryString += "site:";
                 String siteParameter = request.getParameter("site");
                 if (siteParameter.startsWith("http://")) {
                         queryString += siteParameter.substring("http://".length());
@@ -143,19 +141,6 @@ String[] queryString_splitted=null;
                 } else {
                         queryString += siteParameter;
                 }
-                /*queryStringParameter = queryString.length();
-                if (siteParameter.startsWith("http://") && siteParameter.startsWith("https://")) {
-                	queryString +=NutchwaxQuery.encodeExacturl("exacturlexpand:"+siteParameter);
-                } else {
-                	 queryString +=NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+siteParameter);
-                       // queryString += "exacturlexpand:http://"+siteParameter;
-                }
-                String aux = request.getParameter("site");
-                bean.LOG.debug("\nQueryString : "+ queryString+"\n*****************************\n");
-                String aux_ ="exacturlexpand:http://"+aux;
-              	aux = NutchwaxQuery.encodeExacturl(aux_);*/
-                
-                bean.LOG.debug("\nQueryString exactExpand URL: "+ siteParameter+"\n*****************************\n");
                 queryString += " ";
         }
         if (request.getParameter("format") != null && request.getParameter("format") != "" && !request.getParameter("format").equals("all")) {
@@ -223,7 +208,7 @@ String[] queryString_splitted=null;
   if (hitsPerVersionString != null && hitsPerVersionString.length() > 0) {
         hitsPerVersion = Integer.parseInt(hitsPerVersionString);
   }
-  
+
   if (queryString.contains("site:")) {
         hitsPerDup = 0;
 
@@ -268,7 +253,16 @@ String[] queryString_splitted=null;
         }
   }
 
+
+
   /*** Switch dates if start GT end ***/
+    if(dateStart.getTime().compareTo(dateEnd.getTime())>0){
+    Calendar auxCal = dateStart;
+    dateStart = dateEnd;
+    dateEnd = auxCal;
+  }
+  /**/
+
 // TODO - check if start date is GT end
   /*** Add dates to nutch query ***/
   if (queryString != null && queryString != "") {
@@ -311,6 +305,22 @@ String[] queryString_splitted=null;
             collection;
       }
   }
+  /* if (urlQueryParam.contains("http://")){ 
+  	aux=urlQueryParam.replace("http://","");
+  	vect_aux= aux.split("/");				         
+  	aux_1=vect_aux[0];
+   	bean.LOG.debug("\n\n Aux: "+"http://"+aux_1.toLowerCase()+"/"+vect_aux[1]+"\n");
+   	urlQueryParam= "http://"+aux_1.toLowerCase()+"/"+vect_aux[1];
+   }
+  
+  if (urlQueryParam.contains("https://")){ 
+   	 aux=urlQueryParam.replace("https://","");
+   	 vect_aux= aux.split("/");				         
+   	aux_1=vect_aux[0];
+   	bean.LOG.debug("\n\n Aux: "+"https://"+aux_1.toLowerCase()+"/"+vect_aux[1]+"\n");
+   	urlQueryParam= "https://"+aux_1.toLowerCase()+"/"+vect_aux[1];
+   }            
+   */
   
   // Prepare the query values to be presented on the page, preserving the session
   String htmlQueryString = "";
@@ -337,7 +347,7 @@ String[] queryString_splitted=null;
 	<meta name="Keywords" content="<fmt:message key='search.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='search.meta.description'/>" />
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
+	<link rel="search" type="application/  opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
 	<script type="text/javascript">
@@ -348,14 +358,17 @@ String[] queryString_splitted=null;
         <script type="text/javascript" src="js/jquery-ui-1.7.2.custom.min.js"></script>
         <script type="text/javascript" src="js/ui.datepicker.js"></script>
         <% if (language.equals("pt")) { /* load PT i18n for datepicker */ %>
-        <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
+          <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
         <% } %>
+
         <script type="text/javascript" src="js/configs.js"></script>
+
+
 </head>
 <body>
 	<%@ include file="include/topbar.jsp" %>
 <%-- TODO: add loading feedback --%>
-	<div class="wrap">
+	<div class="wrap" id="firstWrap">
 		<div id="main">
 			<div id="header">
 				<%@ include file="include/logo.jsp" %>
@@ -433,9 +446,11 @@ String[] queryString_splitted=null;
 				long hitsTotal = 0;
 				boolean hitsTotalIsExact = false;
 				Query query = null;
-				String queryExactExpand=null;
+
 				String collectionsHost = nutchConf.get("wax.host", "examples.com");
 				pageContext.setAttribute("collectionsHost", collectionsHost);
+
+        String hostArquivo = nutchConf.get("wax.webhost", "arquivo.pt");
 
 
 				if ( request.getAttribute("query") != null && !request.getAttribute("query").toString().equals("") ) {
@@ -448,6 +463,20 @@ String[] queryString_splitted=null;
 			        	        if (!urlQuery.startsWith("http://") && !urlQuery.startsWith("https://") ) {
 				                        urlQueryParam = "http://" + urlQueryParam;
 			                	}
+			        	        /*
+			        	        hostname is not case sensitive, thereby it has to be written with lower case
+			        	        the bellow provide a solution to this problem
+			        	        arquivo.PT will be equal to arquivo.pt
+			        	        Converts hostname to small letters
+			        	        */
+			        	        URL url_queryString=new URL(urlQueryParam);
+			        	        String path=url_queryString.getPath();
+			        	        String hostname=url_queryString.getHost().toLowerCase();
+			        	        String protocol=url_queryString.getProtocol();
+			        	        urlQueryParam= protocol+"://"+hostname+path;
+			        	        
+			        			queryString=urlQueryParam;
+			        			
 								pageContext.setAttribute("urlQueryParam", urlQueryParam);
 
 				                allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
@@ -460,24 +489,8 @@ String[] queryString_splitted=null;
 				                        showList = false;
 				                        usedWayback = true;
 				                        
-				                        /*
-					        	        hostname is not case sensitive, thereby it has to be written with lower case
-					        	        the bellow provide a solution to this problem
-					        	        arquivo.PT will be equal to arquivo.pt
-					        	        Converts hostname to small letters
-					        	        */
-					        	        URL url_queryString=new URL(urlQueryParam);
-					        	        String path=url_queryString.getPath();
-					        	        String hostname=url_queryString.getHost().toLowerCase();
-					        	        String protocol=url_queryString.getProtocol();
-					        	        urlQueryParam= protocol+"://"+hostname+path;
-					        	        
-					        				/*************************************/
-					        	        queryString=urlQueryParam;
-					        			
-					        	        /*************************************************/
-										pageContext.setAttribute("urlQueryParam", urlQueryParam);
-										allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
+				      
+				        
 							pageContext.setAttribute("dateStartWayback", FORMAT.format( dateStart.getTime() ) );
                         pageContext.setAttribute("dateEndWayback", FORMAT.format( dateEnd.getTime() ) );
 
@@ -496,21 +509,280 @@ String[] queryString_splitted=null;
                                 pageContext.setAttribute("seeHistory", seeHistory);
                         %>
                         <c:catch var="exception">
-                                <c:import url="http://${collectionsHost}/query">
-                                        <c:param name="type" value="urlquery" />
-                                        <c:param name="url" value="${urlQueryParam}" />
-                                        <c:param name="aliases" value="true" />
-                                        <c:param name="multiDet" value="true" />
-                                        <c:param name="l" value="${language}" />
-                                        <c:param name="startdate" value ="${dateStartWayback}"/>
-                                        <c:param name="enddate" value="${dateEndWayback}"/>
-                                        <c:param name="hist" value="${pageScope.seeHistory}"/>
-                                        <c:param name="sid" value="${pageContext.session.id}"/>
-                                </c:import>
                                 <% hitsTotal = 1; %>
                         </c:catch>
+
+
+    <script src="http://<%=hostArquivo%>/js/jquery-latest.min.js" type="text/javascript"></script>
+    <script>var $j = jQuery.noConflict(true);</script>
+
+
+<script type="text/javascript">
+
+Content = {
+    months: 
+    {  '01': "<fmt:message key="month.0" />",
+       '02': "<fmt:message key="month.1" />",
+       '03': "<fmt:message key="month.2" />",
+       '04': "<fmt:message key="month.3" />",
+       '05': "<fmt:message key="month.4" />",
+       '06': "<fmt:message key="month.5" />",
+       '07': "<fmt:message key="month.6" />",
+       '08': "<fmt:message key="month.7" />",
+       '09': "<fmt:message key="month.8" />",
+       '10': "<fmt:message key="month.9" />",
+       '11': "<fmt:message key="month.10" />",
+       '12': "<fmt:message key="month.11" />",
+    },
+    shortMonths: 
+    {  '01': "<fmt:message key="smonth.0" />",
+       '02': "<fmt:message key="smonth.1" />",
+       '03': "<fmt:message key="smonth.2" />",
+       '04': "<fmt:message key="smonth.3" />",
+       '05': "<fmt:message key="smonth.4" />",
+       '06': "<fmt:message key="smonth.5" />",
+       '07': "<fmt:message key="smonth.6" />",
+       '08': "<fmt:message key="smonth.7" />",
+       '09': "<fmt:message key="smonth.8" />",
+       '10': "<fmt:message key="smonth.9" />",
+       '11': "<fmt:message key="smonth.10" />",
+       '12': "<fmt:message key="smonth.11" />",
+    },
+    savedInArchive:"<fmt:message key="savedInArchive" />",
+    versionsStored:"<fmt:message key="versionsStored" />",
+    versionsPage:"<fmt:message key="versionsPage" />",
+    between:"<fmt:message key="between" />",
+    and:"<fmt:message key="and" />",
+    resultsQuestion:"<fmt:message key="resultsQuestion" />",
+    moreOptions:"<fmt:message key="moreOptions" />",
+    lessOptions:"<fmt:message key="lessOptions" />",
+    help:"<fmt:message key="help" />",
+    helpHref:"<fmt:message key="helpHref" />",
+    newSearch:"<fmt:message key="newSearch" />",
+    at:"<fmt:message key="at" />",
+    shareMessage:"<fmt:message key="shareMessage" />",
+    language:"<fmt:message key="language" />",
+    otherDates:"<fmt:message key="otherDates" />",
+    emailMessage:"<fmt:message key="emailMessage" />",
+    noResultsFound:"<fmt:message key="noResultsFound" />",
+    suggestions:"<fmt:message key="suggestions" />",
+    checkSpelling:"<fmt:message key="checkSpelling" />",
+    differentKeywords:"<fmt:message key="differentKeywords" />",
+    generalWords:"<fmt:message key="generalWords" />", 
+    internetArchive:"<fmt:message key="internetArchive" />",
+    suggestSiteArchived:"<fmt:message key="suggestSiteArchived" />",
+    suggestUrl:"<fmt:message key="suggestUrl" />",
+    suggest:"<fmt:message key="suggest" />", 
+    mementoFind:"<fmt:message key="mementoFind" />",
+    embargo:"<fmt:message key="embargo" />",
+    embargoUrl:"<fmt:message key="embargoUrl" />",
+    notArchived:"<fmt:message key="notArchived" />",
+    otherLanguage: "<fmt:message key="otherLanguage" />"  ,
+    preservedByArquivo: "<fmt:message key="preservedByArquivo" />"     
+};
+
+
+function getYearTs(ts){
+  return ts.substring(0, 4);
+}
+
+function getYearPosition(ts){
+  return parseInt(getYearTs(ts)) - 1996;
+}
+
+function getDateSpaceFormated(ts){
+  var year = ts.substring(0, 4);
+  var month = ts.substring(4, 6);
+  month = Content.months[month];
+  var day = ts.substring(6, 8);
+  return day + " "+ month + " " +year;
+
+}
+
+function getShortDateSpaceFormated(ts){
+  var year = ts.substring(0, 4);
+  var month = ts.substring(4, 6);
+  month = Content.shortMonths[month];
+  var day = ts.substring(6, 8);
+  return day + " "+ month;
+
+}
+
+function createMatrix(versionsArray, versionsURL){
+  var today = new Date();
+  numberofVersions = yyyy - 1996;
+  var yyyy = today.getFullYear();
+  var numberofVersions = yyyy - 1996;
+  var matrix = new Array(numberofVersions);
+  for (var i = 0; i < matrix.length; i++) {
+    matrix[i] = [];
+    var yearStr = (1996+i).toString();
+    // add the headers for each year
+    $("#years").append('<th id="th_'+yearStr+'">'+yearStr+'</th>');
+  }
+
+  for (var i = 0; i < versionsArray.length; i++) {
+    var timestamp = versionsArray[i];
+    var timestampStr = timestamp.toString();
+    var url = versionsURL[i];
+    var pos = getYearPosition(timestampStr);
+    var dateFormated = getDateSpaceFormated(timestampStr);
+    var shortDateFormated= getShortDateSpaceFormated(timestampStr);       
+    var tdtoInsert = '<td><a href="http://<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+shortDateFormated+'</a></td>';
+    matrix[pos].push(tdtoInsert);  
+  }
+
+  //find which is the biggest number of versions per year and create empty tds in the other years
+  var maxLength = 0;
+  var lengthi =0;
+  for (var i = 0; i < matrix.length; i++) {
+    lengthi = matrix[i].length;
+    var yearStr = (1996+i).toString();
+    if(lengthi == 0){
+      $("#th_"+yearStr).addClass("inactivo");
+    }
+
+    if(lengthi > maxLength){
+      maxLength = lengthi;
+    }
+  }
+  //iterate again to create empty tds
+  for (var i = 0; i < matrix.length; i++) {
+    lengthi = matrix[i].length;
+    if(maxLength > lengthi){
+      for(var j=0; j<(maxLength - lengthi); j++){
+        matrix[i].push('<td>&nbsp;</td>');
+      }
+    }
+  }
+  //create each row of the table
+  for (var i=0; i<maxLength; i++){
+    rowString ="";
+    for (var j = 0; j < matrix.length; j++) {
+      rowString+= matrix[j][i];
+    }
+    var rowId = (i+1).toString()
+    $("#tableBody").append('<tr id="'+rowId+'">'+rowString+'<tr>');
+  }
+  $('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
+}
+
+
+function createResultsPage(numberOfVersions, inputURL){
+    
+    $('<div class="clear">&nbsp;</div>'+
+      '<div id="resultados-url">'+Content.resultsQuestion+' <a href="search.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>?</div>'+
+      '<div class="wrap">' +
+             '  <div id="intro">' +
+             '    <h1 style="text-align: center;">'+Content.versionsStored+'</h1>' +
+             '    <span class="texto-1" style="text-align: center;">'+ numberOfVersions +' ' + Content.versionsPage+' '+ inputURL+
+                '</span>' +
+             '  </div>' +
+             '</div>' + 
+       '<div id="conteudo-versoes">'+
+             '  <div id="resultados-lista">'+
+             '    <table class="tabela-principal">'+
+             '      <thead>'+
+             '        <tr id="years">'+
+             '        </tr>'+
+             '      </thead>'+
+             '      <tbody id="tableBody">'+
+             '      </tbody>'+
+             '    </table>'+
+             '  </div>'+
+             '</div>'        ).insertAfter("#firstWrap");
+     
+}
+
+
+    //top.alert("Starting the Code!")
+    var urlsource = "<%=urlQuery%>" ;
+    //var requestURL = "http://p27.arquivo.pt/wayback/-cdx";
+    var requestURL = "http://<%=collectionsHost%>/" + "-cdx";
+    var versionsArray = [];
+    var versionsURL = [];
+
+    var inputURL = document.getElementById('txtSearch').value;
+
+
+    $.ajax({
+    // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
+       url: requestURL,
+       data: {
+          output: 'json',
+          url: urlsource,
+          fl: 'url,timestamp'
+       },
+       error: function() {
+         // Apresenta que não tem resultados!
+         createErrorPage();
+       },
+       dataType: 'text',
+       success: function(data) {
+
+        //top.alert("I received the versions");
+          versionsArray = []
+          var tokens = data.split('\n')
+          $.each(tokens, function(e){
+              if(this != ""){
+                  var version = JSON.parse(this);
+                  versionsArray.push(version.timestamp);
+                  versionsURL.push(version.url);
+                   
+              }
+              
+          }); 
+          createResultsPage(tokens.length - 1, inputURL);
+          createMatrix(versionsArray, versionsURL);
+          //top.alert(versionsArray.length)
+       },
+       async: false,
+       type: 'GET'
+    });
+</script>
+
+
+<script>
+      var language = Cookies.get('language');
+      if( language == 'EN'){
+          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsEN.js"><\/script>');
+      }
+      else{
+          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsPT.js"><\/script>');
+      }
+</script> 
+
+
+
+
+<script>
+function createErrorPage(){
+  $('#testIT').html('<div id="conteudo-resultado">'+
+           '  <div id="first-column">&nbsp;</div>'+
+           '  <div id="second-column">'+
+           '    <div id="search_stats"></div>'+
+           '    <div id="conteudo-pesquisa-erro">'+
+                '<h2>'+Content.noResultsFound+' </h2> <h3><%=urlQuery%></h3>'+
+                '<div id="sugerimos-que">'+
+                    '<p>'+Content.suggestions+'</p>'+
+                  '<ul>'+
+                    '<li>'+Content.checkSpelling+'</li>'+
+                    '<li><a style="padding-left: 0px;" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
+                    '<li>'+Content.internetArchive+'<a href="http://wayback.archive.org/web/*/<%=urlQuery%>">Internet Archive</a>.</li>'+
+                    '<li><a href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>" style="padding-left: 0px;">'+Content.mementoFind+'</a>.</li>'+                    
+                  '</ul>'+
+                '</div>'+
+                '</div>'+
+              '</div>'+
+           '</div>'); 
+}
+</script>
+
+
+
                         <c:if test="${not empty exception}">
 				<% bean.LOG.error("Error while accessing to wayback: "+ pageContext.getAttribute("exception")); %>
+             
 				<div id="conteudo-resultado"> <%-- START OF: conteudo-resultado --%>
 				<div id="first-column">
 				        &nbsp;
@@ -529,22 +801,8 @@ String[] queryString_splitted=null;
 						} else {
 							// option: (3)
 				                        showList = true;
-										
 				                        showTip = urlMatch.group(1);
-				                        if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
-				                        	queryString_splitted = queryString.split(" ");
-					                        String queryString_expanded="";
-					                        for (int i =0; i<queryString_splitted.length;i++){
-					                     	   if (queryString_splitted[i].contains("site:")){
-					                     		  queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i].replace("site:", ""));
-					                     	   }
-					                     	  queryString_expanded+=" "+queryString_splitted[i];
-					                        }
-													
-					                        			query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
-				                        }
-				                        else
-				                        	query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
+				                        query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
 				                        bean.LOG.debug("query: " + query.toString());
 						}
 					} else {
@@ -765,7 +1023,11 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
 			</div>  <!-- FIM #conteudo-resultado  --> 
 		</div>
 	</div>
+
 <%@include file="include/footer.jsp" %>
+
+
+
 <%@include file="include/analytics.jsp" %>
 </body>
 </html>
