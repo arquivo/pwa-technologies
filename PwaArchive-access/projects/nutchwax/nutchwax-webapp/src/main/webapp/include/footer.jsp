@@ -16,11 +16,12 @@
  		<div class="links-content">
                 <p class="links-title"><fmt:message key="footer.section.social"/></p>
                 <ul>
+                    <li><fmt:message key="footer.section.social.mailinglist"/></li>
                     <li><fmt:message key="footer.section.social.news"/></li>
-                    
                     <li><fmt:message key="footer.section.social.twitter"/></li>
                     <li><a href="http://www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
                     <li><a href="http://arquivo.pt/rss"><fmt:message key='footer.section.social.rss'/></a></li>
+                    <li><fmt:message key="footer.section.social.video"/></li>
                 </ul>
             </div>
 
