@@ -2,35 +2,35 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <%@page import="java.net.URL"%>
 <%@ page
-	session="true"
-	contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"	
+  session="true"
+  contentType="text/html; charset=UTF-8"
+  pageEncoding="UTF-8"  
 
-	import="java.io.File"
-	import="java.io.IOException"
-	import="java.net.URLEncoder"
-	import="java.text.DateFormat"
-	import="java.util.Calendar"
-	import="java.util.Date"
-	import="java.util.regex.Matcher"
-	import="java.util.regex.Pattern"
-	import="java.util.GregorianCalendar"
-	import="org.apache.hadoop.conf.Configuration"
-	import="org.apache.lucene.search.PwaFunctionsWritable"
-	import="org.apache.nutch.global.Global"
-	import="org.apache.nutch.html.Entities"
-	import="org.apache.nutch.metadata.Nutch"
-	import="org.apache.nutch.searcher.Hit"
-	import="org.apache.nutch.searcher.HitDetails"
-	import="org.apache.nutch.searcher.Hits"
-	import="org.apache.nutch.searcher.Query"
-	import="org.apache.nutch.searcher.Query.Clause"
-	import="org.apache.nutch.searcher.NutchBean"
-	import="org.apache.nutch.searcher.Summary"
-	import="org.apache.nutch.searcher.Summary.Fragment"
-	import="org.archive.access.nutch.NutchwaxBean"
-	import="org.archive.access.nutch.NutchwaxQuery"
-	import="org.archive.access.nutch.NutchwaxConfiguration"
+  import="java.io.File"
+  import="java.io.IOException"
+  import="java.net.URLEncoder"
+  import="java.text.DateFormat"
+  import="java.util.Calendar"
+  import="java.util.Date"
+  import="java.util.regex.Matcher"
+  import="java.util.regex.Pattern"
+  import="java.util.GregorianCalendar"
+  import="org.apache.hadoop.conf.Configuration"
+  import="org.apache.lucene.search.PwaFunctionsWritable"
+  import="org.apache.nutch.global.Global"
+  import="org.apache.nutch.html.Entities"
+  import="org.apache.nutch.metadata.Nutch"
+  import="org.apache.nutch.searcher.Hit"
+  import="org.apache.nutch.searcher.HitDetails"
+  import="org.apache.nutch.searcher.Hits"
+  import="org.apache.nutch.searcher.Query"
+  import="org.apache.nutch.searcher.Query.Clause"
+  import="org.apache.nutch.searcher.NutchBean"
+  import="org.apache.nutch.searcher.Summary"
+  import="org.apache.nutch.searcher.Summary.Fragment"
+  import="org.archive.access.nutch.NutchwaxBean"
+  import="org.archive.access.nutch.NutchwaxQuery"
+  import="org.archive.access.nutch.NutchwaxConfiguration"
 %>
 <% // Set the character encoding to use when interpreting request values.
   request.setCharacterEncoding("UTF-8");
@@ -41,18 +41,18 @@
 <%@ include file="include/i18n.jsp" %>
 <fmt:setLocale value="<%=language%>"/>
 
-<%!	//To please the compiler since logging need those -- check [search.jsp]
-	private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
-	private static final DateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
-	//TODO: remove dateStart & dateEnd ???
-	//private static Calendar dateStart = new GregorianCalendar();
-	//private static Calendar dateEnd = new GregorianCalendar();
-	private static final DateFormat OFFSET_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-	private static final Pattern OFFSET_PARAMETER = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
+<%! //To please the compiler since logging need those -- check [search.jsp]
+  private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
+  private static final DateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+  //TODO: remove dateStart & dateEnd ???
+  //private static Calendar dateStart = new GregorianCalendar();
+  //private static Calendar dateEnd = new GregorianCalendar();
+  private static final DateFormat OFFSET_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+  private static final Pattern OFFSET_PARAMETER = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
 
-	private static final String COLLECTION_KEY = "collection";
-	private static final String COLLECTION_QUERY_PARAM_KEY = COLLECTION_KEY + ":";
-	private static final Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-zA-Z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
+  private static final String COLLECTION_KEY = "collection";
+  private static final String COLLECTION_QUERY_PARAM_KEY = COLLECTION_KEY + ":";
+  private static final Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-zA-Z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
 %>
 <%-- Get the application beans --%>
 <%
@@ -68,7 +68,7 @@
   DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
   DATE_END.set( Calendar.MINUTE, 59 );
   DATE_END.set( Calendar.SECOND, 59 );
-
+  int queryStringParameter= 0;
 
   /** Read the embargo offset value from the configuration page. If not present, default to: -1 year */
   try {
@@ -93,17 +93,14 @@
         bean.LOG.error("Embargo offset parameter isn't present");
   }
 %>
-
-
-
 <%-- Handle the url parameters --%>
 <%
   // get query from request
   
   String queryString = request.getParameter("query");
+String[] queryString_splitted=null;
 
-
-	
+  
   if ( queryString != null ) {
         queryString = queryString.trim();
         
@@ -141,6 +138,19 @@
                 } else {
                         queryString += siteParameter;
                 }
+                /*queryStringParameter = queryString.length();
+                if (siteParameter.startsWith("http://") && siteParameter.startsWith("https://")) {
+                  queryString +=NutchwaxQuery.encodeExacturl("exacturlexpand:"+siteParameter);
+                } else {
+                   queryString +=NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+siteParameter);
+                       // queryString += "exacturlexpand:http://"+siteParameter;
+                }
+                String aux = request.getParameter("site");
+                bean.LOG.debug("\nQueryString : "+ queryString+"\n*****************************\n");
+                String aux_ ="exacturlexpand:http://"+aux;
+                aux = NutchwaxQuery.encodeExacturl(aux_);*/
+                
+                bean.LOG.debug("\nQueryString exactExpand URL: "+ siteParameter+"\n*****************************\n");
                 queryString += " ";
         }
         if (request.getParameter("format") != null && request.getParameter("format") != "" && !request.getParameter("format").equals("all")) {
@@ -253,8 +263,6 @@
         }
   }
 
-
-
   /*** Switch dates if start GT end ***/
     if(dateStart.getTime().compareTo(dateEnd.getTime())>0){
     Calendar auxCal = dateStart;
@@ -305,22 +313,6 @@
             collection;
       }
   }
-  /* if (urlQueryParam.contains("http://")){ 
-  	aux=urlQueryParam.replace("http://","");
-  	vect_aux= aux.split("/");				         
-  	aux_1=vect_aux[0];
-   	bean.LOG.debug("\n\n Aux: "+"http://"+aux_1.toLowerCase()+"/"+vect_aux[1]+"\n");
-   	urlQueryParam= "http://"+aux_1.toLowerCase()+"/"+vect_aux[1];
-   }
-  
-  if (urlQueryParam.contains("https://")){ 
-   	 aux=urlQueryParam.replace("https://","");
-   	 vect_aux= aux.split("/");				         
-   	aux_1=vect_aux[0];
-   	bean.LOG.debug("\n\n Aux: "+"https://"+aux_1.toLowerCase()+"/"+vect_aux[1]+"\n");
-   	urlQueryParam= "https://"+aux_1.toLowerCase()+"/"+vect_aux[1];
-   }            
-   */
   
   // Prepare the query values to be presented on the page, preserving the session
   String htmlQueryString = "";
@@ -340,17 +332,17 @@
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
-	<title><fmt:message key='search.meta.title'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></title>
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-	<%-- TODO: define META lang --%>
-	<meta http-equiv="Content-Language" content="pt-PT" />
-	<meta name="Keywords" content="<fmt:message key='search.meta.keywords'/>" />
-	<meta name="Description" content="<fmt:message key='search.meta.description'/>" />
-	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
-	<link rel="search" type="application/  opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
-	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
-	<script type="text/javascript">
+  <title><fmt:message key='search.meta.title'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></title>
+  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+  <%-- TODO: define META lang --%>
+  <meta http-equiv="Content-Language" content="pt-PT" />
+  <meta name="Keywords" content="<fmt:message key='search.meta.keywords'/>" />
+  <meta name="Description" content="<fmt:message key='search.meta.description'/>" />
+  <link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
+  <link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
+  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
+  <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
+  <script type="text/javascript">
                 var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
                 var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
         </script>
@@ -358,148 +350,147 @@
         <script type="text/javascript" src="js/jquery-ui-1.7.2.custom.min.js"></script>
         <script type="text/javascript" src="js/ui.datepicker.js"></script>
         <% if (language.equals("pt")) { /* load PT i18n for datepicker */ %>
-          <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
+        <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
         <% } %>
-
         <script type="text/javascript" src="js/configs.js"></script>
-
-
 </head>
 <body>
-	<%@ include file="include/topbar.jsp" %>
+  <%@ include file="include/topbar.jsp" %>
 <%-- TODO: add loading feedback --%>
-	<div class="wrap" id="firstWrap">
-		<div id="main">
-			<div id="header">
-				<%@ include file="include/logo.jsp" %>
-				<div id="search-header">
-						<form id="loginForm" action="search.jsp" name="loginForm" method="get">
-							<input type="hidden" name="l" value="<%= language %>" />
-							<fieldset id="pesquisar">
-								<label for="txtSearch">&nbsp;</label>
-								<input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' " name="query" id="txtSearch" accesskey="t" />
-								<input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
-								<input type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
-								<%
-									StringBuilder advUrl = new StringBuilder();
-									advUrl.append("advanced.jsp?");
+  <div class="wrap" id="firstWrap">
+    <div id="main">
+      <div id="header">
+        <%@ include file="include/logo.jsp" %>
+        <div id="search-header">
+            <form id="loginForm" action="search.jsp" name="loginForm" method="get">
+              <input type="hidden" name="l" value="<%= language %>" />
+              <fieldset id="pesquisar">
+                <label for="txtSearch">&nbsp;</label>
+                <input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' " name="query" id="txtSearch" accesskey="t" />
+                <input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
+                <input type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
+                <%
+                  StringBuilder advUrl = new StringBuilder();
+                  advUrl.append("advanced.jsp?");
 
-									if (htmlQueryString != null && !htmlQueryString.equals("")) {
-										advUrl.append("query=");
-										advUrl.append( URLEncoder.encode(htmlQueryString, "UTF-8") );
-									}
+                  if (htmlQueryString != null && !htmlQueryString.equals("")) {
+                    advUrl.append("query=");
+                    advUrl.append( URLEncoder.encode(htmlQueryString, "UTF-8") );
+                  }
 
-									advUrl.append("&dateStart=");
-									advUrl.append(dateStartString);
-									advUrl.append("&dateEnd=");
-									advUrl.append(dateEndString);
+                  advUrl.append("&dateStart=");
+                  advUrl.append(dateStartString);
+                  advUrl.append("&dateEnd=");
+                  advUrl.append(dateEndString);
 
-									advUrl.append("&hitsPerPage=");
-									advUrl.append(hitsPerPage);
+                  advUrl.append("&hitsPerPage=");
+                  advUrl.append(hitsPerPage);
 
-									advUrl.append("&l=");
-									advUrl.append(language);
+                  advUrl.append("&l=");
+                  advUrl.append(language);
 
-									if (sort != null) {
-										advUrl.append("&sort=");
-										advUrl.append(sort);
-										if (reverse) {
-											advUrl.append("&reverse=");
-											advUrl.append(reverse);
-										}
-									}
-								%>
-								<a href="<%=advUrl.toString()%>" title="<fmt:message key='search.advanced'/>" id="pesquisa-avancada"><fmt:message key='search.advanced'/></a>
-							</fieldset>
-							<fieldset id="search-date">
-								<div id="search-label-data">
-									<label id="search-dateStart_top" for="dateStart_top"><fmt:message key='search.query-form.from'/></label>
-									<div class="search-withTip">
-										<input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" />
-									</div>
-									<label id="search-labelDateEnd" for="dateEnd_top"><fmt:message key='search.query-form.to'/></label>
-									<div class="withTip">
-										<input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
-									</div>
-								</div>
-							</fieldset>
-						</form>
-				</div>
-			</div>
+                  if (sort != null) {
+                    advUrl.append("&sort=");
+                    advUrl.append(sort);
+                    if (reverse) {
+                      advUrl.append("&reverse=");
+                      advUrl.append(reverse);
+                    }
+                  }
+                %>
+                <a href="<%=advUrl.toString()%>" title="<fmt:message key='search.advanced'/>" id="pesquisa-avancada"><fmt:message key='search.advanced'/></a>
+              </fieldset>
+              <fieldset id="search-date">
+                <div id="search-label-data">
+                  <label id="search-dateStart_top" for="dateStart_top"><fmt:message key='search.query-form.from'/></label>
+                  <div class="search-withTip">
+                    <input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" />
+                  </div>
+                  <label id="search-labelDateEnd" for="dateEnd_top"><fmt:message key='search.query-form.to'/></label>
+                  <div class="withTip">
+                    <input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+        </div>
+      </div>
 <%-- END OF HEADER --%>
-	
-				<%----------------------------------------------------------
-				// Check to see which of the 3 mode is presented:
-				// (1) result list
-				// (2) wayback document's grid
-				// (3) result list with tip
-				----------------------------------------------------------%>
-				<%
-				Matcher urlMatch = null;
-				String urlQuery = null;
-				boolean showList = false;
-				String showTip = null;                  // tip to show
-				String allVersions = null;
-				int end = -1;
-				Hits hits = null;
-				int hitsLength = 0;
-				long hitsTotal = 0;
-				boolean hitsTotalIsExact = false;
-				Query query = null;
+  
+        <%----------------------------------------------------------
+        // Check to see which of the 3 mode is presented:
+        // (1) result list
+        // (2) wayback document's grid
+        // (3) result list with tip
+        ----------------------------------------------------------%>
+        <%
+        Matcher urlMatch = null;
+        String urlQuery = null;
+        boolean showList = false;
+        String showTip = null;                  // tip to show
+        String allVersions = null;
+        int end = -1;
+        Hits hits = null;
+        int hitsLength = 0;
+        long hitsTotal = 0;
+        boolean hitsTotalIsExact = false;
+        Query query = null;
+        String queryExactExpand=null;
+        String collectionsHost = nutchConf.get("wax.host", "examples.com");
+        pageContext.setAttribute("collectionsHost", collectionsHost);
 
-				String collectionsHost = nutchConf.get("wax.host", "examples.com");
-				pageContext.setAttribute("collectionsHost", collectionsHost);
-
-        String hostArquivo = nutchConf.get("wax.webhost", "arquivo.pt");
+              String hostArquivo = nutchConf.get("wax.webhost", "arquivo.pt");
 
 
-				if ( request.getAttribute("query") != null && !request.getAttribute("query").toString().equals("") ) {
+        if ( request.getAttribute("query") != null && !request.getAttribute("query").toString().equals("") ) {
 
-				        if ( (urlMatch = URL_PATTERN.matcher( request.getAttribute("query").toString() )).matches() ) {
-				                urlQuery = urlMatch.group(1);
-				                String urlQueryParam = urlQuery;
-				                int urlLength = urlQuery.length();
-					
-			        	        if (!urlQuery.startsWith("http://") && !urlQuery.startsWith("https://") ) {
-				                        urlQueryParam = "http://" + urlQueryParam;
-			                	}
-			        	        /*
-			        	        hostname is not case sensitive, thereby it has to be written with lower case
-			        	        the bellow provide a solution to this problem
-			        	        arquivo.PT will be equal to arquivo.pt
-			        	        Converts hostname to small letters
-			        	        */
-			        	        URL url_queryString=new URL(urlQueryParam);
-			        	        String path=url_queryString.getPath();
-			        	        String hostname=url_queryString.getHost().toLowerCase();
-			        	        String protocol=url_queryString.getProtocol();
-			        	        urlQueryParam= protocol+"://"+hostname+path;
-			        	        
-			        			queryString=urlQueryParam;
-			        			
-								pageContext.setAttribute("urlQueryParam", urlQueryParam);
+                if ( (urlMatch = URL_PATTERN.matcher( request.getAttribute("query").toString() )).matches() ) {
+                        urlQuery = urlMatch.group(1);
+                        String urlQueryParam = urlQuery;
+                        int urlLength = urlQuery.length();
+          
+                        if (!urlQuery.startsWith("http://") && !urlQuery.startsWith("https://") ) {
+                                urlQueryParam = "http://" + urlQueryParam;
+                        }
+                pageContext.setAttribute("urlQueryParam", urlQueryParam);
 
-				                allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
-				                if (!language.equals("pt")) {
-				                        allVersions += "&l="+ language;
-				                }
+                        allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
+                        if (!language.equals("pt")) {
+                                allVersions += "&l="+ language;
+                        }
 
-						if ( request.getParameter("query") != null && urlLength == request.getParameter("query").trim().length() ) {
-				                        // option: (2)
-				                        showList = false;
-				                        usedWayback = true;
-				                        
-				      
-				        
-							pageContext.setAttribute("dateStartWayback", FORMAT.format( dateStart.getTime() ) );
+            if ( request.getParameter("query") != null && urlLength == request.getParameter("query").trim().length() ) {
+                                // option: (2)
+                                showList = false;
+                                usedWayback = true;
+                                
+                                /*
+                            hostname is not case sensitive, thereby it has to be written with lower case
+                            the bellow provide a solution to this problem
+                            arquivo.PT will be equal to arquivo.pt
+                            Converts hostname to small letters
+                            */
+                            URL url_queryString=new URL(urlQueryParam);
+                            String path=url_queryString.getPath();
+                            String hostname=url_queryString.getHost().toLowerCase();
+                            String protocol=url_queryString.getProtocol();
+                            urlQueryParam= protocol+"://"+hostname+path;
+                            
+                          /*************************************/
+                            queryString=urlQueryParam;
+                        
+                            /*************************************************/
+                    pageContext.setAttribute("urlQueryParam", urlQueryParam);
+                    allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
+              pageContext.setAttribute("dateStartWayback", FORMAT.format( dateStart.getTime() ) );
                         pageContext.setAttribute("dateEndWayback", FORMAT.format( dateEnd.getTime() ) );
 
                         long startQueryTime = System.currentTimeMillis();               // for logging
 %>
 
-			</div> <%-- closes #main --%>
-			</div> <%-- closes .wrap --%>
-			
+      </div> <%-- closes #main --%>
+      </div> <%-- closes .wrap --%>
+      
                         <%-- #search_stats & #result_list for this case are generated by WB --%>
                         <%
                                 boolean seeHistory = false;             // This variable is used to indicate that link to see the history was clicked
@@ -667,26 +658,6 @@ function createMatrix(versionsArray, versionsURL){
   $('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
 }
 
-function createErrorPage(){
-  $('<div id="conteudo-resultado">'+
-           '  <div id="first-column">&nbsp;</div>'+
-           '  <div id="second-column">'+
-           '    <div id="search_stats"></div>'+
-           '    <div id="conteudo-pesquisa-erro">'+
-                '<h2>'+Content.noResultsFound+' </h2> <h3><%=urlQuery%></h3>'+
-                '<div id="sugerimos-que">'+
-                    '<p>'+Content.suggestions+'</p>'+
-                  '<ul>'+
-                    '<li>'+Content.checkSpelling+'</li>'+
-                    '<li><a style="padding-left: 0px;" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
-                    '<li>'+Content.internetArchive+'<a href="http://wayback.archive.org/web/*/<%=urlQuery%>">Internet Archive</a>.</li>'+
-                    '<li><a href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>" style="padding-left: 0px;">'+Content.mementoFind+'</a>.</li>'+                    
-                  '</ul>'+
-                '</div>'+
-                '</div>'+
-              '</div>'+
-           '</div>').insertAfter("#firstWrap"); 
-}
 
 function createResultsPage(numberOfVersions, inputURL){
     
@@ -712,6 +683,26 @@ function createResultsPage(numberOfVersions, inputURL){
              '  </div>'+
              '</div>'        ).insertAfter("#firstWrap");
      
+}
+function createErrorPage(){
+  $('<div id="conteudo-resultado">'+
+           '  <div id="first-column">&nbsp;</div>'+
+           '  <div id="second-column">'+
+           '    <div id="search_stats"></div>'+
+           '    <div id="conteudo-pesquisa-erro">'+
+                '<h2>'+Content.noResultsFound+' </h2> <h3><%=urlQuery%></h3>'+
+                '<div id="sugerimos-que">'+
+                    '<p>'+Content.suggestions+'</p>'+
+                  '<ul>'+
+                    '<li>'+Content.checkSpelling+'</li>'+
+                    '<li><a style="padding-left: 0px;" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
+                    '<li>'+Content.internetArchive+'<a href="http://wayback.archive.org/web/*/<%=urlQuery%>">Internet Archive</a>.</li>'+
+                    '<li><a href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>" style="padding-left: 0px;">'+Content.mementoFind+'</a>.</li>'+                    
+                  '</ul>'+
+                '</div>'+
+                '</div>'+
+              '</div>'+
+           '</div>').insertAfter("#firstWrap"); 
 }
 
 
@@ -772,47 +763,62 @@ function createResultsPage(numberOfVersions, inputURL){
       }
 </script> 
 
+
+
+
                         <c:if test="${not empty exception}">
-				<% bean.LOG.error("Error while accessing to wayback: "+ pageContext.getAttribute("exception")); %>
-             
-				<div id="conteudo-resultado"> <%-- START OF: conteudo-resultado --%>
-				<div id="first-column">
-				        &nbsp;
-				</div>
-				<div id="second-column">
-					<div id="search_stats"></div>
+        <% bean.LOG.error("Error while accessing to wayback: "+ pageContext.getAttribute("exception")); %>
+        <div id="conteudo-resultado"> <%-- START OF: conteudo-resultado --%>
+        <div id="first-column">
+                &nbsp;
+        </div>
+        <div id="second-column">
+          <div id="search_stats"></div>
                         </c:if>
 
                         <% queryTime = (int) (System.currentTimeMillis() - startQueryTime); //for logging %>
-				
+        
 
 
 
 <%
 
-						} else {
-							// option: (3)
-				                        showList = true;
-				                        showTip = urlMatch.group(1);
-				                        query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
-				                        bean.LOG.debug("query: " + query.toString());
-						}
-					} else {
-						// option: (1)
-				                query = NutchwaxQuery.parse(queryString, nutchConf);            //create the query object
-				                bean.LOG.debug("query: " + query.toString());
-						
-						showList = true;
-					}
-				}
-				%>
-					
-			
+            } else {
+              // option: (3)
+                                showList = true;                    
+                                showTip = urlMatch.group(1);
+                                if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
+                                  queryString_splitted = queryString.split(" ");
+                                  String queryString_expanded="";
+                                  for (int i =0; i<queryString_splitted.length;i++){
+                                   if (queryString_splitted[i].contains("site:")){
+                                    queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i].replace("site:", ""));
+                                   }
+                                  queryString_expanded+=" "+queryString_splitted[i];
+                                  }
+                          
+                                        query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
+                                }
+                                else
+                                  query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
+                                bean.LOG.debug("query: " + query.toString());
+            }
+          } else {
+            // option: (1)
+                        query = NutchwaxQuery.parse(queryString, nutchConf);            //create the query object
+                        bean.LOG.debug("query: " + query.toString());
+            
+            showList = true;
+          }
+        }
+        %>
+          
+      
 <% if (showList) { %>
 
 <div id="conteudo-resultado"> <%-- START OF: conteudo-resultado --%>
 <div id="first-column">
-	&nbsp;
+  &nbsp;
 </div>
 <div id="second-column">
 <h1><fmt:message key='search.query'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></h1>
@@ -821,7 +827,7 @@ function createResultsPage(numberOfVersions, inputURL){
 
 <% } %> <%-- END OF: showList --%>
 
-	<% 
+  <% 
         if (hitsLength >= end || hitsLength > start) {
                 long pagesAvailable = (long) (hitsTotal / hitsPerPage) ;
                         if ((hitsTotal % hitsPerPage) != 0) {
@@ -862,31 +868,31 @@ function createResultsPage(numberOfVersions, inputURL){
 %>
         <div id="search_stats"></div>
         <div id="no_results">
-		<c:redirect url='index.jsp'>
-			<c:param name='l' value='${language}'/>
-		</c:redirect>
-	</div>
+    <c:redirect url='index.jsp'>
+      <c:param name='l' value='${language}'/>
+    </c:redirect>
+  </div>
         <% } else { %>
-	<div id="conteudo-pesquisa-erro">
-		<h2><fmt:message key='search.no-results.title'/></h2>
-		<h3><%=htmlQueryString%></h3>
+  <div id="conteudo-pesquisa-erro">
+    <h2><fmt:message key='search.no-results.title'/></h2>
+    <h3><%=htmlQueryString%></h3>
 
-		<div id="sugerimos-que">
-				<p><fmt:message key='search.no-results.suggestions'/></p>
-			<ul>
-				<li><fmt:message key='search.no-results.suggestions.well-written'/></li>
-				<li><fmt:message key='search.no-results.suggestions.time-interval'/></li>
-				<li><fmt:message key='search.no-results.suggestions.keywords'/></li>
-				<li><fmt:message key='search.no-results.suggestions.generic-words'/></li>
-				<%-- Show specific suggestions for URL queries --%>
-				<% if ( usedWayback) { %>
-				<li><fmt:message key='search.no-results.suggestions.internet-archive'><fmt:param value='<%=urlQuery%>'/></fmt:message></li>
-				<li><fmt:message key='search.no-results.suggestions.suggest'><fmt:param value='<%=urlQuery%>'/></fmt:message></li>
-				<% } %>
-			</ul>
-		</div>
-		<div class="voltar-erro"><a href="<%= request.getHeader("Referer")%>">&larr; <fmt:message key='search.no-results.go-back'/></a></div>
-	</div>
+    <div id="sugerimos-que">
+        <p><fmt:message key='search.no-results.suggestions'/></p>
+      <ul>
+        <li><fmt:message key='search.no-results.suggestions.well-written'/></li>
+        <li><fmt:message key='search.no-results.suggestions.time-interval'/></li>
+        <li><fmt:message key='search.no-results.suggestions.keywords'/></li>
+        <li><fmt:message key='search.no-results.suggestions.generic-words'/></li>
+        <%-- Show specific suggestions for URL queries --%>
+        <% if ( usedWayback) { %>
+        <li><fmt:message key='search.no-results.suggestions.internet-archive'><fmt:param value='<%=urlQuery%>'/></fmt:message></li>
+        <li><fmt:message key='search.no-results.suggestions.suggest'><fmt:param value='<%=urlQuery%>'/></fmt:message></li>
+        <% } %>
+      </ul>
+    </div>
+    <div class="voltar-erro"><a href="<%= request.getHeader("Referer")%>">&larr; <fmt:message key='search.no-results.go-back'/></a></div>
+  </div>
 
 <%
         }
@@ -906,8 +912,8 @@ function createResultsPage(numberOfVersions, inputURL){
       "&sort=" + sort +
       "&reverse=" + reverse;
     }
-	
-	String noDupQuery = request.getContextPath() + "/search.jsp?" +
+  
+  String noDupQuery = request.getContextPath() + "/search.jsp?" +
       "query=" + htmlQueryString +
       "&dateStart="+ dateStartString +
       "&dateEnd="+ dateEndString +
@@ -923,9 +929,9 @@ function createResultsPage(numberOfVersions, inputURL){
       }
 
          %>
-	<div class="omitted-results">
-		<fmt:message key="search.results.omitted"><fmt:param value="<%=noDupQuery%>"/></fmt:message>.
-	</div>
+  <div class="omitted-results">
+    <fmt:message key="search.results.omitted"><fmt:param value="<%=noDupQuery%>"/></fmt:message>.
+  </div>
 <% } %>
 
 
@@ -952,7 +958,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "&reverse=" + reverse;
     }
 %>
-	<li class="previous"><a href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>"><fmt:message key='search.pager.previous'/></a></li>
+  <li class="previous"><a href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>"><fmt:message key='search.pager.previous'/></a></li>
 <% } %>
 <%
   for (long pageIndex = displayMin; pageIndex <= displayMax; pageIndex++) {
@@ -1012,14 +1018,10 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
 <% } %>
 </div>
 
-			</div>  <!-- FIM #conteudo-resultado  --> 
-		</div>
-	</div>
-
+      </div>  <!-- FIM #conteudo-resultado  --> 
+    </div>
+  </div>
 <%@include file="include/footer.jsp" %>
-
-
-
 <%@include file="include/analytics.jsp" %>
 </body>
 </html>
