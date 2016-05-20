@@ -9,6 +9,22 @@
 	import="java.util.Calendar"
 	import="java.util.Date"
 	import="java.util.GregorianCalendar"
+    import="org.apache.hadoop.conf.Configuration"
+    import="org.apache.lucene.search.PwaFunctionsWritable"
+    import="org.apache.nutch.global.Global"
+    import="org.apache.nutch.html.Entities"
+    import="org.apache.nutch.metadata.Nutch"
+    import="org.apache.nutch.searcher.Hit"
+    import="org.apache.nutch.searcher.HitDetails"
+    import="org.apache.nutch.searcher.Hits"
+    import="org.apache.nutch.searcher.Query"
+    import="org.apache.nutch.searcher.Query.Clause"
+    import="org.apache.nutch.searcher.NutchBean"
+    import="org.apache.nutch.searcher.Summary"
+    import="org.apache.nutch.searcher.Summary.Fragment"
+    import="org.archive.access.nutch.NutchwaxBean"
+    import="org.archive.access.nutch.NutchwaxQuery"
+    import="org.archive.access.nutch.NutchwaxConfiguration"
 %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
@@ -23,6 +39,13 @@
 	private static Calendar dateEnd = new GregorianCalendar();
 %>
 
+<%-- Get the application beans --%>
+<%
+  Configuration nutchConf = NutchwaxConfiguration.getConfiguration(application);
+  NutchBean bean = NutchwaxBean.get(application, nutchConf);
+%>
+
+
 <%---------------------- Start of HTML ---------------------------%>
 
 <%-- TODO: define XML lang --%>
@@ -34,6 +57,12 @@
 	<meta http-equiv="Content-Language" content="pt-PT" />
 	<meta name="Keywords" content="<fmt:message key='home.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='home.meta.description'/>" />
+
+    <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
+    <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
+    <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
+    <meta property="og:image" content="http://<%=arquivoHostName%>/img/logoFace.png"/>
+
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
