@@ -4,3 +4,6 @@
 [submodule "Plone"]
 	path = Plone
 	url = git@github.com:arquivo/Plone
+[submodule "PrototypeReplayBarHTML"]
+	path = PrototypeReplayBarHTML
+	url = git@github.com:arquivo/PrototypeReplayBarHTML
