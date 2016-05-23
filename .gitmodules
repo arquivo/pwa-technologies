@@ -16,3 +16,15 @@
 [submodule "PwaLogsMiner"]
 	path = PwaLogsMiner
 	url = git@github.com:arquivo/PwaLogsMiner
+[submodule "PwaSpellchecker"]
+	path = PwaSpellchecker
+	url = git@github.com:arquivo/PwaSpellchecker
+[submodule "PwaLucene"]
+	path = PwaLucene
+	url = git@github.com:arquivo/PwaLucene.git
+[submodule "PwaArchive-access"]
+	path = PwaArchive-access
+	url = git@github.com:arquivo/PwaArchive-access.git
+[submodule "PwaProcessor"]
+	path = PwaProcessor
+	url = git@github.com:arquivo/PwaProcessor.git
