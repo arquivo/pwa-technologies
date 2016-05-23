@@ -28,3 +28,12 @@
 [submodule "PwaProcessor"]
 	path = PwaProcessor
 	url = git@github.com:arquivo/PwaProcessor.git
+[submodule "pywb-opensearch-cdx"]
+	path = pywb-opensearch-cdx
+	url = git@github.com:arquivo/pywb-opensearch-cdx.git
+[submodule "PrintServer"]
+	path = PrintServer
+	url = git@github.com:arquivo/PrintServer.git
+[submodule "ScreenShotServer"]
+	path = ScreenShotServer
+	url = git@github.com:arquivo/ScreenShotServer.git
