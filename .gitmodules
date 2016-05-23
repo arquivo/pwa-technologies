@@ -7,3 +7,12 @@
 [submodule "PrototypeReplayBarHTML"]
 	path = PrototypeReplayBarHTML
 	url = git@github.com:arquivo/PrototypeReplayBarHTML
+[submodule "scripts"]
+	path = scripts
+	url = git@github.com:arquivo/scripts
+[submodule "TestCollection"]
+	path = TestCollection
+	url = git@github.com:arquivo/TestCollection
+[submodule "PwaLogsMiner"]
+	path = PwaLogsMiner
+	url = git@github.com:arquivo/PwaLogsMiner
