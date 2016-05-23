@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="commons-net-1.2.0-dev1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/src/plugin/protocol-ftp/lib/commons-net-1.2.0-dev.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

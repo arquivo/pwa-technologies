@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="index-more1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/index-more/index-more.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="lucene-analyzers-2.1.01">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/src/plugin/lib-lucene-analyzers/lib/lucene-analyzers-2.1.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

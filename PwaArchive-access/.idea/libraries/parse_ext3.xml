@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="parse-ext3">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/plugins/parse-ext/parse-ext.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

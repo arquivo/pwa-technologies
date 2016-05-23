@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="parse-zip2">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/plugins/parse-zip/parse-zip.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

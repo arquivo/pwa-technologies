@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="wayback-mapreduce-1.2.1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-mapreduce/target/wayback-mapreduce-1.2.1.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

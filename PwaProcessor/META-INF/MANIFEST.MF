@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Built-By: ArquivoWeb
-Class-Path: lib/*.jar
-Build-Jdk: 1.6.0_04
-Main-Class: pt.arquivo.processor.ProcessFile
-
-

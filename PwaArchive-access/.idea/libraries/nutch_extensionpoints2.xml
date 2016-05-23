@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="nutch-extensionpoints2">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/nutch-extensionpoints/nutch-extensionpoints.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

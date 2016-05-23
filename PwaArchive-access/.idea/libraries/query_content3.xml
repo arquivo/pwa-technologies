@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="query-content3">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/query-content/query-content.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

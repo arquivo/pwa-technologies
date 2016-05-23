@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="nutchwax-job-0.11.0-SNAPSHOT">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-job/target/nutchwax-job-0.11.0-SNAPSHOT.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

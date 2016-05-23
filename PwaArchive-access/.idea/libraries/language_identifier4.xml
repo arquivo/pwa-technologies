@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="language-identifier4">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/language-identifier/language-identifier.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

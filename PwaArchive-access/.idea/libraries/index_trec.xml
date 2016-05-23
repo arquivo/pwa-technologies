@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="index-trec">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/index-trec/index-trec.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
