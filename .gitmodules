@@ -1,3 +1,6 @@
 [submodule "functional-tests"]
 	path = functional-tests
 	url = git@github.com:arquivo/functional-tests.git
+[submodule "Plone"]
+	path = Plone
+	url = git@github.com:arquivo/Plone
