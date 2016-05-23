@@ -1,0 +1,3 @@
+[submodule "functional-tests"]
+	path = functional-tests
+	url = git@github.com:arquivo/functional-tests.git
