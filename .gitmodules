@@ -37,3 +37,6 @@
 [submodule "ScreenShotServer"]
 	path = ScreenShotServer
 	url = git@github.com:arquivo/ScreenShotServer.git
+[submodule "Heritrix"]
+	path = Heritrix
+	url = git@github.com:arquivo/Heritrix.git
