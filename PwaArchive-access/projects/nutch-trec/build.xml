@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+
+<project name="nutch-trec" default="jar">
+  <property file="build.properties"/>
+  <property name="root" value="${basedir}"/>
+
+  <!--'nutch.root' is pointer at core nutch. Set in build.properties or
+  hardcode into below.
+  -->
+  <property name="nutch.root" location="${root}/nutch"/>
+  <available file="${nutch.root}" property="nutch.available"/>
+ <!--  -->
+  <property name="nutchwax.classes" location="${root}/../../projects/nutchwax/nutchwax-core/target/classes"/>
+  <property name="mapred.classes" location="${root}/../../projects/mapred/target/classes"/>
+  <property name="query-basic.classes" location="${root}/../../projects/nutchwax/nutchwax-thirdparty/nutch/build/query-basic/classes"/>
+ <!--  -->
+
+  <property name="src.dir" location="${root}/src/java"/>
+  <property name="src.main" location="${src.dir}/org/archive/nutch/trec"/>
+
+  <property name="src.test" location="${root}/src/test"/>
+  <available file="${src.test}" type="dir" property="test.available"/> 
+ 
+  <property name="conf.dir" location="${root}/conf"/>
+
+  <property name="build.dir" location="${root}/build"/>
+  <property name="build.classes" location="${build.dir}/classes"/>
+  <property name="build.test" location="${build.dir}/test"/>
+
+  <property name="javac.deprecation" value="off"/>
+  <property name="javac.debug" value="on"/>
+
+  <property name="javadoc.link"
+    value="http://java.sun.com/j2se/1.5/docs/api/"/>
+
+  <property name="build.encoding" value="ISO-8859-1"/>
+  
+  <!-- Test if various things are available -->
+  <property name="javacc.root" location="${root}/JavaCC"/>
+  <available file="${javacc.root}" type="dir" property="javacc.available"/>
+
+  <!-- the normal classpath -->
+  <path id="classpath">
+    <pathelement location="${build.classes}"/>
+    <pathelement location="${nutch.root}/build/classes"/>
+ <!--  -->
+    <pathelement location="${nutchwax.classes}"/>
+    <pathelement location="${mapred.classes}"/>
+    <pathelement location="${query-basic.classes}"/>
+    <fileset dir="${root}/../../projects/nutchwax/nutchwax-plugins/src/plugin/index-wax/lib/">
+      <include name="archive-commons-1.12.0.jar"/>
+    </fileset>
+    <fileset dir="${root}/../../projects/nutchwax/nutchwax-thirdparty/nutch/build/">
+      <include name="nutch-0.9.jar"/>
+    </fileset>
+ <!--  -->
+    <fileset dir="${nutch.root}/build">
+      <include name="*.jar" />
+    </fileset>
+    <fileset dir="${nutch.root}/lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+
+  <!-- the unit test classpath -->
+  <path id="test.classpath">
+    <pathelement location="${build.test}" />
+    <pathelement location="${conf.dir}"/>
+    <pathelement location="${nutch.root}/conf"/>
+    <pathelement location="${nutch.root}/build"/>
+    <path refid="classpath"/>
+  </path>
+
+  <!-- ====================================================== -->
+  <!-- Stuff needed by all targets                            -->
+  <!-- ====================================================== -->
+  <target name="init">
+      <fail unless="nutch.available">Need a nutch to build against. Set nutch.root in build.properties (Currently it points to ${nutch.root}).</fail>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.classes}"/>
+    <mkdir dir="${build.test}"/>
+  </target>
+
+  <!-- ====================================================== -->
+  <!-- Compile the Java files                                 -->
+  <!-- ====================================================== -->
+  <target name="compile" depends="init"
+        description="Compile all classes">
+    <javac 
+     encoding="${build.encoding}" 
+     srcdir="${src.dir}"
+     includes="**/*.java"
+     destdir="${build.classes}"
+     debug="${javac.debug}"
+     target="1.5"
+     source="1.5"
+     deprecation="${javac.deprecation}">
+      <classpath refid="classpath"/>
+    </javac>    
+  </target>
+  
+  <!-- ===================================================== -->
+  <!-- Use JavaCC to regenerate the parser                   -->
+  <!-- ===================================================== -->
+
+  <target name="javacc" depends="init"
+	      description="Use JavaCC to regenerate the parser">
+      <fail unless="javacc.available">Set javacc.root in build.properties (Currently it points to ${javacc.root}).</fail>
+    <mkdir dir="${build.dir}"/>
+    <delete failonerror="false">
+      <fileset dir="${src.main}">
+        <include name="*.java" />
+        <exclude name="TRECImport.java" />
+	<exclude name="TRECBean.java" />
+      </fileset>
+    </delete>
+    <javacc target="${src.main}/TRECParser.jj"
+     javacchome="${javacc.root}" />
+  </target>   
+ 
+  <!-- ================================================================== -->
+  <!-- Make job jar                                                       -->
+  <!-- ================================================================== -->
+  <!--                                                                    -->
+  <!-- ================================================================== -->
+  <target name="jar" depends="compile"
+        description="Builds job jar of task to do TREC import" >
+    <zip destfile="${build.dir}/${ant.project.name}.jar">
+      <zipfileset prefix="META-INF" file="${conf.dir}/MANIFEST.MF"/>
+      <zipfileset dir="${build.dir}/classes" />
+      <zipfileset dir="${nutch.root}/build/classes" />
+ <!--  -->
+      <zipfileset dir="${nutchwax.classes}" />
+      <zipfileset dir="${mapred.classes}" />
+ <!--  -->
+    </zip>
+    <symlink link="${nutch.root}/build/${ant.project.name}.job" 
+	overwrite="true" resource="${build.dir}/${ant.project.name}.jar"/>
+  </target>
+
+
+  <!-- ================================================================== -->
+  <!-- Compile test code                                                  --> 
+  <!-- ================================================================== -->
+  <target name="compile-test" depends="compile">
+    <javac 
+     encoding="${build.encoding}" 
+     srcdir="${src.test}"
+     includes="**/*.java"
+     destdir="${build.test}"
+     debug="${debug}">
+      <classpath refid="test.classpath"/>
+    </javac>    
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Run unit tests                                                     --> 
+  <!-- ================================================================== -->
+  <target name="test" depends="compile-test" description="Run tests">
+    <junit printsummary="yes" haltonfailure="yes">
+      <classpath refid="test.classpath"/>
+      <test name="org.archive.nutch.trec.TRECParserTest" haltonfailure="yes" />
+    </junit>
+  </target>   
+
+  <!-- ================================================================== -->
+  <!-- Clean.  Delete the build files, and their directories              -->
+  <!-- ================================================================== -->
+  <target name="clean" description="Clean up all built">
+    <delete dir="${build.dir}"/>
+    <delete file="${nutch.root}/build/*.job"/>
+  </target>
+
+</project>

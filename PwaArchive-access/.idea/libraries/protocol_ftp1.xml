@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="protocol-ftp1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/protocol-ftp/protocol-ftp.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

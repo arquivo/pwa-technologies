@@ -1,0 +1,42 @@
+<component name="libraryTable">
+  <library name="lib12">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/access-control-0.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/standard-1.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-collections-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/jericho-html-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/log4j-1.2.14.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-lang-2.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/jets3t-0.5.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/spring-context-2.5.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/archive-overlay-commons-pool-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-codec-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/oro-2.0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/archive-overlay-commons-httpclient-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/junit-3.8.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/poi-scratchpad-2.5.1-final-20040804.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/spring-beans-2.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/itext-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-logging-1.0.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-httpclient-3.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/poi-2.5.1-final-20040804.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/je-3.3.74.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/aopalliance-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-2.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/mg4j-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/jstl-1.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/wayback-core-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/spring-core-2.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/dnsjava-2.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/javaswf-CVS-SNAPSHOT-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-cli-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/libidn-0.6.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/fastutil-5.0.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-net-1.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/commons-io-1.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/wayback/wayback-webapp/target/wayback-1.2.1/WEB-INF/lib/juniversalchardet-1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

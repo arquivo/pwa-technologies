@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<parent>
+  <groupId>org.archive</groupId>
+  <artifactId>nutchwax</artifactId>
+  <version>0.11.0-SNAPSHOT</version>
+</parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.archive.nutchwax</groupId>
+  <artifactId>nutchwax-plugins</artifactId>
+  <!--This project compiles the nutchwax plugins.
+  It does not produce any product.  It has a
+  packaging of type jar so there will be an
+  empty jar, but it is just ignored.   I tried
+  setting the type to pom having downstream
+  modules depend on a pom, but maven doesn't
+  seem to like that.  You cannot depend
+  on a pom; must be jar (or war I suppose).
+  -->
+  <packaging>jar</packaging>
+  <name>NutchWAX Plugins</name>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>antrun.compile</id>
+            <phase>compile</phase>
+            <configuration>
+              <tasks>
+                <!--Call each of our plugins.  Set the inheritRef so we can get
+                at the maven dependencies when we go to compile.
+                -->
+                <echo>Compiling plugins</echo>
+                <ant dir="src/plugin/index-wax" target="deploy" inheritAll="false" 
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                </ant>
+                 <ant dir="src/plugin/query-wax" target="deploy" inheritAll="false"
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/parse-default" target="deploy" inheritAll="false"
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/parse-waxext" target="deploy" inheritAll="false"
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/query-host" target="deploy" inheritAll="false"
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/query-anchor" target="deploy" inheritAll="false"
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/query-title" target="deploy" inheritAll="false"
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/query-content" target="deploy" inheritAll="false"
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>antrun.clean</id>
+            <phase>clean</phase>
+            <configuration>
+              <tasks>
+                <!-- Make these conditional so do not run everytime
+                    Done as part of the generate-sources step so that
+                    we can invoke it from eclipse.
+                -->
+                <echo>Cleaning plugins</echo>
+                <ant dir="src/plugin/index-wax" target="clean" inheritAll="false" 
+                        inheritRefs="true">
+                    <property name="build.compiler" value="extJavac" />
+                </ant>
+                 <ant dir="src/plugin/query-wax" target="clean" inheritAll="false">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/parse-default" target="clean" inheritAll="false">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/parse-waxext" target="clean" inheritAll="false">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/query-host" target="clean" inheritAll="false">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/query-anchor" target="clean" inheritAll="false">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/query-title" target="clean" inheritAll="false">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+                 <ant dir="src/plugin/query-content" target="clean" inheritAll="false">
+                    <property name="build.compiler" value="extJavac" />
+                 </ant>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.archive.nutchwax</groupId>
+      <artifactId>nutchwax-core</artifactId>
+      <scope>
+        compile
+      </scope>
+    </dependency>
+  </dependencies>
+</project>

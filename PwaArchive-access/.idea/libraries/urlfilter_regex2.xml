@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="urlfilter-regex2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/urlfilter-regex/urlfilter-regex.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

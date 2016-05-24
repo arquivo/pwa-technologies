@@ -1,0 +1,199 @@
+34a35
+>   <!ENTITY rfc3629 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3629.xml'>
+52,67d52
+<   <author initials="J." surname="Kunze" 
+<           fullname="John A. Kunze" role="editor"> 
+<    <organization>
+<     California Digital Library 
+<    </organization>
+<    <address>
+<     <postal>
+<      <street>415 20th St, 4th Floor</street>
+<      <city>Oakland</city> <region>CA</region>
+<      <code>94612-3550</code>
+<      <country>US</country>
+<     </postal>
+<     <email>jak@ucop.edu</email>
+<     <facsimile>+1 510-893-5212</facsimile>
+<    </address>
+<   </author>
+83a69,84
+>   <author initials="J." surname="Kunze" 
+>           fullname="John A. Kunze"> 
+>    <organization>
+>     California Digital Library 
+>    </organization>
+>    <address>
+>     <postal>
+>      <street>415 20th St, 4th Floor</street>
+>      <city>Oakland</city> <region>CA</region>
+>      <code>94612-3550</code>
+>      <country>US</country>
+>     </postal>
+>     <email>jak@ucop.edu</email>
+>     <facsimile>+1 510-893-5212</facsimile>
+>    </address>
+>   </author>
+115c116
+<   <date month="March" year="2007" />
+---
+>   <date month="April" year="2007" />
+273c274,275
+< allowing UTF-8, the WARC record header format largely follows the
+---
+> allowing UTF-8 (<xref target="RFC3629" />),
+> the WARC record header format largely follows the
+291,294c293,295
+<   header       = version CRLF 
+<                  warc-fields
+<   version      = "WARC/0.16" CRLF
+<   warc-fields  = *named-field CRLF
+---
+>   header       = version warc-fields
+>   version      = "WARC/0.16" CRLF 
+>   warc-fields  = *(named-field CRLF)
+299c300
+< <t>The record <spanx style="emph">version-line</spanx> 
+---
+> <t>The record <spanx style="emph">version</spanx> 
+317c318
+<   named-field     = field-name ":" [ field-body ]
+---
+>   named-field     = field-name ":" [ field-value ]
+324c325,326
+<   token           = 1*&lt;any CHAR except CTLs or separators>
+---
+>   token           = 1*&lt;any US-ASCII character
+>                     except CTLs or separators>
+331a334,336
+>   DIGIT           = &lt;any US-ASCII digit "0".."9">
+>   CTL             = &lt;any US-ASCII control character
+>                     (octets 0 - 31) and DEL (127)>
+337,338c342,343
+<   LWS             = [CRLF] 1*( SP | HT )            ; semantics same as 
+<                                                     ; single SP
+---
+>   LWS             = [CRLF] 1*( SP | HT )         ; semantics same as 
+>                                                  ; single SP
+383c388
+< are further described at 
+---
+> are further described in 
+385c390
+< meaning and legal value format are described at 
+---
+> meaning and legal value format are described in 
+393c398,399
+< <t>Some record types also define a <spanx style="emph">payload</spanx>, 
+---
+> <t>Some record types (and possibly future record types) also define a
+> <spanx style="emph">payload</spanx>, 
+399c405
+< has the MIME content-type "application/warc", registered below at 
+---
+> has the MIME content-type "application/warc", registered below in 
+404c410
+< content-type "application/warc-fields", registered below at 
+---
+> content-type "application/warc-fields", registered below in 
+458,461c464,467
+< <t>A UTC timestamp formatted according to the W3C profile of ISO8601, 
+< YYYY-MM-DDThh:mm:ssZ, described at <xref target="W3CDTF"/>. The
+< timestamp MUST represent the instant that data collection for record
+< creation began. Multiple records written as part of a single collection 
+---
+> <t>A 14-digit UTC timestamp formatted according to YYYY-MM-DDThh:mm:ssZ,
+> described in the W3C profile of ISO8601, <xref target="W3CDTF"/>. The
+> timestamp MUST represent the instant that data capture for record
+> creation began. Multiple records written as part of a single capture 
+480c486
+< Types are further described at <xref target="warc_record_types" format="title" />.
+---
+> Types are further described in <xref target="warc_record_types" format="title" />.
+537,538c543,547
+< <t>The WARC-Record-IDs of any records created as part of the same operation as
+< the current record.</t>
+---
+> <t>The WARC-Record-IDs of any records created as part of the same capture
+> event as the current record.  A capture event comprises the information
+> automatically gathered by a retrieval against a single target-URI;
+> for example, it might be represented by a 'response' or 'revisit'
+> record plus its associated 'request' record. </t>
+542c551
+<   WARC-Concurrent-To = "WARC-Concurrent-To" ":" 1#uri
+---
+>   WARC-Concurrent-To = "WARC-Concurrent-To" ":" 1*uri
+548,550c557,560
+< one another when they arise from a single collection action. (When so used, 
+< any WARC-Concurrent-To association MUST be considered bidirectional even if 
+< the  header only appears on one record.)</t>
+---
+> one another when they arise from a single capture action. (When so used, 
+> any WARC-Concurrent-To association MUST be considered bidirectional even
+> if the  header only appears on one record.) The WARC Concurrent-to field
+> MUST NOT be used in 'warcinfo', 'conversion', and 'continuation' records.</t>
+618c628
+< hostname in the record's subject-uri.</t>
+---
+> hostname in the record's target-URI.</t>
+649c659,662
+< content. The WARC-Refers-To field is undefined on other record types.</t>
+---
+> content.  The WARC Concurrent-to field MUST NOT be used in 'warcinfo',
+> 'response', 'resource', 'request', 'conversion', and 'continuation'
+> records.</t>
+> 
+654c667
+< <t>The original URI whose collection gave rise to the information content
+---
+> <t>The original URI whose capture gave rise to the information content
+656,657c669,671
+< was the target of a crawler's retrieval request. Indirectly, such as
+< for a 'revisit', 'metadata', or 'conversion' record, it is a copy of
+---
+> was the target of a crawler's retrieval request.  For a 'revisit' record,
+> it is the URI that was the target of a retrieval request.  Indirectly,
+> such as for a 'metadata' or 'conversion' record, it is a copy of
+669,670c683,684
+< <t>All 'response', 'resource', 'request', 'revisit', and 
+< 'conversion' records MUST have a WARC-Target-URI field. A 'metadata'
+---
+> <t>All 'response', 'resource', 'request', 'revisit', 'conversion', and
+> 'continuation' records MUST have a WARC-Target-URI field. A 'metadata'
+698c712
+< <t>For example, if the collection of 
+---
+> <t>For example, if the capture of 
+775c789,792
+< an independent check.</t>
+---
+> an independent check.  This string MUST NOT be arrived at by blindly
+> promoting an HTTP Content-Type value up from a record block into the
+> WARC header without direct analysis of the payload, as such values
+> have proven to be highly unreliable. </t>
+820,821c837
+<   WARC-Segment-Origin-ID = "WARC-Segment-Origin-ID" ":" 
+<                            &lt;'msg-id' per RFC2045/RFC2822>
+---
+>   WARC-Segment-Origin-ID = "WARC-Segment-Origin-ID" ":" uri
+871c887,888
+< Allowable fields include all <xref target="DCMI" format="title"/> plus
+---
+> Allowable fields include, but are not limited to,
+> all <xref target="DCMI" format="title"/> plus
+1092c1109,1110
+< Allowable fields include all <xref target="DCMI" format="title"/> plus
+---
+> Allowable fields include, but are not limited to,
+> all <xref target="DCMI" format="title"/> plus
+1102c1120
+<  each hop foo a starting 'seed' URI to the current URI. 
+---
+>  each hop from a starting 'seed' URI to the current URI. 
+1112c1130
+< same collection event using the WARC-Concurrent-To header. A 'metadata' 
+---
+> same capture event using the WARC-Concurrent-To header. A 'metadata' 
+1841a1860,1861
+>     &rfc3629; <!-- UTF-8 -->
+> 

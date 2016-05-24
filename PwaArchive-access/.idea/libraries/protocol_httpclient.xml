@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="protocol-httpclient">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/plugins/protocol-httpclient/protocol-httpclient.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

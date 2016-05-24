@@ -1,0 +1,432 @@
+<?xml version="1.0"?>
+<!--
+    POM reference: http://maven.apache.org/pom.html
+
+    List of the better articles on maven:
+
+    http://www.javaworld.com/javaworld/jw-05-2006/jw-0529-maven.html
+    http://www.javaworld.com/javaworld/jw-02-2006/jw-0227-maven_p.html
+
+    URLs on converting from 1.0 to 2.0 maven (not much good generally):
+
+    http://wiki.osafoundation.org/bin/view/Journal/Maven2Upgrade
+    http://maven.apache.org/guides/mini/guide-m1-m2.html
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.archive</groupId>
+    <artifactId>nutchwax</artifactId>
+    <version>0.11.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>NutchWAX</name>
+    <description>NutchWAX is "Nutch with Web Archive eXtensions".
+        Nutch + NutchWAX can be used search Web Archive Collections
+        (WACs).  Extensions include adaptation of the Nutch fetcher step to go
+        against web archives rather than open net. Index-time and
+        query-time plugins
+        add to the index and allow querying of a records' WAC
+        location info., collection name, etc.  This project is sponsored by the
+        International Internet Preservation Consortium.
+    </description>
+    <url>http://archive-access.sourceforge.net/projects/nutchwax/</url>
+    <inceptionYear>2005</inceptionYear>
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <organization>
+        <name>Internet Archive</name>
+        <url>http://www.archive.org/</url>
+    </organization>
+    <issueManagement>
+        <system>SourceForge</system>
+        <url>http://sourceforge.net/tracker/?group_id=118427</url>
+    </issueManagement>
+    <ciManagement>
+        <system>continuum</system>
+        <url>http://builds.archive.org:8081/continuum/</url>
+    </ciManagement>
+    <mailingLists>
+        <mailingList>
+            <name>Archive Access ARC Tools Discussion List</name>
+            <subscribe>
+                http://lists.sourceforge.net/lists/listinfo/archive-access-discuss
+            </subscribe>
+            <unsubscribe>
+                http://lists.sourceforge.net/lists/listinfo/archive-access-discuss
+            </unsubscribe>
+            <post>archive-access-discuss</post>
+            <archive>
+                http://sourceforge.net/mailarchive/forum.php?forum_id=45842
+            </archive>
+        </mailingList>
+        <mailingList>
+            <name>Archive Access ARC Tools Commits</name>
+            <subscribe>
+                https://lists.sourceforge.net/lists/listinfo/archive-access-cvs
+            </subscribe>
+            <unsubscribe>
+                https://lists.sourceforge.net/lists/listinfo/archive-access-cvs
+            </unsubscribe>
+            <post>archive-access-cvs</post>
+            <archive>
+                http://sourceforge.net/mailarchive/forum.php?forum=archive-access-cvs
+            </archive>
+        </mailingList>
+    </mailingLists>
+    <scm>
+        <connection>scm:svn:https://archive-access.svn.sourceforge.net/svnroot/archive-access/trunk/archive-access/projects/nutchwax/</connection>
+        <tag>HEAD</tag>
+        <url>https://archive-access.svn.sourceforge.net/svnroot/archive-access/trunk/archive-access/projects/nutchwax/</url>
+    </scm>
+    <prerequisites>
+        <maven>2.0.5</maven>
+    </prerequisites>
+
+    <developers>
+        <developer>
+            <name>Sverre Bang</name>
+            <id>sverreb</id>
+            <email>sverre dot bang at nb dot no</email>
+            <organization>Nasjonalbiblioteket</organization>
+            <url>http://www.nb.no</url>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <name>Doug Cutting</name>
+            <id>cutting</id>
+            <email>doug at nutch dot org</email>
+            <organization />
+            <url>http://nutch.org</url>
+            <timezone>-8</timezone>
+        </developer>
+        <developer>
+            <name>Gordon Mohr</name>
+            <id>gojomo</id>
+            <email>gojomo at archive dot org</email>
+            <organization>Internet Archive</organization>
+            <url>http://www.archive.org</url>
+            <timezone>-8</timezone>
+        </developer>
+        <developer>
+            <name>Michele Kimpton</name>
+            <id>michele</id>
+            <email>michele at archive dot org</email>
+            <organization>Internet Archive</organization>
+            <url>http://www.archive.org</url>
+            <timezone>-8</timezone>
+        </developer>
+        <developer>
+            <name>Igor Ranitovic</name>
+            <id>ia_igor</id>
+            <email>igor at archive dot org</email>
+            <organization>Internet Archive</organization>
+            <url>http://www.archive.org</url>
+            <timezone>-8</timezone>
+        </developer>
+        <developer>
+            <name>Michael Stack</name>
+            <id>stack-sf</id>
+            <email>stack at archive dot org</email>
+            <organization>Internet Archive</organization>
+            <url>http://www.archive.org</url>
+            <timezone>-8</timezone>
+        </developer>
+        <developer>
+            <name>John H. Lee</name>
+            <id>jlee-archive</id>
+            <email>jlee at archive dot org</email>
+            <organization>Internet Archive</organization>
+            <url>http://www.archive.org</url>
+            <timezone>-8</timezone>
+        </developer>
+    </developers>
+    <contributors />
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+<!--Needed because we have test code under src/java.
+      <scope>test</scope>
+      -->
+    </dependency>
+    <dependency>
+        <groupId>org.archive.wayback</groupId>
+        <artifactId>wayback-core</artifactId>
+        <version>1.2.1</version>
+    </dependency>
+    <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.0.4</version>
+    </dependency>
+    <dependency>
+        <groupId>commons-httpclient</groupId>
+        <artifactId>commons-httpclient</artifactId>
+        <version>3.0.1</version>
+    </dependency>
+    <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>1.0-beta-2</version>
+        <scope>compile</scope>
+    </dependency>
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.4</version>
+    </dependency>
+<!--
+    <dependency>
+      <groupId>org.archive</groupId>
+      <artifactId>archive-commons</artifactId>
+      <version>1.12.0</version>
+      <scope>system</scope>
+      <systemPath>${project.parent.basedir}/nutchwax-plugins/src/plugin/index-wax/lib/archive-commons-1.12.0.jar</systemPath>
+    </dependency>
+-->
+    <dependency>
+        <groupId>org.archive</groupId>
+        <artifactId>archive-mapred</artifactId>
+        <version>0.2.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-maven-plugin</artifactId>
+            <version>2.0.6</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>generate-html</goal>
+                    </goals>
+                    <phase>site</phase>
+                </execution>
+            </executions>
+            <dependencies>
+                <dependency>
+                    <groupId>org.docbook</groupId>
+                    <artifactId>docbook-xml</artifactId>
+                    <version>4.4</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+            <configuration>
+                <includes>**/*.xml</includes>
+                <sourceDirectory> ${basedir}/src/articles </sourceDirectory>
+                <targetDirectory> ${project.reporting.outputDirectory}/articles </targetDirectory>
+                <generateIdAttributes>1</generateIdAttributes>
+                <sectionAutolabel>1</sectionAutolabel>
+                <partAutolabel>1</partAutolabel>
+                <chapterAutolabel>1</chapterAutolabel>
+                <generateMetaAbstract>1</generateMetaAbstract>
+                <htmlStylesheet>docbook.css</htmlStylesheet>
+                <cssDecoration>1</cssDecoration>
+                <postProcess>
+                    <copy file="src/articles/docbook.css" overwrite="true" todir="${project.reporting.outputDirectory}/articles"/>
+                </postProcess>
+            </configuration>
+        </plugin>
+        <plugin>
+            <artifactId>maven-site-plugin</artifactId>
+            <configuration>
+                <xdocDirectory>
+                    ${basedir}/xdocs
+                </xdocDirectory>
+            </configuration>
+        </plugin>
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+                <descriptors>
+                    <descriptor>src/main/assembly/distribution.xml</descriptor>
+                </descriptors>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+
+<reporting>
+    <outputDirectory>target/site</outputDirectory>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <reportSets>
+                <reportSet>
+                    <reports>
+                        <report>dependencies</report>
+                        <report>project-team</report>
+                        <report>mailing-list</report>
+                        <report>cim</report>
+                        <report>issue-tracking</report>
+                        <report>license</report>
+                        <report>scm</report>
+                    </reports>
+                </reportSet>
+            </reportSets>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+                <source>
+                    ${basedir}/nutchwax-core/src/main/java
+                </source>
+                <overview>
+                    ${basedir}/nutchwax-core/src/main/java/overview.html
+                </overview>
+                <aggregate>
+                    true
+                </aggregate>
+            </configuration>
+        </plugin>
+    </plugins>
+</reporting>
+
+<repositories>
+    <repository>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+        </snapshots>
+        <id>internetarchive</id>
+        <name>Internet Archive Maven Repository</name>
+        <url>http://builds.archive.org/maven2</url>
+        <layout>default</layout>
+    </repository>
+    <repository>
+        <id>lib</id>
+        <name>lib</name>
+        <releases>
+            <enabled>true</enabled>
+            <checksumPolicy>ignore</checksumPolicy>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <url>file://${project.basedir}/../../../lib</url>
+    </repository>
+</repositories>
+
+<!--Needed for docbkx plugin and dependencies.
+    -->
+  <pluginRepositories>
+      <pluginRepository>
+          <id>agilejava-repository</id>
+          <name>Agilejava Repository</name>
+          <url>http://central.maven.org/maven2</url>
+          <layout>default</layout>
+          <releases>
+              <enabled>true</enabled>
+              <updatePolicy>daily</updatePolicy>
+              <checksumPolicy>warn</checksumPolicy>
+          </releases>
+          <!--
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+      -->
+    </pluginRepository>
+</pluginRepositories>
+
+<distributionManagement>
+    <repository>
+        <id>repository</id>
+        <name>Repository</name>
+        <!--Pass as command-line system property to maven-->
+        <url>${repository.url}</url>
+    </repository>
+    <site>
+        <id>website</id>
+        <name>Website</name>
+        <!--Pass as command-line system property to maven-->
+        <url>${website.url}/projects/${artifactId}</url>
+    </site>
+</distributionManagement>
+<!--Dependeny management is not same as dependencies (ugh)-->
+  <dependencyManagement>
+      <dependencies>
+          <dependency>
+              <groupId>org.archive.nutchwax</groupId>
+              <artifactId>nutchwax-thirdparty</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>org.archive.nutchwax</groupId>
+              <artifactId>nutchwax-core</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>org.archive.nutchwax</groupId>
+              <artifactId>nutchwax-job</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>org.archive.nutchwax</groupId>
+              <artifactId>nutchwax-webapp</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>org.archive.nutchwax</groupId>
+              <artifactId>nutchwax-plugins</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+      </dependencies>
+  </dependencyManagement>
+  <modules>
+      <module>
+          nutchwax-thirdparty
+      </module>
+      <module>
+          nutchwax-core 
+      </module>
+      <module>
+          nutchwax-plugins 
+      </module>
+      <module>
+          nutchwax-job 
+      </module>
+      <module>
+          nutchwax-webapp 
+      </module>
+  </modules>
+  <profiles>
+      <profile>
+          <id>graph</id>
+          <pluginRepositories>
+              <pluginRepository>
+                  <id>mvnplugins.fusesource.org</id>
+                  <url>http://mvnplugins.fusesource.org/repo/release</url>
+                  <releases>
+                      <enabled>true</enabled>
+                  </releases>
+              </pluginRepository>
+          </pluginRepositories>
+          <build>
+              <plugins>
+                  <plugin>
+                      <groupId>org.fusesource.mvnplugins</groupId>
+                      <artifactId>maven-graph-plugin</artifactId>
+                      <version>1.4</version>
+                  </plugin>
+              </plugins>
+          </build>
+      </profile>    
+  </profiles>
+</project>

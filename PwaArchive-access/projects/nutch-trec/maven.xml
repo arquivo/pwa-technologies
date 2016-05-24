@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<project 
+    xmlns:j="jelly:core" 
+    xmlns:define="jelly:define" 
+    xmlns:doc="doc" 
+    xmlns:artifact="artifact" 
+    xmlns:util="jelly:util" 
+    xmlns:maven="jelly:maven"
+    xmlns:ant="jelly:ant">
+
+    <!--Blank out common targets till we have ant build working.-->
+    <goal name="java:compile" />
+    <goal name="jar:jar" />
+    <goal name="test:compile" />
+    <goal name="test:test" />
+</project>

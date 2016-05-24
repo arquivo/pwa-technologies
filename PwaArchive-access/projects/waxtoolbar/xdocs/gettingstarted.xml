@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<document>
+  <properties>
+    <title>Getting Started</title>
+    <author email="oskar dot grenholm at kb dot se">Oskar Grenholm</author>
+    <revision>$Id: gettingstarted.xml 1005 2006-04-27 09:33:02Z bobcat_zed $</revision>
+  </properties>
+  <body>
+
+  <section name="Getting started">
+    <subsection name="Configuring and using WAXToolbar">
+      <p>
+        To obtain the firefox extension, see <a href="downloads.html">downloads</a>. Installation of the WAXToolbar is just as simple as for any other firefox extension: Double-click the downloaded WaxToolbar.xpi from within Firefox. When the extension is installed (and after a re-start of Firefox) a new toolbar will appear.
+      </p>
+
+      <p>
+        For the extension to be of any real use you need to have an instance of the Open-source Wayback Machine (WM) and/or NutchWAX installed (or at least know the host address of an installation). If you plan on installing them yourself, they are available from <a href="http://archive-access.sourceforge.net/">here</a>. <b>Be sure to get the Wayback Machine that has the lastest patches to the proxy-mode added. At the moment that is only HEAD.</b> (The changes were added after the 0.4.1 release of wayback).
+      </p>
+
+      <p>
+        The first thing you should do after installing the toolbar is to open 'Tools->WAX Toolbar Configuration' from the menu. This will bring up a new, small window where you should configure the host and port to a Wayback Machine (configured for proxy-mode) and a NutchWAX instance. Note that both of them can be on the same machine if desired. When done, simply click 'OK'.
+      </p>
+
+      <p>
+        Now the toolbar is ready for some action (provided that the WM is up for it and hosts a web archive). As indicated by the two radio-buttons to the left, WAXToolbar has two different modes it operates in, normal-mode (Internet) and proxy-mode (Web Archive). When in normal-mode Firefox behaves as you would expect and the only added feature is the search-field in the toolbar, which is available for use in both modes.
+        But when in proxy-mode the interesting stuff happens. Now if you try to access a page that is not in the web archive you will just get an error message from the WM. But if you instead go to a page that exists in the archive you will be served a historical version of that page. The date of the capture will be displayed to the right on the toolbar.
+        Also notice that the arrow buttons previously disabled now are enabled. Using these, and the dropdown menu between them, you can easily go back and forth in time, diplaying the different captured instances of the current page from the archive. Of course going back and forth in time is only possible if multiple instances of the same URL has been downloaded to the web archive.
+      </p>
+
+      <p>
+        As mentioned above you can always use the search field to search for either an URL (using the built-in functions of the WM) or full-text (using instead NutchWAX). You choose which to search by using the button to the right of the search field. Searches will take you to the results page of either the WM or NutchWAX. From there you can now easily choose a web page and a time to visit by following the links. <b>Note that if you click a link on the results page and are NOT in proxy-mode you will be redirected to the live web.</b>
+      </p>
+    </subsection>
+    <subsection name="Configuring the Open-source Wayback Machine for WAXToolbar">
+      <p>
+        To be able to have any real use of the WAXToolbar you have to have an installation of the <a href="../wayback/">Open-source Wayback Machine</a> that is configured properly for proxy-mode.
+        For information on how to achieve that, see <a href="../wayback/user_manual.html">here</a>. <br/> <br/>
+        In addition to doing all that there are some extra settings that has to be included for the WM to work properly with the WAXToolbar. This means editing the <i>web.xml</i> file for the WM. In it you have to modify the settings for the <b>Query Servlet Configuration</b> and <b>QueryUI Configuration</b> and also add a new <b>XMLQuery Servlet Configuration</b>.
+        These should then look something like this: <br/>
+
+        <pre>
+        &lt;!-- Query Servlet Configuration --&gt;
+        &lt;!-- THIS CONFIGURATION HAS BEEN MODIFIED FOR USE WITH WAXTOOLBAR --&gt;
+        &lt;servlet&gt;
+          &lt;servlet-name&gt;QueryServlet&lt;/servlet-name&gt;
+          &lt;servlet-class&gt;org.archive.wayback.query.QueryServlet&lt;/servlet-class&gt;
+          &lt;init-param&gt;
+            &lt;param-name&gt;queryui.jsppath&lt;/param-name&gt;
+            &lt;param-value&gt;jsp/QueryUI&lt;/param-value&gt;
+          &lt;/init-param&gt;
+        &lt;/servlet&gt;
+        &lt;servlet-mapping&gt;
+          &lt;servlet-name&gt;QueryServlet&lt;/servlet-name&gt;
+          &lt;url-pattern&gt;/query&lt;/url-pattern&gt;
+        &lt;/servlet-mapping&gt;
+        
+        &lt;!-- XMLQuery Servlet Configuration --&gt;
+        &lt;!-- THIS IS A NEW CONFIGURATION THAT HAS BEEN ADDED FOR USE WITH WAXTOOLBAR --&gt;
+        &lt;servlet&gt;
+          &lt;servlet-name&gt;XMLQueryServlet&lt;/servlet-name&gt;
+          &lt;servlet-class&gt;org.archive.wayback.query.QueryServlet&lt;/servlet-class&gt;
+          &lt;init-param&gt;
+            &lt;param-name&gt;queryui.jsppath&lt;/param-name&gt;
+            &lt;param-value&gt;jsp/QueryXMLUI&lt;/param-value&gt;
+          &lt;/init-param&gt;
+        &lt;/servlet&gt;
+        &lt;servlet-mapping&gt;
+          &lt;servlet-name&gt;XMLQueryServlet&lt;/servlet-name&gt;
+          &lt;url-pattern&gt;/xmlquery&lt;/url-pattern&gt;
+        &lt;/servlet-mapping&gt;
+
+        &lt;!-- QueryUI Configuration --&gt;
+        &lt;!-- THIS CONFIGURATION HAS BEEN MODIFIED FOR USE WITH WAXTOOLBAR --&gt;
+        &lt;context-param&gt;
+          &lt;param-name&gt;queryrenderer.classname&lt;/param-name&gt;
+          &lt;param-value&gt;org.archive.wayback.query.Renderer&lt;/param-value&gt;
+          &lt;description&gt;Implementation responsible for drawing Index Query results&lt;/description&gt;
+        &lt;/context-param&gt;
+        
+        &lt;context-param&gt;
+          &lt;param-name&gt;proxy.redirectpath&lt;/param-name&gt;
+          &lt;param-value&gt;/jsp/QueryUI/Redirect.jsp&lt;/param-value&gt;
+        &lt;/context-param&gt;
+        </pre>
+      
+      </p>
+    </subsection>
+  </section>
+  
+  </body>
+</document>

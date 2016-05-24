@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+  <!-- Location of the collection -->
+  <bean id="remotecollection" class="org.archive.wayback.webapp.WaybackCollection">
+    <property name="resourceStore">
+      <bean class="org.archive.wayback.resourcestore.Http11ResourceStore">
+        <property name="urlPrefix" value="http://127.0.0.1:8080/arcproxy/arcproxy/" />
+      </bean>
+    </property>
+    <property name="resourceIndex">
+      <bean class="org.archive.wayback.resourceindex.NutchResourceIndex" init-method="init">
+          <property name="searchUrlBase" value="http://127.0.0.1:8080/nutchwax/opensearch" />
+          <property name="maxRecords" value="10000" />
+      </bean>
+    </property>
+  </bean>
+  <!-- Bean for the port 8080 -->
+  <bean name="8080:wayback" class="org.archive.wayback.webapp.AccessPoint"> 
+	<property name="collection" ref="remotecollection" />
+    	<property name="uriConverter">
+      		<bean class="org.archive.wayback.archivalurl.ArchivalUrlResultURIConverter">
+        		<property name="replayURIPrefix" value="http://MACHINE:8080/wayback/wayback/" />
+      		</bean>
+    	</property>
+    	<property name="query">
+    		<bean class="org.archive.wayback.query.Renderer">
+    			<property name="captureJsp" value="/jsp/newInnerCalendarResults.jsp" />
+    		</bean>
+	</property>
+
+   	<property name="replay">
+      		<bean class="org.archive.wayback.archivalurl.ArchivalUrlReplayDispatcher">
+        		<property name="serverSideRendering" value="false" />
+        		<property name="jspInserts">
+          		<list>
+            			<value>/replay/ArchiveComment.jsp</value>
+            			<value>/replay/ClientSideJSInsert.jsp</value>
+            			<value>/replay/Disclaimer.jsp</value>
+                        <value>/replay/analytics.jsp</value>
+          		</list>
+        		</property>
+      		</bean>
+    	</property>
+	<property name="parser">
+		<bean class="org.archive.wayback.archivalurl.ArchivalUrlRequestParser" init-method="init">
+			<property name="maxRecords" value="10000" />
+			<property name="earliestTimestamp" value="1996" />
+		</bean>
+	</property>
+  </bean>
+  <!-- Bean that works for port 80 -->
+  <bean name="80:wayback" class="org.archive.wayback.webapp.AccessPoint">
+	<property name="collection" ref="remotecollection" />
+    	<property name="uriConverter">
+      		<bean class="org.archive.wayback.archivalurl.ArchivalUrlResultURIConverter">
+        		<property name="replayURIPrefix" value="http://arquivo.pt/wayback/wayback/" />
+      		</bean>
+    	</property>
+    	<property name="query">
+    		<bean class="org.archive.wayback.query.Renderer">
+    			<property name="captureJsp" value="/jsp/newInnerCalendarResults.jsp" />
+    		</bean>
+	</property>
+
+   	<property name="replay">
+      		<bean class="org.archive.wayback.archivalurl.ArchivalUrlReplayDispatcher">
+        		<property name="serverSideRendering" value="false" />
+        		<property name="jspInserts">
+          		<list>
+            			<value>/replay/ArchiveComment.jsp</value>
+            			<value>/replay/ClientSideJSInsert.jsp</value>
+            			<value>/replay/Disclaimer.jsp</value>
+                        <value>/replay/analytics.jsp</value>
+          		</list>
+        		</property>
+      		</bean>
+    	</property>
+	<property name="parser">
+		<bean class="org.archive.wayback.archivalurl.ArchivalUrlRequestParser" init-method="init">
+			<property name="maxRecords" value="10000" />
+			<property name="earliestTimestamp" value="1996" />
+		</bean>
+	</property>
+  </bean>
+
+</beans>

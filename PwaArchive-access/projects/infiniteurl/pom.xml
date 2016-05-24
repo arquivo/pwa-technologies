@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!--
+    POM reference: http://maven.apache.org/pom.html
+
+    List of the better articles on maven:
+
+    http://www.javaworld.com/javaworld/jw-05-2006/jw-0529-maven.html
+    http://www.javaworld.com/javaworld/jw-02-2006/jw-0227-maven_p.html
+
+    URLs on converting from 1.0 to 2.0 maven (not much good generally):
+
+    http://wiki.osafoundation.org/bin/view/Journal/Maven2Upgrade
+    http://maven.apache.org/guides/mini/guide-m1-m2.html
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+    <groupId>org.archive</groupId>
+  <artifactId>infiniteurl</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>infiniteurl</name>
+  <description>A webapp that continually generates new URLs. Use it on a host
+  that has been dns wildcarded (i.e. Its been set so that any subdomain
+  will return the domains IP).  
+  Default settings put up a seed page of 200 URLs. Eeach URL is on a subdomain
+  of the accessed domain.  Each URL points at a page that will have
+  ten new URLs in it; each access gets a new set of ten new URLs.
+  Every ten seconds a new subdomain will be introduced.  Edit the JSP page
+  infiniteurls.jsp to change rate of new server introduction
+  and the amount of links per page.  Checkout this project and build 
+  with maven using the 'war' target to generate the war file in the target
+  directory.  Place the webapp under the tomcat, Jetty, etc., webapp directory.
+  Point the crawler at the deployed webapp and let it run.
+  This webapp is used testing Heritrix.
+  </description>
+  <url>http://archive-access.sourceforge.net/projects/infiniteurl/</url>
+  <inceptionYear>2004</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+       </license>
+    </licenses>
+  <organization>
+    <name>Internet Archive</name>
+    <url>http://www.archive.org/</url>
+  </organization>
+  <issueManagement>
+    <system>SourceForge</system>
+    <url>http://sourceforge.net/tracker/?group_id=118427</url>
+  </issueManagement>
+  <ciManagement>
+    <system>cruisecontrol</system>
+    <url>http://builds.archive.org:8080/cruisecontrol/</url>
+  </ciManagement>
+    <mailingLists>
+        <mailingList>  
+            <name>Archive Access ARC Tools Discussion List</name>
+            <subscribe>
+            http://lists.sourceforge.net/lists/listinfo/archive-access-discuss
+            </subscribe>
+            <unsubscribe>
+            http://lists.sourceforge.net/lists/listinfo/archive-access-discuss
+            </unsubscribe>
+            <post>archive-access-discuss</post>
+            <archive>
+            http://sourceforge.net/mailarchive/forum.php?forum_id=45842
+            </archive>
+        </mailingList>  
+        <mailingList>  
+            <name>Archive Access ARC Tools Commits</name>
+            <subscribe>
+            https://lists.sourceforge.net/lists/listinfo/archive-access-cvs
+            </subscribe>
+            <unsubscribe>
+            https://lists.sourceforge.net/lists/listinfo/archive-access-cvs
+            </unsubscribe>
+            <post>archive-access-cvs</post>
+            <archive>
+            http://sourceforge.net/mailarchive/forum.php?forum=archive-access-cvs
+            </archive>
+        </mailingList>  
+    </mailingLists>
+    <scm>
+       <connection>scm:svn:https://archive-access.svn.sourceforge.net/svnroot/archive-access/trunk/archive-access/projects/infiniteurl</connection>
+       <tag>HEAD</tag>
+        <url>https://archive-access.svn.sourceforge.net/svnroot/archive-access/trunk/archive-access/projects/infiniteurl</url>
+    </scm>
+    <prerequisites>
+        <maven>2.0.4</maven>
+    </prerequisites>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+           <warSourceDirectory>${basedir}/src/webapp</warSourceDirectory>    
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+           <webAppDirectory>${maven.build.dir}/reports</webAppDirectory>    
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>  
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>website</id>
+            <name>Website</name>
+            <!--Pass as command-line system property to maven-->
+            <url>${website.url}/projects/${artifactId}</url>
+        </site>
+    </distributionManagement>
+
+</project>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib-xml2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/lib-xml/jaxen-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/lib-xml/jaxen-jdom.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/lib-xml/xercesImpl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/lib-xml/jdom.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/lib-xml/saxpath.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

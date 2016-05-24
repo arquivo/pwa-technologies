@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="test3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/src/test/org/apache/nutch/util/mime/test.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

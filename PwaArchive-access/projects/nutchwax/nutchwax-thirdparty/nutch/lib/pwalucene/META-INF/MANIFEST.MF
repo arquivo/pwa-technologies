@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: root
+Build-Jdk: 1.7.0_79
+Class-Path: junit-4.2.jar hadoop-0.14.5-dev-core.jar commons-codec-1.5
+ .jar spymemcached-2.7.3.jar netty-3.2.0.Final.jar jettison-1.1.jar st
+ ax-api-1.0.1.jar
+Created-By: Apache Maven 3.2.5
+Archiver-Version: Plexus Archiver
+

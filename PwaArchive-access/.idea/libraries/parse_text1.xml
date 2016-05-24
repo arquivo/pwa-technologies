@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="parse-text1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/plugins/parse-text/parse-text.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

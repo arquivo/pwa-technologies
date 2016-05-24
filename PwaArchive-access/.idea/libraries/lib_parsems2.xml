@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="lib-parsems2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/lib-parsems/lib-parsems.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

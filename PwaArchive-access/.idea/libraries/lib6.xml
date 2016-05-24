@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="lib6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/lib/fastutil5-5.1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/lib/webgraph-2.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/lib/jsap-2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/lib/colt-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/lib/postgresql-8.3-604.jdbc4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/lib/dsiutils-1.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/lib/law-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/lib/sux4j-1.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

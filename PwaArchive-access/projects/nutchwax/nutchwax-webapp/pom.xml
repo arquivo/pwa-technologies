@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!--
+    See head of the nutchwax-job/pom.xml for some pointers
+    on the 'weird' stuff that is going on in here, the
+    overwriting of this poms' product by a copy from the
+    directory above.
+
+    POM reference: http://maven.apache.org/pom.html
+
+    List of the better articles on maven:
+
+    http://www.javaworld.com/javaworld/jw-05-2006/jw-0529-maven.html
+    http://www.javaworld.com/javaworld/jw-02-2006/jw-0227-maven_p.html
+
+    URLs on converting from 1.0 to 2.0 maven (not much good generally):
+
+    http://wiki.osafoundation.org/bin/view/Journal/Maven2Upgrade
+    http://maven.apache.org/guides/mini/guide-m1-m2.html
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+    http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+      <groupId>org.archive</groupId>
+      <artifactId>nutchwax</artifactId>
+      <version>0.11.0-SNAPSHOT</version>
+    </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.archive.nutchwax</groupId>
+  <artifactId>nutchwax-webapp</artifactId>
+  <packaging>war</packaging>
+  <name>NutchWAX Webapp</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.archive.nutchwax</groupId>
+      <artifactId>nutchwax-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>taglibs</groupId>
+      <artifactId>standard</artifactId>
+      <version>1.1.2</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>antrun.compile</id>
+            <phase>compile</phase>
+            <configuration>
+              <tasks>
+                <property name="nutch" value="../nutchwax-thirdparty/nutch" />
+                <copy todir="target/${artifactId}-${project.version}/WEB-INF/lib" 
+                        overwrite="true">
+                    <fileset dir="${nutch}/lib" >
+                        <include name="xerces*jar" />
+                        <include name="pwalucene*jar" />
+                        <include name="lucene-misc*jar" />
+                        <include name="log4j*jar" />
+                        <include name="taglibs-i18n*jar" />
+            			<include name="taglibs-log*jar" />
+                        <include name="commons-lang*jar" />
+                        <include name="commons-logging*jar" />
+                        <include name="hadoop*jar" />
+                        <include name="dom4j*jar" />
+                        <include name="commons-*jar" />
+                    </fileset>
+                    <fileset dir="${nutch}/build" >
+                        <include name="nutch*jar" />
+                    </fileset>
+                </copy>
+                <copy todir="target/${artifactId}-${project.version}/WEB-INF/classes/plugins" 
+                        overwrite="true">
+                    <fileset dir="${nutch}/build/plugins" >
+                        <include name="analysis-*/**" />
+                        <include name="clustering-*/**" />
+                        <include name="language-*/**" />
+                        <include name="lib-lucene-*/**" />
+                        <include name="lib-log4j-*/**" />
+                        <include name="lib-regex-*/**" />
+                        <include name="microformats-*/**" />
+                        <include name="nutch-*/**" />
+                        <include name="query-*/**" />
+                        <include name="urlfilter-*/**" />
+                        <include name="urlnormalizer-*/**" />
+                        <include name="summary-*/**" />
+                        <include name="urlfilter-*/**" />
+                    </fileset>
+                </copy>
+                <copy todir="target/${artifactId}-${project.version}/WEB-INF/classes/wax-plugins" 
+                        overwrite="true">
+                    <fileset dir="../nutchwax-plugins/target/wax-plugins" />
+                </copy>
+                <copy todir="target/${artifactId}-${project.version}/WEB-INF/classes" 
+                        overwrite="false">
+                    <fileset dir="${nutch}/conf" >
+                        <exclude name="**/*.template"/>
+                        <exclude name="**/log4j.properties"/>
+                    </fileset>
+                    <fileset dir="../conf" >
+                        <exclude name="**/*.template"/>
+                        <exclude name="**/log4j.properties"/>
+                    </fileset>
+                    <fileset dir="${nutch}/src/web/locale" />
+                </copy>
+                <copy todir="target/${artifactId}-${project.version}/WEB-INF/" 
+                        overwrite="true">
+                    <fileset dir="${nutch}/lib">
+                        <include name="taglibs-i18n*tld" />
+			<include name="taglibs-log*tld" />
+                    </fileset>
+                </copy>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          </executions>
+       </plugin>
+       <plugin>
+         <artifactId>maven-war-plugin</artifactId>
+         <configuration>
+           <warSourceExcludes>**/wayback*jar,**/juniversalchardet*,**/archive-mapred*jar,**/commons-codec*jar,**/commons-collections*jar,**/commons-httpclient*jar,**/commons-pool*jar,**/je-*jar,**/junit*jar,**/libidn*jar,**/mg4j*jar,**/nutchwax-thirdparty*jar,**/servlet-api*.jar</warSourceExcludes>
+         </configuration>       
+      </plugin> 
+    </plugins>
+  </build>
+    <distributionManagement>
+        <site>
+            <id>website</id>
+            <name>Website</name>
+            <!--Pass as command-line system property to maven-->
+            <url>${website.url}/projects/${project.parent.artifactId}/${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+</project>
