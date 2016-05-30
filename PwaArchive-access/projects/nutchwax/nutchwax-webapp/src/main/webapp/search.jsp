@@ -477,7 +477,8 @@ String[] queryString_splitted=null;
                             urlQueryParam= protocol+"://"+hostname+path;
                             
                           /*************************************/
-                            queryString=urlQueryParam;
+                            queryString=urlQueryParam; //Querying wayback servlet
+                            urlQuery=urlQueryParam; //Querying piWB
                         
                             /*************************************************/
                     pageContext.setAttribute("urlQueryParam", urlQueryParam);
