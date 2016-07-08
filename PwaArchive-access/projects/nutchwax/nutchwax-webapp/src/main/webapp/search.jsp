@@ -8,6 +8,8 @@
 
   import="java.io.File"
   import="java.io.IOException"
+  import= "java.net.*"
+  import= "java.io.*"
   import="java.net.URLEncoder"
   import="java.text.DateFormat"
   import="java.util.Calendar"
@@ -130,12 +132,22 @@ String[] queryString_splitted=null;
         }
         if (request.getParameter("site") != null && request.getParameter("site") != "") {
                 queryString += "site:";
-                String siteParameter = request.getParameter("site");
+                String siteParameter = request.getParameter("site"); //here split hostname and put it to lowercase
+
                 if (siteParameter.startsWith("http://")) {
+                        URL siteURL = new URL(siteParameter);
+                        String siteHost = siteURL.getHost();
+                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
                         queryString += siteParameter.substring("http://".length());
                 } else if (siteParameter.startsWith("https://")) {
+                        URL siteURL = new URL(siteParameter);
+                        String siteHost = siteURL.getHost();
+                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
                         queryString += siteParameter.substring("https://".length());
                 } else {
+                        URL siteURL = new URL("http://"+siteParameter);
+                        String siteHost = siteURL.getHost();
+                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
                         queryString += siteParameter;
                 }
                 /*queryStringParameter = queryString.length();
@@ -793,7 +805,12 @@ function createErrorPage(){
                                   String queryString_expanded="";
                                   for (int i =0; i<queryString_splitted.length;i++){
                                    if (queryString_splitted[i].contains("site:")){
-                                    queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i].replace("site:", ""));
+                                    queryString_splitted[i] = queryString_splitted[i].replace("site:", "");
+                                    URL queryStringURL = new URL("http://"+queryString_splitted[i]);
+                                    String queryStringHost = queryStringURL.getHost();
+                                    queryString_splitted[i] = queryString_splitted[i].replace(queryStringHost, queryStringHost.toLowerCase()); // hostname to lowercase
+                                    queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i]); //TODO: SPLIT HOSTNAME
+
                                    }
                                   queryString_expanded+=" "+queryString_splitted[i];
                                   }
