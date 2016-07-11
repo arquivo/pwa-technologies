@@ -13,6 +13,7 @@
   import="java.net.URLEncoder"
   import="java.text.DateFormat"
   import="java.util.Calendar"
+  import="java.util.TimeZone"
   import="java.util.Date"
   import="java.util.regex.Matcher"
   import="java.util.regex.Pattern"
@@ -283,7 +284,6 @@ String[] queryString_splitted=null;
   }
   /**/
 
-// TODO - check if start date is GT end
   /*** Add dates to nutch query ***/
   if (queryString != null && queryString != "") {
         queryString += " date:"+ FORMAT.format( dateStart.getTime() );

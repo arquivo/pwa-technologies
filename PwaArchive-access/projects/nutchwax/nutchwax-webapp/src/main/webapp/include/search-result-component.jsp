@@ -120,7 +120,9 @@
             Date archiveDate = new Date(Long.valueOf(detail.getValue("date")).longValue()*1000);
             String archiveCollection = detail.getValue("collection");
             String url = detail.getValue("url");
-            SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMddhhmmss");
+            SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMddHHmmss");
+            TimeZone zone = TimeZone.getTimeZone("GMT");
+            ft.setTimeZone(zone);
 	    // If the collectionsHost includes a path do not add archiveCollection.
             // See http://sourceforge.net/tracker/index.php?func=detail&aid=1288990&group_id=118427&atid=681140.
             //String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
