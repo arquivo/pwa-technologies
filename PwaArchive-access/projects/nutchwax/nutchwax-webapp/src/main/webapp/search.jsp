@@ -558,11 +558,14 @@ String[] queryString_splitted=null;
                             arquivo.PT will be equal to arquivo.pt
                             Converts hostname to small letters
                             */
+
                             URL url_queryString=new URL(urlQueryParam);
                             String path=url_queryString.getPath();
                             String hostname=url_queryString.getHost().toLowerCase();
                             String protocol=url_queryString.getProtocol();
-                            urlQueryParam= protocol+"://"+hostname+path;
+                            String fileofUrl = url_queryString.getFile();
+
+                            urlQueryParam= protocol+"://"+hostname+fileofUrl;
                             
                           /*************************************/
                             queryString=urlQueryParam; //Querying wayback servlet
@@ -882,6 +885,8 @@ function createErrorPage(){
                                   for (int i =0; i<queryString_splitted.length;i++){
                                    if (queryString_splitted[i].contains("site:")){
                                     queryString_splitted[i] = queryString_splitted[i].replace("site:", "");
+
+
                                     URL queryStringURL = new URL("http://"+queryString_splitted[i]);
                                     String queryStringHost = queryStringURL.getHost();
                                     queryString_splitted[i] = queryString_splitted[i].replace(queryStringHost, queryStringHost.toLowerCase()); // hostname to lowercase
