@@ -124,7 +124,7 @@ String[] queryString_splitted=null;
                 String notStr = request.getParameter("adv_not");
                 if (!notStr.startsWith("-"))
                         notStr = "-" + notStr;
-                notStr = notStr.replaceAll("[ -]+", " -") +" ";
+                notStr = notStr.replaceAll("[ ]+", " -") +" ";
                 queryString += notStr;
         }
         if ( request.getParameter("adv_mime") != null && request.getParameter("adv_mime") != "" ) {
@@ -687,8 +687,10 @@ function getShortDateSpaceFormated(ts){
   var month = ts.substring(4, 6);
   month = Content.shortMonths[month];
   var day = ts.substring(6, 8);
+  if(day.charAt(0) == '0'){
+    day = day.charAt(1);
+  }  
   return day + " "+ month;
-
 }
 
 function createMatrix(versionsArray, versionsURL){
@@ -754,7 +756,7 @@ function createMatrix(versionsArray, versionsURL){
 function createResultsPage(numberOfVersions, inputURL){
     
     $('<div class="clear">&nbsp;</div>'+
-      '<div id="resultados-url">'+Content.resultsQuestion+' <a href="search.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>?</div>'+
+      '<div id="resultados-url">'+Content.resultsQuestion+' \'<a href="search.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>\'</div>'+
       '<div class="wrap">' +
              '  <div id="intro">' +
              '    <h1 style="text-align: center;">'+Content.versionsStored+'</h1>' +
@@ -800,6 +802,18 @@ function createErrorPage(){
 
     //top.alert("Starting the Code!")
     var urlsource = "<%=urlQuery%>" ;
+    var startDate = "<%=dateStartString%>";
+    var startYear = startDate.substring(6,10)
+    var startMonth = startDate.substring(3,5);
+    var startDay = startDate.substring(0,2);
+    var startTs = startYear+startMonth+startDay+'000000';
+
+    var endDate = "<%=dateEndString%>";
+    var endYear = endDate.substring(6,10)
+    var endMonth = endDate.substring(3,5);
+    var endDay = endDate.substring(0,2);
+    var endTs = endYear+endMonth+endDay+'000000';   
+
     //var requestURL = "http://p27.arquivo.pt/wayback/-cdx";
     var requestURL = "http://<%=collectionsHost%>/" + "-cdx";
     var versionsArray = [];
@@ -814,7 +828,9 @@ function createErrorPage(){
        data: {
           output: 'json',
           url: urlsource,
-          fl: 'url,timestamp'
+          fl: 'url,timestamp',
+          from: startTs,
+          to: endTs
        },
        error: function() {
          // Apresenta que não tem resultados!

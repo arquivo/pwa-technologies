@@ -131,8 +131,8 @@ cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 #conteudo-erro h4 { font-size: 1.3em; font-weight: bold;  }
 #conteudo-erro a:link { color: #005DB4; }
 #conteudo-erro p { font-size: 1.2em; line-height: 15px; margin-bottom: 10px; }
-#conteudo-erro ul { list-style: square url("../img/ul.png"); padding: 11px 0 0 33px; color: #5e8400; }
-#conteudo-erro ul li { font-size: 1.2em; color: #000000; padding-bottom: 4px; }
+#conteudo-erro ul { list-style: square url("../img/ul.png"); list-style: none; color: #5e8400; }
+#conteudo-erro ul li {     font-size: 1.7em; color: #000000; padding-bottom: 14px; }
 #conteudo-erro img {margin: 4em 0 0 98px}
 
 .ultima-modificacao { padding: 0 0 41px 159px; }
@@ -279,7 +279,7 @@ li.grouped { padding-left: 38px; }
 /* Versões */
 #conteudo-versoes {  clear: both; margin: 0 auto; position: relative; }
 
-#resultados-url { font-size: 1.2em; background-color: #ebf7ff; border-top: 1px solid #add4ff; padding: 3px 0 6px; text-align: center; }
+#resultados-url { font-size: 1.6em; background-color: #ebf7ff; border-top: 1px solid #add4ff; padding: 3px 0 6px; text-align: center; }
 #resultados-url a { text-decoration: underline; }
 #conteudo-versoes #resultados-lista { padding: 38px 0 0; clear: both; margin: 0 auto; position: relative; }
 #intro { width: 619px; text-align: left; float: left; margin: 0 25px; padding-left: 159px; }

@@ -51,21 +51,18 @@
 			</div>
 
 			<div id="conteudo-erro">
-				<p><fmt:message key='500.suggestions.title'/>
+								<p>
                                 <ul>
-                                        <li><a href="http://sobre.arquivo.pt/contact-info?set_language=<%=language%>"><fmt:message key='500.suggestions.feedback'/></a></li>
+                                	 <%	String contactUrl = null;
+											if (language.equals("en"))
+												contactUrl = "http://sobre.arquivo.pt/contact";
+											else
+												contactUrl = "http://sobre.arquivo.pt/contacto";
+									%>
+                                        <li><fmt:message key='500.suggestions.feedback'><fmt:param value='<%=contactUrl%>'/></fmt:message> </a></li>
                                         <li><a href="./"><fmt:message key='500.suggestions.go-home'/></a></li>
-                                        <%      String contributeUrl = null;
-                                                if (language.equals("en"))
-                                                        contributeUrl = "http://sobre.arquivo.pt/colaboracoes/outras-formas-colaboracao";
-                                                else
-                                                        contributeUrl = "http://sobre.arquivo.pt/how-to-participate/individual-participation";
-                                        %>
-                                        <li><fmt:message key='500.suggestions.contribute'><fmt:param value='<%=contributeUrl%>'/></fmt:message></li>
                                 </ul>
                                 </p>
-                                <img src="img/internal-error.png" alt="" />
-
 			</div>
 		</div>
 	</div>

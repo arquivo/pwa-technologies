@@ -34,8 +34,9 @@
 	<meta http-equiv="Content-Language" content="pt-PT" />
 	<meta name="Keywords" content="<fmt:message key='404.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='404.meta.description'/>" />
-	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
+	<%String serverName = request.getServerName(); %>
+	<link rel="shortcut icon" href="img/logo-16.jpg" type="http://<%=serverName%>/image/x-icon" />
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="http://<%=serverName%>/css/style.css"  media="all" />
 </head>
 <body>
 	<%@ include file="include/topbar.jsp" %>
@@ -50,20 +51,17 @@
 			</div>
 
 			<div id="conteudo-erro">
-				<p><fmt:message key='404.suggestions.title'/>
+				<p>
 				<ul>
-					<li><a href="http://sobre.arquivo.pt/contact-info?set_language=<%=language%>"><fmt:message key='404.suggestions.feedback'/></a></li>
-                                        <li><a href="./"><fmt:message key='404.suggestions.go-home'/></a></li>
-                                        <%	String contributeUrl = null;
+                    <%	String contactUrl = null;
 						if (language.equals("en"))
-							contributeUrl = "http://sobre.arquivo.pt/colaboracoes/outras-formas-colaboracao";
+							contactUrl = "http://sobre.arquivo.pt/contact";
 						else
-							contributeUrl = "http://sobre.arquivo.pt/how-to-participate/individual-participation";
+							contactUrl = "http://sobre.arquivo.pt/contacto";
 					%>
-					<li><fmt:message key='404.suggestions.contribute'><fmt:param value='<%=contributeUrl%>'/></fmt:message></li>
+                    <li><fmt:message key='404.suggestions.feedback'><fmt:param value='<%=contactUrl%>'/></fmt:message> </a></li>	
+                    <li><a href="http://<%=serverName%>"><fmt:message key='404.suggestions.go-home'/></a></li>
 				</ul>
-				</p>
-				<img src="img/not-found.png" alt="" />
 			</div>
 		</div>
 	</div>
