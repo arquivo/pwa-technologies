@@ -194,8 +194,16 @@ public class OpenSearchServlet extends HttpServlet {
     }
     String dateEnd = request.getParameter("dtend");
     if (dateEnd == null || dateEnd.length() == 0) {
-    	dateEnd = null;
+    	dateEnd = null; 
     }
+
+    if(dateStart== null && dateEnd != null){
+      dateStart = "1996-01-01T00:00:00Z"; /*If datestart is not specified set it to 1996*/
+    }
+    if(dateStart != null && dateEnd == null){
+      dateEnd = "2029-12-31T00:00:00Z"; /*If dateEnd is not specified set it to 2029*/
+    }
+
     if (dateStart!=null && dateEnd!=null) {    	    	    	
     	try {
     		Date dStart=RFC3339Date.parseRFC3339Date(dateStart);
