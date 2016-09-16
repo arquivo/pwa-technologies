@@ -34,6 +34,7 @@
   import="org.archive.access.nutch.NutchwaxBean"
   import="org.archive.access.nutch.NutchwaxQuery"
   import="org.archive.access.nutch.NutchwaxConfiguration"
+  import="java.util.Properties"
 %>
 <% // Set the character encoding to use when interpreting request values.
   request.setCharacterEncoding("UTF-8");
@@ -57,6 +58,14 @@
   private static final String COLLECTION_QUERY_PARAM_KEY = COLLECTION_KEY + ":";
   private static final Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-zA-Z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
 %>
+
+<%
+  Properties prop = new Properties();
+  prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("validTLDs/valid.properties"));
+  String tldsLine = prop.getProperty("valid.tld");
+  String tlds[] = tldsLine.split("\t");
+%>
+
 <%-- Get the application beans --%>
 <%
   Configuration nutchConf = NutchwaxConfiguration.getConfiguration(application);
@@ -542,28 +551,39 @@ String[] queryString_splitted=null;
                         }
                 pageContext.setAttribute("urlQueryParam", urlQueryParam);
 
-                        allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
-                        if (!language.equals("pt")) {
-                                allVersions += "&l="+ language;
-                        }
+                allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
+                if (!language.equals("pt")) {
+                        allVersions += "&l="+ language;
+                }
+                    /*
+                hostname is not case sensitive, thereby it has to be written with lower case
+                the bellow provide a solution to this problem
+                arquivo.PT will be equal to arquivo.pt
+                Converts hostname to small letters
+                */
 
-            if ( request.getParameter("query") != null && urlLength == request.getParameter("query").trim().length() ) {
+                URL url_queryString=new URL(urlQueryParam);
+                String path=url_queryString.getPath();
+                String hostname=url_queryString.getHost().toLowerCase();
+
+                String protocol=url_queryString.getProtocol();
+                String fileofUrl = url_queryString.getFile();
+
+                boolean validTLD = false;
+
+                for(String tld:tlds){ //
+                  if(hostname.endsWith(tld.toLowerCase())){
+                    validTLD = true;
+                  }
+                }
+
+
+
+            if ( request.getParameter("query") != null && urlLength == request.getParameter("query").trim().length() && validTLD) {
                                 // option: (2)
                                 showList = false;
                                 usedWayback = true;
-                                
-                                /*
-                            hostname is not case sensitive, thereby it has to be written with lower case
-                            the bellow provide a solution to this problem
-                            arquivo.PT will be equal to arquivo.pt
-                            Converts hostname to small letters
-                            */
 
-                            URL url_queryString=new URL(urlQueryParam);
-                            String path=url_queryString.getPath();
-                            String hostname=url_queryString.getHost().toLowerCase();
-                            String protocol=url_queryString.getProtocol();
-                            String fileofUrl = url_queryString.getFile();
 
                             urlQueryParam= protocol+"://"+hostname+fileofUrl;
                             
@@ -790,7 +810,6 @@ function createErrorPage(){
                   '<ul>'+
                     '<li>'+Content.checkSpelling+'</li>'+
                     '<li><a style="padding-left: 0px;" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
-                    '<li>'+Content.internetArchive+'<a href="http://wayback.archive.org/web/*/<%=urlQuery%>">Internet Archive</a>.</li>'+
                     '<li><a href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>" style="padding-left: 0px;">'+Content.mementoFind+'</a>.</li>'+                    
                   '</ul>'+
                 '</div>'+
