@@ -700,7 +700,6 @@ function getDateSpaceFormated(ts){
   month = Content.months[month];
   var day = ts.substring(6, 8);
   return day + " "+ month + " " +year;
-
 }
 
 function getShortDateSpaceFormated(ts){

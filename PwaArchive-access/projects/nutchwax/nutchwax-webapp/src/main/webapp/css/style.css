@@ -179,6 +179,9 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 /* Pesquisa avançada: Formato */
 #conteudo-pesquisa #label-format-1 { padding: 38px 0; clear: both; }
 
+/* Pesquisa avançada imagens escolher tamanho da imagem*/
+#conteudo-pesquisa #label-size-1 { padding: 38px 0; clear: both; }
+
 /* Pesquisa avançada: Sítio Web */
 #conteudo-pesquisa #label-domains-1 { padding: 38px 0; clear: both; }
 
@@ -194,6 +197,8 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 #conteudo-pesquisa #labelDateEnd { padding: 4px 11px 0; text-align: center; vertical-align: middle; width: 22px; }
 #conteudo-pesquisa #sort, #formatType, #num-result { border: 1px solid #949494; font-size: 1.2em; }
 #conteudo-pesquisa #sort, #formatType { width: 224px; background-color: #ffffff; }
+#conteudo-pesquisa #sort, #imagesFormatType, #num-result { border: 1px solid #949494; font-size: 1.2em; }
+#conteudo-pesquisa #sort, #imagesFormatType { width: 284px; background-color: #ffffff; }
 #conteudo-pesquisa #num-result { width: 52px; background-color: #ffffff; }
 #conteudo-pesquisa .tip { color: #888888; font-size: 1.1em; }
 #conteudo-pesquisa form input:focus { outline: thin solid #98c8e8; }
@@ -424,4 +429,50 @@ li.grouped { padding-left: 38px; }
 #conteudo-versoes .mais-resultados { padding: 0 5px 5px; }
 #conteudo-versoes .mais-resultados,
 #conteudo-versoes .mais-resultados span { text-align: center; }
+/*Update 09/12/2016*/
+#loadingDiv {display: none;}
+#resultsUl li {float: left;}
 	
+.imageFormatLabel{ font-size: 1.2em; vertical-align: top; padding-left: 10px;}
+.imageSizeDiv { padding-left: 230px; padding-bottom: 5px; }
+
+.imageExpandedDiv{	
+				display:none; 
+				width: 100%;
+				left:0;
+				max-height: 400px;
+				min-height: 400px;
+				position: absolute;
+				margin-top: 10px;
+				padding-top: 50px;
+				margin-bottom: 50px; 
+				padding-bottom: 50px;
+    			box-sizing: content-box;
+    			overflow: hidden;
+    			background: #222;
+    		}
+.imageExpanded{
+	max-height: 400px;	
+}
+
+.expand__close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #454545;
+  font-size: 50px;
+  line-height: 50px;
+  text-decoration: none;
+}
+
+.expand__close:before {
+  content: '\00d7';
+}
+
+.expand__close:visited {
+  color: #454545;
+}
+
+.expand__close:hover {
+  color: #fff;
+}

@@ -9,6 +9,7 @@ StringBuilder phrase = new StringBuilder();
 StringBuilder not = new StringBuilder();
 int hitsPerPage = request.getParameter("hitsPerPage") != null ? Integer.parseInt(request.getParameter("hitsPerPage")) : 10;
 String format = null;
+String imagesSize = null;
 String site = "";
 String sortType = request.getParameter("sort") != null ? request.getParameter("sort") : null;
 boolean sortReverse = "true".equals(request.getParameter("reverse")) ? true : false;
@@ -44,7 +45,9 @@ if (queryString != null) {
 				if (parcel.startsWith("site:")) {
 					site = parcel.substring(parcel.indexOf(':')+1);
 				} else if (parcel.startsWith("type:")) {
-					format = parcel.substring(parcel.indexOf(':')+1);
+					format += parcel.substring(parcel.indexOf(':')+1) + " ";
+				} else if (parcel.startsWith("size:")) {
+					imagesSize += parcel.substring(parcel.indexOf(':')+1) + " ";
 				}
 				// TODO - handle
 			} else {								//words
