@@ -166,7 +166,6 @@ public class FlatFile {
 	 */
 	public ReverseRecordIterator getReverseRecordIterator(final String prefix) 
 		throws IOException {
-
 		ReverseRecordIterator itr = null;
 		RandomAccessFile raf = new RandomAccessFile(file,"r");
 		long offset = findKeyOffset(raf,prefix);
@@ -194,14 +193,15 @@ public class FlatFile {
 	}
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		if(args.length < 2) {
 			USAGE();
 		}
 		String prefix = args[0];
-		CloseableIterator<String> itr;
+		CloseableIterator<String> itr = null;
 		try {
 			if(args.length == 2) {
 				FlatFile ff = new FlatFile(args[1]);
@@ -212,15 +212,21 @@ public class FlatFile {
 						return o1.compareTo(o2);
 					}
 				};
-				CompositeSortedIterator<String> csi = 
-					new CompositeSortedIterator<String>(comp);
-				RecordIterator fitr;
-				for(int i=1; i < args.length; i++) {
-					FlatFile ff = new FlatFile(args[i]);
-					fitr = (RecordIterator) ff.getRecordIterator(prefix);
-					csi.addComponent(fitr);
+				CompositeSortedIterator<String> csi = null;
+				try{
+					csi =new CompositeSortedIterator< String >( comp );
+					RecordIterator fitr;
+					for(int i=1; i < args.length; i++) {
+						FlatFile ff = new FlatFile(args[i]);
+						fitr = (RecordIterator) ff.getRecordIterator(prefix);
+						csi.addComponent(fitr);
+					}
+					itr = csi;
+				} finally {
+					if( csi != null )
+						csi.close( );
 				}
-				itr = csi;
+				
 			}
 			while(itr.hasNext()) {
 				String line = (String) itr.next();
@@ -231,6 +237,9 @@ public class FlatFile {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if( itr != null )
+				itr.close( );
 		}
 	}
 }

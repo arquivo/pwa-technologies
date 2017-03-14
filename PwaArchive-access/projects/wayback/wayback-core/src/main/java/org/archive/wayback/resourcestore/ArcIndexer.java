@@ -129,10 +129,12 @@ public class ArcIndexer {
 			}
 			Iterator<SearchResult> res = indexer.iterator(arc);
 			Iterator<String> lines = SearchResultToCDXLineAdapter.adapt(res);
-			while(lines.hasNext()) {
-				pw.println(lines.next());
+			if( pw != null ) {
+				while(lines.hasNext()) {
+					pw.println(lines.next());
+				}
+				pw.close();
 			}
-			pw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

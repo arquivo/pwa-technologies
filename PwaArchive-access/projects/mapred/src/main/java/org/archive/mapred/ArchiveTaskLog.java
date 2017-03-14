@@ -424,44 +424,52 @@ public class ArchiveTaskLog {
      * @return Returns a <code>byte[]</code> containing the data in user-log.
      * @throws IOException
      */
-    public byte[] fetchAll() throws IOException {
-      if (!initialized) {
-        init();
-      }
-      
-      // Get all splits 
-      Vector<InputStream> streams = new Vector<InputStream>();
-      int totalLogSize = 0;
-      for (int i=0; i < indexRecords.length; ++i) {
-        InputStream stream = getLogSplit(i);
-        if (stream != null) {
-          streams.add(stream);
-          totalLogSize += indexRecords[i].splitLength;
-          LOG.debug("Added split: " + i);
-        }
-      }
-      LOG.debug("Total log-size on disk: " + totalLogSize + 
-          "; actual log-size: " + logFileSize);
-
-      // Copy log data into buffer
-      byte[] b = new byte[totalLogSize];
-      SequenceInputStream in = new SequenceInputStream(streams.elements());
-      int bytesRead = 0, totalBytesRead = 0;
-      int off = 0, len = totalLogSize;
-      LOG.debug("Attempting to read " + len + " bytes from logs");
-      while ((bytesRead = in.read(b, off, len)) > 0) {
-        LOG.debug("Got " + bytesRead + " bytes");
-        off += bytesRead;
-        len -= bytesRead;
-        
-        totalBytesRead += bytesRead;
-      }
-
-      if (totalBytesRead != totalLogSize) {
-        LOG.debug("Didn't not read all requisite data in logs!");
-      }
-      
-      return b;
+	public byte[] fetchAll() throws IOException {
+    	SequenceInputStream in = null;
+    	byte[] b = null;
+    	try{ 
+	     if (!initialized) {
+	        init();
+	      }
+	      
+	      // Get all splits 
+	      Vector<InputStream> streams = new Vector<InputStream>();
+	      int totalLogSize = 0;
+	      for (int i=0; i < indexRecords.length; ++i) {
+	        InputStream stream = getLogSplit(i);
+	        if (stream != null) {
+	          streams.add(stream);
+	          totalLogSize += indexRecords[i].splitLength;
+	          LOG.debug("Added split: " + i);
+	        }
+	      }
+	      LOG.debug("Total log-size on disk: " + totalLogSize + 
+	          "; actual log-size: " + logFileSize);
+	
+	      // Copy log data into buffer
+	      b = new byte[totalLogSize];
+	      in = new SequenceInputStream(streams.elements());
+	      int bytesRead = 0, totalBytesRead = 0;
+	      int off = 0, len = totalLogSize;
+	      LOG.debug("Attempting to read " + len + " bytes from logs");
+	      while ((bytesRead = in.read(b, off, len)) > 0) {
+	        LOG.debug("Got " + bytesRead + " bytes");
+	        off += bytesRead;
+	        len -= bytesRead;
+	        
+	        totalBytesRead += bytesRead;
+	      }
+	
+	      if (totalBytesRead != totalLogSize) {
+	        LOG.debug("Didn't not read all requisite data in logs!");
+	      }
+	      
+	      in.close();
+	     }catch( IOException e ) {
+	    	 LOG.error( "[ArchiveTaskLog][fetchAll] " , e );
+	    	  throw e;
+	     } 
+    	 return b;	
     }
     
     /**
@@ -510,85 +518,91 @@ public class ArchiveTaskLog {
         long logOffset, long logLength) 
     throws IOException {
       LOG.debug("TaskLog.Reader.read: logOffset: " + logOffset + " - logLength: " + logLength);
-
+      SequenceInputStream in = null;
       // Sanity check
       if (logLength == 0) {
         return 0;
       }
-      
-      if (!initialized) {
-        init();
+      try {
+	      if (!initialized) {
+	        init();
+	      }
+	      
+	      // Locate the requisite splits 
+	      Vector<InputStream> streams = new Vector<InputStream>();
+	      long offset = logOffset;
+	      int startIndex = -1, stopIndex = -1;
+	      boolean inRange = false;
+	      for (int i=0; i < indexRecords.length; ++i) {
+	        LOG.debug("offset: " + offset + " - (split, splitOffset) : (" + 
+	            i + ", " + indexRecords[i].splitOffset + ")");
+	        
+	        if (offset <= indexRecords[i].splitOffset) {
+	          if (!inRange) {
+	            startIndex = i - ((i > 0) ? 1 : 0);
+	            LOG.debug("Starting at split: " + startIndex);
+	            offset += logLength;
+	            InputStream stream = getLogSplit(startIndex);
+	            if (stream != null) {
+	              streams.add(stream);
+	            }
+	            LOG.debug("Added split: " + startIndex);
+	            inRange = true;
+	          } else {
+	            stopIndex = i-1;
+	            LOG.debug("Stop at split: " + stopIndex);
+	            break;
+	          }
+	        }
+	        
+	        if (inRange) {
+	          InputStream stream = getLogSplit(i);
+	          if (stream != null) {
+	            streams.add(stream);
+	          }
+	          LOG.debug("Added split: " + i);
+	        }
+	      }
+	      if (startIndex == -1) {
+	        throw new IOException("Illegal logOffset/logLength");
+	      }
+	      if (stopIndex == -1) {
+	        stopIndex = indexRecords.length - 1;
+	        LOG.debug("Stop at split: " + stopIndex);
+	        
+	        // Check if request exceeds the log-file size
+	        if ((logOffset+logLength) > logFileSize) {
+	          LOG.debug("logOffset+logLength exceeds log-file size");
+	          logLength = logFileSize - logOffset;
+	        }
+	      }
+	      
+	      // Copy requisite data into user buffer
+	      in = new SequenceInputStream(streams.elements());
+	      if (streams.size() == (stopIndex - startIndex +1)) {
+	        // Skip to get to 'logOffset' if logs haven't been purged
+	        long skipBytes = 
+	          in.skip(logOffset - indexRecords[startIndex].splitOffset);
+	        LOG.debug("Skipped " + skipBytes + " bytes from " + 
+	            startIndex + " stream");
+	      }
+	      int bytesRead = 0, totalBytesRead = 0;
+	      len = Math.min((int)logLength, len);
+	      LOG.debug("Attempting to read " + len + " bytes from logs");
+	      while ((bytesRead = in.read(b, off, len)) > 0) {
+	        off += bytesRead;
+	        len -= bytesRead;
+	        
+	        totalBytesRead += bytesRead;
+	      }
+	      if( in != null )
+	    	  in.close( );
+	      
+	      return totalBytesRead;
+      } catch( IOException e ) {
+    	  LOG.error( "[ArchivTaskLog][read]" , e );
+    	  throw e;
       }
-      
-      // Locate the requisite splits 
-      Vector<InputStream> streams = new Vector<InputStream>();
-      long offset = logOffset;
-      int startIndex = -1, stopIndex = -1;
-      boolean inRange = false;
-      for (int i=0; i < indexRecords.length; ++i) {
-        LOG.debug("offset: " + offset + " - (split, splitOffset) : (" + 
-            i + ", " + indexRecords[i].splitOffset + ")");
-        
-        if (offset <= indexRecords[i].splitOffset) {
-          if (!inRange) {
-            startIndex = i - ((i > 0) ? 1 : 0);
-            LOG.debug("Starting at split: " + startIndex);
-            offset += logLength;
-            InputStream stream = getLogSplit(startIndex);
-            if (stream != null) {
-              streams.add(stream);
-            }
-            LOG.debug("Added split: " + startIndex);
-            inRange = true;
-          } else {
-            stopIndex = i-1;
-            LOG.debug("Stop at split: " + stopIndex);
-            break;
-          }
-        }
-        
-        if (inRange) {
-          InputStream stream = getLogSplit(i);
-          if (stream != null) {
-            streams.add(stream);
-          }
-          LOG.debug("Added split: " + i);
-        }
-      }
-      if (startIndex == -1) {
-        throw new IOException("Illegal logOffset/logLength");
-      }
-      if (stopIndex == -1) {
-        stopIndex = indexRecords.length - 1;
-        LOG.debug("Stop at split: " + stopIndex);
-        
-        // Check if request exceeds the log-file size
-        if ((logOffset+logLength) > logFileSize) {
-          LOG.debug("logOffset+logLength exceeds log-file size");
-          logLength = logFileSize - logOffset;
-        }
-      }
-      
-      // Copy requisite data into user buffer
-      SequenceInputStream in = new SequenceInputStream(streams.elements());
-      if (streams.size() == (stopIndex - startIndex +1)) {
-        // Skip to get to 'logOffset' if logs haven't been purged
-        long skipBytes = 
-          in.skip(logOffset - indexRecords[startIndex].splitOffset);
-        LOG.debug("Skipped " + skipBytes + " bytes from " + 
-            startIndex + " stream");
-      }
-      int bytesRead = 0, totalBytesRead = 0;
-      len = Math.min((int)logLength, len);
-      LOG.debug("Attempting to read " + len + " bytes from logs");
-      while ((bytesRead = in.read(b, off, len)) > 0) {
-        off += bytesRead;
-        len -= bytesRead;
-        
-        totalBytesRead += bytesRead;
-      }
-      
-      return totalBytesRead;
     }
 
     private synchronized InputStream getLogSplit(int split) 
@@ -598,10 +612,11 @@ public class ArchiveTaskLog {
       InputStream in = null;
       try {
         in = new BufferedInputStream(new FileInputStream(new File(splitName)));
+        in.close( );
       } catch (FileNotFoundException fnfe) {
         in = null;
         LOG.debug("Split " + splitName + " not found... probably purged!");
-      }
+      } 
       
       return in;
     }

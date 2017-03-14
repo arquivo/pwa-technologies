@@ -180,7 +180,7 @@ public class ARCMapRunner implements MapRunnable {
                 reportingDuringDownload.setDaemon(true);
                 reportingDuringDownload.start();
                 arc = ArchiveReaderFactory.get(this.location);
-            } catch (final Throwable e) {
+            } catch (final Exception e) {
                 //try {
                     final String msg = "Error opening " + this.location
                         + ": " + e.toString();
@@ -248,7 +248,7 @@ public class ARCMapRunner implements MapRunnable {
                                 incrCounter(Counter.LONG_ARCRECORDS_COUNT, 1);
                             break;
                         }
-                    } catch (final Throwable e) {
+                    } catch (final Exception e) {
                         // Failed parse of record. Keep going.
                         LOG.warn("Error processing " + rec.getMetaData(), e);
                     }
@@ -258,7 +258,7 @@ public class ARCMapRunner implements MapRunnable {
                 }                
                 this.reporter.setStatus("closing " + this.location, true);
                 
-            } catch (final Throwable e) {
+            } catch (final Exception e) {
                 // Problem parsing arc file.
                 this.reporter.incrCounter(Counter.BAD_ARC_PARSE_COUNT, 1);
                 final String msg = "Error parsing " + this.location;

@@ -65,7 +65,8 @@ public class ResultsPartitionsFactory {
 		
 		String rsd = startTS.getDateStr();
 		String red = endTS.getDateStr();
-
+		
+		
 		Date startDate = startTS.getDate();
 		Date endDate = endTS.getDate();
 
@@ -84,10 +85,11 @@ public class ResultsPartitionsFactory {
 		// ResultPartition objects:
 		ArrayList<ResultsPartition> partitions = 
 			new ArrayList<ResultsPartition>();
-
+		if( rsd == null || red == null || partitioner == null )
+			return null;
 		Calendar startCal = partitioner.dateStrToCalendar(rsd);
 		Calendar lastCal = partitioner.dateStrToCalendar(red);
-
+		
 		partitioner.alignStart(startCal);
 		Calendar endCal = partitioner.incrementPartition(startCal,1);
 		while (true) {

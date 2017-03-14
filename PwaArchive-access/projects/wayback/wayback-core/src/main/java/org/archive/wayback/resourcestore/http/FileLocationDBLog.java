@@ -53,22 +53,21 @@ public class FileLocationDBLog extends File {
 	 * @param pathname
 	 * @throws ConfigurationException
 	 */
-	public FileLocationDBLog(String pathname) throws ConfigurationException {
+	public FileLocationDBLog(String pathname) throws IOException {
 		super(pathname);
 		if (!isFile()) {
 			if (exists()) {
-				throw new ConfigurationException("path(" + pathname
+				throw new IOException("path(" + pathname
 						+ ") exists but is not a file!");
 			}
 			try {
 				if (!createNewFile()) {
-					throw new ConfigurationException(
-							"Unable to create empty file " + pathname);
+					throw new IOException( "Unable to create empty file " + pathname );
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new ConfigurationException("Unable to create empty file "
-						+ pathname);
+				throw e;
+
 			}
 		}
 	}
@@ -87,12 +86,20 @@ public class FileLocationDBLog extends File {
 	 * @throws IOException
 	 */
 	public CloseableIterator<String> getArcsBetweenMarks(long start, long end)
-			throws IOException {
-
-		RandomAccessFile raf = new RandomAccessFile(this, "r");
-		raf.seek(start);
-		BufferedReader is = new BufferedReader(new FileReader(raf.getFD()));
-		return new BufferedRangeIterator(new RecordIterator(is),end - start);
+			throws	IOException	 {
+		RandomAccessFile raf = null;
+		try {
+			raf = new RandomAccessFile(this, "r");
+			raf.seek(start);
+			BufferedReader is = new BufferedReader(new FileReader(raf.getFD()));
+			return new BufferedRangeIterator(new RecordIterator(is),end - start);
+		} catch( IOException e ) {
+			throw e;
+		} finally {
+			if( raf != null )
+				raf.close( );
+		}
+		
 	}
 
 	/**
@@ -136,19 +143,12 @@ public class FileLocationDBLog extends File {
 		/* (non-Javadoc)
 		 * @see java.util.Iterator#hasNext()
 		 */
-		public boolean hasNext() {
+		public boolean hasNext( ) {
 			if(done) return false;
 			if(next != null) return true;
 			if((bytesSent >= bytesToSend) || !itr.hasNext()) {
-				try {
-					close();
-				} catch (IOException e) {
-					// TODO This is lame. What is the right way?
-					throw new RuntimeException(e);
-				}
 				return false;
 			}
-			next = (String) itr.next();
 			return true;
 		}
 
@@ -156,9 +156,9 @@ public class FileLocationDBLog extends File {
 		 * @see java.util.Iterator#next()
 		 */
 		public String next() {
-			String returnString = next;
+			String returnString =  (String) itr.next(); 
 			next = null;
-			bytesSent += returnString.length() + 1; // TODO: not X-platform!
+			bytesSent += returnString.length() + 1; 
 			return returnString;
 		}
 
@@ -166,7 +166,7 @@ public class FileLocationDBLog extends File {
 		 * @see java.util.Iterator#remove()
 		 */
 		public void remove() {
-			throw new RuntimeException("not implemented");
+			throw new UnsupportedOperationException("not implemented");
 		}
 	}
 }
