@@ -87,19 +87,10 @@ public class FileLocationDBLog extends File {
 	 */
 	public CloseableIterator<String> getArcsBetweenMarks(long start, long end)
 			throws	IOException	 {
-		RandomAccessFile raf = null;
-		try {
-			raf = new RandomAccessFile(this, "r");
-			raf.seek(start);
-			BufferedReader is = new BufferedReader(new FileReader(raf.getFD()));
-			return new BufferedRangeIterator(new RecordIterator(is),end - start);
-		} catch( IOException e ) {
-			throw e;
-		} finally {
-			if( raf != null )
-				raf.close( );
-		}
-		
+		RandomAccessFile raf = new RandomAccessFile(this, "r");
+		raf.seek(start);
+		BufferedReader is = new BufferedReader(new FileReader(raf.getFD()));
+		return new BufferedRangeIterator(new RecordIterator(is),end - start);
 	}
 
 	/**
@@ -147,16 +138,22 @@ public class FileLocationDBLog extends File {
 			if(done) return false;
 			if(next != null) return true;
 			if((bytesSent >= bytesToSend) || !itr.hasNext()) {
-				return false;
+				try {		
+					close( );		
+				} catch (IOException e) {		
+					 throw new RuntimeException(e); // TODO This is lame. What is the right way?		
+				}		
+					return false;
 			}
-			return true;
+			next = (String) itr.next();		
+  			return true;
 		}
 
 		/* (non-Javadoc)
 		 * @see java.util.Iterator#next()
 		 */
 		public String next() {
-			String returnString =  (String) itr.next(); 
+			String returnString = next;
 			next = null;
 			bytesSent += returnString.length() + 1; 
 			return returnString;
