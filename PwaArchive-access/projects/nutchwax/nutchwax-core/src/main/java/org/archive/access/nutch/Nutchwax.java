@@ -178,7 +178,7 @@ public class Nutchwax
    */
   protected void doAll(final Path input, final String collectionName,
     final OutputDirectories od)
-    throws Exception
+    throws IOException
   {
     doImport(input, collectionName, od);
     doUpdate(od);
@@ -376,9 +376,10 @@ public class Nutchwax
         Class.forName(className).getDeclaredMethod("main", argTypes);
       result = mainMethod.invoke(newArgs, new Object [] {newArgs});
     }
-    catch (Throwable t)
+    catch (Exception t)
     {
-      t.printStackTrace();
+    	LOG.error( "[Nutchwax][doClassmain] error" , t );
+    	t.printStackTrace();
     }
 
     return result;
@@ -403,7 +404,7 @@ public class Nutchwax
     (new Multiple()).run(rewriteArgs(args, 1));
   }
     
-  protected void doVersion(final String [] args) throws Exception {
+  protected void doVersion() throws IOException {
 	  JobConf job = getJobConf();	  
 	  String collectionType = job.get(Global.COLLECTION_TYPE);	  
 	  System.out.println("Collection type:"+collectionType);
@@ -412,7 +413,7 @@ public class Nutchwax
   protected void doJob(final String jobName, final String [] args)
     throws Exception
   {
-    if (jobName.equals("import"))
+    if ( "import".equals( jobName ) )
     {
       // Usage: hadoop jar nutchwax.jar import input output name
       if (args.length != 4)
@@ -429,7 +430,7 @@ public class Nutchwax
       OutputDirectories od = new OutputDirectories(output);
       doImport(input, collectionName, od);
     }
-    else if (jobName.equals("update"))
+    else if ( "update".equals( jobName ) )
     {
       // Usage: hadoop jar nutchwax.jar update output
       if (args.length < 2)
@@ -451,7 +452,7 @@ public class Nutchwax
         }
       }
     }
-    else if (jobName.equals("invert"))
+    else if ( "invert".equals( jobName ) )
     {
       // Usage: hadoop jar nutchwax.jar invert output
       if (args.length < 2)
@@ -464,29 +465,29 @@ public class Nutchwax
       if (args.length == 2)
       {
         doInvert(od);
+        return;
       }
-      else
-      {
-        final int offset = 2;
-        Path [] segments = new Path[args.length - offset];
-
-        for (int i = offset; i < args.length; i++)
-        {
-          Path f = new Path(args[i]);
-
-          if (! getFS().exists(f))
-          {
-            throw new FileNotFoundException(f.toString());
-          }
-
-          segments[i - offset] = f;
-        }
-
-        doInvert(od, segments);
-      }
+      
+	    final int offset = 2;
+	    Path [] segments = new Path[args.length - offset];
+	
+	    for (int i = offset; i < args.length; i++)
+	    {
+	      Path f = new Path(args[i]);
+	      
+	      if (! getFS().exists(f))
+	      {
+	        throw new FileNotFoundException(f.toString());
+	      }
+	
+	      segments[i - offset] = f;
+	    }
+	
+	    doInvert(od, segments);
+      
     }
     /* TODO MC */
-    else if (jobName.equals("pagerank"))
+    else if ( "pagerank".equals( jobName ) )
     {
       // Usage: hadoop jar nutchwax.jar pagerank output
       if (args.length != 2)
@@ -498,41 +499,41 @@ public class Nutchwax
       doPagerank(od);      
     }  
     /* TODO MC */
-    else if (jobName.equals("index"))
+    else if ( "index".equals( jobName ) )
     {
       // Usage: hadoop jar nutchwax.jar index output
       if (args.length < 2)
       {
         doIndexUsage("ERROR: Wrong number of arguments passed.", 2);
       }
-
-      OutputDirectories od = new OutputDirectories(new Path(args[1]));
-
-      if (args.length == 2)
-      {
-        doIndexing(od);
-      }
-      else
-      {
-        final int offset = 2;
-        Path [] segments = new Path[args.length - offset];
-
-        for (int i = offset; i < args.length; i++)
-        {
-          Path f = new Path(args[i]);
-
-          if (! getFS().exists(f))
-          {
-            throw new FileNotFoundException(f.toString());
-          }
-
-          segments[i - offset] = f;
-        }
-
-        doIndexing(od, segments);
-      }
+	
+	  OutputDirectories od = new OutputDirectories(new Path(args[1]));
+	
+	  if (args.length == 2)
+	  {
+	    doIndexing(od);
+	    return;
+	  }
+      
+		final int offset = 2;
+		Path [] segments = new Path[args.length - offset];
+		
+		for (int i = offset; i < args.length; i++)
+		{
+		  Path f = new Path(args[i]);
+		
+		  if (! getFS().exists(f))
+		  {
+		    throw new FileNotFoundException(f.toString());
+		  }
+		
+		  segments[i - offset] = f;
+		}
+		
+		doIndexing(od, segments);
+      
     }
-    else if (jobName.equals("dedup"))
+    else if ( "dedup".equals( jobName ) )
     {
       // Usage: hadoop jar nutchwax.jar dedup output
       if (args.length != 2)
@@ -542,9 +543,8 @@ public class Nutchwax
 
       doDedup(new OutputDirectories(new Path(args[1])));
     }
-    else if (jobName.equals("merge"))
+    else if ( "merge".equals( jobName ) )
     {
-      // Usage: hadoop jar nutchwax.jar merge output");
       if (args.length != 2)
       {
         doMergeUsage("ERROR: Wrong number of arguments passed.", 2);
@@ -552,7 +552,7 @@ public class Nutchwax
 
       doMerge(new OutputDirectories(new Path(args[1])));
     }
-    else if (jobName.equals("all"))
+    else if ( "all".equals( jobName ) )
     {
       // Usage: hadoop jar nutchwax.jar import input output name
       if (args.length != 4)
@@ -570,7 +570,7 @@ public class Nutchwax
 
       doAll(input, collectionName, od);
     }
-    else if (jobName.equals("class"))
+    else if ( "class".equals( jobName ) )
     {
       if (args.length < 2)
       {
@@ -579,7 +579,7 @@ public class Nutchwax
 
       doClassMain(args);
     }
-    else if (jobName.equals("search"))
+    else if ( "search".equals( jobName ) )
     {
       if (args.length < 1)
       {
@@ -588,13 +588,13 @@ public class Nutchwax
 
       doSearch(args);
     }
-    else if (jobName.equals("multiple"))
+    else if ( "multiple".equals( jobName ) )
     {
       doMultiple(args);
     }
-    else if (jobName.equals("version"))
+    else if ( "version".equals( jobName ) )
     {
-      doVersion(args);
+      doVersion( );
     }    
     else
     {
@@ -948,49 +948,49 @@ public class Nutchwax
       usage("ERROR: Unknown job " + jobName, 1);
     }
 
-    if (jobName.equals("import"))
+    if ( "import".equals( jobName ) )
     {
       ImportArcs.doImportUsage(null, 1);
     }
-    else if (jobName.equals("update"))
+    else if ( "update".equals( jobName ) )
     {
       doUpdateUsage(null, 1);
     }
-    else if (jobName.equals("invert"))
+    else if ( "invert".equals( jobName ) )
     {
       doInvertUsage(null, 1);
     }
     /* TODO MC */    
-    else if (jobName.equals("pagerank"))
+    else if ( "pagerank".equals( jobName ) )
     {
       doPagerankUsage(null, 1);
     }
     /* TODO MC */
-    else if (jobName.equals("index"))
+    else if ( "index".equals( jobName ) )
     {
       doIndexUsage(null, 1);
     }
-    else if (jobName.equals("dedup"))
+    else if ( "dedup".equals( jobName ) )
     {
       doDedupUsage(null, 1);
     }
-    else if (jobName.equals("merge"))
+    else if ( "merge".equals( jobName ) )
     {
       doMergeUsage(null, 1);
     }
-    else if (jobName.equals("all"))
+    else if ( "all".equals( jobName ) )
     {
       doAllUsage(null, 1);
     }
-    else if (jobName.equals("search"))
+    else if ( "search".equals( jobName ) )
     {
       doSearchUsage(null, 1);
     }
-    else if (jobName.equals("multiple"))
+    else if ( "multiple".equals( jobName ) )
     {
       doMultipleUsage(null, 1);
     }
-    else if (jobName.equals("class"))
+    else if ( "class".equals( jobName ) )
     {
       doClassUsage(null, 1);
     }
@@ -1008,7 +1008,7 @@ public class Nutchwax
       return;
     }
 
-    if (args[0].toLowerCase().equals("help"))
+    if ( "help".equalsIgnoreCase( args[ 0 ] ) )
     {
       if (args.length == 1)
       {

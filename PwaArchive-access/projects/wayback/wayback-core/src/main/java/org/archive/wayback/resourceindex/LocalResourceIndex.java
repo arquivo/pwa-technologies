@@ -87,10 +87,11 @@ public class LocalResourceIndex implements ResourceIndex {
 	private void filterRecords(Iterator<SearchResult> itr,
 			ObjectFilter<SearchResult> filter, SearchResults results,
 			boolean forwards) throws IOException {
-
+		
 		if(dedupeRecords) {
 			itr = new AdaptedIterator<SearchResult, SearchResult>(itr,
 					new DeduplicationSearchResultAnnotationAdapter());
+			
 		}
 		while (itr.hasNext()) {
 			SearchResult result = itr.next();
@@ -101,11 +102,13 @@ public class LocalResourceIndex implements ResourceIndex {
 				results.addSearchResult(result, forwards);
 			}
 		}
+
 		if(itr instanceof CloseableIterator) {
 			CloseableIterator<SearchResult> citr =
 				(CloseableIterator<SearchResult>) itr;
 			source.cleanup(citr);
 		}
+	
 	}
 
 	private String getRequired(WaybackRequest wbRequest, String field,

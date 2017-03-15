@@ -75,12 +75,15 @@ public class Http11ResourceStore implements ResourceStore {
 		try {
 
 			r = ResourceFactory.getResource(new URL(fileUrl), offset);
-
+			
 		} catch (IOException e) {
 
 			e.printStackTrace();
 			throw new ResourceNotAvailableException("Unable to retrieve",
 					e.getLocalizedMessage());
+		} finally {
+			if( r != null )
+				r.close( );
 		}
 		return r;
 	}

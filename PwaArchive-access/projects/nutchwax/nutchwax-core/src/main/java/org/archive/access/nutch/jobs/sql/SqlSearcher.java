@@ -10,8 +10,8 @@ import java.text.*;
  */
 public class SqlSearcher {
 	  
-	  private final static SimpleDateFormat formatterTimestampToString = new SimpleDateFormat("yyyyMMdd");
-	  private final static String SQL_QUERY=
+	  private final  SimpleDateFormat formatterTimestampToString = new SimpleDateFormat("yyyyMMdd");
+	  private final  String SQL_QUERY=
 		"select abs(extract(epoch FROM date-?::timestamp)) as duration, date " +
 	    "from files " +
 	    "where url=? " +

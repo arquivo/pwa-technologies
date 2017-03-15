@@ -70,8 +70,9 @@ public class FileLocationDB extends BDBRecordSet {
 	/**
 	 * @throws DatabaseException
 	 * @throws ConfigurationException
+	 * @throws IOException 
 	 */
-	public void init() throws DatabaseException, ConfigurationException {
+	public void init() throws DatabaseException, ConfigurationException, IOException {
 		if(logPath == null) {
 			throw new ConfigurationException("No logPath");
 		}

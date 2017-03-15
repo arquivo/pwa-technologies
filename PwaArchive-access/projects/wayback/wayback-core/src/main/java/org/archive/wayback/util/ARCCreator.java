@@ -198,13 +198,21 @@ public class ARCCreator {
 				throw new RuntimeException("Missing components for key " + key +
 						" in directory " + componentDir.getAbsolutePath());
 			}
-			File metaFile = new File(componentDir,key + ".meta");
-			RandomAccessFile raFile = new RandomAccessFile(metaFile, "r");
+			File metaFile = null;
+			RandomAccessFile raFile = null;
+			try {
+				metaFile = new File(componentDir,key + ".meta");
+				raFile = new RandomAccessFile(metaFile, "r");
+			} finally {
+				if( raFile != null )
+					raFile.close( );
+			}
 			String metaLine = raFile.readLine();
 			if (metaLine == null) {
 				throw new IOException("No meta info in " + 
 						metaFile.getAbsolutePath());
 			}
+
 			String metaParts[] = metaLine.split(" ");
 			if(metaParts.length != 5) {
 				throw new IOException("Should be 5 elements in " + 

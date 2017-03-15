@@ -16,14 +16,14 @@ import org.apache.commons.logging.LogFactory;
 public class TimeoutParsingThread extends Thread {
 	
 	private final Log LOG = LogFactory.getLog(TimeoutParsingThread.class);
-	private final Integer lock = 999; // TODO: don't use global objects, since they can be shared by the compiler; use unique objects
-		
-	private boolean done; // if thread should finish 	
+	//private final Integer lock = 999; // TODO: don't use global objects, since they can be shared by the compiler; use unique objects
+	private final Object lock = new Object();
+	private boolean done; // if thread should finish
 	private long id; // thread id
 	private String url; // url been parsed
 	private boolean isWaiting; // indicates if thread is waiting
 	private boolean isSignalled2Start;
-	private boolean isSignalled2Finish; 
+	private boolean isSignalled2Finish;
 	private Parse parse;
 	private ParseStatus parseStatus;
 	private ParseUtil parseUtil;
@@ -57,6 +57,7 @@ public class TimeoutParsingThread extends Thread {
 	/**
 	 * 
 	 */
+	@Override
 	public void run() {				
 		
    	    while (!done) {    	    	
@@ -68,6 +69,7 @@ public class TimeoutParsingThread extends Thread {
    	    			}            
    	    			catch (InterruptedException ignored) {
    	    				isSignalled2Start=true;
+   	    				LOG.warn( "[TimeoutParsing][run] " , ignored );
    	    			}
    	    		}
    	    		isSignalled2Start=false;
@@ -97,11 +99,7 @@ public class TimeoutParsingThread extends Thread {
    		catch (Exception e) { // InterruptedException also caught here
    			parse = null;
    			parseStatus = new ParseStatus(e);		    
-   		}
-   		catch (Error e) { 
-   			parse = null;
-   			parseStatus = new ParseStatus(e);		
-   			LOG.warn("Thread error for Mapper with id "+id+" and url "+url+". Error "+e.getMessage());
+   			LOG.error("Thread error for Mapper with id "+id+" and url "+url+". Error "+e.getMessage());
    		}
 	}
 	
@@ -115,11 +113,11 @@ public class TimeoutParsingThread extends Thread {
 				Thread.sleep(100); // wait for the other thread 
 			} 
 			catch (InterruptedException ignored) {	
+				LOG.warn( "[TimeoutParsing][run] " , ignored );
 				return;
 			}
 		}
 				
-		long startWaiting=0;
 		long totalTime=0;
 		synchronized(lock) {						
 			// wakeup		
@@ -127,12 +125,13 @@ public class TimeoutParsingThread extends Thread {
 			lock.notify();			
 			
 			// wait until notification, interrupt or timeout
-			startWaiting=System.currentTimeMillis();
+			long startWaiting=System.currentTimeMillis();
 			while (!isSignalled2Finish && totalTime<timeoutIndexingDocument) {
 				try {				
 					lock.wait(timeoutIndexingDocument-totalTime);
 				}            
-				catch (InterruptedException ignored) {	  
+				catch (InterruptedException ignored) {	 
+					LOG.warn( "[TimeoutParsing][run] " , ignored );
 					isSignalled2Finish=true;
 				}	  
 	    	   	totalTime=System.currentTimeMillis()-startWaiting;

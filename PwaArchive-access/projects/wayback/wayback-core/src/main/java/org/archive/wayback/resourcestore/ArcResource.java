@@ -98,11 +98,12 @@ public class ArcResource extends Resource {
                 String metaKey = entry.getKey();
                 Object value = entry.getValue();
 
-                String metaValue = "";
+                /*TODO JN:  Spaghetti code - does not make sense
+                 * String metaValue = "";
                 if(metaValue != null) {
                     metaValue = metaValue.toString();
-                }
-                metaData.put(ARC_META_PREFIX + metaKey, metaValue);
+                }*/
+                metaData.put(ARC_META_PREFIX + metaKey, "");
             }
 
 			parsedHeader = true;			

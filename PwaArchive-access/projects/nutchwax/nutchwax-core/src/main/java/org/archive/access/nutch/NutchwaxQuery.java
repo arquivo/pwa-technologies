@@ -67,9 +67,7 @@ public class NutchwaxQuery
     try
     {
       md = MessageDigest.getInstance("MD5");
-    }
-    catch (NoSuchAlgorithmException e)
-    {
+    } catch ( NoSuchAlgorithmException e ) {
       LOGGER.severe("Failed to get md5 digester: " + e.getMessage());
     }
   }
@@ -141,12 +139,14 @@ public class NutchwaxQuery
         sb.append(mexpand.group(3));
     }                  
     else { // TODO MC - BUG nutchwax 0000357 
-    	sb.append(mexpandmin.group(1).substring(0, mexpandmin.group(1).length()-4)); // remove "min:" and use only exacturlexpand   	
-    	String encoded = Base32.encode(md.digest(mexpandmin.group(2).getBytes()));    	
-        sb.append(":").append(encoded);
-    	encoded = Base32.encode(md.digest((mexpandmin.group(2)+"/").getBytes()));        
-        sb.append(" exacturlexpand:").append(encoded);
-    	sb.append(mexpandmin.group(3));    	   
+    	if( mexpandmin != null ) {
+    		sb.append(mexpandmin.group(1).substring(0, mexpandmin.group(1).length()-4)); // remove "min:" and use only exacturlexpand   	
+        	String encoded = Base32.encode(md.digest(mexpandmin.group(2).getBytes()));    	
+            sb.append(":").append(encoded);
+        	encoded = Base32.encode(md.digest((mexpandmin.group(2)+"/").getBytes()));        
+            sb.append(" exacturlexpand:").append(encoded);
+        	sb.append(mexpandmin.group(3));
+    	}
     }
 
     return sb.toString();

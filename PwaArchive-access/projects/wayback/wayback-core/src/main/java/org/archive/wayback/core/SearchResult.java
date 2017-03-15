@@ -145,6 +145,9 @@ public class SearchResult implements Comparator<SearchResult> {
 	 * @return
 	 */
 	public boolean equals(SearchResult o1) {
-		return this.data.equals(o1.data);
+		if( o1 != null && o1.data != null )
+			return this.data.equals(o1.data);
+		else 
+			return false;
 	}
 }

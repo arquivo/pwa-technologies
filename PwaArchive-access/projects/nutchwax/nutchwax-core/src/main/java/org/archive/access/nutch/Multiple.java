@@ -334,13 +334,13 @@ public class Multiple extends ToolBase implements Mapper
       return -1;
     }
     
-    JobConf job = new JobConf(MultipleInputFormat.class);
-    job.setInputFormat(MultipleInputFormat.class);
-    job.setInputPath(new Path(args[0]));
-    job.setMapperClass(Multiple.class);
-    job.setOutputPath(new Path(args[1]));
+    JobConf jobcon = new JobConf(MultipleInputFormat.class);
+    jobcon.setInputFormat(MultipleInputFormat.class);
+    jobcon.setInputPath(new Path(args[0]));
+    jobcon.setMapperClass(Multiple.class);
+    jobcon.setOutputPath(new Path(args[1]));
     
-    JobClient.runJob(job);
+    JobClient.runJob(jobcon);
     
     return 0;
   }
