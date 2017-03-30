@@ -374,6 +374,7 @@ String[] queryString_splitted=null;
         <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
         <% } %>
         <script type="text/javascript" src="js/configs.js"></script>
+        <%@include file="include/analytics.jsp" %>
 </head>
 <body>
   <%@ include file="include/topbar.jsp" %>
@@ -699,7 +700,13 @@ function getDateSpaceFormated(ts){
   var month = ts.substring(4, 6);
   month = Content.months[month];
   var day = ts.substring(6, 8);
-  return day + " "+ month + " " +year;
+  if( day[0] === '0'){
+    day = day[1];
+  }
+  var hours = ts.substring(8,10);
+  var minutes = ts.substring(10,12);
+
+  return day + " "+ month + " " +year+ " " +" " + Content.at + " " + hours+":"+minutes;
 }
 
 function getShortDateSpaceFormated(ts){
@@ -769,18 +776,19 @@ function createMatrix(versionsArray, versionsURL){
     var rowId = (i+1).toString()
     $("#tableBody").append('<tr id="'+rowId+'">'+rowString+'<tr>');
   }
-  $('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
+  if($('#1 td:nth-child('+String(matrix.length)+')').html() ==='&nbsp;'){ /*If last year in the table doesn't have versions show embargo message*/
+  	$('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
+  }
 }
 
-
 function createResultsPage(numberOfVersions, inputURL){
-    
+
     $('<div class="clear">&nbsp;</div>'+
       '<div id="resultados-url">'+Content.resultsQuestion+' \'<a href="search.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>\'</div>'+
       '<div class="wrap">' +
              '  <div id="intro">' +
              '    <h1 style="text-align: center;">'+Content.versionsStored+'</h1>' +
-             '    <span class="texto-1" style="text-align: center;">'+ numberOfVersions +' ' + Content.versionsPage+' '+ inputURL+
+             '    <span class="texto-1" style="text-align: center;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' ' + Content.versionsPage+' '+ inputURL+
                 '</span>' +
              '  </div>' +
              '</div>' + 
@@ -798,6 +806,18 @@ function createResultsPage(numberOfVersions, inputURL){
              '</div>'        ).insertAfter("#firstWrap");
      
 }
+
+function formatNumberOfVersions( numberofVersionsString){
+  formatedNumberOfVersionsString = '';
+  for (var i = 0, len = numberofVersionsString.length; i < len; i++) {
+    if( (len-i)%3 === 0 ){
+      formatedNumberOfVersionsString+= ' ';
+    }
+    formatedNumberOfVersionsString+= numberofVersionsString[i];
+  }
+  return formatedNumberOfVersionsString;
+}
+
 function createErrorPage(){
   $('<div id="conteudo-resultado">'+
            '  <div id="first-column">&nbsp;</div>'+
@@ -847,7 +867,7 @@ function createErrorPage(){
        data: {
           output: 'json',
           url: urlsource,
-          fl: 'url,timestamp',
+          fl: 'url,timestamp,status',
           from: startTs,
           to: endTs
        },
@@ -864,13 +884,18 @@ function createErrorPage(){
           $.each(tokens, function(e){
               if(this != ""){
                   var version = JSON.parse(this);
-                  versionsArray.push(version.timestamp);
-                  versionsURL.push(version.url);
+                  if(version.status[0] === '4' || version.status[0] === '5'){ /*Ignore 400's and 500's*/
+                    /*empty on purpose*/ 
+                  } 
+                  else{
+                    versionsArray.push(version.timestamp);
+                    versionsURL.push(version.url);
+                  }
                    
               }
               
           }); 
-          createResultsPage(tokens.length - 1, inputURL);
+          createResultsPage(tokens.length-1, inputURL);
           createMatrix(versionsArray, versionsURL);
           //top.alert(versionsArray.length)
        },
@@ -914,9 +939,7 @@ function createErrorPage(){
               // option: (3)
                                 showList = true;                    
                                 showTip = urlMatch.group(1);
-                                String queryString_expanded="";
-                               // String queryString_expanded="";
-                                /*if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
+                                if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
                                   queryString_splitted = queryString.split(" ");
                                   String queryString_expanded="";
                                   for (int i =0; i<queryString_splitted.length;i++){
@@ -930,26 +953,18 @@ function createErrorPage(){
                                     queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i]); //TODO: SPLIT HOSTNAME
 
                                    }
-                                   queryString_expanded+=" "+queryString_splitted[i];
+                                  queryString_expanded+=" "+queryString_splitted[i];
                                   }
                           
                                         query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
                                 }
-                                else {*/
-                                 if( queryString.contains("date:") ) {
-                                  queryString_splitted = queryString.split(" ");
-                                  for (int i =0; i<queryString_splitted.length;i++){
-                                    if( !queryString_splitted[i].startsWith( "date:" ) )
-                                      queryString_expanded+=" "+queryString_splitted[i];
-                                  }
-                                } 
-                                  bean.LOG.debug("[FRONT-END] query input: " + queryString_expanded );
-                                  query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
-                                  bean.LOG.debug("[FRONT-END] query output: " + query.toString());
-                                
+                                else
+                                  query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
+                                bean.LOG.debug("query: " + query.toString());
             }
           } else {
             // option: (1)
+            
                         query = NutchwaxQuery.parse(queryString, nutchConf);            //create the query object
                         bean.LOG.debug("query: " + query.toString());
             
@@ -1167,7 +1182,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
     </div>
   </div>
 <%@include file="include/footer.jsp" %>
-<%@include file="include/analytics.jsp" %>
+
 </body>
 </html>
 
