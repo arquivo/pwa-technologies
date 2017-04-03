@@ -88,10 +88,10 @@ $(document).ready( function() {
         
         if (matcher == null ){ // If the date is malformed fell up the input box with the standard date
             changedDate = parsedDate;
-            if (selector == "dateStart_top"){
+            if (selector === "dateStart_top"){
                 document.getElementById('dateStart_top').value = changedDate;
             }
-            else if (selector == "dateEnd_top") {
+            else if (selector === "dateEnd_top") {
                 document.getElementById('dateEnd_top').value = changedDate;
             }
         }        
@@ -167,7 +167,7 @@ $(document).ready( function() {
 
 			if ( queryParam !== correctionText) {
 				for (var p in params) {
-					if (p == 'query') {
+					if (p === 'query') {
 						correctionUrl += p +'='+ encodeURIComponent(correctionText) +'&';
 					} else {
 						correctionUrl += p +"="+ params[p] +"&";

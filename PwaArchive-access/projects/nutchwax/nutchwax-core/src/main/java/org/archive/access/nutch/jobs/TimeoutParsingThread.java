@@ -68,8 +68,9 @@ public class TimeoutParsingThread extends Thread {
    	    				lock.wait(); // wait until notified
    	    			}            
    	    			catch (InterruptedException ignored) {
+   	    				Thread.currentThread().interrupt();  // set interrupt flag
    	    				isSignalled2Start=true;
-   	    				LOG.warn( "[TimeoutParsing][run] " , ignored );
+   	    				LOG.error( "[TimeoutParsing][run] " , ignored );
    	    			}
    	    		}
    	    		isSignalled2Start=false;
@@ -113,7 +114,8 @@ public class TimeoutParsingThread extends Thread {
 				Thread.sleep(100); // wait for the other thread 
 			} 
 			catch (InterruptedException ignored) {	
-				LOG.warn( "[TimeoutParsing][run] " , ignored );
+				Thread.currentThread().interrupt();  // set interrupt flag
+				LOG.error( "[TimeoutParsing][run] " , ignored );
 				return;
 			}
 		}
@@ -131,7 +133,8 @@ public class TimeoutParsingThread extends Thread {
 					lock.wait(timeoutIndexingDocument-totalTime);
 				}            
 				catch (InterruptedException ignored) {	 
-					LOG.warn( "[TimeoutParsing][run] " , ignored );
+					Thread.currentThread().interrupt();  // set interrupt flag
+					LOG.error( "[TimeoutParsing][run] " , ignored );
 					isSignalled2Finish=true;
 				}	  
 	    	   	totalTime=System.currentTimeMillis()-startWaiting;
