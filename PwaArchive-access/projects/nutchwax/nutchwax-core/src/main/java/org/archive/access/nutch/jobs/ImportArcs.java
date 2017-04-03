@@ -647,6 +647,7 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
 
   protected static String checkMimetype(String mimetype)
   {
+	  MimeType aux = null;
     if ((mimetype == null) || (mimetype.length() <= 0) ||
       mimetype.startsWith(MimetypeUtils.NO_TYPE_MIMETYPE))
     {
@@ -654,12 +655,9 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
     }
 
     // Test the mimetype makes sense. If not, clear it.
-    try
-    {
-      new MimeType(mimetype);
-    }
-    catch (final MimeTypeException e)
-    {
+    try{
+    	aux = new MimeType(mimetype);
+    } catch ( final MimeTypeException e ) {
       mimetype = null;
     }
     

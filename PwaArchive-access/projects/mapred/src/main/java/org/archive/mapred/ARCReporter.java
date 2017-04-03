@@ -39,7 +39,7 @@ public class ARCReporter implements Reporter {
     private long nextUpdate = 0;
     private long time = System.currentTimeMillis();
 
-    private static final long FIVE_MINUTES = 1000 * 60 * 5;
+    private static final long FIVE_MINUTES = 1000l * 60l * 5l;
     
     public ARCReporter(final Reporter r) {
         this.wrappedReporter = r;

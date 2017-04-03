@@ -103,7 +103,8 @@ public class ARCMapRunner implements MapRunnable {
                 try {
                     thread.join(period);
                 } catch (final InterruptedException e) {
-                    e.printStackTrace();
+                	Thread.currentThread().interrupt();  // set interrupt flag
+                	LOG.error( "[ARCMapRunner][startIndexingThread] e: ", e );
                 }
             }
         } finally {
@@ -122,7 +123,9 @@ public class ARCMapRunner implements MapRunnable {
             // Give it some time to die.
             thread.join(1000);
         } catch (final InterruptedException e) {
-            e.printStackTrace();
+        	Thread.currentThread().interrupt();  // set interrupt flag
+        	LOG.error( "[ARCMapRunner][cleanup] e: ", e );
+            //e.printStackTrace();
         }
         if (thread.isAlive()) {
             LOG.info(thread.getName() + " will not die");
@@ -149,6 +152,7 @@ public class ARCMapRunner implements MapRunnable {
          */
         protected ArchiveReader getArchiveReader() {
             ArchiveReader arc = null;
+            final int sleeptime = 1000 * 60;
             // Need a thread that will keep updating TaskTracker during long
             // downloads else tasktracker will kill us.
             Thread reportingDuringDownload = null;
@@ -159,7 +163,8 @@ public class ARCMapRunner implements MapRunnable {
                         while (!this.isInterrupted()) {
                             try {
                                 synchronized (this) {
-                                    sleep(1000 * 60); // Sleep a minute.
+                                	wait( sleeptime );
+                                    //sleep( sleeptime ); // Sleep a minute.
                                 }
                                 reporter.setStatus("downloading " +
                                     location);
@@ -171,6 +176,7 @@ public class ARCMapRunner implements MapRunnable {
                                 break;
                             */    
                             } catch (final InterruptedException e) {
+                            	Thread.currentThread().interrupt();  // JN - set interrupt flag
                                 // Interrupt flag is cleared. Just fall out.
                                 break;
                             }
