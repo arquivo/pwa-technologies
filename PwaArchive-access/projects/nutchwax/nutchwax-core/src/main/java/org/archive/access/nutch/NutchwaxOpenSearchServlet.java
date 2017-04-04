@@ -230,7 +230,7 @@ public class NutchwaxOpenSearchServlet extends OpenSearchServlet
 	
 	      public boolean isRequestedSessionIdFromUrl()
 	      {
-	        throw new IOException("Unimplemented");
+	        throw new RuntimeException("Unimplemented");
 	      }
 	
 	      public Object getAttribute(String s)
@@ -351,7 +351,7 @@ public class NutchwaxOpenSearchServlet extends OpenSearchServlet
 	
 	      public String getRealPath(String a)
 	      {
-	        throw new IOException("Unimplemented");
+	        throw new RuntimeException("Unimplemented");
 	      }
 	
 	      public int getRemotePort()
