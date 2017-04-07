@@ -82,7 +82,7 @@
                                                         <input class="search-inputtext" type="text" size="15" value="<fmt:message key='search.value'/>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' "  name="query" id="txtSearch" accesskey="t" />
                                                         <input type="reset" value="&nbsp;" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
                                                         <input type="submit" value="<fmt:message key='home.submit'/>" class="home-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
-                                                        <a href="advanced.jsp?l=<%=language%>" onclick="{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>
+                                                        <a href="advanced.jsp?l=<%=language%>" onclick="ga('send', 'event', 'Homepage', 'pesquisa-avancada', 'Click on link (Pesquisa avancada)');{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>
                                                         <script type="text/javascript">
                                                           String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
                                                               return this.split(needle).join(replacement);
@@ -197,7 +197,7 @@
                                                 <h1><fmt:message key='home.title'/></h1>
                                                <!-- <h2><fmt:message key='home.subtitle'/></h2> -->
                                                 <p class="green"><fmt:message key='home.description'/></p>
-                                                <a href="http://sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>"><fmt:message key='home.know-more'/></a>
+                                                <a href="http://sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>" onclick="ga('send', 'event', 'Homepage', 'conheca-servico', 'Click on link (sobre.arquivo)');"><fmt:message key='home.know-more'/></a>
                                         </div>
                                 </div>
 		</div>
@@ -215,7 +215,7 @@
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="/wayback/19980205082901/http://www.caleida.pt/saramago/" title="<fmt:message key='highlight.saramago.link.title'/>"><fmt:message key='highlight.saramago.title'/></a>
+                                                        <a href="/wayback/19980205082901/http://www.caleida.pt/saramago/" title="<fmt:message key='highlight.saramago.link.title'/>" onclick="ga('send', 'event', 'Homepage', 'jose-saramago', 'Click on link (Exemplos)');"><fmt:message key='highlight.saramago.title'/></a>
                                                         <p class="box-sub-title"><fmt:message key='highlight.saramago.description'/></p>
                                                         <p><fmt:message key='highlight.saramago.description2'/></p>
                                                 </div>
@@ -227,7 +227,7 @@
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-							<a href="/wayback/20000823154833/http://www.parquedasnacoes.pt/pt/expo98/" title="<fmt:message key='highlight.expo98.link.title'/>"><fmt:message key='highlight.expo98.title'/></a>
+							<a href="/wayback/20000823154833/http://www.parquedasnacoes.pt/pt/expo98/" title="<fmt:message key='highlight.expo98.link.title'/>" onclick="ga('send', 'event', 'Homepage', 'expo-98', 'Click on link (Exemplos)');"><fmt:message key='highlight.expo98.title'/></a>
                                                         <p class="box-sub-title"><fmt:message key='highlight.expo98.description'/></p>
                                                         <p><fmt:message key='highlight.expo98.description2'/></p>
                                                 </div>
@@ -239,7 +239,7 @@
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="/wayback/20040525212736/http://euro2004.clix.pt/" title="<fmt:message key='highlight.euro2004.link.title'/>"><fmt:message key='highlight.euro2004.title'/></a>
+                                                        <a href="/wayback/20040525212736/http://euro2004.clix.pt/" title="<fmt:message key='highlight.euro2004.link.title'/>" onclick="ga('send', 'event', 'Homepage', 'euro-2004', 'Click on link (Exemplos)');"><fmt:message key='highlight.euro2004.title'/></a>
                                                         <p class="box-sub-title"><fmt:message key='highlight.euro2004.description'/></p>
                                                         <p><fmt:message key='highlight.euro2004.description2'/></p>
                                                 </div>
@@ -251,7 +251,7 @@
                                                         <div class="mascara-img-gr"></div>
                                                 </div>
                                                 <div class="box-info">
-                                                        <a href="/wayback/20011230091638/http://www.ojogo.pt/17-300/artigo145049.htm" title="<fmt:message key='highlight.figo.link.title'/>"><fmt:message key='highlight.figo.title'/></a>
+                                                        <a href="/wayback/20011230091638/http://www.ojogo.pt/17-300/artigo145049.htm" title="<fmt:message key='highlight.figo.link.title'/>" onclick="ga('send', 'event', 'Homepage', 'Luis Figo', 'Click on link (Exemplos)');"><fmt:message key='highlight.figo.title'/></a>
                                                         <p class="box-sub-title"><fmt:message key='highlight.figo.description'/></p>
                                                         <p><fmt:message key='highlight.figo.description2'/></p>
                                                 </div>
@@ -262,10 +262,10 @@
 <!--Inspect the language for returning the proper highlight page  -->
 <c:choose>
   <c:when test="${language == 'pt'}">
-   <a href="http://sobre.arquivo.pt/sobre/paginas-de-exemplo-no-arquivo-da-web-portuguesa" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
+   <a href="http://sobre.arquivo.pt/sobre/paginas-de-exemplo-no-arquivo-da-web-portuguesa" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
   </c:when>
   <c:otherwise>
-    <a href=" http://sobre.arquivo.pt/about-the-archive/example-pages-in-the-portuguese-web-archive" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques"><fmt:message key='home.highlights'/></a>
+    <a href=" http://sobre.arquivo.pt/about-the-archive/example-pages-in-the-portuguese-web-archive" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
   </c:otherwise>
 </c:choose>
 
