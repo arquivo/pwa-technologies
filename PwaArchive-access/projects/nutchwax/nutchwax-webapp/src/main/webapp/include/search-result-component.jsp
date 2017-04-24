@@ -152,7 +152,7 @@
             final int TITLE_MAX_LENGTH = 60;
             int tagLengthCount = 0;
 
-	    outerLoop:
+	    outerLoop: // JN: spaghetti-code!!!
             for ( String s : splittedTitle ) {
 
                 if (newTitle.length() > 0) {

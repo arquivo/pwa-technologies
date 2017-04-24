@@ -937,30 +937,42 @@ function createErrorPage(){
 
             } else {
               // option: (3)
-                                showList = true;                    
-                                showTip = urlMatch.group(1);
-                                if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
-                                  queryString_splitted = queryString.split(" ");
-                                  String queryString_expanded="";
-                                  for (int i =0; i<queryString_splitted.length;i++){
-                                   if (queryString_splitted[i].contains("site:")){
-                                    queryString_splitted[i] = queryString_splitted[i].replace("site:", "");
+              showList = true;                    
+              showTip = urlMatch.group(1);
+              String queryString_expanded="";
+             // String queryString_expanded="";
+              /*if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
+                queryString_splitted = queryString.split(" ");
+                String queryString_expanded="";
+                for (int i =0; i<queryString_splitted.length;i++){
+                 if (queryString_splitted[i].contains("site:")){
+                  queryString_splitted[i] = queryString_splitted[i].replace("site:", "");
 
 
-                                    URL queryStringURL = new URL("http://"+queryString_splitted[i]);
-                                    String queryStringHost = queryStringURL.getHost();
-                                    queryString_splitted[i] = queryString_splitted[i].replace(queryStringHost, queryStringHost.toLowerCase()); // hostname to lowercase
-                                    queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i]); //TODO: SPLIT HOSTNAME
+                  URL queryStringURL = new URL("http://"+queryString_splitted[i]);
+                  String queryStringHost = queryStringURL.getHost();
+                  queryString_splitted[i] = queryString_splitted[i].replace(queryStringHost, queryStringHost.toLowerCase()); // hostname to lowercase
+                  queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i]); //TODO: SPLIT HOSTNAME
 
-                                   }
-                                  queryString_expanded+=" "+queryString_splitted[i];
-                                  }
-                          
-                                        query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
-                                }
-                                else
-                                  query = NutchwaxQuery.parse(queryString, nutchConf);    //create the query object
-                                bean.LOG.debug("query: " + query.toString());
+                 }
+                 queryString_expanded+=" "+queryString_splitted[i];
+                }
+        
+                      query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
+              }
+              else {*/
+              if( queryString.contains("date:") ) {
+                queryString_splitted = queryString.split(" ");
+                for (int i =0; i<queryString_splitted.length;i++){
+                  if( !queryString_splitted[i].startsWith( "date:" ) )
+                    queryString_expanded+=" "+queryString_splitted[i];
+                }
+              }
+
+
+              //bean.LOG.debug( "[FRONT-END] query input: " + queryString_expanded );
+              query = NutchwaxQuery.parse( queryString_expanded , nutchConf );    //create the query object
+              bean.LOG.debug( "[FRONT-END] query output: " + query.toString( ) );
             }
           } else {
             // option: (1)
