@@ -940,7 +940,7 @@ function createErrorPage(){
               showList = true;                    
               showTip = urlMatch.group(1);
               String queryString_expanded="";
-             // String queryString_expanded="";
+             // String queryString_expanded=""; TODO bug: search subdomains with site operator 
               /*if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
                 queryString_splitted = queryString.split(" ");
                 String queryString_expanded="";
@@ -961,16 +961,18 @@ function createErrorPage(){
                       query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
               }
               else {*/
-              if( queryString.contains("date:") ) {
-                queryString_splitted = queryString.split(" ");
-                for (int i =0; i<queryString_splitted.length;i++){
-                  if( !queryString_splitted[i].startsWith( "date:" ) )
-                    queryString_expanded+=" "+queryString_splitted[i];
+              bean.LOG.debug("[search.jsp] query input: " + queryString );
+              queryString_splitted = queryString.split(" ");
+
+              if( queryString.contains( "site:" ) || queryString.contains( "date:" ) ) {
+                String buildTerm = ""; 
+                for ( int i =0 ; i < queryString_splitted.length ; i++ ){
+                  buildTerm = queryString_splitted[ i ];
+                  queryString_expanded += " " + buildTerm; 
                 }
               }
-
-
-              //bean.LOG.debug( "[FRONT-END] query input: " + queryString_expanded );
+              
+              bean.LOG.debug( "[FRONT-END] query input: " + queryString_expanded );
               query = NutchwaxQuery.parse( queryString_expanded , nutchConf );    //create the query object
               bean.LOG.debug( "[FRONT-END] query output: " + query.toString( ) );
             }
