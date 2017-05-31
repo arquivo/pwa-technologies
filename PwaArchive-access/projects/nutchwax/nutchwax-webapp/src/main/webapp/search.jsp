@@ -868,6 +868,7 @@ function createErrorPage(){
           output: 'json',
           url: urlsource,
           fl: 'url,timestamp,status',
+          filter: '!status:4|5',
           from: startTs,
           to: endTs
        },
