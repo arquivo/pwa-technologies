@@ -228,12 +228,12 @@
   <script  src="/js/jquery-latest.min.js" type="text/javascript"></script>
   <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src='http://rawgit.com/jasonday/jQuery-UI-Dialog-extended/master/jquery.dialogOptions.js'></script>
+  <script src='js/jquery.dialogOptions.js'></script>
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
   <script type="text/javascript" src="js/ui.datepicker.js"></script>
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
   <script type="text/javascript" src="js/configs.js"></script>
-  <script type="text/javascript" src="js/images.js"></script>
+  <script type="text/javascript" src="js/images2.js"></script>
  
   <script type="text/javascript">
     clickToCopy = '<fmt:message key="images.clickToCopy" />';
@@ -297,7 +297,6 @@ Content = {
   showImage='<fmt:message key="images.showImage" />';
 </script>
 
-
 <script type="text/javascript" src="/js/js.cookie.js"></script>
 
 
@@ -313,7 +312,7 @@ Content = {
 </div>
 
         <div id="search-header">
-            <form id="loginForm" action="images.jsp" name="imageSearchForm" method="get">
+            <form id="loginForm" action="images2.jsp" name="imageSearchForm" method="get">
               <input type="hidden" name="l" value="<%= language %>" />
               <fieldset id="pesquisar">
                 <label for="txtSearch">&nbsp;</label>

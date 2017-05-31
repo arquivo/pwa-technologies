@@ -221,6 +221,16 @@
 						</div>
 					</fieldset>
 
+					<fieldset id="safe">
+						<legend>Pesquisa Segura</legend>
+						<div class="box-content">
+							<div id="label-size-1">								
+										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="safe" value="true" checked="checked"><span class="imageFormatLabel">Mostrar imagens seguras</span></div>										
+										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="unsafe" value="true"><span class="imageFormatLabel">Mostrar imagens inseguras</span></div>
+							</div>
+						</div>
+					</fieldset>					
+
 					<fieldset id="format">
 						<legend><fmt:message key='advancedImages.format'/></legend>
 						<div class="box-content">

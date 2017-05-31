@@ -443,8 +443,8 @@ li.grouped { padding-left: 38px; }
 				max-height: 400px;
 				min-height: 400px;
 				position: absolute;
-				margin-top: 10px;
 				padding-top: 50px;
+				margin-top: 8px;
 				margin-bottom: 50px; 
 				padding-bottom: 50px;
     			box-sizing: content-box;
@@ -463,6 +463,7 @@ li.grouped { padding-left: 38px; }
   font-size: 50px;
   line-height: 50px;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .expand__close:before {
@@ -476,3 +477,168 @@ li.grouped { padding-left: 38px; }
 .expand__close:hover {
   color: #fff;
 }
+
+.expand__close__mini {
+	position: absolute;
+    top: 0px;
+    right: 20px;
+    color: #454545;
+    font-size: 5em!important;
+    line-height: em;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.expand__close__mini:before {
+  content: '\00d7';
+}
+
+.expand__close__mini:visited {
+  color: #454545;
+}
+
+.expand__close__mini:hover {
+  color: #454545;
+}
+
+
+/*left arrow image visualizer*/
+.left__arrow {
+  position: absolute;
+  top: 225px;
+  left: 15px;
+  color: #454545;
+  font-size: 50px;
+  line-height: 50px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.left__arrow:before {
+  content: '\25C0';
+}
+
+.left__arrow:visited {
+  color: #454545;
+}
+
+.left__arrow:hover {
+  color: #fff;
+}
+/*right arrow image visualizer*/
+.right__arrow {
+  position: absolute;
+  top: 225px;
+  right: 15px;
+  color: #454545;
+  font-size: 50px;
+  line-height: 50px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.right__arrow:before {
+  content: '\25B6';
+}
+
+.right__arrow:visited {
+  color: #454545;
+}
+
+.right__arrow:hover {
+  color: #fff;
+}
+
+
+.imageViewerAnchor{
+	text-decoration: none;
+}
+
+.imageViewerButton {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));
+	background:-moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+	background:-webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+	background:-o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+	background:-ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+	background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#000;
+	font-family:Arial;
+	font-size:1.2em;
+	font-weight:bold;
+	padding:5px 5px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+	text-align: center;
+	height: 25px;
+    vertical-align: middle;
+    display: inline-block;
+    text-decoration: none;
+}
+.imageViewerButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));
+	background:-moz-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+	background:-webkit-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+	background:-o-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+	background:-ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+	background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);
+	background-color:#dfdfdf;
+}
+.imageViewerButton:active {
+	position:relative;
+}
+
+.imageViewerButton:visited {
+	color:#777777;
+}
+.arrow{
+  background: #D8DBDF;
+  border-bottom: 8px solid #222;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  height: 0;
+  width: 0;
+  /*margin: 0px auto 0;*/
+}
+
+.arrowWrapper{
+  background: #D8DBDF;
+  display: none;
+  position: absolute;	
+}
+
+.img-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    text-align:center; /* Align center inline elements */
+    font: 0/0 a;
+}
+
+.img-container:before {
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.img-container img {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.ui-dialog-titlebar {display:none}
