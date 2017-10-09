@@ -56,7 +56,7 @@ public class NutchwaxDistributedSearch
 		{
 			String usage =
 				"NutchwaxDistributedSearch$Server <port> <index dir> <blacklist dir>";
-			final String ip = "localhost";
+			
 			if (args.length == 0 || args.length > 3) {
 				System.err.println(usage);
 				System.exit(-1);
@@ -75,7 +75,7 @@ public class NutchwaxDistributedSearch
 		    boolean ipcVerbose=conf.getBoolean(Global.IPC_VERBOSE, false);
 
 			org.apache.hadoop.ipc.Server server = RPC.getServer(bean,
-					ip, port, numHandlers, ipcVerbose, conf);
+					"0.0.0.0", port, numHandlers, ipcVerbose, conf);
 								   
 			server.start();
 			server.join();
