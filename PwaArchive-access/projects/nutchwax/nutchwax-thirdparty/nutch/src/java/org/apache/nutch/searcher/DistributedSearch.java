@@ -280,6 +280,7 @@ public class DistributedSearch {
           k++;
         }
       }
+      int N = liveAddresses.length;
       
       Hits[] results = null;
       if (searcherMaxHits==NutchBean.MATCHED_DOCS_CONST_IGNORE && functions==null) { // TODO MC 
@@ -291,7 +292,15 @@ public class DistributedSearch {
     		  params[i][3] = sortField;
     		  params[i][4] = Boolean.valueOf(reverse);
     	  }
+    	  //long startTime = System.currentTimeMillis( );
+    	  //String timeoutPerQueryServer = this.conf.get( "timeout.index.servers.response" );
+    	  //LOG.info( "[DistributedSearch][Search] 1  Method = " + SEARCH_MAX_MATCHES + " Query = " + params[ 0 ][ 0 ] + " timeout = " + timeoutPerQueryServer + " calling query server...");
+    	  
     	  results = (Hits[])RPC.call(SEARCH, params, liveAddresses, this.conf);
+    	  
+    	  //long elapsed = System.currentTimeMillis( ) - startTime;
+    	  //LOG.info( "[DistributedSearch][Search] 1 Method = " + SEARCH_MAX_MATCHES + " Query = " + params[ 0 ][ 0 ] + " timeout = " + timeoutPerQueryServer + " response time = " + elapsed );
+
       }
       else { // TODO MC 
     	  Object[][] params = new Object[liveAddresses.length][9];
@@ -306,7 +315,16 @@ public class DistributedSearch {
     		  params[i][7] = functions;
     		  params[i][8] = new Integer(maxHitsPerVersion);
     	  }
-    	  results = (Hits[])RPC.call(SEARCH_MAX_MATCHES, params, liveAddresses, this.conf);    	    
+    	  
+    	  //long startTime = System.currentTimeMillis( );
+    	  //String timeoutPerQueryServer = this.conf.get( "timeout.index.servers.response" );
+    	  //LOG.info( "[DistributedSearch][Search] 2  Method = " + SEARCH_MAX_MATCHES + " Query = " + params[ 0 ][ 0 ] + " timeout = " + timeoutPerQueryServer + " calling query server...");
+    	  
+    	  results = (Hits[])RPC.call(SEARCH_MAX_MATCHES, params, liveAddresses, this.conf);
+    	  
+    	  //long elapsed = System.currentTimeMillis( ) - startTime;
+    	  //LOG.info( "[DistributedSearch][Search] 2 Method = " + SEARCH_MAX_MATCHES + " Query = " + params[ 0 ][ 0 ] + " timeout = " + timeoutPerQueryServer + " response time = " + elapsed );
+    	  
       }
       
       TreeSet queue;                              // cull top hits from results
