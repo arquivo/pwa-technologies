@@ -77,6 +77,7 @@ public class NutchBean
   private int maxQueryTerms;
   private int maxQueryExtraTerms;
   
+  private static final int MAX_TIME_FOR_QUERY = 30; 
 
   /** Cache in servlet context. */
   public static NutchBean get(ServletContext app, Configuration conf) throws IOException {
@@ -278,7 +279,7 @@ public class NutchBean
    */
   public Hits search(Query query, int numHits, int searcherMaxHits, int maxHitsPerDup, String dedupField,
                      String sortField, boolean reverse, PwaFunctionsWritable functions, int maxHitsPerVersion, boolean waybackQuery) throws IOException {	  
-       	  		  
+    LOG.debug( "[NutchBean][search]" );
 	Hits hits = null; 
 	if (waybackQuery) {
 		hits=searcher.search(query, numHits, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse, functions, maxHitsPerVersion);		
@@ -296,14 +297,15 @@ public class NutchBean
 	
 	// limit query terms for full-text queries
 	query=limitTerms(query);	  
-    
+	long start = System.nanoTime( ); //TODO JN: the execution time, if it exceeds 40 seconds it will return to the state so far.
+	
     int numHitsRaw;
     float rawHitsFactor;
     if (maxHitsPerDup<=0) {
     	if (searcherMaxHits==MATCHED_DOCS_CONST_IGNORE && functions==null) { 
     		return searcher.search(query, numHits, dedupField, sortField, reverse);
     	}
-    	else {    		
+    	else {
     		return searcher.search(query, numHits, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse, functions, maxHitsPerVersion);    	
     	}
     }
@@ -311,7 +313,7 @@ public class NutchBean
     	rawHitsFactor = this.conf.getFloat("searcher.hostgrouping.rawhits.factor", 2.0f);
         numHitsRaw = (int)(numHits * rawHitsFactor);
         
-        LOG.debug("searching for "+numHitsRaw+" raw hits");                
+        LOG.info("searching for "+numHitsRaw+" raw hits"); 
         hits=searcher.search(query, numHitsRaw, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse, functions, maxHitsPerVersion);  // the same method for all values of searcherMaxHits
     }           
     
@@ -327,14 +329,24 @@ public class NutchBean
     Set seen = new HashSet();
     List excludedValues = new ArrayList();
     boolean totalIsExact = true;
+    LOG.debug( "[NutchBean][Search] hits.getTotal() = " + hits.getTotal() );
     for (int rawHitNum = 0; rawHitNum < hits.getTotal(); rawHitNum++) {
+       LOG.debug( "[NutchBean][Search] rawHitNum["+rawHitNum+"] >= hits.getTotal()[" + hits.getLength()+"]" );
       // get the next raw hit
       if (rawHitNum >= hits.getLength()) {
     	  
     	if (lastRequest) { // BUG 200608
     		break;
     	}
-    	  
+    	
+    	long end = System.nanoTime( );
+    	long elapsedTime = end - start;
+    	double seconds = ( double ) elapsedTime / 1000000000.0;
+    	int retvalTime = Double.compare( seconds , MAX_TIME_FOR_QUERY ); 
+    	LOG.debug( "[NUtchBean][search] elapsed time["+seconds+"] MAX_TIME_FOR_QUERY["+MAX_TIME_FOR_QUERY+"] retvalTime["+retvalTime+"]");
+    	if( retvalTime > 0 ) //JN: If exceeded the maximum time for research, break. Returning the current status of the hit list.
+    		break;
+    	
         // optimize query by prohibiting more matches on some excluded values
         Query optQuery = (Query)query.clone();
         for (int i = 0; i < excludedValues.size(); i++) {
@@ -344,7 +356,7 @@ public class NutchBean
         }
         numHitsRaw = (int)(numHitsRaw * rawHitsFactor);
         //if (LOG.isInfoEnabled()) {
-          LOG.debug("re-searching for "+numHitsRaw+" raw hits, query: "+optQuery);
+        	LOG.debug("re-searching for "+numHitsRaw+" raw hits, query: "+optQuery);
         //}
         // hits = searchAux(optQuery, numHitsRaw, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse);  // for TREC 
         hits = searcher.search(optQuery, numHitsRaw, searcherMaxHits, maxHitsPerDup, dedupField, sortField, reverse, functions, maxHitsPerVersion);        
@@ -353,7 +365,7 @@ public class NutchBean
         }
         
         //if (LOG.isInfoEnabled()) {
-          LOG.debug("found "+hits.getTotal()+" raw hits");
+        	LOG.debug("found "+hits.getTotal()+" raw hits");
         //}
         rawHitNum = -1;
         continue;
@@ -396,7 +408,12 @@ public class NutchBean
           break;
       }
     }
-
+    
+    long end = System.nanoTime( );
+    long elapsedTime = end - start;
+    double seconds = ( double ) elapsedTime / 1000000000.0;
+	LOG.info( "[NuchBean][search] Query["+query.toString()+"] Queryservers response time: " + seconds );
+    
     Hits results = new Hits(total, (Hit[])resultList.toArray(new Hit[resultList.size()]));
     results.setTotalIsExact(totalIsExact);
     return results;
