@@ -72,7 +72,7 @@
 	<div class="wrap">
 		<div id="header-home">
                                 <div id="logo-home">
-                                        <img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="400" height="105" />
+                                    <a href="https://10anosarquivopt.eventbrite.pt/"> <img style="margin-left: -22px;" src="img/banner_10anos.gif" alt="<fmt:message key='header.logo.alt'/>"  /></a>
                                 </div>
                                 <div id="search-home">
                                         <form id="loginForm" action="search.jsp" name="loginForm" method="get">
