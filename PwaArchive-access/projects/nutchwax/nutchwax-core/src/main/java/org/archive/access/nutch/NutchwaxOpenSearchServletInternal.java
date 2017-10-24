@@ -46,7 +46,7 @@ import org.apache.nutch.util.NutchConfiguration;
  * there is a 'exacturl' in the query string parameter.
  * @author stack
  */
-public class NutchwaxOpenSearchServlet extends OpenSearchServlet
+public class NutchwaxOpenSearchServletInternal extends OpenSearchServlet
 {
   //private static final long serialVersionUID = -6009645870609220838L;
 

@@ -32,6 +32,11 @@
   <servlet-class>org.apache.nutch.searcher.OpenSearchServlet</servlet-class>
 </servlet>
 
+<servlet>
+  <servlet-name>OpenSearchInternal</servlet-name>
+  <servlet-class>org.apache.nutch.searcher.OpenSearchServletInternal</servlet-class>
+</servlet>
+
 <servlet-mapping>
   <servlet-name>Cached</servlet-name>
   <url-pattern>/servlet/cached</url-pattern>
@@ -40,6 +45,11 @@
 <servlet-mapping>
   <servlet-name>OpenSearch</servlet-name>
   <url-pattern>/opensearch</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>OpenSearchInternal</servlet-name>
+  <url-pattern>/opensearch2</url-pattern>
 </servlet-mapping>
 
 <welcome-file-list>

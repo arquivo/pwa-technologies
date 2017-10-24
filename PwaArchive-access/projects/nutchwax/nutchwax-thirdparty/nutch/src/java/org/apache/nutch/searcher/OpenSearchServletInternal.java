@@ -58,13 +58,9 @@ import javax.xml.parsers.*;
 
 /** Present search results using A9's OpenSearch extensions to RSS, plus a few
  * Nutch-specific extensions. */   
-public class OpenSearchServlet extends HttpServlet {
+public class OpenSearchServletInternal extends HttpServlet {
 	 	
-  /**
-	 * 
-  */
-  private static final long serialVersionUID = 1L;
-  private static final Log LOG = LogFactory.getLog(OpenSearchServlet.class);  
+  private static final Log LOG = LogFactory.getLog(OpenSearchServletInternal.class);  
   private static final Map NS_MAP = new HashMap();  
   private static PwaFunctionsWritable functions = null;
   private static int nQueryMatches = 0;
@@ -123,94 +119,106 @@ public class OpenSearchServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
 
-	  LOG.info("[OpenSearchServlet][doGet] query request from " + request.getRemoteAddr());
-	  Calendar DATE_END = currentDate(); 
-	  int start = 0;
-	  int limit = 10;
-	  
-	  // get parameters from request
-	  request.setCharacterEncoding("UTF-8");
-	  String queryString = request.getParameter("query");
-    
-	  if (queryString == null)
-		  queryString = "";
-	  LOG.info( "[OpenSearchServlet][doGet] queryString=" + queryString );
-	  String urlQuery = URLEncoder.encode( queryString , "UTF-8" );
-	  urlQuery = URLEncoder.encode( queryString , "UTF-8" );
-	  
-	  // the query language
-	  String queryLang = request.getParameter( "lang" );
-    
-	  // first hit to display
-	  String startString = request.getParameter( "start" );
-	  if ( startString != null )
-		  start = Integer.parseInt( startString );
-    
-	  // number of items to display
-	  String limitString = request.getParameter( "limit" );
-	  if ( limitString != null )
-		  limit = Integer.parseInt(limitString);
-	  
-	  int hitsPerDup = 2;
-	  /*****************    'sort' param    ***************************/
-	  String sort = request.getParameter("sort"); //relevance or new or old
-	  boolean reverse = false;
-	  if ( "relevance".equals( sort ) ) {
-		  sort = null;
-	  } else if ( "new".equals( sort ) ) {
-		  sort = "date";
-		  reverse = true;
-	  } else if ( "old".equals( sort ) ) {
-		  sort = "date";
-	  } else 
-		  sort = null;
-	 
-	  
-      // De-Duplicate handling.  Look for duplicates field and for how many
-      // duplicates per results to return. Default duplicates field is 'site'
-      // and duplicates per results default is '2'.
-      String dedupField = "site";
+    //if (NutchBean.LOG.isInfoEnabled()) {
+      LOG.debug("query request from " + request.getRemoteAddr());
+    //}
       
+      Calendar DATE_END = new GregorianCalendar();
+      DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) );
+      DATE_END.set( Calendar.MONTH, 12-1 );
+      DATE_END.set( Calendar.DAY_OF_MONTH, 31 );
+      DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
+      DATE_END.set( Calendar.MINUTE, 59 );
+      DATE_END.set( Calendar.SECOND, 59 );
+      String dateEndString = FORMAT.format( DATE_END.getTime() );
+      
+      
+      
+    // get parameters from request
+    request.setCharacterEncoding("UTF-8");
     
-      //If 'hitsPerSite' present, use that value.
-      String hitsPerSiteString = request.getParameter( "limitPerSite" );
-      if ( hitsPerSiteString != null && hitsPerSiteString.length( ) > 0 ) 
-    	  hitsPerDup = Integer.parseInt( hitsPerSiteString );
-      
-      /**** TODO: I stayed here ****/
-      
-      // date restriction   
-      String dateStart = request.getParameter("dtstart");
-      if ( dateStart == null || dateStart.length( ) == 0 ) {
-    	  dateStart = null;
-      }
-      String dateEnd = request.getParameter("dtend");
-      if (dateEnd == null || dateEnd.length() == 0) {
-    	  dateEnd = null; 
-      }
+   
+    String queryString = request.getParameter("query");
+    
+    if (queryString == null)
+      queryString = "";
+   
+  
+   
+    
+    
+   String urlQuery = URLEncoder.encode(queryString, "UTF-8");
+   urlQuery= URLEncoder.encode(queryString,"UTF-8");
+    // the query language
+    String queryLang = request.getParameter("lang");
+    
+    // first hit to display
+    int start = 0;                                
+    String startString = request.getParameter("start");
+    if (startString != null)
+      start = Integer.parseInt(startString);
+    
+    // number of hits to display
+    int hitsPerPage = 10;                         
+    String hitsString = request.getParameter("hitsPerPage");
+    if (hitsString != null)
+      hitsPerPage = Integer.parseInt(hitsString);
 
-      if(dateStart== null && dateEnd != null){
-    	  dateStart = "1996-01-01T00:00:00Z"; /*If datestart is not specified set it to 1996*/
-      }
-      if(dateStart != null && dateEnd == null){
-    	  dateEnd = "2029-12-31T00:00:00Z"; /*If dateEnd is not specified set it to 2029*/
-      }
+    String sort = request.getParameter("sort");
+    boolean reverse =
+      sort!=null && "true".equals(request.getParameter("reverse"));
 
-      if (dateStart!=null && dateEnd!=null) {    	    	    	
-    	  try {
-    		  Date dStart=RFC3339Date.parseRFC3339Date(dateStart);
-    		  Date dEnd=RFC3339Date.parseRFC3339Date(dateEnd);
+    // De-Duplicate handling.  Look for duplicates field and for how many
+    // duplicates per results to return. Default duplicates field is 'site'
+    // and duplicates per results default is '2'.
+    String dedupField = request.getParameter("dedupField");
+    if (dedupField == null || dedupField.length() == 0) {
+        dedupField = "site";
+    }
+    int hitsPerDup = 2;
+    String hitsPerDupString = request.getParameter("hitsPerDup");
+    if (hitsPerDupString != null && hitsPerDupString.length() > 0) {
+        hitsPerDup = Integer.parseInt(hitsPerDupString);
+    } else {
+        // If 'hitsPerSite' present, use that value.
+        String hitsPerSiteString = request.getParameter("hitsPerSite");
+        if (hitsPerSiteString != null && hitsPerSiteString.length() > 0) {
+            hitsPerDup = Integer.parseInt(hitsPerSiteString);
+        }
+    }     
+    
+    // date restriction   
+    String dateStart = request.getParameter("dtstart");
+    if (dateStart == null || dateStart.length() == 0) {
+    	dateStart = null;
+    }
+    String dateEnd = request.getParameter("dtend");
+    if (dateEnd == null || dateEnd.length() == 0) {
+    	dateEnd = null; 
+    }
+
+    if(dateStart== null && dateEnd != null){
+      dateStart = "1996-01-01T00:00:00Z"; /*If datestart is not specified set it to 1996*/
+    }
+    if(dateStart != null && dateEnd == null){
+      dateEnd = "2029-12-31T00:00:00Z"; /*If dateEnd is not specified set it to 2029*/
+    }
+
+    if (dateStart!=null && dateEnd!=null) {    	    	    	
+    	try {
+    		Date dStart=RFC3339Date.parseRFC3339Date(dateStart);
+    		Date dEnd=RFC3339Date.parseRFC3339Date(dateEnd);
     	
-    		  DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-    		  queryString += " date:"+ dOutputFormat.format(dStart.getTime()) + "-" + dOutputFormat.format(dEnd.getTime());
-    	  }
-    	  catch (ParseException e) {
-    		  // ignore
-    	  }    	
-    	  catch (IndexOutOfBoundsException e) {
-    		  // ignore
-    	  }    	
-      }
+    		DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+    		queryString += " date:"+ dOutputFormat.format(dStart.getTime()) + "-" + dOutputFormat.format(dEnd.getTime());
+    	}
+    	catch (ParseException e) {
+    		// ignore
+    	}    	
+    	catch (IndexOutOfBoundsException e) {
+    		// ignore
+    	}    	
+    }
     
     // wayback parameters
     boolean multipleDetails = request.getParameter("multDet")!=null && request.getParameter("multDet").equals("true"); // indicates that it requests multiple details instead of one at the time
@@ -245,7 +253,7 @@ public class OpenSearchServlet extends HttpServlet {
     	queryString = queryString.replaceAll("site:https://", "site:");
     }
     // Make up query string for use later drawing the 'rss' logo.
-    String params = "&hitsPerPage=" + limit +
+    String params = "&hitsPerPage=" + hitsPerPage +
         (queryLang == null ? "" : "&lang=" + queryLang) +
         (sort == null ? "" : "&sort=" + sort + (reverse? "&reverse=true": "") +
         (dedupField == null ? "" : "&dedupField=" + dedupField)) +
@@ -277,11 +285,11 @@ public class OpenSearchServlet extends HttpServlet {
     	try {    		
     		if (waybackQuery) { // wayback (URL) query
     			
-    			hits = bean.search(query, start + limit, hitsPerDup, dedupField, sort, reverse, true); 
+    			hits = bean.search(query, start + hitsPerPage, hitsPerDup, dedupField, sort, reverse, true); 
     		}
     		else { // nutchwax (full-text) query    			    			
     			int hitsPerVersion = 1;    		
-    			hits = bean.search(query, start + limit, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
+    			hits = bean.search(query, start + hitsPerPage, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
     			
     		}
     	} 
@@ -294,7 +302,7 @@ public class OpenSearchServlet extends HttpServlet {
     }
     
     // generate xml results
-    int end = (int)Math.min(hits.getLength(), start + limit);
+    int end = (int)Math.min(hits.getLength(), start + hitsPerPage);
     int length = end-start;
 
     Hit[] show = hits.getHits(start, end-start);        
@@ -346,7 +354,7 @@ public class OpenSearchServlet extends HttpServlet {
       */
       addNode(doc, channel, "opensearch", "totalResults", ""+hits.getTotal());
       addNode(doc, channel, "opensearch", "startIndex", ""+start);
-      addNode(doc, channel, "opensearch", "itemsPerPage", ""+limit);
+      addNode(doc, channel, "opensearch", "itemsPerPage", ""+hitsPerPage);
       Element queryElem=addNode(doc, channel, "opensearch", "Query", "");
       addAttribute(doc, queryElem, "role", "request");
       addAttribute(doc, queryElem, "searchTerms", queryString);
@@ -444,8 +452,13 @@ public class OpenSearchServlet extends HttpServlet {
 
       // dump DOM tree
 
-      response.setContentType("application/json");
-      response.getWriter().write(json.toString());
+      DOMSource source = new DOMSource(doc);
+      TransformerFactory transFactory = TransformerFactory.newInstance();
+      Transformer transformer = transFactory.newTransformer();
+      transformer.setOutputProperty("indent", "yes");
+      StreamResult result = new StreamResult(response.getOutputStream());      
+      response.setContentType("application/rss+xml; charset=UTF-8");      
+      transformer.transform(source, result);
 
     } catch (javax.xml.parsers.ParserConfigurationException e) {
       throw new ServletException(e);
@@ -455,18 +468,6 @@ public class OpenSearchServlet extends HttpServlet {
       
   }
 
-  private static Calendar currentDate( ) {
-      Calendar DATE_END = new GregorianCalendar();
-      DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) );
-      DATE_END.set( Calendar.MONTH, 12-1 );
-      DATE_END.set( Calendar.DAY_OF_MONTH, 31 );
-      DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
-      DATE_END.set( Calendar.MINUTE, 59 );
-      DATE_END.set( Calendar.SECOND, 59 );
-      String dateEndString = FORMAT.format( DATE_END.getTime() );
-      return DATE_END;
-  }
-  
   private static Element addNode(Document doc, Node parent, String name) {
     Element child = doc.createElement(name);
     parent.appendChild(child);
