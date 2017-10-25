@@ -176,7 +176,7 @@ public class OpenSearchServlet extends HttpServlet {
       // and duplicates per results default is '2'.
       String dedupField = "site";
       
-    
+      
       //If 'hitsPerSite' present, use that value.
       String hitsPerSiteString = request.getParameter( "limitPerSite" );
       if ( hitsPerSiteString != null && hitsPerSiteString.length( ) > 0 ) 
@@ -337,15 +337,14 @@ public class OpenSearchServlet extends HttpServlet {
 		  else
 			  responseObject.setItens( new ArrayList< Item >( ) );
 		  
-		  String jsonObject = new Gson( ).toJson( responseObject );
-    	
+		  //String jsonObject = new Gson( ).toJson( responseObject );
+		  String jsonObject = toPrettyFormat( responseObject );
 		  response.setContentType( "application/json" );
 		  // Get the printwriter object from response to write the required json object to the output stream      
-		  PrintWriter out = response.getWriter( );
-		  // Assuming your json object is **jsonObject**, perform the following, it will return your json object  
+		  PrintWriter out = response.getWriter( );  
 		  out.print( jsonObject );
 		  out.flush( );
-    
+
 
 	  } catch ( JsonParseException e ) {
 		  throw new ServletException( e );
@@ -353,6 +352,11 @@ public class OpenSearchServlet extends HttpServlet {
 	  
   }
 
+  
+  /**
+   * Returns the current date in the format (YYYYMMDDHHMMSS)
+   * @return
+   */
   private static Calendar currentDate( ) {
       Calendar DATE_END = new GregorianCalendar();
       DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) );
@@ -363,5 +367,24 @@ public class OpenSearchServlet extends HttpServlet {
       DATE_END.set( Calendar.SECOND, 59 );
       return DATE_END;
   }
+  
+  /**
+   * Convert a JSON string to pretty print version
+   * @param jsonString
+   * @return
+   */
+  private static String toPrettyFormat( OpenSearchResponse responseObject ) {
+      /*JsonParser parser = new JsonParser( );
+      JsonObject json = parser.parse( jsonString ).getAsJsonObject( );
+
+      Gson gson = new GsonBuilder( ).setPrettyPrinting( ).create( );
+      String prettyJson = gson.toJson( json );*/
+      
+      Gson gson = new GsonBuilder( ).setPrettyPrinting( ).create( );
+      String prettyJson = gson.toJson( responseObject );
+      
+      return prettyJson;
+  }
+  
 
 }
