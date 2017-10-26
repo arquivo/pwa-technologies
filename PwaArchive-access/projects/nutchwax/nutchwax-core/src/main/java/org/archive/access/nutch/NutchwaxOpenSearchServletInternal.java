@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.nutch.searcher.OpenSearchServlet;
+import org.apache.nutch.searcher.OpenSearchServletInternal;
 import org.apache.nutch.util.NutchConfiguration;
 
 
@@ -46,9 +46,9 @@ import org.apache.nutch.util.NutchConfiguration;
  * there is a 'exacturl' in the query string parameter.
  * @author stack
  */
-public class NutchwaxOpenSearchServletInternal extends OpenSearchServlet
+public class NutchwaxOpenSearchServletInternal extends OpenSearchServletInternal
 {
-  //private static final long serialVersionUID = -6009645870609220838L;
+  private static final long serialVersionUID = -6009645870609220838L;
 
   public void init(ServletConfig config) throws ServletException
   {

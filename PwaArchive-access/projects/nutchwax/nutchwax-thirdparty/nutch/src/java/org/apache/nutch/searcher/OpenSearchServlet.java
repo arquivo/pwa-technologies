@@ -53,6 +53,7 @@ import org.apache.lucene.search.PwaFunctionsWritable;
 import org.w3c.dom.*;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 
 import javax.xml.transform.TransformerFactory;
@@ -71,7 +72,7 @@ public class OpenSearchServlet extends HttpServlet {
   */
   private static final long serialVersionUID = 1L;
   private static final Log LOG = LogFactory.getLog(OpenSearchServlet.class);  
-  private static final Map NS_MAP = new HashMap();  
+  private static final Map NS_MAP = new HashMap( ); 
   private static PwaFunctionsWritable functions = null;
   private static int nQueryMatches = 0;
   private static String collectionsHost=null;
@@ -81,6 +82,8 @@ public class OpenSearchServlet extends HttpServlet {
   SimpleDateFormat inputDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
   private static Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
   Calendar DATE_END = new GregorianCalendar();
+  private static final String noFrame = "/noFrame/replay";
+  private static final String screenShotURL = "/screenshot/?url=";
   static {
     NS_MAP.put("serviceName", "Arquivo.pt - the Portuguese web-archive");
     NS_MAP.put("link","http://arquivo.pt");
@@ -158,17 +161,20 @@ public class OpenSearchServlet extends HttpServlet {
 	  
 	  int hitsPerDup = 2;
 	  /*****************    'sort' param    ***************************/
-	  String sort = request.getParameter("sort"); //relevance or new or old
+	  String sortParameter = request.getParameter("sort"); //relevance or new or old
+	  String sort;
 	  boolean reverse = false;
-	  if ( "relevance".equals( sort ) ) {
+	  if ( "relevance".equals( sortParameter ) ) {
 		  sort = null;
-	  } else if ( "new".equals( sort ) ) {
+	  } else if ( "new".equals( sortParameter ) ) {
 		  sort = "date";
 		  reverse = true;
-	  } else if ( "old".equals( sort ) ) {
+	  } else if ( "old".equals( sortParameter ) ) {
 		  sort = "date";
-	  } else 
+	  } else {
 		  sort = null;
+		  sortParameter = "relevance";
+	  }
 	 
 	  
       // De-Duplicate handling.  Look for duplicates field and for how many
@@ -215,8 +221,6 @@ public class OpenSearchServlet extends HttpServlet {
     	  }    	
       }
     
-    
-    
       // To support querying opensearch by  url
       // Lucene index format
       String queryStringOpensearchWayback=null;
@@ -243,9 +247,7 @@ public class OpenSearchServlet extends HttpServlet {
       Query query=null;
  
 	  query = Query.parse(queryString, queryLang, this.conf);
-	  LOG.debug("query: " + queryString);
-  
-	    	
+	  LOG.info("query: " + queryString);
 
 	  //execute the query    
 	  try {    		
@@ -272,19 +274,26 @@ public class OpenSearchServlet extends HttpServlet {
 	  String requestUrl = request.getRequestURL( ).toString( );
 	  String base = requestUrl.substring( 0 , requestUrl.lastIndexOf( '/' ) );
       
-
 	  try {
 		  
 		  List< Item > itens = new ArrayList< Item >( );
 		  
 		  OpenSearchResponse responseObject = new OpenSearchResponse( );
+		  OpenSearchRequestParameters requestParameters = new OpenSearchRequestParameters( );
 		  
 		  responseObject.setServiceName( ( String ) NS_MAP.get( "serviceName" ) );
 		  responseObject.setLinkToService( ( String ) NS_MAP.get( "link" ) );
-		  responseObject.setLimit( limit );
-		  responseObject.setLimitPerSite( hitsPerDup );
-		  responseObject.setStart( start );
-		  responseObject.setSort( sort );
+		  
+		  requestParameters.setLimit( limit );
+		  requestParameters.setLimitPerSite( hitsPerDup );
+		  requestParameters.setStart( start );
+		  if( sortParameter != null && !"".equals( sortParameter ) )
+			  requestParameters.setSort( sortParameter );
+		  if( queryString != null && !"".equals( queryString ) )
+			  requestParameters.setQueryTerms( queryString );
+		  if( requestParameters != null )
+			  responseObject.setRequestParameters( requestParameters );
+		  
 		  Item item = null;
 		  for ( int i = 0 ; i < length ; i++ ) {
 			  	Hit hit = show[ i ];
@@ -305,7 +314,7 @@ public class OpenSearchServlet extends HttpServlet {
         	    }
                 if ( url != null ) {
                 	// Lucene index format
-                	String infoIndex = "htJsonParseExceptiontp://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
+                	String infoIndex = "http://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
                 	LOG.info( "Index Information " + infoIndex );
                 	String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
                     item.setLink( target );
@@ -321,23 +330,59 @@ public class OpenSearchServlet extends HttpServlet {
                 item.setPrimaryType( primaryType );
                 String subType = detail.getValue( "subType" );
                 item.setSubType( subType );
-                String screenShotLink = url; //TODO not implemented
-                item.setScreenShotLink( screenShotLink );
-                String itemText = "TESTE1"; //TODO not implemented
+                String encoding = detail.getValue( "encoding" );
+                item.setEncoding( encoding );
+                
+                //http://arquivo.pt/noFrame/replay/19980205082901/http://www.caleida.pt/saramago/
+                if( url != null ) {
+                	String urlNoFrame = "http://".concat( collectionsHost ).concat( noFrame ).concat( "/" ).concat( url );
+                    String urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
+                    String screenShotLink = "http://".concat( collectionsHost ).concat( screenShotURL ).concat( urlEncode );
+                    item.setScreenShotLink( screenShotLink );
+                }
+                
+                String itemText = "NOT IMPLEMENTED"; //TODO not implemented
                 item.setItemText( itemText );
+                
+                String detailsCheck = request.getParameter( "details" );
+                
+                if( detailsCheck != null && detailsCheck.equals( "true" ) ) {
+                	int idDoc = hit.getIndexDocNo( );
+                	int index = hit.getIndexNo( );
+                	String arcname 		= detail.getValue( "arcname" );
+                    String arcoffset 	= detail.getValue( "arcoffset" );
+                    String segment 		= detail.getValue( "segment" );
+                    String collection 	= detail.getValue( "collection" );
+                	item.setIdDoc( String.valueOf( idDoc ) );
+                	item.setIndex( String.valueOf( index ) );
+                	if( arcname != null )
+                		item.setArcname( arcname );
+                	else
+                		item.setArcname( "" );
+                	if( arcoffset != null )
+                		item.setArcoffset( arcoffset );
+                	else 
+                		item.setArcoffset( "" );
+                	if( segment != null )
+                		item.setSegment( segment );
+                	else
+                		item.setSegment( "" );
+                	if( collection != null )
+                		item.setCollection( collection );
+                	else 
+                		item.setCollection( "" );
+                }
                 
                 if( item != null ) {
                 	itens.add( item );
                 }
-                
-		  }
+          }
 		  
 		  if( itens != null && itens.size( ) > 0 )
 			  responseObject.setItens( itens );
 		  else
 			  responseObject.setItens( new ArrayList< Item >( ) );
 		  
-		  //String jsonObject = new Gson( ).toJson( responseObject );
 		  String jsonObject = toPrettyFormat( responseObject );
 		  response.setContentType( "application/json" );
 		  // Get the printwriter object from response to write the required json object to the output stream      

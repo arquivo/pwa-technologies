@@ -14,24 +14,16 @@ public class Item {
 	private String screenShotLink;
 	private String itemText;
 	private String date; //epoch format
+	private String encoding;
+	//details
+	private String arcname;
+	private String arcoffset;
+	private String collection;
+	private String idDoc;
+	private String index;
+	private String segment;
 
-	public Item(String key, String title, String source, String link, String tstamp, String contentLength,
-			String digest, String primaryType, String subType, String screenShotLink, String itemText, String date) {
-		super();
-		this.key 			= key;
-		this.title 			= title;
-		this.source 		= source;
-		this.link 			= link;
-		this.tstamp 		= tstamp;
-		this.contentLength 	= contentLength;
-		this.digest 		= digest;
-		this.primaryType 	= primaryType;
-		this.subType 		= subType;
-		this.screenShotLink = screenShotLink;
-		this.itemText 		= itemText;
-		this.date			= date;
-	}
-	
+
 	public Item( ) { }
 	
 	public String getKey() {
@@ -94,31 +86,70 @@ public class Item {
 	public void setScreenShotLink(String screenShotLink) {
 		this.screenShotLink = screenShotLink;
 	}
-
 	public String getDate() {
 		return date;
 	}
-
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
-	
 	public String getItemText() {
 		return itemText;
 	}
-
 	public void setItemText(String itemText) {
 		this.itemText = itemText;
 	}
-	
+	public String getEncoding() {
+		return encoding;
+	}
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
+	}
+	public String getArcname() {
+		return arcname;
+	}
+	public void setArcname(String arcname) {
+		this.arcname = arcname;
+	}
+	public String getArcoffset() {
+		return arcoffset;
+	}
+	public void setArcoffset(String arcoffset) {
+		this.arcoffset = arcoffset;
+	}
+	public String getCollection() {
+		return collection;
+	}
+	public void setCollection(String collection) {
+		this.collection = collection;
+	}
+	public String getIdDoc() {
+		return idDoc;
+	}
+	public void setIdDoc(String idDoc) {
+		this.idDoc = idDoc;
+	}
+	public String getIndex() {
+		return index;
+	}
+	public void setIndex(String index) {
+		this.index = index;
+	}
+	public String getSegment() {
+		return segment;
+	}
+	public void setSegment(String segment) {
+		this.segment = segment;
+	}
+
 	@Override
 	public String toString() {
 		return "Item [key=" + key + ", title=" + title + ", source=" + source + ", link=" + link + ", tstamp=" + tstamp
 				+ ", contentLength=" + contentLength + ", digest=" + digest + ", primaryType=" + primaryType
-				+ ", subType=" + subType + ", screenShotLink=" + screenShotLink + ", textItem=" + itemText + "]";
+				+ ", subType=" + subType + ", screenShotLink=" + screenShotLink + ", itemText=" + itemText + ", date="
+				+ date + ", encoding=" + encoding + ", arcname=" + arcname + ", arcoffset=" + arcoffset
+				+ ", collection=" + collection + ", idDoc=" + idDoc + ", index=" + index + ", segment="+ segment +"]";
 	}
 
 
-	
+
 }
