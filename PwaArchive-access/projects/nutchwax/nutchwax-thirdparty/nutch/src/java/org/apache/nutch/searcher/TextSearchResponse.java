@@ -4,17 +4,17 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-public class OpenSearchResponse {
+public class TextSearchResponse {
 	
 	private String serviceName;
 	private String linkToService;
 	@SerializedName( "request-parameters" ) 
-	private OpenSearchRequestParameters requestParameters; //request input parameters
+	private TextSearchRequestParameters requestParameters; //request input parameters
 	@SerializedName( "response-items" )
 	private List<Item> itens;
 
 	
-	public OpenSearchResponse( ) { }
+	public TextSearchResponse( ) { }
 
 	public String getServiceName() {
 		return serviceName;
@@ -37,11 +37,11 @@ public class OpenSearchResponse {
 		this.itens = itens;
 	}
 	
-	public OpenSearchRequestParameters getRequestParameters() {
+	public TextSearchRequestParameters getRequestParameters() {
 		return requestParameters;
 	}
 	
-	public void setRequestParameters(OpenSearchRequestParameters requestParameters) {
+	public void setRequestParameters(TextSearchRequestParameters requestParameters) {
 		this.requestParameters = requestParameters;
 	}
 

@@ -36,44 +36,74 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.nutch.searcher.OpenSearchServletInternal;
+import org.apache.nutch.searcher.TextSearchServlet;
 import org.apache.nutch.util.NutchConfiguration;
 
 
 /**
- * Subclass of OpenSearchServlet from nutch.
+ * Subclass of TextSearchServlet from nutch.
  * Adds in the Nutchwax plugins and does special encoding if
  * there is a 'exacturl' in the query string parameter.
- * @author stack
+ * @author jnobre
  */
-public class NutchwaxOpenSearchServletInternal extends OpenSearchServletInternal
+public class NutchwaxTextSearchServlet extends TextSearchServlet
 {
   private static final long serialVersionUID = -6009645870609220838L;
-
+  
+  
+  /**
+   * Put our configuration into place in the servlet context ahead
+   * of the query done by OpenSearchServlet#init so it finds our
+   * Configuration and doesn't create its own -- we're faking it out.
+   * Do same for nutchbean.  Add our NutchwaxBean into place instead.
+   * @param config
+   * @throws ServletException
+   */
   public void init(ServletConfig config) throws ServletException
   {
-    // Put our configuration into place in the servlet context ahead
-    // of the query done by OpenSearchServlet#init so it finds our
-    // Configuration and doesn't create its own -- we're faking it out.
-    // Do same for nutchbean.  Add our NutchwaxBean into place instead.
+   
     Configuration conf = NutchwaxConfiguration.
       getConfiguration(config.getServletContext());
       
-    config.getServletContext().
-      setAttribute(NutchConfiguration.class.getName(), conf);
+    config.getServletContext( ).
+      setAttribute( NutchConfiguration.class.getName( ) , conf );
 
-    try
-    {
-      NutchwaxBean.get(config.getServletContext(), conf);
+    try{
+      NutchwaxBean.get( config.getServletContext( ) , conf );
     }
-    catch (IOException e)
+    catch ( IOException e )
     {
-      throw new ServletException(e);
+      throw new ServletException( e );
     }
     
-    super.init(config);
+    super.init( config );
   }
-
+  
+  /**
+   * 
+   * @param request
+   * @param response
+   * @throws ServletException
+   * @throws IOException
+   */
+  public void doPost(final HttpServletRequest request,
+		    final HttpServletResponse response)
+		    throws ServletException, IOException
+	  {
+	  
+  
+  			doGet(request, response);
+  
+	  }
+  
+  
+  /**
+   * 
+   * @param request
+   * @param response
+   * @throws ServletException
+   * @throws IOException
+   */
   public void doGet(final HttpServletRequest request,
     final HttpServletResponse response)
     throws ServletException, IOException
@@ -88,19 +118,18 @@ public class NutchwaxOpenSearchServletInternal extends OpenSearchServletInternal
 	    {
 	      public String getParameter(String s)
 	      {
-	        if (s == null || !s.equals("query") && !s.contains("exacturlexpand:"))
-	        {
+	        if ( s == null || !s.equals( "query" ) ) {
 	          return request.getParameter(s);
 	        }
 	        
 	        String queryString= null;
-	        if (s.contains("exacturlexpand:") && !s.equals("query")){
+	        if ( !s.equals( "query" ) ){
 	        	queryString = s;
 	        }else
-	        	queryString = request.getParameter(s);
+	        	queryString = request.getParameter( s );
 	        
-	        if (queryString != null){
-	          queryString = NutchwaxQuery.encodeExacturl(queryString);
+	        if ( queryString != null ){
+	          queryString = NutchwaxQuery.encodeExacturl( queryString );
 	        }
 	        
 	        return queryString;

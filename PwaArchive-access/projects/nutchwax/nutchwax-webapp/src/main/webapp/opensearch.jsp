@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <%@ page 
   session="true"
-  contentType="application/x-suggestions+json; charset=UTF-8"
+  contentType="application/opensearchdescription+xml; charset=UTF-8"
   pageEncoding="UTF-8"
   import="java.util.Locale"
 %>
@@ -16,10 +16,10 @@
 	<LongName><fmt:message key="opensearch.longname"/></LongName>
 	<Description><fmt:message key="opensearch.description"/></Description>
 	<InputEncoding>UTF-8</InputEncoding>
-	<Tags>web archive arquivo Português FPortuguese Portugal</Tags>
+	<Tags>web archive arquivo Português Portuguese Portugal</Tags>
 	<Language><%=language%></Language>
 	<Image width="16" height="16" type="image/x-icon"><c:out value="${rootUrl}"/>/img/logo-16.jpg</Image>
 	<Url type="text/html" method="get" template="<c:out value="${rootUrl}"/>/search.jsp?query={searchTerms}&amp;l=<%=language%>"/>
-	<Url type="application/x-suggestions+json" method="get" template="<c:out value="${rootUrl}"/>/opensearch2?query={searchTerms}&amp;dtstart={time:start?}&amp;dtend={time:end?}"/>
-        <Url type="application/x-suggestions+json" rel="self" template="<c:out value="${rootUrl}"/>/opensearch2.jsp" />
+	<Url type="application/rss+xml" method="get" template="<c:out value="${rootUrl}"/>/opensearch?query={searchTerms}&amp;dtstart={time:start?}&amp;dtend={time:end?}"/>
+    <Url type="application/opensearchdescription+xml" rel="self" template="<c:out value="${rootUrl}"/>/opensearch.jsp" />
 </OpenSearchDescription>

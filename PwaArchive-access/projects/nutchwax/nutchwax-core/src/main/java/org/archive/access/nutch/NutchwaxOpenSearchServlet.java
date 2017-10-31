@@ -48,7 +48,7 @@ import org.apache.nutch.util.NutchConfiguration;
  */
 public class NutchwaxOpenSearchServlet extends OpenSearchServlet
 {
-  //private static final long serialVersionUID = -6009645870609220838L;
+  private static final long serialVersionUID = -6009645870609220838L;
 
   public void init(ServletConfig config) throws ServletException
   {

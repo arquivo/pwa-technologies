@@ -15,12 +15,12 @@
 </servlet-mapping>
 
 <servlet>
-  <servlet-name>NutchwaxOpenSearchInternal</servlet-name>
-  <servlet-class>org.archive.access.nutch.NutchwaxOpenSearchServletInternal</servlet-class>
+  <servlet-name>NutchwaxTextSearch</servlet-name>
+  <servlet-class>org.archive.access.nutch.NutchwaxTextSearchServlet</servlet-class>
 </servlet>
 <servlet-mapping>
-  <servlet-name>NutchwaxOpenSearchInternal</servlet-name>
-  <url-pattern>/opensearch2</url-pattern>
+  <servlet-name>NutchwaxTextSearch</servlet-name>
+  <url-pattern>/textsearch</url-pattern>
 </servlet-mapping>
 
 

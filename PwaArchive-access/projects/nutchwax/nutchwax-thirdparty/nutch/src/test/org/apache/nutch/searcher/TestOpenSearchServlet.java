@@ -24,10 +24,10 @@ public class TestOpenSearchServlet extends TestCase {
    * Test removing of illegal xml chars from string
    */
   public void testGetLegalXml(){
-    assertEquals("hello",OpenSearchServlet.getLegalXml("hello"));
-    assertEquals("hello",OpenSearchServlet.getLegalXml("he\u0000llo"));
-    assertEquals("hello",OpenSearchServlet.getLegalXml("\u0000he\u0000llo"));
-    assertEquals("hello",OpenSearchServlet.getLegalXml("\u0000he\u0000llo\u0000"));
+    assertEquals("hello",TextSearchServlet.getLegalXml("hello"));
+    assertEquals("hello",TextSearchServlet.getLegalXml("he\u0000llo"));
+    assertEquals("hello",TextSearchServlet.getLegalXml("\u0000he\u0000llo"));
+    assertEquals("hello",TextSearchServlet.getLegalXml("\u0000he\u0000llo\u0000"));
   }
   
 }
