@@ -153,7 +153,7 @@ public class TextSearchServlet extends HttpServlet {
 	  String queryLang = request.getParameter( "lang" );
     
 	  // first hit to display
-	  String startString = request.getParameter( "start" );
+	  String startString = request.getParameter( "offset" );
 	  if ( startString != null )
 		  start = Integer.parseInt( startString );
     
@@ -255,12 +255,6 @@ public class TextSearchServlet extends HttpServlet {
       if( prettyPrintParameter != null && prettyPrintParameter.equals( "true" ) ) 
     	  prettyOutput = true;
     	
-      
-      // Make up query strintargetg for use later drawing the 'rss' logo.
-      String params = "&hitsPerPage=" + limit +
-    		  (queryLang == null ? "" : "&lang=" + queryLang) +
-    		  (sort == null ? "" : "&sort=" + sort + (reverse? "&reverse=true": "") +
-    				  (dedupField == null ? "" : "&dedupField=" + dedupField));
 
       Hits hits;
 
@@ -294,7 +288,13 @@ public class TextSearchServlet extends HttpServlet {
 	  String base = requestUrl.substring( 0 , requestUrl.lastIndexOf( '/' ) );
       
 	  try {
-		  
+		  String fieldsParam = "";
+		  if( request.getParameter( "fields" ) != null )
+			  fieldsParam = request.getParameter( "fields" );
+		  String[ ] fields = null;
+		  if( !fieldsParam.equals( "" ) )
+			  fields = fieldsParam.split( "," );
+				  
 		  List< Item > itens = new ArrayList< Item >( );
 		  
 		  TextSearchResponse responseObject = new TextSearchResponse( );
@@ -325,53 +325,65 @@ public class TextSearchServlet extends HttpServlet {
 			  	Hit hit = show[ i ];
 		        HitDetails detail = details[ i ];
 		        item = new Item( );
+		        
 		        String title = detail.getValue( "title" );
 		        String url 	= detail.getValue( "url" );
 		        String date = detail.getValue( "tstamp" );
-		        item.setTitle( title );
-		        item.setSource( url );
+		        if( FieldExists( fields , "title" ) )
+		        	item.setTitle( title );	
+		        if( FieldExists( fields , "source" ) )
+		        	item.setSource( url );	
 		        
 		        Date datet = null;
         		try{
         			datet = FORMAT.parse( date );
-        			item.setTstamp( FORMAT.format( datet ).toString( ) );
+        			if( FieldExists( fields , "tstamp" ) )
+        				item.setTstamp( FORMAT.format( datet ).toString( ) );
         	    }catch ( ParseException e ){
         	    	LOG.error( e );
         	    }
-                if ( url != null ) {
+                if( url != null ) {
                 	// Lucene index format
                 	String infoIndex = "http://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
                 	LOG.info( "Index Information " + infoIndex );
                 	String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
-                    item.setLink( target );
+                	if( FieldExists( fields , "link" ) )
+                		item.setLink( target );
                 }
-                /**** TODO: I stayed here ****/
+                
                 String contentLength = detail.getValue( "contentLength" );
-                item.setContentLength( contentLength );
+                if( FieldExists( fields , "ContentLength" ) )
+                	item.setContentLength( contentLength );
                 String digest = detail.getValue( "digest" );
-                item.setDigest( digest );
+                if( FieldExists( fields , "digest" ) )
+                	item.setDigest( digest );
                 String dateEpoch = detail.getValue( "date" );
-                item.setDate( dateEpoch );
+                if( FieldExists( fields , "Date" ) )
+                	item.setDate( dateEpoch );
                 String primaryType = detail.getValue( "primaryType" );
-                item.setPrimaryType( primaryType );
+                if( FieldExists( fields , "primaryType" ) )
+                	item.setPrimaryType( primaryType );
                 String subType = detail.getValue( "subType" );
-                item.setSubType( subType );
+                if( FieldExists( fields , "subtype" ) )
+                	item.setSubType( subType );
                 String encoding = detail.getValue( "encoding" );
-                item.setEncoding( encoding );
+                if( FieldExists( fields , "encoding" ) )
+                	item.setEncoding( encoding );
                 
                 //http://arquivo.pt/noFrame/replay/19980205082901/http://www.caleida.pt/saramago/
                 if( url != null ) {
-                	//TODO test collectionsHost
                 	String urlNoFrame = "http://".concat( "arquivo.pt" ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
                     LOG.info( "[TextSearchServlet][doGet] urlNoFrame =" + urlNoFrame );
                 	String urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
                 	LOG.info( "[TextSearchServlet][doGet] urlEncode =" + urlEncode );
                 	String screenShotLink = "http://".concat( "arquivo.pt" ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
-                    item.setScreenShotLink( screenShotLink );
+                	if( FieldExists( fields , "ScreenShotLink" ) )
+                		item.setScreenShotLink( screenShotLink );
                 }
                 
                 String itemText = "NOT IMPLEMENTED"; //TODO not implemented
-                item.setItemText( itemText );
+                if( FieldExists( fields , "ItemText" ) )
+                	item.setItemText( itemText );
                 
                 String detailsCheck = request.getParameter( "details" );
                 
@@ -420,7 +432,17 @@ public class TextSearchServlet extends HttpServlet {
 			  jsonObject = gson.toJson( responseObject );
 		  }
 		  
-		  response.setContentType( "application/json" );
+		  String callBackJavaScripMethodName = "";
+		  if( request.getParameter( "callback" ) != null && !request.getParameter( "callback" ).equals( "" ) ) {
+			  callBackJavaScripMethodName = request.getParameter( "callback" );
+			  String jsonObject = callBackJavaScripMethodName + "("+ jsonObject + ");";  
+		  }
+		  
+		  if( !callBackJavaScripMethodName.equals( "" ) )
+			  response.setContentLength( "text/javascript" ); //jsonp
+		  else
+			  response.setContentType( "application/json" ); //json
+		  
 		  // Get the printwriter object from response to write the required json object to the output stream      
 		  PrintWriter out = response.getWriter( );  
 		  out.print( jsonObject );
@@ -433,6 +455,19 @@ public class TextSearchServlet extends HttpServlet {
 	  
   }
 
+  
+  
+  private static boolean FieldExists( String[ ] fields, String fieldParam ) {
+	  if( fields == null || fields.length == 0 )
+		  return true;
+	  
+	  for( String field : fields ) {
+		  if( field.toUpperCase( ).equals( fieldParam.toUpperCase( ) ) )
+			  return true;
+	  }
+	  return false;
+  }
+  
   
   /**
    * Returns the current date in the format (YYYYMMDDHHMMSS)
