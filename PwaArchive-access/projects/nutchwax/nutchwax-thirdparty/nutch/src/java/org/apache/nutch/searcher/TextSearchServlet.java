@@ -19,6 +19,7 @@ package org.apache.nutch.searcher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -134,7 +135,7 @@ public class TextSearchServlet extends HttpServlet {
 	  Calendar DATE_END = currentDate( );
 	  String dateEndString = FORMAT.format( DATE_END.getTime( ) );
 	  int start = 0;
-	  int limit = 10;
+	  int limit = 50;
 	  
 	  // get parameters from request
 	  request.setCharacterEncoding("UTF-8");
@@ -230,7 +231,7 @@ public class TextSearchServlet extends HttpServlet {
       boolean isOpensearhWayback=false;
       String urlQueryParam=null;
       
-      String siteParameter = request.getParameter( "site" );
+      String siteParameter = request.getParameter( "siteSearch" );
       if( siteParameter == null )
     	  siteParameter = "";
       if ( !siteParameter.equals( "" ) ){// if it contains site: is also a full-text search
@@ -312,6 +313,46 @@ public class TextSearchServlet extends HttpServlet {
 		  requestParameters.setPrettyPrint( prettyPrintParameter );
 		  requestParameters.setSite( siteParameter );
 		  
+		  int offsetNextPage = start + limit;
+		  System.out.println( "offsetNextPage = " + offsetNextPage );
+		  int offsetPreviousPage;
+		  if( start == 0 )
+			  offsetPreviousPage = 0;
+		  else
+			  offsetPreviousPage = start - limit;
+		  System.out.println( "offsetPreviousPage = " + offsetPreviousPage );
+		  
+		  StringBuffer requestURL = request.getRequestURL( );
+		  if (request.getQueryString( ) != null) {
+		      String parameterURL = request.getQueryString( ); 
+		      System.out.println( "getQueryString 1 ="+ request.getQueryString( ) );
+			  String pattern = "&offset=([^&]+)";
+		      if( parameterURL.contains( "&offset=" ) ) {
+		    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset=" + offsetNextPage );
+		      } else {
+		    	  parameterURL = parameterURL.concat( "&offset=" + offsetNextPage );
+		      }
+		      requestURL.append( "?" ).append( parameterURL );
+		  }
+		  System.out.println( "Next_page = " + requestURL.toString( ) );
+		  requestParameters.setNext_page( requestURL.toString( ) );
+		  
+		  requestURL = request.getRequestURL( );
+		  if (request.getQueryString( ) != null) {
+		      String parameterURL = request.getQueryString( ); 
+		      System.out.println( "getQueryString 2 ="+ request.getQueryString( ) );
+			  String pattern = "&offset=([^&]+)";
+		      if( parameterURL.contains( "&offset=" ) ) {
+		    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset="+offsetPreviousPage );
+		      } else {
+		    	  parameterURL = parameterURL.concat( "&offset=" + offsetPreviousPage );
+		      }
+		      requestURL.append( "?" ).append( parameterURL );
+		  }
+		  System.out.println( "Previous_page = " + requestURL.toString( ) );
+		  requestParameters.setPrevious_page( requestURL.toString( ) );
+		  
+		  
 		  if( sortParameter != null && !"".equals( sortParameter ) )
 			  requestParameters.setSort( sortParameter );
 		  if( q != null && !"".equals( q ) )
@@ -335,10 +376,13 @@ public class TextSearchServlet extends HttpServlet {
 		        	item.setSource( url );	
 		        
 		        Date datet = null;
+		        String tstamp = "";
         		try{
         			datet = FORMAT.parse( date );
-        			if( FieldExists( fields , "tstamp" ) )
-        				item.setTstamp( FORMAT.format( datet ).toString( ) );
+        			if( FieldExists( fields , "tstamp" ) ) {
+        				tstamp = FORMAT.format( datet ).toString( );
+        				item.setTstamp( tstamp );
+        			}
         	    }catch ( ParseException e ){
         	    	LOG.error( e );
         	    }
@@ -351,6 +395,11 @@ public class TextSearchServlet extends HttpServlet {
                 		item.setLink( target );
                 }
                 
+                URL source = new URL( url );
+                String domainHost = source.getHost( );
+                String id = domainHost.concat( "/" ).concat( tstamp );
+                if( FieldExists( fields , "id" ) )
+                	item.setKey( id );
                 String contentLength = detail.getValue( "contentLength" );
                 if( FieldExists( fields , "ContentLength" ) )
                 	item.setContentLength( contentLength );
@@ -428,18 +477,18 @@ public class TextSearchServlet extends HttpServlet {
 		  if( prettyOutput )
 			  jsonObject = toPrettyFormat( responseObject );
 		  else {
-			  Gson gson = new Gson( );
+			  Gson gson = new GsonBuilder( ).disableHtmlEscaping( ).create( );
 			  jsonObject = gson.toJson( responseObject );
 		  }
 		  
 		  String callBackJavaScripMethodName = "";
 		  if( request.getParameter( "callback" ) != null && !request.getParameter( "callback" ).equals( "" ) ) {
 			  callBackJavaScripMethodName = request.getParameter( "callback" );
-			  String jsonObject = callBackJavaScripMethodName + "("+ jsonObject + ");";  
+			  jsonObject = callBackJavaScripMethodName + "("+ jsonObject + ");";  
 		  }
 		  
 		  if( !callBackJavaScripMethodName.equals( "" ) )
-			  response.setContentLength( "text/javascript" ); //jsonp
+			  response.setContentType( "text/javascript" ); //jsonp
 		  else
 			  response.setContentType( "application/json" ); //json
 		  
@@ -490,8 +539,8 @@ public class TextSearchServlet extends HttpServlet {
    * @return
    */
   private static String toPrettyFormat( TextSearchResponse responseObject ) {
-	  Gson gson = new GsonBuilder( ).setPrettyPrinting( ).create( );
-      String prettyJson = gson.toJson( responseObject );
+	  Gson gson = new GsonBuilder( ).disableHtmlEscaping( ).setPrettyPrinting( ).create( );
+	  String prettyJson = gson.toJson( responseObject );
       
       return prettyJson;
   }

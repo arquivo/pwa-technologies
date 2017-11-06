@@ -6,6 +6,7 @@ public class TextSearchRequestParameters {
 	
 	@SerializedName( "q" ) 
 	private String queryTerms;
+	@SerializedName( "offset" )
 	private int start;
 	private int limit;
 	private int limitPerSite;
@@ -15,9 +16,24 @@ public class TextSearchRequestParameters {
 	private String type;
 	private String site;
 	private String prettyPrint;
+	private String next_page;
+	private String previous_page;
 	
 	public TextSearchRequestParameters( ) { }
 	
+	
+	public String getNext_page() {
+		return next_page;
+	}
+	public void setNext_page(String next_page) {
+		this.next_page = next_page;
+	}
+	public String getPrevious_page() {
+		return previous_page;
+	}
+	public void setPrevious_page(String previous_page) {
+		this.previous_page = previous_page;
+	}
 	public String getQueryTerms() {
 		return queryTerms;
 	}
@@ -89,11 +105,13 @@ public class TextSearchRequestParameters {
 		this.prettyPrint = prettyPrint;
 	}
 
+
 	@Override
 	public String toString() {
 		return "TextSearchRequestParameters [queryTerms=" + queryTerms + ", start=" + start + ", limit=" + limit
 				+ ", limitPerSite=" + limitPerSite + ", sort=" + sort + ", from=" + from + ", to=" + to + ", type="
-				+ type + ", site=" + site + ", prettyPrint=" + prettyPrint + "]";
+				+ type + ", site=" + site + ", prettyPrint=" + prettyPrint + ", next_page=" + next_page
+				+ ", previous_page=" + previous_page + "]";
 	}
 
 	

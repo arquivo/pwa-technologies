@@ -1,7 +1,9 @@
 package org.apache.nutch.searcher;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Item {
-	
+	@SerializedName( "ID" )
 	private String key;
 	private String title;
 	private String source;
