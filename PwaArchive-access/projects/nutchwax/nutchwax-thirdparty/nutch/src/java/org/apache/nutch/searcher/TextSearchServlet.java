@@ -204,27 +204,35 @@ public class TextSearchServlet extends HttpServlet {
       
       LOG.info( "[doGet] dtstart["+dateStart+"] dtend["+dateEnd+"]" );
       
-      if(dateStart== null && dateEnd != null){
-    	  dateStart = "1996-01-01T00:00:00Z"; /*If datestart is not specified set it to 1996*/
+      if( dateStart== null && dateEnd != null ){
+    	  dateStart = "19960101000000"; /*If datestart is not specified set it to 1996*/
       }
-      if(dateStart != null && dateEnd == null){
-    	  dateEnd = "2029-12-31T00:00:00Z"; /*If dateEnd is not specified set it to 2029*/
+      if( dateStart != null && dateEnd == null ){
+    	  Calendar dateEND = currentDate( );
+    	  String EndString = FORMAT.format( DATE_END.getTime( ) );
       }
 
-      if (dateStart!=null && dateEnd!=null) {    	    	    	
+      if (dateStart!=null && dateEnd!=null) {  	    	
     	  try {
-    		  Date dStart = RFC3339Date.parseRFC3339Date( dateStart );
-    		  Date dEnd = RFC3339Date.parseRFC3339Date( dateEnd );
-    	
+    		  
     		  DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-    		  queryString.append( " date:".concat( dOutputFormat.format(dStart.getTime( ) ) ).concat( "-" ).concat( dOutputFormat.format( dEnd.getTime( ) ) ) );
+    		  dOutputFormat.setLenient( false );
+    		  if( tryParse( dOutputFormat , dateStart ) && tryParse( dOutputFormat , dateEnd ) ) {
+    			  Date dStart = dOutputFormat.parse( dateStart );
+    			  Date dEnd = dOutputFormat.parse( dateEnd );
+    			  queryString.append( " date:".concat( dOutputFormat.format( dStart.getTime( ) ) ).concat( "-" ).concat( dOutputFormat.format( dEnd.getTime( ) ) ) );
+    		  }
+    		  
     	  } catch ( ParseException e ) {
     		  // ignore
+    		  LOG.info( "Parse Exception: " , e );
     	  } catch ( IndexOutOfBoundsException e ) {
     		  // ignore
+    		  LOG.info( "IndexOutOfBoundsException: " , e );
     	  }    	
       }
-    
+      LOG.info( "queryString 1 = " + queryString.toString( ) );
+
       // To support querying opensearch by  url
       // Lucene index format
       String queryStringOpensearchWayback=null;
@@ -335,7 +343,7 @@ public class TextSearchServlet extends HttpServlet {
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
 		  System.out.println( "Next_page = " + requestURL.toString( ) );
-		  requestParameters.setNext_page( requestURL.toString( ) );
+		  responseObject.setNext_page( requestURL.toString( ) );
 		  
 		  requestURL = request.getRequestURL( );
 		  if (request.getQueryString( ) != null) {
@@ -350,7 +358,7 @@ public class TextSearchServlet extends HttpServlet {
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
 		  System.out.println( "Previous_page = " + requestURL.toString( ) );
-		  requestParameters.setPrevious_page( requestURL.toString( ) );
+		  responseObject.setPrevious_page( requestURL.toString( ) );
 		  
 		  
 		  if( sortParameter != null && !"".equals( sortParameter ) )
@@ -504,7 +512,18 @@ public class TextSearchServlet extends HttpServlet {
 	  
   }
 
-  
+  private static Boolean tryParse( DateFormat df, String s ) {
+	    Boolean valid = false;
+	    try {
+	        Date d = df.parse( s );
+	        System.out.println( "[tryParse] s["+s+"] valid = true" );
+	        valid = true;
+	    } catch ( ParseException e ) {
+	    	System.out.println( "[tryParse] s["+s+"] valid = false" );
+         	valid = false;
+	    }
+	    return valid;
+  }
   
   private static boolean FieldExists( String[ ] fields, String fieldParam ) {
 	  if( fields == null || fields.length == 0 )
