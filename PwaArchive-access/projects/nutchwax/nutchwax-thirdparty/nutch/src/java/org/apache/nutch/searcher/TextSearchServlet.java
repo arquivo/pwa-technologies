@@ -209,18 +209,56 @@ public class TextSearchServlet extends HttpServlet {
       }
       if( dateStart != null && dateEnd == null ){
     	  Calendar dateEND = currentDate( );
-    	  String EndString = FORMAT.format( DATE_END.getTime( ) );
+    	  dateEnd = FORMAT.format( dateEND.getTime( ) );
       }
 
       if (dateStart!=null && dateEnd!=null) {  	    	
     	  try {
+    		  String startDate = null;
+    		  String endDate = null;
     		  
-    		  DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-    		  dOutputFormat.setLenient( false );
-    		  if( tryParse( dOutputFormat , dateStart ) && tryParse( dOutputFormat , dateEnd ) ) {
-    			  Date dStart = dOutputFormat.parse( dateStart );
-    			  Date dEnd = dOutputFormat.parse( dateEnd );
-    			  queryString.append( " date:".concat( dOutputFormat.format( dStart.getTime( ) ) ).concat( "-" ).concat( dOutputFormat.format( dEnd.getTime( ) ) ) );
+    		  DateFormat dOutputFormatTimestamp = new SimpleDateFormat("yyyyMMddHHmmss");
+    		  dOutputFormatTimestamp.setLenient( false );
+    		  DateFormat dOutputFormatYear = new SimpleDateFormat("yyyy");
+    		  dOutputFormatYear.setLenient( false );
+    		  String dateFinal = "";
+    		  if( tryParse( dOutputFormatTimestamp , dateStart )  ) {
+    			  Date dStart = dOutputFormatTimestamp.parse( dateStart );
+    			  startDate = dOutputFormatTimestamp.format( dStart.getTime( ) );
+    		  } else if( tryParse( dOutputFormatYear , dateStart )  ) {
+    			  String extensionStart = "0101000000"; 
+    			  dateStart = dateStart.concat( extensionStart );
+    			  if( tryParse( dOutputFormatTimestamp , dateStart )  ) {
+    				  Date dStart = dOutputFormatTimestamp.parse( dateStart );
+        			  startDate = dOutputFormatTimestamp.format( dStart.getTime( ) );
+    			  }
+    		  }
+    			  
+    		  if( tryParse( dOutputFormatTimestamp , dateEnd ) ) {
+    			  Date dEnd = dOutputFormatTimestamp.parse( dateEnd );
+    			  endDate = dOutputFormatTimestamp.format( dEnd.getTime( ) );
+    		  } else if( tryParse( dOutputFormatYear , dateEnd ) ) {
+    			  String extensionEnd = "1231235959";
+    			  dateEnd = dateEnd.concat( extensionEnd );
+    			  if( tryParse( dOutputFormatTimestamp , dateEnd )  ) {
+    				  Date dEnd = dOutputFormatTimestamp.parse( dateEnd );
+    				  endDate = dOutputFormatTimestamp.format( dEnd.getTime( ) );
+    			  }
+    		  }
+    		   
+    		  if( startDate == null && endDate != null ) {
+    			  startDate = "19960101000000";
+    		  }
+    		  
+    		  if( startDate != null && endDate == null ) {
+    			  Calendar dateEND = currentDate( );
+    			  endDate = FORMAT.format( dateEND.getTime( ) );
+    		  }
+    		  
+    		  
+    		  if( startDate != null && endDate != null ) {
+    			  dateFinal = " date:".concat( startDate ).concat( "-" ).concat( endDate );
+    			  queryString.append( dateFinal );
     		  }
     		  
     	  } catch ( ParseException e ) {
@@ -242,7 +280,7 @@ public class TextSearchServlet extends HttpServlet {
       String siteParameter = request.getParameter( "siteSearch" );
       if( siteParameter == null )
     	  siteParameter = "";
-      if ( !siteParameter.equals( "" ) ){// if it contains site: is also a full-text search
+      if ( !siteParameter.equals( "" ) ){ // if it contains site: is also a full-text search
     	  hitsPerDup = 0;
     	  String site = siteParameter;
     	  site = " site:".concat( siteParameter );
@@ -322,18 +360,18 @@ public class TextSearchServlet extends HttpServlet {
 		  requestParameters.setSite( siteParameter );
 		  
 		  int offsetNextPage = start + limit;
-		  System.out.println( "offsetNextPage = " + offsetNextPage );
+		  LOG.info( "offsetNextPage = " + offsetNextPage );
 		  int offsetPreviousPage;
 		  if( start == 0 )
 			  offsetPreviousPage = 0;
 		  else
 			  offsetPreviousPage = start - limit;
-		  System.out.println( "offsetPreviousPage = " + offsetPreviousPage );
+		  LOG.info( "offsetPreviousPage = " + offsetPreviousPage );
 		  
 		  StringBuffer requestURL = request.getRequestURL( );
 		  if (request.getQueryString( ) != null) {
 		      String parameterURL = request.getQueryString( ); 
-		      System.out.println( "getQueryString 1 ="+ request.getQueryString( ) );
+		      LOG.info( "getQueryString 1 ="+ request.getQueryString( ) );
 			  String pattern = "&offset=([^&]+)";
 		      if( parameterURL.contains( "&offset=" ) ) {
 		    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset=" + offsetNextPage );
@@ -342,13 +380,13 @@ public class TextSearchServlet extends HttpServlet {
 		      }
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
-		  System.out.println( "Next_page = " + requestURL.toString( ) );
+		  LOG.info( "Next_page = " + requestURL.toString( ) );
 		  responseObject.setNext_page( requestURL.toString( ) );
 		  
 		  requestURL = request.getRequestURL( );
 		  if (request.getQueryString( ) != null) {
 		      String parameterURL = request.getQueryString( ); 
-		      System.out.println( "getQueryString 2 ="+ request.getQueryString( ) );
+		      LOG.info( "getQueryString 2 ="+ request.getQueryString( ) );
 			  String pattern = "&offset=([^&]+)";
 		      if( parameterURL.contains( "&offset=" ) ) {
 		    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset="+offsetPreviousPage );
@@ -357,7 +395,7 @@ public class TextSearchServlet extends HttpServlet {
 		      }
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
-		  System.out.println( "Previous_page = " + requestURL.toString( ) );
+		  LOG.info( "Previous_page = " + requestURL.toString( ) );
 		  responseObject.setPrevious_page( requestURL.toString( ) );
 		  
 		  
@@ -516,10 +554,10 @@ public class TextSearchServlet extends HttpServlet {
 	    Boolean valid = false;
 	    try {
 	        Date d = df.parse( s );
-	        System.out.println( "[tryParse] s["+s+"] valid = true" );
+	        LOG.info( "[tryParse] s[" + s + "] valid = true" );
 	        valid = true;
 	    } catch ( ParseException e ) {
-	    	System.out.println( "[tryParse] s["+s+"] valid = false" );
+	    	LOG.info( "[tryParse] s[" + s + "] valid = false" );
          	valid = false;
 	    }
 	    return valid;

@@ -14,6 +14,7 @@ public class TextSearchRequestParameters {
 	private String from;
 	private String to;
 	private String type;
+	@SerializedName( "siteSearch" )
 	private String site;
 	private String prettyPrint;
 	
