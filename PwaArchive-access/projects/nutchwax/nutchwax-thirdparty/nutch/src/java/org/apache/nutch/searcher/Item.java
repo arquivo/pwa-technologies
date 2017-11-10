@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class Item {
 	@SerializedName( "ID" )
 	private String key;
+	@SerializedName( "htmlTitle" )
 	private String title;
 	private String source;
 	private String link;

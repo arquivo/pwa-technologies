@@ -163,6 +163,9 @@ public class TextSearchServlet extends HttpServlet {
 	  if ( limitString != null )
 		  limit = Integer.parseInt(limitString);
 	  
+	  if( limit > 2000 )
+		  limit = 2000;
+	  
 	  int hitsPerDup = 2;
 	  /*****************    'sort' param    ***************************/
 	  String sortParameter = request.getParameter("sort"); //relevance or new or old

@@ -10,9 +10,9 @@ public class TextSearchResponse {
 	private String linkToService;
 	private String next_page;
 	private String previous_page;
-	@SerializedName( "request-parameters" ) 
+	@SerializedName( "request_parameters" ) 
 	private TextSearchRequestParameters requestParameters; //request input parameters
-	@SerializedName( "response-items" )
+	@SerializedName( "response_items" )
 	private List<Item> itens;
 
 	
