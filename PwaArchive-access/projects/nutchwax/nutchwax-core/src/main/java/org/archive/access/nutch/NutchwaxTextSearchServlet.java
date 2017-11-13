@@ -118,12 +118,12 @@ public class NutchwaxTextSearchServlet extends TextSearchServlet
 	    {
 	      public String getParameter(String s)
 	      {
-	        if ( s == null || !s.equals( "query" ) ) {
+	        if ( s == null || !s.equals( "q" ) ) {
 	          return request.getParameter(s);
 	        }
 	        
 	        String queryString= null;
-	        if ( !s.equals( "query" ) ){
+	        if ( !s.equals( "q" ) ){
 	        	queryString = s;
 	        }else
 	        	queryString = request.getParameter( s );

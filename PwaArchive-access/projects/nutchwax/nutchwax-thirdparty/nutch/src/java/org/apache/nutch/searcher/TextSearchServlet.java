@@ -63,68 +63,42 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.parsers.*;
 
-
-/** Present search results using A9's OpenSearch extensions to RSS, plus a few
- * Nutch-specific extensions. */   
+/**
+ * TextSearch API Back-End - Full Search. Responsible for processing the input parameters, sending a query to the QueryServers, and responding in json.
+ * @author jnobre
+ *
+ */
 public class TextSearchServlet extends HttpServlet {
-	 	
-  /**
-	 * 
-  */
+  
   private static final long serialVersionUID = 1L;
-  private static final Log LOG = LogFactory.getLog(TextSearchServlet.class);  
+  private static final Log LOG = LogFactory.getLog( TextSearchServlet.class );  
   private static final Map NS_MAP = new HashMap( ); 
   private static PwaFunctionsWritable functions = null;
   private static int nQueryMatches = 0;
-  private static String collectionsHost=null;
-  private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
-  private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
-  private static final SimpleDateFormat FORMATVIEW = new SimpleDateFormat("yyyy/MM/dd");
-  SimpleDateFormat inputDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-  private static Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
+  private static String collectionsHost = null;
+  private static final SimpleDateFormat FORMAT = new SimpleDateFormat( "yyyyMMddHHmmss" );
   Calendar DATE_END = new GregorianCalendar();
   private static final String noFrame = "/noFrame/replay";
   private static final String screenShotURL = "/screenshot/?url";
   static {
-    NS_MAP.put("serviceName", "Arquivo.pt - the Portuguese web-archive");
-    NS_MAP.put("link","http://arquivo.pt");
+    NS_MAP.put( "serviceName" , "Arquivo.pt - the Portuguese web-archive" );
+    NS_MAP.put( "link" , "http://arquivo.pt" );
   }  
-
-  private static final Set SKIP_DETAILS = new HashSet(); // skip these fields always
-  static {
-    SKIP_DETAILS.add("url");                   // redundant with RSS link
-    SKIP_DETAILS.add("title");                 // redundant with RSS title
-    SKIP_DETAILS.add("boost");                
-    SKIP_DETAILS.add("pagerank");
-    SKIP_DETAILS.add("inlinks");
-    SKIP_DETAILS.add("outlinks");      
-    SKIP_DETAILS.add("domain");    
-  }
-  
-  private static final Set SKIP_DETAILS_USER = new HashSet(); // skip these fields when the request is not made by wayback
-  static {
-    SKIP_DETAILS_USER.add("segment");       
-    SKIP_DETAILS_USER.add("date");
-    SKIP_DETAILS_USER.add("encoding");    
-    SKIP_DETAILS_USER.add("collection");
-    SKIP_DETAILS_USER.add("arcname");
-    SKIP_DETAILS_USER.add("arcoffset");        
-  }
-    
   private NutchBean bean;
   private Configuration conf;
-  public void init(ServletConfig config) throws ServletException {
+  
+  public void init( ServletConfig config ) throws ServletException {
     try {
-      this.conf = NutchConfiguration.get(config.getServletContext());
-      bean = NutchBean.get(config.getServletContext(), this.conf);
+      this.conf = NutchConfiguration.get( config.getServletContext( ) );
+      bean = NutchBean.get( config.getServletContext( ), this.conf );
 
-      functions=PwaFunctionsWritable.parse(this.conf.get(Global.RANKING_FUNCTIONS));            
-      nQueryMatches=Integer.parseInt(this.conf.get(Global.MAX_FULLTEXT_MATCHES_RANKED));
+      functions = PwaFunctionsWritable.parse( this.conf.get( Global.RANKING_FUNCTIONS ) );            
+      nQueryMatches=Integer.parseInt( this.conf.get( Global.MAX_FULLTEXT_MATCHES_RANKED ) );
       
-      collectionsHost = this.conf.get("wax.host", "examples.com");
+      collectionsHost = this.conf.get( "wax.host", "examples.com" );
     } 
-    catch (IOException e) {
-      throw new ServletException(e);
+    catch ( IOException e ) {
+      throw new ServletException( e );
     }
   }
 
@@ -205,7 +179,7 @@ public class TextSearchServlet extends HttpServlet {
     	  dateEnd = null; 
       }
       
-      LOG.info( "[doGet] dtstart["+dateStart+"] dtend["+dateEnd+"]" );
+      LOG.debug( "[doGet] dtstart["+dateStart+"] dtend["+dateEnd+"]" );
       
       if( dateStart== null && dateEnd != null ){
     	  dateStart = "19960101000000"; /*If datestart is not specified set it to 1996*/
@@ -266,14 +240,13 @@ public class TextSearchServlet extends HttpServlet {
     		  
     	  } catch ( ParseException e ) {
     		  // ignore
-    		  LOG.info( "Parse Exception: " , e );
+    		  LOG.error( "Parse Exception: " , e );
     	  } catch ( IndexOutOfBoundsException e ) {
     		  // ignore
-    		  LOG.info( "IndexOutOfBoundsException: " , e );
+    		  LOG.error( "IndexOutOfBoundsException: " , e );
     	  }    	
       }
-      LOG.info( "queryString 1 = " + queryString.toString( ) );
-
+      
       // To support querying opensearch by  url
       // Lucene index format
       String queryStringOpensearchWayback=null;
@@ -305,13 +278,13 @@ public class TextSearchServlet extends HttpServlet {
       if( prettyPrintParameter != null && prettyPrintParameter.equals( "true" ) ) 
     	  prettyOutput = true;
     	
-
+     
       Hits hits;
 
       Query query = null;
       String qRequest = queryString.toString( );
 	  query = Query.parse( qRequest , queryLang , this.conf );
-	  LOG.info( "query: " + qRequest );
+	  LOG.info( "query:" + qRequest + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & functions:" +  this.conf.get( Global.RANKING_FUNCTIONS ) + " & maxHitsPerVersion:1" );
 
 	  //execute the query    
 	  try {    		
@@ -363,18 +336,17 @@ public class TextSearchServlet extends HttpServlet {
 		  requestParameters.setSite( siteParameter );
 		  
 		  int offsetNextPage = start + limit;
-		  LOG.info( "offsetNextPage = " + offsetNextPage );
+		  LOG.debug( "offsetNextPage = " + offsetNextPage );
 		  int offsetPreviousPage;
 		  if( start == 0 )
 			  offsetPreviousPage = 0;
 		  else
 			  offsetPreviousPage = start - limit;
-		  LOG.info( "offsetPreviousPage = " + offsetPreviousPage );
+		  LOG.debug( "offsetPreviousPage = " + offsetPreviousPage );
 		  
 		  StringBuffer requestURL = request.getRequestURL( );
 		  if (request.getQueryString( ) != null) {
 		      String parameterURL = request.getQueryString( ); 
-		      LOG.info( "getQueryString 1 ="+ request.getQueryString( ) );
 			  String pattern = "&offset=([^&]+)";
 		      if( parameterURL.contains( "&offset=" ) ) {
 		    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset=" + offsetNextPage );
@@ -383,13 +355,13 @@ public class TextSearchServlet extends HttpServlet {
 		      }
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
-		  LOG.info( "Next_page = " + requestURL.toString( ) );
+		  LOG.debug( "Next_page = " + requestURL.toString( ) );
 		  responseObject.setNext_page( requestURL.toString( ) );
 		  
 		  requestURL = request.getRequestURL( );
 		  if (request.getQueryString( ) != null) {
 		      String parameterURL = request.getQueryString( ); 
-		      LOG.info( "getQueryString 2 ="+ request.getQueryString( ) );
+		      LOG.debug( "getQueryString 2 ="+ request.getQueryString( ) );
 			  String pattern = "&offset=([^&]+)";
 		      if( parameterURL.contains( "&offset=" ) ) {
 		    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset="+offsetPreviousPage );
@@ -398,7 +370,7 @@ public class TextSearchServlet extends HttpServlet {
 		      }
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
-		  LOG.info( "Previous_page = " + requestURL.toString( ) );
+		  LOG.debug( "Previous_page = " + requestURL.toString( ) );
 		  responseObject.setPrevious_page( requestURL.toString( ) );
 		  
 		  
@@ -419,7 +391,7 @@ public class TextSearchServlet extends HttpServlet {
 		        String title = detail.getValue( "title" );
 		        String url 	= detail.getValue( "url" );
 		        String date = detail.getValue( "tstamp" );
-		        if( FieldExists( fields , "title" ) )
+		        if( FieldExists( fields , "htmlTitle" ) )
 		        	item.setTitle( title );	
 		        if( FieldExists( fields , "source" ) )
 		        	item.setSource( url );	
@@ -438,7 +410,7 @@ public class TextSearchServlet extends HttpServlet {
                 if( url != null ) {
                 	// Lucene index format
                 	String infoIndex = "http://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
-                	LOG.info( "Index Information " + infoIndex );
+                	LOG.debug( "Index Information " + infoIndex );
                 	String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
                 	if( FieldExists( fields , "link" ) )
                 		item.setLink( target );
@@ -468,20 +440,19 @@ public class TextSearchServlet extends HttpServlet {
                 if( FieldExists( fields , "encoding" ) )
                 	item.setEncoding( encoding );
                 
-                //http://arquivo.pt/noFrame/replay/19980205082901/http://www.caleida.pt/saramago/
                 if( url != null ) {
                 	String urlNoFrame = "http://".concat( "arquivo.pt" ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
-                    LOG.info( "[TextSearchServlet][doGet] urlNoFrame =" + urlNoFrame );
+                    LOG.debug( "[TextSearchServlet][doGet] urlNoFrame =" + urlNoFrame );
                 	String urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
-                	LOG.info( "[TextSearchServlet][doGet] urlEncode =" + urlEncode );
+                	LOG.debug( "[TextSearchServlet][doGet] urlEncode =" + urlEncode );
                 	String screenShotLink = "http://".concat( "arquivo.pt" ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
                 	if( FieldExists( fields , "ScreenShotLink" ) )
                 		item.setScreenShotLink( screenShotLink );
                 }
                 
-                String itemText = "NOT IMPLEMENTED"; //TODO not implemented
+               /* String itemText = "NOT IMPLEMENTED"; //TODO not implemented
                 if( FieldExists( fields , "ItemText" ) )
-                	item.setItemText( itemText );
+                	item.setItemText( itemText );*/
                 
                 String detailsCheck = request.getParameter( "details" );
                 
@@ -557,10 +528,10 @@ public class TextSearchServlet extends HttpServlet {
 	    Boolean valid = false;
 	    try {
 	        Date d = df.parse( s );
-	        LOG.info( "[tryParse] s[" + s + "] valid = true" );
+	        LOG.debug( "[tryParse] s[" + s + "] valid = true" );
 	        valid = true;
 	    } catch ( ParseException e ) {
-	    	LOG.info( "[tryParse] s[" + s + "] valid = false" );
+	    	LOG.debug( "[tryParse] s[" + s + "] valid = false" );
          	valid = false;
 	    }
 	    return valid;
