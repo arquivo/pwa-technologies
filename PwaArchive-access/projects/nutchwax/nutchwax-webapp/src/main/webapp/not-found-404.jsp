@@ -37,9 +37,9 @@
 	<%String serverName = request.getServerName(); %>
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="http://<%=serverName%>/image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="http://<%=serverName%>/css/style.css"  media="all" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<%@ include file="include/topbar.jsp" %>
 	<div class="wrap">
 		<div id="main">
 			<div id="header">

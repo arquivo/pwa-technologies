@@ -29,6 +29,7 @@
 
 %>
 
+<!--
 <div id="resultados">
 <%--- TODO: updates this values --%>
 <fmt:message key='search.results'>
@@ -36,6 +37,7 @@
         <fmt:param value='<%=new Long(end)%>'/>
         <fmt:param value='<%=new Long(hitsTotal)%>'/></fmt:message>
 </div>
+-->
 
 <%-- Show tip if present --%>
 <%--
@@ -265,15 +267,16 @@
             <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
             <!-- Changed to return in wayback query format -->
             
-            <h2><a href="<c:url value='${target}'></c:url>"><%=title%></a></h2>
-	    <br />
+            <h2><a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%=title%></a></h2>
+            <div class="url"><%= url %></div>
 		<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
-		<span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span> - <a class="outras-datas" href="<%=allVersions%>"><fmt:message key='search.result.history'/></a>
             <% showSummary=true; //to show always summaries %>
             <% if (!"".equals(summary) && showSummary) { %>
-            <br /><span class="resumo"><%=summary%></span>
+            <span class="resumo"><%=summary%></span><br />
+            <span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span>
+            <!--<div><a class="outras-datas" href="<%=allVersions%>"><fmt:message key='search.result.history'/></a></div>-->
+            <div><a onclick="ga('send', 'event', 'Full-text search', 'List Versions', '/wayback/*/<%= url %>');" class="outras-datas" href="/wayback/*/<%= url %>"><fmt:message key='search.allVersions'/></a></div>            
             <% } %>
-            <span class="url"><%= url %></span>
 <%--
             -
             <a class="history" href="<%=allVersions%>"><fmt:message key="otherVersions"/></a>

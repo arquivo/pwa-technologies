@@ -45,7 +45,7 @@
 <%@ include file="include/i18n.jsp" %>
 <fmt:setLocale value="<%=language%>"/>
 
-<%! //To please the compiler since logging need those -- check [search.jsp]
+<%! //To please the compiler since logging need those -- check [searchBootstrap.jsp]
   private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
   private static final DateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
   //TODO: remove dateStart & dateEnd ???
@@ -271,7 +271,13 @@ String[] queryString_splitted=null;
   }
 
   /*** End date ***/
-  Calendar dateEnd = (Calendar)DATE_END.clone();                                // Setting current date
+  Calendar dateEnd = (Calendar)DATE_END.clone();  
+
+  String dateEndNoParameter = inputDateFormatter.format( dateEnd.getTime() );
+  String yearEndNoParameter =dateEndNoParameter.substring(dateEndNoParameter.length()-4);
+  String yearStartNoParameter = "1996";
+
+  // Setting current date
 
   if ( request.getParameter("dateEnd") != null && !request.getParameter("dateEnd").equals("") ) {
         try {
@@ -304,7 +310,11 @@ String[] queryString_splitted=null;
 
   String dateStartString = inputDateFormatter.format( dateStart.getTime() );
 
+  String dateStartYear = dateStartString.substring(dateStartString.length()-4);
+
   String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
+
+  String dateEndYear = dateEndString.substring(dateEndString.length()-4);
 
   //--- not needed, since we use fields. String htmlQueryString = Entities.encode(queryString);
 
@@ -349,171 +359,246 @@ String[] queryString_splitted=null;
     (dedupField == null ? "" : "&dedupField=" + dedupField));
 
 %>
+
+
 <%---------------------- Start of HTML ---------------------------%>
+
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
-  <title><fmt:message key='search.meta.title'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></title>
-  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-  <%-- TODO: define META lang --%>
-  <meta http-equiv="Content-Language" content="pt-PT" />
-  <meta name="Keywords" content="<fmt:message key='search.meta.keywords'/>" />
-  <meta name="Description" content="<fmt:message key='search.meta.description'/>" />
-  <link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
-  <link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
-  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
-  <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
-  <script type="text/javascript">
-                var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
-                var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
-        </script>
-        <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
-        <script type="text/javascript" src="js/jquery-ui-1.7.2.custom.min.js"></script>
-        <script type="text/javascript" src="js/ui.datepicker.js"></script>
-        <% if (language.equals("pt")) { /* load PT i18n for datepicker */ %>
-        <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
-        <% } %>
-        <script type="text/javascript" src="js/configs.js"></script>
-        <%@include file="include/analytics.jsp" %>
+  <%@ include file="include/checkDesktop.jsp" %>
+	<title><fmt:message key='home.meta.title'/></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+	<%-- TODO: define META lang --%>
+	<meta http-equiv="Content-Language" content="pt-PT" />
+	<meta name="Keywords" content="<fmt:message key='home.meta.keywords'/>" />
+	<meta name="Description" content="<fmt:message key='home.meta.description'/>" />
+
+    <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
+    <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
+    <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
+    <meta property="og:image" content="http://<%=arquivoHostName%>/img/logoFace.png"/>
+
+	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
+	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- cookies for language selection -->
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
+    <!-- dual slider dependencies -->
+    <script type="text/javascript" src="/js/nouislider.min.js"></script>
+    <link rel="stylesheet" href="/css/nouislider.min.css">
+    <script type="text/javascript" src="/js/wNumb.js"></script>
+    <!-- CSS loading spiner -->
+	<link href="css/csspin.css" rel="stylesheet" type="text/css">
+
 </head>
 <body>
-  <%@ include file="include/topbar.jsp" %>
-<%-- TODO: add loading feedback --%>
-  <div class="wrap" id="firstWrap">
-    <div id="main">
-      <div id="header">
-        <%@ include file="include/logo.jsp" %>
-        <div id="search-header">
-            <form id="loginForm" action="search.jsp" name="loginForm" method="get">
-              <input type="hidden" name="l" value="<%= language %>" />
-              <fieldset id="pesquisar">
-                <label for="txtSearch">&nbsp;</label>
-                <input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' " name="query" id="txtSearch" accesskey="t" />
-                <input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" onclick="{document.getElementById('txtSearch').setAttribute('value','');}" />
-                <input type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
-                <a href="advanced.jsp?l=<%=language%>" onclick="{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='search.advanced'/>" id="pesquisa-avancada"><fmt:message key='search.advanced'/></a>
-                <script type="text/javascript">
-                  String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
-                      return this.split(needle).join(replacement);
-                  };
-                </script>
-                <script type="text/javascript">
-                    function encodeHtmlEntity(str) {
-
-                        str = str.replaceAll('ç','%26ccedil%3B')
-                                 .replaceAll('Á','%26Aacute%3B')
-                                 .replaceAll('á','%26aacute%3B')
-                                 .replaceAll('À','%26Agrave%3B')
-                                 .replaceAll('Â','%26Acirc%3B')
-                                 .replaceAll('à','%26agrave%3B')
-                                 .replaceAll('â','%26acirc%3B')
-                                 .replaceAll('Ä','%26Auml%3B')
-                                 .replaceAll('ä','%26auml%3B')
-                                 .replaceAll('Ã','%26Atilde%3B')
-                                 .replaceAll('ã','%26atilde%3B')
-                                 .replaceAll('Å','%26Aring%3B')
-                                 .replaceAll('å','%26aring%3B')
-                                 .replaceAll('Æ','%26Aelig%3B')
-                                 .replaceAll('æ','%26aelig%3B')
-                                 .replaceAll('Ç','%26Ccedil%3B')
-                                 .replaceAll('Ð','%26Eth%3B')
-                                 .replaceAll('ð','%26eth%3B')
-                                 .replaceAll('É','%26Eacute%3B')
-                                 .replaceAll('é','%26eacute%3B')
-                                 .replaceAll('È','%26Egrave%3B')
-                                 .replaceAll('è','%26egrave%3B')
-                                 .replaceAll('Ê','%26Ecirc%3B')
-                                 .replaceAll('ê','%26ecirc%3B')
-                                 .replaceAll('Ë','%26Euml%3B')
-                                 .replaceAll('ë','%26euml%3B')
-                                 .replaceAll('Í','%26Iacute%3B')
-                                 .replaceAll('í','%26iacute%3B')
-                                 .replaceAll('Ì','%26Igrave%3B')
-                                 .replaceAll('ì','%26igrave%3B')
-                                 .replaceAll('Î','%26Icirc%3B')
-                                 .replaceAll('î','%26icirc%3B')
-                                 .replaceAll('Ï','%26Iuml%3B')
-                                 .replaceAll('ï','%26iuml%3B')
-                                 .replaceAll('Ñ','%26Ntilde%3B')
-                                 .replaceAll('ñ','%26ntilde%3B')
-                                 .replaceAll('Ó','%26Oacute%3B')
-                                 .replaceAll('ó','%26oacute%3B')
-                                 .replaceAll('Ò','%26Ograve%3B')
-                                 .replaceAll('ò','%26ograve%3B')
-                                 .replaceAll('Ô','%26Ocirc%3B')
-                                 .replaceAll('ô','%26ocirc%3B')
-                                 .replaceAll('Ö','%26Ouml%3B')
-                                 .replaceAll('ö','%26ouml%3B')
-                                 .replaceAll('Õ','%26Otilde%3B')
-                                 .replaceAll('õ','%26otilde%3B')
-                                 .replaceAll('Ø','%26Oslash%3B')
-                                 .replaceAll('ø','%26oslash%3B')
-                                 .replaceAll('ß','%26szlig%3B')
-                                 .replaceAll('Þ','%26Thorn%3B')
-                                 .replaceAll('þ','%26thorn%3B')
-                                 .replaceAll('Ú','%26Uacute%3B')
-                                 .replaceAll('ú','%26uacute%3B')
-                                 .replaceAll('Ù','%26Ugrave%3B')
-                                 .replaceAll('ù','%26ugrave%3B')
-                                 .replaceAll('Û','%26Ucirc%3B')
-                                 .replaceAll('û','%26ucirc%3B')
-                                 .replaceAll('Ü','%26Uuml%3B')
-                                 .replaceAll('ü','%26uuml%3B')
-                                 .replaceAll('Ý','%26Yacute%3B')
-                                 .replaceAll('ý','%26yacute%3B')
-                                 .replaceAll('ÿ','%26yuml%3B')
-                                 .replaceAll('©','%26copy%3B')
-                                 .replaceAll('®','%26reg%3B')
-                                 .replaceAll('™','%26trade%3B')
-                                 .replaceAll('&','%26amp%3B')
-                                 .replaceAll('<','%26lt%3B')
-                                 .replaceAll('>','%26gt%3B')
-                                 .replaceAll('€','%26euro%3B')
-                                 .replaceAll('¢','%26cent%3B')
-                                 .replaceAll('£','%26pound%3B')
-                                 .replaceAll('\"','%26quot%3B')
-                                 .replaceAll('‘','%26lsquo%3B')
-                                 .replaceAll('’','%26rsquo%3B')
-                                 .replaceAll('“','%26ldquo%3B')
-                                 .replaceAll('”','%26rdquo%3B')
-                                 .replaceAll('«','%26laquo%3B')
-                                 .replaceAll('»','%26raquo%3B')
-                                 .replaceAll('—','%26mdash%3B')
-                                 .replaceAll('–','%26ndash%3B')
-                                 .replaceAll('°','%26deg%3B')
-                                 .replaceAll('±','%26plusmn%3B')
-                                 .replaceAll('¼','%26frac14%3B')
-                                 .replaceAll('½','%26frac12%3B')
-                                 .replaceAll('¾','%26frac34%3B')
-                                 .replaceAll('×','%26times%3B')
-                                 .replaceAll('÷','%26divide%3B')
-                                 .replaceAll('α','%26alpha%3B')
-                                 .replaceAll('β','%26beta%3B')
-                                 .replaceAll('∞','%26infin%3B')
-                                 .replaceAll(' ','+');
-
-
-                        return str;
-                    }
-                </script>
-
-              </fieldset>
-              <fieldset id="search-date">
-                <div id="search-label-data">
-                  <label id="search-dateStart_top" for="dateStart_top"><fmt:message key='search.query-form.from'/></label>
-                  <div class="search-withTip">
-                    <input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" />
-                  </div>
-                  <label id="search-labelDateEnd" for="dateEnd_top"><fmt:message key='search.query-form.to'/></label>
-                  <div class="withTip">
-                    <input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
-                  </div>
-                </div>
-              </fieldset>
-            </form>
+    <%@ include file="include/topbar.jsp" %>
+    <div class="container-fluid topcontainer" id="headerSearchDiv">
+        <div class="row">
+            <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 ">
+                <img src="/img/logo-home-pt_nospaces.png" alt="Logo Arquivo.pt" class="img-responsive center-block" />
+            </div>
         </div>
-      </div>
-<%-- END OF HEADER --%>
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">
+                <form id="searchForm" action="/search.jsp">
+                <div id="form_container"> 
+                    <div class="input-group stylish-input-group">
+                        
+                            <input id="txtSearch" value="<%=htmlQueryString%>" name="query" type="search" class="form-control no-radius"  placeholder="<fmt:message key="home.search.placeholder" />" autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <span class="search-span input-group-addon no-radius">
+                                <button  class="search-button" type="submit">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>  
+                            </span>
+                        
+                    </div>
+                </div>
+                <!--<a href="/advanced.jsp?l=pt">Pesquisa avançada</a>-->
+                
+                    
+                        <div id="slider-date" class="col-sm-12"></div>
+                    
+                
+                <div id="slider-caption" class="row">
+                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year text-bold" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=yearEndNoParameter%>"></input>
+                    <input size="4" maxlength="4" type="number" class="example-val text-center text-bold input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=yearEndNoParameter%>"></input>
+                    <input type="hidden" id="dateStart" name="dateStart" value="01/01/<%=dateStartYear%>"/>
+                    <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
+                </div>
+                   <div id="divLoading" style="margin-top: 25px; text-align: center;">
+                   		<div style="text-align: center; display: inline-block;" class="cp-spinner cp-round"></div>
+                   </div>    
+<script type="text/javascript">
+    $('#searchForm').submit(function() 
+    {
+        if ($.trim($(".form-control").val()) === "") {
+            /*TODO:: Do something when user enters empty input?*/
+        return false;
+        }
+    });    
+</script>                
+<script type="text/javascript">
+// Create a new date from a string, return as a timestamp.
+
+var dateSlider = document.getElementById('slider-date');
+
+var beginYear = parseInt("<%=dateStartYear%>");
+var endYear = parseInt("<%=dateEndYear%>");
+var minYear = 1996;
+var maxYear = (new Date()).getFullYear() - 1
+
+noUiSlider.create(dateSlider, {
+// Create two timestamps to define a range.
+    range: {
+        min: [minYear],
+        max: [maxYear]
+    },
+    tooltips: true,
+    connect: true,
+// Steps of one year
+    step: 1,
+
+// Two more timestamps indicate the handle starting positions.
+    start: [ beginYear, endYear ],
+
+// No decimals
+    format: wNumb({
+        decimals: 0
+    })
+}); 
+</script>
+<script type="text/javascript">$('.noUi-tooltip').hide();</script>
+<script type="text/javascript">
+  $('#event-start').bind('input', function() { 
+    var currentInputDate = $(this).val();
+    currentInputDateNumber = parseInt(currentInputDate);
+    var currentDateEndNumber =  parseInt($('#event-end').attr('value'));
+    if( (currentInputDate.length) === 4 && currentInputDateNumber >= 1996 && currentInputDateNumber >= parseInt("<%=yearStartNoParameter%>") && currentInputDateNumber <= currentDateEndNumber){ /*if it is a year after 1996 and eventStartDate <= eventEndDate*/
+       /* update the input year of #datestart*/
+       var currentDate = $('#dateStart').attr('value');
+       var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
+       dateSlider.noUiSlider.set([parseInt(currentInputDate) ,null]);
+    }
+    else  if(currentInputDateNumber > parseInt("<%=yearEndNoParameter%>")  ){
+     $('#event-start').val(1996); 
+     dateSlider.noUiSlider.set([1996 , null]);
+    }    
+    if((currentInputDate.length) === 4 && currentInputDateNumber >= currentDateEndNumber  ){
+      dateSlider.noUiSlider.set([currentDateEndNumber , null]);
+      $('#event-start').val(currentDateEndNumber);
+    }
+});
+</script>
+<script type="text/javascript">
+$("#event-end").blur(function() {
+  if( $("#event-end").val().toString().length < 4 ){
+    $('#event-end').val(parseInt("<%=yearEndNoParameter%>"));
+    dateSlider.noUiSlider.set([null , parseInt("<%=yearEndNoParameter%>")]);
+  }
+});
+
+$("#event-start").blur(function() {
+  if( $("#event-start").val().toString().length < 4 || $("#event-start").val() < 1996 ){
+    $('#event-start').val(1996);
+    dateSlider.noUiSlider.set([1996 , null]);
+  }
+});
+
+  $('#event-end').bind('input', function() { 
+    var currentInputDate = $(this).val();
+    currentInputDateNumber = parseInt(currentInputDate);
+    var currentDateStartNumber =  parseInt($('#event-start').attr('value'));
+    if( (currentInputDate.length) === 4 && currentInputDateNumber <= parseInt("<%=yearEndNoParameter%>") && currentInputDateNumber >= currentDateStartNumber ){ 
+      /*if it is a year*/
+       /* update the input year of #dateend*/
+       var currentDate = $('#dateEnd').attr('value');
+       var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
+       dateSlider.noUiSlider.set([null , currentInputDateNumber]);
+    } 
+    if((currentInputDate.length) === 4 && currentInputDateNumber < currentDateStartNumber  ){
+      dateSlider.noUiSlider.set([null , currentDateStartNumber]);
+      $('#event-end').val(currentDateStartNumber);
+    }
+    else  if((currentInputDate.length) >= 4 && currentInputDateNumber > parseInt("<%=yearEndNoParameter%>")  ){
+     $('#event-end').val(parseInt("<%=yearEndNoParameter%>")); 
+     dateSlider.noUiSlider.set([null , parseInt("<%=yearEndNoParameter%>")]);
+    }
+});
+</script>
+<script type="text/javascript">
+// Create a list of day and monthnames.
+var
+    weekdays = [
+        "Sunday", "Monday", "Tuesday",
+        "Wednesday", "Thursday", "Friday",
+        "Saturday"
+    ],
+    months = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+    ];
+
+var dateValues = [
+    document.getElementById('event-start'),
+    document.getElementById('event-end')
+];
+
+initial = 0; /*do not show tooltips when slider is initialized i.e. when initial < 2*/
+dateSlider.noUiSlider.on('update', function( values, handle ) {
+  if(initial > 1){
+      $(".noUi-handle[data-handle='"+handle.toString()+"'] .noUi-tooltip").show().delay(1000).fadeOut();
+    }
+    else{
+      initial += 1;
+    }
+    if(handle==0){
+     $('#dateStart').attr('value', '01/01/'+values[handle]);
+     $('#event-start').attr('value', +values[handle]);
+    }else{
+     $('#dateEnd').attr('value', '31/12/'+values[handle]);
+     $('#event-end').attr('value', +values[handle]);
+    }
+});     
+
+// Append a suffix to dates.
+// Example: 23 => 23rd, 1 => 1st.
+function nth (d) {
+  if(d>3 && d<21) return 'th';
+  switch (d % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+    }
+}
+
+// Create a string representation of the date.
+function formatDate ( date ) {
+    return weekdays[date.getDay()] + ", " +
+        date.getDate() + nth(date.getDate()) + " " +
+        months[date.getMonth()] + " " +
+        date.getFullYear();
+}    
+
+</script>
+
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- End SearchHeader -->
+
   
         <%----------------------------------------------------------
         // Check to see which of the 3 mode is presented:
@@ -618,9 +703,6 @@ String[] queryString_splitted=null;
                         </c:catch>
 
 
-    <script src="http://<%=hostArquivo%>/js/jquery-latest.min.js" type="text/javascript"></script>
-    <script>var $j = jQuery.noConflict(true);</script>
-
 
 <script type="text/javascript">
 
@@ -655,6 +737,7 @@ Content = {
     },
     savedInArchive:"<fmt:message key="savedInArchive" />",
     versionsStored:"<fmt:message key="versionsStored" />",
+    versionPage:"<fmt:message key="versionPage" />",    
     versionsPage:"<fmt:message key="versionsPage" />",
     between:"<fmt:message key="between" />",
     and:"<fmt:message key="and" />",
@@ -691,8 +774,26 @@ function getYearTs(ts){
   return ts.substring(0, 4);
 }
 
+function getMonthTs(ts){
+  return ts.substring(4,6);
+}
+
+
 function getYearPosition(ts){
   return parseInt(getYearTs(ts)) - 1996;
+}
+
+function getDateSpaceFormatedWithoutYear(ts){
+  var month = ts.substring(4, 6);
+  month = Content.months[month];
+  var day = ts.substring(6, 8);
+  if( day[0] === '0'){
+    day = day[1];
+  }
+  var hours = ts.substring(8,10);
+  var minutes = ts.substring(10,12);
+
+  return day + " "+ month + " " + Content.at + " " + hours+":"+minutes;
 }
 
 function getDateSpaceFormated(ts){
@@ -730,80 +831,71 @@ function createMatrix(versionsArray, versionsURL){
     matrix[i] = [];
     var yearStr = (1996+i).toString();
     // add the headers for each year
-    $("#years").append('<th id="th_'+yearStr+'">'+yearStr+'</th>');
+    $("#years").append('<div class="yearUl row" id="th_'+yearStr+'"><div class="col-xs-6 text-left yearText"><h4>'+yearStr+'</h4></div></div>');
   }
 
   for (var i = 0; i < versionsArray.length; i++) {
     var timestamp = versionsArray[i];
     var timestampStr = timestamp.toString();
+    var currentYear = getYearTs(timestampStr);
+    var currentMonth = getMonthTs(timestampStr);
+    var currentMonthVersions = 0;
     var url = versionsURL[i];
-    var pos = getYearPosition(timestampStr);
+
     var dateFormated = getDateSpaceFormated(timestampStr);
-    var shortDateFormated= getShortDateSpaceFormated(timestampStr);       
-    var tdtoInsert = '<td><a href="http://<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+shortDateFormated+'</a></td>';
-    matrix[pos].push(tdtoInsert);  
+
+    var tdtoInsert = '<a onclick="ga(\'send\', \'event\', \'Versions List\', \'Version Click\', \'http://<%=collectionsHost%>/'+timestampStr+'/'+url+'\');" class="day-version-div" id="'+timestampStr+'" href="http://<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+getDateSpaceFormatedWithoutYear(timestampStr)+'</a>';
+
+     if(! $('#'+currentYear+'_'+currentMonth).length )  /*Add month if it doesn't exist already*/
+    {
+         $("#th_"+currentYear.toString()).append('<div class="month-version-div row" id="'+currentYear+'_'+currentMonth+'"><h4 class="month-left month-margins col-xs-6 text-left">'+Content.months[currentMonth]+'</h4><h4 class="month-margins col-xs-6 text-right month-right" ><span id="month_'+currentYear+'_'+currentMonth+'">1 <fmt:message key='search.version'/></span> <i class="fa fa-caret-down iCarret monthCarret" aria-hidden="true"></i></h4></div>');
+         currentMonthVersions = 1;
+    }
+    $("#"+currentYear+'_'+currentMonth).append(tdtoInsert);
+
+    if(currentMonthVersions === 0 ){
+      currentMonthVersions = $('#'+currentYear+'_'+currentMonth + '> a').length;
+     /* top.alert(''+ currentYear+'_'+currentMonth+'_monthversions');*/
+      $('#month_'+currentYear+'_'+currentMonth).html(currentMonthVersions+ " <fmt:message key='search.versions'/>");
+     
+    }
+
+
   }
 
   //find which is the biggest number of versions per year and create empty tds in the other years
-  var maxLength = 0;
   var lengthi =0;
   for (var i = 0; i < matrix.length; i++) {
     lengthi = matrix[i].length;
     var yearStr = (1996+i).toString();
-    if(lengthi == 0){
-      $("#th_"+yearStr).addClass("inactivo");
+    var numberOfVersionsCurrentYear = $("#th_"+yearStr+" .day-version-div").length;
+    if(numberOfVersionsCurrentYear > 1){
+      $("#th_"+yearStr+" div:first-child").after('<div class="col-xs-6 numberVersions no-padding-left text-right"><h4>'+numberOfVersionsCurrentYear.toString() + ' <fmt:message key='search.versions'/>    <i class="fa fa-caret-down iCarret yearCarret" aria-hidden="true"></i></h4></div>');
+    }else if(numberOfVersionsCurrentYear === 1 ){
+      $("#th_"+yearStr+" div:first-child").after('<div class="col-xs-6 numberVersions no-padding-left text-right"><h4>'+numberOfVersionsCurrentYear.toString() + ' <fmt:message key='search.version'/>    <i class="fa fa-caret-down iCarret yearCarret" aria-hidden="true"></i></h4></div>');
+    }else{
+      /*Year with no versions maybe delete if we don't want to present empty years?*/
+      $("#th_"+yearStr+" div:first-child").after('<div class="numberVersions no-padding-left text-right"><h4>'+numberOfVersionsCurrentYear.toString() + ' <fmt:message key='search.versions'/>    <i class="fa fa-caret-down iCarretDisabled yearCarret" aria-hidden="true"></i></h4></div>'); 
+       $("#th_"+yearStr).addClass("noVersions");     
     }
+  }
 
-    if(lengthi > maxLength){
-      maxLength = lengthi;
-    }
-  }
-  //iterate again to create empty tds
-  for (var i = 0; i < matrix.length; i++) {
-    lengthi = matrix[i].length;
-    if(maxLength > lengthi){
-      for(var j=0; j<(maxLength - lengthi); j++){
-        matrix[i].push('<td>&nbsp;</td>');
-      }
-    }
-  }
-  //create each row of the table
-  for (var i=0; i<maxLength; i++){
-    rowString ="";
-    for (var j = 0; j < matrix.length; j++) {
-      rowString+= matrix[j][i];
-    }
-    var rowId = (i+1).toString()
-    $("#tableBody").append('<tr id="'+rowId+'">'+rowString+'<tr>');
-  }
-  if($('#1 td:nth-child('+String(matrix.length)+')').html() ==='&nbsp;'){ /*If last year in the table doesn't have versions show embargo message*/
-  	$('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
-  }
 }
+
+
 
 function createResultsPage(numberOfVersions, inputURL){
 
-    $('<div class="clear">&nbsp;</div>'+
-      '<div id="resultados-url">'+Content.resultsQuestion+' \'<a href="search.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>\'</div>'+
-      '<div class="wrap">' +
-             '  <div id="intro">' +
-             '    <h1 style="text-align: center;">'+Content.versionsStored+'</h1>' +
-             '    <span class="texto-1" style="text-align: center;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' ' + Content.versionsPage+' '+ inputURL+
-                '</span>' +
-             '  </div>' +
-             '</div>' + 
-       '<div id="conteudo-versoes">'+
-             '  <div id="resultados-lista">'+
-             '    <table class="tabela-principal">'+
-             '      <thead>'+
-             '        <tr id="years">'+
-             '        </tr>'+
-             '      </thead>'+
-             '      <tbody id="tableBody">'+
-             '      </tbody>'+
-             '    </table>'+
-             '  </div>'+
-             '</div>'        ).insertAfter("#firstWrap");
+    $('<div id="resultados-url">'+Content.resultsQuestion+' \'<a href="searchMobile.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>\'</div>'+
+/*        '<div>' +
+               '    <h3 class="texto-1 text-center">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+ 
+                 (numberOfVersions===1 ?  Content.versionPage : Content.versionsPage )+
+                 ' '+'<strong>'+ inputURL+'</strong>'+'</h3>' +
+        '</div>' + */
+          '<div id="years" class="container-fluid">' +
+          '</div>' +
+        '</div>' +
+      '</div>').insertAfter("#headerSearchDiv");
      
 }
 
@@ -819,23 +911,23 @@ function formatNumberOfVersions( numberofVersionsString){
 }
 
 function createErrorPage(){
-  $('<div id="conteudo-resultado">'+
+  $('<div id="conteudo-resultado" class="container-fluid">'+
            '  <div id="first-column">&nbsp;</div>'+
            '  <div id="second-column">'+
            '    <div id="search_stats"></div>'+
            '    <div id="conteudo-pesquisa-erro">'+
-                '<h2>'+Content.noResultsFound+' </h2> <h3><%=urlQuery%></h3>'+
-                '<div id="sugerimos-que">'+
-                    '<p>'+Content.suggestions+'</p>'+
+                '<div class="row alert alert-danger col-xs-offset-1 col-xs-10 my-alert break-word"><p>'+Content.noResultsFound+' <span class="text-bold"><%=urlQuery%></span></p></div>'+
+                '<div id="sugerimos-que" class="col-xs-offset-1 col-xs-10 no-padding-left suggestions-no-results">'+
+                    '<p class="text-bold">'+Content.suggestions+'</p>'+
                   '<ul>'+
                     '<li>'+Content.checkSpelling+'</li>'+
-                    '<li><a style="padding-left: 0px;" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
-                    '<li><a href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>" style="padding-left: 0px;">'+Content.mementoFind+'</a>.</li>'+                    
+                    '<li><a class="no-padding-left" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
+                    '<li><a class="no-padding-left" href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>">'+Content.mementoFind+'</a>.</li>'+                    
                   '</ul>'+
                 '</div>'+
                 '</div>'+
               '</div>'+
-           '</div>').insertAfter("#firstWrap"); 
+           '</div>').insertAfter("#headerSearchDiv"); 
 }
 
 
@@ -860,10 +952,21 @@ function createErrorPage(){
 
     var inputURL = document.getElementById('txtSearch').value;
 
+	$( document ).ajaxStart(function() {
+	  $( "#divLoading").show();
+	});
+	$( document ).ajaxStop(function() {
+	  $( "#divLoading").hide();
+	});
+  $( document ).ajaxComplete(function() {
+    $( "#divLoading").hide();
+  });
+
 
     $.ajax({
     // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
        url: requestURL,
+       cache: false,
        data: {
           output: 'json',
           url: urlsource,
@@ -879,7 +982,6 @@ function createErrorPage(){
        dataType: 'text',
        success: function(data) {
 
-        //top.alert("I received the versions");
           versionsArray = []
           var tokens = data.split('\n')
           $.each(tokens, function(e){
@@ -898,9 +1000,9 @@ function createErrorPage(){
           }); 
           createResultsPage(tokens.length-1, inputURL);
           createMatrix(versionsArray, versionsURL);
-          //top.alert(versionsArray.length)
+          attachClicks();
        },
-       async: false,
+      
        type: 'GET'
     });
 </script>
@@ -914,6 +1016,34 @@ function createErrorPage(){
       else{
           document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsPT.js"><\/script>');
       }
+</script>
+<script type="text/javascript">
+function attachClicks(){
+  /*Action to show/hide versions on click*/
+  touched = false;
+  $(".day-version-div").click(function() {
+    touched = true;
+  });
+
+  $(".month-version-div").click(function() {
+    if(touched === false){
+      $(this).children(".day-version-div").toggleClass("show-day-version");
+      $(this).find(".monthCarret").toggleClass('fa-caret-up fa-caret-down');
+      $(this).toggleClass("preventMonth");
+      touched = true;
+    }
+    /*$j(this).find("i").toggleClass('fa-caret-up fa-caret-down');*/
+  });
+
+    $(".yearUl").click(function() {
+      if(touched === false){
+        $(this).children(".month-version-div").toggle();
+        $(this).find(".yearCarret").toggleClass('fa-caret-up fa-caret-down');
+        $(this).toggleClass("preventYear");
+      }
+      touched=false;  
+    });
+}
 </script> 
 
 
@@ -921,10 +1051,7 @@ function createErrorPage(){
 
                         <c:if test="${not empty exception}">
         <% bean.LOG.error("Error while accessing to wayback: "+ pageContext.getAttribute("exception")); %>
-        <div id="conteudo-resultado"> <%-- START OF: conteudo-resultado --%>
-        <div id="first-column">
-                &nbsp;
-        </div>
+        <div id="conteudo-resultado" class="container-fluid"> <%-- START OF: conteudo-resultado --%>
         <div id="second-column">
           <div id="search_stats"></div>
                         </c:if>
@@ -991,12 +1118,9 @@ function createErrorPage(){
       
 <% if (showList) { %>
 
-<div id="conteudo-resultado"> <%-- START OF: conteudo-resultado --%>
-<div id="first-column">
-  &nbsp;
-</div>
+<div id="conteudo-resultado" class="container-fluid"> <%-- START OF: conteudo-resultado --%>
 <div id="second-column">
-<h1><fmt:message key='search.query'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></h1>
+<!--<h1><fmt:message key='search.query'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></h1>-->
 
 <%@include file="include/search-result-component.jsp"%>
 
@@ -1049,12 +1173,12 @@ function createErrorPage(){
   </div>
         <% } else { %>
   <div id="conteudo-pesquisa-erro">
-    <h2><fmt:message key='search.no-results.title'/></h2>
-    <h3><%=htmlQueryString%></h3>
-
-    <div id="sugerimos-que">
-        <p><fmt:message key='search.no-results.suggestions'/></p>
-      <ul>
+    <div class="row alert alert-danger break-word col-xs-offset-1 col-xs-10 my-alert">
+      <p><fmt:message key='search.no-results.title'/> <span class="text-bold"><%=htmlQueryString%></span></p>
+    </div>
+    <div id="sugerimos-que" class="col-xs-offset-1 col-xs-10 no-padding-left">
+        <p class="text-bold"><fmt:message key='search.no-results.suggestions'/></p>
+      <ul class="suggestions-no-results">
         <li><fmt:message key='search.no-results.suggestions.well-written'/></li>
         <li><fmt:message key='search.no-results.suggestions.time-interval'/></li>
         <li><fmt:message key='search.no-results.suggestions.keywords'/></li>
@@ -1066,7 +1190,7 @@ function createErrorPage(){
         <% } %>
       </ul>
     </div>
-    <div class="voltar-erro"><a href="<%= request.getHeader("Referer")%>">&larr; <fmt:message key='search.no-results.go-back'/></a></div>
+    <!--<div class="voltar-erro"><a href="<%= request.getHeader("Referer")%>">&larr; <fmt:message key='search.no-results.go-back'/></a></div>-->
   </div>
 
 <%
@@ -1111,7 +1235,7 @@ function createErrorPage(){
 
 
 <% if (hitsTotal >= 1 && !usedWayback) { %>              <%-- Start Pager IF --%>
-<div class="pagination">
+<div class="pagesNextPrevious text-center">
 
 <ul>
 <%
@@ -1133,38 +1257,9 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "&reverse=" + reverse;
     }
 %>
-  <li class="previous"><a href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>"><fmt:message key='search.pager.previous'/></a></li>
+  <li class="previous"><a onclick="ga('send', 'event', 'Full-text search', 'Previous page', document.location.href );" class="myButtonStyle text-center right10" role="button" href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>"><fmt:message key='search.pager.previous'/></a></li>
 <% } %>
 <%
-  for (long pageIndex = displayMin; pageIndex <= displayMax; pageIndex++) {
-    long pageStart = (pageIndex - 1) * hitsPerPage;
-    String pageUrl = "search.jsp?" +
-      "query=" + URLEncoder.encode(request.getAttribute("query").toString(), "UTF-8") +
-      "&dateStart="+ dateStartString +
-      "&dateEnd="+ dateEndString +
-      "&pag=" + pageIndex +
-      "&start=" + pageStart +
-      "&hitsPerPage=" + hitsPerPage +
-      "&hitsPerDup=" + hitsPerDup +
-      "&dedupField=" + dedupField +
-      "&l="+ language;
-    if (sort != null) {
-      pageUrl = pageUrl +
-      "&sort=" + sort +
-      "&reverse=" + reverse;
-    }
-    if (pageIndex != currentPage) {
-%>
-    <li><a href="<%=pageUrl%>"><%=pageIndex%></a></li>
-<%
-    }
-        else {
-%>
-    <li class="current"><%=pageIndex%></li>
-<%
-    }
-  }
-
   if (currentPage < pagesAvailable) {
     long nextPageStart = currentPage * hitsPerPage;
     String nextPageUrl = "search.jsp?" +
@@ -1183,7 +1278,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "&reverse=" + reverse;
     }
 %>
-    <li class="next"><a href="<%=nextPageUrl%>" title="<fmt:message key='search.pager.next'/>"><fmt:message key='search.pager.next'/></a></li>
+    <li class="next"><a onclick="ga('send', 'event', 'Full-text search', 'Next page', document.location.href );" class="myButtonStyle text-center" role="button" href="<%=nextPageUrl%>" title="<fmt:message key='search.pager.next'/>"><fmt:message key='search.pager.next'/></a></li>
 <% } %>
 
 </ul>
@@ -1196,8 +1291,9 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       </div>  <!-- FIM #conteudo-resultado  --> 
     </div>
   </div>
+           
+<%@include file="include/analytics.jsp" %>
 <%@include file="include/footer.jsp" %>
-
 </body>
 </html>
 

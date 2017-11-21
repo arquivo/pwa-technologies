@@ -34,6 +34,7 @@
 	<meta http-equiv="Content-Language" content="pt-PT" />
 	<meta name="Keywords" content="<fmt:message key='500.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='500.meta.description'/>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
 	<script type="text/javacsript" src="stream-min.js"></script>

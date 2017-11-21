@@ -1,0 +1,94 @@
+body,html{
+/*	height: 100%;
+	width: 100%*/
+}
+
+.swiper-container {
+	width: 100%;
+	height: 100%;
+}
+.swiper-slide {
+    font-size: 18px;
+    background: #fff;
+}
+.swiper-wrapper {
+	background-color: #252525;
+	visibility: hidden;
+}
+.menu {
+	min-width: 100px;
+	width: 70%;
+	max-width: 320px;
+	overflow-y: auto;
+	background-color: #252525;
+	color: #fff;
+    display: initial;
+}
+.content {
+	width: 100%;
+	min-height: 100vh;
+}
+
+.bar {
+	position: relative;
+	display: block;
+
+	width: 50px;
+	height: 5px;
+
+	margin: 10px auto;
+	background-color: #fff;
+
+	border-radius: 10px;
+
+	-webkit-transition: .3s;
+	transition: .3s;
+}
+
+.menu h4{
+	border-top: 1px solid #3E3E3E;;
+	padding-top: 15px;
+	margin-bottom: 0px;
+	padding-bottom: 15px;
+	margin-top: 0px;
+	padding-left: 20px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.menu h4:hover, .menu h4:visited, .menu h4:link, .menu h4:active
+{
+    text-decoration: none;
+}
+
+
+
+.menu a{
+	color:white;
+	text-decoration: none;
+}
+
+.menu h4:active{
+	 background: rgba(255, 255, 255, 0.2)!important;
+}	
+
+#topBarFixed{
+    border-bottom: 1px solid lightgrey;
+    background-color: white;
+    min-height: 0!important;
+    padding-top: 12px;
+    padding-bottom: 13px;
+    /*z-index: 1000!important;**/
+}
+
+#mainMask{
+	width: 100%;position: absolute;height: 100%;background: black;z-index: 4;display: none;opacity: 0.7;
+}
+
+#menuButton{
+	cursor: pointer;
+}
+
+#mainMenu{
+
+}

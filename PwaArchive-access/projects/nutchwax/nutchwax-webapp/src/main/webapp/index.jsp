@@ -35,8 +35,24 @@
 <%!	//To please the compiler since logging need those -- check [search.jsp]
 	private static int hitsTotal = -10;		// the value -10 will be used to mark as being "advanced search"
 	private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
-	private static Calendar dateStart = new GregorianCalendar();
+    Calendar dateStart = (Calendar)DATE_START.clone();
+    SimpleDateFormat inputDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+	/*private static Calendar dateStart = new GregorianCalendar();*/
 	private static Calendar dateEnd = new GregorianCalendar();
+    String dateStartString = inputDateFormatter.format( dateStart.getTime() );
+    String dateStartYear = dateStartString.substring(dateStartString.length()-4);
+
+
+   /* dateEnd.set( Calendar.YEAR, dateEnd.get(Calendar.YEAR) - 1);*/
+    /*DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1);*/
+    String dateEndNoParameter =""+ (Calendar.getInstance().get(Calendar.YEAR) - 1);
+    String yearEndNoParameter =dateEndNoParameter.substring(dateEndNoParameter.length()-4);
+    String yearStartNoParameter = "1996";    
+
+
+    String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
+    String dateEndYear = dateEndString.substring(dateEndString.length()-4);
+
 %>
 
 <%-- Get the application beans --%>
@@ -51,7 +67,10 @@
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
+  <%@ include file="include/checkDesktop.jsp" %>
 	<title><fmt:message key='home.meta.title'/></title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
 	<meta http-equiv="Content-Language" content="pt-PT" />
@@ -65,219 +84,280 @@
 
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
+    <!-- dual slider dependencies -->
+    <script type="text/javascript" src="/js/nouislider.min.js"></script>
+    <link rel="stylesheet" href="/css/nouislider.min.css">
+    <script type="text/javascript" src="/js/wNumb.js"></script>
+    <!-- end slider dependencies -->
+
+    <!-- left menu dependencies -->
+    <link rel="stylesheet" href="css/leftmenu.css">
+    <!-- end left menu dependencies -->
+
+
 </head>
 <body>
-	<%@ include file="include/topbar.jsp" %>
-	<div class="wrap">
-		<div id="header-home">
-                                <div id="logo-home">
-									<img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="400" height="105" />
-                                </div>
-                                <div id="search-home">
-                                        <form id="loginForm" action="search.jsp" name="loginForm" method="get">
-						<input type="hidden" name="l" value="<%= language %>" />
-                                                <fieldset>
-                                                        <label for="txtSearch">&nbsp;</label>
-                                                        <input class="search-inputtext" type="text" size="15" value="<fmt:message key='search.value'/>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' "  name="query" id="txtSearch" accesskey="t" />
-                                                        <input type="reset" value="&nbsp;" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
-                                                        <input type="submit" value="<fmt:message key='home.submit'/>" class="home-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
-                                                        <a href="advanced.jsp?l=<%=language%>" onclick="ga('send', 'event', 'Homepage', 'pesquisa-avancada', 'Click on link (Pesquisa avancada)');{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>
-                                                        <script type="text/javascript">
-                                                          String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
-                                                              return this.split(needle).join(replacement);
-                                                          };
-                                                        </script>
-                                                        <script type="text/javascript">
-                                                            function encodeHtmlEntity(str) {
+    <%@ include file="include/topbar.jsp" %>
+    <div class="container-fluid topcontainer">
+        <div class="row">
+            <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 ">
+                <img src="/img/logo-home-pt_nospaces.png" alt="Logo Arquivo.pt" class="img-responsive center-block" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">
+                <form id="searchForm" action="/search.jsp">
+                <div id="form_container"> 
+                    <div class="input-group stylish-input-group">
+                        
+                            <input name="query" type="search" class="form-control no-radius" placeholder="<fmt:message key='home.search.placeholder'/>" autofocus autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <span class="input-group-addon no-radius">
+                                <button type="submit">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>  
+                            </span>
+                        
+                    </div>
+                </div>
+                <div id="slider-date" class="col-sm-12"></div>
+                <div id="slider-caption" class="row">
+                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year text-bold" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=yearEndNoParameter%>"></input>
+                    <input size="4" maxlength="4" type="number" class="example-val text-center text-bold input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=yearEndNoParameter%>"></input>
+                    <input type="hidden" id="dateStart" name="dateStart" value="01/01/<%=dateStartYear%>"/>
+                    <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
+                </div>                  
+                </form>
 
-                                                                str = str.replaceAll('ç','%26ccedil%3B')
-                                                                         .replaceAll('Á','%26Aacute%3B')
-                                                                         .replaceAll('á','%26aacute%3B')
-                                                                         .replaceAll('À','%26Agrave%3B')
-                                                                         .replaceAll('Â','%26Acirc%3B')
-                                                                         .replaceAll('à','%26agrave%3B')
-                                                                         .replaceAll('â','%26acirc%3B')
-                                                                         .replaceAll('Ä','%26Auml%3B')
-                                                                         .replaceAll('ä','%26auml%3B')
-                                                                         .replaceAll('Ã','%26Atilde%3B')
-                                                                         .replaceAll('ã','%26atilde%3B')
-                                                                         .replaceAll('Å','%26Aring%3B')
-                                                                         .replaceAll('å','%26aring%3B')
-                                                                         .replaceAll('Æ','%26Aelig%3B')
-                                                                         .replaceAll('æ','%26aelig%3B')
-                                                                         .replaceAll('Ç','%26Ccedil%3B')
-                                                                         .replaceAll('Ð','%26Eth%3B')
-                                                                         .replaceAll('ð','%26eth%3B')
-                                                                         .replaceAll('É','%26Eacute%3B')
-                                                                         .replaceAll('é','%26eacute%3B')
-                                                                         .replaceAll('È','%26Egrave%3B')
-                                                                         .replaceAll('è','%26egrave%3B')
-                                                                         .replaceAll('Ê','%26Ecirc%3B')
-                                                                         .replaceAll('ê','%26ecirc%3B')
-                                                                         .replaceAll('Ë','%26Euml%3B')
-                                                                         .replaceAll('ë','%26euml%3B')
-                                                                         .replaceAll('Í','%26Iacute%3B')
-                                                                         .replaceAll('í','%26iacute%3B')
-                                                                         .replaceAll('Ì','%26Igrave%3B')
-                                                                         .replaceAll('ì','%26igrave%3B')
-                                                                         .replaceAll('Î','%26Icirc%3B')
-                                                                         .replaceAll('î','%26icirc%3B')
-                                                                         .replaceAll('Ï','%26Iuml%3B')
-                                                                         .replaceAll('ï','%26iuml%3B')
-                                                                         .replaceAll('Ñ','%26Ntilde%3B')
-                                                                         .replaceAll('ñ','%26ntilde%3B')
-                                                                         .replaceAll('Ó','%26Oacute%3B')
-                                                                         .replaceAll('ó','%26oacute%3B')
-                                                                         .replaceAll('Ò','%26Ograve%3B')
-                                                                         .replaceAll('ò','%26ograve%3B')
-                                                                         .replaceAll('Ô','%26Ocirc%3B')
-                                                                         .replaceAll('ô','%26ocirc%3B')
-                                                                         .replaceAll('Ö','%26Ouml%3B')
-                                                                         .replaceAll('ö','%26ouml%3B')
-                                                                         .replaceAll('Õ','%26Otilde%3B')
-                                                                         .replaceAll('õ','%26otilde%3B')
-                                                                         .replaceAll('Ø','%26Oslash%3B')
-                                                                         .replaceAll('ø','%26oslash%3B')
-                                                                         .replaceAll('ß','%26szlig%3B')
-                                                                         .replaceAll('Þ','%26Thorn%3B')
-                                                                         .replaceAll('þ','%26thorn%3B')
-                                                                         .replaceAll('Ú','%26Uacute%3B')
-                                                                         .replaceAll('ú','%26uacute%3B')
-                                                                         .replaceAll('Ù','%26Ugrave%3B')
-                                                                         .replaceAll('ù','%26ugrave%3B')
-                                                                         .replaceAll('Û','%26Ucirc%3B')
-                                                                         .replaceAll('û','%26ucirc%3B')
-                                                                         .replaceAll('Ü','%26Uuml%3B')
-                                                                         .replaceAll('ü','%26uuml%3B')
-                                                                         .replaceAll('Ý','%26Yacute%3B')
-                                                                         .replaceAll('ý','%26yacute%3B')
-                                                                         .replaceAll('ÿ','%26yuml%3B')
-                                                                         .replaceAll('©','%26copy%3B')
-                                                                         .replaceAll('®','%26reg%3B')
-                                                                         .replaceAll('™','%26trade%3B')
-                                                                         .replaceAll('&','%26amp%3B')
-                                                                         .replaceAll('<','%26lt%3B')
-                                                                         .replaceAll('>','%26gt%3B')
-                                                                         .replaceAll('€','%26euro%3B')
-                                                                         .replaceAll('¢','%26cent%3B')
-                                                                         .replaceAll('£','%26pound%3B')
-                                                                         .replaceAll('\"','%26quot%3B')
-                                                                         .replaceAll('‘','%26lsquo%3B')
-                                                                         .replaceAll('’','%26rsquo%3B')
-                                                                         .replaceAll('“','%26ldquo%3B')
-                                                                         .replaceAll('”','%26rdquo%3B')
-                                                                         .replaceAll('«','%26laquo%3B')
-                                                                         .replaceAll('»','%26raquo%3B')
-                                                                         .replaceAll('—','%26mdash%3B')
-                                                                         .replaceAll('–','%26ndash%3B')
-                                                                         .replaceAll('°','%26deg%3B')
-                                                                         .replaceAll('±','%26plusmn%3B')
-                                                                         .replaceAll('¼','%26frac14%3B')
-                                                                         .replaceAll('½','%26frac12%3B')
-                                                                         .replaceAll('¾','%26frac34%3B')
-                                                                         .replaceAll('×','%26times%3B')
-                                                                         .replaceAll('÷','%26divide%3B')
-                                                                         .replaceAll('α','%26alpha%3B')
-                                                                         .replaceAll('β','%26beta%3B')
-                                                                         .replaceAll('∞','%26infin%3B')
-                                                                         .replaceAll(' ','+');
+<script type="text/javascript">
+    $('#searchForm').submit(function() 
+    {
+        if ($.trim($(".form-control").val()) === "") {
+            /*TODO:: Do something when user enters empty input?*/
+        return false;
+        }
+    });    
+</script>
+  
+<script type="text/javascript">
+// Create a new date from a string, return as a timestamp.
 
+var dateSlider = document.getElementById('slider-date');
 
-                                                                return str;
-                                                            }
-                                                        </script>
-                                                </fieldset>
-                                        </form>
-                                </div>
-                                <div id="info">
-                                      <!--  <img src="img/search-icon.gif" width="62" height="71" alt="" /> -->
-                                        <div id="info-texto-home">
-						<%-- TODO: wrong H1. The title should be AWP. Merge H1 with logo for the intro page --%>
-                                                <h1><fmt:message key='home.title'/></h1>
-                                               <!-- <h2><fmt:message key='home.subtitle'/></h2> -->
-                                                <p class="green"><fmt:message key='home.description'/></p>
-                                                <a href="http://sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>" onclick="ga('send', 'event', 'Homepage', 'conheca-servico', 'Click on link (sobre.arquivo)');"><fmt:message key='home.know-more'/></a>
-                                        </div>
-                                </div>
-		</div>
-		<div id="video-home"><iframe width="480" height="270" src="https://www.youtube.com/embed/2HEudlXPV4o?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe></div>
-		<div id="main-home">
-                                <h3><fmt:message key='home.examples.title'/></h3>
-                                <h4><fmt:message key='home.examples.subtitle'/></h4>
+var beginYear = parseInt("<%=dateStartYear%>");
+var endYear = parseInt("<%=dateEndYear%>");
+var minYear = 1996;
+maxYear = (new Date()).getFullYear() - 1;
 
-				<fmt:bundle basename='pt.arquivo.i18n.Highlights'>
-                                <div class="boxes-home" id="boxes">
-					<%-- Let the box be clickable. Not just that one text --%>
-                                        <div class="box">
-                                                <div class="mascara-img">
-                                                        <img src="img/highlights/saramago.png" alt="<fmt:message key='highlight.saramago.alt'/>" width="80" height="80" />
-                                                        <div class="mascara-img-gr"></div>
-                                                </div>
-                                                <div class="box-info">
-                                                        <a href="/wayback/19980205082901/http://www.caleida.pt/saramago/" title="<fmt:message key='highlight.saramago.link.title'/>" onclick="ga('send', 'event', 'Homepage', 'jose-saramago', 'Click on link (Exemplos)');"><fmt:message key='highlight.saramago.title'/></a>
-                                                        <p class="box-sub-title"><fmt:message key='highlight.saramago.description'/></p>
-                                                        <p><fmt:message key='highlight.saramago.description2'/></p>
-                                                </div>
-                                        </div>
+noUiSlider.create(dateSlider, {
+// Create two timestamps to define a range.
+    range: {
+        min: [minYear],
+        max: [maxYear]
+    },
+    tooltips:true,
+    connect: true,
+// Steps of one year
+    step: 1,
 
-                                        <div class="box">
-                                                <div class="mascara-img">
-                                                        <img src="img/highlights/expo98.gif" alt="<fmt:message key='highlight.expo98.alt'/>" width="80" height="80" />
-                                                        <div class="mascara-img-gr"></div>
-                                                </div>
-                                                <div class="box-info">
-							<a href="/wayback/20000823154833/http://www.parquedasnacoes.pt/pt/expo98/" title="<fmt:message key='highlight.expo98.link.title'/>" onclick="ga('send', 'event', 'Homepage', 'expo-98', 'Click on link (Exemplos)');"><fmt:message key='highlight.expo98.title'/></a>
-                                                        <p class="box-sub-title"><fmt:message key='highlight.expo98.description'/></p>
-                                                        <p><fmt:message key='highlight.expo98.description2'/></p>
-                                                </div>
-                                        </div>
+// Two more timestamps indicate the handle starting positions.
+    start: [ beginYear, endYear ],
 
-                                        <div class="box">
-                                                <div class="mascara-img">
-                                                        <img src="img/highlights/euro2004.png" alt="<fmt:message key='highlight.euro2004.alt'/>" width="80" height="80" />
-                                                        <div class="mascara-img-gr"></div>
-                                                </div>
-                                                <div class="box-info">
-                                                        <a href="/wayback/20040525212736/http://euro2004.clix.pt/" title="<fmt:message key='highlight.euro2004.link.title'/>" onclick="ga('send', 'event', 'Homepage', 'euro-2004', 'Click on link (Exemplos)');"><fmt:message key='highlight.euro2004.title'/></a>
-                                                        <p class="box-sub-title"><fmt:message key='highlight.euro2004.description'/></p>
-                                                        <p><fmt:message key='highlight.euro2004.description2'/></p>
-                                                </div>
-                                        </div>
+// No decimals
+    format: wNumb({
+        decimals: 0
+    })
+}); 
+</script>
+<script type="text/javascript">$('.noUi-tooltip').hide();</script>
+<script type="text/javascript">
+  $('#event-start').bind('input', function() { 
+    var currentInputDate = $(this).val();
+    currentInputDateNumber = parseInt(currentInputDate);
+    var currentDateEndNumber =  parseInt($('#event-end').attr('value'));
+    if( (currentInputDate.length) === 4 && currentInputDateNumber >= 1996 && currentInputDateNumber >= parseInt("<%=yearStartNoParameter%>") && currentInputDateNumber <= currentDateEndNumber){ /*if it is a year after 1996 and eventStartDate <= eventEndDate*/
+       /* update the input year of #datestart*/
+       var currentDate = $('#dateStart').attr('value');
+       var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
+       dateSlider.noUiSlider.set([parseInt(currentInputDate) ,null]);
+    }
+    else  if(currentInputDateNumber > parseInt("<%=yearEndNoParameter%>")  ){
+     $('#event-start').val(1996); 
+     dateSlider.noUiSlider.set([1996 , null]);
+    }    
+    if((currentInputDate.length) === 4 && currentInputDateNumber >= currentDateEndNumber  ){
+      dateSlider.noUiSlider.set([currentDateEndNumber , null]);
+      $('#event-start').val(currentDateEndNumber);
+    }
+});
+</script>
+<script type="text/javascript">
+$("#event-end").blur(function() {
+  if( $("#event-end").val().toString().length < 4 ){
+    $('#event-end').val(parseInt("<%=yearEndNoParameter%>"));
+    dateSlider.noUiSlider.set([null , parseInt("<%=yearEndNoParameter%>")]);
+  }
+});
 
-                                        <div class="box">
-                                                <div class="mascara-img">
-                                                        <img src="img/highlights/figo.png" alt="<fmt:message key='highlight.figo.alt'/>" width="80" height="80" />
-                                                        <div class="mascara-img-gr"></div>
-                                                </div>
-                                                <div class="box-info">
-                                                        <a href="/wayback/20011230091638/http://www.ojogo.pt/17-300/artigo145049.htm" title="<fmt:message key='highlight.figo.link.title'/>" onclick="ga('send', 'event', 'Homepage', 'Luis Figo', 'Click on link (Exemplos)');"><fmt:message key='highlight.figo.title'/></a>
-                                                        <p class="box-sub-title"><fmt:message key='highlight.figo.description'/></p>
-                                                        <p><fmt:message key='highlight.figo.description2'/></p>
-                                                </div>
-                                        </div>
-					</fmt:bundle>
-					
-					
-<!--Inspect the language for returning the proper highlight page  -->
-<c:choose>
-  <c:when test="${language == 'pt'}">
-   <a href="http://sobre.arquivo.pt/sobre/paginas-de-exemplo-no-arquivo-da-web-portuguesa" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
-  </c:when>
-  <c:otherwise>
-    <a href=" http://sobre.arquivo.pt/about-the-archive/example-pages-in-the-portuguese-web-archive" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
-  </c:otherwise>
-</c:choose>
+$("#event-start").blur(function() {
+  if( $("#event-start").val().toString().length < 4 || $("#event-start").val() < 1996 ){
+    $('#event-start').val(1996);
+    dateSlider.noUiSlider.set([1996 , null]);
+  }
+});
 
+  $('#event-end').bind('input', function() { 
+    var currentInputDate = $(this).val();
+    currentInputDateNumber = parseInt(currentInputDate);
+    var currentDateStartNumber =  parseInt($('#event-start').attr('value'));
+    if( (currentInputDate.length) === 4 && currentInputDateNumber <= parseInt("<%=yearEndNoParameter%>") && currentInputDateNumber >= currentDateStartNumber ){ 
+      /*if it is a year*/
+       /* update the input year of #dateend*/
+       var currentDate = $('#dateEnd').attr('value');
+       var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
+       dateSlider.noUiSlider.set([null , currentInputDateNumber]);
+    } 
+    if((currentInputDate.length) === 4 && currentInputDateNumber < currentDateStartNumber  ){
+      dateSlider.noUiSlider.set([null , currentDateStartNumber]);
+      $('#event-end').val(currentDateStartNumber);
+    }
+    else  if((currentInputDate.length) >= 4 && currentInputDateNumber > parseInt("<%=yearEndNoParameter%>")  ){
+     $('#event-end').val(parseInt("<%=yearEndNoParameter%>")); 
+     dateSlider.noUiSlider.set([null , parseInt("<%=yearEndNoParameter%>")]);
+    }
+});
+</script>
+<script type="text/javascript">
+// Create a list of day and monthnames.
+var
+    weekdays = [
+        "Sunday", "Monday", "Tuesday",
+        "Wednesday", "Thursday", "Friday",
+        "Saturday"
+    ],
+    months = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+    ];
 
+var dateValues = [
+    document.getElementById('event-start'),
+    document.getElementById('event-end')
+];
 
-					
-                                </div>
-                        </div>
+initial = 0; /*do not show tooltips when slider is initialized i.e. when initial < 2*/
+dateSlider.noUiSlider.on('update', function( values, handle ) {
+	if(initial > 1){
+    	$(".noUi-handle[data-handle='"+handle.toString()+"'] .noUi-tooltip").show().delay(1000).fadeOut();
+    }
+    else{
+    	initial += 1;
+    }
+    if(handle==0){
+     $('#dateStart').attr('value', '01/01/'+values[handle]);
+     $('#event-start').attr('value', +values[handle]);
+    }else{
+     $('#dateEnd').attr('value', '31/12/'+values[handle]);
+     $('#event-end').attr('value', +values[handle]);
+    }
+});      
 
-	</div> <!-- end of wrap -->
-<%@include file="include/footer.jsp" %>
+// Append a suffix to dates.
+// Example: 23 => 23rd, 1 => 1st.
+function nth (d) {
+  if(d>3 && d<21) return 'th';
+  switch (d % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+    }
+}
+
+// Create a string representation of the date.
+function formatDate ( date ) {
+    return weekdays[date.getDay()] + ", " +
+        date.getDate() + nth(date.getDate()) + " " +
+        months[date.getMonth()] + " " +
+        date.getFullYear();
+}    
+
+</script>                
+            </div>
+        </div>
+
+    </div>
+    <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 text-center no-padding-horizontal" >
+                    <h4><fmt:message key='home.examples.preserved'/></title></h4>
+                </div>    
+            </div>   
+    </div>
+    <div class="container-fluid carousel-container no-padding-horizontal" id="container-carousel"> 
+        <div class="col-xs-12 col-sm-6 col-sm-offset-3 no-padding-horizontal" >
+          <div id="my-slider" class="carousel slide" data-ride="carousel" data-interval="false">
+              <!-- Indicators -->
+              <!--
+              <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+              </ol>
+              -->          
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner center-block" role="listbox">
+              <div class="item active">
+                <a onclick="ga('send', 'event', 'Homepage', 'Ronaldo', 'Click on link (Exemplos - Ronaldo bola de ouro)');" href="/wayback/20091219061621/http://jogodirecto.blogspot.com/2008/12/ronaldo-ballon-dor.html"><img src="/img/ronaldo2008-e1487678911859.jpg" alt="<fmt:message key='home.examples.ronaldo'/>" class="img-responsive center-block"></a>
+                  <div class="text-center">
+                        <a onclick="ga('send', 'event', 'Homepage', 'Ronaldo', 'Click on link (Exemplos - Ronaldo bola de ouro)');" href="/wayback/20091219061621/http://jogodirecto.blogspot.com/2008/12/ronaldo-ballon-dor.html"><h5><fmt:message key='home.examples.ronaldo'/></h5></a>
+                  </div>
+              </div>
+            <div class="item">
+              <a onclick="ga('send', 'event', 'Homepage', 'Euro2008', 'Click on link (Exemplos - Euro 2008)');" href="/wayback/20081023211542tf_/http://euro2008.publico.clix.pt/noticia.aspx?id=1333952"><img src="/img/espanhaEuro2008-e1488898061641.jpg" class="img-responsive center-block" alt="<fmt:message key='home.examples.spain'/>"></a>
+                <div class="text-center">
+                  <a onclick="ga('send', 'event', 'Homepage', 'Euro2008', 'Click on link (Exemplos - Euro 2008)');" href="/wayback/20081023211542tf_/http://euro2008.publico.clix.pt/noticia.aspx?id=1333952"><h5><fmt:message key='home.examples.spain'/></h5></a>
+                </div>
+            </div>
+            <div class="item">
+              <a onclick="ga('send', 'event', 'Homepage', 'Vasco Ribeiro', 'Click on link (Exemplos - Vasco Ribeiro)');" href="/wayback/20141029233410/http://www.ionline.pt/artigos/surf/vasco-ribeiro-campeao-mundial-surf-juniores"><img src="/img/vasco-12-ok-e1489775252953.jpg" class="img-responsive center-block" alt="<fmt:message key='home.examples.vasco'/>"></a>
+                <div class="text-center">
+                  <a onclick="ga('send', 'event', 'Homepage', 'Vasco Ribeiro', 'Click on link (Exemplos - Vasco Ribeiro)');" href="/wayback/20141029233410/http://www.ionline.pt/artigos/surf/vasco-ribeiro-campeao-mundial-surf-juniores"><h5><fmt:message key='home.examples.vasco'/></h5></a>
+                </div>
+            </div> 
+            <div class="item">
+              <a onclick="ga('send', 'event', 'Homepage', 'Portugal Tenis Mesa', 'Click on link (Exemplos - Portugal Tenis Mesa)');" href="/wayback/20150101012504/http://www.maisfutebol.iol.pt/modalidades/outros-desportos/ultima-hora-portugal-e-campeao-da-europa-de-tenis-de-mesa"><img src="/img/portugalTenisMesa.png" class="img-responsive center-block" alt="<fmt:message key='home.examples.tableTennis'/>"></a>
+                <div class="text-center">
+                  <a onclick="ga('send', 'event', 'Homepage', 'Portugal Tenis Mesa', 'Click on link (Exemplos - Portugal Tenis Mesa)');" href="/wayback/20150101012504/http://www.maisfutebol.iol.pt/modalidades/outros-desportos/ultima-hora-portugal-e-campeao-da-europa-de-tenis-de-mesa"><h5><fmt:message key='home.examples.tableTennis'/></h5></a>
+                </div>
+            </div>                         
+            </div>
+            <!-- Controls or next and prev buttons -->
+            <a class="left carousel-control" href="#my-slider" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#my-slider" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+              <span class="sr-only">Next</span>
+            </a>
+
+          </div>
+        </div>
+    </div>
+
 <%@include file="include/analytics.jsp" %>
+<%@include file="include/footer.jsp" %>
 </body>
 </html>
 

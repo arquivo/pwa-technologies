@@ -1,62 +1,46 @@
-<div id="footer">
-    <div id="links">
-        <%-- TODO: remove uneeded div#wrap-footer --%>
-        <div class="wrap-footer">
-   		<div class="links-content">
-                <p class="links-title"><fmt:message key="footer.section.about"/></p>
-                <ul>
-                    <li><fmt:message key="footer.section.about.objectives"/></li>
-                    <li><fmt:message key="footer.section.about.publications"/></li>
-                    <li><fmt:message key="footer.section.about.pages-examples"/></li>
-                    <li><fmt:message key="footer.section.about.press"/></li>
-                    <li><fmt:message key="footer.section.about.services"/></li>
-                    <li><fmt:message key='footer.section.about.terms-conditions'/></li>
-                </ul>
-            </div>
- 		<div class="links-content">
-                <p class="links-title"><fmt:message key="footer.section.social"/></p>
-                <ul>
-                    <li><fmt:message key="footer.section.social.mailinglist"/></li>
-                    <li><fmt:message key="footer.section.social.news"/></li>
-                    <li><fmt:message key="footer.section.social.twitter"/></li>
-                    <li><a href="http://www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
-                    <li><a href="http://arquivo.pt/rss"><fmt:message key='footer.section.social.rss'/></a></li>
-                    <li><fmt:message key="footer.section.social.video"/></li>
-                </ul>
-            </div>
+<script src="js/swiper.min.js"></script>
+<script type="text/javascript">MENU.close()</script>
+<script type="text/javascript">
+	        	var menuButton = document.querySelector('.menu-button');
+			    var swiper = new Swiper('.swiper-container', {
+			      slidesPerView: 'auto',
+			      initialSlide: 1,
+			      resistanceRatio: 0,
+			      slideToClickedSlide: true,
+			      on: {
+			        init: function () {
+			          /*Initialize slider in the right position i.e. menu closed, then set element visible*/
+				      $('.swiper-wrapper').css('-webkit-transition', 'all 0s linear' );
+				      $('.swiper-wrapper').css('-moz-transition', 'all 0s linear' );
+				      $('.swiper-wrapper').css('-o-transition', 'all 0s linear' );
+				      $('.swiper-wrapper').css('-ms-transition', 'all 0s linear' );
+				      $('.swiper-wrapper').css('transition', 'all 0s linear' );
+				      $('.swiper-wrapper').css('transform', 'translate3d(-'+$('#mainMenu').width()+', 0px, 0px)' );
+				      $('.swiper-wrapper').css('-webkit-transform', 'translate3d(-'+$('#mainMenu').width()+', 0px, 0px)' );   	
+				      $('.swiper-wrapper').css('visibility', 'visible');
 
-    		<div class="links-content">
-                <p class="links-title"><fmt:message key="footer.section.collaboration"/></p>
-                <ul>
-                    <li><fmt:message key="footer.section.collaboration.suggest-website"/></li>
-                    <li><fmt:message key="footer.section.collaboration.divulgation"/></li>
-                    <li><fmt:message key="footer.section.collaboration.recommendations"/></li>
-                    <li><fmt:message key="footer.section.collaboration.giving"/></li>
-                    <li><fmt:message key="footer.section.collaboration.projects"/></li>
-                </ul>
-            </div>
-
-            <div class="links-content">
-                <p class="links-title"><fmt:message key="footer.section.help"/></p>
-                <ul>
-                    <li><fmt:message key='footer.section.help.search'/></li>
-                    <li><fmt:message key='footer.section.help.advanced-search'/></li>
-                    <li><fmt:message key='footer.section.help.access'/></li>
-                    <li><fmt:message key='footer.section.help.crawl'/></li>
-                    <li><fmt:message key='footer.section.help.faq'/></li>
-                    <li><fmt:message key='footer.section.help.contact'/></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div id="empresa">
-        <div class="wrap-footer">
-            <a href="http://www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" >
-                <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="222" height="40" id="fccn" />
-            </a>&nbsp;
-            <a href="http://www.portugal.gov.pt/pt/ministerios/mctes.aspx" title="<fmt:message key='footer.sponsor.mec'/>"> <img alt="<fmt:message key='footer.sponsor.gov.alt'/>" src="<c:out value="${pageContext.servletContext.contextPath}" />/img/10-Digital_PT_4C_H_FC_MCTES_opt-e1491300980870.png" width="220" height="40"/>
-            </a>
-            </map>
-        </div>
-    </div>
-</div>
+				      /*alternate between the closed and open menu states on click*/
+			          menuButton.addEventListener('click', function () {		            
+					  var slider = document.querySelector('.swiper-container').swiper;
+					  slider.activeIndex == 0 ? (slider.slideNext()) : (slider.slidePrev());  
+			          }, true);
+			        },
+			        slideChange: function () {
+			          var slider = this;
+			          if (slider.activeIndex === 0) {
+			            /*If Menu is active*/
+			            /* scroll to the top of menu*/
+			            $("html, body").animate({ scrollTop: 0 }, "medium");
+			            /*do not allow scroll down in menu open state*/
+			            $('body').css('overflow-y', 'hidden');
+			            $('#mainMask').fadeIn("fast");
+			          } else {
+			            /*If Menu closed*/
+			            /*Allow scrolldown again*/
+			            $('body').css('overflow-y', 'auto');
+			            $('#mainMask').fadeOut("fast");
+			          }
+			        },
+			      }
+    			});
+</script>

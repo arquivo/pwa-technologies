@@ -40,49 +40,67 @@
 %>
 <%String arquivoHost = nutchConfAlt.get("wax.webhost", "arquivo.pt"); %>
 <script type="text/javascript" src="/js/js.cookie.js"></script>
-<div id="language">
-<!--	<img src="img/experimental.png" alt="<fmt:message key='topbar.experimental.alt'/>" width="123" height="124" /> -->
-	<div class="wrap">
-		<ul>
-			<li><a href="<c:url value='http://sobre.arquivo.pt/'><c:param name='set_language' value='${language}'/></c:url>" title="<fmt:message key='topbar.help'/>" class="ajuda"><fmt:message key='topbar.help'/></a></li>
-		</ul>
-		<ul class="langs">
-		<c:choose>
-			<c:when test="${language eq 'pt'}">
-			<script type="text/javascript">
-				ptHref = window.location.toString();
 
-				if(ptHref.indexOf("l=pt") > -1){ // if found l=en parameter change to l=pt
-					enHref = ptHref.replace('?l=pt', '?l=en');
-				}
-				else{
-					enHref = ptHref +"?l=en";
-				}
-				document.write('<li><a href="'+ ptHref +'" title="<fmt:message key="topbar.portuguese"/>" class="activo"><fmt:message key="topbar.portuguese"/></a></li>');
-				document.write('<li><a href="'+ enHref +'" title="<fmt:message key="topbar.english"/>"><fmt:message key="topbar.english"/></a></li>');
-		        var arquivoHostName = "<%=arquivoHost%>";
-		        Cookies.set('language', 'PT', { expires: 30, path: '/', domain: arquivoHostName  });
-			</script>
-			
-			</c:when>
-			<c:otherwise>
-			<script type="text/javascript">
-				enHref = window.location.toString();
+<!-- Main Menu Dependencies -->
+<link rel="stylesheet" href="css/swiper.min.css">
+<link rel="stylesheet" href="css/MainMenu.css">
+<%@ include file="MainMenu.jsp" %>
+<script type="text/javascript">MENU.init()</script> 
 
-				if(enHref.indexOf("l=en") > -1){ // if found l=en parameter change to l=pt
-					ptHref = enHref.replace('?l=en', '?l=pt');
-				}
-				else{
-					ptHref = enHref + "?l=pt";
-				}
-				document.write('<li><a href="'+ ptHref +'" title="<fmt:message key="topbar.portuguese"/>" ><fmt:message key="topbar.portuguese"/></a></li>');
-				document.write('<li><a href="'+ enHref +'" title="<fmt:message key="topbar.english"/>" class="activo"><fmt:message key="topbar.english"/></a></li>');
-				var arquivoHostName = "<%=arquivoHost%>";
-		        Cookies.set('language', 'EN', { expires: 30, path: '/', domain: arquivoHostName  });
-			</script>
 
-			</c:otherwise>
-		</c:choose>
-		</ul>
+<div class="container-fluid">
+	<div class="row">
+		<div id="topBarFixed" class="col-xs-12 navbar  top-bar-background">
+			<div class="col-xs-6">
+			<h3 style="color:black; margin: 0"><a id="menuButton" class="menu-button"><i class="fa fa-bars" aria-hidden="true"></i></a></h3></div>
+			<div class="col-xs-6 text-right">
+				<h4 style="margin-top: 3px; margin-bottom:0px;"><a id="languageSelection" href="#"><fmt:message key='topbar.otherLanguage'/></a></h4>
+			</div> 
+		</div>
 	</div>
 </div>
+<script type="text/javascript">
+$('#languageSelection').click( function(e) {
+		e.preventDefault();
+		window.location = toggleLanguage(); 
+		return false; } );
+</script>
+
+<script type="text/javascript">
+function toggleLanguage() {
+	/*returns current window href without the specified parameter*/
+	key="l"; /*language parameter*/
+	sourceURL = window.location.href;
+	var foundParameter = false;
+    var rtn = sourceURL.split("?")[0],
+        param,
+        params_arr = [],
+        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+    if (queryString !== "") {
+        params_arr = queryString.split("&");
+        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+            param = params_arr[i].split("=")[0];
+            if (param === key) {
+                params_arr.splice(i, 1);
+                foundParameter = true;
+            }
+        }
+        rtn = rtn + "?" + params_arr.join("&");
+        if(foundParameter){
+        	if( rtn.substr(rtn.length - 1) ==="?"){
+        		rtn = rtn.substr(0, rtn.length-1);
+        	}
+        }
+        else{
+        	rtn = rtn +"&l=en";
+        }
+    }
+    else{
+    	rtn=rtn +"?&l=en"
+    }
+    return rtn;
+}
+</script>
+
+
+
