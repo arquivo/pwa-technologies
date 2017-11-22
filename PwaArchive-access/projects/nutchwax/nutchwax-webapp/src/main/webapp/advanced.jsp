@@ -68,12 +68,16 @@
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
+	<%@ include file="include/checkMobile.jsp" %>
 	<title><fmt:message key='advanced.meta.title'/></title>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
 	<meta http-equiv="Content-Language" content="pt-PT" />
 	<meta name="Keywords" content="<fmt:message key='advanced.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='advanced.meta.description'/>" />
+    <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
+    <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
+    <meta property="og:image" content="http://arquivo.pt/img/logoFace.png"/>	
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />

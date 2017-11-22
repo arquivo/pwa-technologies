@@ -51,10 +51,13 @@
     <div id="empresa">
         <div class="wrap-footer">
             <a href="http://www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" >
-                <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="222" height="40" id="fccn" />
+                <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="183" height="46" id="fccn" />
             </a>&nbsp;
-            <a href="http://www.portugal.gov.pt/pt/ministerios/mctes.aspx">	<img alt="<fmt:message key='footer.sponsor.gov.alt'/>" src="<c:out value="${pageContext.servletContext.contextPath}" />/img/10-Digital_PT_4C_H_FC_MCTES_opt-e1491300980870.png" width="220" height="40"/>
-            </a>
+            <img usemap="#logomap" alt="<fmt:message key='footer.sponsor.gov.alt'/>" src="<c:out value="${pageContext.servletContext.contextPath}" />/img/mec-web.png" width="243" height="40"/>
+            <map id="logomap" name="logomap">
+                <area title="<fmt:message key='footer.sponsor.gov'/>" href="http://www.portugal.gov.pt/" coords="0,0,138,40" shape="rect"/>
+                <area title="<fmt:message key='footer.sponsor.mec'/>" href="http://www.portugal.gov.pt/pt/os-ministerios/ministerio-da-educacao-e-ciencia.aspx" coords="141,0,243,40" shape="rect"/>
+            </map>
         </div>
     </div>
 </div>

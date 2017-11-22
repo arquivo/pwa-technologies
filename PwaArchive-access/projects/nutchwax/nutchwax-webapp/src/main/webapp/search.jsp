@@ -353,12 +353,17 @@ String[] queryString_splitted=null;
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
+  <%@ include file="include/checkMobile.jsp" %>
   <title><fmt:message key='search.meta.title'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></title>
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
   <%-- TODO: define META lang --%>
   <meta http-equiv="Content-Language" content="pt-PT" />
   <meta name="Keywords" content="<fmt:message key='search.meta.keywords'/>" />
   <meta name="Description" content="<fmt:message key='search.meta.description'/>" />
+  <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
+  <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
+  <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
+  <meta property="og:image" content="http://<%=arquivoHostName%>/img/logoFace.png"/>
   <link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
   <link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
   <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
@@ -384,7 +389,7 @@ String[] queryString_splitted=null;
       <div id="header">
         <%@ include file="include/logo.jsp" %>
         <div id="search-header">
-            <form id="loginForm" action="search.jsp" name="loginForm" method="get">
+            <form id="loginForm" autocomplete="off" action="search.jsp" name="loginForm" method="get">
               <input type="hidden" name="l" value="<%= language %>" />
               <fieldset id="pesquisar">
                 <label for="txtSearch">&nbsp;</label>
@@ -655,6 +660,7 @@ Content = {
     },
     savedInArchive:"<fmt:message key="savedInArchive" />",
     versionsStored:"<fmt:message key="versionsStored" />",
+    versionPage:"<fmt:message key="versionPage" />",    
     versionsPage:"<fmt:message key="versionsPage" />",
     between:"<fmt:message key="between" />",
     and:"<fmt:message key="and" />",
@@ -788,7 +794,9 @@ function createResultsPage(numberOfVersions, inputURL){
       '<div class="wrap">' +
              '  <div id="intro">' +
              '    <h1 style="text-align: center;">'+Content.versionsStored+'</h1>' +
-             '    <span class="texto-1" style="text-align: center;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' ' + Content.versionsPage+' '+ inputURL+
+             '    <span class="texto-1" style="text-align: center;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+ 
+               (numberOfVersions===1 ?  Content.versionPage : Content.versionsPage )+
+               ' '+ inputURL+
                 '</span>' +
              '  </div>' +
              '</div>' + 
@@ -924,7 +932,7 @@ function createErrorPage(){
         <div id="conteudo-resultado"> <%-- START OF: conteudo-resultado --%>
         <div id="first-column">
                 &nbsp;
-        </div>
+        </div>        
         <div id="second-column">
           <div id="search_stats"></div>
                         </c:if>

@@ -44,7 +44,7 @@
 <!--	<img src="img/experimental.png" alt="<fmt:message key='topbar.experimental.alt'/>" width="123" height="124" /> -->
 	<div class="wrap">
 		<ul>
-			<li><a href="<c:url value='http://sobre.arquivo.pt/'><c:param name='set_language' value='${language}'/></c:url>" title="<fmt:message key='topbar.help'/>" class="ajuda"><fmt:message key='topbar.help'/></a></li>
+			<li><a href="<c:url value='http://sobre.arquivo.pt/${language}'></c:url>" title="<fmt:message key='topbar.about'/>" class="ajuda"><fmt:message key='topbar.about'/></a></li>
 		</ul>
 		<ul class="langs">
 		<c:choose>
@@ -58,8 +58,7 @@
 				else{
 					enHref = ptHref +"?l=en";
 				}
-				document.write('<li><a href="'+ ptHref +'" title="<fmt:message key="topbar.portuguese"/>" class="activo"><fmt:message key="topbar.portuguese"/></a></li>');
-				document.write('<li><a href="'+ enHref +'" title="<fmt:message key="topbar.english"/>"><fmt:message key="topbar.english"/></a></li>');
+				document.write('<li><a href="'+enHref+'" title="<fmt:message key="topbar.OtherLanguage"/>" class="activo"><fmt:message key="topbar.OtherLanguage"/></a></li>');	
 		        var arquivoHostName = "<%=arquivoHost%>";
 		        Cookies.set('language', 'PT', { expires: 30, path: '/', domain: arquivoHostName  });
 			</script>
@@ -75,8 +74,7 @@
 				else{
 					ptHref = enHref + "?l=pt";
 				}
-				document.write('<li><a href="'+ ptHref +'" title="<fmt:message key="topbar.portuguese"/>" ><fmt:message key="topbar.portuguese"/></a></li>');
-				document.write('<li><a href="'+ enHref +'" title="<fmt:message key="topbar.english"/>" class="activo"><fmt:message key="topbar.english"/></a></li>');
+				document.write('<li><a href="'+ptHref+'" title="<fmt:message key="topbar.OtherLanguage"/>" class="activo"><fmt:message key="topbar.OtherLanguage"/></a></li>');	
 				var arquivoHostName = "<%=arquivoHost%>";
 		        Cookies.set('language', 'EN', { expires: 30, path: '/', domain: arquivoHostName  });
 			</script>

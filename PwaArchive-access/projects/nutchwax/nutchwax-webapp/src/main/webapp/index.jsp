@@ -51,13 +51,13 @@
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
+    <%@ include file="include/checkMobile.jsp" %>
 	<title><fmt:message key='home.meta.title'/></title>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
 	<meta http-equiv="Content-Language" content="pt-PT" />
 	<meta name="Keywords" content="<fmt:message key='home.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='home.meta.description'/>" />
-
     <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
@@ -72,7 +72,7 @@
 	<div class="wrap">
 		<div id="header-home">
                                 <div id="logo-home">
-									<img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="400" height="105" />
+                                    <img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="400" height="105" />
                                 </div>
                                 <div id="search-home">
                                         <form id="loginForm" action="search.jsp" name="loginForm" method="get">
@@ -197,14 +197,23 @@
                                                 <h1><fmt:message key='home.title'/></h1>
                                                <!-- <h2><fmt:message key='home.subtitle'/></h2> -->
                                                 <p class="green"><fmt:message key='home.description'/></p>
-                                                <a href="http://sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>" onclick="ga('send', 'event', 'Homepage', 'conheca-servico', 'Click on link (sobre.arquivo)');"><fmt:message key='home.know-more'/></a>
+                                                <!--<a href="http://sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>" onclick="ga('send', 'event', 'Homepage', 'conheca-servico', 'Click on link (sobre.arquivo)');"><fmt:message key='home.know-more'/></a>-->
                                         </div>
                                 </div>
 		</div>
-		<div id="video-home"><iframe width="480" height="270" src="https://www.youtube.com/embed/2HEudlXPV4o?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe></div>
+
+        <c:choose>
+            <c:when test="${language eq 'pt'}">          
+                <div id="video-home"><iframe width="480" height="270" src="https://www.youtube.com/embed/2HEudlXPV4o?rel=0&amp;showinfo=0&amp;list=PLKfzD5UuSdETtSCX_TM02nSP7JDmGFGIE" frameborder="0" allowfullscreen></iframe></div>
+            </c:when>
+            <c:otherwise>
+                <div id="video-home"><iframe width="480" height="270" src="https://www.youtube.com/embed/dqG0VILi3gs?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe></div>
+            </c:otherwise>
+        </c:choose>
+
 		<div id="main-home">
                                 <h3><fmt:message key='home.examples.title'/></h3>
-                                <h4><fmt:message key='home.examples.subtitle'/></h4>
+                                <!--<h4><fmt:message key='home.examples.subtitle'/></h4>-->
 
 				<fmt:bundle basename='pt.arquivo.i18n.Highlights'>
                                 <div class="boxes-home" id="boxes">
@@ -262,10 +271,10 @@
 <!--Inspect the language for returning the proper highlight page  -->
 <c:choose>
   <c:when test="${language == 'pt'}">
-   <a href="http://sobre.arquivo.pt/sobre/paginas-de-exemplo-no-arquivo-da-web-portuguesa" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
+   <a href="http://sobre.arquivo.pt/pt/exemplos" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
   </c:when>
   <c:otherwise>
-    <a href=" http://sobre.arquivo.pt/about-the-archive/example-pages-in-the-portuguese-web-archive" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
+    <a href=" http://sobre.arquivo.pt/en/examples" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
   </c:otherwise>
 </c:choose>
 
