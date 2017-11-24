@@ -266,9 +266,12 @@
 
             <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
             <!-- Changed to return in wayback query format -->
-            
-            <h2><a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%=title%></a></h2>
-            <div class="url"><%= url %></div>
+            <div class="urlBlock">
+              <h2>
+                <a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%=title%></a>
+              </h2>
+              <div class="url"><a class="url" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%= url %></a></div>
+            </div>  
 		<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
             <% showSummary=true; //to show always summaries %>
             <% if (!"".equals(summary) && showSummary) { %>

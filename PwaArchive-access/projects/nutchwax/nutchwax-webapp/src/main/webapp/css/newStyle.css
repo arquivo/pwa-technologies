@@ -574,3 +574,9 @@ em{
 #years h4{
     font-size: 16px!important;
 }
+
+.urlBlock{
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
