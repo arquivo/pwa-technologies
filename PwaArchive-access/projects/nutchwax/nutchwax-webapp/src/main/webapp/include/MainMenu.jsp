@@ -8,7 +8,7 @@ var MENU = MENU || (function(){
 					'<div class="swiper-wrapper">'+
 						'<div id="mainMenu" class="swiper-slide menu closed">'+
 							'<a onclick="ga(\'send\', \'event\', \'MainMenu\', \'Home click\', \''+window.location.href+'\');" href="/index.jsp?l=<%=language%>"><h4><i class="fa fa-home" aria-hidden="true"></i> <fmt:message key='topbar.leftmenu.home'/></h4></a>'+
-							'<a onclick="ga(\'send\', \'event\', \'MainMenu\', \' Advanced search click\', \''+window.location.href+'\');" href="/advanced.jsp?l=<%=language%>"><h4><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key='topbar.leftmenu.advanced'/></h4></a>'+
+							'<a onclick="ga(\'send\', \'event\', \'MainMenu\', \' Advanced search click\', \''+window.location.href+'\');" href="/advanced.jsp?l=<%=language%>"><h4><i class="fa fa-search-plus" aria-hidden="true"></i> <fmt:message key='topbar.leftmenu.advanced'/></h4></a>'+
 							'<a onclick="ga(\'send\', \'event\', \'MainMenu\', \' Video click\', \''+window.location.href+'\');" href="<fmt:message key='topbar.leftmenu.video.href'/>"><h4><i class="fa fa-youtube-play" aria-hidden="true"></i> <fmt:message key='topbar.leftmenu.video'/></h4></a>'+
 							'<a onclick="ga(\'send\', \'event\', \'MainMenu\', \' Examples click\', \''+window.location.href+'\');" href="<fmt:message key='topbar.leftmenu.examples.href'/>"><h4><i class="fa fa-globe" aria-hidden="true"></i> <fmt:message key='topbar.leftmenu.examples'/></h4></a>'+
 							'<a onclick="ga(\'send\', \'event\', \'MainMenu\', \' Help click\', \''+window.location.href+'\');" href="<fmt:message key='topbar.leftmenu.help.href'/>"><h4><i class="fa fa-question-circle" aria-hidden="true"></i> <fmt:message key='topbar.leftmenu.help'/></h4></a>'+
