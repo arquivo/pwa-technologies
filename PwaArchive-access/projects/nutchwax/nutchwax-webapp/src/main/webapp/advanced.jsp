@@ -68,7 +68,6 @@
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
-	<%@ include file="include/checkDesktop.jsp" %>
 	<title><fmt:message key='advanced.meta.title'/></title>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
