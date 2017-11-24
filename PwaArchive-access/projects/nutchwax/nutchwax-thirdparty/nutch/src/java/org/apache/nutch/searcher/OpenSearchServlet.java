@@ -145,7 +145,7 @@ public class OpenSearchServlet extends HttpServlet {
    
   
    
-    
+    LOG.info("[OpenSearch] First queryString =  " + queryString.toString() );
     
    String urlQuery = URLEncoder.encode(queryString, "UTF-8");
    urlQuery= URLEncoder.encode(queryString,"UTF-8");
@@ -196,19 +196,19 @@ public class OpenSearchServlet extends HttpServlet {
     if (dateEnd == null || dateEnd.length() == 0) {
     	dateEnd = null; 
     }
-
+    LOG.info("[OpenSearch] dateStart["+dateStart+"] dateEnd["+dateEnd+"]" );
     if(dateStart== null && dateEnd != null){
       dateStart = "1996-01-01T00:00:00Z"; /*If datestart is not specified set it to 1996*/
     }
     if(dateStart != null && dateEnd == null){
       dateEnd = "2029-12-31T00:00:00Z"; /*If dateEnd is not specified set it to 2029*/
     }
-
+    
     if (dateStart!=null && dateEnd!=null) {    	    	    	
     	try {
     		Date dStart=RFC3339Date.parseRFC3339Date(dateStart);
     		Date dEnd=RFC3339Date.parseRFC3339Date(dateEnd);
-    	
+    		LOG.info("[OpenSearch] dStart["+dStart.toString( )+"] dEnd["+dEnd.toString( )+"]" );
     		DateFormat dOutputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     		queryString += " date:"+ dOutputFormat.format(dStart.getTime()) + "-" + dOutputFormat.format(dEnd.getTime());
     	}
@@ -219,6 +219,7 @@ public class OpenSearchServlet extends HttpServlet {
     		// ignore
     	}    	
     }
+    LOG.info("[OpenSearch] TODO queryString =  " + queryString.toString() );
     
     // wayback parameters
     boolean multipleDetails = request.getParameter("multDet")!=null && request.getParameter("multDet").equals("true"); // indicates that it requests multiple details instead of one at the time
@@ -272,12 +273,12 @@ public class OpenSearchServlet extends HttpServlet {
     	Query query=null;
     	if (isOpensearhWayback){
     		query = Query.parse(queryStringOpensearchWayback, queryLang, this.conf);
-    		LOG.debug("query: " + queryStringOpensearchWayback);	
+    		LOG.info("query: " + queryStringOpensearchWayback);	
     		sort = "relevance";
     	}
     	else{
     		query = Query.parse(queryString, queryLang, this.conf);
-    		LOG.debug("query: " + queryString);
+    		LOG.info("query: " + queryString);
     	}
     	    	
 
@@ -298,7 +299,7 @@ public class OpenSearchServlet extends HttpServlet {
     		hits = new Hits(0,new Hit[0]);	
     	}
 
-   		LOG.debug("total hits: " + hits.getTotal());
+   		LOG.info("total hits: " + hits.getTotal());
     }
     
     // generate xml results
@@ -409,7 +410,7 @@ public class OpenSearchServlet extends HttpServlet {
         	// Lucene index format
         	String infoIndex = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
         	
-        	LOG.info("Index Information " + infoIndex);
+        	LOG.debug("Index Information " + infoIndex);
         	queryElem=addNode(doc, item, "source", "Original URL of "+title);
             addAttribute(doc, queryElem, "url", url);
             String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;

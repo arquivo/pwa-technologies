@@ -15,6 +15,16 @@
 </servlet-mapping>
 
 <servlet>
+  <servlet-name>NutchwaxTextSearch</servlet-name>
+  <servlet-class>org.archive.access.nutch.NutchwaxTextSearchServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>NutchwaxTextSearch</servlet-name>
+  <url-pattern>/textsearch</url-pattern>
+</servlet-mapping>
+
+
+<servlet>
   <servlet-name>NutchwaxTimemap</servlet-name>
   <servlet-class>org.archive.access.nutch.NutchwaxTimemapServlet</servlet-class>
 </servlet>

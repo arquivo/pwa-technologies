@@ -21,5 +21,5 @@
 	<Image width="16" height="16" type="image/x-icon"><c:out value="${rootUrl}"/>/img/logo-16.jpg</Image>
 	<Url type="text/html" method="get" template="<c:out value="${rootUrl}"/>/search.jsp?query={searchTerms}&amp;l=<%=language%>"/>
 	<Url type="application/rss+xml" method="get" template="<c:out value="${rootUrl}"/>/opensearch?query={searchTerms}&amp;dtstart={time:start?}&amp;dtend={time:end?}"/>
-        <Url type="application/opensearchdescription+xml" rel="self" template="<c:out value="${rootUrl}"/>/opensearch.jsp" />
+    <Url type="application/opensearchdescription+xml" rel="self" template="<c:out value="${rootUrl}"/>/opensearch.jsp" />
 </OpenSearchDescription>

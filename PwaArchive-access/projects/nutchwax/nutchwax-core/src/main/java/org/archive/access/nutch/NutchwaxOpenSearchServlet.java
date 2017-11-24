@@ -92,19 +92,17 @@ public class NutchwaxOpenSearchServlet extends OpenSearchServlet
 	        {
 	          return request.getParameter(s);
 	        }
+	        
 	        String queryString= null;
 	        if (s.contains("exacturlexpand:") && !s.equals("query")){
 	        	queryString = s;
-	        }
-	        
-	        else
+	        }else
 	        	queryString = request.getParameter(s);
 	        
-	        if (queryString != null)
-	        {
+	        if (queryString != null){
 	          queryString = NutchwaxQuery.encodeExacturl(queryString);
 	        }
-	  
+	        
 	        return queryString;
 	      }
 	
