@@ -945,7 +945,7 @@ function createErrorPage(){
     var endTs = endYear+endMonth+endDay+'000000';   
 
     //var requestURL = "http://p27.arquivo.pt/wayback/-cdx";
-    var requestURL = "http://<%=collectionsHost%>/" + "-cdx";
+    var requestURL = "http://<%=collectionsHost%>/" + "cdx";
     var versionsArray = [];
     var versionsURL = [];
 
