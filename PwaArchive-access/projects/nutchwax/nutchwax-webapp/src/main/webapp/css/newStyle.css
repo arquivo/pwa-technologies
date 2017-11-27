@@ -580,3 +580,7 @@ em{
     margin-bottom: 10px;
     padding-bottom: 5px;
 }
+
+.break-word{
+    word-wrap: break-word;
+}
