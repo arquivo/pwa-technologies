@@ -133,7 +133,7 @@ public class TextSearchServlet extends HttpServlet {
 		  start = Integer.parseInt( startString );
     
 	  // number of items to display
-	  String limitString = request.getParameter( "limit" );
+	  String limitString = request.getParameter( "maxItems" );
 	  if ( limitString != null )
 		  limit = Integer.parseInt(limitString);
 	  
@@ -165,7 +165,7 @@ public class TextSearchServlet extends HttpServlet {
       
       
       //If 'hitsPerSite' present, use that value.
-      String hitsPerSiteString = request.getParameter( "limitPerSite" );
+      String hitsPerSiteString = request.getParameter( "itemsPerSite" );
       if ( hitsPerSiteString != null && hitsPerSiteString.length( ) > 0 ) 
     	  hitsPerDup = Integer.parseInt( hitsPerSiteString );
       

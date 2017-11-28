@@ -3,17 +3,19 @@ package org.apache.nutch.searcher;
 import com.google.gson.annotations.SerializedName;
 
 public class Item {
-	@SerializedName( "ID" )
+	@SerializedName( "version_id" )
 	private String key;
-	@SerializedName( "htmlTitle" )
+	@SerializedName( "versionTitle" )
 	private String title;
 	private String source;
+	@SerializedName( "linkToArchive" )
 	private String link;
 	private String tstamp;
 	private String contentLength;
 	private String digest;
 	private String primaryType;
 	private String subType;
+	@SerializedName( "downloadImage" )
 	private String screenShotLink;
 	private String itemText;
 	private String date; //epoch format
