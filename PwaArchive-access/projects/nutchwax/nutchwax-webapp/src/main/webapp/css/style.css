@@ -405,8 +405,8 @@ height: 100%;
 #language img { float: left; z-index: 100; position: relative; }
 #language ul { float: right; height: 30px; }
 #language li { display: inline; }
-#language li a { padding: 0px 10px; text-decoration: underline; font-size: 15px; float: left; display: block; color:white; }
-#language a:hover, #language .activo { color: white }
+#language li a { padding: 0px 10px; font-size: 15px; float: left; display: block; color:white; text-decoration: none; }
+#language a:hover{ color: white; text-decoration: underline; } 
 #language .langs a:hover, #language .langs .activo { /*text-decoration: none; background: url("../img/language-arrow.gif") no-repeat scroll center bottom transparent; */}
 .langs { padding-right: 24px; }
 .ajuda a { padding-left: 50px; }
