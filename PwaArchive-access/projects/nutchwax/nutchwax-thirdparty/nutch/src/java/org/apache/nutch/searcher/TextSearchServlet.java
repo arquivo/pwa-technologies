@@ -86,7 +86,7 @@ public class TextSearchServlet extends HttpServlet {
   }  
   private NutchBean bean;
   private Configuration conf;
-  private static String[ ]  fieldsReponse = {"version_id", "versionTitle", "source", "linkToArchive",
+  private static String[ ]  fieldsReponse = {"versionId", "versionTitle", "source", "linkToArchive",
 		  "tstamp", "contentLength", "digest", "primaryType", "subType", "downloadImage",
 		  "date", "encoding", "noFrameLink"};
   
@@ -439,7 +439,7 @@ public class TextSearchServlet extends HttpServlet {
                 URL source = new URL( url );
                 String domainHost = source.getHost( );
                 String id = domainHost.concat( "/" ).concat( tstamp );
-                if( FieldExists( fields , "version_id" ) )
+                if( FieldExists( fields , "versionId" ) )
                 	item.setKey( id );
                 String contentLength = detail.getValue( "contentLength" );
                 if( FieldExists( fields , "ContentLength" ) )

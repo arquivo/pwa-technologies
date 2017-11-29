@@ -3,7 +3,7 @@ package org.apache.nutch.searcher;
 import com.google.gson.annotations.SerializedName;
 
 public class Item {
-	@SerializedName( "version_id" )
+	@SerializedName( "versionId" )
 	private String key;
 	@SerializedName( "versionTitle" )
 	private String title;
