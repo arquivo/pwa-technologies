@@ -86,6 +86,9 @@ public class TextSearchServlet extends HttpServlet {
   }  
   private NutchBean bean;
   private Configuration conf;
+  private static String[ ]  fieldsReponse = {"version_id", "versionTitle", "source", "linkToArchive",
+		  "tstamp", "contentLength", "digest", "primaryType", "subType", "downloadImage",
+		  "date", "encoding", "noFrameLink"};
   
   public void init( ServletConfig config ) throws ServletException {
     try {
@@ -232,6 +235,7 @@ public class TextSearchServlet extends HttpServlet {
     			  endDate = FORMAT.format( dateEND.getTime( ) );
     		  }
     		  
+ 
     		  
     		  if( startDate != null && endDate != null ) {
     			  dateFinal = " date:".concat( startDate ).concat( "-" ).concat( endDate );
@@ -296,17 +300,20 @@ public class TextSearchServlet extends HttpServlet {
 		  hits = new Hits( 0 ,new Hit[ 0 ] );	
 	  }
 
-	  LOG.info( "total hits: " + hits.getTotal( ) );
+	  LOG.info( "total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
 
 	  // generate json results
 	  int end = ( int )Math.min( hits.getLength( ), start + limit );
 	  int length = end-start;
 
-	  Hit[ ] show = hits.getHits( start , end-start );        
 	  HitDetails[ ] details = null;
-           
-	  details = bean.getDetails( show ); //get details
-	  	
+	  Hit[ ] show = null; 
+	  
+	  if( hits != null && hits.getLength( ) > 0 ) {
+		  show = hits.getHits( start , end-start );        
+		  details = bean.getDetails( show ); //get details
+	  }
+
 	  String requestUrl = request.getRequestURL( ).toString( );
 	  String base = requestUrl.substring( 0 , requestUrl.lastIndexOf( '/' ) );
       
@@ -317,7 +324,7 @@ public class TextSearchServlet extends HttpServlet {
 		  String[ ] fields = null;
 		  if( !fieldsParam.equals( "" ) )
 			  fields = fieldsParam.split( "," );
-				  
+		  
 		  List< Item > itens = new ArrayList< Item >( );
 		  
 		  TextSearchResponse responseObject = new TextSearchResponse( );
@@ -331,17 +338,21 @@ public class TextSearchServlet extends HttpServlet {
 		  requestParameters.setStart( start );
 		  requestParameters.setFrom( dateStart );
 		  requestParameters.setTo( dateEnd );
-		  requestParameters.setType( typeParameter );
+		  if( !typeParameter.equals( "" ) )
+			  requestParameters.setType( typeParameter );
 		  requestParameters.setPrettyPrint( prettyPrintParameter );
-		  requestParameters.setSite( siteParameter );
+		  if( !siteParameter.equals( "" ) )
+			  requestParameters.setSite( siteParameter );
 		  
 		  int offsetNextPage = start + limit;
 		  LOG.debug( "offsetNextPage = " + offsetNextPage );
 		  int offsetPreviousPage;
 		  if( start == 0 )
 			  offsetPreviousPage = 0;
-		  else
+		  else {
 			  offsetPreviousPage = start - limit;
+			  offsetPreviousPage = (offsetPreviousPage < 0 ? -offsetPreviousPage : offsetPreviousPage);
+		  }
 		  LOG.debug( "offsetPreviousPage = " + offsetPreviousPage );
 		  
 		  StringBuffer requestURL = request.getRequestURL( );
@@ -356,7 +367,8 @@ public class TextSearchServlet extends HttpServlet {
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
 		  LOG.debug( "Next_page = " + requestURL.toString( ) );
-		  responseObject.setNext_page( requestURL.toString( ) );
+		  if( hits != null && hits.getLength( ) > 0 ) 
+			  responseObject.setNext_page( requestURL.toString( ) );
 		  
 		  requestURL = request.getRequestURL( );
 		  if (request.getQueryString( ) != null) {
@@ -371,27 +383,35 @@ public class TextSearchServlet extends HttpServlet {
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
 		  LOG.debug( "Previous_page = " + requestURL.toString( ) );
-		  responseObject.setPrevious_page( requestURL.toString( ) );
+		  if( hits != null && hits.getLength( ) > 0 ) 
+			  responseObject.setPrevious_page( requestURL.toString( ) );
 		  
 		  
-		  if( sortParameter != null && !"".equals( sortParameter ) )
-			  requestParameters.setSort( sortParameter );
+		  /*if( sortParameter != null && !"".equals( sortParameter ) )
+			  requestParameters.setSort( sortParameter );*/
+		  
 		  if( q != null && !"".equals( q ) )
 			  requestParameters.setQueryTerms( q );
 		  
 		  if( requestParameters != null )
 			  responseObject.setRequestParameters( requestParameters );
 		  
+		  boolean fieldsCorrect = true; 
+		  if( fields != null && fields.length > 0 )	  
+			  fieldsCorrect = checkFields( fields );
+			  
 		  Item item = null;
-		  for ( int i = 0 ; i < length ; i++ ) {
+		  for ( int i = 0 ; i < length && fieldsCorrect ; i++ ) {
 			  	Hit hit = show[ i ];
 		        HitDetails detail = details[ i ];
 		        item = new Item( );
 		        
+		        
+		        
 		        String title = detail.getValue( "title" );
 		        String url 	= detail.getValue( "url" );
 		        String date = detail.getValue( "tstamp" );
-		        if( FieldExists( fields , "htmlTitle" ) )
+		        if( FieldExists( fields , "versionTitle" ) )
 		        	item.setTitle( title );	
 		        if( FieldExists( fields , "source" ) )
 		        	item.setSource( url );	
@@ -412,14 +432,14 @@ public class TextSearchServlet extends HttpServlet {
                 	String infoIndex = "http://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
                 	LOG.debug( "Index Information " + infoIndex );
                 	String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
-                	if( FieldExists( fields , "link" ) )
+                	if( FieldExists( fields , "linkToArchive" ) )
                 		item.setLink( target );
                 }
                 
                 URL source = new URL( url );
                 String domainHost = source.getHost( );
                 String id = domainHost.concat( "/" ).concat( tstamp );
-                if( FieldExists( fields , "id" ) )
+                if( FieldExists( fields , "version_id" ) )
                 	item.setKey( id );
                 String contentLength = detail.getValue( "contentLength" );
                 if( FieldExists( fields , "ContentLength" ) )
@@ -448,6 +468,8 @@ public class TextSearchServlet extends HttpServlet {
                 	String screenShotLink = "http://".concat( "arquivo.pt" ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
                 	if( FieldExists( fields , "ScreenShotLink" ) )
                 		item.setScreenShotLink( screenShotLink );
+                	if( FieldExists( fields , "noFrameLink" ) )
+                		item.setNoFrameLink( urlNoFrame );
                 }
                 
                /* String itemText = "NOT IMPLEMENTED"; //TODO not implemented
@@ -524,6 +546,16 @@ public class TextSearchServlet extends HttpServlet {
 	  
   }
 
+  private static boolean checkFields( String[ ] fields ) {
+	  for( String fieldInput : fields ) {
+		  for( String fieldResponse: fieldsReponse ){
+			  if( fieldInput.equals( fieldResponse ) )
+				  return true;
+		  }
+	  }
+	  return false;
+  }
+  
   private static Boolean tryParse( DateFormat df, String s ) {
 	    Boolean valid = false;
 	    try {

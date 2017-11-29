@@ -20,6 +20,7 @@ public class Item {
 	private String itemText;
 	private String date; //epoch format
 	private String encoding;
+	private String noFrameLink;
 	//details
 	private String arcname;
 	private String arcoffset;
@@ -145,6 +146,12 @@ public class Item {
 	public void setSegment(String segment) {
 		this.segment = segment;
 	}
+	public String getNoFrameLink() {
+		return noFrameLink;
+	}
+	public void setNoFrameLink(String noFrameLink) {
+		this.noFrameLink = noFrameLink;
+	}
 
 	@Override
 	public String toString() {
@@ -152,7 +159,7 @@ public class Item {
 				+ ", contentLength=" + contentLength + ", digest=" + digest + ", primaryType=" + primaryType
 				+ ", subType=" + subType + ", screenShotLink=" + screenShotLink + ", itemText=" + itemText + ", date="
 				+ date + ", encoding=" + encoding + ", arcname=" + arcname + ", arcoffset=" + arcoffset
-				+ ", collection=" + collection + ", idDoc=" + idDoc + ", index=" + index + ", segment="+ segment +"]";
+				+ ", collection=" + collection + ", idDoc=" + idDoc + ", index=" + index + ", segment="+ segment +", noFrameLink="+ noFrameLink +"]";
 	}
 
 

@@ -8,7 +8,9 @@ public class TextSearchRequestParameters {
 	private String queryTerms;
 	@SerializedName( "offset" )
 	private int start;
+	@SerializedName( "maxItems" )
 	private int limit;
+	@SerializedName( "itemsPerSite" )
 	private int limitPerSite;
 	private String sort;
 	private String from;
