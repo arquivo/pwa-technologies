@@ -8,6 +8,8 @@
 	import="java.io.File"
 	import="java.util.Calendar"
 	import="java.util.Date"
+    import="java.util.regex.Matcher"
+    import="java.util.regex.Pattern"	
 	import="java.util.GregorianCalendar"
     import="org.apache.hadoop.conf.Configuration"
     import="org.apache.lucene.search.PwaFunctionsWritable"
@@ -33,6 +35,7 @@
 <fmt:setLocale value="<%=language%>"/>
 
 <%!	//To please the compiler since logging need those -- check [search.jsp]
+    private static final Pattern OFFSET_PARAMETER = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
 	private static int hitsTotal = -10;		// the value -10 will be used to mark as being "advanced search"
 	private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
     Calendar dateStart = (Calendar)DATE_START.clone();
@@ -42,16 +45,8 @@
     String dateStartString = inputDateFormatter.format( dateStart.getTime() );
     String dateStartYear = dateStartString.substring(dateStartString.length()-4);
 
-
-   /* dateEnd.set( Calendar.YEAR, dateEnd.get(Calendar.YEAR) - 1);*/
-    /*DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1);*/
-    String dateEndNoParameter =""+ (Calendar.getInstance().get(Calendar.YEAR) - 1);
-    String yearEndNoParameter =dateEndNoParameter.substring(dateEndNoParameter.length()-4);
     String yearStartNoParameter = "1996";    
 
-
-    String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
-    String dateEndYear = dateEndString.substring(dateEndString.length()-4);
 
 %>
 
@@ -59,7 +54,47 @@
 <%
   Configuration nutchConf = NutchwaxConfiguration.getConfiguration(application);
   NutchBean bean = NutchwaxBean.get(application, nutchConf);
+
+  Calendar DATE_END = new GregorianCalendar();
+  DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) );
+  DATE_END.set( Calendar.MONTH, 12-1 );
+  DATE_END.set( Calendar.DAY_OF_MONTH, 31 );
+  DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
+  DATE_END.set( Calendar.MINUTE, 59 );
+  DATE_END.set( Calendar.SECOND, 59 );
+  int queryStringParameter= 0;
+  String dateEndString="";
+  String dateEndYear="";
+  /** Read the embargo offset value from the configuration page. If not present, default to: -1 year */
+  try {
+        String offsetDateString = getServletContext().getInitParameter("embargo-offset");
+
+        Matcher offsetMatcher = OFFSET_PARAMETER.matcher( offsetDateString );
+        offsetMatcher.matches();
+        int offsetYear = Integer.parseInt(offsetMatcher.group(1));
+        int offsetMonth = Integer.parseInt(offsetMatcher.group(2));
+        int offsetDay = Integer.parseInt(offsetMatcher.group(3));
+
+        DATE_END.set(Calendar.YEAR, DATE_END.get(Calendar.YEAR) - offsetYear);
+        DATE_END.set(Calendar.MONTH, DATE_END.get(Calendar.MONTH) - offsetMonth);
+        DATE_END.set(Calendar.DAY_OF_MONTH, DATE_END.get(Calendar.DAY_OF_MONTH) - offsetDay );
+        dateEndString = inputDateFormatter.format( DATE_END.getTime() );
+    	dateEndYear = dateEndString.substring(dateEndString.length()-4);
+  } catch(IllegalStateException e) {
+        // Set the default embargo period to: 1 year
+        DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1);
+        bean.LOG.error("Embargo offset parameter isn't in a valid format");
+        dateEndString = inputDateFormatter.format( DATE_END.getTime() );
+    	dateEndYear = dateEndString.substring(dateEndString.length()-4);
+  } catch(NullPointerException e) {
+        // Set the default embargo period to: 1 year
+        DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1);
+        dateEndString = inputDateFormatter.format( DATE_END.getTime() );
+    	dateEndYear = dateEndString.substring(dateEndString.length()-4);
+        bean.LOG.error("Embargo offset parameter isn't present");
+  }
 %>
+
 
 
 <%---------------------- Start of HTML ---------------------------%>
@@ -129,8 +164,8 @@
                 </div>
                 <div id="slider-date" class="col-sm-12"></div>
                 <div id="slider-caption" class="row">
-                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year text-bold" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=yearEndNoParameter%>"></input>
-                    <input size="4" maxlength="4" type="number" class="example-val text-center text-bold input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=yearEndNoParameter%>"></input>
+                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year text-bold" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=dateEndYear%>"></input>
+                    <input size="4" maxlength="4" type="number" class="example-val text-center text-bold input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=dateEndYear%>"></input>
                     <input type="hidden" id="dateStart" name="dateStart" value="01/01/<%=dateStartYear%>"/>
                     <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
                 </div>                  
@@ -188,7 +223,7 @@ noUiSlider.create(dateSlider, {
        var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
        dateSlider.noUiSlider.set([parseInt(currentInputDate) ,null]);
     }
-    else  if(currentInputDateNumber > parseInt("<%=yearEndNoParameter%>")  ){
+    else  if(currentInputDateNumber > parseInt("<%=dateEndYear%>")  ){
      $('#event-start').val(1996); 
      dateSlider.noUiSlider.set([1996 , null]);
     }    
@@ -201,8 +236,8 @@ noUiSlider.create(dateSlider, {
 <script type="text/javascript">
 $("#event-end").blur(function() {
   if( $("#event-end").val().toString().length < 4 ){
-    $('#event-end').val(parseInt("<%=yearEndNoParameter%>"));
-    dateSlider.noUiSlider.set([null , parseInt("<%=yearEndNoParameter%>")]);
+    $('#event-end').val(parseInt("<%=dateEndYear%>"));
+    dateSlider.noUiSlider.set([null , parseInt("<%=dateEndYear%>")]);
   }
 });
 
@@ -217,7 +252,7 @@ $("#event-start").blur(function() {
     var currentInputDate = $(this).val();
     currentInputDateNumber = parseInt(currentInputDate);
     var currentDateStartNumber =  parseInt($('#event-start').attr('value'));
-    if( (currentInputDate.length) === 4 && currentInputDateNumber <= parseInt("<%=yearEndNoParameter%>") && currentInputDateNumber >= currentDateStartNumber ){ 
+    if( (currentInputDate.length) === 4 && currentInputDateNumber <= parseInt("<%=dateEndYear%>") && currentInputDateNumber >= currentDateStartNumber ){ 
       /*if it is a year*/
        /* update the input year of #dateend*/
        var currentDate = $('#dateEnd').attr('value');
@@ -228,9 +263,9 @@ $("#event-start").blur(function() {
       dateSlider.noUiSlider.set([null , currentDateStartNumber]);
       $('#event-end').val(currentDateStartNumber);
     }
-    else  if((currentInputDate.length) >= 4 && currentInputDateNumber > parseInt("<%=yearEndNoParameter%>")  ){
-     $('#event-end').val(parseInt("<%=yearEndNoParameter%>")); 
-     dateSlider.noUiSlider.set([null , parseInt("<%=yearEndNoParameter%>")]);
+    else  if((currentInputDate.length) >= 4 && currentInputDateNumber > parseInt("<%=dateEndYear%>")  ){
+     $('#event-end').val(parseInt("<%=dateEndYear%>")); 
+     dateSlider.noUiSlider.set([null , parseInt("<%=dateEndYear%>")]);
     }
 });
 </script>
