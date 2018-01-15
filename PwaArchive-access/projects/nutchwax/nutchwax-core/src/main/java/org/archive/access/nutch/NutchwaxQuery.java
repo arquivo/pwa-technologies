@@ -59,6 +59,10 @@ public class NutchwaxQuery
   private static final String EXACTURLEXPANDMIN_PATTERN = // TODO MC
     "(.*(?:\\(\\s*|\\s|^)exacturlexpandmin:)([^ ]+)(.*)";
 
+  //Look for an versionHistory clause that begins with a 
+  private static final String VERSIONHISTORY_PATTERN =
+	  "(.*(?:\\(\\s*|\\s|^)versionHistory=)([^ ]+)(.*)";
+ 
   
   private static MessageDigest md = null;
   
@@ -116,10 +120,10 @@ public class NutchwaxQuery
     	for (int i=0;i<urls.length;i++) {
     		String encoded = Base32.encode(md.digest(urls[i].getBytes()));         	    	
         	if (i==0) {
-       			sb.append(encoded);
+        		sb.append(encoded);
     		}
     		else {
-                       sb.append(" exacturl:").append(encoded);
+    			sb.append(" exacturl:").append(encoded);
     		}
     	}
     	sb.append(m.group(3));
@@ -133,7 +137,7 @@ public class NutchwaxQuery
        			sb.append(encoded);
     		}
     		else {
-                       sb.append(" exacturlexpand:").append(encoded);
+               sb.append(" exacturlexpand:").append(encoded);
     		}
     	}
         sb.append(mexpand.group(3));
@@ -151,4 +155,21 @@ public class NutchwaxQuery
 
     return sb.toString();
   }
+  
+  public static String encodeVersionHistory( final String versionHistory ) {
+	  StringBuffer sb = new StringBuffer( versionHistory.length( ) );
+	  LOGGER.info( "[encodeVersionHistory] versionHistory " + versionHistory );
+	  String urls[]=EntryPageExpansion.expandhttpAndhttps( versionHistory );
+	  LOGGER.info( "[encodeVersionHistory] urls.length[ "+urls.length+" ]" );
+	  sb.append( versionHistory );
+	  for ( int i = 0 ;i < urls.length ; i++ ) {
+		  LOGGER.info( "[encodeVersionHistory] url[ "+urls[ i ]+" ] to encoded" );
+		  String encoded = Base32.encode( md.digest( urls[ i ].getBytes( ) ) );
+		  if( encoded != null && !encoded.equals( "" ) )
+			  sb.append( " exacturl:" ).append( encoded );
+	  }
+	  //LOGGER.info( "[encodeVersionHistory] encodeVersionHistory " + sb.toString( ) );
+	  return sb.toString( );
+  }
+  
 }

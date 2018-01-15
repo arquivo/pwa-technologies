@@ -19,19 +19,26 @@ package org.apache.nutch.searcher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -45,7 +52,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapred.Reporter;
 import org.apache.nutch.global.Global;
 import org.apache.nutch.parse.Parse;
 import org.apache.nutch.util.NutchConfiguration;
@@ -62,6 +71,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.parsers.*;
+
 
 /**
  * TextSearch API Back-End - Full Search. Responsible for processing the input parameters, sending a query to the QueryServers, and responding in json.
@@ -86,7 +96,8 @@ public class TextSearchServlet extends HttpServlet {
   }  
   private NutchBean bean;
   private Configuration conf;
-  private static String[ ]  fieldsReponse = {"versionId", "versionTitle", "source", "linkToArchive",
+  
+  private static String[ ]  fieldsReponse = {"versionId", "title", "originalURL", "linkToArchive",
 		  "tstamp", "contentLength", "digest", "primaryType", "subType", "downloadImage",
 		  "date", "encoding", "noFrameLink"};
   
@@ -99,8 +110,7 @@ public class TextSearchServlet extends HttpServlet {
       nQueryMatches=Integer.parseInt( this.conf.get( Global.MAX_FULLTEXT_MATCHES_RANKED ) );
       
       collectionsHost = this.conf.get( "wax.host", "examples.com" );
-    } 
-    catch ( IOException e ) {
+    } catch ( IOException e ) {
       throw new ServletException( e );
     }
   }
@@ -113,32 +123,51 @@ public class TextSearchServlet extends HttpServlet {
 	  String dateEndString = FORMAT.format( DATE_END.getTime( ) );
 	  int start = 0;
 	  int limit = 50;
-	  
+	  Hits hits;
+	  LuceneParser luceneProcessor = new LuceneParser( );
+	  MessageDigest md = null;
 	  // get parameters from request
 	  request.setCharacterEncoding("UTF-8");
 	  StringBuilder queryString = new StringBuilder( );
 	  String q = request.getParameter("q");
+	  
+	  try {
+		  md = MessageDigest.getInstance( "MD5" );
+	  } catch ( NoSuchAlgorithmException e ) {
+		  LOG.error( "Failed to get md5 digester: " + e.getMessage( ) );
+	  }
 	  
 	  if ( q == null )
 		  q = "";
 	  queryString.append( q );
 	  
 	  LOG.info( "[doGet] q=" + q );
+	  
 	  String urlQuery = URLEncoder.encode( q , "UTF-8" );
 	  urlQuery = URLEncoder.encode( q , "UTF-8" );
 	  
-	  // the query language
-	  String queryLang = request.getParameter( "lang" );
-    
+	  String queryLang 		= request.getParameter( "lang" ); // the query language
+	  String versionHistory = request.getParameter( "versionHistory" ); // get versiobnHistory parameter
+	  String metadataParam  = request.getParameter( "metadata" ); //get metadata parameter
+	  
+	  String qURL = "";
+	  String qExactURL = "";
+	  String[ ] urlParams = null;
+	  if( isDefined( versionHistory ) ) {
+		 urlParams = versionHistory.split( " " );
+		 qURL = urlParams[ 0 ];
+		 
+	  }
+	  
 	  // first hit to display
 	  String startString = request.getParameter( "offset" );
 	  if ( startString != null )
-		  start = Integer.parseInt( startString );
-    
+		  start = parseToIntWithDefault( startString , 0 );
+     
 	  // number of items to display
 	  String limitString = request.getParameter( "maxItems" );
 	  if ( limitString != null )
-		  limit = Integer.parseInt(limitString);
+		  limit = parseToIntWithDefault( limitString , 50 );
 	  
 	  if( limit > 2000 )
 		  limit = 2000;
@@ -160,17 +189,15 @@ public class TextSearchServlet extends HttpServlet {
 		  sortParameter = "relevance";
 	  }
 	 
-	  
-      // De-Duplicate handling.  Look for duplicates field and for how many
+	  // De-Duplicate handling.  Look for duplicates field and for how many
       // duplicates per results to return. Default duplicates field is 'site'
-      // and duplicates per results default is '2'.
+      // and duplicates per results default is '2'.url
       String dedupField = "site";
-      
       
       //If 'hitsPerSite' present, use that value.
       String hitsPerSiteString = request.getParameter( "itemsPerSite" );
       if ( hitsPerSiteString != null && hitsPerSiteString.length( ) > 0 ) 
-    	  hitsPerDup = Integer.parseInt( hitsPerSiteString );
+    	  hitsPerDup = parseToIntWithDefault( hitsPerSiteString , 2 );
       
       // date restriction   
       String dateStart = request.getParameter( "from" );
@@ -182,21 +209,19 @@ public class TextSearchServlet extends HttpServlet {
     	  dateEnd = null; 
       }
       
-      LOG.debug( "[doGet] dtstart["+dateStart+"] dtend["+dateEnd+"]" );
+      LOG.info( "[doGet] dtstart["+dateStart+"] dtend["+dateEnd+"]" );
       
-      if( dateStart== null && dateEnd != null ){
+      if( dateStart == null && dateEnd != null ){
     	  dateStart = "19960101000000"; /*If datestart is not specified set it to 1996*/
       }
       if( dateStart != null && dateEnd == null ){
     	  Calendar dateEND = currentDate( );
     	  dateEnd = FORMAT.format( dateEND.getTime( ) );
       }
+      
+      if (dateStart!=null && dateEnd!=null) {
 
-      if (dateStart!=null && dateEnd!=null) {  	    	
     	  try {
-    		  String startDate = null;
-    		  String endDate = null;
-    		  
     		  DateFormat dOutputFormatTimestamp = new SimpleDateFormat("yyyyMMddHHmmss");
     		  dOutputFormatTimestamp.setLenient( false );
     		  DateFormat dOutputFormatYear = new SimpleDateFormat("yyyy");
@@ -204,41 +229,39 @@ public class TextSearchServlet extends HttpServlet {
     		  String dateFinal = "";
     		  if( tryParse( dOutputFormatTimestamp , dateStart )  ) {
     			  Date dStart = dOutputFormatTimestamp.parse( dateStart );
-    			  startDate = dOutputFormatTimestamp.format( dStart.getTime( ) );
+    			  dateStart = dOutputFormatTimestamp.format( dStart.getTime( ) );
     		  } else if( tryParse( dOutputFormatYear , dateStart )  ) {
     			  String extensionStart = "0101000000"; 
     			  dateStart = dateStart.concat( extensionStart );
     			  if( tryParse( dOutputFormatTimestamp , dateStart )  ) {
     				  Date dStart = dOutputFormatTimestamp.parse( dateStart );
-        			  startDate = dOutputFormatTimestamp.format( dStart.getTime( ) );
+    				  dateStart = dOutputFormatTimestamp.format( dStart.getTime( ) );
     			  }
     		  }
     			  
     		  if( tryParse( dOutputFormatTimestamp , dateEnd ) ) {
     			  Date dEnd = dOutputFormatTimestamp.parse( dateEnd );
-    			  endDate = dOutputFormatTimestamp.format( dEnd.getTime( ) );
+    			  dateEnd = dOutputFormatTimestamp.format( dEnd.getTime( ) );
     		  } else if( tryParse( dOutputFormatYear , dateEnd ) ) {
     			  String extensionEnd = "1231235959";
     			  dateEnd = dateEnd.concat( extensionEnd );
     			  if( tryParse( dOutputFormatTimestamp , dateEnd )  ) {
     				  Date dEnd = dOutputFormatTimestamp.parse( dateEnd );
-    				  endDate = dOutputFormatTimestamp.format( dEnd.getTime( ) );
+    				  dateEnd = dOutputFormatTimestamp.format( dEnd.getTime( ) );
     			  }
     		  }
     		   
-    		  if( startDate == null && endDate != null ) {
-    			  startDate = "19960101000000";
+    		  if( dateStart == null && dateEnd != null ) {
+    			  dateStart = "19960101000000";
     		  }
     		  
-    		  if( startDate != null && endDate == null ) {
+    		  if( dateStart != null && dateEnd == null ) {
     			  Calendar dateEND = currentDate( );
-    			  endDate = FORMAT.format( dateEND.getTime( ) );
+    			  dateEnd = FORMAT.format( dateEND.getTime( ) );
     		  }
     		  
- 
-    		  
-    		  if( startDate != null && endDate != null ) {
-    			  dateFinal = " date:".concat( startDate ).concat( "-" ).concat( endDate );
+    		  if( dateStart != null && dateEnd != null ) {
+    			  dateFinal = " date:".concat( dateStart ).concat( "-" ).concat( dateEnd );
     			  queryString.append( dateFinal );
     		  }
     		  
@@ -251,9 +274,9 @@ public class TextSearchServlet extends HttpServlet {
     	  }    	
       }
       
-      // To support querying opensearch by  url
+      // To support querying textSearch by  url
       // Lucene index format
-      String queryStringOpensearchWayback=null;
+      String queryStringTextSearchWayback=null;
       boolean isOpensearhWayback=false;
       String urlQueryParam=null;
       
@@ -266,7 +289,6 @@ public class TextSearchServlet extends HttpServlet {
     	  site = " site:".concat( siteParameter );
     	  site = site.replaceAll( "site:http://" , "site:" );
     	  site = site.replaceAll( "site:https://" , "site:" );
-    	  
     	  queryString.append( site );
       }
    
@@ -281,70 +303,131 @@ public class TextSearchServlet extends HttpServlet {
       boolean prettyOutput = false;
       if( prettyPrintParameter != null && prettyPrintParameter.equals( "true" ) ) 
     	  prettyOutput = true;
-    	
-     
-      Hits hits;
-
-      Query query = null;
-      String qRequest = queryString.toString( );
-	  query = Query.parse( qRequest , queryLang , this.conf );
-	  LOG.info( "query:" + qRequest + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & functions:" +  this.conf.get( Global.RANKING_FUNCTIONS ) + " & maxHitsPerVersion:1" );
-
-	  //execute the query    
-	  try {    		
-		  int hitsPerVersion = 1;    		
-		  hits = bean.search(query, start + limit, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
-	  } 
-	  catch (IOException e) {
-		  LOG.warn("Search Error", e);    	
-		  hits = new Hits( 0 ,new Hit[ 0 ] );	
-	  }
-
-	  LOG.info( "total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
-
-	  // generate json results
-	  int end = ( int )Math.min( hits.getLength( ), start + limit );
-	  int length = end-start;
-
-	  HitDetails[ ] details = null;
-	  Hit[ ] show = null; 
-	  
-	  if( hits != null && hits.getLength( ) > 0 ) {
-		  show = hits.getHits( start , end-start );        
-		  details = bean.getDetails( show ); //get details
-	  }
-
-	  String requestUrl = request.getRequestURL( ).toString( );
-	  String base = requestUrl.substring( 0 , requestUrl.lastIndexOf( '/' ) );
       
-	  try {
-		  String fieldsParam = "";
-		  if( request.getParameter( "fields" ) != null )
-			  fieldsParam = request.getParameter( "fields" );
-		  String[ ] fields = null;
-		  if( !fieldsParam.equals( "" ) )
-			  fields = fieldsParam.split( "," );
-		  
-		  List< Item > itens = new ArrayList< Item >( );
-		  
-		  TextSearchResponse responseObject = new TextSearchResponse( );
-		  TextSearchRequestParameters requestParameters = new TextSearchRequestParameters( );
-		  
-		  responseObject.setServiceName( ( String ) NS_MAP.get( "serviceName" ) );
-		  responseObject.setLinkToService( ( String ) NS_MAP.get( "link" ) );
-		  
-		  requestParameters.setLimit( limit );
-		  requestParameters.setLimitPerSite( hitsPerDup );
-		  requestParameters.setStart( start );
-		  requestParameters.setFrom( dateStart );
-		  requestParameters.setTo( dateEnd );
-		  if( !typeParameter.equals( "" ) )
-			  requestParameters.setType( typeParameter );
-		  requestParameters.setPrettyPrint( prettyPrintParameter );
-		  if( !siteParameter.equals( "" ) )
-			  requestParameters.setSite( siteParameter );
-		  
-		  int offsetNextPage = start + limit;
+      String fieldsParam = "";
+	  if( request.getParameter( "fields" ) != null )
+		  fieldsParam = request.getParameter( "fields" );
+	  String[ ] fields = null;
+	  if( !fieldsParam.equals( "" ) )
+		  fields = fieldsParam.split( "," );
+	  
+	  List< Item > itens = new ArrayList< Item >( );
+	  
+	  TextSearchResponse responseObject = new TextSearchResponse( );
+	  TextSearchRequestParameters requestParameters = new TextSearchRequestParameters( );
+	  
+	  responseObject.setServiceName( ( String ) NS_MAP.get( "serviceName" ) );
+	  responseObject.setLinkToService( ( String ) NS_MAP.get( "link" ) );
+	  
+	  requestParameters.setLimit( limit );
+	  requestParameters.setLimitPerSite( hitsPerDup );
+	  requestParameters.setStart( start );
+	  requestParameters.setFrom( dateStart );
+	  requestParameters.setTo( dateEnd );
+	  if( !typeParameter.equals( "" ) )
+		  requestParameters.setType( typeParameter );
+	  requestParameters.setPrettyPrint( prettyPrintParameter );
+	  if( !siteParameter.equals( "" ) )
+		  requestParameters.setSite( siteParameter );
+	  
+	  
+      int metadata = parseToIntWithDefault( metadataParam , -1 );
+      
+      if( metadata > 0 ) { //metadata query
+    	  
+    	  LOG.info( "Metadata query" );
+    	  //TODO
+    	  
+      }else if( isDefined( qURL ) ) { //URL query
+    	  LOG.info( "URL query => versionHistory = " + qURL );
+    	  
+    	  if( urlValidator( qURL ) ) { //valid URL
+    		  if( dateStart == null && dateEnd == null ){ //if date is null
+    			  dateStart = "19960101000000";
+    			  Calendar dateEND = currentDate( );
+    			  dateEnd = FORMAT.format( dateEND.getTime( ) );
+    		  }
+    		  
+    		  StringBuilder sbExactURL = new StringBuilder( ); //build extacurl info
+    		  for( int i = 1 ; i < urlParams.length ; i++ ) {
+    			  sbExactURL.append( urlParams[ i ].concat( " " ) );
+    		  }
+    		  qExactURL = sbExactURL.toString( );
+    		  itens = URLQueryProcessor( qURL , dateStart, dateEnd, fields, limit, start, qExactURL, queryLang, hitsPerDup, dedupField, sort, reverse );
+    		  
+    		  /**Updated values with lucene index information**/
+    		 /*for( Item item : itens ) {
+        		  Query query = null;
+        		  String dateLucene = "date:".concat( item.getTstamp( ) ).concat( " " ); //format:ddmmyyyhhmmss-ddmmyyyhhmmss
+        		  String qLucene = dateLucene.concat( qExactURL );
+        		  query = Query.parse( qLucene, queryLang, this.conf );
+            	  LOG.info( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
+            	  
+            	  try {
+            		  int hitsPerVersion = 1;    		
+            		  hits = bean.search(query, start + limit, hitsPerDup, dedupField, sort, reverse, true);
+            	  } catch ( IOException e ) {
+            		  LOG.warn("Search Error", e);    	
+            		  hits = new Hits( 0 ,new Hit[ 0 ] );	
+            	  }
+            	  
+            	  int end = ( int )Math.min( hits.getLength( ), start + limit );
+            	  int length = end-start;
+
+            	  HitDetails[ ] details = null;
+            	  Hit[ ] show = null; 
+            	  
+            	  if( hits != null && hits.getLength( ) > 0 ) {
+            		  show = hits.getHits( start , end-start );        
+            		  details = bean.getDetails( show ); 
+            	  }
+            	  
+            	  LOG.info( "[URLSearch] total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
+            	  break; 
+    		  }*/
+    	  }
+
+      } else { //full-text query
+    	  LOG.info( "Full-text Query" );
+    	  /** Lucene index fields **/
+    	  Query query = null;
+    	  String qRequest = queryString.toString( );
+    	  query = Query.parse( qRequest , queryLang , this.conf );
+    	  LOG.info( "query:" + qRequest + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & functions:" +  this.conf.get( Global.RANKING_FUNCTIONS ) + " & maxHitsPerVersion:1" );
+    	
+    	  //execute the query    
+    	  try {
+    		  int hitsPerVersion = 1;    		
+    		  hits = bean.search(query, start + limit, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
+    	  } catch ( IOException e ) {
+    		  LOG.warn("Search Error", e);    	
+    		  hits = new Hits( 0 ,new Hit[ 0 ] );	
+    	  }
+
+    	  LOG.info( "total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
+
+    	  int end = ( int )Math.min( hits.getLength( ), start + limit );
+    	  int length = end-start;
+
+    	  HitDetails[ ] details = null;
+    	  Hit[ ] show = null; 
+    	  
+    	  if( hits != null && hits.getLength( ) > 0 ) {
+    		  show = hits.getHits( start , end-start );        
+    		  details = bean.getDetails( show ); //get details
+    	  }
+    	  
+    	  itens = luceneQueryProcessor( length, fields, details, request.getParameter( "details" ), show );
+      
+      }
+     
+      try {
+    	  
+    	  String requestUrl = request.getRequestURL( ).toString( );
+    	  String base = requestUrl.substring( 0 , requestUrl.lastIndexOf( '/' ) );
+    	  
+    	  //*** calculate the offset of the next & previous results. ***
+		  int offsetNextPage = start + limit; // offset next page
 		  LOG.debug( "offsetNextPage = " + offsetNextPage );
 		  int offsetPreviousPage;
 		  if( start == 0 )
@@ -367,7 +450,7 @@ public class TextSearchServlet extends HttpServlet {
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
 		  LOG.debug( "Next_page = " + requestURL.toString( ) );
-		  if( hits != null && hits.getLength( ) > 0 ) 
+		  if( itens != null && itens.size( ) > 0 ) 
 			  responseObject.setNext_page( requestURL.toString( ) );
 		  
 		  requestURL = request.getRequestURL( );
@@ -383,9 +466,9 @@ public class TextSearchServlet extends HttpServlet {
 		      requestURL.append( "?" ).append( parameterURL );
 		  }
 		  LOG.debug( "Previous_page = " + requestURL.toString( ) );
-		  if( hits != null && hits.getLength( ) > 0 ) 
+		  if( itens != null && itens.size( ) > 0 ) 
 			  responseObject.setPrevious_page( requestURL.toString( ) );
-		  
+		  //** end **
 		  
 		  /*if( sortParameter != null && !"".equals( sortParameter ) )
 			  requestParameters.setSort( sortParameter );*/
@@ -396,120 +479,8 @@ public class TextSearchServlet extends HttpServlet {
 		  if( requestParameters != null )
 			  responseObject.setRequestParameters( requestParameters );
 		  
-		  boolean fieldsCorrect = true; 
-		  if( fields != null && fields.length > 0 )	  
-			  fieldsCorrect = checkFields( fields );
-			  
-		  Item item = null;
-		  for ( int i = 0 ; i < length && fieldsCorrect ; i++ ) {
-			  	Hit hit = show[ i ];
-		        HitDetails detail = details[ i ];
-		        item = new Item( );
-		        
-		        
-		        
-		        String title = detail.getValue( "title" );
-		        String url 	= detail.getValue( "url" );
-		        String date = detail.getValue( "tstamp" );
-		        if( FieldExists( fields , "versionTitle" ) )
-		        	item.setTitle( title );	
-		        if( FieldExists( fields , "source" ) )
-		        	item.setSource( url );	
-		        
-		        Date datet = null;
-		        String tstamp = "";
-        		try{
-        			datet = FORMAT.parse( date );
-        			if( FieldExists( fields , "tstamp" ) ) {
-        				tstamp = FORMAT.format( datet ).toString( );
-        				item.setTstamp( tstamp );
-        			}
-        	    }catch ( ParseException e ){
-        	    	LOG.error( e );
-        	    }
-                if( url != null ) {
-                	// Lucene index format
-                	String infoIndex = "http://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
-                	LOG.debug( "Index Information " + infoIndex );
-                	String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
-                	if( FieldExists( fields , "linkToArchive" ) )
-                		item.setLink( target );
-                }
-                
-                URL source = new URL( url );
-                String domainHost = source.getHost( );
-                String id = domainHost.concat( "/" ).concat( tstamp );
-                if( FieldExists( fields , "versionId" ) )
-                	item.setKey( id );
-                String contentLength = detail.getValue( "contentLength" );
-                if( FieldExists( fields , "ContentLength" ) )
-                	item.setContentLength( contentLength );
-                String digest = detail.getValue( "digest" );
-                if( FieldExists( fields , "digest" ) )
-                	item.setDigest( digest );
-                String dateEpoch = detail.getValue( "date" );
-                if( FieldExists( fields , "Date" ) )
-                	item.setDate( dateEpoch );
-                String primaryType = detail.getValue( "primaryType" );
-                if( FieldExists( fields , "primaryType" ) )
-                	item.setPrimaryType( primaryType );
-                String subType = detail.getValue( "subType" );
-                if( FieldExists( fields , "subtype" ) )
-                	item.setSubType( subType );
-                String encoding = detail.getValue( "encoding" );
-                if( FieldExists( fields , "encoding" ) )
-                	item.setEncoding( encoding );
-                
-                if( url != null ) {
-                	String urlNoFrame = "http://".concat( "arquivo.pt" ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
-                    LOG.debug( "[TextSearchServlet][doGet] urlNoFrame =" + urlNoFrame );
-                	String urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
-                	LOG.debug( "[TextSearchServlet][doGet] urlEncode =" + urlEncode );
-                	String screenShotLink = "http://".concat( "arquivo.pt" ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
-                	if( FieldExists( fields , "ScreenShotLink" ) )
-                		item.setScreenShotLink( screenShotLink );
-                	if( FieldExists( fields , "noFrameLink" ) )
-                		item.setNoFrameLink( urlNoFrame );
-                }
-                
-               /* String itemText = "NOT IMPLEMENTED"; //TODO not implemented
-                if( FieldExists( fields , "ItemText" ) )
-                	item.setItemText( itemText );*/
-                
-                String detailsCheck = request.getParameter( "details" );
-                
-                if( detailsCheck != null && detailsCheck.equals( "true" ) ) {
-                	int idDoc = hit.getIndexDocNo( );
-                	int index = hit.getIndexNo( );
-                	String arcname 		= detail.getValue( "arcname" );
-                    String arcoffset 	= detail.getValue( "arcoffset" );
-                    String segment 		= detail.getValue( "segment" );
-                    String collection 	= detail.getValue( "collection" );
-                	item.setIdDoc( String.valueOf( idDoc ) );
-                	item.setIndex( String.valueOf( index ) );
-                	if( arcname != null )
-                		item.setArcname( arcname );
-                	else
-                		item.setArcname( "" );
-                	if( arcoffset != null )
-                		item.setArcoffset( arcoffset );
-                	else 
-                		item.setArcoffset( "" );
-                	if( segment != null )
-                		item.setSegment( segment );
-                	else
-                		item.setSegment( "" );
-                	if( collection != null )
-                		item.setCollection( collection );
-                	else 
-                		item.setCollection( "" );
-                }
-                
-                if( item != null ) {
-                	itens.add( item );
-                }
-          }
 		  
+    	  // generate json results
 		  if( itens != null && itens.size( ) > 0 )
 			  responseObject.setItens( itens );
 		  else
@@ -545,7 +516,290 @@ public class TextSearchServlet extends HttpServlet {
 	  }
 	  
   }
+  
+  
+  public List< Item > URLQueryProcessor( String qURL, String dateStart, String dateEnd, String[ ] fields, int limit, int start, String qExactURL, String queryLang, int hitsPerDup, String dedupField, String sort, boolean reverse ) {
+	  CdxParser cdxProcessor = new CdxParser( collectionsHost );
+	  //get cdx index fields
+	  List< ItemCDX > resultsCDX = cdxProcessor.getResults( qURL, dateStart, dateEnd, limit, start );
+	  //TODO delete debug!!!
+	  /*LOG.info( "***** DEBUG PRINT -> CDX *****" );
+	  int counter = 0;
+	  for( ItemCDX cdx : resultsCDX ){
+		  counter++;
+		  LOG.info( "Cdx[" + counter + "]  URL[" + cdx.getUrl( ) + "] TSTAMP[" + cdx.getTimestamp( ) + "] MIME[" + cdx.getMime( ) + "]" );
+	  }
+	  LOG.info( "*****************************" );*/
+	  // Process the CDX index fields
+	  return getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse);
+  }
 
+
+  
+  public List< Item > getResponseValues( List< ItemCDX > resultsCDX , String[ ] fields , String qExactURL, String queryLang, int start, int limit, int hitsPerDup, String dedupField, String sort, boolean reverse ) {
+	  List< Item > responseFields = new ArrayList< Item >( );
+	  Item item = null;
+	  Hits hits = null;
+	  Query query = null;
+	  for( ItemCDX itemcdx : resultsCDX ) { //originalURL, contentLength, digest, mimeType, tstamp, statusCode 
+		  
+		  item = new Item( );
+		  if( FieldExists(  fields , "originalURL" ) ) 
+			  item.setSource( itemcdx.getUrl( ) );
+		  if( FieldExists( fields , "contentLength" ) )
+			  item.setContentLength( itemcdx.getLength( ) );
+		  if( FieldExists( fields , "digest" ) )
+			  item.setDigest( itemcdx.getDigest( ) );
+		  if( FieldExists( fields , "mimeType" ) )
+			  item.setMimeType( itemcdx.getMime( ) );
+		  if( FieldExists( fields , "tstamp" ) )
+			  item.setTstamp( itemcdx.getTimestamp( ) );
+		  if( FieldExists( fields , "statusCode" ) )
+			  item.setStatus( itemcdx.getStatus( ) );
+		  
+		  query = null;
+		  String dateLucene = "date:".concat( item.getTstamp( ) ).concat( " " ); //format:ddmmyyyhhmmss-ddmmyyyhhmmss
+		  String qLucene = dateLucene.concat( qExactURL );
+		  try{
+			  query = Query.parse( qLucene, queryLang, this.conf );  
+		  } catch( IOException e ) {
+			  query = null;
+			  LOG.error( e );
+			  if( item != null )
+				  responseFields.add( item );
+			  continue;
+		  }
+		  
+    	  LOG.info( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
+    	  //execute the query    
+    	  try {
+    		  int hitsPerVersion = 1;    		
+    		  hits = bean.search(query, start + limit, hitsPerDup, dedupField, sort, reverse, true);
+    	  } catch ( IOException e ) {
+    		  LOG.warn("Search Error", e);    	
+    		  hits = new Hits( 0 ,new Hit[ 0 ] );	
+    	  }
+    	  
+    	  int end = ( int )Math.min( hits.getLength( ), start + limit );
+    	  int length = end-start;
+
+    	  HitDetails[ ] details = null;
+    	  Hit[ ] show = null; 
+    	  
+    	  if( hits != null && hits.getLength( ) > 0 ) {
+    		  
+    		  show = hits.getHits( start , end-start );        
+    		  try{
+    			  details = bean.getDetails( show ); //get details  
+    		  } catch( IOException e ) {
+    			  LOG.error( e );
+    			  if( item != null )
+    				  responseFields.add( item );
+    			  continue;
+    		  }
+    		  
+    		  Hit hit = show[ 0 ];
+    		  HitDetails detail = details[ 0 ];
+    		  String title = detail.getValue( "title" );
+    		  if( FieldExists( fields , "title" ) )
+    			  item.setTitle( title );	
+    		  String url 	= detail.getValue( "url" );
+    		  String date 	= detail.getValue( "tstamp" );
+    		  Date datet = null;
+    		  String tstamp = "";
+    		  try{
+    			  datet = FORMAT.parse( date );
+    			  if( FieldExists( fields , "tstamp" ) ) {
+    				  tstamp = FORMAT.format( datet ).toString( );
+    				  item.setTstamp( tstamp );
+    			  }
+    		  }catch ( ParseException e ){
+    			  LOG.error( e );
+    		  }
+    		  
+    		  String encoding = detail.getValue( "encoding" );
+              if( FieldExists( fields , "encoding" ) )
+              	item.setEncoding( encoding );
+              
+              if( url != null ) {
+              	// Lucene index format
+              	String infoIndex = "http://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
+              	LOG.debug( "Index Information " + infoIndex );
+              	String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
+              	if( FieldExists( fields , "linkToArchive" ) )
+              		item.setLink( target );
+              }
+              
+              String mimeType = detail.getValue( "primaryType" ).concat( "/" ).concat( detail.getValue( "subType" ) ); 
+              String domainHost = "";
+              try{	
+            	  URL source = new URL( url );
+            	  domainHost = source.getHost( );
+              } catch( MalformedURLException e ) {
+            	  if( item != null )
+            		  responseFields.add( item );
+            	  LOG.error( e );
+            	  continue;
+              }
+              String id = domainHost.concat( "/" ).concat( tstamp );
+              if( FieldExists( fields , "versionId" ) )
+              	item.setKey( id );
+              String dateEpoch = detail.getValue( "date" );
+              if( FieldExists( fields , "Date" ) )
+              	item.setDate( dateEpoch );
+              if( FieldExists( fields , "mimetype" ) )
+              	item.setMimeType( mimeType );
+              String collection = detail.getValue( "collection" );
+              if( FieldExists( fields , "collection" ) )
+            	item.setCollection( collection );
+              
+    	  }
+    	  if( hits.getTotal() == 0 || hits.getLength() == 0 )
+    		  LOG.info( "[URLSearch] ts["+timest+"] url["++"] exactURL["++"]" ); //TODO AQUI!!!
+    	  
+    	  
+    	  //LOG.info( "[URLSearch] total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
+    	  
+		  if( item != null )
+			  responseFields.add( item );
+	  }
+	  return responseFields;
+  }
+  
+  private List< Item > luceneQueryProcessor( int length, String[ ] fields, HitDetails[ ] details, String detailsCheck, Hit[ ] show ){
+	  
+	  Item item = null;
+	  List< Item > items = new ArrayList< Item >( );
+	  
+	  boolean fieldsCorrect = true; 
+	  if( fields != null && fields.length > 0 )	  
+		  fieldsCorrect = checkFields( fields );
+	  
+	  for ( int i = 0 ; i < length && fieldsCorrect ; i++ ) {
+		  	Hit hit = show[ i ];
+	        HitDetails detail = details[ i ];
+	        item = new Item( );
+	        
+	        String title = detail.getValue( "title" );
+	        String url 	= detail.getValue( "url" );
+	        String date = detail.getValue( "tstamp" );
+	        if( FieldExists( fields , "title" ) )
+	        	item.setTitle( title );	
+	        if( FieldExists( fields , "originalURL" ) )
+	        	item.setSource( url );	
+	        
+	        Date datet = null;
+	        String tstamp = "";
+    		try{
+    			datet = FORMAT.parse( date );
+    			if( FieldExists( fields , "tstamp" ) ) {
+    				tstamp = FORMAT.format( datet ).toString( );
+    				item.setTstamp( tstamp );
+    			}
+    	    }catch ( ParseException e ){
+    	    	LOG.error( e );
+    	    }
+            if( url != null ) {
+            	// Lucene index format
+            	String infoIndex = "http://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
+            	LOG.debug( "Index Information " + infoIndex );
+            	String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
+            	if( FieldExists( fields , "linkToArchive" ) )
+            		item.setLink( target );
+            }
+            
+            String mimeType = detail.getValue( "primaryType" ).concat( "/" ).concat( detail.getValue( "subType" ) ); 
+            String domainHost = "";
+            try{
+            	URL source = new URL( url );
+            	domainHost = source.getHost( );
+            } catch( MalformedURLException e ) {
+            	LOG.error( e );
+            	continue;
+            }
+            String id = domainHost.concat( "/" ).concat( tstamp );
+            if( FieldExists( fields , "versionId" ) )
+            	item.setKey( id );
+            String contentLength = detail.getValue( "contentLength" );
+            if( FieldExists( fields , "ContentLength" ) )
+            	item.setContentLength( contentLength );
+            String digest = detail.getValue( "digest" );
+            if( FieldExists( fields , "digest" ) )
+            	item.setDigest( digest );
+            String dateEpoch = detail.getValue( "date" );
+            if( FieldExists( fields , "Date" ) )
+            	item.setDate( dateEpoch );
+            
+            if( FieldExists( fields , "mimetype" ) )
+            	item.setMimeType( mimeType );
+            String encoding = detail.getValue( "encoding" );
+            if( FieldExists( fields , "encoding" ) )
+            	item.setEncoding( encoding );
+            
+            if( url != null ) {
+            	String urlNoFrame = "http://".concat( "arquivo.pt" ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
+                LOG.debug( "[TextSearchServlet][doGet] urlNoFrame =" + urlNoFrame );
+                String urlEncode = "";
+                try{
+            		urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
+            	} catch( UnsupportedEncodingException e ) {
+            		LOG.error( e );
+            		continue;
+            	}
+            	LOG.debug( "[TextSearchServlet][doGet] urlEncode =" + urlEncode );
+            	String screenShotLink = "http://".concat( "arquivo.pt" ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
+            	if( FieldExists( fields , "ScreenShotLink" ) )
+            		item.setScreenShotLink( screenShotLink );
+            	if( FieldExists( fields , "noFrameLink" ) )
+            		item.setNoFrameLink( urlNoFrame );
+            }
+            
+           /* String itemText = "NOT IMPLEMENTED"; //TODO not implemented
+            if( FieldExists( fields , "ItemText" ) )
+            	item.setItemText( itemText );*/
+            
+            if( detailsCheck != null && detailsCheck.equals( "true" ) ) {
+            	int idDoc = hit.getIndexDocNo( );
+            	int index = hit.getIndexNo( );
+            	String arcname 		= detail.getValue( "arcname" );
+                String arcoffset 	= detail.getValue( "arcoffset" );
+                String segment 		= detail.getValue( "segment" );
+                String collection 	= detail.getValue( "collection" );
+            	item.setIdDoc( String.valueOf( idDoc ) );
+            	item.setIndex( String.valueOf( index ) );
+            	if( arcname != null )
+            		item.setArcname( arcname );
+            	else
+            		item.setArcname( "" );
+            	if( arcoffset != null )
+            		item.setArcoffset( arcoffset );
+            	else 
+            		item.setArcoffset( "" );
+            	if( segment != null )
+            		item.setSegment( segment );
+            	else
+            		item.setSegment( "" );
+            	if( collection != null )
+            		item.setCollection( collection );
+            	else 
+            		item.setCollection( "" );
+            }
+            
+            if( item != null ) 
+            	items.add( item );
+      }
+	  return items;
+  }
+  
+  private static boolean urlValidator(String url){
+	  Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
+	  return URL_PATTERN.matcher( url ).matches( );
+  }
+  
+  private static boolean isDefined( String str ) {
+	  return str == null ? false : "".equals( str ) ? false : true;  
+  }
+  
   private static boolean checkFields( String[ ] fields ) {
 	  for( String fieldInput : fields ) {
 		  for( String fieldResponse: fieldsReponse ){
@@ -554,6 +808,14 @@ public class TextSearchServlet extends HttpServlet {
 		  }
 	  }
 	  return false;
+  }
+  
+  public static int parseToIntWithDefault( String number, int defaultVal ) {
+	  try {
+	    return Integer.parseInt( number );
+	  } catch ( NumberFormatException e ) {
+	    return defaultVal;
+	  }
   }
   
   private static Boolean tryParse( DateFormat df, String s ) {

@@ -38,6 +38,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.nutch.searcher.TextSearchServlet;
 import org.apache.nutch.util.NutchConfiguration;
+import org.archive.access.nutch.jobs.EntryPageExpansion;
 
 
 /**
@@ -114,25 +115,25 @@ public class NutchwaxTextSearchServlet extends TextSearchServlet
 	    // HttpServletRequest so we can preprocess the query string whenever
 	    // a call to #getParameter adding our exacturl encoding.  See
 	    // NutchwaxQuery for why we have to do this.
-	    super.doGet(new HttpServletRequest()
+	    super.doGet(new HttpServletRequest( )
 	    {
 	      public String getParameter(String s)
 	      {
-	        if ( s == null || !s.equals( "q" ) ) {
-	          return request.getParameter(s);
-	        }
-	        
-	        String queryString= null;
-	        if ( !s.equals( "q" ) ){
-	        	queryString = s;
-	        }else
-	        	queryString = request.getParameter( s );
-	        
-	        if ( queryString != null ){
-	          queryString = NutchwaxQuery.encodeExacturl( queryString );
-	        }
-	        
-	        return queryString;
+			if ( s == null || !s.equals( "versionHistory" ) ){
+			  return request.getParameter( s );
+			}
+			
+			String queryString= null;
+			if ( s.contains( "exacturl:" ) ){
+				queryString = s;
+			}else
+				queryString = request.getParameter( s );
+			
+			if ( queryString != null ){
+				queryString = NutchwaxQuery.encodeVersionHistory( queryString );
+			}
+			
+			return queryString;
 	      }
 	
 	      public String getAuthType()

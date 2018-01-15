@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.commons.lang.ArrayUtils;
+
 /**
  * Expands a url query with its alias
  * @author Miguel Costa
@@ -184,6 +186,80 @@ public class EntryPageExpansion {
 		else {
 			return new String[]{surl};
 		}		
+	}
+	
+	/**
+	 * Expand url to include www. and without www. and http protocol
+	 * @param purl url
+	 * @return
+	 */
+	public static String[] expandhttpAndhttps( String purl ) {
+		List< String > urls = new ArrayList< String >( );
+		String newUrl = "";
+		purl = purl.toLowerCase( );
+		if( !purl.startsWith("http://") && !purl.startsWith( "https://" ) ) {
+			urls.add( "http://".concat( purl ) );
+			if( !purl.startsWith( "www." ) )
+				urls.add( "http://www.".concat( purl ) );
+			else
+				urls.add( "http://".concat( purl.replaceFirst( "www." , "" ) ) );
+			
+			urls.add( "https://".concat( purl ) );
+			if( !purl.startsWith( "www." ) )
+				urls.add( "https://www.".concat( purl ) );
+			else
+				urls.add( "https://".concat( purl.replaceFirst( "www." , "" ) ) );
+			
+			
+		} else if( purl.startsWith("http://") && !purl.startsWith( "https://" ) ) { //start with http://
+			String urlWithoutHttp = purl.replaceFirst( "http://" , "" ); //without http
+			urls.add( purl ); // with http
+			
+			if( !urlWithoutHttp.startsWith( "www." ) )
+				urls.add( "http://www.".concat( urlWithoutHttp ) );
+			else
+				urls.add( "http://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+			
+			urls.add( "https://".concat( urlWithoutHttp ) );
+			if( !urlWithoutHttp.startsWith( "www." ) )
+				urls.add( "https://www.".concat( urlWithoutHttp ) );
+			else
+				urls.add( "https://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+			
+			
+			
+		} else if( !purl.startsWith("http://") && purl.startsWith( "https://" ) ) { //start with https://
+			String urlWithoutHttp = purl.replaceFirst( "https://" , "" ); //without http
+			urls.add( purl ); // with http
+			
+			if( !urlWithoutHttp.startsWith( "www." ) )
+				urls.add( "https://www.".concat( urlWithoutHttp ) );
+			else
+				urls.add( "https://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+			
+			urls.add( "http://".concat( urlWithoutHttp ) );
+			if( !urlWithoutHttp.startsWith( "www." ) )
+				urls.add( "http://www.".concat( urlWithoutHttp ) );
+			else
+				urls.add( "http://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+		}
+		
+		String[ ] rURL = new String[ urls.size( ) ];
+		rURL = urls.toArray( rURL );
+		
+		return rURL;
+	}
+	
+	public static String getURLQuery( String surl ) {
+		URL url;
+		try {
+			url = new URL( surl );
+			return url.getQuery();
+		} 
+		catch ( MalformedURLException e ) {
+			return "";
+		}
+		
 	}
 	
 	
