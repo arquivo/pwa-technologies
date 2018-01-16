@@ -479,7 +479,6 @@ public class TextSearchServlet extends HttpServlet {
 		  if( requestParameters != null )
 			  responseObject.setRequestParameters( requestParameters );
 		  
-		  
     	  // generate json results
 		  if( itens != null && itens.size( ) > 0 )
 			  responseObject.setItens( itens );
@@ -531,7 +530,7 @@ public class TextSearchServlet extends HttpServlet {
 	  }
 	  LOG.info( "*****************************" );*/
 	  // Process the CDX index fields
-	  return getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse);
+	  return getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse );
   }
 
 
@@ -541,6 +540,7 @@ public class TextSearchServlet extends HttpServlet {
 	  Item item = null;
 	  Hits hits = null;
 	  Query query = null;
+	  
 	  for( ItemCDX itemcdx : resultsCDX ) { //originalURL, contentLength, digest, mimeType, tstamp, statusCode 
 		  
 		  item = new Item( );
@@ -556,7 +556,35 @@ public class TextSearchServlet extends HttpServlet {
 			  item.setTstamp( itemcdx.getTimestamp( ) );
 		  if( FieldExists( fields , "statusCode" ) )
 			  item.setStatus( itemcdx.getStatus( ) );
+			  
+		  Date datet = null;
+		  try{
+			  datet = FORMAT.parse( itemcdx.getTimestamp( ) );
+		  }catch ( ParseException e ){
+			  LOG.error( e );
+		  }
+		  if( itemcdx.getUrl( ) != null ) {
+			  //Lucene index format
+			  String target = "http://"+ collectionsHost +"/"+ FORMAT.format( datet ).toString()  +"/"+ itemcdx.getUrl( );
+			  if( FieldExists( fields , "linkToArchive" ) )
+				  item.setLink( target );
+          }
 		  
+		  
+		  String domainHost = "";
+          try{
+        	  URL source = new URL( itemcdx.getUrl( ) );
+        	  domainHost = source.getHost( );
+          } catch( MalformedURLException e ) {
+        	  if( item != null )
+        		  responseFields.add( item );
+        	  LOG.error( e );
+        	  continue;
+          }
+          String id = domainHost.concat( "/" ).concat( itemcdx.getTimestamp( ) );
+          if( FieldExists( fields , "versionId" ) )
+          	item.setKey( id );
+          
 		  query = null;
 		  String dateLucene = "date:".concat( item.getTstamp( ) ).concat( " " ); //format:ddmmyyyhhmmss-ddmmyyyhhmmss
 		  String qLucene = dateLucene.concat( qExactURL );
@@ -570,25 +598,22 @@ public class TextSearchServlet extends HttpServlet {
 			  continue;
 		  }
 		  
-    	  LOG.info( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
+    	  //LOG.info( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
     	  //execute the query    
     	  try {
     		  int hitsPerVersion = 1;    		
-    		  hits = bean.search(query, start + limit, hitsPerDup, dedupField, sort, reverse, true);
+    		  hits = bean.search(query, 1, hitsPerDup, dedupField, sort, reverse, true);
     	  } catch ( IOException e ) {
     		  LOG.warn("Search Error", e);    	
     		  hits = new Hits( 0 ,new Hit[ 0 ] );	
     	  }
-    	  
-    	  int end = ( int )Math.min( hits.getLength( ), start + limit );
-    	  int length = end-start;
 
-    	  HitDetails[ ] details = null;
-    	  Hit[ ] show = null; 
+    	  HitDetails details = null;
+    	  Hit show = null; 
     	  
     	  if( hits != null && hits.getLength( ) > 0 ) {
     		  
-    		  show = hits.getHits( start , end-start );        
+    		  show = hits.getHit( 0 );        
     		  try{
     			  details = bean.getDetails( show ); //get details  
     		  } catch( IOException e ) {
@@ -598,54 +623,28 @@ public class TextSearchServlet extends HttpServlet {
     			  continue;
     		  }
     		  
-    		  Hit hit = show[ 0 ];
-    		  HitDetails detail = details[ 0 ];
+    		  Hit hit = show;
+    		  HitDetails detail = details;
     		  String title = detail.getValue( "title" );
     		  if( FieldExists( fields , "title" ) )
     			  item.setTitle( title );	
     		  String url 	= detail.getValue( "url" );
     		  String date 	= detail.getValue( "tstamp" );
-    		  Date datet = null;
-    		  String tstamp = "";
-    		  try{
-    			  datet = FORMAT.parse( date );
-    			  if( FieldExists( fields , "tstamp" ) ) {
-    				  tstamp = FORMAT.format( datet ).toString( );
-    				  item.setTstamp( tstamp );
-    			  }
-    		  }catch ( ParseException e ){
-    			  LOG.error( e );
-    		  }
     		  
     		  String encoding = detail.getValue( "encoding" );
               if( FieldExists( fields , "encoding" ) )
               	item.setEncoding( encoding );
               
-              if( url != null ) {
-              	// Lucene index format
-              	String infoIndex = "http://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
-              	LOG.debug( "Index Information " + infoIndex );
-              	String target = "http://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
-              	if( FieldExists( fields , "linkToArchive" ) )
-              		item.setLink( target );
+              if( item.getContentLength( ).equalsIgnoreCase( "0" ) ) {
+            	  String contentLength = detail.getValue( "contentLength" );
+                  if( FieldExists( fields , "contentLength" ) )
+                  	item.setContentLength( contentLength );
               }
               
               String mimeType = detail.getValue( "primaryType" ).concat( "/" ).concat( detail.getValue( "subType" ) ); 
-              String domainHost = "";
-              try{	
-            	  URL source = new URL( url );
-            	  domainHost = source.getHost( );
-              } catch( MalformedURLException e ) {
-            	  if( item != null )
-            		  responseFields.add( item );
-            	  LOG.error( e );
-            	  continue;
-              }
-              String id = domainHost.concat( "/" ).concat( tstamp );
-              if( FieldExists( fields , "versionId" ) )
-              	item.setKey( id );
+              
               String dateEpoch = detail.getValue( "date" );
-              if( FieldExists( fields , "Date" ) )
+              if( FieldExists( fields , "date" ) )
               	item.setDate( dateEpoch );
               if( FieldExists( fields , "mimetype" ) )
               	item.setMimeType( mimeType );
@@ -653,9 +652,21 @@ public class TextSearchServlet extends HttpServlet {
               if( FieldExists( fields , "collection" ) )
             	item.setCollection( collection );
               
+    	  } else {
+    		  
+                if( FieldExists( fields , "date" ) )
+                	item.setDate( "" );
+                if( FieldExists( fields , "mimetype" ) )
+                	item.setMimeType( "" );
+                if( FieldExists( fields , "collection" ) )
+                	item.setCollection( "" );
+                if( FieldExists( fields , "encoding" ) )
+                  	item.setEncoding( "" );
+                if( FieldExists( fields , "title" ) )
+      			  	item.setTitle( "" );	
     	  }
-    	  if( hits.getTotal() == 0 || hits.getLength() == 0 )
-    		  LOG.info( "[URLSearch] ts["+timest+"] url["++"] exactURL["++"]" ); //TODO AQUI!!!
+    	  if( hits.getTotal( ) == 0 || hits.getLength( ) == 0 )
+    		  LOG.info( "[URLSearch] ts[" + item.getTstamp( ) + "] url[" + itemcdx.getUrl( ) + "] exactURL[" + qExactURL + "]  0 hits." ); 
     	  
     	  
     	  //LOG.info( "[URLSearch] total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );

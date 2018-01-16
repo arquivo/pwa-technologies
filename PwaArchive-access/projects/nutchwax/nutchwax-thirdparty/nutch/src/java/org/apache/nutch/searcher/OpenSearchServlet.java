@@ -313,9 +313,10 @@ public class OpenSearchServlet extends HttpServlet {
     	details = bean.getDetails(show);
     }
     else { // BUG wayback 0000155 - send only the fields necessary to presentation
+    	LOG.info( "Multiple details == true" );
     	PwaRequestDetailsWritable detailsWritable=new PwaRequestDetailsWritable();
     	//detailsWritable.setFields(null);
-    	detailsWritable.setFields(new String[]{"digestDiff","tstamp"});
+    	detailsWritable.setFields(new String[]{"digestDiff","tstamp","exacturl"});
     	detailsWritable.setHits(show);
     	details = bean.getDetails(detailsWritable);
     }
@@ -395,18 +396,28 @@ public class OpenSearchServlet extends HttpServlet {
         	title = url;
         }
         addNode(doc, item, "title", title);
-                                     
+        
         //addNode(doc, item, "description", /*summaries[i].toHtml(false)*/""); // BUG wayback 0000155 - this is unnecessary
         String date = detail.getValue("tstamp");
         Date datet= null;
-        		try{
-        			datet = FORMAT.parse(date);
-        	        
-        	    }
-        	    catch ( ParseException e ){
-        	    	LOG.error(e);
-        	    }
-        if (url!=null) {
+		try{
+			datet = FORMAT.parse(date);
+	        
+	    }
+	    catch ( ParseException e ){
+	    	LOG.error(e);
+	    }
+		
+		/*TODO  DEBUG PRINTS 
+		 * for( int j = 0 ; j < detail.getLength( ) ; j++ ) 
+			LOG.info( "Hit field[" + detail.getField( j ) + "] value[" + detail.getValue( detail.getField( j ) ) + "]" );
+		
+		
+		LOG.info( " Hit url[" + url + "] timestamp[" + date + "] exactURL[" + detail.getValue( "exacturl" ) + "]  digestDiff[" + detail.getValue("digestDiff") + "]" );		
+        */
+		
+		
+        if ( url !=null ) {
         	// Lucene index format
         	String infoIndex = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
         	

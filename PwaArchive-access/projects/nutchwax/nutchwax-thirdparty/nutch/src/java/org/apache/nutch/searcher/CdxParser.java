@@ -52,15 +52,14 @@ public class CdxParser {
 			List< JsonObject > jsonValues = readJsonFromUrl( urlCDX );
 			if( jsonValues == null ) 
 				return null;
-			
-			for( JsonObject json : jsonValues ) { //convert cdx result into object
-				ItemCDX item = gson.fromJson( json , ItemCDX.class );
+			limit = limit + start;
+			for( int i = 0 ; i < jsonValues.size( ) ; i++ ) { //convert cdx result into object
+				if( i < start ) continue;
+				ItemCDX item = gson.fromJson( jsonValues.get( i ) , ItemCDX.class );
 				if( cdxList.contains( item ) ) continue;
-				if( counter > start ) {
-					cdxList.add( item );
-				}
-				counter++;
-				if( counter > limit )
+				cdxList.add( item );
+				
+				if( i > limit )
 					break;
 			}
 			
