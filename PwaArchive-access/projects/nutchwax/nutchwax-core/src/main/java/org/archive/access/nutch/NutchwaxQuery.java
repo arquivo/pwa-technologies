@@ -118,6 +118,7 @@ public class NutchwaxQuery
     	sb.append(m.group(1));    	    	   
     	String urls[]=EntryPageExpansion.expandwww(m.group(2)); // TODO MC - BUG nutchwax 0000566 - add search with and witout www variations  
     	for (int i=0;i<urls.length;i++) {
+    		LOGGER.info(  "[OpenSearch] url[" + urls[ i ] + "]" );
     		String encoded = Base32.encode(md.digest(urls[i].getBytes()));         	    	
         	if (i==0) {
         		sb.append(encoded);
@@ -132,6 +133,7 @@ public class NutchwaxQuery
     	sb.append(mexpand.group(1));
     	String urls[]=EntryPageExpansion.expand(mexpand.group(2));
     	for (int i=0;i<urls.length;i++) {
+    		LOGGER.info(  "[OpenSearch] url[" + urls[ i ] + "]" );
     		String encoded = Base32.encode(md.digest(urls[i].getBytes()));
     		if (i==0) {
        			sb.append(encoded);

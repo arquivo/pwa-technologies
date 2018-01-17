@@ -189,59 +189,119 @@ public class EntryPageExpansion {
 	}
 	
 	/**
-	 * Expand url to include www. and without www. and http protocol
+	 * Expand url to include www. and without www. and http protocol 
+	 * TODO Review method logic, nutchwax doesn't help
 	 * @param purl url
 	 * @return
 	 */
 	public static String[] expandhttpAndhttps( String purl ) {
 		List< String > urls = new ArrayList< String >( );
-		String newUrl = "";
-		purl = purl.toLowerCase( );
+		String auxStr = "";
 		if( !purl.startsWith("http://") && !purl.startsWith( "https://" ) ) {
 			urls.add( "http://".concat( purl ) );
-			if( !purl.startsWith( "www." ) )
+			auxStr = getSlashVersion( "http://".concat( purl )  );
+			if( !checkURLinlist( urls , auxStr ) )
+				urls.add( auxStr );
+			
+			if( !purl.startsWith( "www." ) ) {
 				urls.add( "http://www.".concat( purl ) );
-			else
+				auxStr = getSlashVersion( "http://www.".concat( purl ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			} else {
 				urls.add( "http://".concat( purl.replaceFirst( "www." , "" ) ) );
+				auxStr = getSlashVersion( "http://".concat( purl.replaceFirst( "www." , "" ) ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			}
 			
 			urls.add( "https://".concat( purl ) );
-			if( !purl.startsWith( "www." ) )
-				urls.add( "https://www.".concat( purl ) );
-			else
-				urls.add( "https://".concat( purl.replaceFirst( "www." , "" ) ) );
+			auxStr = getSlashVersion( "https://".concat( purl )  );
+			if( !checkURLinlist( urls , auxStr ) )
+				urls.add( auxStr );
 			
+			if( !purl.startsWith( "www." ) ) {
+				urls.add( "https://www.".concat( purl ) );
+				auxStr = getSlashVersion(  "https://www.".concat( purl )  );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			} else {
+				urls.add( "https://".concat( purl.replaceFirst( "www." , "" ) ) );
+				auxStr = getSlashVersion(  "https://".concat( purl.replaceFirst( "www." , "" ) ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			}
 			
 		} else if( purl.startsWith("http://") && !purl.startsWith( "https://" ) ) { //start with http://
 			String urlWithoutHttp = purl.replaceFirst( "http://" , "" ); //without http
 			urls.add( purl ); // with http
+			auxStr = getSlashVersion(  purl );
+			if( !checkURLinlist( urls , auxStr ) )
+				urls.add( auxStr );
 			
-			if( !urlWithoutHttp.startsWith( "www." ) )
+			if( !urlWithoutHttp.startsWith( "www." ) ) {
 				urls.add( "http://www.".concat( urlWithoutHttp ) );
-			else
+				auxStr = getSlashVersion(  "http://www.".concat( urlWithoutHttp ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			} else {
 				urls.add( "http://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+				auxStr = getSlashVersion(  "http://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			}
 			
 			urls.add( "https://".concat( urlWithoutHttp ) );
-			if( !urlWithoutHttp.startsWith( "www." ) )
+			auxStr = getSlashVersion( "https://".concat( urlWithoutHttp ) );
+			if( !checkURLinlist( urls , auxStr ) )
+				urls.add( auxStr );
+			
+			if( !urlWithoutHttp.startsWith( "www." ) ) {
 				urls.add( "https://www.".concat( urlWithoutHttp ) );
-			else
+				auxStr = getSlashVersion( "https://www.".concat( urlWithoutHttp ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			} else{
 				urls.add( "https://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
-			
-			
-			
+				auxStr = getSlashVersion( "https://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			}
+
 		} else if( !purl.startsWith("http://") && purl.startsWith( "https://" ) ) { //start with https://
 			String urlWithoutHttp = purl.replaceFirst( "https://" , "" ); //without http
 			urls.add( purl ); // with http
+			auxStr = getSlashVersion( purl );
+			if( !checkURLinlist( urls , auxStr ) )
+				urls.add( auxStr );
 			
-			if( !urlWithoutHttp.startsWith( "www." ) )
+			if( !urlWithoutHttp.startsWith( "www." ) ) {
 				urls.add( "https://www.".concat( urlWithoutHttp ) );
-			else
+				auxStr = getSlashVersion( "https://www.".concat( urlWithoutHttp ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			} else {
 				urls.add( "https://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+				auxStr = getSlashVersion( "https://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			}
 			
 			urls.add( "http://".concat( urlWithoutHttp ) );
-			if( !urlWithoutHttp.startsWith( "www." ) )
+			auxStr = getSlashVersion( "http://".concat( urlWithoutHttp ) );
+			if( !checkURLinlist( urls , auxStr ) )
+				urls.add( auxStr );
+			if( !urlWithoutHttp.startsWith( "www." ) ) {
 				urls.add( "http://www.".concat( urlWithoutHttp ) );
-			else
+				auxStr = getSlashVersion( "http://www.".concat( urlWithoutHttp ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			} else {
 				urls.add( "http://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+				auxStr = getSlashVersion( "http://".concat( urlWithoutHttp.replaceFirst( "www." , "" ) ) );
+				if( !checkURLinlist( urls , auxStr ) )
+					urls.add( auxStr );
+			}
 		}
 		
 		String[ ] rURL = new String[ urls.size( ) ];
@@ -262,6 +322,21 @@ public class EntryPageExpansion {
 		
 	}
 	
+	public static boolean checkURLinlist( List< String > urls , String auxStr ) {
+		for(String str: urls) {
+		    if(str.trim( ).contains( auxStr ))
+		       return true;
+		}
+		return false;
+	}
+	
+	public static String getSlashVersion( String purl ) {
+		if( !purl.endsWith( "/" ) ) {
+			return purl.concat( "/" );
+		} else {
+			return purl.substring( 0, purl.length( ) - 1 );
+		}
+	}
 	
 	// TESTS
 	public static void main(String[] args) {

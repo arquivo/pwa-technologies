@@ -353,38 +353,9 @@ public class TextSearchServlet extends HttpServlet {
     			  sbExactURL.append( urlParams[ i ].concat( " " ) );
     		  }
     		  qExactURL = sbExactURL.toString( );
+    		  hitsPerDup = 1;
     		  itens = URLQueryProcessor( qURL , dateStart, dateEnd, fields, limit, start, qExactURL, queryLang, hitsPerDup, dedupField, sort, reverse );
-    		  
-    		  /**Updated values with lucene index information**/
-    		 /*for( Item item : itens ) {
-        		  Query query = null;
-        		  String dateLucene = "date:".concat( item.getTstamp( ) ).concat( " " ); //format:ddmmyyyhhmmss-ddmmyyyhhmmss
-        		  String qLucene = dateLucene.concat( qExactURL );
-        		  query = Query.parse( qLucene, queryLang, this.conf );
-            	  LOG.info( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
-            	  
-            	  try {
-            		  int hitsPerVersion = 1;    		
-            		  hits = bean.search(query, start + limit, hitsPerDup, dedupField, sort, reverse, true);
-            	  } catch ( IOException e ) {
-            		  LOG.warn("Search Error", e);    	
-            		  hits = new Hits( 0 ,new Hit[ 0 ] );	
-            	  }
-            	  
-            	  int end = ( int )Math.min( hits.getLength( ), start + limit );
-            	  int length = end-start;
 
-            	  HitDetails[ ] details = null;
-            	  Hit[ ] show = null; 
-            	  
-            	  if( hits != null && hits.getLength( ) > 0 ) {
-            		  show = hits.getHits( start , end-start );        
-            		  details = bean.getDetails( show ); 
-            	  }
-            	  
-            	  LOG.info( "[URLSearch] total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
-            	  break; 
-    		  }*/
     	  }
 
       } else { //full-text query
@@ -529,6 +500,9 @@ public class TextSearchServlet extends HttpServlet {
 		  LOG.info( "Cdx[" + counter + "]  URL[" + cdx.getUrl( ) + "] TSTAMP[" + cdx.getTimestamp( ) + "] MIME[" + cdx.getMime( ) + "]" );
 	  }
 	  LOG.info( "*****************************" );*/
+	  if( resultsCDX == null || resultsCDX.size( ) == 0 )
+		  return new ArrayList< Item >( );
+	  
 	  // Process the CDX index fields
 	  return getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse );
   }
@@ -570,7 +544,6 @@ public class TextSearchServlet extends HttpServlet {
 				  item.setLink( target );
           }
 		  
-		  
 		  String domainHost = "";
           try{
         	  URL source = new URL( itemcdx.getUrl( ) );
@@ -599,18 +572,19 @@ public class TextSearchServlet extends HttpServlet {
 		  }
 		  
     	  //LOG.info( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
+		  
     	  //execute the query    
     	  try {
     		  int hitsPerVersion = 1;    		
     		  hits = bean.search(query, 1, hitsPerDup, dedupField, sort, reverse, true);
     	  } catch ( IOException e ) {
-    		  LOG.warn("Search Error", e);    	
+    		  LOG.error("Search Error", e);    	
     		  hits = new Hits( 0 ,new Hit[ 0 ] );	
     	  }
 
     	  HitDetails details = null;
     	  Hit show = null; 
-    	  
+    	  LOG.info( "hits.length = " + hits.getLength( )+ " hits.total = " + hits.getTotal( ) );
     	  if( hits != null && hits.getLength( ) > 0 ) {
     		  
     		  show = hits.getHit( 0 );        
@@ -653,7 +627,6 @@ public class TextSearchServlet extends HttpServlet {
             	item.setCollection( collection );
               
     	  } else {
-    		  
                 if( FieldExists( fields , "date" ) )
                 	item.setDate( "" );
                 if( FieldExists( fields , "mimetype" ) )
@@ -666,7 +639,7 @@ public class TextSearchServlet extends HttpServlet {
       			  	item.setTitle( "" );	
     	  }
     	  if( hits.getTotal( ) == 0 || hits.getLength( ) == 0 )
-    		  LOG.info( "[URLSearch] ts[" + item.getTstamp( ) + "] url[" + itemcdx.getUrl( ) + "] exactURL[" + qExactURL + "]  0 hits." ); 
+    		  LOG.info( "[URLSearch] query[" + query.toString( ) + "] ts[" + item.getTstamp( ) + "] url[" + itemcdx.getUrl( ) + "]  0 hits." ); 
     	  
     	  
     	  //LOG.info( "[URLSearch] total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
