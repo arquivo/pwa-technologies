@@ -172,6 +172,8 @@ public class TextSearchServlet extends HttpServlet {
 	  if( limit > 2000 )
 		  limit = 2000;
 	  
+	  
+	  
 	  int hitsPerDup = 2;
 	  /*****************    'sort' param    ***************************/
 	  String sortParameter = request.getParameter("sort"); //relevance or new or old
@@ -330,6 +332,44 @@ public class TextSearchServlet extends HttpServlet {
 	  if( !siteParameter.equals( "" ) )
 		  requestParameters.setSite( siteParameter );
 	  
+	  if( limit == 0 ) { //TODO review code 
+		  if( q != null && !"".equals( q ) )
+			  requestParameters.setQueryTerms( q );
+		  
+		  if( requestParameters != null )
+			  responseObject.setRequestParameters( requestParameters );
+		  
+    	  // generate json results
+		  if( itens != null && itens.size( ) > 0 )
+			  responseObject.setItens( itens );
+		  else
+			  responseObject.setItens( new ArrayList< Item >( ) );
+		  
+		  String jsonObject;
+		  if( prettyOutput )
+			  jsonObject = toPrettyFormat( responseObject );
+		  else {
+			  Gson gson = new GsonBuilder( ).disableHtmlEscaping( ).create( );
+			  jsonObject = gson.toJson( responseObject );
+		  }
+		  
+		  String callBackJavaScripMethodName = "";
+		  if( request.getParameter( "callback" ) != null && !request.getParameter( "callback" ).equals( "" ) ) {
+			  callBackJavaScripMethodName = request.getParameter( "callback" );
+			  jsonObject = callBackJavaScripMethodName + "("+ jsonObject + ");";  
+		  }
+		  
+		  if( !callBackJavaScripMethodName.equals( "" ) )
+			  response.setContentType( "text/javascript" ); //jsonp
+		  else
+			  response.setContentType( "application/json" ); //json
+		  
+		  // Get the printwriter object from response to write the required json object to the output stream      
+		  PrintWriter out = response.getWriter( );  
+		  out.print( jsonObject );
+		  out.flush( );
+		  return;
+	  }
 	  
       int metadata = parseToIntWithDefault( metadataParam , -1 );
       
@@ -530,13 +570,26 @@ public class TextSearchServlet extends HttpServlet {
 			  item.setTstamp( itemcdx.getTimestamp( ) );
 		  if( FieldExists( fields , "statusCode" ) )
 			  item.setStatus( itemcdx.getStatus( ) );
-			  
+		  if( FieldExists( fields , "statusCode" ) )
+			  item.setStatus( itemcdx.getStatus( ) );  
+		  
 		  Date datet = null;
 		  try{
 			  datet = FORMAT.parse( itemcdx.getTimestamp( ) );
 		  }catch ( ParseException e ){
 			  LOG.error( e );
 		  }
+		  String epochDate = "";
+		  Long epochDatel = datet.getTime( );
+		  if( epochDatel != null ) {
+			  epochDate = String.valueOf( epochDatel );
+			  
+			  if( epochDate != null && !epochDate.equals( "" ) ){
+				  epochDate = epochDate.substring( 0 , epochDate.length( ) - 3 ); //remove 000
+				  item.setDate( epochDate );
+			  }
+		  }
+		  
 		  if( itemcdx.getUrl( ) != null ) {
 			  //Lucene index format
 			  String target = "http://"+ collectionsHost +"/"+ FORMAT.format( datet ).toString()  +"/"+ itemcdx.getUrl( );
@@ -618,6 +671,7 @@ public class TextSearchServlet extends HttpServlet {
               String mimeType = detail.getValue( "primaryType" ).concat( "/" ).concat( detail.getValue( "subType" ) ); 
               
               String dateEpoch = detail.getValue( "date" );
+              LOG.info( "dateCDX = " + epochDate + " dateLucene = " + dateEpoch );
               if( FieldExists( fields , "date" ) )
               	item.setDate( dateEpoch );
               if( FieldExists( fields , "mimetype" ) )
@@ -627,16 +681,18 @@ public class TextSearchServlet extends HttpServlet {
             	item.setCollection( collection );
               
     	  } else {
-                if( FieldExists( fields , "date" ) )
-                	item.setDate( "" );
-                if( FieldExists( fields , "mimetype" ) )
-                	item.setMimeType( "" );
+                if( FieldExists( fields , "date" )  )
+                	if( item.getDate( ) == null || item.getDate( ).equals( "" ) )
+                		item.setDate( "" );
                 if( FieldExists( fields , "collection" ) )
                 	item.setCollection( "" );
                 if( FieldExists( fields , "encoding" ) )
                   	item.setEncoding( "" );
                 if( FieldExists( fields , "title" ) )
       			  	item.setTitle( "" );	
+                if( FieldExists( fields , "mimetype" ) )
+                	if( item.getMimeType( ) == null || item.getMimeType( ).equals( "" ) )
+                		item.setMimeType( "" );
     	  }
     	  if( hits.getTotal( ) == 0 || hits.getLength( ) == 0 )
     		  LOG.info( "[URLSearch] query[" + query.toString( ) + "] ts[" + item.getTstamp( ) + "] url[" + itemcdx.getUrl( ) + "]  0 hits." ); 
@@ -650,6 +706,7 @@ public class TextSearchServlet extends HttpServlet {
 	  return responseFields;
   }
   
+
   private List< Item > luceneQueryProcessor( int length, String[ ] fields, HitDetails[ ] details, String detailsCheck, Hit[ ] show ){
 	  
 	  Item item = null;
