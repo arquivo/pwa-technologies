@@ -10,14 +10,13 @@ public class TextSearchResponse {
 	private String linkToService;
 	private String next_page;
 	private String previous_page;
+	@SerializedName( "total_items" )
+	private String totalItems;
 	@SerializedName( "request_parameters" ) 
 	private TextSearchRequestParameters requestParameters; //request input parameters
 	@SerializedName( "response_items" )
 	private List<Item> itens;
-	@SerializedName( "total_items" )
-	private String totalItems;
-
-	
+		
 	public TextSearchResponse( ) { }
 
 	public String getServiceName() {

@@ -22,8 +22,10 @@ public class Item {
 	private String date; //epoch format
 	private String encoding;
 	private String noFrameLink;
+	@SerializedName( "snippet" )
 	private String snippetForTerms;
 	private String status;
+	
 	//details
 	private String arcname;
 	private String arcoffset;
