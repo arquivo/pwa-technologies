@@ -201,6 +201,9 @@
 
             // Build the summary
             StringBuffer sum = new StringBuffer();
+            if(summaries[ positionIndex[i] ] == null){
+              break;
+            }            
             Fragment[] fragments = summaries[ positionIndex[i] ].getFragments();
             for (int j=0; j<fragments.length; j++) {
               if (fragments[j].isHighlight()) {
