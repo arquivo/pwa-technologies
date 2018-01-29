@@ -8,17 +8,15 @@ body,html{
 	height: 100%;
 }
 .swiper-slide {
-    font-size: 18px;
-    background: #fff;
 }
 .swiper-wrapper {
-	background-color: #252525;
-	visibility: hidden;
+	/*background-color: #252525;*/
 }
 .menu {
 	min-width: 100px;
 	width: 70%;
 	max-width: 320px;
+	min-height: 100vh;
 	overflow-y: auto;
 	background-color: #252525;
 	color: #fff;
@@ -61,6 +59,10 @@ body,html{
     text-decoration: none;
 }
 
+.submenu{
+	background-color: #343434;
+    padding-left: 30px!important;
+}
 
 
 .menu a{
@@ -82,13 +84,69 @@ body,html{
 }
 
 #mainMask{
-	width: 100%;position: absolute;height: 100%;background: black;z-index: 4;display: none;opacity: 0.7;
+	position: absolute;
+    margin: 0;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 16777269;
+    opacity: 0.7;
+    display: none;
 }
 
 #menuButton{
 	cursor: pointer;
 }
 
-#mainMenu{
+.main-content{
+	width:100%;
+	height: 100%;
+}
 
+.logo-main-div{
+	padding-left: 15px;
+	padding-top:10px;
+	padding-bottom:10px;
+	background-color: #252525;
+	border-bottom: solid 1px white;
+	line-height: 30px;
+}
+
+.logo-main{
+	width:auto;
+	max-height: 30px;
+}
+
+.main-menu, .main-menu:active, .main-menu:visited, .main-menu:link, .main-menu:hover{
+	color:white;
+	font-size:23px;
+	padding-left: 15px;
+	padding-right: 15px;
+	line-height: 30px;
+	vertical-align: middle;
+	cursor: pointer;
+	z-index: 16777270;
+	position: relative;
+}
+
+.main-menu-top-div{
+	background-color:#42a5f5
+}
+
+.line-height{
+	line-height: 30px!important;
+	z-index: 16777270;
+	position: relative;
+}
+.shareCarret{
+	padding-right: 20px;
+}
+
+#shareOptions, #toolsOptions{
+	display: none;
+}
+
+.padding-right-menu-icon{
+	padding-right: 5px;
 }

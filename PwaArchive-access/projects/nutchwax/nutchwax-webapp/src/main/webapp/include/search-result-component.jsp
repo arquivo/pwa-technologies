@@ -193,9 +193,9 @@
             if ( title.length() - tagLengthCount >= TITLE_MAX_LENGTH ) {
                 title = title.substring(0, TITLE_MAX_LENGTH + tagLengthCount) + "<b>...</b>";
             }
-
-            if ( url.length() > 80) {
-                String newUrl = url.substring(0, 40) + "..."+ url.substring((url.length()-37),url.length());
+            String untruncatedURL = url;
+            if ( url.length() > 55) {
+                String newUrl = url.substring(0, 52) + "..."/*+ url.substring((url.length()-12),url.length())*/;
                 url = newUrl;
             }
 
@@ -212,6 +212,7 @@
                    .append("</em>");
               } else if (fragments[j].isEllipsis()) {
                 sum.append("<span class=\"ellipsis\"> ... </span>");
+                break; /*Only show first sentence*/
               } else {
                 sum.append(Entities.encode(fragments[j].getText()));
               }
@@ -257,6 +258,10 @@
                         <li>
                 <% previous_host = current_host; } %>
 
+            <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
+            <!-- Changed to return in wayback query format -->
+            <div class="urlBlock">
+              <h2>
                 <% if (showMore) {
                         if (!"text".equalsIgnoreCase(primaryType)) {
                                 if ( contentType.lastIndexOf('-') != -1) {
@@ -264,25 +269,25 @@
                                 }
                                 contentType = contentType.toUpperCase(); %>
                                 <span class="mime"><%=contentType%></span>
-                <%} }%>
-
-
-            <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
-            <!-- Changed to return in wayback query format -->
-            <div class="urlBlock">
-              <h2>
+                <%} }%>                
                 <a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%=title%></a>
               </h2>
               <div class="url"><a class="url" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%= url %></a></div>
+              <div class="border-bottom"></div>
             </div>  
 		<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
-            <% showSummary=true; //to show always summaries %>
-            <% if (!"".equals(summary) && showSummary) { %>
-            <span class="resumo"><%=summary%></span><br />
-            <span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span>
-            <!--<div><a class="outras-datas" href="<%=allVersions%>"><fmt:message key='search.result.history'/></a></div>-->
-            <div><a onclick="ga('send', 'event', 'Full-text search', 'List Versions', '/wayback/*/<%= url %>');" class="outras-datas" href="/wayback/*/<%= url %>"><fmt:message key='search.allVersions'/></a></div>            
-            <% } %>
+            <% showSummary=true; //to show always summaries %>            
+            <div class="summary"> 
+              <% if (!"".equals(summary) && showSummary) { %>
+                <span class="resumo"><%=summary%></span><br />
+              <% } %>  
+            <div class="list-versions-div"><span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span><span> - </span>
+              <script type="text/javascript">
+                document.write('<a onclick="ga(\'send\', \'event\', \'Full-text search\', \'List Versions\', \'/wayback/*/<%= untruncatedURL %>\');" class="outras-datas" href="/search.jsp?l=<%=language%>&query='+encodeURIComponent("<%=untruncatedURL%>")+'"><fmt:message key="search.allVersions"/></a>');
+                
+              </script>
+            </div></div>            
+            
 <%--
             -
             <a class="history" href="<%=allVersions%>"><fmt:message key="otherVersions"/></a>
@@ -292,3 +297,14 @@
         <% } %>
 </ul>
 </div> <!-- FIM #resultados-lista  --> 
+<script type="text/javascript">
+  $('.urlBlock').on('click', function(e){
+    window.location = $(this).find('h2 > a').attr('href');
+  });
+  $('.date').on('click', function(e){
+    e.preventDefault(); return false;
+  });
+  $('.list-versions-div').on('click', function(e){
+    window.location = $(this).find('a').attr('href');
+  });    
+</script>

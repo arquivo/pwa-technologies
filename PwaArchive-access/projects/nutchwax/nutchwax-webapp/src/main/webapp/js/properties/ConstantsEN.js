@@ -11,7 +11,7 @@ Content = {
 			 '09': "September",
 			 '10': "October",
 			 '11': "November",
-			 '12': "Dezember",
+			 '12': "December",
 		},
     shortMonths: 
 		{ 	 '01': "Jan",

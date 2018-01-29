@@ -151,65 +151,50 @@
             	mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
             }));
         });
-    </script>	
+    </script>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
+<!-- end addthis for sharing on social media --> 	
 </head>
 <body>
 	<%@ include file="include/topbar.jsp" %>
 	<div class="wrap">
-    <div class="container-fluid topcontainer" id="headerSearchDiv" >
-        <div class="row">
-            <div class="col-xs-10 col-xs-offset-1 col-lg-6 col-lg-offset-3 ">
-                <img src="/img/logo-home-pt_nospaces.png" alt="Logo Arquivo.pt" class="img-responsive center-block" />
-            </div>
-        </div>
+    <div class="container-fluid topcontainer col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4 " id="headerSearchDiv" >
 		<div id="info-texto-termos" class="row">
-			<h3 class="text-center title-advanced"><fmt:message key='advanced.title'/></h1>
-			<!--<h4 class="titulo-advanced"><fmt:message key='advanced.form-title'/></h4>-->
 		</div>  
 		<!-- Formulario -->
 		<div id="main" class="main-form-advanced">
 			<div id="conteudo-pesquisa">
 				<form method="get" action="search.jsp">
 					<input type="hidden" name="l" value="<%= language %>" />
-					<!--<div class="pesquisar-por">
-						<div class="row">
-							<div class="col-xs-6">
-	                        	<h2 class="titulo"><fmt:message key='advanced.form-title'/></h2>
-	                        </div>
-	                        <div class="col-xs-6 text-right">	
-	                            <input type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="search-submit" name="btnSubmitTop" id="btnSubmitTop" accesskey="e" />
-		                    </div>
-		                </div>    
-		            -->
 		            <div class="expandable-div">   
 						<fieldset id="words">
-							<legend><fmt:message key='advanced.terms'/><i class="fa iCarret yearCarret fa-caret-up pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid">
+							<legend><fmt:message key='advanced.terms'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
 								<div id="label-palavras-1">
-									<label for="adv_and" class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top"><fmt:message key='advanced.terms.all'/></label>
+									<label for="adv_and" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.terms.all'/></label>
 									<div class="withTip ">
-										<input type="text" id="adv_and" class="row col-xs-offset-1 col-xs-10" name="adv_and" value="<%=and.toString()%>" />
-										<div class="row col-xs-offset-1 col-xs-10 no-padding-left">
+										<input type="text" id="adv_and" class="row  col-xs-10" name="adv_and" value="<%=and.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
 											<span class="tip"><fmt:message key='advanced.terms.all.hint'/></span>
 										</div>										
 									</div>
 								</div>
 
 								<div id="label-palavras-2">
-									<label class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top" for="adv_phr"><fmt:message key='advanced.terms.phrase'/></label>
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="adv_phr"><fmt:message key='advanced.terms.phrase'/></label>
 									<div class="withTip">
-										<input type="text" class="row col-xs-offset-1 col-xs-10" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
-										<div class="row col-xs-offset-1 col-xs-10 no-padding-left">
+										<input type="text" class="row  col-xs-10" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
 											<span class="tip"><fmt:message key='advanced.terms.phrase.hint'/></span>
 										</div>											
 									</div>
 								</div>
 
 								<div id="label-palavras-3">
-									<label class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top" for="adv_not"><fmt:message key='advanced.terms.not'/></label>
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="adv_not"><fmt:message key='advanced.terms.not'/></label>
 									<div class="withTip">
-										<input type="text" class="row col-xs-offset-1 col-xs-10" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
-										<div class="row col-xs-offset-1 col-xs-10 no-padding-left">
+										<input type="text" class="row  col-xs-10" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
 											<span class="tip"><fmt:message key='advanced.terms.not.hint'/></span>
 										</div>	
 									</div>
@@ -220,23 +205,23 @@
 
 					<div class="expandable-div">
 						<fieldset id="date">
-							<legend><fmt:message key='advanced.date'/><i class="fa iCarret yearCarret fa-caret-up pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid">
+							<legend><fmt:message key='advanced.date'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
 								<div id="label-data-1">
 
-									<label class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top" for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
 									<div class="withTip">
-										<input size="10" class="row col-xs-offset-1 date-advanced no-padding-left" type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" /><a class="calendar-anchor-advanced" id="startDateCalendarAnchor"><img src="/img/calendar.gif"/></a>
+										<input size="10" class="row  date-advanced no-padding-left" type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" /><a class="calendar-anchor-advanced" id="startDateCalendarAnchor"><img src="/img/calendar.gif"/></a>
 									</div>
 
-									<label id="labelDateEnd" class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top" for="dateEnd_top"><fmt:message key='advanced.date.to'/></label>
+									<label id="labelDateEnd" class="row  col-xs-12 no-padding-left label-padding-top" for="dateEnd_top"><fmt:message key='advanced.date.to'/></label>
 									<div class="withTip">
-										<input type="text" class="row col-xs-offset-1 date-advanced no-padding-left" id="dateEnd_top" name="dateEnd" size="10" value="<%=dateEndString%>" /><a class="calendar-anchor-advanced" id="endDateCalendarAnchor"><img src="/img/calendar.gif"/></a>
+										<input type="text" class="row  date-advanced no-padding-left" id="dateEnd_top" name="dateEnd" size="10" value="<%=dateEndString%>" /><a class="calendar-anchor-advanced" id="endDateCalendarAnchor"><img src="/img/calendar.gif"/></a>
 									</div>
 								</div>
 								<div id="label-data-2">
-									<label for="sort" class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top"><fmt:message key='advanced.sort'/></label>
-									<select id="sort" name="sort" class="date-advanced row col-xs-offset-1 no-padding-left select-style">
+									<label for="sort" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.sort'/></label>
+									<select id="sort" name="sort" class="date-advanced row  no-padding-left select-style select-sort-type">
 										<%
 										if (sortType == null) {		// use the default sorting behavior %>
 											<option value="relevance" selected="selected"><fmt:message key="advanced.sort.relevance"/></option>
@@ -264,8 +249,8 @@
 							<legend><fmt:message key='advanced.format'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
 							<div class="box-content container-fluid hidden">
 								<div id="label-format-1">
-									<label class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top" for="formatType"><fmt:message key='advanced.format.label'/></label>
-									<select id="formatType" name="format" class="row col-xs-offset-1 col-xs-10 no-padding-left select-style">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="formatType"><fmt:message key='advanced.format.label'/></label>
+									<select id="formatType" name="format" class="row  col-xs-10 no-padding-left select-style">
 									<%
 										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
 										String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
@@ -295,10 +280,10 @@
 							<legend><fmt:message key='advanced.website'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
 							<div class="box-content container-fluid hidden">
 								<div id="label-domains-1">
-									<label class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top" for="site"><fmt:message key='advanced.website.label'/></label>
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="site"><fmt:message key='advanced.website.label'/></label>
 									<div class="withTip">
-										<input class="row col-xs-offset-1 col-xs-10 no-padding-left" type="text" id="site" name="site" value="<%=site%>" />
-										<span class="row col-xs-offset-1 col-xs-10 no-padding-left tip"><fmt:message key='advanced.website.hint'/></span>
+										<input class="row  col-xs-10 no-padding-left" type="text" id="site" name="site" value="<%=site%>" />
+										<span class="row  col-xs-10 no-padding-left tip"><fmt:message key='advanced.website.hint'/></span>
 									</div>
 								</div>
 							</div>
@@ -310,9 +295,9 @@
 							<legend><fmt:message key='advanced.results'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
 							<div class="box-content container-fluid hidden">
 								<div id="label-num-result-fieldset-1">
-									<label class="row col-xs-offset-1 col-xs-10 no-padding-left label-padding-top" for="num-result"><fmt:message key='advanced.results.label'/></label>
-									<div class="row col-xs-offset-1 col-xs-10 no-padding-left">
-										<select class="number-results-advanced no-padding-left select-style" id="num-result" name="hitsPerPage">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="num-result"><fmt:message key='advanced.results.label'/></label>
+									<div>
+										<select class="row  col-xs-10 no-padding-left number-results-advanced no-padding-left select-style " id="num-result" name="hitsPerPage">
 										<%
 										int[] hitsPerPageValues = {10, 20, 30, 50, 100};
 										for (int i=0; i < hitsPerPageValues.length; i++) {
@@ -324,15 +309,15 @@
 										}%>
 										</select>
 									</div>	
-									<label class="row col-xs-offset-1 col-xs-10 no-padding-left"><fmt:message key='advanced.results.label2'/></label>
+									<label class="row  col-xs-12 no-padding-left"><fmt:message key='advanced.results.label2'/></label>
 								</div>
 							</div>
 						</fieldset>
 					</div>	
 
 					<div id="bottom-submit" class="text-center button-advanced">
-						<button type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="myButtonStyle" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" >
-						<fmt:message key='advanced.submit'/>
+						<button type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="myButtonStyle col-xs-offset-3 col-xs-6" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" >
+						<fmt:message key='advanced.search'/>
 						<span class="glyphicon glyphicon-search padding-left-5"></span>
 						</button>
 					</div>

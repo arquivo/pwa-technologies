@@ -39,6 +39,9 @@
 <% // Set the character encoding to use when interpreting request values.
   request.setCharacterEncoding("UTF-8");
 %>
+<%
+response.setHeader("Cache-Control","public, max-age=600");
+%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
 <%@ include file="include/logging_params.jsp" %>
@@ -396,26 +399,24 @@ String[] queryString_splitted=null;
     <script type="text/javascript" src="/js/wNumb.js"></script>
     <!-- CSS loading spiner -->
 	<link href="css/csspin.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
+  <!-- end addthis for sharing on social media --> 
 
 </head>
+
 <body>
     <%@ include file="include/topbar.jsp" %>
     <div class="container-fluid topcontainer" id="headerSearchDiv">
-        <div class="row">
-            <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 ">
-                <img src="/img/logo-home-pt_nospaces.png" alt="Logo Arquivo.pt" class="img-responsive center-block" />
-            </div>
-        </div>
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">
                 <form id="searchForm" action="/search.jsp">
                 <div id="form_container"> 
                     <div class="input-group stylish-input-group">
                         
-                            <input id="txtSearch" value="<%=htmlQueryString%>" name="query" type="search" class="form-control no-radius"  placeholder="<fmt:message key="home.search.placeholder" />" autocapitalize="off" autocomplete="off" autocorrect="off">
-                            <span class="search-span input-group-addon no-radius">
-                                <button  class="search-button" type="submit">
-                                    <span class="glyphicon glyphicon-search"></span>
+                            <input id="txtSearch" value="<%=htmlQueryString%>" name="query" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>"  autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <span class="input-group-addon no-radius search-button-span">
+                                <button class="search-button" type="submit">
+                                    <span class="glyphicon glyphicon-search white"></span>
                                 </button>  
                             </span>
                         
@@ -428,14 +429,24 @@ String[] queryString_splitted=null;
                     
                 
                 <div id="slider-caption" class="row">
-                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year text-bold" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=yearEndNoParameter%>"></input>
-                    <input size="4" maxlength="4" type="number" class="example-val text-center text-bold input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=yearEndNoParameter%>"></input>
+                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=yearEndNoParameter%>"></input>
+                    <input size="4" maxlength="4" type="number" class="example-val text-center input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=yearEndNoParameter%>"></input>
                     <input type="hidden" id="dateStart" name="dateStart" value="01/01/<%=dateStartYear%>"/>
                     <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
-                </div>
-                   <div id="divLoading" style="margin-top: 25px; text-align: center;">
-                   		<div style="text-align: center; display: inline-block;" class="cp-spinner cp-round"></div>
-                   </div>    
+                    <input type="hidden" id="l" name="l" value="<%=language%>"/>
+                </div>   
+
+<script>
+  document.write("<div id='loadingDiv' class='text-center' style='text-align: center; margin-top: 10%; margin-bottom: 5%;'><div style='text-align: center; display: inline-block;'' class='cp-spinner cp-round'></div></div>");
+  $( document ).ready(function() {
+    if(typeof(loading)=="undefined" || loading != true){
+      $('#loadingDiv').hide();
+      $('#conteudo-resultado').show();
+      dateSlider.removeAttribute('disabled');
+    }
+  });
+</script> 
+
 <script type="text/javascript">
     $('#searchForm').submit(function() 
     {
@@ -448,7 +459,7 @@ String[] queryString_splitted=null;
 <script type="text/javascript">
 // Create a new date from a string, return as a timestamp.
 
-var dateSlider = document.getElementById('slider-date');
+dateSlider = document.getElementById('slider-date');
 
 var beginYear = parseInt("<%=dateStartYear%>");
 var endYear = parseInt("<%=dateEndYear%>");
@@ -461,7 +472,7 @@ noUiSlider.create(dateSlider, {
         min: [minYear],
         max: [maxYear]
     },
-    tooltips: true,
+    tooltips: false,
     connect: true,
 // Steps of one year
     step: 1,
@@ -474,6 +485,8 @@ noUiSlider.create(dateSlider, {
         decimals: 0
     })
 }); 
+dateSlider.setAttribute('disabled', true);
+
 </script>
 <script type="text/javascript">$('.noUi-tooltip').hide();</script>
 <script type="text/javascript">
@@ -552,9 +565,10 @@ var dateValues = [
     document.getElementById('event-start'),
     document.getElementById('event-end')
 ];
-
+changed = false;
 initial = 0; /*do not show tooltips when slider is initialized i.e. when initial < 2*/
 dateSlider.noUiSlider.on('update', function( values, handle ) {
+
   if(initial > 1){
       $(".noUi-handle[data-handle='"+handle.toString()+"'] .noUi-tooltip").show().delay(1000).fadeOut();
     }
@@ -562,13 +576,28 @@ dateSlider.noUiSlider.on('update', function( values, handle ) {
       initial += 1;
     }
     if(handle==0){
-     $('#dateStart').attr('value', '01/01/'+values[handle]);
-     $('#event-start').attr('value', +values[handle]);
+
+      if( $('#dateStart').attr('value').substring(6, 10) != values[handle]){
+        $('#dateStart').attr('value', '01/01/'+values[handle]);
+        $('#event-start').attr('value', +values[handle]);
+        changed= true;
+        console.log('changed true')        
+      }     
     }else{
-     $('#dateEnd').attr('value', '31/12/'+values[handle]);
-     $('#event-end').attr('value', +values[handle]);
+      if( $('#dateEnd').attr('value').substring(6, 10) != values[handle]){    
+       $('#dateEnd').attr('value', '31/12/'+values[handle]);
+       $('#event-end').attr('value', +values[handle]);
+       changed=true
+      }
     }
 });     
+
+dateSlider.noUiSlider.on('set', function( values, handle ) {
+  if(changed){
+    changed=false;
+    $('.search-button').click();
+  }
+});
 
 // Append a suffix to dates.
 // Example: 23 => 23rd, 1 => 1st.
@@ -687,8 +716,7 @@ function formatDate ( date ) {
 %>
 
       </div> <%-- closes #main --%>
-      </div> <%-- closes .wrap --%>
-      
+    </div> <%-- closes .wrap --%> 
                         <%-- #search_stats & #result_list for this case are generated by WB --%>
                         <%
                                 boolean seeHistory = false;             // This variable is used to indicate that link to see the history was clicked
@@ -704,7 +732,7 @@ function formatDate ( date ) {
 
 
 <script type="text/javascript">
-
+/*
 Content = {
     months: 
     {  '01': "<fmt:message key="month.0" />",
@@ -766,7 +794,7 @@ Content = {
     notArchived:"<fmt:message key="notArchived" />",
     otherLanguage: "<fmt:message key="otherLanguage" />"  ,
     preservedByArquivo: "<fmt:message key="preservedByArquivo" />"     
-};
+};*/
 
 
 function getYearTs(ts){
@@ -843,7 +871,7 @@ function createMatrix(versionsArray, versionsURL){
 
     var dateFormated = getDateSpaceFormated(timestampStr);
 
-    var tdtoInsert = '<a onclick="ga(\'send\', \'event\', \'Versions List\', \'Version Click\', \'http://<%=collectionsHost%>/'+timestampStr+'/'+url+'\');" class="day-version-div" id="'+timestampStr+'" href="http://<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+getDateSpaceFormatedWithoutYear(timestampStr)+'</a>';
+    var tdtoInsert = '<a onclick="ga(\'send\', \'event\', \'Versions List\', \'Version Click\', \'http://<%=collectionsHost%>/'+timestampStr+'/'+url+'\');" class="day-version-div text-center" id="'+timestampStr+'" href="http://<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+getDateSpaceFormatedWithoutYear(timestampStr)+'</a>';
 
      if(! $('#'+currentYear+'_'+currentMonth).length )  /*Add month if it doesn't exist already*/
     {
@@ -854,7 +882,6 @@ function createMatrix(versionsArray, versionsURL){
 
     if(currentMonthVersions === 0 ){
       currentMonthVersions = $('#'+currentYear+'_'+currentMonth + '> a').length;
-     /* top.alert(''+ currentYear+'_'+currentMonth+'_monthversions');*/
       $('#month_'+currentYear+'_'+currentMonth).html(currentMonthVersions+ " <fmt:message key='search.versions'/>");
      
     }
@@ -891,7 +918,7 @@ function createResultsPage(numberOfVersions, inputURL){
                  (numberOfVersions===1 ?  Content.versionPage : Content.versionsPage )+
                  ' '+'<strong>'+ inputURL+'</strong>'+'</h3>' +
         '</div>' + */
-          '<div id="years" class="container-fluid">' +
+          '<div id="years" class="container-fluid col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4 ">' +
           '</div>' +
         '</div>' +
       '</div>').insertAfter("#headerSearchDiv");
@@ -910,13 +937,13 @@ function formatNumberOfVersions( numberofVersionsString){
 }
 
 function createErrorPage(){
-  $('<div id="conteudo-resultado" class="container-fluid">'+
+  $('<div id="conteudo-resultado" class="container-fluid col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">'+
            '  <div id="first-column">&nbsp;</div>'+
            '  <div id="second-column">'+
            '    <div id="search_stats"></div>'+
            '    <div id="conteudo-pesquisa-erro">'+
-                '<div class="row alert alert-danger col-xs-offset-1 col-xs-10 my-alert break-word"><p>'+Content.noResultsFound+' <span class="text-bold"><%=urlQuery%></span></p></div>'+
-                '<div id="sugerimos-que" class="col-xs-offset-1 col-xs-10 no-padding-left suggestions-no-results">'+
+                '<div class="alert alert-danger col-xs-12 my-alert break-word"><p>'+Content.noResultsFound+' <span class="text-bold"><%=urlQuery%></span></p></div>'+
+                '<div id="sugerimos-que" class="col-xs-12 no-padding-left suggestions-no-results">'+
                     '<p class="text-bold">'+Content.suggestions+'</p>'+
                   '<ul>'+
                     '<li>'+Content.checkSpelling+'</li>'+
@@ -951,21 +978,26 @@ function createErrorPage(){
 
     var inputURL = document.getElementById('txtSearch').value;
 
+  loading = false;
 	$( document ).ajaxStart(function() {
-	  $( "#divLoading").show();
+    loading = true;
+	  $( "#loadingDiv").show();
 	});
 	$( document ).ajaxStop(function() {
-	  $( "#divLoading").hide();
+    loading = false;
+	  $( "#loadingDiv").hide();
+    dateSlider.removeAttribute('disabled');
 	});
   $( document ).ajaxComplete(function() {
-    $( "#divLoading").hide();
+    loading = false;
+    $( "#loadingDiv").hide();
+    dateSlider.removeAttribute('disabled');
   });
-
 
     $.ajax({
     // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
        url: requestURL,
-       cache: false,
+       cache: true,
        data: {
           output: 'json',
           url: urlsource,
@@ -980,7 +1012,6 @@ function createErrorPage(){
        },
        dataType: 'text',
        success: function(data) {
-
           versionsArray = []
           var tokens = data.split('\n')
           $.each(tokens, function(e){
@@ -1050,7 +1081,7 @@ function attachClicks(){
 
                         <c:if test="${not empty exception}">
         <% bean.LOG.error("Error while accessing to wayback: "+ pageContext.getAttribute("exception")); %>
-        <div id="conteudo-resultado" class="container-fluid"> <%-- START OF: conteudo-resultado --%>
+        <div id="conteudo-resultado" class="container-fluid display-none col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4"> <%-- START OF: conteudo-resultado --%>
         <div id="second-column">
           <div id="search_stats"></div>
                         </c:if>
@@ -1117,7 +1148,7 @@ function attachClicks(){
       
 <% if (showList) { %>
 
-<div id="conteudo-resultado" class="container-fluid"> <%-- START OF: conteudo-resultado --%>
+<div id="conteudo-resultado" class="container-fluid display-none col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4"> <%-- START OF: conteudo-resultado --%>
 <div id="second-column">
 <!--<h1><fmt:message key='search.query'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></h1>-->
 
@@ -1172,10 +1203,10 @@ function attachClicks(){
   </div>
         <% } else { %>
   <div id="conteudo-pesquisa-erro">
-    <div class="row alert alert-danger break-word col-xs-offset-1 col-xs-10 my-alert">
+    <div class="alert alert-danger break-word col-xs-12 my-alert">
       <p><fmt:message key='search.no-results.title'/> <span class="text-bold"><%=htmlQueryString%></span></p>
     </div>
-    <div id="sugerimos-que" class="col-xs-offset-1 col-xs-10 no-padding-left">
+    <div id="sugerimos-que" class="col-xs-12 no-padding-left">
         <p class="text-bold"><fmt:message key='search.no-results.suggestions'/></p>
       <ul class="suggestions-no-results">
         <li><fmt:message key='search.no-results.suggestions.well-written'/></li>

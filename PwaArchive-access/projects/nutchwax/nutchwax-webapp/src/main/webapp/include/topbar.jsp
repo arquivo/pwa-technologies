@@ -39,26 +39,23 @@
   NutchBean bean2 = NutchwaxBean.get(application, nutchConfAlt);
 %>
 <%String arquivoHost = nutchConfAlt.get("wax.webhost", "arquivo.pt"); %>
-<script type="text/javascript" src="/js/js.cookie.js"></script>
-
 <!-- Main Menu Dependencies -->
 <link rel="stylesheet" href="css/swiper.min.css">
 <link rel="stylesheet" href="css/MainMenu.css">
 <%@ include file="MainMenu.jsp" %>
 <script type="text/javascript">MENU.init()</script> 
-
-
-<div class="container-fluid">
-	<div class="row">
-		<div id="topBarFixed" class="col-xs-12 navbar  top-bar-background">
-			<div class="col-xs-6">
-			<h3 style="color:black; margin: 0"><a id="menuButton" class="menu-button"><i class="fa fa-bars" aria-hidden="true"></i></a></h3></div>
-			<div class="col-xs-6 text-right">
-				<h4 style="margin-top: 3px; margin-bottom:0px;"><a id="languageSelection" href="#"><fmt:message key='topbar.otherLanguage'/></a></h4>
-			</div> 
-		</div>
+<script type="text/javascript" src="/js/js.cookie.js"></script>
+<script>
+	Cookies.set("language", "<%=language%>".toUpperCase());
+</script>
+<div class="main-content">
+	<div class="container-fluid">
+		 <div class="row text-center logo-main-div">
+		                    <a href="/?l=<%=language%>"><img src="/img/01_preto.png" id="arquivoLogo" alt="Logo Arquivo.pt" class="text-center logo-main"></a>
+		                    <a class="pull-right main-menu" id="menuButton"><i class="fa fa-bars line-height"></i></a>
+		 </div> 	
 	</div>
-</div>
+</div>	
 <script type="text/javascript">
 $('#languageSelection').click( function(e) {
 		e.preventDefault();

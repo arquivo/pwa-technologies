@@ -1,0 +1,6 @@
+User-agent: Arquivo-web-crawler
+Disallow: /wayback
+
+User-agent: *
+Disallow: /nutchwax/search
+Disallow: /search

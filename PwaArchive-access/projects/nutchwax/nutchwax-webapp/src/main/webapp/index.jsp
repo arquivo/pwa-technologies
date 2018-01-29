@@ -136,6 +136,8 @@
     <!-- left menu dependencies -->
     <link rel="stylesheet" href="css/leftmenu.css">
     <!-- end left menu dependencies -->
+	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
+	<!-- end addthis for sharing on social media -->     
 
 
 </head>
@@ -143,20 +145,15 @@
     <%@ include file="include/topbar.jsp" %>
     <div class="container-fluid topcontainer">
         <div class="row">
-            <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3 ">
-                <img src="/img/logo-home-pt_nospaces.png" alt="Logo Arquivo.pt" class="img-responsive center-block" />
-            </div>
-        </div>
-        <div class="row">
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">
                 <form id="searchForm" action="/search.jsp">
                 <div id="form_container"> 
                     <div class="input-group stylish-input-group">
                         
-                            <input name="query" type="search" class="form-control no-radius" placeholder="<fmt:message key='home.search.placeholder'/>" autofocus autocapitalize="off" autocomplete="off" autocorrect="off">
-                            <span class="input-group-addon no-radius">
-                                <button type="submit">
-                                    <span class="glyphicon glyphicon-search"></span>
+                            <input name="query" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autofocus autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <span class="input-group-addon no-radius search-button-span">
+                                <button class="search-button" type="submit">
+                                    <span class="glyphicon glyphicon-search white"></span>
                                 </button>  
                             </span>
                         
@@ -164,10 +161,11 @@
                 </div>
                 <div id="slider-date" class="col-sm-12"></div>
                 <div id="slider-caption" class="row">
-                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year text-bold" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=dateEndYear%>"></input>
-                    <input size="4" maxlength="4" type="number" class="example-val text-center text-bold input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=dateEndYear%>"></input>
+                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=dateEndYear%>"></input>
+                    <input size="4" maxlength="4" type="number" class="example-val text-center input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=dateEndYear%>"></input>
                     <input type="hidden" id="dateStart" name="dateStart" value="01/01/<%=dateStartYear%>"/>
                     <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
+                    <input type="hidden" id="l" name="l" value="<%=language%>"/>
                 </div>                  
                 </form>
 
@@ -197,7 +195,7 @@ noUiSlider.create(dateSlider, {
         min: [minYear],
         max: [maxYear]
     },
-    tooltips:true,
+    tooltips:false,
     connect: true,
 // Steps of one year
     step: 1,
@@ -326,68 +324,19 @@ function formatDate ( date ) {
         date.getFullYear();
 }    
 
-</script>                
+</script>  
+
+<div class="videoWrapper">
+    <!-- Copy & Pasted from YouTube -->
+
+    <iframe width="260" height="149" src="<fmt:message key='home.video'/>" frameborder="0" allowfullscreen></iframe>
+</div>
+
+
+
             </div>
         </div>
 
-    </div>
-    <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12 text-center no-padding-horizontal" >
-                    <h4><fmt:message key='home.examples.preserved'/></title></h4>
-                </div>    
-            </div>   
-    </div>
-    <div class="container-fluid carousel-container no-padding-horizontal" id="container-carousel"> 
-        <div class="col-xs-12 col-sm-6 col-sm-offset-3 no-padding-horizontal" >
-          <div id="my-slider" class="carousel slide" data-ride="carousel" data-interval="false">
-              <!-- Indicators -->
-              <!--
-              <ol class="carousel-indicators">
-                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#myCarousel" data-slide-to="1"></li>
-                <li data-target="#myCarousel" data-slide-to="2"></li>
-              </ol>
-              -->          
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner center-block" role="listbox">
-              <div class="item active">
-                <a onclick="ga('send', 'event', 'Homepage', 'Ronaldo', 'Click on link (Exemplos - Ronaldo bola de ouro)');" href="/wayback/20091219061621/http://jogodirecto.blogspot.com/2008/12/ronaldo-ballon-dor.html"><img src="/img/ronaldo2008-e1487678911859.jpg" alt="<fmt:message key='home.examples.ronaldo'/>" class="img-responsive center-block"></a>
-                  <div class="text-center">
-                        <a onclick="ga('send', 'event', 'Homepage', 'Ronaldo', 'Click on link (Exemplos - Ronaldo bola de ouro)');" href="/wayback/20091219061621/http://jogodirecto.blogspot.com/2008/12/ronaldo-ballon-dor.html"><h5><fmt:message key='home.examples.ronaldo'/></h5></a>
-                  </div>
-              </div>
-            <div class="item">
-              <a onclick="ga('send', 'event', 'Homepage', 'Euro2008', 'Click on link (Exemplos - Euro 2008)');" href="/wayback/20081023211542tf_/http://euro2008.publico.clix.pt/noticia.aspx?id=1333952"><img src="/img/espanhaEuro2008-e1488898061641.jpg" class="img-responsive center-block" alt="<fmt:message key='home.examples.spain'/>"></a>
-                <div class="text-center">
-                  <a onclick="ga('send', 'event', 'Homepage', 'Euro2008', 'Click on link (Exemplos - Euro 2008)');" href="/wayback/20081023211542tf_/http://euro2008.publico.clix.pt/noticia.aspx?id=1333952"><h5><fmt:message key='home.examples.spain'/></h5></a>
-                </div>
-            </div>
-            <div class="item">
-              <a onclick="ga('send', 'event', 'Homepage', 'Vasco Ribeiro', 'Click on link (Exemplos - Vasco Ribeiro)');" href="/wayback/20141029233410/http://www.ionline.pt/artigos/surf/vasco-ribeiro-campeao-mundial-surf-juniores"><img src="/img/vasco-12-ok-e1489775252953.jpg" class="img-responsive center-block" alt="<fmt:message key='home.examples.vasco'/>"></a>
-                <div class="text-center">
-                  <a onclick="ga('send', 'event', 'Homepage', 'Vasco Ribeiro', 'Click on link (Exemplos - Vasco Ribeiro)');" href="/wayback/20141029233410/http://www.ionline.pt/artigos/surf/vasco-ribeiro-campeao-mundial-surf-juniores"><h5><fmt:message key='home.examples.vasco'/></h5></a>
-                </div>
-            </div> 
-            <div class="item">
-              <a onclick="ga('send', 'event', 'Homepage', 'Portugal Tenis Mesa', 'Click on link (Exemplos - Portugal Tenis Mesa)');" href="/wayback/20150101012504/http://www.maisfutebol.iol.pt/modalidades/outros-desportos/ultima-hora-portugal-e-campeao-da-europa-de-tenis-de-mesa"><img src="/img/portugalTenisMesa.png" class="img-responsive center-block" alt="<fmt:message key='home.examples.tableTennis'/>"></a>
-                <div class="text-center">
-                  <a onclick="ga('send', 'event', 'Homepage', 'Portugal Tenis Mesa', 'Click on link (Exemplos - Portugal Tenis Mesa)');" href="/wayback/20150101012504/http://www.maisfutebol.iol.pt/modalidades/outros-desportos/ultima-hora-portugal-e-campeao-da-europa-de-tenis-de-mesa"><h5><fmt:message key='home.examples.tableTennis'/></h5></a>
-                </div>
-            </div>                         
-            </div>
-            <!-- Controls or next and prev buttons -->
-            <a class="left carousel-control" href="#my-slider" role="button" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="right carousel-control" href="#my-slider" role="button" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right"></span>
-              <span class="sr-only">Next</span>
-            </a>
-
-          </div>
-        </div>
     </div>
 
 <%@include file="include/analytics.jsp" %>

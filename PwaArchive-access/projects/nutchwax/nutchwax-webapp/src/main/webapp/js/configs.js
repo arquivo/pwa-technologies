@@ -20,7 +20,7 @@ $(document).ready( function() {
 	$(function() {
         var min = minDate;
         var max = maxDate; 
-
+/*
                         $('#dateStart_top, #dateStart_bottom').datepicker(
                                 $.extend({
                                         changeMonth: true,
@@ -56,7 +56,7 @@ $(document).ready( function() {
                                         buttonText: 'Calendário - data final'
                 				})
                         );
-
+*/
                         $(".ui-datepicker-trigger").mouseover(function() {
                                 $(this).css('cursor','pointer');
                         });
