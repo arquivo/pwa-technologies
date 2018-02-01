@@ -26,14 +26,17 @@ import org.apache.nutch.parse.ParseText;
 /** Service that returns the content of a hit. */
 public interface HitContent extends Closeable {
   /** Returns the content of a hit document. */
-  byte[] getContent(HitDetails details) throws IOException;
+  byte[] getContent(HitDetails detail) throws IOException;
 
   /** Returns the ParseData of a hit document. */
   ParseData getParseData(HitDetails details) throws IOException;
 
   /** Returns the ParseText of a hit document. */
   ParseText getParseText(HitDetails details) throws IOException;
-
+  
+  /** Returns the ParseText of a hit document. */
+  public ParseText[] getParseText(HitDetails[] hits) throws IOException;
+  
   /** Returns the fetch date of a hit document. */
   long getFetchDate(HitDetails details) throws IOException;
 

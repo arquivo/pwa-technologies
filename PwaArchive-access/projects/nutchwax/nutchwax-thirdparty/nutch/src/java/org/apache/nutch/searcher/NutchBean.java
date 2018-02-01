@@ -118,8 +118,7 @@ public class NutchBean
         if (fs.exists(servers)) {
             LOG.info("searching servers in " + servers);            
             init(new DistributedSearch.Client(servers, conf));
-        } 
-        else {
+        } else {
             init(new Path(dir, "index"), new Path(dir, "indexes"), new Path(
                     dir, "segments"), new Path(dir, "linkdb"), blacklistFile);
         }
@@ -542,6 +541,10 @@ public class NutchBean
 
   public ParseText getParseText(HitDetails hit) throws IOException {
     return content.getParseText(hit);
+  }
+  
+  public ParseText[] getParseText(HitDetails[] hits) throws IOException {
+    return content.getParseText(hits);
   }
 
   public String[] getAnchors(HitDetails hit) throws IOException {

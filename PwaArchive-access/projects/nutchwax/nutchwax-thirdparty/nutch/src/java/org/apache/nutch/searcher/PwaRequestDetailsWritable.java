@@ -124,7 +124,7 @@ public class PwaRequestDetailsWritable implements Writable {
     	    }
     	}
     	
-    	for (int i=0;i<arrSize;i++) {    		
+    	for (int i=0;i<arrSize;i++) {   		
     		int indexDocNo = in.readInt();              // read indexDocNo
             WritableComparable sortValue = null;
     		try {

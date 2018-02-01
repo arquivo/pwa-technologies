@@ -59,6 +59,8 @@ import org.apache.hadoop.mapred.Reporter;
 import org.apache.nutch.global.Global;
 import org.apache.nutch.html.Entities;
 import org.apache.nutch.parse.Parse;
+import org.apache.nutch.parse.ParseText;
+import org.apache.nutch.searcher.HitContent;
 import org.apache.nutch.searcher.Summary.Fragment;
 import org.apache.nutch.util.NutchConfiguration;
 import org.apache.nutch.util.RFC3339Date;
@@ -108,7 +110,8 @@ public class TextSearchServlet extends HttpServlet {
     try {
       this.conf = NutchConfiguration.get( config.getServletContext( ) );
       bean = NutchBean.get( config.getServletContext( ), this.conf );
-
+      
+      
       functions = PwaFunctionsWritable.parse( this.conf.get( Global.RANKING_FUNCTIONS ) );            
       nQueryMatches=Integer.parseInt( this.conf.get( Global.MAX_FULLTEXT_MATCHES_RANKED ) );
       
@@ -169,7 +172,7 @@ public class TextSearchServlet extends HttpServlet {
 	  String startString = request.getParameter( "offset" );
 	  if ( startString != null )
 		  start = parseToIntWithDefault( startString , 0 );
-     
+	  
 	  // number of items to display
 	  String limitString = request.getParameter( "maxItems" );
 	  if ( limitString != null )
@@ -381,15 +384,16 @@ public class TextSearchServlet extends HttpServlet {
 		  return;
 	  }
 	  
-      int metadata = parseToIntWithDefault( metadataParam , -1 );
+      
       String totalItems = "";
       
-      if( metadata > 0 ) { //metadata query
+      if( metadataParam != null && !metadataParam.equals( "" ) ) { //metadata query
     	  
     	  LOG.info( "Metadata query" );
     	  //TODO Not yet.. 
     	  
-      }else if( isDefined( qURL ) ) { //URL query
+    	  
+      } else if( isDefined( qURL ) ) { //URL query
     	  LOG.info( "URL query => versionHistory = " + qURL );
     	  
     	  if( urlValidator( qURL ) ) { //valid URL
@@ -423,11 +427,12 @@ public class TextSearchServlet extends HttpServlet {
     	  String qRequest = queryString.toString( );
     	  query = Query.parse( qRequest , queryLang , this.conf );
     	  LOG.info( "query:" + qRequest + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & functions:" +  this.conf.get( Global.RANKING_FUNCTIONS ) + " & maxHitsPerVersion:1" );
-    	
+    	  
     	  //execute the query    
     	  try {
     		  int hitsPerVersion = 1;    		
     		  hits = bean.search(query, start + limit, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
+    		  
     	  } catch ( IOException e ) {
     		  LOG.warn("Search Error", e);    	
     		  hits = new Hits( 0 ,new Hit[ 0 ] );	
@@ -441,13 +446,44 @@ public class TextSearchServlet extends HttpServlet {
     	  HitDetails[ ] details = null;
     	  Hit[ ] show = null; 
     	  Summary[ ] summaries = null;
+    	  byte[][] contents = null;
+    	  ParseText[] parseTexts = null;
     	  if( hits != null && hits.getLength( ) > 0 ) {
-    		  
     		  show = hits.getHits( start , end-start );        
     		  details = bean.getDetails( show ); //get details
     		  summaries = bean.getSummary( details, query ); //get snippet
     		  
-    		  int[] positionIndex = new int[ show.length ];
+    		  try{
+    			parseTexts = bean.getParseText(details);
+   			   /*	if( contents == null ) {
+   			   		for( ParseText textP : parseTexts ) {
+   			   			if( textP != null ){
+   			   				LOG.info( "TextParse s = " + textP.getText() );
+   			   			} else
+   			   				LOG.info( "TextParse is null");
+   			   		}
+   			   	} else
+   			   		LOG.info( " parseTexts is null!!!!" );*/
+    		  } catch( IOException e ) {
+    			  LOG.error( e );
+    		  }
+    		  /*try{
+    			   contents = bean.getContent( details ); //TODO important!!!
+    			   if( contents == null ) {
+    				   for( byte[] content : contents ) {
+    					   if( content != null ){
+    						   String s = new String( content , "UTF-8" );
+    						   LOG.info( "Content s = " + s );
+    					   } else
+    						   LOG.info( "Content is null");
+    				   }
+    			   } else
+    				   LOG.info( " Contents is null!!!!" );
+    		  } catch( IOException e ) {
+    			  LOG.error( e );
+    		  }*/
+  	        
+    		  /*int[] positionIndex = new int[ show.length ];
     		  int indexPos = 0;
     		  Hit[] showCopy = show.clone( );
     		  for ( int i = 0; i < show.length; i++ ) { //dedupvalue fuck logic!!!
@@ -455,7 +491,7 @@ public class TextSearchServlet extends HttpServlet {
     				  positionIndex[ indexPos++ ] = i;
     				  showCopy[ i ] = null;
     				  String host = show[ i ].getDedupValue( );
-    				  LOG.info( "DedupValue = " + host );
+    				  LOG.debug( "DedupValue = " + host );
     				  for (int j = i + 1; j < show.length; j++ ) {
     					  if ( showCopy[ j ] != null && host.equals( showCopy[ j ].getDedupValue( ) ) ) {
     						  positionIndex[ indexPos++ ] = j;
@@ -464,11 +500,10 @@ public class TextSearchServlet extends HttpServlet {
     				  }
     			  }
     		  }
-    		  showCopy = null;
+    		  showCopy = null;*/
     	  }
 
-    	  
-    	  itens = luceneQueryProcessor( length, fields, details, request.getParameter( "details" ), show , summaries );
+    	  itens = luceneQueryProcessor( length, fields, details, request.getParameter( "details" ), show , summaries, query, parseTexts );
       
       }
      
@@ -677,7 +712,7 @@ public class TextSearchServlet extends HttpServlet {
 
     	  HitDetails details = null;
     	  Hit show = null; 
-    	  LOG.info( "hits.length = " + hits.getLength( )+ " hits.total = " + hits.getTotal( ) );
+    	  //LOG.info( "hits.length = " + hits.getLength( )+ " hits.total = " + hits.getTotal( ) );
     	  if( hits != null && hits.getLength( ) > 0 ) {
     		  
     		  show = hits.getHit( 0 );        
@@ -737,7 +772,6 @@ public class TextSearchServlet extends HttpServlet {
     	  if( hits.getTotal( ) == 0 || hits.getLength( ) == 0 )
     		  LOG.info( "[URLSearch] query[" + query.toString( ) + "] ts[" + item.getTstamp( ) + "] url[" + itemcdx.getUrl( ) + "]  0 hits." ); 
     	  
-    	  
     	  //LOG.info( "[URLSearch] total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
     	  
 		  if( item != null )
@@ -747,7 +781,7 @@ public class TextSearchServlet extends HttpServlet {
   }
   
 
-  private List< Item > luceneQueryProcessor( int length, String[ ] fields, HitDetails[ ] details, String detailsCheck, Hit[ ] show, Summary[ ] summaries ){
+  private List< Item > luceneQueryProcessor( int length, String[ ] fields, HitDetails[ ] details, String detailsCheck, Hit[ ] show, Summary[ ] summaries, Query query, ParseText[ ] parseTexts ){
 	  
 	  Item item = null;
 	  List< Item > items = new ArrayList< Item >( );
@@ -760,7 +794,6 @@ public class TextSearchServlet extends HttpServlet {
 		  	Hit hit = show[ i ];
 	        HitDetails detail = details[ i ];
 	        item = new Item( );
-	        
 	        String title = detail.getValue( "title" );
 	        String url 	= detail.getValue( "url" );
 	        String date = detail.getValue( "tstamp" );
@@ -768,7 +801,7 @@ public class TextSearchServlet extends HttpServlet {
 	        	item.setTitle( title );	
 	        if( FieldExists( fields , "originalURL" ) )
 	        	item.setSource( url );	
-	        
+
 	        Date datet = null;
 	        String tstamp = "";
     		try{
@@ -817,7 +850,7 @@ public class TextSearchServlet extends HttpServlet {
             	item.setEncoding( encoding );
             String collection = detail.getValue( "collection" );
             if( FieldExists( fields , "collection" ) )
-            	item.setEncoding( collection );
+            	item.setCollection( collection );
             
             if( url != null ) {
             	String urlNoFrame = "http://".concat( "arquivo.pt" ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
@@ -837,11 +870,11 @@ public class TextSearchServlet extends HttpServlet {
             		item.setNoFrameLink( urlNoFrame );
             	
             	// Build the summary
-                if( summaries != null  ) {
+                if( summaries != null ) {
                 	StringBuffer sum = new StringBuffer( );
                     Fragment[ ] fragments = summaries[ i ].getFragments( );
-                    for (int j=0; j<fragments.length; j++) {
-                      LOG.info( "Fragment["+j+"] Text[" + fragments[ j ].getText( ) + "] isHighlight[" + fragments[ j ].isHighlight( ) + "] " );
+                    for ( int j = 0 ; j < fragments.length ; j++ ) {
+                      //LOG.info( "Fragment["+j+"] Text[" + fragments[ j ].getText( ) + "] isHighlight[" + fragments[ j ].isHighlight( ) + "] " );
                       if ( fragments[ j ].isHighlight( ) ) {
                         sum.append( "<em>" )
                            .append( Entities.encode( fragments[ j ].getText( ) ) )
@@ -853,16 +886,24 @@ public class TextSearchServlet extends HttpServlet {
                       }
                     }
                     String summary = sum.toString( );
-                    item.setSnippetForTerms( summary );
-                    LOG.info( "URL[" + item.getSource( ) + "] tstamp[" + item.getTstamp( ) + "] summary[" + summary + "]" );
+                    if( FieldExists( fields , "snippetForTerms" ) )
+                    	item.setSnippetForTerms( summary );
+                    //LOG.info( "URL[" + item.getSource( ) + "] tstamp[" + item.getTstamp( ) + "] summary[" + summary + "]" );
                 } else {
-                	item.setSnippetForTerms( "" );
+                	if( FieldExists( fields , "snippetForTerms" ) )
+                		item.setSnippetForTerms( "" );
+                }
+                
+                if( parseTexts != null ) {
+                	String parseText = parseTexts[ i ].getText( );
+                	if( parseText != null && FieldExists( fields , "textContent" ) )
+                		item.setParseText( parseText );
+                } else {
+                	if( FieldExists( fields , "textContent" ) )
+                		item.setParseText( "" );
                 }
             }
             
-           /* String itemText = "NOT IMPLEMENTED"; //TODO not implemented
-            if( FieldExists( fields , "ItemText" ) )
-            	item.setItemText( itemText );*/
             
             if( detailsCheck != null && detailsCheck.equals( "true" ) ) {
             	int idDoc = hit.getIndexDocNo( );

@@ -12,11 +12,11 @@ import org.apache.nutch.util.NutchConfiguration;
 
 
 /**
- * Class that encapsulates parameters for RPC communication to request summary for a set of hits
- * @author Miguel Costa
+ * Class that encapsualtes parameters for RPC communication to request content for a set of hits
+ * @author jnobre
  */
-public class PwaRequestSummaryWritable implements Writable {
-	
+public class PwaContentDetailsWritable implements Writable {
+
 	/** serial id */
 	private static final long serialVersionUID = 1L;
 
@@ -26,11 +26,10 @@ public class PwaRequestSummaryWritable implements Writable {
 	/** hit details array */
 	private HitDetails[] hitDetails=null;
 	
-	
 	/**
 	 * Constructor
 	 */
-	public PwaRequestSummaryWritable() {		
+	public PwaContentDetailsWritable() {		
 	}
 	
 	/**
@@ -98,6 +97,7 @@ public class PwaRequestSummaryWritable implements Writable {
     		hitDetails[i]=HitDetails.read(in);
     	}       	 
     }    
+      
     
     /**
      * Get instance
@@ -105,10 +105,10 @@ public class PwaRequestSummaryWritable implements Writable {
      * @return
      * @throws IOException
      */	
-    public static PwaRequestSummaryWritable read(DataInput in) throws IOException {
-    	PwaRequestSummaryWritable w = new PwaRequestSummaryWritable();
+    public static PwaContentDetailsWritable read(DataInput in) throws IOException {
+    	PwaContentDetailsWritable w = new PwaContentDetailsWritable();
     	w.readFields(in);
     	return w;
-    }    
+    }   
 
-  }
+}

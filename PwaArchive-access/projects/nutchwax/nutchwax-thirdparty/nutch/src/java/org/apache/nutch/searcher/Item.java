@@ -25,11 +25,13 @@ public class Item {
 	@SerializedName( "snippet" )
 	private String snippetForTerms;
 	private String status;
+	private String collection;
+	@SerializedName( "textContent" )
+	private String parseText;
 	
 	//details
 	private String arcname;
 	private String arcoffset;
-	private String collection;
 	private String idDoc;
 	private String index;
 	private String segment;
@@ -146,30 +148,29 @@ public class Item {
 	public void setNoFrameLink(String noFrameLink) {
 		this.noFrameLink = noFrameLink;
 	}
-
 	public String getMimeType() {
 		return mimeType;
 	}
-
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
 	}
-
 	public String getSnippetForTerms() {
 		return snippetForTerms;
 	}
-
 	public void setSnippetForTerms(String snippetForTerms) {
 		this.snippetForTerms = snippetForTerms;
 	}
-	
-
 	public String getStatus() {
 		return status;
 	}
-
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getParseText() {
+		return parseText;
+	}
+	public void setParseText(String parseText) {
+		this.parseText = parseText;
 	}
 
 	@Override
@@ -177,9 +178,10 @@ public class Item {
 		return "Item [key=" + key + ", title=" + title + ", source=" + source + ", link=" + link + ", tstamp=" + tstamp
 				+ ", contentLength=" + contentLength + ", digest=" + digest + ", mimeType=" + mimeType
 				+ ", screenShotLink=" + screenShotLink + ", itemText=" + itemText + ", date=" + date + ", encoding="
-				+ encoding + ", noFrameLink=" + noFrameLink + ", snippetForTerms=" + snippetForTerms + ", arcname="
-				+ arcname + ", arcoffset=" + arcoffset + ", collection=" + collection + ", idDoc=" + idDoc + ", index="
-				+ index + ", segment=" + segment + ", status=" + status + "]";
+				+ encoding + ", noFrameLink=" + noFrameLink + ", snippetForTerms=" + snippetForTerms + ", status="
+				+ status + ", collection=" + collection + ", parseText=" + parseText + ", arcname=" + arcname
+				+ ", arcoffset=" + arcoffset + ", idDoc=" + idDoc + ", index=" + index + ", segment=" + segment + "]";
 	}
+	
 	
 }

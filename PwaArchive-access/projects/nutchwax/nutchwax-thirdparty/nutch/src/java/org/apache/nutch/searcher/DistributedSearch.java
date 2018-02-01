@@ -158,6 +158,9 @@ public class DistributedSearch {
     private static final Method DETAILS_FIELDS; // returns only the fields required. Returns multiple hits in only one Hadoop request, contrary to DETAILS 
     private static final Method SUMMARY;
     private static final Method SUMMARY_MULTIPLE; // returns multiple hits in only one Hadoop request, contrary to SUMMARY
+    private static final Method CONTENT;
+    //private static final Method CONTENT_MULTIPLE;
+    private static final Method PARSE_TEXT;
     static {
       try {
         GET_SEGMENTS = Protocol.class.getMethod
@@ -176,6 +179,10 @@ public class DistributedSearch {
           ("getSummary", new Class[] { HitDetails.class, Query.class});
         SUMMARY_MULTIPLE = Protocol.class.getMethod
           ("getSummary", new Class[] { PwaRequestSummaryWritable.class});
+        CONTENT = Protocol.class.getMethod
+          ("getContent", new Class[] { HitDetails.class } );
+        PARSE_TEXT = Protocol.class.getMethod
+          ("getParseText", new Class[] { HitDetails.class } );
       } catch (NoSuchMethodException e) {
         throw new RuntimeException(e);
       }
@@ -373,6 +380,7 @@ public class DistributedSearch {
     private Protocol getRemote(HitDetails hit) throws IOException {
       InetSocketAddress address =
         (InetSocketAddress)segmentToAddress.get(hit.getValue("segment"));
+      LOG.info( " segmentsToAddess =  " + hit.getValue( "segment" ) );
       return (Protocol)RPC.getProxy(Protocol.class, versionID, address, conf);
     }
 
@@ -444,10 +452,12 @@ public class DistributedSearch {
     }    
 
     public Summary getSummary(HitDetails hit, Query query) throws IOException {
-      return getRemote(hit).getSummary(hit, query);
+    	LOG.info( "Summary with Remote!!" );
+    	return getRemote(hit).getSummary(hit, query);
     }
 
     public Summary[] getSummary(HitDetails[] hits, Query query) throws IOException {
+      LOG.info( "Summary with RPC call!!" );
       InetSocketAddress[] addrs = new InetSocketAddress[hits.length];
       Object[][] params = new Object[hits.length][2];
       for (int i = 0; i < hits.length; i++) {
@@ -462,6 +472,7 @@ public class DistributedSearch {
     
     /* BUG nutchwax 0000616 */
     public Summary[] getSummary(PwaRequestSummaryWritable summaries) throws IOException {
+    	LOG.info( "Summary with PwaRequestSummaryWritable!!" );
     	HitDetails[] hitDetails=summaries.getHitDetails();      
     	Query query=summaries.getQuery();
     	
@@ -516,12 +527,41 @@ public class DistributedSearch {
       return getRemote(hit).getContent(hit);
     }
     
+    
+    public byte[][] getContent(HitDetails[] hits) throws IOException {
+        LOG.info( "Content with RPC call!!" );
+        InetSocketAddress[] addrs = new InetSocketAddress[hits.length];
+        Object[][] params = new Object[hits.length][1];
+        for (int i = 0; i < hits.length; i++) {
+          HitDetails hit = hits[i];
+          addrs[i] =
+            (InetSocketAddress)segmentToAddress.get(hit.getValue("segment"));
+          params[i][0] = hit;
+        }
+        return (byte[][])RPC.call(CONTENT, params, addrs, conf);
+     }
+    
+    
     public ParseData getParseData(HitDetails hit) throws IOException {
       return getRemote(hit).getParseData(hit);
     }
       
     public ParseText getParseText(HitDetails hit) throws IOException {
-      return getRemote(hit).getParseText(hit);
+    	LOG.info( "ParseText getParseText" );
+    	return getRemote(hit).getParseText(hit);
+    }
+    
+    public ParseText[] getParseText(HitDetails[] hits) throws IOException {
+    	LOG.info( "ParseText RPC call" );
+    	InetSocketAddress[] addrs = new InetSocketAddress[hits.length];
+        Object[][] params = new Object[hits.length][1];
+        for (int i = 0; i < hits.length; i++) {
+          HitDetails hit = hits[i];
+          addrs[i] =
+            (InetSocketAddress)segmentToAddress.get(hit.getValue("segment"));
+          params[i][0] = hit;
+        }
+        return (ParseText[])RPC.call( PARSE_TEXT, params, addrs, conf);
     }
       
     public String[] getAnchors(HitDetails hit) throws IOException {
@@ -560,7 +600,7 @@ public class DistributedSearch {
       for (int i = 0; i < hits.getLength(); i++) {
         System.out.println(" "+i+" "+ client.getDetails(hits.getHit(i)));
       }
-
+      
     }
 
     public void run() {           

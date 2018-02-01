@@ -26,6 +26,8 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.fs.*;
 import org.apache.nutch.protocol.*;
 import org.apache.nutch.parse.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.mapred.lib.*;
@@ -34,10 +36,12 @@ import org.apache.nutch.crawl.*;
 /** Implements {@link HitSummarizer} and {@link HitContent} for a set of
  * fetched segments. */
 public class FetchedSegments implements HitSummarizer, HitContent {
-
+	
+  public static final Log LOG = LogFactory.getLog(FetchedSegments.class);
+	
   private static class Segment implements Closeable {
     
-    private static final Partitioner PARTITIONER = new HashPartitioner();
+	private static final Partitioner PARTITIONER = new HashPartitioner();
 
     private FileSystem fs;
     private Path segmentDir;
@@ -79,10 +83,14 @@ public class FetchedSegments implements HitSummarizer, HitContent {
     }
 
     public ParseText getParseText(Text url) throws IOException {
+      
       synchronized (this) {
-        if (parseText == null)
-          parseText = getReaders(ParseText.DIR_NAME);
+        if (parseText == null){
+           	parseText = getReaders(ParseText.DIR_NAME);
+           	LOG.info( "ParseText.DIR_NAME ["+ParseText.DIR_NAME+"] " );
+        }
       }
+      LOG.info( "Segment -> getParseText ["+url+"] parseText["+parseText+"]" );
       return (ParseText)getEntry(parseText, url, new ParseText());
     }
     
@@ -126,7 +134,7 @@ public class FetchedSegments implements HitSummarizer, HitContent {
 //             	segments.put(segmentDir.getName(), new Segment(fs, segmentDir));
 //             }
             segments.put(segmentDir.getName(), new Segment(fs, segmentDir, conf));
-
+            
         }
     }
   }
@@ -138,7 +146,7 @@ public class FetchedSegments implements HitSummarizer, HitContent {
   public byte[] getContent(HitDetails details) throws IOException {
     return getSegment(details).getContent(getUrl(details));
   }
-
+  
   public ParseData getParseData(HitDetails details) throws IOException {
     return getSegment(details).getParseData(getUrl(details));
   }
@@ -149,12 +157,23 @@ public class FetchedSegments implements HitSummarizer, HitContent {
   }
 
   public ParseText getParseText(HitDetails details) throws IOException {
-    return getSegment(details).getParseText(getUrl(details));
+	LOG.info( "getParseText URL => " + getUrl( details ) );
+	LOG.info( "getSegment detail => " + getSegment( details ).toString( ) );
+	try{
+		ParseText text = getSegment(details).getParseText( getUrl( details ) );
+	} catch( IOException e ){
+		LOG.info( "URL exception["+getUrl( details )+"] e= ", e );
+	}
+	
+	return getSegment(details).getParseText( getUrl( details ) );
   }
-
+  
+  public String getContentText(HitDetails details) throws IOException {
+	return getSegment(details).getParseText(getUrl(details)).getText();
+  }
+  
   public Summary getSummary(HitDetails details, Query query)
     throws IOException {
-
     if (this.summarizer == null) { return new Summary(); }
     String text = getSegment(details).getParseText(getUrl(details)).getText();
     return this.summarizer.getSummary(text, query);
@@ -213,8 +232,56 @@ public class FetchedSegments implements HitSummarizer, HitContent {
   	  return getSummary(summaries.getHitDetails(), summaries.getQuery());
   }
   /* BUG nutchwax 0000616 */
+  
+  private class ParseTextThread extends Thread {
+	    private HitDetails details;
+
+	    private ParseText parseText;
+	    private Throwable throwable;
+
+	    public ParseTextThread(HitDetails details) {
+	      this.details = details;
+	    }
+
+	    public void run() {
+	      try {
+	        this.parseText = getParseText(details);
+	      } catch (Throwable throwable) {
+	        this.throwable = throwable;
+	      }
+	    }
+
+  }
 
 
+  /**
+   * @jnobre - get all content
+   */
+  public ParseText[] getParseText(HitDetails[] details) throws IOException {
+	  ParseTextThread[ ] threads = new ParseTextThread[ details.length ];
+	    for ( int i = 0; i < threads.length; i++ ) {
+	      threads[ i ] = new ParseTextThread( details[ i ] );
+	      threads[ i ].start( );
+	    }
+
+	    ParseText[] results = new ParseText[details.length];
+	    for (int i = 0; i < threads.length; i++) {
+	      try {
+	        threads[ i ].join( );
+	      } catch ( InterruptedException e ) {
+	        throw new RuntimeException( e );
+	      }
+	      if ( threads[ i ].throwable instanceof IOException ) {
+	        throw ( IOException )threads[ i ].throwable;
+	      } else if ( threads[ i ].throwable != null ) {
+	        throw new RuntimeException(threads[i].throwable);
+	      }
+	      results[i] = threads[i].parseText;
+	    }
+	    return results;
+  }
+		  
+  
   private Segment getSegment(HitDetails details) {
     return (Segment)segments.get(details.getValue("segment"));
   }
@@ -229,5 +296,6 @@ public class FetchedSegments implements HitSummarizer, HitContent {
       ((Segment) iterator.next()).close();
     }
   }
+
   
 }

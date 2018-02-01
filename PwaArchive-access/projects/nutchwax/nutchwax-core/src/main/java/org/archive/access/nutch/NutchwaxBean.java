@@ -15,7 +15,7 @@ import org.apache.nutch.searcher.NutchBean;
 import org.apache.nutch.searcher.Query;
 import org.apache.nutch.searcher.Summary;
 import org.apache.nutch.searcher.PwaRequestSummaryWritable;
-
+import org.apache.nutch.parse.ParseText;
 
 /**
   * Proxy that allows us intercept getSummary so we can change key used.
@@ -49,6 +49,21 @@ public class NutchwaxBean extends NutchBean
     return bean;
   }
 
+  public ParseText[] getParseText(HitDetails[] hits) throws IOException {
+    // Rewrite details so that URL is not just URL when we go to get Summary.
+    // Its compound of collection and url. Alternative is override of
+    // NutchBean so we can add in our own Summarizer. NutchBean needs to be
+    // made more amenable to subclassing. Should be setters for detailers,
+    // etc. so can supply alternatives (Or pass in a constructor).
+	  HitDetails[] amendedHits = new HitDetails[hits.length];
+    
+	  for (int j=0;j<hits.length;j++) {
+		  amendedHits[j] = getCollectionQualifiedHitDetails(hits[j]);
+	  }
+    
+	  return super.getParseText(amendedHits);
+  }
+  
   public Summary[] getSummary(HitDetails[] hits, Query query) throws IOException {
     // Rewrite details so that URL is not just URL when we go to get Summary.
     // Its compound of collection and url. Alternative is override of
