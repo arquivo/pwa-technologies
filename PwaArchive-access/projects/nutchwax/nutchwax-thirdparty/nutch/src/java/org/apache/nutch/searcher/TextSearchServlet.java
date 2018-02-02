@@ -79,12 +79,23 @@ import javax.xml.parsers.*;
 
 
 /**
- * TextSearch API Back-End - Full Search. Responsible for processing the input parameters, sending a query to the QueryServers, and responding in json.
+ * TextSearch API Back-End - Full Search & URL Search. 
+ * Servlet responsible for returning a json object with the results of the query received in the parameter.
+ * 
  * @author jnobre
- *
+ * @version 1.0
  */
 public class TextSearchServlet extends HttpServlet {
-  
+  /**
+   * Class responsible for:
+   * 	Search the indexes lucene, through the calls to the queryServers.
+   *	Search by URL in CDX indexes, through the CDXServer API.
+   *
+   * Documentation: https://github.com/arquivo/pwa-technologies/wiki/APIs - Full-text search: TestSearch based Arquivo.pt API
+   * (The code indentation isn't adequate. Consequence of the NutchWax structure)
+   */
+	
+	
   private static final long serialVersionUID = 1L;
   private static final Log LOG = LogFactory.getLog( TextSearchServlet.class );  
   private static final Map NS_MAP = new HashMap( ); 
@@ -95,17 +106,23 @@ public class TextSearchServlet extends HttpServlet {
   Calendar DATE_END = new GregorianCalendar();
   private static final String noFrame = "/noFrame/replay";
   private static final String screenShotURL = "/screenshot/?url";
-  static {
-    NS_MAP.put( "serviceName" , "Arquivo.pt - the Portuguese web-archive" );
-    NS_MAP.put( "link" , "http://arquivo.pt" );
-  }  
   private NutchBean bean;
   private Configuration conf;
   
+  static {
+    NS_MAP.put( "serviceName" , "Arquivo.pt - the Portuguese web-archive" );
+    NS_MAP.put( "link" , "http://arquivo.pt" ); 
+  }  
+  
   private static String[ ]  fieldsReponse = {"versionId", "title", "originalURL", "linkToArchive",
 		  "tstamp", "contentLength", "digest", "primaryType", "subType", "downloadImage",
-		  "date", "encoding", "noFrameLink"};
+		  "date", "encoding", "noFrameLink"}; //input parameters
   
+  /**
+   * HttpServlet init method.
+   * @param config: nutchwax configuration
+   * @return void
+   */
   public void init( ServletConfig config ) throws ServletException {
     try {
       this.conf = NutchConfiguration.get( config.getServletContext( ) );
@@ -123,7 +140,14 @@ public class TextSearchServlet extends HttpServlet {
       throw new ServletException( e );
     }
   }
-
+  
+  
+  /**
+   * HttpServlet doGet method
+   * @param request - type HttpServletRequest
+   * @param response - type HttpServletResponse
+   * 
+   */
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
 
@@ -135,6 +159,15 @@ public class TextSearchServlet extends HttpServlet {
 	  Hits hits;
 	  LuceneParser luceneProcessor = new LuceneParser( );
 	  MessageDigest md = null;
+	  String urlQuery 		= "";
+	  String queryLang 		= "";
+	  String versionHistory = "";
+	  String metadataParam 	= "";
+	  String qURL 			= "";
+	  String qExactURL 		= "";
+	  String[ ] urlParams 	= null;
+	  int hitsPerDup = 2;
+	  
 	  // get parameters from request
 	  request.setCharacterEncoding("UTF-8");
 	  StringBuilder queryString = new StringBuilder( );
@@ -149,23 +182,17 @@ public class TextSearchServlet extends HttpServlet {
 	  if ( q == null )
 		  q = "";
 	  queryString.append( q );
-	  
 	  LOG.info( "[doGet] q=" + q );
 	  
-	  String urlQuery = URLEncoder.encode( q , "UTF-8" );
-	  urlQuery = URLEncoder.encode( q , "UTF-8" );
+	  urlQuery = URLEncoder.encode( q , "UTF-8" ); //Encode query  in utf8
 	  
-	  String queryLang 		= request.getParameter( "lang" ); // the query language
-	  String versionHistory = request.getParameter( "versionHistory" ); // get versiobnHistory parameter
-	  String metadataParam  = request.getParameter( "metadata" ); //get metadata parameter
+	  queryLang 	 = request.getParameter( "lang" ); // the query language
+	  versionHistory = request.getParameter( "versionHistory" ); // get versiobnHistory parameter
+	  metadataParam  = request.getParameter( "metadata" ); //get metadata parameter
 	  
-	  String qURL = "";
-	  String qExactURL = "";
-	  String[ ] urlParams = null;
 	  if( isDefined( versionHistory ) ) {
 		 urlParams = versionHistory.split( " " );
 		 qURL = urlParams[ 0 ];
-		 
 	  }
 	  
 	  // first hit to display
@@ -181,14 +208,12 @@ public class TextSearchServlet extends HttpServlet {
 	  if( limit > 2000 )
 		  limit = 2000;
 	  
-	  int hitsPerDup = 2;
-	  
 	  String limitPerSiteS = request.getParameter( "limitPerSite" );
 	  if( limitPerSiteS != null )
 		  hitsPerDup = parseToIntWithDefault( limitPerSiteS , 2 );
 	  
 	  
-	  /*****************    'sort' param    ***************************/
+	  //Define 'sort' param 
 	  String sortParameter = request.getParameter("sort"); //relevance or new or old
 	  String sort;
 	  boolean reverse = false;
@@ -204,9 +229,9 @@ public class TextSearchServlet extends HttpServlet {
 		  sortParameter = "relevance";
 	  }
 	 
-	  // De-Duplicate handling.  Look for duplicates field and for how many
+	  // De-Duplicate handling. Look for duplicates field and for how many
       // duplicates per results to return. Default duplicates field is 'site'
-      // and duplicates per results default is '2'.url
+      // and duplicates per results default is '2'.
       String dedupField = "site";
       
       //If 'hitsPerSite' present, use that value.
@@ -226,6 +251,7 @@ public class TextSearchServlet extends HttpServlet {
       
       LOG.info( "[doGet] dtstart["+dateStart+"] dtend["+dateEnd+"]" );
       
+      //Set the timestamp based on the input parameters from and to
       if( dateStart == null && dateEnd != null ){
     	  dateStart = "19960101000000"; /*If datestart is not specified set it to 1996*/
       }
@@ -234,7 +260,7 @@ public class TextSearchServlet extends HttpServlet {
     	  dateEnd = FORMAT.format( dateEND.getTime( ) );
       }
       
-      if (dateStart!=null && dateEnd!=null) {
+      if (dateStart!=null && dateEnd!=null) { //Logic to accept pages with yyyy and yyyyMMddHHmmss format 
 
     	  try {
     		  DateFormat dOutputFormatTimestamp = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -285,16 +311,11 @@ public class TextSearchServlet extends HttpServlet {
     		  LOG.error( "Parse Exception: " , e );
     	  } catch ( IndexOutOfBoundsException e ) {
     		  // ignore
-    		  LOG.error( "IndexOutOfBoundsException: " , e );
+    		  LOG.error( "Parse Exception: " , e );
     	  }    	
       }
       
-      // To support querying textSearch by  url
-      // Lucene index format
-      String queryStringTextSearchWayback=null;
-      boolean isOpensearhWayback=false;
-      String urlQueryParam=null;
-      
+      //Full-text search on specified web site only
       String siteParameter = request.getParameter( "siteSearch" );
       if( siteParameter == null )
     	  siteParameter = "";
@@ -306,7 +327,8 @@ public class TextSearchServlet extends HttpServlet {
     	  site = site.replaceAll( "site:https://" , "site:" );
     	  queryString.append( site );
       }
-   
+      
+      //Full-text search on specified type documents
       String typeParameter = request.getParameter( "type" );
       if( typeParameter == null )
     	  typeParameter = "";
@@ -314,11 +336,14 @@ public class TextSearchServlet extends HttpServlet {
     	  String type = " type:".concat( typeParameter );
     	  queryString.append( type );
       }
+      
+      //Pretty print in output message 
       String prettyPrintParameter = request.getParameter( "prettyPrint" );
       boolean prettyOutput = false;
       if( prettyPrintParameter != null && prettyPrintParameter.equals( "true" ) ) 
     	  prettyOutput = true;
       
+      //fields parameter
       String fieldsParam = "";
 	  if( request.getParameter( "fields" ) != null )
 		  fieldsParam = request.getParameter( "fields" );
@@ -327,13 +352,14 @@ public class TextSearchServlet extends HttpServlet {
 		  fields = fieldsParam.split( "," );
 	  
 	  List< Item > itens = new ArrayList< Item >( );
-	  
 	  TextSearchResponse responseObject = new TextSearchResponse( );
 	  TextSearchRequestParameters requestParameters = new TextSearchRequestParameters( );
 	  
+	  //Set Service Name and link to service in response 
 	  responseObject.setServiceName( ( String ) NS_MAP.get( "serviceName" ) );
 	  responseObject.setLinkToService( ( String ) NS_MAP.get( "link" ) );
 	  
+	  //Set input parameters to send in response
 	  requestParameters.setLimit( limit );
 	  requestParameters.setLimitPerSite( hitsPerDup );
 	  requestParameters.setStart( start );
@@ -352,7 +378,7 @@ public class TextSearchServlet extends HttpServlet {
 		  if( requestParameters != null )
 			  responseObject.setRequestParameters( requestParameters );
 		  
-    	  // generate json results
+		  // generate json results
 		  if( itens != null && itens.size( ) > 0 )
 			  responseObject.setItens( itens );
 		  else
@@ -384,20 +410,18 @@ public class TextSearchServlet extends HttpServlet {
 		  return;
 	  }
 	  
-      
       String totalItems = "";
       
       if( metadataParam != null && !metadataParam.equals( "" ) ) { //metadata query
     	  
     	  LOG.info( "Metadata query" );
-    	  //TODO Not yet.. 
-    	  
+    	  //TODO Not implemented
     	  
       } else if( isDefined( qURL ) ) { //URL query
     	  LOG.info( "URL query => versionHistory = " + qURL );
     	  
     	  if( urlValidator( qURL ) ) { //valid URL
-    		  if( dateStart == null && dateEnd == null ){ //if date is null
+    		  if( dateStart == null && dateEnd == null ) { //if date is null
     			  dateStart = "19960101000000";
     			  Calendar dateEND = currentDate( );
     			  dateEnd = FORMAT.format( dateEND.getTime( ) );
@@ -416,14 +440,22 @@ public class TextSearchServlet extends HttpServlet {
     			  totalItems = String.valueOf( resultsCDX.size( ) );
     		  else 
     			  totalItems = "0";
-    		  itens = URLQueryProcessor( resultsCDX, qURL, dateStart, dateEnd, fields, limit, start, qExactURL, queryLang, hitsPerDup, dedupField, sort, reverse );
-
+    		  
+    		  
+    		  itens = getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse );
+    	  
     	  }
 
       } else { //full-text query
     	  LOG.info( "Full-text Query" );
     	  /** Lucene index fields **/
     	  Query query = null;
+    	  HitDetails[ ] details = null;
+    	  Hit[ ] show = null; 
+    	  Summary[ ] summaries = null;
+    	  byte[][] contents = null;
+    	  ParseText[] parseTexts = null;
+    	  
     	  String qRequest = queryString.toString( );
     	  query = Query.parse( qRequest , queryLang , this.conf );
     	  LOG.info( "query:" + qRequest + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & functions:" +  this.conf.get( Global.RANKING_FUNCTIONS ) + " & maxHitsPerVersion:1" );
@@ -443,11 +475,6 @@ public class TextSearchServlet extends HttpServlet {
     	  int end = ( int )Math.min( hits.getLength( ), start + limit );
     	  int length = end-start;
 
-    	  HitDetails[ ] details = null;
-    	  Hit[ ] show = null; 
-    	  Summary[ ] summaries = null;
-    	  byte[][] contents = null;
-    	  ParseText[] parseTexts = null;
     	  if( hits != null && hits.getLength( ) > 0 ) {
     		  show = hits.getHits( start , end-start );        
     		  details = bean.getDetails( show ); //get details
@@ -455,52 +482,9 @@ public class TextSearchServlet extends HttpServlet {
     		  
     		  try{
     			parseTexts = bean.getParseText(details);
-   			   /*	if( contents == null ) {
-   			   		for( ParseText textP : parseTexts ) {
-   			   			if( textP != null ){
-   			   				LOG.info( "TextParse s = " + textP.getText() );
-   			   			} else
-   			   				LOG.info( "TextParse is null");
-   			   		}
-   			   	} else
-   			   		LOG.info( " parseTexts is null!!!!" );*/
     		  } catch( IOException e ) {
     			  LOG.error( e );
     		  }
-    		  /*try{
-    			   contents = bean.getContent( details ); //TODO important!!!
-    			   if( contents == null ) {
-    				   for( byte[] content : contents ) {
-    					   if( content != null ){
-    						   String s = new String( content , "UTF-8" );
-    						   LOG.info( "Content s = " + s );
-    					   } else
-    						   LOG.info( "Content is null");
-    				   }
-    			   } else
-    				   LOG.info( " Contents is null!!!!" );
-    		  } catch( IOException e ) {
-    			  LOG.error( e );
-    		  }*/
-  	        
-    		  /*int[] positionIndex = new int[ show.length ];
-    		  int indexPos = 0;
-    		  Hit[] showCopy = show.clone( );
-    		  for ( int i = 0; i < show.length; i++ ) { //dedupvalue fuck logic!!!
-    			  if ( showCopy[ i ] != null ) {
-    				  positionIndex[ indexPos++ ] = i;
-    				  showCopy[ i ] = null;
-    				  String host = show[ i ].getDedupValue( );
-    				  LOG.debug( "DedupValue = " + host );
-    				  for (int j = i + 1; j < show.length; j++ ) {
-    					  if ( showCopy[ j ] != null && host.equals( showCopy[ j ].getDedupValue( ) ) ) {
-    						  positionIndex[ indexPos++ ] = j;
-    						  showCopy[ j ] = null;
-    					  }
-    				  }
-    			  }
-    		  }
-    		  showCopy = null;*/
     	  }
 
     	  itens = luceneQueryProcessor( length, fields, details, request.getParameter( "details" ), show , summaries, query, parseTexts );
@@ -558,8 +542,9 @@ public class TextSearchServlet extends HttpServlet {
 		  
 		  if( totalItems != null )
 			  responseObject.setTotalItems( totalItems );
-		  /*if( sortParameter != null && !"".equals( sortParameter ) )
-			  requestParameters.setSort( sortParameter );*/
+		  
+		  if( sortParameter != null && !"".equals( sortParameter ) )
+			  requestParameters.setSort( sortParameter );
 		  
 		  if( q != null && !"".equals( q ) )
 			  requestParameters.setQueryTerms( q );
@@ -597,38 +582,35 @@ public class TextSearchServlet extends HttpServlet {
 		  out.print( jsonObject );
 		  out.flush( );
 
-
 	  } catch ( JsonParseException e ) {
 		  throw new ServletException( e );
 	  }
 	  
   }
   
-  
-  public List< Item > URLQueryProcessor( List< ItemCDX > resultsCDX, String qURL, String dateStart, String dateEnd, String[ ] fields, int limit, int start, String qExactURL, String queryLang, int hitsPerDup, String dedupField, String sort, boolean reverse ) {
-	  
-	  //TODO delete debug!!!
-	  /*LOG.info( "***** DEBUG PRINT -> CDX *****" );
-	  int counter = 0;
-	  for( ItemCDX cdx : resultsCDX ){
-		  counter++;
-		  LOG.info( "Cdx[" + counter + "]  URL[" + cdx.getUrl( ) + "] TSTAMP[" + cdx.getTimestamp( ) + "] MIME[" + cdx.getMime( ) + "]" );
-	  }
-	  LOG.info( "*****************************" );*/
-	  if( resultsCDX == null || resultsCDX.size( ) == 0 )
-		  return new ArrayList< Item >( );
-	  
-	  // Process the CDX index fields
-	  return getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse );
-  }
 
-
-  
+  /**
+   * Get the CDXServer values and insert into the final response
+   * @param resultsCDX
+   * @param fields
+   * @param qExactURL
+   * @param queryLang
+   * @param start
+   * @param limit
+   * @param hitsPerDup
+   * @param dedupField
+   * @param sort
+   * @param reverse
+   * @return List
+   */
   public List< Item > getResponseValues( List< ItemCDX > resultsCDX , String[ ] fields , String qExactURL, String queryLang, int start, int limit, int hitsPerDup, String dedupField, String sort, boolean reverse ) {
 	  List< Item > responseFields = new ArrayList< Item >( );
 	  Item item = null;
 	  Hits hits = null;
 	  Query query = null;
+	  
+	  if( resultsCDX == null || resultsCDX.size( ) == 0 )
+		  return new ArrayList< Item >( );
 	  
 	  for( ItemCDX itemcdx : resultsCDX ) { //originalURL, contentLength, digest, mimeType, tstamp, statusCode 
 		  
@@ -645,8 +627,6 @@ public class TextSearchServlet extends HttpServlet {
 			  item.setTstamp( itemcdx.getTimestamp( ) );
 		  if( FieldExists( fields , "statusCode" ) )
 			  item.setStatus( itemcdx.getStatus( ) );
-		  if( FieldExists( fields , "statusCode" ) )
-			  item.setStatus( itemcdx.getStatus( ) );  
 		  
 		  Date datet = null;
 		  try{
@@ -699,7 +679,7 @@ public class TextSearchServlet extends HttpServlet {
 			  continue;
 		  }
 		  
-    	  //LOG.info( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
+    	  LOG.debug( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
 		  
     	  //execute the query    
     	  try {
@@ -712,7 +692,7 @@ public class TextSearchServlet extends HttpServlet {
 
     	  HitDetails details = null;
     	  Hit show = null; 
-    	  //LOG.info( "hits.length = " + hits.getLength( )+ " hits.total = " + hits.getTotal( ) );
+    	  LOG.debug( "hits.length = " + hits.getLength( )+ " hits.total = " + hits.getTotal( ) );
     	  if( hits != null && hits.getLength( ) > 0 ) {
     		  
     		  show = hits.getHit( 0 );        
@@ -727,10 +707,13 @@ public class TextSearchServlet extends HttpServlet {
     		  
     		  Hit hit = show;
     		  HitDetails detail = details;
+    		  String url = detail.getValue( "url" );
     		  String title = detail.getValue( "title" );
+    		  if ( title == null || title.equals("") ) {   // use url for docs w/o title
+	        	title = url;
+    		  }
     		  if( FieldExists( fields , "title" ) )
     			  item.setTitle( title );	
-    		  String url 	= detail.getValue( "url" );
     		  String date 	= detail.getValue( "tstamp" );
     		  
     		  String encoding = detail.getValue( "encoding" );
@@ -763,16 +746,20 @@ public class TextSearchServlet extends HttpServlet {
                 	item.setCollection( "" );
                 if( FieldExists( fields , "encoding" ) )
                   	item.setEncoding( "" );
-                if( FieldExists( fields , "title" ) )
-      			  	item.setTitle( "" );	
+                if( FieldExists( fields , "title" ) ) {
+                	if( item.getSource() != null )
+                		item.setTitle( item.getSource( ) );
+                	else
+                		item.setTitle( "" );
+                }
                 if( FieldExists( fields , "mimetype" ) )
                 	if( item.getMimeType( ) == null || item.getMimeType( ).equals( "" ) )
                 		item.setMimeType( "" );
     	  }
-    	  if( hits.getTotal( ) == 0 || hits.getLength( ) == 0 )
-    		  LOG.info( "[URLSearch] query[" + query.toString( ) + "] ts[" + item.getTstamp( ) + "] url[" + itemcdx.getUrl( ) + "]  0 hits." ); 
+    	  //if( hits.getTotal( ) == 0 || hits.getLength( ) == 0 )
+    	  //	LOG.info( "[URLSearch] query[" + query.toString( ) + "] ts[" + item.getTstamp( ) + "] url[" + itemcdx.getUrl( ) + "]  0 hits." ); 
     	  
-    	  //LOG.info( "[URLSearch] total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
+    	  LOG.debug( "[URLSearch] total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
     	  
 		  if( item != null )
 			  responseFields.add( item );
@@ -780,15 +767,26 @@ public class TextSearchServlet extends HttpServlet {
 	  return responseFields;
   }
   
-
+  /**
+   * Processes the values obtained from the lucene indexes and inserts into the response object
+   * @param length
+   * @param fields
+   * @param details
+   * @param detailsCheck
+   * @param show
+   * @param summaries
+   * @param query
+   * @param parseTexts
+   * @return
+   */
   private List< Item > luceneQueryProcessor( int length, String[ ] fields, HitDetails[ ] details, String detailsCheck, Hit[ ] show, Summary[ ] summaries, Query query, ParseText[ ] parseTexts ){
 	  
 	  Item item = null;
 	  List< Item > items = new ArrayList< Item >( );
 	  
 	  boolean fieldsCorrect = true; 
-	  if( fields != null && fields.length > 0 )	  
-		  fieldsCorrect = checkFields( fields );
+	  if( fields != null && fields.length > 0 )	
+		  fieldsCorrect = checkFields( fields ); 
 	  
 	  for ( int i = 0 ; i < length && fieldsCorrect ; i++ ) {
 		  	Hit hit = show[ i ];
@@ -797,6 +795,9 @@ public class TextSearchServlet extends HttpServlet {
 	        String title = detail.getValue( "title" );
 	        String url 	= detail.getValue( "url" );
 	        String date = detail.getValue( "tstamp" );
+	        if ( title == null || title.equals("") ) {   // use url for docs w/o title
+	        	title = url;
+	        }
 	        if( FieldExists( fields , "title" ) )
 	        	item.setTitle( title );	
 	        if( FieldExists( fields , "originalURL" ) )
@@ -888,7 +889,6 @@ public class TextSearchServlet extends HttpServlet {
                     String summary = sum.toString( );
                     if( FieldExists( fields , "snippetForTerms" ) )
                     	item.setSnippetForTerms( summary );
-                    //LOG.info( "URL[" + item.getSource( ) + "] tstamp[" + item.getTstamp( ) + "] summary[" + summary + "]" );
                 } else {
                 	if( FieldExists( fields , "snippetForTerms" ) )
                 		item.setSnippetForTerms( "" );
@@ -904,7 +904,7 @@ public class TextSearchServlet extends HttpServlet {
                 }
             }
             
-            
+            //Details info - parameter details
             if( detailsCheck != null && detailsCheck.equals( "true" ) ) {
             	int idDoc = hit.getIndexDocNo( );
             	int index = hit.getIndexNo( );
@@ -933,15 +933,36 @@ public class TextSearchServlet extends HttpServlet {
 	  return items;
   }
   
+  /*************************************************************/
+  /********************* AUXILIARY METHODS *********************/
+  /************************************************************/
+  
+  
+  /**
+   * Check if parameter url is URL
+   * @param url
+   * @return
+   */
   private static boolean urlValidator(String url){
 	  Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
 	  return URL_PATTERN.matcher( url ).matches( );
   }
   
+  /**
+   * Check if str is defined
+   * @param str
+   * @return
+   */
   private static boolean isDefined( String str ) {
 	  return str == null ? false : "".equals( str ) ? false : true;  
   }
   
+  
+  /**
+   * Check if at least one field entered per parameter is true
+   * @param fields
+   * @return
+   */
   private static boolean checkFields( String[ ] fields ) {
 	  for( String fieldInput : fields ) {
 		  for( String fieldResponse: fieldsReponse ){
@@ -952,6 +973,12 @@ public class TextSearchServlet extends HttpServlet {
 	  return false;
   }
   
+  /**
+   * Converting a string to an integer, if it is not possible, returns a defaultVal value
+   * @param number
+   * @param defaultVal
+   * @return
+   */
   public static int parseToIntWithDefault( String number, int defaultVal ) {
 	  try {
 	    return Integer.parseInt( number );
@@ -960,19 +987,29 @@ public class TextSearchServlet extends HttpServlet {
 	  }
   }
   
+  /**
+   * Checks whether it is possible to parse from a string to a format
+   * @param df
+   * @param s
+   * @return
+   */
   private static Boolean tryParse( DateFormat df, String s ) {
 	    Boolean valid = false;
 	    try {
 	        Date d = df.parse( s );
-	        LOG.debug( "[tryParse] s[" + s + "] valid = true" );
 	        valid = true;
 	    } catch ( ParseException e ) {
-	    	LOG.debug( "[tryParse] s[" + s + "] valid = false" );
          	valid = false;
 	    }
 	    return valid;
   }
   
+  /**
+   * 
+   * @param fields
+   * @param fieldParam
+   * @return
+   */
   private static boolean FieldExists( String[ ] fields, String fieldParam ) {
 	  if( fields == null || fields.length == 0 )
 		  return true;
@@ -1012,5 +1049,4 @@ public class TextSearchServlet extends HttpServlet {
       return prettyJson;
   }
   
-
 }

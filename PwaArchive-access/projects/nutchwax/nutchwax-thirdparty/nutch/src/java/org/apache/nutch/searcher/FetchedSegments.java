@@ -87,10 +87,9 @@ public class FetchedSegments implements HitSummarizer, HitContent {
       synchronized (this) {
         if (parseText == null){
            	parseText = getReaders(ParseText.DIR_NAME);
-           	LOG.info( "ParseText.DIR_NAME ["+ParseText.DIR_NAME+"] " );
         }
       }
-      LOG.info( "Segment -> getParseText ["+url+"] parseText["+parseText+"]" );
+      LOG.debug( "Segment -> getParseText ["+url+"] parseText["+parseText+"]" );
       return (ParseText)getEntry(parseText, url, new ParseText());
     }
     
@@ -157,14 +156,7 @@ public class FetchedSegments implements HitSummarizer, HitContent {
   }
 
   public ParseText getParseText(HitDetails details) throws IOException {
-	LOG.info( "getParseText URL => " + getUrl( details ) );
-	LOG.info( "getSegment detail => " + getSegment( details ).toString( ) );
-	try{
-		ParseText text = getSegment(details).getParseText( getUrl( details ) );
-	} catch( IOException e ){
-		LOG.info( "URL exception["+getUrl( details )+"] e= ", e );
-	}
-	
+	LOG.debug( "getParseText URL => " + getUrl( details ) + "getSegment detail => " + getSegment( details ).toString( ) );
 	return getSegment(details).getParseText( getUrl( details ) );
   }
   

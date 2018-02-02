@@ -26,7 +26,7 @@ public class Item {
 	private String snippetForTerms;
 	private String status;
 	private String collection;
-	@SerializedName( "textContent" )
+	@SerializedName( "extractedText" )
 	private String parseText;
 	
 	//details
