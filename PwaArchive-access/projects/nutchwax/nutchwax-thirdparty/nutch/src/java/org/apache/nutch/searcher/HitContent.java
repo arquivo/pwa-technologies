@@ -32,7 +32,7 @@ public interface HitContent extends Closeable {
   ParseData getParseData(HitDetails details) throws IOException;
 
   /** Returns the ParseText of a hit document. */
-  ParseText getParseText(HitDetails details) throws IOException;
+  public ParseText getParseText(HitDetails details) throws IOException;
   
   /** Returns the ParseText of a hit document. */
   public ParseText[] getParseText(HitDetails[] hits) throws IOException;

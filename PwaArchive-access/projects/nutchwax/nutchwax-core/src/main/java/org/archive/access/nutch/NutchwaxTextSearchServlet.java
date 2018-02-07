@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.nutch.searcher.TextSearchServlet;
 import org.apache.nutch.util.NutchConfiguration;
@@ -51,6 +53,9 @@ public class NutchwaxTextSearchServlet extends TextSearchServlet
 {
   private static final long serialVersionUID = -6009645870609220838L;
   
+  public static final Log LOG =
+		    LogFactory.getLog(NutchwaxTextSearchServlet.class.getName());
+		  
   
   /**
    * Put our configuration into place in the servlet context ahead
@@ -119,21 +124,46 @@ public class NutchwaxTextSearchServlet extends TextSearchServlet
 	    {
 	      public String getParameter(String s)
 	      {
-			if ( s == null || !s.equals( "versionHistory" ) ){
+	    	if ( s == null || ( !s.equals( "versionHistory" ) && !s.equals( "metadata" ) ) ){
 			  return request.getParameter( s );
 			}
-			
 			String queryString= null;
 			if ( s.contains( "exacturl:" ) ){
 				queryString = s;
-			}else
-				queryString = request.getParameter( s );
-			
-			if ( queryString != null ){
-				queryString = NutchwaxQuery.encodeVersionHistory( queryString );
+			} else {
+				if( s.equals( "versionHistory" ) ) { 
+					queryString = request.getParameter( s );
+					
+					if ( queryString != null ){
+						queryString = NutchwaxQuery.encodeVersionHistory( queryString );
+					}
+					
+				} else if( s.equals( "metadata" ) ) {
+					String saux = request.getParameter( s );
+					if( saux == null || saux.equals( "" ) ) {
+						return null;
+					}
+						
+					int indx = saux.lastIndexOf( "/" );
+					LOG.info( "saux["+saux+"] indx["+indx+"]" );
+					String url = null;
+					String tstamp = null;
+					if( indx <= 0 )
+						return null;
+					
+					url = saux.substring( 0, indx );
+					tstamp = saux.substring( indx + 1 );
+					queryString = url; 
+						
+					if ( queryString != null ) {
+						queryString = NutchwaxQuery.encodeVersionHistory( queryString );
+						queryString = url + "/" + tstamp + queryString.substring( queryString.indexOf( " " ) ); 
+						LOG.debug( "queryString ["+queryString+"]" );
+					}
+				}
 			}
-			
 			return queryString;
+			
 	      }
 	
 	      public String getAuthType()

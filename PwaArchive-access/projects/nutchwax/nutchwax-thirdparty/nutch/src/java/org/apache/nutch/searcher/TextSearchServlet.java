@@ -88,7 +88,7 @@ import javax.xml.parsers.*;
 public class TextSearchServlet extends HttpServlet {
   /**
    * Class responsible for:
-   * 	Search the indexes lucene, through the calls to the queryServers.
+   * 	Search the indexes Lucene, through the calls to the queryServers.
    *	Search by URL in CDX indexes, through the CDXServer API.
    *
    * Documentation: https://github.com/arquivo/pwa-technologies/wiki/APIs - Full-text search: TestSearch based Arquivo.pt API
@@ -103,7 +103,7 @@ public class TextSearchServlet extends HttpServlet {
   private static int nQueryMatches = 0;
   private static String collectionsHost = null;
   private static final SimpleDateFormat FORMAT = new SimpleDateFormat( "yyyyMMddHHmmss" );
-  Calendar DATE_END = new GregorianCalendar();
+  Calendar DATE_END = new GregorianCalendar( );
   private static final String noFrame = "/noFrame/replay";
   private static final String screenShotURL = "/screenshot/?url";
   private NutchBean bean;
@@ -115,8 +115,8 @@ public class TextSearchServlet extends HttpServlet {
   }  
   
   private static String[ ]  fieldsReponse = {"versionId", "title", "originalURL", "linkToArchive",
-		  "tstamp", "contentLength", "digest", "primaryType", "subType", "downloadImage",
-		  "date", "encoding", "noFrameLink"}; //input parameters
+		  "tstamp", "contentLength", "digest", "mimeType", "linkToScreenshot",
+		  "date", "encoding", "noFrameLink", "collection", "snippet", "extractedText"}; //input parameters
   
   /**
    * HttpServlet init method.
@@ -189,6 +189,7 @@ public class TextSearchServlet extends HttpServlet {
 	  queryLang 	 = request.getParameter( "lang" ); // the query language
 	  versionHistory = request.getParameter( "versionHistory" ); // get versiobnHistory parameter
 	  metadataParam  = request.getParameter( "metadata" ); //get metadata parameter
+	  LOG.info( "versionHistory["+versionHistory+"] metadataParam["+metadataParam+"]" );
 	  
 	  if( isDefined( versionHistory ) ) {
 		 urlParams = versionHistory.split( " " );
@@ -204,6 +205,9 @@ public class TextSearchServlet extends HttpServlet {
 	  String limitString = request.getParameter( "maxItems" );
 	  if ( limitString != null )
 		  limit = parseToIntWithDefault( limitString , 50 );
+	  
+	  if( limit < 0 )
+		  limit = 0;
 	  
 	  if( limit > 2000 )
 		  limit = 2000;
@@ -274,10 +278,15 @@ public class TextSearchServlet extends HttpServlet {
     		  } else if( tryParse( dOutputFormatYear , dateStart )  ) {
     			  String extensionStart = "0101000000"; 
     			  dateStart = dateStart.concat( extensionStart );
+    			  LOG.info( "dateStart["+dateStart+"]" );
     			  if( tryParse( dOutputFormatTimestamp , dateStart )  ) {
     				  Date dStart = dOutputFormatTimestamp.parse( dateStart );
     				  dateStart = dOutputFormatTimestamp.format( dStart.getTime( ) );
+    				  LOG.info( "2 dateStart["+dateStart+"]" );
     			  }
+    		  } else {
+    			  LOG.info( "dateStart["+dateStart+"] don't get parse!!" );
+    			  dateStart="19960101000000";
     		  }
     			  
     		  if( tryParse( dOutputFormatTimestamp , dateEnd ) ) {
@@ -286,10 +295,16 @@ public class TextSearchServlet extends HttpServlet {
     		  } else if( tryParse( dOutputFormatYear , dateEnd ) ) {
     			  String extensionEnd = "1231235959";
     			  dateEnd = dateEnd.concat( extensionEnd );
+    			  LOG.info( "dateEnd["+dateEnd+"]" );
     			  if( tryParse( dOutputFormatTimestamp , dateEnd )  ) {
     				  Date dEnd = dOutputFormatTimestamp.parse( dateEnd );
     				  dateEnd = dOutputFormatTimestamp.format( dEnd.getTime( ) );
+    				  LOG.info( "2 dateEnd["+dateEnd+"]" );
     			  }
+    		  } else {
+    			  LOG.info( "dateEnd["+dateEnd+"] don't get parse!!" );
+    			  Calendar dateEND = currentDate( );
+    	    	  dateEnd = FORMAT.format( dateEND.getTime( ) );
     		  }
     		   
     		  if( dateStart == null && dateEnd != null ) {
@@ -413,10 +428,57 @@ public class TextSearchServlet extends HttpServlet {
       String totalItems = "";
       
       if( metadataParam != null && !metadataParam.equals( "" ) ) { //metadata query
-    	  
     	  LOG.info( "Metadata query" );
-    	  //TODO Not implemented
-    	  
+    	  //TODO NOT implemented
+    	  String rversionId = metadataParam.split( " " )[ 0 ];
+    	  LOG.info( "rversionId["+rversionId+"]" );
+    	  int indx = rversionId.lastIndexOf( "/" );
+    	  LOG.info( "indx["+indx+"]" );
+    	  if( indx > 0 ) {
+        	  String[ ] versionIdsplited = { rversionId.substring( 0, indx ), rversionId.substring( indx + 1) };
+        	  if( metadataValidator( versionIdsplited ) ) { //valid URL
+        		 LOG.info( "Version ["+rversionId+"] is correct" );
+        		 if( urlValidator( versionIdsplited[ 0 ] ) ) { //valid URL
+        			 dateStart = "19960101000000";
+        			 Calendar dateEND = currentDate( );
+        			 dateEnd = FORMAT.format( dateEND.getTime( ) );
+        			
+           		  	 String[ ] urlEncoded = rversionId.split( " " );
+    				 
+        			 StringBuilder sbExactURL = new StringBuilder( ); //build extacurl info
+           		  	 for( int i = 1 ; i < urlEncoded.length ; i++ ) {
+           		  		 sbExactURL.append( urlEncoded[ i ].concat( " " ) );
+           		  	 }
+           		  	 qExactURL = sbExactURL.toString( );
+           		  	 LOG.info(" [Metadata] qExactURL["+qExactURL+"]");
+           		  	 hitsPerDup = 1;
+           		  	 CdxParser cdxProcessor = new CdxParser( collectionsHost );
+           		  	 //get cdx index fields
+           		  	 List< ItemCDX > resultsCDX = cdxProcessor.getResults( versionIdsplited[ 0 ], dateStart, dateEnd, -1, 0 );
+           		  	 if( resultsCDX != null )
+           		  		 totalItems = String.valueOf( resultsCDX.size( ) );
+           		  	 else
+           		  		 totalItems = "0";
+           		  	 
+           		  	 List< ItemCDX > mresultsCDX = selectCDXItem( resultsCDX , versionIdsplited[ 1 ] );
+           		  	 
+           		  	 if( mresultsCDX != null ) {
+           		  		 LOG.info( "resultCDX CORRECT" );
+           		  		 itens = getResponseValues( mresultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse );
+           		  	 } else 
+           		  		 itens = new ArrayList< Item >( );
+           	  	}
+        		 
+        	  } else {
+        		  LOG.info( "Version 1 ["+metadataParam+"] NOT correct" );
+        		  itens = new ArrayList< Item >( );
+        	  }
+    		  
+    	  } else {
+    		  LOG.info( "Version 2 ["+metadataParam+"] NOT correct" );
+    		  itens = new ArrayList< Item >( );
+    	  }
+    		  
       } else if( isDefined( qURL ) ) { //URL query
     	  LOG.info( "URL query => versionHistory = " + qURL );
     	  
@@ -426,7 +488,6 @@ public class TextSearchServlet extends HttpServlet {
     			  Calendar dateEND = currentDate( );
     			  dateEnd = FORMAT.format( dateEND.getTime( ) );
     		  }
-    		  
     		  StringBuilder sbExactURL = new StringBuilder( ); //build extacurl info
     		  for( int i = 1 ; i < urlParams.length ; i++ ) {
     			  sbExactURL.append( urlParams[ i ].concat( " " ) );
@@ -453,8 +514,8 @@ public class TextSearchServlet extends HttpServlet {
     	  HitDetails[ ] details = null;
     	  Hit[ ] show = null; 
     	  Summary[ ] summaries = null;
-    	  byte[][] contents = null;
-    	  ParseText[] parseTexts = null;
+    	  byte[ ][ ] contents = null;
+    	  ParseText[ ] parseTexts = null;
     	  
     	  String qRequest = queryString.toString( );
     	  query = Query.parse( qRequest , queryLang , this.conf );
@@ -464,7 +525,6 @@ public class TextSearchServlet extends HttpServlet {
     	  try {
     		  int hitsPerVersion = 1;    		
     		  hits = bean.search(query, start + limit, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
-    		  
     	  } catch ( IOException e ) {
     		  LOG.warn("Search Error", e);    	
     		  hits = new Hits( 0 ,new Hit[ 0 ] );	
@@ -543,8 +603,8 @@ public class TextSearchServlet extends HttpServlet {
 		  if( totalItems != null )
 			  responseObject.setTotalItems( totalItems );
 		  
-		  if( sortParameter != null && !"".equals( sortParameter ) )
-			  requestParameters.setSort( sortParameter );
+		  //if( sortParameter != null && !"".equals( sortParameter ) )
+			  //requestParameters.setSort( sortParameter );
 		  
 		  if( q != null && !"".equals( q ) )
 			  requestParameters.setQueryTerms( q );
@@ -576,6 +636,8 @@ public class TextSearchServlet extends HttpServlet {
 			  response.setContentType( "text/javascript" ); //jsonp
 		  else
 			  response.setContentType( "application/json" ); //json
+		  
+		  //response.setHeader("Content-Encoding", "gzip"); //TODO
 		  
 		  // Get the printwriter object from response to write the required json object to the output stream      
 		  PrintWriter out = response.getWriter( );  
@@ -698,6 +760,7 @@ public class TextSearchServlet extends HttpServlet {
     		  show = hits.getHit( 0 );        
     		  try{
     			  details = bean.getDetails( show ); //get details  
+    			  
     		  } catch( IOException e ) {
     			  LOG.error( e );
     			  if( item != null )
@@ -707,6 +770,28 @@ public class TextSearchServlet extends HttpServlet {
     		  
     		  Hit hit = show;
     		  HitDetails detail = details;
+    		  ParseText[] textContent = null;
+        	  if( detail != null && detail.getLength( ) > 0 ) {
+        		  try{
+        			  HitDetails[] hitsT = { detail };
+        			  LOG.info( "hits SIZE = " +  hitsT.length );
+        			  textContent = bean.getParseText( hitsT ) ;
+        		  } catch( IOException e ) {
+        			  LOG.error( e );
+        		  }
+        		  
+                  if( textContent != null && textContent[ 0 ] != null ) {
+                	LOG.info( "[getResponseValues] textContent defined" );
+                  	String parseText = textContent[ 0 ].getText( ); //TODO 
+                  	if( parseText != null && FieldExists( fields , "textContent" ) )
+                  		item.setParseText( parseText );
+                  } else {
+                	LOG.info( "[getResponseValues] textContent NULL" );
+                  	if( FieldExists( fields , "textContent" ) )
+                  		item.setParseText( "" );
+                  }
+        	  }
+    		  
     		  String url = detail.getValue( "url" );
     		  String title = detail.getValue( "title" );
     		  if ( title == null || title.equals("") ) {   // use url for docs w/o title
@@ -807,8 +892,8 @@ public class TextSearchServlet extends HttpServlet {
 	        String tstamp = "";
     		try{
     			datet = FORMAT.parse( date );
+    			tstamp = FORMAT.format( datet ).toString( );
     			if( FieldExists( fields , "tstamp" ) ) {
-    				tstamp = FORMAT.format( datet ).toString( );
     				item.setTstamp( tstamp );
     			}
     	    } catch ( ParseException e ) {
@@ -895,7 +980,7 @@ public class TextSearchServlet extends HttpServlet {
                 }
                 
                 if( parseTexts != null ) {
-                	String parseText = parseTexts[ i ].getText( );
+                	String parseText = parseTexts[ i ].getText( ); //TODO 
                 	if( parseText != null && FieldExists( fields , "textContent" ) )
                 		item.setParseText( parseText );
                 } else {
@@ -937,6 +1022,23 @@ public class TextSearchServlet extends HttpServlet {
   /********************* AUXILIARY METHODS *********************/
   /************************************************************/
   
+  /**
+   * 
+   * @param resultsCDX
+   * @param tstamp
+   * @return
+   */
+  private static List< ItemCDX > selectCDXItem( List< ItemCDX > resultsCDX , String tstamp ) {
+	  List< ItemCDX > items = new ArrayList< ItemCDX >( );
+	  for( ItemCDX item : resultsCDX ) {
+		  LOG.info( "[selectCDXItem] item.getTimestamp( )["+item.getTimestamp( )+"].equals( "+tstamp+" )" );
+		  if( item.getTimestamp( ).equals( tstamp ) ) {
+			  items.add( item );
+			  return items;
+		  }
+	  }
+	  return null;
+  }
   
   /**
    * Check if parameter url is URL
@@ -946,6 +1048,19 @@ public class TextSearchServlet extends HttpServlet {
   private static boolean urlValidator(String url){
 	  Pattern URL_PATTERN = Pattern.compile("^.*? ?((https?:\\/\\/)?([a-zA-Z\\d][-\\w\\.]+)\\.([a-z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
 	  return URL_PATTERN.matcher( url ).matches( );
+  }
+  
+  /**
+   * Check if parameter versionId is format url/tstamp
+   * @param versionId
+   * @return
+   */
+  private static boolean metadataValidator( String[ ] versionIdsplited ) {
+	  LOG.info( "metadata versionId[0]["+versionIdsplited[ 0 ]+"] versionId[1]["+versionIdsplited[ 1 ]+"]" );
+	  if( urlValidator( versionIdsplited[ 0 ] ) && versionIdsplited[ 1 ].matches( "[0-9]+" ) ) 
+		  return true;
+	  else
+		  return false;
   }
   
   /**

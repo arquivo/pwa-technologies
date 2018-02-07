@@ -170,7 +170,6 @@ public class NutchwaxQuery
 		  if( encoded != null && !encoded.equals( "" ) )
 			  sb.append( " exacturl:" ).append( encoded );
 	  }
-	  //LOGGER.info( "[encodeVersionHistory] encodeVersionHistory " + sb.toString( ) );
 	  return sb.toString( );
   }
   

@@ -161,6 +161,7 @@ public class DistributedSearch {
     private static final Method CONTENT;
     //private static final Method CONTENT_MULTIPLE;
     private static final Method PARSE_TEXT;
+    private static final Method PARSE_TEXT_SINGLE;
     static {
       try {
         GET_SEGMENTS = Protocol.class.getMethod
@@ -183,6 +184,8 @@ public class DistributedSearch {
           ("getContent", new Class[] { HitDetails.class } );
         PARSE_TEXT = Protocol.class.getMethod
           ("getParseText", new Class[] { HitDetails.class } );
+        PARSE_TEXT_SINGLE = Protocol.class.getMethod
+                ("getParseText",  HitDetails.class );
       } catch (NoSuchMethodException e) {
         throw new RuntimeException(e);
       }

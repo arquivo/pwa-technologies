@@ -42,24 +42,29 @@ public class CdxParser {
 	}
 	
 	
-	public List< ItemCDX > getResults( String url , String from , String to, int limit, int start ) {
+	public List< ItemCDX > getResults( String url , String from , String to, int limitP, int start ) {
 		Gson gson = new Gson( );
 		List< ItemCDX > cdxList = new ArrayList< ItemCDX >( );
 		String urlCDX = getLink( url , from , to );
 		int counter = 0;
+		int limit = 0;
+		if( limitP > 0 ) {
+			limit = limitP;
+		}
 		LOG.info( "[getResults] urlCDX["+urlCDX+"]" );
 		try{
 			List< JsonObject > jsonValues = readJsonFromUrl( urlCDX );
 			if( jsonValues == null ) 
 				return null;
-			limit = limit + start;
+			if( limit > 0 )
+				limit = limit + start;
 			for( int i = 0 ; i < jsonValues.size( ) ; i++ ) { //convert cdx result into object
 				if( i < start ) continue;
 				ItemCDX item = gson.fromJson( jsonValues.get( i ) , ItemCDX.class );
 				if( cdxList.contains( item ) ) continue;
 				cdxList.add( item );
 				
-				if( i > limit )
+				if( limit > 0 && i > limit )
 					break;
 			}
 			

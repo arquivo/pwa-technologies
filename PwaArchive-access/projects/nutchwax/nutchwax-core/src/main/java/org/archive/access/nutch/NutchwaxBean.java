@@ -64,6 +64,15 @@ public class NutchwaxBean extends NutchBean
 	  return super.getParseText(amendedHits);
   }
   
+  public ParseText getParseText(HitDetails hit) throws IOException {
+	    // Rewrite details so that URL is not just URL when we go to get Summary.
+	    // Its compound of collection and url. Alternative is override of
+	    // NutchBean so we can add in our own Summarizer. NutchBean needs to be
+	    // made more amenable to subclassing. Should be setters for detailers,
+	    // etc. so can supply alternatives (Or pass in a constructor).
+	  	return super.getParseText(getCollectionQualifiedHitDetails(hit));
+  }
+  
   public Summary[] getSummary(HitDetails[] hits, Query query) throws IOException {
     // Rewrite details so that URL is not just URL when we go to get Summary.
     // Its compound of collection and url. Alternative is override of
