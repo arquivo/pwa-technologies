@@ -96,10 +96,7 @@ public class NutchwaxTextSearchServlet extends TextSearchServlet
 		    final HttpServletResponse response)
 		    throws ServletException, IOException
 	  {
-	  
-  
-  			doGet(request, response);
-  
+	  		doGet(request, response);
 	  }
   
   

@@ -37,6 +37,11 @@
   <servlet-class>org.apache.nutch.searcher.TextSearchServlet</servlet-class>
 </servlet>
 
+<servlet>
+  <servlet-name>TextExtracted</servlet-name>
+  <servlet-class>org.apache.nutch.searcher.TextExtractedServlet</servlet-class>
+</servlet>
+
 <servlet-mapping>
   <servlet-name>Cached</servlet-name>
   <url-pattern>/servlet/cached</url-pattern>
@@ -50,6 +55,11 @@
 <servlet-mapping>
   <servlet-name>TextSearch</servlet-name>
   <url-pattern>/textsearch</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>TextExtracted</servlet-name>
+  <url-pattern>/textextracted</url-pattern>
 </servlet-mapping>
 
 <welcome-file-list>
