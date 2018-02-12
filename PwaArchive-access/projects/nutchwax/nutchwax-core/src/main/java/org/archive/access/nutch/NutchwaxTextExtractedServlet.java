@@ -107,17 +107,8 @@ public class NutchwaxTextExtractedServlet extends TextExtractedServlet{
 				if ( s.contains( "exacturl:" ) ){
 					queryString = s;
 				} else {
-					String sauxEnc = request.getParameter( s );
-					String saux = "";
-					try{
-						saux =  URLDecoder.decode(sauxEnc, "UTF-8");
-					} catch( UnsupportedEncodingException un ) {
-						LOG.error( un );
-						saux = sauxEnc; 
-			    	}
-					if( saux == null || saux.equals( "" ) ) {
-						return null;
-					}
+					String saux = request.getParameter( s );
+					LOG.info( "Parameter = " + saux );
 					
 					int indx = saux.lastIndexOf( "/" );
 					LOG.info( "saux["+saux+"] indx["+indx+"]" );

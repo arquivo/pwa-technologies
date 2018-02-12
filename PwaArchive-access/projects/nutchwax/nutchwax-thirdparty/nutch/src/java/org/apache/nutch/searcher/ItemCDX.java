@@ -105,7 +105,7 @@ public class ItemCDX {
             return false;
         }
         ItemCDX other = ( ItemCDX ) obj;
-        return this.digest.equals( other.digest );
+        return this.digest.equals( other.digest ) && this.getTimestamp( ).equals( other.getTimestamp( ) );
 	}
 
 }

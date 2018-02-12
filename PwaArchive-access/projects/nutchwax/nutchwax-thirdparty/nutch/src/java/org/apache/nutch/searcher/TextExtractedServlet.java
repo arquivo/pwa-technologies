@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
@@ -108,6 +109,9 @@ public class TextExtractedServlet extends HttpServlet{
 		String fileTypeError = "text/plain";
 		String errorM = "";
 		
+		//Type of response 
+		response.setContentType( "text/plain" );
+		
 		// get parameters from request
 		request.setCharacterEncoding("UTF-8");
 		//get metadata parameter
@@ -115,27 +119,19 @@ public class TextExtractedServlet extends HttpServlet{
 			
 		if( metadataParam != null && !metadataParam.equals( "" ) ) { //metadata query
 	    	  LOG.info( "[Text Extacted] Download File" );
-	    	  String metadataParamD = "";
-	    	  try{	  
-	    		  metadataParamD =  URLDecoder.decode(metadataParam, "UTF-8");
-	    	  } catch( UnsupportedEncodingException un ) {
-	    		  LOG.error( un );
-	    		  metadataParamD = metadataParam; 
-	    	  }
-	    	  String rversionId = metadataParamD.split( " " )[ 0 ];
-	    	  LOG.info( "rversionId["+rversionId+"] metadataParam["+metadataParamD+"]" );
+	    	  String rversionId = metadataParam.split( " " )[ 0 ];
+	    	  LOG.info( "rversionId["+rversionId+"] metadataParam["+metadataParam+"]" );
 	    	  int indx = rversionId.lastIndexOf( "/" );
-	    	  LOG.info( "indx["+indx+"]" );
+	    	  
 	    	  if( indx > 0 ) {
 	        	  String[ ] versionIdsplited = { rversionId.substring( 0, indx ), rversionId.substring( indx + 1) };
 	        	  if( metadataValidator( versionIdsplited ) ) { //valid URL
-	        		 LOG.info( "Version ["+rversionId+"] is correct" );
 	        		 if( urlValidator( versionIdsplited[ 0 ] ) ) { //valid URL
 	        			 dateStart = "19960101000000";
 	        			 Calendar dateEND = currentDate( );
 	        			 dateEnd = FORMAT.format( dateEND.getTime( ) );
 	        			 
-	           		  	 String[ ] urlEncoded = metadataParamD.split( " " );
+	           		  	 String[ ] urlEncoded = metadataParam.split( " " );
 	    				 
 	        			 StringBuilder sbExactURL = new StringBuilder( ); //build extacurl info
 	           		  	 for( int i = 1 ; i < urlEncoded.length ; i++ ) {
@@ -148,7 +144,7 @@ public class TextExtractedServlet extends HttpServlet{
 	           		  	 Query query = null;
 	           		  	 String dateLucene = "date:".concat( versionIdsplited[ 1 ] ).concat( " " ); //format:ddmmyyyhhmmss-ddmmyyyhhmmss
 	           		  	 String qLucene = dateLucene.concat( qExactURL );
-	           		  	 LOG.info( "qLucene = " + qLucene );
+	           		  	 LOG.debug( "qLucene = " + qLucene );
 	           		  	 try{
 	           		  		 query = Query.parse( qLucene, queryLang, this.conf );  
 	           		  	 } catch( IOException e ) {
@@ -159,7 +155,7 @@ public class TextExtractedServlet extends HttpServlet{
 	           		  	 
 	           		  	 //execute the query
 	           		  	 try {
-	           		  		 LOG.info( "Search for query["+query.toString()+"] hitsPerDup["+hitsPerDup+"] dedupField["+dedupField+"] sort["+sort+"] reverse["+reverse+"]" );
+	           		  		 LOG.debug( "Search for query["+query.toString()+"] hitsPerDup["+hitsPerDup+"] dedupField["+dedupField+"] sort["+sort+"] reverse["+reverse+"]" );
 	           		  		 int hitsPerVersion = 1;    		
 	           		  		 hits = bean.search(query, 1, hitsPerDup, dedupField, sort, reverse, true);
 	           		  	 } catch ( IOException e ) {
@@ -169,7 +165,7 @@ public class TextExtractedServlet extends HttpServlet{
 	           		  	 
 	           		  	 HitDetails[ ] details = null;
 	           		  	 Hit[ ] show = null; 
-	           		  	 LOG.info( "hits.length = " + hits.getLength( )+ " hits.total = " + hits.getTotal( ) );
+	           		  	 LOG.debug( "hits.length = " + hits.getLength( )+ " hits.total = " + hits.getTotal( ) );
 	           		  	 if( hits != null && hits.getLength( ) > 0 ) {
 	           		  		 show = hits.getHits( 0 , 1 );     
 	           		  		 try{
@@ -186,24 +182,21 @@ public class TextExtractedServlet extends HttpServlet{
 		           		  		 } catch( IOException e ) {
 		           		  			 LOG.error( e );
 		           		  		 }
-		                		  
+		                		 
 		           		  		 if( textContent != null && textContent[ 0 ] != null ) {
-		           		  			 LOG.info( "[getResponseValues] textContent["+textContent[0]+"] defined" );
 		           		  			 String parseText = textContent[ 0 ].getText( ); 
-		           		  			 LOG.info( "[getResponseValues] ParseText = " + parseText );
+		           		  			 
 		           		  			 fileName = versionIdsplited[ 0 ] + "-" + versionIdsplited[ 1 ]; 
-		           		  			 response.setContentType( "text/plain" );
 		           		  			 if( fileName.startsWith( "https://" ) )
 		           		  				 fileName = fileName.replace( "https://" , "" );
 		           		  		     if( fileName.startsWith( "http://" ) )	 
 		           		  		    	 fileName = fileName.replace( "https://" , "" );
 		           		  			 fileName = fileName.replace( "/" , "-");
 		           		  			 response.setHeader( "Content-disposition","attachment; filename=" + fileName + ".txt" );
-		           		  			 
+		           		  			 OutputStream os = response.getOutputStream( );
 		           		  			 InputStream input = new ByteArrayInputStream( parseText.getBytes( "UTF8" ) );
 		           		  		     int read = 0;
 		           		  		     byte[ ] bytes = new byte[ BYTES_DOWNLOAD ];
-		           		  		     OutputStream os = response.getOutputStream( );
 		           		  		     while ( ( read = input.read( bytes ) ) != -1 ) {
 		           		  		    	 os.write( bytes, 0, read );
 		           		  		     }
@@ -213,28 +206,33 @@ public class TextExtractedServlet extends HttpServlet{
 		           		  		     return;
 		           		  		     
 		           		  		 } else {
-		           		  			 LOG.info( "[getResponseValues] textContent NULL" );
-		           		  			 errorM = "Empty file - ";
-		           		  			 
+		           		  			 LOG.warn( "[getResponseValues] textContent NULL" );
+		           		  			 errorM = "Empty file - There is no text to extract";
 		           		  		 }
 		                	  } 
 	           		  	 }
 	           		 }
 	        		 
 	        	  } else {
-	        		  LOG.info( "Version 1 ["+metadataParamD+"] NOT correct" );
+	        		  LOG.warn( "Version ["+metadataParam+"] NOT correct" );
+	        		  errorM = "Invalid VersionID";
 	        	  }
 	    		  
+	    	  } else {
+	    		  LOG.warn( "Version ["+metadataParam+"] NOT correct" );
+        		  errorM = "Invalid VersionID";
 	    	  }
+		} else {
+			LOG.warn( "VersionID is empty or invalid" );
+			errorM = "Invalid or empty VersionID";
 		}
 		
-		// You must tell the browser the file type you are going to send
-        // for example application/pdf, text/plain, text/html, image/jpg
-        //TODO error - response.setContentType(fileType);
+		PrintWriter out = response.getWriter();
+		out.println( errorM );
+		out.flush( );
+		out.close( );
 		
-		
-
-	
+	 	return;	
 	}
 	  
 	/**

@@ -58,12 +58,12 @@ public class CdxParser {
 				return null;
 			if( limit > 0 )
 				limit = limit + start;
+			LOG.info( "[getResults] jsonValues size = " + jsonValues.size( ) );
 			for( int i = 0 ; i < jsonValues.size( ) ; i++ ) { //convert cdx result into object
 				if( i < start ) continue;
 				ItemCDX item = gson.fromJson( jsonValues.get( i ) , ItemCDX.class );
 				if( cdxList.contains( item ) ) continue;
 				cdxList.add( item );
-				
 				if( limit > 0 && i > limit )
 					break;
 			}
@@ -100,8 +100,7 @@ public class CdxParser {
 					.concat( "to" )
 					.concat( equalOP )
 					.concat( to );
-					//.concat( Constants.equalOP )
-					//.concat( timestamp )
+
 	}
 	
 	
@@ -116,7 +115,7 @@ public class CdxParser {
 		try {
 			URL url = new URL( strurl );
 			URLConnection con = url.openConnection( );
-			con.setConnectTimeout( timeoutConn ); //3 sec
+			con.setConnectTimeout( timeoutConn );//3 sec
 			con.setReadTimeout( timeoutreadConn );//5 sec
 			is = con.getInputStream( );
 			BufferedReader rd = new BufferedReader( new InputStreamReader( is , Charset.forName( "UTF-8" ) ) );

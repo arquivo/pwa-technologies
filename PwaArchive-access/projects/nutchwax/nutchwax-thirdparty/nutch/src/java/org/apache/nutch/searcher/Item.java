@@ -30,7 +30,9 @@ public class Item {
 	private String parseText;
 	
 	//details
+	@SerializedName( "filename" )
 	private String arcname;
+	@SerializedName( "offset" )
 	private String arcoffset;
 	private String idDoc;
 	private String index;

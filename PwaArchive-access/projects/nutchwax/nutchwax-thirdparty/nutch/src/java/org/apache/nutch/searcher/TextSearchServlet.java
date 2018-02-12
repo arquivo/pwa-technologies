@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -61,6 +62,7 @@ import org.apache.nutch.html.Entities;
 import org.apache.nutch.parse.Parse;
 import org.apache.nutch.parse.ParseText;
 import org.apache.nutch.searcher.HitContent;
+import org.apache.nutch.searcher.Item;
 import org.apache.nutch.searcher.Summary.Fragment;
 import org.apache.nutch.util.NutchConfiguration;
 import org.apache.nutch.util.RFC3339Date;
@@ -278,14 +280,11 @@ public class TextSearchServlet extends HttpServlet {
     		  } else if( tryParse( dOutputFormatYear , dateStart )  ) {
     			  String extensionStart = "0101000000"; 
     			  dateStart = dateStart.concat( extensionStart );
-    			  LOG.info( "dateStart["+dateStart+"]" );
     			  if( tryParse( dOutputFormatTimestamp , dateStart )  ) {
     				  Date dStart = dOutputFormatTimestamp.parse( dateStart );
     				  dateStart = dOutputFormatTimestamp.format( dStart.getTime( ) );
-    				  LOG.info( "2 dateStart["+dateStart+"]" );
     			  }
     		  } else {
-    			  LOG.info( "dateStart["+dateStart+"] don't get parse!!" );
     			  dateStart="19960101000000";
     		  }
     			  
@@ -295,14 +294,11 @@ public class TextSearchServlet extends HttpServlet {
     		  } else if( tryParse( dOutputFormatYear , dateEnd ) ) {
     			  String extensionEnd = "1231235959";
     			  dateEnd = dateEnd.concat( extensionEnd );
-    			  LOG.info( "dateEnd["+dateEnd+"]" );
     			  if( tryParse( dOutputFormatTimestamp , dateEnd )  ) {
     				  Date dEnd = dOutputFormatTimestamp.parse( dateEnd );
     				  dateEnd = dOutputFormatTimestamp.format( dEnd.getTime( ) );
-    				  LOG.info( "2 dateEnd["+dateEnd+"]" );
     			  }
     		  } else {
-    			  LOG.info( "dateEnd["+dateEnd+"] don't get parse!!" );
     			  Calendar dateEND = currentDate( );
     	    	  dateEnd = FORMAT.format( dateEND.getTime( ) );
     		  }
@@ -443,7 +439,7 @@ public class TextSearchServlet extends HttpServlet {
         			 Calendar dateEND = currentDate( );
         			 dateEnd = FORMAT.format( dateEND.getTime( ) );
         			
-           		  	 String[ ] urlEncoded = rversionId.split( " " );
+           		  	 String[ ] urlEncoded = metadataParam.split( " " );
     				 
         			 StringBuilder sbExactURL = new StringBuilder( ); //build extacurl info
            		  	 for( int i = 1 ; i < urlEncoded.length ; i++ ) {
@@ -464,18 +460,18 @@ public class TextSearchServlet extends HttpServlet {
            		  	 
            		  	 if( mresultsCDX != null ) {
            		  		 LOG.info( "resultCDX CORRECT" );
-           		  		 itens = getResponseValues( mresultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse );
+           		  		 itens = getResponseValues( mresultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse, true );
            		  	 } else 
            		  		 itens = new ArrayList< Item >( );
            	  	}
         		 
         	  } else {
-        		  LOG.info( "Version 1 ["+metadataParam+"] NOT correct" );
+        		  LOG.info( "VersionID ["+metadataParam+"] NOT correct" );
         		  itens = new ArrayList< Item >( );
         	  }
     		  
     	  } else {
-    		  LOG.info( "Version 2 ["+metadataParam+"] NOT correct" );
+    		  LOG.info( "VersionID ["+metadataParam+"] NOT correct" );
     		  itens = new ArrayList< Item >( );
     	  }
     		  
@@ -503,7 +499,7 @@ public class TextSearchServlet extends HttpServlet {
     			  totalItems = "0";
     		  
     		  
-    		  itens = getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse );
+    		  itens = getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse, false );
     	  
     	  }
 
@@ -539,12 +535,6 @@ public class TextSearchServlet extends HttpServlet {
     		  show = hits.getHits( start , end-start );        
     		  details = bean.getDetails( show ); //get details
     		  summaries = bean.getSummary( details, query ); //get snippet
-    		  
-    		 /* try{
-    			parseTexts = bean.getParseText( details );
-    		  } catch( IOException e ) {
-    			  LOG.error( e );
-    		  }*/
     	  }
 
     	  itens = luceneQueryProcessor( length, fields, details, request.getParameter( "details" ), show , summaries, query, parseTexts );
@@ -665,12 +655,13 @@ public class TextSearchServlet extends HttpServlet {
    * @param reverse
    * @return List
    */
-  public List< Item > getResponseValues( List< ItemCDX > resultsCDX , String[ ] fields , String qExactURL, String queryLang, int start, int limit, int hitsPerDup, String dedupField, String sort, boolean reverse ) {
+  public List< Item > getResponseValues( List< ItemCDX > resultsCDX , String[ ] fields , String qExactURL, String queryLang, int start, int limit, int hitsPerDup, String dedupField, String sort, boolean reverse, boolean detailsInfo ) {
 	  List< Item > responseFields = new ArrayList< Item >( );
 	  Item item 	= null;
 	  Hits hits 	= null;
 	  Query query 	= null;
 	  String tstamp = "";
+	  String domainService = collectionsHost.substring( 0 , collectionsHost.indexOf( "/" ) );
 	  
 	  if( resultsCDX == null || resultsCDX.size( ) == 0 )
 		  return new ArrayList< Item >( );
@@ -717,6 +708,19 @@ public class TextSearchServlet extends HttpServlet {
 			  String target = "http://"+ collectionsHost +"/"+ FORMAT.format( datet ).toString()  +"/"+ itemcdx.getUrl( );
 			  if( FieldExists( fields , "linkToArchive" ) )
 				  item.setLink( target );
+			  String urlNoFrame = "http://".concat( domainService ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( itemcdx.getUrl( ) );
+			  String urlEncode = "";
+			  try{
+				  urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
+			  } catch( UnsupportedEncodingException e ) {
+				  LOG.error( e );
+				  continue;
+			  }
+			  String screenShotLink = "http://".concat( domainService ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
+			  if( FieldExists( fields , "ScreenShotLink" ) )
+				  item.setScreenShotLink( screenShotLink );
+			  if( FieldExists( fields , "noFrameLink" ) )
+				  item.setNoFrameLink( urlNoFrame );
           }
 		  
 		  String domainHost = "";
@@ -732,7 +736,6 @@ public class TextSearchServlet extends HttpServlet {
         	  LOG.error( e );
         	  continue;
           }
-          
           
 		  query = null;
 		  
@@ -777,31 +780,17 @@ public class TextSearchServlet extends HttpServlet {
     		  
     		  Hit hit = show;
     		  HitDetails detail = details;
-    		  /*ParseText[] textContent = null;
-        	  if( detail != null && detail.getLength( ) > 0 ) {
-        		  try{
-        			  HitDetails[] hitsT = { detail };
-        			  LOG.info( "hits SIZE = " +  hitsT.length );
-        			  textContent = bean.getParseText( hitsT ) ;
-        		  } catch( IOException e ) {
-        			  LOG.error( e );
-        		  }
-        		  
-                  if( textContent != null && textContent[ 0 ] != null ) {
-                	LOG.debug( "[getResponseValues] textContent defined" );
-                  	String parseText = textContent[ 0 ].getText( ); //TODO 
-                  	LOG.debug( "[getResponseValues] parseText = " + textContent[ 0 ].getText( ) );
-                  	if( parseText != null && FieldExists( fields , "textContent" ) )
-                  		item.setParseText( parseText );
-                  } else {
-                	LOG.info( "[getResponseValues] textContent NULL" );
-                  	if( FieldExists( fields , "textContent" ) )
-                  		item.setParseText( "" );
-                  }
-        	  }*/
+
     		  if( FieldExists( fields , "textContent" ) ) {
-    			  String domainService = collectionsHost.substring( 0 , collectionsHost.indexOf( "/" ) );
-    			  String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( id );
+    			  String urlEncoded = "";
+    			  try{
+    				  urlEncoded = URLEncoder.encode( id, "UTF-8" );
+    				  LOG.info( "ID = " + id + " urlEncoded = " + urlEncoded );
+    			  } catch( UnsupportedEncodingException un ) {
+    				  LOG.error( un );
+    				  urlEncoded = id; 
+    			  }
+    			  String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
     			  LOG.info( "textContent = " + textContent );
     			  item.setParseText( textContent );
           	  } else {
@@ -840,6 +829,30 @@ public class TextSearchServlet extends HttpServlet {
               String collection = detail.getValue( "collection" );
               if( FieldExists( fields , "collection" ) )
             	item.setCollection( collection );
+              
+              if( detailsInfo == true ) {
+            	  int idDoc = hit.getIndexDocNo( );
+            	  int index = hit.getIndexNo( );
+            	  String arcname 	= detail.getValue( "arcname" );
+            	  String arcoffset 	= detail.getValue( "arcoffset" );
+            	  //String segment 	= detail.getValue( "segment" );
+            	  
+            	  if( FieldExists( fields , "filename" ) ) {
+            		  if( itemcdx.getFilename( ) != null )
+            			  item.setArcname( itemcdx.getFilename( ) );
+            		  else if( arcname != null )
+            			  item.setArcname(  arcname );
+            	  }
+            	  
+            	  if( FieldExists( fields , "offset" ) ) {
+            		  if( arcoffset != null )
+            			  item.setArcoffset( arcoffset );
+            		  else if( itemcdx.getOffset( ) != null )
+            			  item.setArcoffset( itemcdx.getOffset( ) );
+            		  
+            	  }
+            	  
+              }
               
     	  } else {
                 if( FieldExists( fields , "date" )  )
@@ -890,8 +903,9 @@ public class TextSearchServlet extends HttpServlet {
 	  boolean fieldsCorrect = true; 
 	  if( fields != null && fields.length > 0 )	
 		  fieldsCorrect = checkFields( fields ); 
+	  String domainService = collectionsHost.substring( 0 , collectionsHost.indexOf( "/" ) ); 
 	  
-	  for ( int i = 0 ; i < length && fieldsCorrect ; i++ ) {
+	  for ( int i = 0 ; i < length && fieldsCorrect ; i++ ) { 
 		  	Hit hit = show[ i ];
 	        HitDetails detail = details[ i ];
 	        item = new Item( );
@@ -961,8 +975,7 @@ public class TextSearchServlet extends HttpServlet {
             	item.setCollection( collection );
             
             if( url != null ) {
-            	String urlNoFrame = "http://".concat( collectionsHost ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
-                LOG.debug( "[TextSearchServlet][doGet] urlNoFrame =" + urlNoFrame );
+            	String urlNoFrame = "http://".concat( domainService ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
                 String urlEncode = "";
                 try{
             		urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
@@ -970,8 +983,7 @@ public class TextSearchServlet extends HttpServlet {
             		LOG.error( e );
             		continue;
             	}
-            	LOG.debug( "[TextSearchServlet][doGet] urlEncode =" + urlEncode );
-            	String screenShotLink = "http://".concat( collectionsHost ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
+            	String screenShotLink = "http://".concat( domainService ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
             	if( FieldExists( fields , "ScreenShotLink" ) )
             		item.setScreenShotLink( screenShotLink );
             	if( FieldExists( fields , "noFrameLink" ) )
@@ -1003,10 +1015,12 @@ public class TextSearchServlet extends HttpServlet {
                 
                 
             	if( FieldExists( fields , "textContent" ) ) {
-            		String domainService = collectionsHost.substring( 0 , collectionsHost.indexOf( "/" ) );
             		String urlEncoded = "";
+            		//String urlDecoder = "";
             		try{
-            			urlEncoded = URLEncoder.encode(id, "UTF-8");
+            			//urlDecoder = URLDecoder.decode( id, "UTF-8" );
+            			urlEncoded = URLEncoder.encode( id, "UTF-8" );
+            			LOG.info( "ID = " + id + " urlEncoded = " + urlEncode );
             		} catch( UnsupportedEncodingException un ) {
             			LOG.error( un );
             			urlEncoded = id; 
@@ -1018,17 +1032,7 @@ public class TextSearchServlet extends HttpServlet {
             		LOG.info( "textContent NOT print ");
             		item.setParseText( "" );
             	}
-                
-                
-               /* if( parseTexts != null ) {
-                	String parseText = parseTexts[ i ].getText( ); //TODO 
-                	if( parseText != null && FieldExists( fields , "textContent" ) ) {
-                		item.setParseText( parseText );
-                	}
-                } else {
-                	if( FieldExists( fields , "textContent" ) )
-                		item.setParseText( "" );
-                }*/
+
             }
             
             //Details info - parameter details
