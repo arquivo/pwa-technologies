@@ -118,7 +118,7 @@ public class NutchwaxQuery
     	sb.append(m.group(1));    	    	   
     	String urls[]=EntryPageExpansion.expandwww(m.group(2)); // TODO MC - BUG nutchwax 0000566 - add search with and witout www variations  
     	for (int i=0;i<urls.length;i++) {
-    		LOGGER.info(  "[OpenSearch] url[" + urls[ i ] + "]" );
+    		//LOGGER.info(  "[OpenSearch] url[" + urls[ i ] + "]" );
     		String encoded = Base32.encode(md.digest(urls[i].getBytes()));         	    	
         	if (i==0) {
         		sb.append(encoded);
@@ -133,7 +133,7 @@ public class NutchwaxQuery
     	sb.append(mexpand.group(1));
     	String urls[]=EntryPageExpansion.expand(mexpand.group(2));
     	for (int i=0;i<urls.length;i++) {
-    		LOGGER.info(  "[OpenSearch] url[" + urls[ i ] + "]" );
+    		//LOGGER.info(  "[OpenSearch] url[" + urls[ i ] + "]" );
     		String encoded = Base32.encode(md.digest(urls[i].getBytes()));
     		if (i==0) {
        			sb.append(encoded);
@@ -160,12 +160,12 @@ public class NutchwaxQuery
   
   public static String encodeVersionHistory( final String versionHistory ) {
 	  StringBuffer sb = new StringBuffer( versionHistory.length( ) );
-	  LOGGER.info( "[encodeVersionHistory] versionHistory " + versionHistory );
+	  //LOGGER.info( "[encodeVersionHistory] versionHistory " + versionHistory );
 	  String urls[]=EntryPageExpansion.expandhttpAndhttps( versionHistory );
-	  LOGGER.info( "[encodeVersionHistory] urls.length[ "+urls.length+" ]" );
+	  //LOGGER.info( "[encodeVersionHistory] urls.length[ "+urls.length+" ]" );
 	  sb.append( versionHistory );
 	  for ( int i = 0 ;i < urls.length ; i++ ) {
-		  LOGGER.info( "[encodeVersionHistory] url[ "+urls[ i ]+" ] to encoded" );
+		  //LOGGER.info( "[encodeVersionHistory] url[ "+urls[ i ]+" ] to encoded" );
 		  String encoded = Base32.encode( md.digest( urls[ i ].getBytes( ) ) );
 		  if( encoded != null && !encoded.equals( "" ) )
 			  sb.append( " exacturl:" ).append( encoded );

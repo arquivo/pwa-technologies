@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,31 +43,50 @@ public class CdxParser {
 		this.collectionsHost = collectionsHost;
 	}
 	
+	public int getTotal( String url , String from , String to, int limitP, int start  ) {
+		String urlCDX = getLink( url , from , to );
+		try{
+			List< JsonObject > jsonValues = readJsonFromUrl( urlCDX );
+			if( jsonValues == null ) 
+				return 0;
+
+			return jsonValues.size( );
+			
+		} catch( Exception e ){
+			LOG.debug( "[getResults] URL["+urlCDX+"] e " , e );
+			return 0;
+		}
+	}
 	
 	public List< ItemCDX > getResults( String url , String from , String to, int limitP, int start ) {
 		Gson gson = new Gson( );
 		List< ItemCDX > cdxList = new ArrayList< ItemCDX >( );
 		String urlCDX = getLink( url , from , to );
-		int counter = 0;
+		int counter = 1;
 		int limit = 0;
 		if( limitP > 0 ) {
 			limit = limitP;
 		}
-		LOG.info( "[getResults] urlCDX["+urlCDX+"]" );
+		
+		LOG.info( "[getResults] CDX-API URL["+urlCDX+"]" );
 		try{
 			List< JsonObject > jsonValues = readJsonFromUrl( urlCDX );
 			if( jsonValues == null ) 
 				return null;
 			if( limit > 0 )
 				limit = limit + start;
-			LOG.info( "[getResults] jsonValues size = " + jsonValues.size( ) );
+			
 			for( int i = 0 ; i < jsonValues.size( ) ; i++ ) { //convert cdx result into object
-				if( i < start ) continue;
+				if( counter < start ){
+					counter++;
+					continue;
+				}
 				ItemCDX item = gson.fromJson( jsonValues.get( i ) , ItemCDX.class );
 				if( cdxList.contains( item ) ) continue;
-				cdxList.add( item );
-				if( limit > 0 && i > limit )
+				if( limit > 0 && counter >= limit )
 					break;
+				cdxList.add( item );
+				counter++;
 			}
 			
 			return cdxList;
@@ -84,10 +105,19 @@ public class CdxParser {
 	 */
 	private String getLink( String url , String from , String to ) {
 		LOG.info( "[CDXParser][getLink] url["+url+"] from["+from+"] to["+to+"]" );
+		String urlEncoded = "";
+		try{
+			urlEncoded = URLEncoder.encode( url, "UTF-8" );
+			LOG.info( "url = " + url + " urlEncoded = " + urlEncoded );
+		} catch( UnsupportedEncodingException un ) {
+			LOG.error( un );
+			urlEncoded = url; 
+		}
+		  
 		return "http://".concat( "arquivo.pt" ).concat( cdxServer ) 
 					.concat( "url" )
 					.concat( equalOP )
-					.concat( url )
+					.concat( urlEncoded )
 					.concat( andOP )
 					.concat( "output" )
 					.concat( equalOP )
@@ -99,8 +129,11 @@ public class CdxParser {
 					.concat( andOP )
 					.concat( "to" )
 					.concat( equalOP )
-					.concat( to );
-
+					.concat( to )
+					.concat( andOP )
+					.concat( "reverse" )
+					.concat( equalOP )
+					.concat( "true" );
 	}
 	
 	
@@ -112,6 +145,7 @@ public class CdxParser {
 	private ArrayList< JsonObject > readJsonFromUrl( String strurl ) {
 		InputStream is = null;
 		ArrayList< JsonObject >  jsonResponse = new ArrayList< JsonObject >( );
+		
 		try {
 			URL url = new URL( strurl );
 			URLConnection con = url.openConnection( );

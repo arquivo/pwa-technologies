@@ -170,6 +170,12 @@ public class TextSearchServlet extends HttpServlet {
 	  String qExactURL 		= "";
 	  String[ ] urlParams 	= null;
 	  int hitsPerDup = 2;
+	  long startTime;
+	  long endTime;
+	  long duration;
+	  boolean metadataQuery = false;
+	  boolean versionHistoryQuery = false;
+	  boolean fulltextQuery = false;
 	  
 	  // get parameters from request
 	  request.setCharacterEncoding("UTF-8");
@@ -185,14 +191,12 @@ public class TextSearchServlet extends HttpServlet {
 	  if ( q == null )
 		  q = "";
 	  queryString.append( q );
-	  LOG.info( "[doGet] q=" + q );
 	  
 	  urlQuery = URLEncoder.encode( q , "UTF-8" ); //Encode query  in utf8
 	  
 	  queryLang 	 = request.getParameter( "lang" ); // the query language
 	  versionHistory = request.getParameter( "versionHistory" ); // get versiobnHistory parameter
 	  metadataParam  = request.getParameter( "metadata" ); //get metadata parameter
-	  LOG.info( "versionHistory["+versionHistory+"] metadataParam["+metadataParam+"]" );
 	  
 	  if( isDefined( versionHistory ) ) {
 		 urlParams = versionHistory.split( " " );
@@ -215,7 +219,7 @@ public class TextSearchServlet extends HttpServlet {
 	  if( limit > 2000 )
 		  limit = 2000;
 	  
-	  String limitPerSiteS = request.getParameter( "limitPerSite" );
+	  String limitPerSiteS = request.getParameter( "itemsPerSite" );
 	  if( limitPerSiteS != null )
 		  hitsPerDup = parseToIntWithDefault( limitPerSiteS , 2 );
 	  
@@ -254,8 +258,6 @@ public class TextSearchServlet extends HttpServlet {
       if ( dateEnd == null || dateEnd.length( ) == 0 ) {
     	  dateEnd = null; 
       }
-      
-      LOG.info( "[doGet] dtstart["+dateStart+"] dtend["+dateEnd+"]" );
       
       //Set the timestamp based on the input parameters from and to
       if( dateStart == null && dateEnd != null ){
@@ -369,20 +371,25 @@ public class TextSearchServlet extends HttpServlet {
 	  //Set Service Name and link to service in response 
 	  responseObject.setServiceName( ( String ) NS_MAP.get( "serviceName" ) );
 	  responseObject.setLinkToService( ( String ) NS_MAP.get( "link" ) );
-	  
-	  //Set input parameters to send in response
-	  requestParameters.setLimit( limit );
-	  requestParameters.setLimitPerSite( hitsPerDup );
-	  requestParameters.setStart( start );
-	  requestParameters.setFrom( dateStart );
-	  requestParameters.setTo( dateEnd );
-	  if( !typeParameter.equals( "" ) )
-		  requestParameters.setType( typeParameter );
-	  requestParameters.setPrettyPrint( prettyPrintParameter );
-	  if( !siteParameter.equals( "" ) )
-		  requestParameters.setSite( siteParameter );
+
 	  
 	  if( limit == 0 ) { //TODO review code 
+		  
+		  //Set input parameters to send in response
+		  if( limitString != null && !limitString.equals( "" ) )
+			  requestParameters.setLimit( limitString );
+		  if( limitPerSiteS != null && !limitPerSiteS.equals( "" ) )
+			  requestParameters.setLimitPerSite( limitPerSiteS );
+		  if( startString != null && !startString.equals( "" ) )
+			  requestParameters.setStart( startString );
+		  requestParameters.setFrom( dateStart );
+		  requestParameters.setTo( dateEnd );
+		  if( !typeParameter.equals( "" ) )
+			  requestParameters.setType( typeParameter );
+		  requestParameters.setPrettyPrint( prettyPrintParameter );
+		  if( !siteParameter.equals( "" ) )
+			  requestParameters.setSite( siteParameter );
+		  
 		  if( q != null && !"".equals( q ) )
 			  requestParameters.setQueryTerms( q );
 		  
@@ -425,15 +432,13 @@ public class TextSearchServlet extends HttpServlet {
       
       if( metadataParam != null && !metadataParam.equals( "" ) ) { //metadata query
     	  LOG.info( "Metadata query" );
-    	  //TODO NOT implemented
     	  String rversionId = metadataParam.split( " " )[ 0 ];
-    	  LOG.info( "rversionId["+rversionId+"]" );
     	  int indx = rversionId.lastIndexOf( "/" );
-    	  LOG.info( "indx["+indx+"]" );
+    	  
     	  if( indx > 0 ) {
         	  String[ ] versionIdsplited = { rversionId.substring( 0, indx ), rversionId.substring( indx + 1) };
         	  if( metadataValidator( versionIdsplited ) ) { //valid URL
-        		 LOG.info( "Version ["+rversionId+"] is correct" );
+        		 LOG.debug( "Version ["+metadataParam+"] is correct" );
         		 if( urlValidator( versionIdsplited[ 0 ] ) ) { //valid URL
         			 dateStart = "19960101000000";
         			 Calendar dateEND = currentDate( );
@@ -446,7 +451,8 @@ public class TextSearchServlet extends HttpServlet {
            		  		 sbExactURL.append( urlEncoded[ i ].concat( " " ) );
            		  	 }
            		  	 qExactURL = sbExactURL.toString( );
-           		  	 LOG.info(" [Metadata] qExactURL["+qExactURL+"]");
+           		  	 LOG.debug(" [Metadata] qExactURL["+qExactURL+"]");
+           		  	 
            		  	 hitsPerDup = 1;
            		  	 CdxParser cdxProcessor = new CdxParser( collectionsHost );
            		  	 //get cdx index fields
@@ -459,24 +465,25 @@ public class TextSearchServlet extends HttpServlet {
            		  	 List< ItemCDX > mresultsCDX = selectCDXItem( resultsCDX , versionIdsplited[ 1 ] );
            		  	 
            		  	 if( mresultsCDX != null ) {
-           		  		 LOG.info( "resultCDX CORRECT" );
            		  		 itens = getResponseValues( mresultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse, true );
            		  	 } else 
            		  		 itens = new ArrayList< Item >( );
            	  	}
         		 
         	  } else {
-        		  LOG.info( "VersionID ["+metadataParam+"] NOT correct" );
+        		  LOG.warn( "VersionID ["+metadataParam+"] NOT correct" );
         		  itens = new ArrayList< Item >( );
         	  }
     		  
     	  } else {
-    		  LOG.info( "VersionID ["+metadataParam+"] NOT correct" );
+    		  LOG.warn( "VersionID ["+metadataParam+"] NOT correct" );
     		  itens = new ArrayList< Item >( );
     	  }
+    	  
+    	  metadataQuery = true;
     		  
       } else if( isDefined( qURL ) ) { //URL query
-    	  LOG.info( "URL query => versionHistory = " + qURL );
+    	  LOG.info( "URL query" );
     	  
     	  if( urlValidator( qURL ) ) { //valid URL
     		  if( dateStart == null && dateEnd == null ) { //if date is null
@@ -490,19 +497,32 @@ public class TextSearchServlet extends HttpServlet {
     		  }
     		  qExactURL = sbExactURL.toString( );
     		  hitsPerDup = 1;
+    		  
+    		  startTime = System.nanoTime( );
     		  CdxParser cdxProcessor = new CdxParser( collectionsHost );
     		  //get cdx index fields
     		  List< ItemCDX > resultsCDX = cdxProcessor.getResults( qURL, dateStart, dateEnd, limit, start );
-    		  if( resultsCDX != null )
-    			  totalItems = String.valueOf( resultsCDX.size( ) );
+    		  if( resultsCDX != null ) {
+    			  int sizeItems = cdxProcessor.getTotal( qURL, dateStart, dateEnd, limit, start );
+    			  totalItems = String.valueOf( sizeItems );
+    		  }
     		  else 
     			  totalItems = "0";
+    		  endTime = System.nanoTime( );
+    		  duration = ( endTime - startTime );
     		  
+    		  LOG.info( "[URL-Query] CDX API Response Time: " + duration + " milliseconds");
+    		  startTime = System.nanoTime( );
     		  
     		  itens = getResponseValues( resultsCDX , fields , qExactURL, queryLang, start, limit, hitsPerDup, dedupField, sort, reverse, false );
-    	  
+    		  
+    		  endTime = System.nanoTime( );
+    		  duration = ( endTime - startTime );
+    		  LOG.info( "[URL-Query] Match between CDX results and Lucene index information Response Time: " + duration + " milliseconds" );
+    		  
     	  }
-
+    	  versionHistoryQuery = true;
+    	  
       } else { //full-text query
     	  LOG.info( "Full-text Query" );
     	  /** Lucene index fields **/
@@ -515,8 +535,8 @@ public class TextSearchServlet extends HttpServlet {
     	  
     	  String qRequest = queryString.toString( );
     	  query = Query.parse( qRequest , queryLang , this.conf );
-    	  LOG.info( "query:" + qRequest + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & functions:" +  this.conf.get( Global.RANKING_FUNCTIONS ) + " & maxHitsPerVersion:1" );
     	  
+    	  startTime = System.nanoTime( );
     	  //execute the query    
     	  try {
     		  int hitsPerVersion = 1;    		
@@ -525,8 +545,8 @@ public class TextSearchServlet extends HttpServlet {
     		  LOG.warn("Search Error", e);    	
     		  hits = new Hits( 0 ,new Hit[ 0 ] );	
     	  }
-
-    	  LOG.info( "total hits: " + hits.getTotal( ) + " & length: " +hits.getLength( ) );
+    	  LOG.info( "query:" + qRequest + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & functions:" +  this.conf.get( Global.RANKING_FUNCTIONS ) + " & maxHitsPerVersion:1 =  Total Hits: " + hits.getTotal( ) + " & Length: " +hits.getLength( ) );
+    	  
     	  totalItems = String.valueOf( hits.getTotal( ) );
     	  int end = ( int )Math.min( hits.getLength( ), start + limit );
     	  int length = end-start;
@@ -538,63 +558,90 @@ public class TextSearchServlet extends HttpServlet {
     	  }
 
     	  itens = luceneQueryProcessor( length, fields, details, request.getParameter( "details" ), show , summaries, query, parseTexts );
-      
+    	  endTime = System.nanoTime( );
+    	  duration = ( endTime - startTime );
+    	  LOG.info( "[Full-Text Query] Call response time to the query server and subsequent processing of the lucene index information: " + duration + " milliseconds." );
+    	  fulltextQuery = true;
       }
      
       try {
     	  
     	  String requestUrl = request.getRequestURL( ).toString( );
     	  String base = requestUrl.substring( 0 , requestUrl.lastIndexOf( '/' ) );
+    	  if( !metadataQuery ) {
+    		
+	    	  //*** calculate the offset of the next & previous results. ***
+			  int offsetNextPage = start + limit; // offset next page
+			  LOG.debug( "offsetNextPage = " + offsetNextPage );
+			  int offsetPreviousPage;
+			  if( start == 0 )
+				  offsetPreviousPage = 0;
+			  else {
+				  offsetPreviousPage = start - limit;
+				  offsetPreviousPage = (offsetPreviousPage < 0 ? -offsetPreviousPage : offsetPreviousPage);
+			  }
+			  LOG.debug( "offsetPreviousPage = " + offsetPreviousPage );
+			  
+			  StringBuffer requestURL = request.getRequestURL( );
+			  if (request.getQueryString( ) != null) {
+			      String parameterURL = request.getQueryString( ); 
+				  String pattern = "&offset=([^&]+)";
+			      if( parameterURL.contains( "&offset=" ) ) {
+			    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset=" + offsetNextPage );
+			      } else {
+			    	  parameterURL = parameterURL.concat( "&offset=" + offsetNextPage );
+			      }
+			      requestURL.append( "?" ).append( parameterURL );
+			  }
+			  LOG.debug( "Next_page = " + requestURL.toString( ) );
+			  if( itens != null && itens.size( ) > 0 ) 
+				  responseObject.setNext_page( requestURL.toString( ) );
+			  
+			  requestURL = request.getRequestURL( );
+			  if (request.getQueryString( ) != null) {
+			      String parameterURL = request.getQueryString( ); 
+			      LOG.debug( "getQueryString 2 ="+ request.getQueryString( ) );
+				  String pattern = "&offset=([^&]+)";
+			      if( parameterURL.contains( "&offset=" ) ) {
+			    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset="+offsetPreviousPage );
+			      } else {
+			    	  parameterURL = parameterURL.concat( "&offset=" + offsetPreviousPage );
+			      }
+			      requestURL.append( "?" ).append( parameterURL );
+			  }
+			  LOG.debug( "Previous_page = " + requestURL.toString( ) );
+			  if( itens != null && itens.size( ) > 0 ) 
+				  responseObject.setPrevious_page( requestURL.toString( ) );
+			  //** end **
+			  
+			  if( totalItems != null )
+				  responseObject.setTotalItems( totalItems );
+			  
+			  //if( sortParameter != null && !"".equals( sortParameter ) )
+				  //requestParameters.setSort( sortParameter );
+    	  }
     	  
-    	  //*** calculate the offset of the next & previous results. ***
-		  int offsetNextPage = start + limit; // offset next page
-		  LOG.debug( "offsetNextPage = " + offsetNextPage );
-		  int offsetPreviousPage;
-		  if( start == 0 )
-			  offsetPreviousPage = 0;
-		  else {
-			  offsetPreviousPage = start - limit;
-			  offsetPreviousPage = (offsetPreviousPage < 0 ? -offsetPreviousPage : offsetPreviousPage);
+    	  //Set input parameters to send in response
+		  if( !metadataQuery ) {
+			  if( limitString != null && !limitString.equals( "" ) )
+				  requestParameters.setLimit( limitString );
+			  if( startString != null && !startString.equals( "" ) )
+				  requestParameters.setStart( startString );
+			  requestParameters.setFrom( dateStart );
+			  requestParameters.setTo( dateEnd );
 		  }
-		  LOG.debug( "offsetPreviousPage = " + offsetPreviousPage );
-		  
-		  StringBuffer requestURL = request.getRequestURL( );
-		  if (request.getQueryString( ) != null) {
-		      String parameterURL = request.getQueryString( ); 
-			  String pattern = "&offset=([^&]+)";
-		      if( parameterURL.contains( "&offset=" ) ) {
-		    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset=" + offsetNextPage );
-		      } else {
-		    	  parameterURL = parameterURL.concat( "&offset=" + offsetNextPage );
-		      }
-		      requestURL.append( "?" ).append( parameterURL );
-		  }
-		  LOG.debug( "Next_page = " + requestURL.toString( ) );
-		  if( itens != null && itens.size( ) > 0 ) 
-			  responseObject.setNext_page( requestURL.toString( ) );
-		  
-		  requestURL = request.getRequestURL( );
-		  if (request.getQueryString( ) != null) {
-		      String parameterURL = request.getQueryString( ); 
-		      LOG.debug( "getQueryString 2 ="+ request.getQueryString( ) );
-			  String pattern = "&offset=([^&]+)";
-		      if( parameterURL.contains( "&offset=" ) ) {
-		    	  parameterURL = parameterURL.replaceAll(pattern,  "&offset="+offsetPreviousPage );
-		      } else {
-		    	  parameterURL = parameterURL.concat( "&offset=" + offsetPreviousPage );
-		      }
-		      requestURL.append( "?" ).append( parameterURL );
-		  }
-		  LOG.debug( "Previous_page = " + requestURL.toString( ) );
-		  if( itens != null && itens.size( ) > 0 ) 
-			  responseObject.setPrevious_page( requestURL.toString( ) );
-		  //** end **
-		  
-		  if( totalItems != null )
-			  responseObject.setTotalItems( totalItems );
-		  
-		  //if( sortParameter != null && !"".equals( sortParameter ) )
-			  //requestParameters.setSort( sortParameter );
+		  LOG.info( "fulltextQuery = " + fulltextQuery );
+    	  if( fulltextQuery ) {
+    		  LOG.info( "fulltextQuery = " + fulltextQuery + " hitsPerDup" );
+    		  if( limitPerSiteS != null && !limitPerSiteS.equals( "" ) )
+    			  requestParameters.setLimitPerSite( limitPerSiteS );
+    		  if( !typeParameter.equals( "" ) )
+    			  requestParameters.setType( typeParameter );
+    	  }
+    		  
+    	  requestParameters.setPrettyPrint( prettyPrintParameter );
+		  if( !siteParameter.equals( "" ) )
+			  requestParameters.setSite( siteParameter );
 		  
 		  if( q != null && !"".equals( q ) )
 			  requestParameters.setQueryTerms( q );
@@ -741,7 +788,7 @@ public class TextSearchServlet extends HttpServlet {
 		  
 		  String dateLucene = "date:".concat( item.getTstamp( ) ).concat( " " ); //format:ddmmyyyhhmmss-ddmmyyyhhmmss
 		  String qLucene = dateLucene.concat( qExactURL );
-		  LOG.info( "qLucene = " + qLucene );
+		 
 		  try{
 			  query = Query.parse( qLucene, queryLang, this.conf );
 		  } catch( IOException e ) {
@@ -785,20 +832,17 @@ public class TextSearchServlet extends HttpServlet {
     			  String urlEncoded = "";
     			  try{
     				  urlEncoded = URLEncoder.encode( id, "UTF-8" );
-    				  LOG.info( "ID = " + id + " urlEncoded = " + urlEncoded );
     			  } catch( UnsupportedEncodingException un ) {
     				  LOG.error( un );
     				  urlEncoded = id; 
     			  }
     			  String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
-    			  LOG.info( "textContent = " + textContent );
     			  item.setParseText( textContent );
           	  } else {
-          		LOG.info( "textContent NOT print" );
           		  item.setParseText( "" );
           	  }
         	  
-    		  LOG.info( "CDXServer["+item.getTstamp()+"] Lucene["+detail.getValue( "tstamp" )+"]" );
+    		  LOG.debug( "CDXServer["+item.getTstamp()+"] Lucene["+detail.getValue( "tstamp" )+"]" );
     		  String url = detail.getValue( "url" );
     		  String title = detail.getValue( "title" );
     		  if ( title == null || title.equals("") ) {   // use url for docs w/o title
@@ -821,7 +865,6 @@ public class TextSearchServlet extends HttpServlet {
               String mimeType = detail.getValue( "primaryType" ).concat( "/" ).concat( detail.getValue( "subType" ) ); 
               
               String dateEpoch = detail.getValue( "date" );
-              LOG.info( "dateCDX = " + epochDate + " dateLucene = " + dateEpoch );
               if( FieldExists( fields , "date" ) )
               	item.setDate( dateEpoch );
               if( FieldExists( fields , "mimetype" ) )
@@ -1020,16 +1063,13 @@ public class TextSearchServlet extends HttpServlet {
             		try{
             			//urlDecoder = URLDecoder.decode( id, "UTF-8" );
             			urlEncoded = URLEncoder.encode( id, "UTF-8" );
-            			LOG.info( "ID = " + id + " urlEncoded = " + urlEncode );
             		} catch( UnsupportedEncodingException un ) {
             			LOG.error( un );
             			urlEncoded = id; 
             		}
             		String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
-            		LOG.info( "textContent = " + textContent + " encode = " + urlEncoded );
             		item.setParseText( textContent );
             	} else {
-            		LOG.info( "textContent NOT print ");
             		item.setParseText( "" );
             	}
 
@@ -1077,7 +1117,6 @@ public class TextSearchServlet extends HttpServlet {
   private static List< ItemCDX > selectCDXItem( List< ItemCDX > resultsCDX , String tstamp ) {
 	  List< ItemCDX > items = new ArrayList< ItemCDX >( );
 	  for( ItemCDX item : resultsCDX ) {
-		  LOG.info( "[selectCDXItem] item.getTimestamp( )["+item.getTimestamp( )+"].equals( "+tstamp+" )" );
 		  if( item.getTimestamp( ).equals( tstamp ) ) {
 			  items.add( item );
 			  return items;
@@ -1102,7 +1141,6 @@ public class TextSearchServlet extends HttpServlet {
    * @return
    */
   private static boolean metadataValidator( String[ ] versionIdsplited ) {
-	  LOG.info( "metadata versionId[0]["+versionIdsplited[ 0 ]+"] versionId[1]["+versionIdsplited[ 1 ]+"]" );
 	  if( urlValidator( versionIdsplited[ 0 ] ) && versionIdsplited[ 1 ].matches( "[0-9]+" ) ) 
 		  return true;
 	  else

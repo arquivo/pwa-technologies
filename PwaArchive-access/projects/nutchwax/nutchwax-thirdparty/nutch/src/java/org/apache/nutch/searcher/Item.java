@@ -3,7 +3,7 @@ package org.apache.nutch.searcher;
 import com.google.gson.annotations.SerializedName;
 
 public class Item {
-	@SerializedName( "versionId" )
+	@SerializedName( "versionID" )
 	private String key;
 	@SerializedName( "title" )
 	private String title;
@@ -21,6 +21,7 @@ public class Item {
 	private String itemText;
 	private String date; //epoch format
 	private String encoding;
+	@SerializedName( "linkToNoFrame" )
 	private String noFrameLink;
 	@SerializedName( "snippet" )
 	private String snippetForTerms;
