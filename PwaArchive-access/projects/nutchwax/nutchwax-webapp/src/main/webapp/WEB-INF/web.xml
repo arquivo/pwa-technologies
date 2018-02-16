@@ -23,6 +23,14 @@
   <url-pattern>/textsearch</url-pattern>
 </servlet-mapping>
 
+<servlet>
+  <servlet-name>NutchwaxTextExtracted</servlet-name>
+  <servlet-class>org.archive.access.nutch.NutchwaxTextExtractedServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>NutchwaxTextExtracted</servlet-name>
+  <url-pattern>/textextracted</url-pattern>
+</servlet-mapping>
 
 <servlet>
   <servlet-name>NutchwaxTimemap</servlet-name>

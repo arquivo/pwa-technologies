@@ -12,7 +12,7 @@ import org.apache.nutch.util.NutchConfiguration;
 
 
 /**
- * Class that encapsualtes parameters for RPC communication to request summary for a set of hits
+ * Class that encapsulates parameters for RPC communication to request summary for a set of hits
  * @author Miguel Costa
  */
 public class PwaRequestSummaryWritable implements Writable {

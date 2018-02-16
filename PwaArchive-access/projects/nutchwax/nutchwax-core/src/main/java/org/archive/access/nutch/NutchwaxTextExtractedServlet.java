@@ -1,0 +1,406 @@
+package org.archive.access.nutch;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.security.Principal;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.Map;
+import java.net.URLDecoder;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.conf.Configuration;
+
+import org.apache.nutch.searcher.TextExtractedServlet;
+import org.apache.nutch.util.NutchConfiguration;
+import org.archive.access.nutch.jobs.EntryPageExpansion;
+
+
+public class NutchwaxTextExtractedServlet extends TextExtractedServlet{
+
+	
+	public static final Log LOG =
+		    LogFactory.getLog(NutchwaxTextExtractedServlet.class.getName());
+	
+			  
+	  
+	  /**
+	   * Put our configuration into place in the servlet context ahead
+	   * of the query done by OpenSearchServlet#init so it finds our
+	   * Configuration and doesn't create its own -- we're faking it out.
+	   * Do same for nutchbean.  Add our NutchwaxBean into place instead.
+	   * @param config
+	   * @throws ServletException
+	   */
+	  public void init(ServletConfig config) throws ServletException
+	  {
+	   
+	    Configuration conf = NutchwaxConfiguration.
+	      getConfiguration(config.getServletContext());
+	      
+	    config.getServletContext( ).
+	      setAttribute( NutchConfiguration.class.getName( ) , conf );
+
+	    try{
+	      NutchwaxBean.get( config.getServletContext( ) , conf );
+	    }
+	    catch ( IOException e )
+	    {
+	      throw new ServletException( e );
+	    }
+	    
+	    super.init( config );
+	  }
+	  
+	  /**
+	   * 
+	   * @param request
+	   * @param response
+	   * @throws ServletException
+	   * @throws IOException
+	   */
+	  public void doPost(final HttpServletRequest request,
+			    final HttpServletResponse response)
+			    throws ServletException, IOException
+	  {
+		  doGet(request, response);
+	  }
+	  
+	  
+	  /**
+	   * 
+	   * @param request
+	   * @param response
+	   * @throws ServletException
+	   * @throws IOException
+	   */
+	  public void doGet(final HttpServletRequest request,
+	    final HttpServletResponse response)
+	    throws ServletException, IOException
+	  {
+		  
+		 try {
+			 // Call super method passing an overridden version of
+		    // HttpServletRequest so we can preprocess the query string whenever
+		    // a call to #getParameter adding our exacturl encoding.  See
+		    // NutchwaxQuery for why we have to do this.
+		    super.doGet(new HttpServletRequest( )
+		    {
+		      public String getParameter(String s)
+		      {
+		    	if ( s == null || !s.equals( "m" ) ){
+				  return request.getParameter( s );
+				}
+				String queryString= null;
+				if ( s.contains( "exacturl:" ) ){
+					queryString = s;
+				} else {
+					String saux = request.getParameter( s );
+					LOG.info( "Parameter = " + saux );
+					
+					int indx = saux.lastIndexOf( "/" );
+					LOG.info( "saux["+saux+"] indx["+indx+"]" );
+					String url = null;
+					String tstamp = null;
+					if( indx <= 0 )
+						return null;
+					
+					url = saux.substring( 0, indx );
+					tstamp = saux.substring( indx + 1 );
+					queryString = url; 
+						
+					if ( queryString != null ) {
+						queryString = NutchwaxQuery.encodeVersionHistory( queryString );
+						queryString = url + "/" + tstamp + queryString.substring( queryString.indexOf( " " ) ); 
+						LOG.debug( "queryString ["+queryString+"]" );
+					}
+				}
+				return queryString;
+		      }
+		
+		      public String getAuthType()
+		      {
+		        return request.getAuthType();
+		      }
+		
+		      public Cookie[] getCookies()
+		      {
+		        return request.getCookies();
+		      }
+		
+		      public long getDateHeader(String s)
+		      {
+		        return request.getDateHeader(s);
+		      }
+		
+		      public String getHeader(String s)
+		      {
+		        return request.getHeader(s);
+		      }
+		
+		      public Enumeration getHeaders(String s)
+		      {
+		        return request.getHeaders(s);
+		      }
+		
+		      public Enumeration getHeaderNames()
+		      {
+		        return request.getHeaderNames();
+		      }
+		
+		      public int getIntHeader(String s)
+		      {
+		        return request.getIntHeader(s);
+		      }
+		
+		      public String getMethod()
+		      {
+		        return request.getMethod();
+		      }
+		
+		      public String getPathInfo()
+		      {
+		        return request.getPathInfo();
+		      }
+		
+		      public String getPathTranslated()
+		      {
+		        return request.getPathTranslated();
+		      }
+		
+		      public String getContextPath()
+		      {
+		        return request.getContextPath();
+		      }
+		
+		      public String getQueryString()
+		      {
+		        return request.getQueryString();
+		      }
+		
+		      public String getRemoteUser()
+		      {
+		        return request.getRemoteUser();
+		      }
+		
+		      public boolean isUserInRole(String s)
+		      {
+		        return request.isUserInRole(s);
+		      }
+		
+		      public Principal getUserPrincipal()
+		      {
+		        return request.getUserPrincipal();
+		      }
+		
+		      public String getRequestedSessionId()
+		      {
+		        return request.getRequestedSessionId();
+		      }
+		
+		      public String getRequestURI()
+		      {
+		        return request.getRequestURI();
+		      }
+		
+		      public StringBuffer getRequestURL()
+		      {
+		        return request.getRequestURL();
+		      }
+		
+		      public String getServletPath()
+		      {
+		        return request.getServletPath();
+		      }
+		
+		      public HttpSession getSession(boolean s)
+		      {
+		        return request.getSession(s);
+		      }
+		
+		      public HttpSession getSession()
+		      {
+		        return request.getSession();
+		      }
+		
+		      public boolean isRequestedSessionIdValid()
+		      {
+		        return request.isRequestedSessionIdValid();
+		      }
+		
+		      public boolean isRequestedSessionIdFromCookie()
+		      {
+		        return request.isRequestedSessionIdFromCookie();
+		      }
+		
+		      public boolean isRequestedSessionIdFromURL()
+		      {
+		        return request.isRequestedSessionIdFromURL();
+		      }
+		
+		      public boolean isRequestedSessionIdFromUrl()
+		      {
+		        throw new RuntimeException("Unimplemented");
+		      }
+		
+		      public Object getAttribute(String s)
+		      {
+		        return request.getAttribute(s);
+		      }
+		
+		      public Enumeration getAttributeNames()
+		      {
+		        return request.getAttributeNames();
+		      }
+		
+		      public String getCharacterEncoding()
+		      {
+		        return request.getCharacterEncoding();
+		      }
+		
+		      public void setCharacterEncoding(String s)
+		        throws UnsupportedEncodingException
+		      {
+		        request.setCharacterEncoding(s);
+		      }
+		
+		      public int getContentLength()
+		      {
+		        return request.getContentLength();
+		      }
+		
+		      public String getContentType()
+		      {
+		        return request.getContentType();
+		      }
+		
+		      public ServletInputStream getInputStream() throws IOException
+		      {
+		        return request.getInputStream();
+		      }
+		
+		      public Enumeration getParameterNames()
+		      {
+		        return request.getParameterNames();
+		      }
+		
+		      public String[] getParameterValues(String s)
+		      {
+		        return request.getParameterValues(s);
+		      }
+		
+		      public Map getParameterMap()
+		      {
+		        return request.getParameterMap();
+		      }
+		
+		      public String getProtocol()
+		      {
+		        return request.getProtocol();
+		      }
+		
+		      public String getScheme()
+		      {
+		        return request.getScheme();
+		      }
+		
+		      public String getServerName()
+		      {
+		        return request.getServerName();
+		      }
+		
+		      public int getServerPort()
+		      {
+		        return request.getServerPort();
+		      }
+		
+		      public BufferedReader getReader() throws IOException
+		      {
+		        return request.getReader();
+		      }
+		
+		      public String getRemoteAddr()
+		      {
+		        return request.getRemoteAddr();
+		      }
+		
+		      public String getRemoteHost()
+		      {
+		        return request.getRemoteHost();
+		      }
+		
+		      public void setAttribute(String a, Object b)
+		      {
+		        request.setAttribute(a, b);
+		      }
+		
+		      public void removeAttribute(String a)
+		      {
+		        request.removeAttribute(a);
+		      }
+		
+		      public Locale getLocale()
+		      {
+		        return request.getLocale();
+		      }
+		
+		      public Enumeration getLocales()
+		      {
+		        return request.getLocales();
+		      }
+		
+		      public boolean isSecure()
+		      {
+		        return request.isSecure();
+		      }
+		
+		      public RequestDispatcher getRequestDispatcher(String a)
+		      {
+		        return request.getRequestDispatcher(a);
+		      }
+		
+		      public String getRealPath(String a)
+		      {
+		        throw new RuntimeException("Unimplemented");
+		      }
+		
+		      public int getRemotePort()
+		      {
+		        return request.getRemotePort();
+		      }
+		
+		      public String getLocalName()
+		      {
+		        return request.getLocalName();
+		      }
+		
+		      public String getLocalAddr()
+		      {
+		        return request.getLocalAddr();
+		      }
+		
+		      public int getLocalPort()
+		      {
+		        return request.getLocalPort();
+		      }
+		    }, response);
+		 } catch( IOException e ) {
+			 return;
+		 } catch( ServletException e1 ) {
+			 return;
+		 }
+	  }
+	
+}

@@ -142,13 +142,11 @@ public class OpenSearchServlet extends HttpServlet {
     
     if (queryString == null)
       queryString = "";
-   
   
-   
     LOG.info("[OpenSearch] First queryString =  " + queryString.toString() );
     
-   String urlQuery = URLEncoder.encode(queryString, "UTF-8");
-   urlQuery= URLEncoder.encode(queryString,"UTF-8");
+    String urlQuery = URLEncoder.encode(queryString, "UTF-8");
+    urlQuery= URLEncoder.encode(queryString,"UTF-8");
     // the query language
     String queryLang = request.getParameter("lang");
     
@@ -219,14 +217,14 @@ public class OpenSearchServlet extends HttpServlet {
     		// ignore
     	}    	
     }
-    LOG.info("[OpenSearch] TODO queryString =  " + queryString.toString() );
+    LOG.info("[OpenSearch] TODO queryString =  " + queryString.toString( ) );
     
     // wayback parameters
     boolean multipleDetails = request.getParameter("multDet")!=null && request.getParameter("multDet").equals("true"); // indicates that it requests multiple details instead of one at the time
     String sId = request.getParameter("id");
     String sIndex = request.getParameter("index");       
     boolean waybackQuery = request.getParameter("waybackQuery")!=null && request.getParameter("waybackQuery").equals("true"); // indicates that is a wayback request
-    
+    LOG.info( " waybackQuery="+ request.getParameter("waybackQuery") );
     
     // To support querying opensearch by  url
     // Lucene index format
@@ -236,8 +234,9 @@ public class OpenSearchServlet extends HttpServlet {
     boolean urlMatch = false;
     urlMatch= URL_PATTERN.matcher(queryString.toString()).matches();
     String urlQueryParam=null;
-    
+    LOG.info( "1 waybackQuery["+waybackQuery+"] urlMatch["+urlMatch+"]" );
     if (!waybackQuery && urlMatch  && !queryString.contains("site:")) {
+    	LOG.info( "waybackQuery["+waybackQuery+"] urlMatch["+urlMatch+"]" );
     	if (!queryString.startsWith("http://") && !queryString.startsWith("https://") ) {
             urlQueryParam = "http://" + queryString;
     	}
@@ -248,7 +247,8 @@ public class OpenSearchServlet extends HttpServlet {
     	queryStringOpensearchWayback= request.getParameter(s);
     	isOpensearhWayback=true;
     }
-    else if (queryString.contains("site:")){// if it contains site: is also a full-text search
+    else if (queryString.contains("site:")){ // if it contains site: is also a full-text search
+    	LOG.info( "waybackQuery["+waybackQuery+"] urlMatch["+urlMatch+"]" );
     	hitsPerDup = 0;
     	queryString= queryString.replaceAll("site:http://", "site:");
     	queryString = queryString.replaceAll("site:https://", "site:");
@@ -273,25 +273,25 @@ public class OpenSearchServlet extends HttpServlet {
     	Query query=null;
     	if (isOpensearhWayback){
     		query = Query.parse(queryStringOpensearchWayback, queryLang, this.conf);
-    		LOG.info("query: " + queryStringOpensearchWayback);	
+    		LOG.info("queryStringOpensearchWayback: " + queryStringOpensearchWayback + " queryLang:" + queryLang);	
     		sort = "relevance";
     	}
     	else{
     		query = Query.parse(queryString, queryLang, this.conf);
-    		LOG.info("query: " + queryString);
+    		LOG.info("queryString: " + queryString + " queryLang:" + queryLang );
     	}
     	    	
-
+    	
     	// execute the query    
-    	try {    		
+    	try {
+    		LOG.info( "query.toString() = " + query.toString( ) );
     		if (waybackQuery) { // wayback (URL) query
-    			
+    			LOG.info( "query:" + query.getTerms()[0] + " hitPerDup:" + hitsPerDup + " sort:" + sort );
     			hits = bean.search(query, start + hitsPerPage, hitsPerDup, dedupField, sort, reverse, true); 
     		}
     		else { // nutchwax (full-text) query    			    			
     			int hitsPerVersion = 1;    		
     			hits = bean.search(query, start + hitsPerPage, nQueryMatches, hitsPerDup, dedupField, sort, reverse, functions, hitsPerVersion);
-    			
     		}
     	} 
     	catch (IOException e) {
@@ -313,9 +313,10 @@ public class OpenSearchServlet extends HttpServlet {
     	details = bean.getDetails(show);
     }
     else { // BUG wayback 0000155 - send only the fields necessary to presentation
+    	LOG.info( "Multiple details == true" );
     	PwaRequestDetailsWritable detailsWritable=new PwaRequestDetailsWritable();
     	//detailsWritable.setFields(null);
-    	detailsWritable.setFields(new String[]{"digestDiff","tstamp"});
+    	detailsWritable.setFields(new String[]{"digestDiff","tstamp","exacturl"});
     	detailsWritable.setHits(show);
     	details = bean.getDetails(detailsWritable);
     }
@@ -395,18 +396,28 @@ public class OpenSearchServlet extends HttpServlet {
         	title = url;
         }
         addNode(doc, item, "title", title);
-                                     
+        
         //addNode(doc, item, "description", /*summaries[i].toHtml(false)*/""); // BUG wayback 0000155 - this is unnecessary
         String date = detail.getValue("tstamp");
         Date datet= null;
-        		try{
-        			datet = FORMAT.parse(date);
-        	        
-        	    }
-        	    catch ( ParseException e ){
-        	    	LOG.error(e);
-        	    }
-        if (url!=null) {
+		try{
+			datet = FORMAT.parse(date);
+	        
+	    }
+	    catch ( ParseException e ){
+	    	LOG.error(e);
+	    }
+		
+		/*TODO  DEBUG PRINTS 
+		 * for( int j = 0 ; j < detail.getLength( ) ; j++ ) 
+			LOG.info( "Hit field[" + detail.getField( j ) + "] value[" + detail.getValue( detail.getField( j ) ) + "]" );
+		
+		
+		LOG.info( " Hit url[" + url + "] timestamp[" + date + "] exactURL[" + detail.getValue( "exacturl" ) + "]  digestDiff[" + detail.getValue("digestDiff") + "]" );		
+        */
+		
+		
+        if ( url !=null ) {
         	// Lucene index format
         	String infoIndex = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
         	

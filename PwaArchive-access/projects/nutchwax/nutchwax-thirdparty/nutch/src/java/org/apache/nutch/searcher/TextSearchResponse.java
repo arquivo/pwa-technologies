@@ -10,12 +10,13 @@ public class TextSearchResponse {
 	private String linkToService;
 	private String next_page;
 	private String previous_page;
+	@SerializedName( "total_items" )
+	private String totalItems;
 	@SerializedName( "request_parameters" ) 
 	private TextSearchRequestParameters requestParameters; //request input parameters
 	@SerializedName( "response_items" )
 	private List<Item> itens;
-
-	
+		
 	public TextSearchResponse( ) { }
 
 	public String getServiceName() {
@@ -63,13 +64,21 @@ public class TextSearchResponse {
 		this.previous_page = previous_page;
 	}
 
+	
+	
+	public String getTotalItems() {
+		return totalItems;
+	}
+
+	public void setTotalItems(String totalItems) {
+		this.totalItems = totalItems;
+	}
+
 	@Override
 	public String toString() {
 		return "TextSearchResponse [serviceName=" + serviceName + ", linkToService=" + linkToService + ", next_page="
 				+ next_page + ", previous_page=" + previous_page + ", requestParameters=" + requestParameters
-				+ ", itens=" + itens + "]";
+				+ ", itens=" + itens + ", totalItems=" + totalItems + "]";
 	}
-
-	
 
 }

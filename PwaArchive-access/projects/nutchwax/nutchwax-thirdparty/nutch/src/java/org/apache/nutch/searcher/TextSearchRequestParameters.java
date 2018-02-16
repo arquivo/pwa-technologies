@@ -7,11 +7,11 @@ public class TextSearchRequestParameters {
 	@SerializedName( "q" )
 	private String queryTerms;
 	@SerializedName( "offset" )
-	private int start;
+	private String start;
 	@SerializedName( "maxItems" )
-	private int limit;
+	private String limit;
 	@SerializedName( "itemsPerSite" )
-	private int limitPerSite;
+	private String limitPerSite;
 	private String sort;
 	private String from;
 	private String to;
@@ -29,22 +29,22 @@ public class TextSearchRequestParameters {
 	public void setQueryTerms(String queryTerms) {
 		this.queryTerms = queryTerms;
 	}
-	public int getStart() {
+	public String getStart() {
 		return start;
 	}
-	public void setStart(int start) {
+	public void setStart(String start) {
 		this.start = start;
 	}
-	public int getLimit() {
+	public String getLimit() {
 		return limit;
 	}
-	public void setLimit(int limit) {
+	public void setLimit(String limit) {
 		this.limit = limit;
 	}
-	public int getLimitPerSite() {
+	public String getLimitPerSite() {
 		return limitPerSite;
 	}
-	public void setLimitPerSite(int limitPerSite) {
+	public void setLimitPerSite(String limitPerSite) {
 		this.limitPerSite = limitPerSite;
 	}
 	public String getSort() {
