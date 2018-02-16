@@ -62,7 +62,7 @@ public class CdxParser {
 		Gson gson = new Gson( );
 		List< ItemCDX > cdxList = new ArrayList< ItemCDX >( );
 		String urlCDX = getLink( url , from , to );
-		int counter = 1;
+		int counter = 0;
 		int limit = 0;
 		if( limitP > 0 ) {
 			limit = limitP;
