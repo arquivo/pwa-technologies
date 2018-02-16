@@ -137,7 +137,7 @@
     <link rel="stylesheet" href="css/leftmenu.css">
     <!-- end left menu dependencies -->
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
-	<!-- end addthis for sharing on social media -->     
+	<!-- end addthis for sharing on social media --> 
 
 
 </head>
@@ -150,7 +150,8 @@
                 <div id="form_container"> 
                     <div class="input-group stylish-input-group">
                         
-                            <input name="query" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autofocus autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <input name="query" id="txtSearch" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autofocus autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <span class="clear-text"><i class="fa fa-close"></i></span>                            
                             <span class="input-group-addon no-radius search-button-span">
                                 <button class="search-button" type="submit">
                                     <span class="glyphicon glyphicon-search white"></span>
@@ -168,17 +169,7 @@
                     <input type="hidden" id="l" name="l" value="<%=language%>"/>
                 </div>                  
                 </form>
-
-<script type="text/javascript">
-    $('#searchForm').submit(function() 
-    {
-        if ($.trim($(".form-control").val()) === "") {
-            /*TODO:: Do something when user enters empty input?*/
-        return false;
-        }
-    });    
-</script>
-  
+<script src="/include/clearForm.js"></script>      
 <script type="text/javascript">
 // Create a new date from a string, return as a timestamp.
 

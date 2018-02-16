@@ -12,6 +12,7 @@ body{
 #searchForm .form-control{
     font-size: 16px!important;
     height: 40px!important;
+    padding-right: 40px!important;
 }
 
 #form_container{
@@ -235,7 +236,7 @@ body{
 .yearUl{
     background: #42a5f5;
     text-align: left;
-    padding-top: 10px;
+    padding-top: 5px;
     margin-bottom: 1px;
     margin-left: 0px!important;
     margin-right: 0px!important;
@@ -247,7 +248,7 @@ body{
     background: #2196f3;
 }
 .yearUl > div:nth-child(3){
-    margin-top: 49px;
+    margin-top: 42px;
     border-top: 1px solid white;
 }
 
@@ -281,8 +282,8 @@ body{
 }
 
 .day-version-div{
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 12px;
+    padding-bottom: 13px;
     text-align: left;
     display: none;
     cursor: pointer;
@@ -350,7 +351,7 @@ body{
     float: right;
     padding-right: 1%;
     color: white;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
 }
 
 .iCarret{
@@ -661,7 +662,7 @@ em{
 
 .topcontainer{
     margin-top: 15px;
-    margin-bottom: 45px
+    margin-bottom: 21px;
 }
 
 .no-padding-horizontal{
@@ -790,4 +791,30 @@ input:active, input:focus{
 #conteudo-pesquisa-erro{
 	margin-left:15px;
 	margin-right: 15px;
+}
+
+.spell{
+    padding-left: 15px;
+    padding-bottom: 10px;
+}
+
+#years{
+	padding-bottom: 40px;
+}
+
+.clear-text{
+    position: absolute;
+    font-size: 28px;
+    color: lightgrey;
+    right: 41px;
+    z-index: 3;
+    height: 38px;
+    padding: 5px 8px 37px 8px;
+    -webkit-text-stroke: 4px white;
+    cursor: pointer;
+    display: none;
+}
+
+.clear-text:active, .clear-text:hover{
+    color: #555555;
 }

@@ -22,18 +22,20 @@ var MENU = MENU || (function(){
 	          						'<a class="addthis_button_twitter" onclick="" ><h4 class="submenu"><i class="fa fa-twitter padding-right-menu-icon" aria-hidden="true"></i> Twitter</h4></a>'+
 	        /*  ' 			<a title="EmailTitle" href="mailto:?subject=EmailMessage [sub]" onclick="this.href = this.href.replace(\'[sub]\',document.title + \'%0D%0A'+ encodeURIComponent(this.getDatets()) +'%0D%0A %0D%0A\' + encodeURIComponent(window.location.href) ); ga(\'send\', \'event\', \'ReplayBarFunctions\', \'EmailShareClick\', \'http://arquivo.pt/'+_ts+'/'+_url+'\');""><h4 class="submenu"><i class="fa fa-envelope" aria-hidden="true"></i> '+Content.email+'</h4></a>'+*/
 			  					'</div>'+   
+	          					'<a href="" id="switchDesktop" onclick=""><h4><i class="fa fa-desktop padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.desktop'/></h4></a>'+		  	
 	          					'<a href="http://sobre.arquivo.pt/<%=language%>" onclick=""><h4><i class="fa fa-info-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.about'/></h4></a>'+			  					          
 	          					'<a href="<fmt:message key='topbar.menu.help.href'/>" onclick=""><h4><i class="fa fa-question-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.help'/></h4></a>'+
 	          					'<a id="changeLanguage" ><h4><i class="fa fa-flag padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.otherLanguage'/></h4></a>'+
 	          				'</div>');
+        	this.attachSwitchDesktop();
         	this.attachChangeLanguage();
         	this.attachShare();
         },
 		toggleLanguage: function() {
-			/*returns current window href without the specified parameter*/
+		    localStorage.setItem("language", "<fmt:message key='topbar.OtherLanguageShort'/>".toUpperCase());			
+			/*changes language*/
 			key="l"; /*language parameter*/
 			sourceURL = window.location.href;
-			var foundParameter = false;
 		    var rtn = sourceURL.split("?")[0],
 		        param,
 		        params_arr = [],
@@ -44,21 +46,13 @@ var MENU = MENU || (function(){
 		            param = params_arr[i].split("=")[0];
 		            if (param === key) {
 		                params_arr.splice(i, 1);
-		                foundParameter = true;
 		            }
 		        }
 		        rtn = rtn + "?" + params_arr.join("&");
-		        if(foundParameter){
-		        	if( rtn.substr(rtn.length - 1) ==="?"){
-		        		rtn = rtn.substr(0, rtn.length-1);
-		        	}
-		        }
-		        else{
-		        	rtn = rtn +"&l=en";
-		        }
+	        	rtn = rtn +"&l=<fmt:message key='topbar.OtherLanguageShort'/>";
 		    }
 		    else{
-		    	rtn=rtn +"?&l=en"
+		    	rtn=rtn +"?l=<fmt:message key='topbar.OtherLanguageShort'/>";
 		    }
 		    return rtn;
 		},
@@ -72,9 +66,18 @@ var MENU = MENU || (function(){
 		attachChangeLanguage: function(){
 			$('#changeLanguage').click( function(e) {
 					e.preventDefault();
-					window.location = toggleLanguage(); 
+					window.location = MENU.toggleLanguage(); 
 					return false; } );
 		},
+		attachSwitchDesktop: function(){
+			$('#switchDesktop').click( function(e) {
+					e.preventDefault();
+					Cookies.set('forceDesktop', 'true', { domain: window.location.hostname.substr(2, window.location.hostname.length) });
+					/*redirect current link from mobile to desktop version i.e. remove the m. from current link*/
+					window.location = window.location.href.replace(window.location.hostname , window.location.hostname.substr(2, window.location.hostname.length)) 
+					return false; } );			
+			
+		},		
         attachMask: function(){       
 		  $('#mainMask').on('click', function(e){
 		    document.querySelector('.swiper-container').swiper.slideNext();

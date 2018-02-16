@@ -46,7 +46,8 @@
 <script type="text/javascript">MENU.init()</script> 
 <script type="text/javascript" src="/js/js.cookie.js"></script>
 <script>
-	Cookies.set("language", "<%=language%>".toUpperCase());
+	localStorage.setItem("language", "<%=language%>".toUpperCase());
+	/*Cookies.set("language", "<%=language%>".toUpperCase());*/
 </script>
 <div class="main-content">
 	<div class="container-fluid">
@@ -62,42 +63,3 @@ $('#languageSelection').click( function(e) {
 		window.location = toggleLanguage(); 
 		return false; } );
 </script>
-
-<script type="text/javascript">
-function toggleLanguage() {
-	/*returns current window href without the specified parameter*/
-	key="l"; /*language parameter*/
-	sourceURL = window.location.href;
-	var foundParameter = false;
-    var rtn = sourceURL.split("?")[0],
-        param,
-        params_arr = [],
-        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
-    if (queryString !== "") {
-        params_arr = queryString.split("&");
-        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
-            param = params_arr[i].split("=")[0];
-            if (param === key) {
-                params_arr.splice(i, 1);
-                foundParameter = true;
-            }
-        }
-        rtn = rtn + "?" + params_arr.join("&");
-        if(foundParameter){
-        	if( rtn.substr(rtn.length - 1) ==="?"){
-        		rtn = rtn.substr(0, rtn.length-1);
-        	}
-        }
-        else{
-        	rtn = rtn +"&l=en";
-        }
-    }
-    else{
-    	rtn=rtn +"?&l=en"
-    }
-    return rtn;
-}
-</script>
-
-
-

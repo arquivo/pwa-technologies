@@ -18,8 +18,8 @@ $(document).ready( function() {
 
 	/* Calendar configuration */
 	$(function() {
-        var min = minDate;
-        var max = maxDate; 
+       // var min = minDate;
+       // var max = maxDate; 
 /*
                         $('#dateStart_top, #dateStart_bottom').datepicker(
                                 $.extend({
@@ -115,8 +115,8 @@ $(document).ready( function() {
     });
 
     /* Verify if the dates were previously changed by the user */
-    userChangedDate($("#dateStart_top"), minDate);
-    userChangedDate("#dateEnd_top", maxDate);
+   /* userChangedDate($("#dateStart_top"), minDate);
+    userChangedDate("#dateEnd_top", maxDate);*/
 
 
 	/**

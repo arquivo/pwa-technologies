@@ -391,8 +391,6 @@ String[] queryString_splitted=null;
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script src="/js/jquery-latest.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <!-- cookies for language selection -->
-    <script type="text/javascript" src="/js/js.cookie.js"></script>
     <!-- dual slider dependencies -->
     <script type="text/javascript" src="/js/nouislider.min.js"></script>
     <link rel="stylesheet" href="/css/nouislider.min.css">
@@ -401,7 +399,7 @@ String[] queryString_splitted=null;
 	<link href="css/csspin.css" rel="stylesheet" type="text/css">
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
   <!-- end addthis for sharing on social media --> 
-
+  <script type="text/javascript" src="js/configs.js"></script>
 </head>
 
 <body>
@@ -414,6 +412,7 @@ String[] queryString_splitted=null;
                     <div class="input-group stylish-input-group">
                         
                             <input id="txtSearch" value="<%=htmlQueryString%>" name="query" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>"  autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <span class="clear-text"><i class="fa fa-close"></i></span>
                             <span class="input-group-addon no-radius search-button-span">
                                 <button class="search-button" type="submit">
                                     <span class="glyphicon glyphicon-search white"></span>
@@ -435,7 +434,7 @@ String[] queryString_splitted=null;
                     <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
                     <input type="hidden" id="l" name="l" value="<%=language%>"/>
                 </div>   
-
+<script src="/include/clearForm.js"></script>  
 <script>
   document.write("<div id='loadingDiv' class='text-center' style='text-align: center; margin-top: 10%; margin-bottom: 5%;'><div style='text-align: center; display: inline-block;'' class='cp-spinner cp-round'></div></div>");
   $( document ).ready(function() {
@@ -445,17 +444,7 @@ String[] queryString_splitted=null;
       dateSlider.removeAttribute('disabled');
     }
   });
-</script> 
-
-<script type="text/javascript">
-    $('#searchForm').submit(function() 
-    {
-        if ($.trim($(".form-control").val()) === "") {
-            /*TODO:: Do something when user enters empty input?*/
-        return false;
-        }
-    });    
-</script>                
+</script>               
 <script type="text/javascript">
 // Create a new date from a string, return as a timestamp.
 
@@ -728,74 +717,16 @@ function formatDate ( date ) {
                         <c:catch var="exception">
                                 <% hitsTotal = 1; %>
                         </c:catch>
-
-
-
+<script>
+      var language =   localStorage.language;
+      if( language == 'EN'){
+          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsEN.js"><\/script>');
+      }
+      else{
+          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsPT.js"><\/script>');
+      }
+</script>
 <script type="text/javascript">
-/*
-Content = {
-    months: 
-    {  '01': "<fmt:message key="month.0" />",
-       '02': "<fmt:message key="month.1" />",
-       '03': "<fmt:message key="month.2" />",
-       '04': "<fmt:message key="month.3" />",
-       '05': "<fmt:message key="month.4" />",
-       '06': "<fmt:message key="month.5" />",
-       '07': "<fmt:message key="month.6" />",
-       '08': "<fmt:message key="month.7" />",
-       '09': "<fmt:message key="month.8" />",
-       '10': "<fmt:message key="month.9" />",
-       '11': "<fmt:message key="month.10" />",
-       '12': "<fmt:message key="month.11" />",
-    },
-    shortMonths: 
-    {  '01': "<fmt:message key="smonth.0" />",
-       '02': "<fmt:message key="smonth.1" />",
-       '03': "<fmt:message key="smonth.2" />",
-       '04': "<fmt:message key="smonth.3" />",
-       '05': "<fmt:message key="smonth.4" />",
-       '06': "<fmt:message key="smonth.5" />",
-       '07': "<fmt:message key="smonth.6" />",
-       '08': "<fmt:message key="smonth.7" />",
-       '09': "<fmt:message key="smonth.8" />",
-       '10': "<fmt:message key="smonth.9" />",
-       '11': "<fmt:message key="smonth.10" />",
-       '12': "<fmt:message key="smonth.11" />",
-    },
-    savedInArchive:"<fmt:message key="savedInArchive" />",
-    versionsStored:"<fmt:message key="versionsStored" />",
-    versionPage:"<fmt:message key="versionPage" />",    
-    versionsPage:"<fmt:message key="versionsPage" />",
-    between:"<fmt:message key="between" />",
-    and:"<fmt:message key="and" />",
-    resultsQuestion:"<fmt:message key="resultsQuestion" />",
-    moreOptions:"<fmt:message key="moreOptions" />",
-    lessOptions:"<fmt:message key="lessOptions" />",
-    help:"<fmt:message key="help" />",
-    helpHref:"<fmt:message key="helpHref" />",
-    newSearch:"<fmt:message key="newSearch" />",
-    at:"<fmt:message key="at" />",
-    shareMessage:"<fmt:message key="shareMessage" />",
-    language:"<fmt:message key="language" />",
-    otherDates:"<fmt:message key="otherDates" />",
-    emailMessage:"<fmt:message key="emailMessage" />",
-    noResultsFound:"<fmt:message key="noResultsFound" />",
-    suggestions:"<fmt:message key="suggestions" />",
-    checkSpelling:"<fmt:message key="checkSpelling" />",
-    differentKeywords:"<fmt:message key="differentKeywords" />",
-    generalWords:"<fmt:message key="generalWords" />", 
-    internetArchive:"<fmt:message key="internetArchive" />",
-    suggestSiteArchived:"<fmt:message key="suggestSiteArchived" />",
-    suggestUrl:"<fmt:message key="suggestUrl" />",
-    suggest:"<fmt:message key="suggest" />", 
-    mementoFind:"<fmt:message key="mementoFind" />",
-    embargo:"<fmt:message key="embargo" />",
-    embargoUrl:"<fmt:message key="embargoUrl" />",
-    notArchived:"<fmt:message key="notArchived" />",
-    otherLanguage: "<fmt:message key="otherLanguage" />"  ,
-    preservedByArquivo: "<fmt:message key="preservedByArquivo" />"     
-};*/
-
 
 function getYearTs(ts){
   return ts.substring(0, 4);
@@ -957,7 +888,6 @@ function createErrorPage(){
 }
 
 
-    //top.alert("Starting the Code!")
     var urlsource = "<%=urlQuery%>" ;
     var startDate = "<%=dateStartString%>";
     var startYear = startDate.substring(6,10)
@@ -1035,17 +965,6 @@ function createErrorPage(){
       
        type: 'GET'
     });
-</script>
-
-
-<script>
-      var language = Cookies.get('language');
-      if( language == 'EN'){
-          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsEN.js"><\/script>');
-      }
-      else{
-          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsPT.js"><\/script>');
-      }
 </script>
 <script type="text/javascript">
 function attachClicks(){
