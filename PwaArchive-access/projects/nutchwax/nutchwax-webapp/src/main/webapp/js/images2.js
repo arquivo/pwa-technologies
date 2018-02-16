@@ -97,8 +97,9 @@ function truncateUrl(url, maxSize)
 }
 
 lastPosition = -1; /*Global var refers to the lastImage the user*/
+lastPress= -1; /*Global var refers to last time user pressed arrow in image viewer*/
 
-function expandImage(position){
+function expandImage(position, animate){
     var arrowWidth = 16; //width of the arrow
     if(lastPosition != -1){
         $('#testViewer'+lastPosition).hide();
@@ -111,28 +112,53 @@ function expandImage(position){
         lastPosition = -1;
         return false;
     }
+    (position == 0) ? $('.left__arrow').hide() : $('.left__arrow').show();
     var arrowMarginLeft = $('#imageResults'+position).width()/2 - arrowWidth/2;
     $('#arrow'+position).css('margin-left', arrowMarginLeft+'px');
-    $('#testViewer'+position).fadeIn();
-    $('#arrowWrapper'+position).fadeIn();
+    $('#testViewer'+position).show();
+    $('#arrowWrapper'+position).show();
     lastPosition = position;
-    window.scrollTo( 0 , $('#date'+position).offset().top - 250);
+    animate ? $('html, body').animate({scrollTop: $('#date'+position).offset().top - 150}, 400) : window.scrollTo( 0 , $('#date'+position).offset().top - 150);
+    $('#testViewer'+position).focus();
+ $('#testViewer'+position).bind('keydown', function(event) {
+   var now = Date.now();
+   var minimumTime= 100;
+
+   console.log('last Press: ' + lastPress);
+   console.log('now: ' + now);   
+   console.log('position: ' + position);
+
+   if(event.keyCode == 37 && position > 0 ) {
+        if(lastPress < 0 || (now - lastPress) > minimumTime ){
+		previousImage(''+position);
+		lastPress = Date.now();
+	}
+    } 
+   else if (event.keyCode == 39 && position >= 0){
+	if(lastPress < 0 || (now - lastPress) > minimumTime ){
+		nextImage(''+position);
+		lastPress = Date.now();
+	}
+   }
+ });
+
+
 return false;
 }
 
 function previousImage(position){
     var previousImageLi = $('#imageResults'+position).prev();
     if( previousImageLi.attr('position') != undefined){
-        expandImage(parseInt(position)); /*Close current image*/
-        expandImage(parseInt(previousImageLi.attr('position')));
+        expandImage(parseInt(position), false); /*Close current image*/
+        expandImage(parseInt(previousImageLi.attr('position')), false);
     }
     return;
 }
 function nextImage(position){
     var nextImageLi = $('#imageResults'+position).next();
     if( nextImageLi.attr('position') != undefined){
-        expandImage(parseInt(position)); /*Close current image*/
-        expandImage(parseInt(nextImageLi.attr('position')));            
+        expandImage(parseInt(position), false); /*Close current image*/
+        expandImage(parseInt(nextImageLi.attr('position')), false);            
     }
     return;
 }
@@ -158,9 +184,9 @@ var centerImage = maxImageExpandHeight/2 - expandedImageHeight/2 ;
 
 var liMarginTop = maxImageHeight - imageHeight;
 
-var contentToInsert = '<li position='+position+' id="imageResults'+position+'" style="background:white; margin-right: 1%; margin-bottom:1%; margin-top:'+liMarginTop.toString()+'px;"><h2><button style="cursor:pointer;" onclick = "expandImage('+position+')"> <img style="max-height:200px; padding:0px 0px 4px 0px;" height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/> </button></h2> <p class="green" style="font-size:1em!important; text-align: left; padding-left:5px">'+truncateUrl(imageObj.originalURL, 20)+'</p> <p class="date" id="date'+position+'" style="font-weight:normal; font-size:1em!important; text-align: left; padding-left:5px;padding-bottom:2px;">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
+var contentToInsert = '<li position='+position+' id="imageResults'+position+'" style="background:white; margin-right: 1%; margin-bottom:1%; margin-top:'+liMarginTop.toString()+'px;"><h2><button style="cursor:pointer;" onclick = "expandImage('+position+',true)"> <img style="max-height:200px; padding:0px 0px 4px 0px;" height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/> </button></h2> <p class="green" style="font-size:1em!important; text-align: left; padding-left:5px">'+truncateUrl(imageObj.originalURL, 20)+'</p> <p class="date" id="date'+position+'" style="font-weight:normal; font-size:1em!important; text-align: left; padding-left:5px;padding-bottom:2px;">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
     '<div id="arrowWrapper'+position+'" class="arrowWrapper" ><div id="arrow'+position+'" class="arrow"/></div>' +
-    '<div id="testViewer'+position+'" class="imageExpandedDiv"><button onclick = "expandImage('+position+')" class="expand__close" title="'+close+'"></button> <button onclick="previousImage('+position+')"  class="left__arrow" title="'+leftArrow+'"></button> <button onclick="nextImage('+position+')" class="right__arrow" title="'+rightArrow+'"></button> <div style="width: 60%; display: inline-block;float: left;"> <a target="_blank" href="http://arquivo.pt/wayback/'+imageObj.timestamp+'/'+imageObj.originalURL+'"> <img style="max-width:'+maxImageDivWidth+'px; margin-left: 70px; margin-top:'+ centerImage+'px; margin-bottom:'+ centerImage+'px"class="imageExpanded" id="ExpandedImg'+position+'" src="'+imageObj.currentImageURL+'"> </a> </div> <div style="min-height: 500px;margin-top: -50px;width: 39%;display: inline-block; border-left: solid 1px #454545;"> <div style="padding-top:120px; margin-left: 25px; margin-right:70px; text-align: left;"> <h2 style="color:white; word-wrap: break-word;">'+truncateUrl(imageObj.originalURL, 80)+'</h2> <br/> <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.timestamp)+' </h2> <div style="padding-top:20px; padding-bottom:50px;"> <h2 style="color:white;word-wrap: break-word;" > '+resolution+' '+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'</h2></div><div style="display: inline; white-space: nowrap; overflow: hidden;"><a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.timestamp+'/'+imageObj.originalURL+'"><span class="imageViewerButton">'+visitPage+'</span></a><a target="_blank" class="imageViewerAnchor" style="margin-left: 20px"  href="'+imageObj.currentImageURL+'"><span class="imageViewerButton">'+showImage+'</span></a><button id="dButton" position='+position+'  class="imageViewerAnchor" style="margin-left: 20px"><span class="imageViewerButton" style="line-height:25px;">'+share+'</span></button></div>  </div> </div> </div>'+ '</li>';     
+    '<div id="testViewer'+position+'" class="imageExpandedDiv" tabindex="1"><button onclick = "expandImage('+position+',false)" class="expand__close" title="'+close+'"></button> <button onclick="previousImage('+position+')"  class="left__arrow" title="'+leftArrow+'"></button> <button onclick="nextImage('+position+')" class="right__arrow" title="'+rightArrow+'"></button> <div style="width: 60%; display: inline-block;float: left;"> <a target="_blank" href="http://arquivo.pt/wayback/'+imageObj.timestamp+'/'+imageObj.originalURL+'"> <img style="max-width:'+maxImageDivWidth+'px; margin-left: 70px; margin-top:'+ centerImage+'px; margin-bottom:'+ centerImage+'px"class="imageExpanded" id="ExpandedImg'+position+'" src="'+imageObj.currentImageURL+'"> </a> </div> <div style="min-height: 500px;margin-top: -50px;width: 39%;display: inline-block; border-left: solid 1px #454545;"> <div style="padding-top:120px; margin-left: 25px; margin-right:70px; text-align: left;"> <h2 style="color:white; word-wrap: break-word;">'+truncateUrl(imageObj.originalURL, 80)+'</h2> <br/> <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.timestamp)+' </h2><div style="padding-top:20px; padding-bottom:50px;"><h2 style="color:white;word-wrap: break-word;" > <span style="font-weight: bold">'+imageTitle + ' </span>' +imageObj.title+'</h2><br/> <h2 style="color:white;word-wrap: break-word;" > <span style="font-weight: bold">'+imageType+' </span>'+imageObj.type+'</h2> <br/> <h2 style="color:white;word-wrap: break-word;" > <span style="font-weight: bold">'+resolution+' </span>'+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'</h2></div><div style="display: inline; white-space: nowrap; overflow: hidden;"><a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.timestamp+'/'+imageObj.originalURL+'"><span class="imageViewerButton">'+visitPage+'</span></a><a target="_blank" class="imageViewerAnchor" style="margin-left: 20px"  href="'+imageObj.currentImageURL+'"><span class="imageViewerButton">'+showImage+'</span></a><button id="dButton" position='+position+'  class="imageViewerAnchor" style="margin-left: 20px"><span class="imageViewerButton" style="line-height:25px;">'+share+'</span></button></div>  </div> </div> </div>'+ '</li>';     
 
   /*href="/shareImage.jsp?imgurl='+encodeURIComponent(imageObj.currentImageURL)+'&imgrefurl='+encodeURIComponent(imageObj.originalURL)+'&imgrefts='+imageObj.timestamp+'&imgres='+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'&query='+$('#txtSearch').val()+'"*/
   imageObj.expandedImageWidth = expandedImageWidth;
@@ -324,24 +350,31 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
       //query += "imgSrc:*"+tokenNoAccents.toLowerCase()+"* AND ";
     }
     query = query.substring(0, query.length -5); 
+
+    var dateStart= $('#dateStart_top').attr("value");
+    dateStart = dateStart.substring(6, 10)+dateStart.substring(3, 5) + dateStart.substring(0, 2)+'000000' ;
+    var dateEnd= $('#dateEnd_top').attr("value");
+    dateEnd = dateEnd.substring(6, 10)+dateEnd.substring(3, 5) + dateEnd.substring(0, 2)+'000000' ;
+
+    query += "AND (timestamp:["+dateStart+" TO "+dateEnd+"])";
     console.log(query);
 
     if( size === ''){
       size = 'all';
     }
 
-    var dateStartTokenes = dateStartWithSlashes.split("/");
+   /* var dateStartTokenes = dateStartWithSlashes.split("/");
     var dateStartTs = dateStartTokenes[2]+ dateStartTokenes[1] + dateStartTokenes[0]+ "000000";
 
     var dateEndTokenes = dateEndWithSlashes.split("/");
     var dateEndTs = dateEndTokenes[2]+ dateEndTokenes[1] + dateEndTokenes[0]+ "000000"     ;
 
-    var dateFinal = dateStartTs+"-"+dateEndTs; 
+    var dateFinal = dateStartTs+"-"+dateEndTs; */
     var showAll = false;
 
     $.ajax({
     // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
-       url: "http://p27.arquivo.pt:8983/solr/images/select",
+       url: "http://p28.arquivo.pt:8983/solr/Europe/select",
        /*?q=imgSrc:*Patricia*%20OR%20imgSrc:*patricia*&wt=json*/
        data: {
           q: query,
@@ -396,6 +429,9 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                 imageObj.position = totalPosition;
                 imageObj.expandedHeight = currentDocument.imgHeight;
                 imageObj.expandedWidth = currentDocument.imgWidth;
+                imageObj.type= currentDocument.mimeType.substring(6,currentDocument.mimeType.length);
+                imageObj.title = currentDocument.imgTitle;
+                if (imageObj.title == "undefined") {imageObj.title = imageUndefined;}
 
 
                 totalPosition = totalPosition + 1;

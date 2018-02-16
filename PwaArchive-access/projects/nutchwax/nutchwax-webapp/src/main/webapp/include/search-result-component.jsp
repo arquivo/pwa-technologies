@@ -101,7 +101,7 @@
 <%
           // Saves information about the previous result's host so same-host results can be grouped.
           String previous_host = "";
-
+          String previous_url = "";
           //Format the results
           for (int i = 0; i < length; i++) {      // display the hits
             Hit hit = show[ positionIndex[i] ];
@@ -120,6 +120,8 @@
             Date archiveDate = new Date(Long.valueOf(detail.getValue("date")).longValue()*1000);
             String archiveCollection = detail.getValue("collection");
             String url = detail.getValue("url");
+            if(previous_url.equals(url)) continue; /*If URL exactly the same do not show result*/
+            previous_url = url;
             SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMddHHmmss");
             TimeZone zone = TimeZone.getTimeZone("GMT");
             ft.setTimeZone(zone);

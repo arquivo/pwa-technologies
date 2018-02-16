@@ -66,20 +66,23 @@
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
+    <script src="/js/jquery-latest.min.js"> </script>
 </head>
 <body>
 	<%@ include file="include/topbar.jsp" %>
 	<div class="wrap">
 		<div id="header-home">
                                 <div id="logo-home">
-                                    <img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="400" height="105" />
+                                    <a href="<fmt:message key='home.prizes.href'/>" onclick="ga('send', 'event', 'Homepage', 'premio Arquivopt', 'Click on link (premio Arquivo.pt 10 anos)');">
+                                        <img src="img/banner-premiarquivo-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" style="padding-bottom: 15px;" />
+                                    </a>
                                 </div>
                                 <div id="search-home">
                                         <form id="loginForm" action="search.jsp" name="loginForm" method="get">
 						<input type="hidden" name="l" value="<%= language %>" />
                                                 <fieldset>
                                                         <label for="txtSearch">&nbsp;</label>
-                                                        <input class="search-inputtext" type="text" size="15" value="<fmt:message key='search.value'/>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' "  name="query" id="txtSearch" accesskey="t" />
+                                                        <input class="search-inputtext" type="text" size="15"  placeholder="<fmt:message key='search.value'/>" onfocus="this.placeholder = ''" onblur="if(this.placeholder == ''){this.placeholder='<fmt:message key='search.value'/>'}"  name="query" id="txtSearch" accesskey="t" />
                                                         <input type="reset" value="&nbsp;" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" />
                                                         <input type="submit" value="<fmt:message key='home.submit'/>" class="home-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
                                                         <a href="advanced.jsp?l=<%=language%>" onclick="ga('send', 'event', 'Homepage', 'pesquisa-avancada', 'Click on link (Pesquisa avancada)');{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='home.advanced.link.title'/>" id="pesquisa-avancada"><fmt:message key='home.advanced.link'/></a>

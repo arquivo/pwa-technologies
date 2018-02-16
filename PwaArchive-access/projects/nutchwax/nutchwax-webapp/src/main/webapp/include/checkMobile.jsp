@@ -1,3 +1,4 @@
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
     <script type="text/javascript">
         /*Detect Mobile*/
         window.mobilecheck = function() {
@@ -8,7 +9,7 @@
           }
           return (width < 768);
         };
-        if(mobilecheck()){
+        if(mobilecheck() && Cookies.get('forceDesktop')!== 'true' ){
             currentURL = window.location.href;
             window.location.href = 'http://m.'+currentURL.substr(7,currentURL.length); /*Redirect to mobile version*/
         }   

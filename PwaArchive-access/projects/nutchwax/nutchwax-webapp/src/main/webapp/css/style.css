@@ -813,6 +813,8 @@ li.grouped { padding-left: 38px; }
     			box-sizing: content-box;
     			overflow: hidden;
     			background: #222;
+                border-bottom: solid 1px #454545;
+                z-index: 1;
     		}
 .imageExpanded{
 	max-height: 400px;	
@@ -3542,3 +3544,4 @@ text-align: center;
 #newFooterWrapper .header-widget .widget-title{margin-bottom:15px}
 #newFooterWrapper footerLogo {height: 5}
 
+.left-10{padding-left: 10px;}
