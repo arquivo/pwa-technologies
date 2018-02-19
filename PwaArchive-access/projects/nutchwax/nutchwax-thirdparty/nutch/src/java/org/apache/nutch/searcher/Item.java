@@ -17,8 +17,6 @@ public class Item {
 	private String mimeType;
 	@SerializedName( "linkToScreenshot" )
 	private String screenShotLink;
-	@SerializedName( "linkToExtractedText" )
-	private String itemText;
 	private String date; //epoch format
 	private String encoding;
 	@SerializedName( "linkToNoFrame" )
@@ -27,7 +25,7 @@ public class Item {
 	private String snippetForTerms;
 	private String status;
 	private String collection;
-	@SerializedName( "extractedText" )
+	@SerializedName( "linkToExtractedText" )
 	private String parseText;
 	
 	//details
@@ -96,12 +94,6 @@ public class Item {
 	}
 	public void setDate(String date) {
 		this.date = date;
-	}
-	public String getItemText() {
-		return itemText;
-	}
-	public void setItemText(String itemText) {
-		this.itemText = itemText;
 	}
 	public String getEncoding() {
 		return encoding;
@@ -180,7 +172,7 @@ public class Item {
 	public String toString() {
 		return "Item [key=" + key + ", title=" + title + ", source=" + source + ", link=" + link + ", tstamp=" + tstamp
 				+ ", contentLength=" + contentLength + ", digest=" + digest + ", mimeType=" + mimeType
-				+ ", screenShotLink=" + screenShotLink + ", itemText=" + itemText + ", date=" + date + ", encoding="
+				+ ", screenShotLink=" + screenShotLink + ", date=" + date + ", encoding="
 				+ encoding + ", noFrameLink=" + noFrameLink + ", snippetForTerms=" + snippetForTerms + ", status="
 				+ status + ", collection=" + collection + ", parseText=" + parseText + ", arcname=" + arcname
 				+ ", arcoffset=" + arcoffset + ", idDoc=" + idDoc + ", index=" + index + ", segment=" + segment + "]";

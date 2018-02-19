@@ -117,9 +117,9 @@ public class TextSearchServlet extends HttpServlet {
     NS_MAP.put( "link" , "http://arquivo.pt" ); 
   }  
   
-  private static String[ ]  fieldsReponse = {"versionId", "title", "originalURL", "linkToArchive",
+  private static String[ ]  fieldsReponse = {"versionID", "title", "originalURL", "linkToArchive",
 		  "tstamp", "contentLength", "digest", "mimeType", "linkToScreenshot",
-		  "date", "encoding", "linkToNoFrame", "collection", "snippet", "extractedText"}; //input parameters
+		  "date", "encoding", "linkToNoFrame", "collection", "snippet", "linkToExtractedText"}; //input parameters
   
   /**
    * HttpServlet init method.
@@ -775,7 +775,7 @@ public class TextSearchServlet extends HttpServlet {
           try{
         	  URL source = new URL( itemcdx.getUrl( ) );
         	  id = itemcdx.getUrl( ).concat( "/" ).concat( tstamp );
-              if( FieldExists( fields , "versionId" ) )
+              if( FieldExists( fields , "versionID" ) )
               	item.setKey( id );
           } catch( MalformedURLException e ) {
         	  if( item != null )
@@ -828,7 +828,7 @@ public class TextSearchServlet extends HttpServlet {
     		  Hit hit = show;
     		  HitDetails detail = details;
 
-    		  if( FieldExists( fields , "extractedText" ) ) {
+    		  if( FieldExists( fields , "linkToExtractedText" ) ) {
     			  String urlEncoded = "";
     			  try{
     				  urlEncoded = URLEncoder.encode( id, "UTF-8" );
@@ -933,7 +933,7 @@ public class TextSearchServlet extends HttpServlet {
               	  
                 }
                 
-                if( FieldExists( fields , "extractedText" ) ) {
+                if( FieldExists( fields , "linkToExtractedText" ) ) {
                 	item.setParseText( "" );
                 }
                 
@@ -1014,7 +1014,7 @@ public class TextSearchServlet extends HttpServlet {
             try{
             	URL source = new URL( url );
             	id = url.concat( "/" ).concat( tstamp );
-                if( FieldExists( fields , "versionId" ) )
+                if( FieldExists( fields , "versionID" ) )
                 	item.setKey( id );
             } catch( MalformedURLException e ) {
             	LOG.error( e );
@@ -1080,7 +1080,7 @@ public class TextSearchServlet extends HttpServlet {
                 }
                 
                 
-            	if( FieldExists( fields , "extractedText" ) ) {
+            	if( FieldExists( fields , "linkToExtractedText" ) ) {
             		String urlEncoded = "";
             		//String urlDecoder = "";
             		try{
