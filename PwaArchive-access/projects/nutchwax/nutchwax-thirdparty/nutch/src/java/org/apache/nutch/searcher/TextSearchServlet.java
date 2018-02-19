@@ -119,7 +119,7 @@ public class TextSearchServlet extends HttpServlet {
   
   private static String[ ]  fieldsReponse = {"versionId", "title", "originalURL", "linkToArchive",
 		  "tstamp", "contentLength", "digest", "mimeType", "linkToScreenshot",
-		  "date", "encoding", "noFrameLink", "collection", "snippet", "extractedText"}; //input parameters
+		  "date", "encoding", "linkToNoFrame", "collection", "snippet", "extractedText"}; //input parameters
   
   /**
    * HttpServlet init method.
@@ -630,9 +630,9 @@ public class TextSearchServlet extends HttpServlet {
 			  requestParameters.setFrom( dateStart );
 			  requestParameters.setTo( dateEnd );
 		  }
-		  LOG.info( "fulltextQuery = " + fulltextQuery );
+		  
     	  if( fulltextQuery ) {
-    		  LOG.info( "fulltextQuery = " + fulltextQuery + " hitsPerDup" );
+    		  
     		  if( limitPerSiteS != null && !limitPerSiteS.equals( "" ) )
     			  requestParameters.setLimitPerSite( limitPerSiteS );
     		  if( !typeParameter.equals( "" ) )
@@ -741,7 +741,7 @@ public class TextSearchServlet extends HttpServlet {
 		  
 		  String epochDate = "";
 		  Long epochDatel = datet.getTime( );
-		  if( epochDatel != null ) {
+		  if( epochDatel != null && FieldExists( fields , "date" ) ) {
 			  epochDate = String.valueOf( epochDatel );
 			  
 			  if( epochDate != null && !epochDate.equals( "" ) ){
@@ -764,9 +764,9 @@ public class TextSearchServlet extends HttpServlet {
 				  continue;
 			  }
 			  String screenShotLink = "http://".concat( domainService ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
-			  if( FieldExists( fields , "ScreenShotLink" ) )
+			  if( FieldExists( fields , "linkToScreenshot" ) )
 				  item.setScreenShotLink( screenShotLink );
-			  if( FieldExists( fields , "noFrameLink" ) )
+			  if( FieldExists( fields , "linkToNoFrame" ) )
 				  item.setNoFrameLink( urlNoFrame );
           }
 		  
@@ -786,9 +786,9 @@ public class TextSearchServlet extends HttpServlet {
           
 		  query = null;
 		  
-		  String dateLucene = "date:".concat( item.getTstamp( ) ).concat( " " ); //format:ddmmyyyhhmmss-ddmmyyyhhmmss
+		  String dateLucene = "date:".concat( tstamp ).concat( " " ); //format:ddmmyyyhhmmss-ddmmyyyhhmmss
 		  String qLucene = dateLucene.concat( qExactURL );
-		 
+		  
 		  try{
 			  query = Query.parse( qLucene, queryLang, this.conf );
 		  } catch( IOException e ) {
@@ -828,7 +828,7 @@ public class TextSearchServlet extends HttpServlet {
     		  Hit hit = show;
     		  HitDetails detail = details;
 
-    		  if( FieldExists( fields , "textContent" ) ) {
+    		  if( FieldExists( fields , "extractedText" ) ) {
     			  String urlEncoded = "";
     			  try{
     				  urlEncoded = URLEncoder.encode( id, "UTF-8" );
@@ -838,11 +838,9 @@ public class TextSearchServlet extends HttpServlet {
     			  }
     			  String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
     			  item.setParseText( textContent );
-          	  } else {
-          		  item.setParseText( "" );
           	  }
         	  
-    		  LOG.debug( "CDXServer["+item.getTstamp()+"] Lucene["+detail.getValue( "tstamp" )+"]" );
+    		  LOG.debug( "CDXServer["+tstamp+"] Lucene["+detail.getValue( "tstamp" )+"]" );
     		  String url = detail.getValue( "url" );
     		  String title = detail.getValue( "title" );
     		  if ( title == null || title.equals("") ) {   // use url for docs w/o title
@@ -856,7 +854,7 @@ public class TextSearchServlet extends HttpServlet {
               if( FieldExists( fields , "encoding" ) )
               	item.setEncoding( encoding );
               
-              if( item.getContentLength( ).equalsIgnoreCase( "0" ) ) {
+              if( item.getContentLength( ) == null || item.getContentLength( ).equals( "" )  || item.getContentLength( ).equalsIgnoreCase( "0" ) ) {
             	  String contentLength = detail.getValue( "contentLength" );
                   if( FieldExists( fields , "contentLength" ) )
                   	item.setContentLength( contentLength );
@@ -865,8 +863,9 @@ public class TextSearchServlet extends HttpServlet {
               String mimeType = detail.getValue( "primaryType" ).concat( "/" ).concat( detail.getValue( "subType" ) ); 
               
               String dateEpoch = detail.getValue( "date" );
-              if( FieldExists( fields , "date" ) )
-              	item.setDate( dateEpoch );
+              if( FieldExists( fields , "date" ) ) {
+            	  item.setDate( dateEpoch );
+              }
               if( FieldExists( fields , "mimetype" ) )
               	item.setMimeType( mimeType );
               String collection = detail.getValue( "collection" );
@@ -914,6 +913,30 @@ public class TextSearchServlet extends HttpServlet {
                 if( FieldExists( fields , "mimetype" ) )
                 	if( item.getMimeType( ) == null || item.getMimeType( ).equals( "" ) )
                 		item.setMimeType( "" );
+                
+                if( detailsInfo == true ) {
+              	  
+              	  if( FieldExists( fields , "filename" ) ) {
+              		  if( itemcdx.getFilename( ) != null )
+              			  item.setArcname( itemcdx.getFilename( ) );
+              		  else
+              			  item.setArcname( "" );
+              	  }
+              	  
+              	  if( FieldExists( fields , "offset" ) ) {
+              		  if( itemcdx.getOffset( ) != null )
+              			  item.setArcoffset( itemcdx.getOffset( ) );
+              		  else
+              			item.setArcoffset( "" );
+              		  
+              	  }
+              	  
+                }
+                
+                if( FieldExists( fields , "extractedText" ) ) {
+                	item.setParseText( "" );
+                }
+                
     	  }
     	  //if( hits.getTotal( ) == 0 || hits.getLength( ) == 0 )
     	  //	LOG.info( "[URLSearch] query[" + query.toString( ) + "] ts[" + item.getTstamp( ) + "] url[" + itemcdx.getUrl( ) + "]  0 hits." ); 
@@ -1005,7 +1028,7 @@ public class TextSearchServlet extends HttpServlet {
             if( FieldExists( fields , "digest" ) )
             	item.setDigest( digest );
             String dateEpoch = detail.getValue( "date" );
-            if( FieldExists( fields , "Date" ) )
+            if( FieldExists( fields , "date" ) )
             	item.setDate( dateEpoch );
             
             if( FieldExists( fields , "mimetype" ) )
@@ -1027,9 +1050,9 @@ public class TextSearchServlet extends HttpServlet {
             		continue;
             	}
             	String screenShotLink = "http://".concat( domainService ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
-            	if( FieldExists( fields , "ScreenShotLink" ) )
+            	if( FieldExists( fields , "linkToScreenshot" ) )
             		item.setScreenShotLink( screenShotLink );
-            	if( FieldExists( fields , "noFrameLink" ) )
+            	if( FieldExists( fields , "linkToNoFrame" ) )
             		item.setNoFrameLink( urlNoFrame );
             	
             	// Build the summary
@@ -1049,15 +1072,15 @@ public class TextSearchServlet extends HttpServlet {
                       }
                     }
                     String summary = sum.toString( );
-                    if( FieldExists( fields , "snippetForTerms" ) )
+                    if( FieldExists( fields , "snippet" ) )
                     	item.setSnippetForTerms( summary );
                 } else {
-                	if( FieldExists( fields , "snippetForTerms" ) )
+                	if( FieldExists( fields , "snippet" ) )
                 		item.setSnippetForTerms( "" );
                 }
                 
                 
-            	if( FieldExists( fields , "textContent" ) ) {
+            	if( FieldExists( fields , "extractedText" ) ) {
             		String urlEncoded = "";
             		//String urlDecoder = "";
             		try{
@@ -1069,9 +1092,7 @@ public class TextSearchServlet extends HttpServlet {
             		}
             		String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
             		item.setParseText( textContent );
-            	} else {
-            		item.setParseText( "" );
-            	}
+            	} 
 
             }
             
