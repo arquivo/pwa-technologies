@@ -108,7 +108,6 @@ public class CdxParser {
 		String urlEncoded = "";
 		try{
 			urlEncoded = URLEncoder.encode( url, "UTF-8" );
-			LOG.info( "url = " + url + " urlEncoded = " + urlEncoded );
 		} catch( UnsupportedEncodingException un ) {
 			LOG.error( un );
 			urlEncoded = url; 
