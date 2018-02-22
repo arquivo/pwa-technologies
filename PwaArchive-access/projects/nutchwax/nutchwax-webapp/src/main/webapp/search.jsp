@@ -782,6 +782,8 @@ function createMatrix(versionsArray, versionsURL){
     $("#tableBody").append('<tr id="'+rowId+'">'+rowString+'<tr>');
   }
   if($('#1 td:nth-child('+String(matrix.length)+')').html() ==='&nbsp;'){ /*If last year in the table doesn't have versions show embargo message*/
+    $('#1 td:nth-child('+String(matrix.length)+')').attr('rowspan', '999');
+    $('#1 td:nth-child('+String(matrix.length)+')').attr('class', 'td-embargo')
   	$('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
   }
 }

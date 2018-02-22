@@ -3545,3 +3545,11 @@ text-align: center;
 #newFooterWrapper footerLogo {height: 5}
 
 .left-10{padding-left: 10px;}
+
+.td-embargo{
+    vertical-align: top!important;
+}
+.td-embargo > a {
+    line-height: 18px!important;
+    padding-top: 4px;
+}
