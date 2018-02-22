@@ -818,3 +818,7 @@ input:active, input:focus{
 .clear-text:active, .clear-text:hover{
     color: #555555;
 }
+
+.prizes{
+    margin-top: 50px;
+}
