@@ -111,7 +111,6 @@
   
   String queryString = request.getParameter("query");
 String[] queryString_splitted=null;
-
   
   if ( queryString != null ) {
         queryString = queryString.trim();
@@ -393,7 +392,7 @@ String[] queryString_splitted=null;
               <input type="hidden" name="l" value="<%= language %>" />
               <fieldset id="pesquisar">
                 <label for="txtSearch">&nbsp;</label>
-                <input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" onfocus="if(this.value=='<fmt:message key='search.value'/>') this.value=''; " onblur=" if(this.value=='')this.value='<fmt:message key='search.value'/>' " name="query" id="txtSearch" accesskey="t" />
+                <input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" placeholder="<fmt:message key='search.value'/>" onfocus="this.placeholder = ''" onblur="if(this.placeholder == ''){this.placeholder='<fmt:message key='search.value'/>'}" name="query" id="txtSearch" accesskey="t" />
                 <input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" onclick="{document.getElementById('txtSearch').setAttribute('value','');}" />
                 <input type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
                 <a href="advanced.jsp?l=<%=language%>" onclick="{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='search.advanced'/>" id="pesquisa-avancada"><fmt:message key='search.advanced'/></a>
@@ -585,7 +584,7 @@ String[] queryString_splitted=null;
 
 
 
-            if ( request.getParameter("query") != null && urlLength == request.getParameter("query").trim().length() && validTLD) {
+            if (request.getParameter("query") != null && urlLength == request.getParameter("query").trim().length() && validTLD ) {
                                 // option: (2)
                                 showList = false;
                                 usedWayback = true;
@@ -783,6 +782,8 @@ function createMatrix(versionsArray, versionsURL){
     $("#tableBody").append('<tr id="'+rowId+'">'+rowString+'<tr>');
   }
   if($('#1 td:nth-child('+String(matrix.length)+')').html() ==='&nbsp;'){ /*If last year in the table doesn't have versions show embargo message*/
+    $('#1 td:nth-child('+String(matrix.length)+')').attr('rowspan', '999');
+    $('#1 td:nth-child('+String(matrix.length)+')').attr('class', 'td-embargo')
   	$('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
   }
 }
@@ -868,7 +869,6 @@ function createErrorPage(){
 
     var inputURL = document.getElementById('txtSearch').value;
 
-
     $.ajax({
     // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
        url: requestURL,
@@ -893,20 +893,13 @@ function createErrorPage(){
           $.each(tokens, function(e){
               if(this != ""){
                   var version = JSON.parse(this);
-                  if(version.status[0] === '4' || version.status[0] === '5'){ /*Ignore 400's and 500's*/
-                    /*empty on purpose*/ 
-                  } 
-                  else{
                     versionsArray.push(version.timestamp);
-                    versionsURL.push(version.url);
-                  }
-                   
+                    versionsURL.push(version.url);                   
               }
               
           }); 
           createResultsPage(tokens.length-1, inputURL);
           createMatrix(versionsArray, versionsURL);
-          //top.alert(versionsArray.length)
        },
        async: false,
        type: 'GET'
@@ -915,7 +908,7 @@ function createErrorPage(){
 
 
 <script>
-      var language = Cookies.get('language');
+      var language = localStorage.language;
       if( language == 'EN'){
           document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsEN.js"><\/script>');
       }

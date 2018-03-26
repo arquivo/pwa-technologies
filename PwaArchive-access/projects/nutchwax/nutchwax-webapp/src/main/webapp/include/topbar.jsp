@@ -40,13 +40,12 @@
 %>
 <%String arquivoHost = nutchConfAlt.get("wax.webhost", "arquivo.pt"); %>
 <script type="text/javascript" src="/js/js.cookie.js"></script>
+<link href="/css/ionicons.css?release=Zeus" rel="stylesheet">
 <div id="language">
 <!--	<img src="img/experimental.png" alt="<fmt:message key='topbar.experimental.alt'/>" width="123" height="124" /> -->
 	<div class="wrap">
 		<ul>
 			<li><a href="<c:url value='http://sobre.arquivo.pt/${language}'></c:url>" title="<fmt:message key='topbar.about'/>" class="ajuda"><fmt:message key='topbar.about'/></a></li>
-		</ul>
-		<ul class="langs">
 		<c:choose>
 			<c:when test="${language eq 'pt'}">
 			<script type="text/javascript">
@@ -58,9 +57,9 @@
 				else{
 					enHref = ptHref +"?l=en";
 				}
-				document.write('<li><a href="'+enHref+'" title="<fmt:message key="topbar.OtherLanguage"/>" class="activo"><fmt:message key="topbar.OtherLanguage"/></a></li>');	
+				document.write('<li><a changeLanguage id="changeLanguage" href="'+enHref+'" title="<fmt:message key="topbar.OtherLanguage"/>" class="activo"><fmt:message key="topbar.OtherLanguage"/></a></li>');	
 		        var arquivoHostName = "<%=arquivoHost%>";
-		        Cookies.set('language', 'PT', { expires: 30, path: '/', domain: arquivoHostName  });
+		        localStorage.setItem("language", "<%=language%>".toUpperCase());
 			</script>
 			
 			</c:when>
@@ -74,13 +73,54 @@
 				else{
 					ptHref = enHref + "?l=pt";
 				}
-				document.write('<li><a href="'+ptHref+'" title="<fmt:message key="topbar.OtherLanguage"/>" class="activo"><fmt:message key="topbar.OtherLanguage"/></a></li>');	
+				document.write('<li><a id="changeLanguage" href="" title="<fmt:message key="topbar.OtherLanguage"/>" class="activo"><fmt:message key="topbar.OtherLanguage"/></a></li>');	
 				var arquivoHostName = "<%=arquivoHost%>";
-		        Cookies.set('language', 'EN', { expires: 30, path: '/', domain: arquivoHostName  });
+		        localStorage.setItem("language", "<%=language%>".toUpperCase());
 			</script>
 
 			</c:otherwise>
 		</c:choose>
+			<li class="left-10"><a href="" id="switchMobile" title="<fmt:message key="topbar.switchMobile"/>" ><i class="ion ion-iphone"></i></a></li>
 		</ul>
 	</div>
 </div>
+
+
+<script type="text/javascript">
+		$('#changeLanguage').click( function(e) {
+				e.preventDefault();
+				window.location = toggleLanguages(); 
+				return false; 
+		});	
+		$('#switchMobile').click( function(e) {
+				e.preventDefault();
+				Cookies.set('forceDesktop', 'false', { domain: window.location.hostname});
+				window.location = window.location.href.replace(window.location.hostname, "m."+window.location.hostname);  
+				return false; 
+		});	
+
+		function toggleLanguages()  {
+			/*changes language*/
+			key="l"; /*language parameter*/
+			sourceURL = window.location.href;
+		    var rtn = sourceURL.split("?")[0],
+		        param,
+		        params_arr = [],
+		        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+		    if (queryString !== "") {
+		        params_arr = queryString.split("&");
+		        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+		            param = params_arr[i].split("=")[0];
+		            if (param === key) {
+		                params_arr.splice(i, 1);
+		            }
+		        }
+		        rtn = rtn + "?" + params_arr.join("&");
+	        	rtn = rtn +"&l=<fmt:message key='topbar.OtherLanguageShort'/>";
+		    }
+		    else{
+		    	rtn=rtn +"?l=<fmt:message key='topbar.OtherLanguageShort'/>";
+		    }
+		    return rtn;
+		}
+</script>		

@@ -228,12 +228,12 @@
   <script  src="/js/jquery-latest.min.js" type="text/javascript"></script>
   <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src='http://rawgit.com/jasonday/jQuery-UI-Dialog-extended/master/jquery.dialogOptions.js'></script>
+  <script src='js/jquery.dialogOptions.js'></script>
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
   <script type="text/javascript" src="js/ui.datepicker.js"></script>
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
   <script type="text/javascript" src="js/configs.js"></script>
-  <script type="text/javascript" src="js/images.js"></script>
+  <script type="text/javascript" src="js/images2.js"></script>
  
   <script type="text/javascript">
     clickToCopy = '<fmt:message key="images.clickToCopy" />';
@@ -293,10 +293,12 @@ Content = {
   leftArrow='<fmt:message key="images.leftArrow"/>';
   rightArrow='<fmt:message key="images.rightArrow"/>';
   resolution='<fmt:message key="images.size" />';
+  imageType='<fmt:message key="images.type" />';
+  imageTitle ='<fmt:message key="images.imageTitle" />';
   visitPage='<fmt:message key="images.visitPage" />';
   showImage='<fmt:message key="images.showImage" />';
+  imageUndefined='<fmt:message key="images.undefined" />';
 </script>
-
 
 <script type="text/javascript" src="/js/js.cookie.js"></script>
 
@@ -307,10 +309,10 @@ Content = {
     <div id="main">
       <div id="header" style="min-height: 0">
         <div id="logo">
-    <a href="/index.jsp?l=pt" title="<fmt:message key='header.logo.link'/>">
-            <img src="/img/logo-pt.png" alt="Logo Arquivo.pt" width="125" height="90">
-    </a>
-</div>
+    		<a href="/index.jsp?l=pt" title="<fmt:message key='header.logo.link'/>">
+            		<img src="/img/logo-pt.png" alt="Logo Arquivo.pt" width="125" height="90">
+    		</a>
+	</div>
 
         <div id="search-header">
             <form id="loginForm" action="images.jsp" name="imageSearchForm" method="get">
@@ -375,7 +377,20 @@ Content = {
       </div>      
   <!-- FIM #conteudo-resultado  --> 
     </div>
-  </div>
+<div id="conteudo-resultado"> 
+	<div id="first-column">
+	  &nbsp;
+	</div>
+	<div id="second-column">
+	<div id="resultados">
+    <script type="text/javascript">
+      document.write('<a href="/search.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" style="text-decoration: none; color: #005db4; font-size: 17px; margin-right: 15px; font-size: 17px; font-style: normal;">Web</a>')
+    </script>
+		 <span  style="text-decoration: none;  font-size: 17px; padding-top: 4px; text-decoration: none; padding-left: 5px; padding-right: 5px;   border-top: 3px solid lightblue; padding-top: 4px; margin-right: -15px" href="/images.jsp">Imagens</span>
+</div>
+</div>
+</div>
+</div>
 
 
 <!-- List Results!-->
@@ -406,7 +421,12 @@ Content = {
       </div>
 
 </div>
-<%@include file="include/footerImages.jsp" %>
+<style>
+#newFooterWrapper{
+	padding-top:0px!important;
+}
+</style>
+<%@include file="include/footer.jsp" %>
 <script type="text/javascript"> if($('#txtSearch').val().length){doInitialSearch();}</script>
 <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div>
 

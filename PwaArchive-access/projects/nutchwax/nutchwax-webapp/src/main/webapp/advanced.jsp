@@ -229,7 +229,6 @@
 							</div>
 						</div>
 					</fieldset>
-
 					<fieldset id="num_result_fieldset">
 						<legend><fmt:message key='advanced.results'/></legend>
 						<div class="box-content">
@@ -250,7 +249,6 @@
 							</div>
 						</div>
 					</fieldset>
-
 					<div id="bottom-submit">
 						<input type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="search-submit" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" />
 					</div>
