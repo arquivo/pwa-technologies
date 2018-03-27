@@ -327,19 +327,24 @@ public class TextSearchServlet extends HttpServlet {
     	  }    	
       }
       
-      //Full-text search on specified web site only
+      //Full-text search on specified web site only/multiple
       String siteParameter = request.getParameter( "siteSearch" );
-      if( siteParameter == null )
-    	  siteParameter = "";
-      if ( !siteParameter.equals( "" ) ){ // if it contains site: is also a full-text search
-    	  hitsPerDup = 0;
-    	  String site = siteParameter;
-    	  site = " site:".concat( siteParameter );
-    	  site = site.replaceAll( "site:http://" , "site:" );
-    	  site = site.replaceAll( "site:https://" , "site:" );
-    	  queryString.append( site );
+      if( siteParameter != null && !siteParameter.equals( "" ) ) {
+          String[ ] siteParameters = siteParameter.split( "," );
+          if( siteParameters != null ) {
+        	  for( String siteP : siteParameters ) {
+        		  LOG.info( "siteP = " + siteP );
+        		  if( siteP.equals( "" ) )
+        			  continue;
+        		  String site = "";
+            	  site = " site:".concat( siteP );
+            	  site = site.replaceAll( "site:http://" , "site:" );
+            	  site = site.replaceAll( "site:https://" , "site:" );
+            	  queryString.append( site );
+        	  }
+          }
       }
-      
+  
       //Full-text search on specified type documents
       String typeParameter = request.getParameter( "type" );
       if( typeParameter == null )
@@ -386,8 +391,10 @@ public class TextSearchServlet extends HttpServlet {
 		  if( !typeParameter.equals( "" ) )
 			  requestParameters.setType( typeParameter );
 		  requestParameters.setPrettyPrint( prettyPrintParameter );
-		  if( !siteParameter.equals( "" ) )
+		  if( siteParameter != null && !siteParameter.equals( "" ) ) {
 			  requestParameters.setSite( siteParameter );
+		  }
+			  
 		  
 		  if( q != null && !"".equals( q ) )
 			  requestParameters.setQueryTerms( q );
@@ -635,9 +642,13 @@ public class TextSearchServlet extends HttpServlet {
     	  }
     		  
     	  requestParameters.setPrettyPrint( prettyPrintParameter );
-		  if( !siteParameter.equals( "" ) )
+		  /*if( !siteParameter.equals( "" ) )
+			  requestParameters.setSite( siteParameter );*/
+    	  
+    	  if( siteParameter != null && !siteParameter.equals( "" ) ) {
 			  requestParameters.setSite( siteParameter );
-		  
+		  }
+
 		  if( q != null && !"".equals( q ) )
 			  requestParameters.setQueryTerms( q );
 		  
