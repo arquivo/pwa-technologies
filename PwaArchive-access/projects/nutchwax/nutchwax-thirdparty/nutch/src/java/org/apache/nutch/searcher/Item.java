@@ -27,6 +27,9 @@ public class Item {
 	private String collection;
 	@SerializedName( "linkToExtractedText" )
 	private String parseText;
+	private String linkToMetadata;
+	
+	
 	
 	//details
 	@SerializedName( "filename" )
@@ -167,16 +170,22 @@ public class Item {
 	public void setParseText(String parseText) {
 		this.parseText = parseText;
 	}
+	public String getLinkToMetadata() {
+		return linkToMetadata;
+	}
+	public void setLinkToMetadata(String linkToMetadata) {
+		this.linkToMetadata = linkToMetadata;
+	}
 
 	@Override
 	public String toString() {
 		return "Item [key=" + key + ", title=" + title + ", source=" + source + ", link=" + link + ", tstamp=" + tstamp
 				+ ", contentLength=" + contentLength + ", digest=" + digest + ", mimeType=" + mimeType
-				+ ", screenShotLink=" + screenShotLink + ", date=" + date + ", encoding="
-				+ encoding + ", noFrameLink=" + noFrameLink + ", snippetForTerms=" + snippetForTerms + ", status="
-				+ status + ", collection=" + collection + ", parseText=" + parseText + ", arcname=" + arcname
-				+ ", arcoffset=" + arcoffset + ", idDoc=" + idDoc + ", index=" + index + ", segment=" + segment + "]";
+				+ ", screenShotLink=" + screenShotLink + ", date=" + date + ", encoding=" + encoding + ", noFrameLink="
+				+ noFrameLink + ", snippetForTerms=" + snippetForTerms + ", status=" + status + ", collection="
+				+ collection + ", parseText=" + parseText + ", linkToMetadata=" + linkToMetadata + ", arcname="
+				+ arcname + ", arcoffset=" + arcoffset + ", idDoc=" + idDoc + ", index=" + index + ", segment="
+				+ segment + "]";
 	}
-	
 	
 }

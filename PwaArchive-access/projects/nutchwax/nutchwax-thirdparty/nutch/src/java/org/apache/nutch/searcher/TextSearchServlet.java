@@ -109,6 +109,7 @@ public class TextSearchServlet extends HttpServlet {
   private static final String noFrame = "/noFrame/replay";
   private static final String screenShotURL = "/screenshot/?url";
   private static final String textExtracted = "/textextracted?m";
+  private static final String infoMetadata = "/textsearch?metadata";
   private NutchBean bean;
   private Configuration conf;
   
@@ -119,7 +120,7 @@ public class TextSearchServlet extends HttpServlet {
   
   private static String[ ]  fieldsReponse = {"versionID", "title", "originalURL", "linkToArchive",
 		  "tstamp", "contentLength", "digest", "mimeType", "linkToScreenshot",
-		  "date", "encoding", "linkToNoFrame", "collection", "snippet", "linkToExtractedText"}; //input parameters
+		  "date", "encoding", "linkToNoFrame", "collection", "snippet", "linkToExtractedText","linkToMetadata"}; //input parameters
   
   /**
    * HttpServlet init method.
@@ -130,7 +131,6 @@ public class TextSearchServlet extends HttpServlet {
     try {
       this.conf = NutchConfiguration.get( config.getServletContext( ) );
       bean = NutchBean.get( config.getServletContext( ), this.conf );
-      
       
       functions = PwaFunctionsWritable.parse( this.conf.get( Global.RANKING_FUNCTIONS ) );            
       nQueryMatches=Integer.parseInt( this.conf.get( Global.MAX_FULLTEXT_MATCHES_RANKED ) );
@@ -174,7 +174,6 @@ public class TextSearchServlet extends HttpServlet {
 	  long endTime;
 	  long duration;
 	  boolean metadataQuery = false;
-	  boolean versionHistoryQuery = false;
 	  boolean fulltextQuery = false;
 	  
 	  // get parameters from request
@@ -521,7 +520,6 @@ public class TextSearchServlet extends HttpServlet {
     		  LOG.info( "[URL-Query] Match between CDX results and Lucene index information Response Time: " + duration + " milliseconds" );
     		  
     	  }
-    	  versionHistoryQuery = true;
     	  
       } else { //full-text query
     	  LOG.info( "Full-text Query" );
@@ -530,7 +528,6 @@ public class TextSearchServlet extends HttpServlet {
     	  HitDetails[ ] details = null;
     	  Hit[ ] show = null; 
     	  Summary[ ] summaries = null;
-    	  byte[ ][ ] contents = null;
     	  ParseText[ ] parseTexts = null;
     	  
     	  String qRequest = queryString.toString( );
@@ -566,8 +563,6 @@ public class TextSearchServlet extends HttpServlet {
      
       try {
     	  
-    	  String requestUrl = request.getRequestURL( ).toString( );
-    	  String base = requestUrl.substring( 0 , requestUrl.lastIndexOf( '/' ) );
     	  if( !metadataQuery ) {
     		
 	    	  //*** calculate the offset of the next & previous results. ***
@@ -768,6 +763,7 @@ public class TextSearchServlet extends HttpServlet {
 				  item.setScreenShotLink( screenShotLink );
 			  if( FieldExists( fields , "linkToNoFrame" ) )
 				  item.setNoFrameLink( urlNoFrame );
+			  
           }
 		  
 		  String domainHost = "";
@@ -775,14 +771,31 @@ public class TextSearchServlet extends HttpServlet {
           try{
         	  URL source = new URL( itemcdx.getUrl( ) );
         	  id = itemcdx.getUrl( ).concat( "/" ).concat( tstamp );
-              if( FieldExists( fields , "versionID" ) )
-              	item.setKey( id );
+              /*if( FieldExists( fields , "versionID" ) )
+              	item.setKey( id );*/ //remove versionID
           } catch( MalformedURLException e ) {
         	  if( item != null )
         		  responseFields.add( item );
         	  LOG.error( e );
         	  continue;
           }
+          
+          String urlEncoded = "";
+		  try{
+			  urlEncoded = URLEncoder.encode( id, "UTF-8" );
+		  } catch( UnsupportedEncodingException un ) {
+			  LOG.error( un );
+			  urlEncoded = id; 
+		  }
+		  LOG.info( "[linkToMetadata] ID = " + id );
+		  if( FieldExists( fields , "linkToMetadata" ) ) {
+			  String linkToMetadata = "http://".concat( domainService ).concat( infoMetadata ).concat( "=" ).concat( urlEncoded );
+			  item.setLinkToMetadata( linkToMetadata );
+			  LOG.info( "Yes linkToMetadata = " + item.getLinkToMetadata( ) );
+		  } else {
+			  if( FieldExists( fields , "linkToMetadata" ) ) 
+              	item.setLinkToMetadata( "" );
+		  }
           
 		  query = null;
 		  
@@ -800,7 +813,7 @@ public class TextSearchServlet extends HttpServlet {
 		  }
 		  
     	  LOG.debug( "[URLSearch] query:" + query.toString( ) + " & numHits:"+ (start+limit) + " & searcherMaxHits:" + nQueryMatches + " & maxHitsPerDup:" + hitsPerDup + " & dedupField:" + dedupField + " & sortField:" + sort + " & reverse:" + reverse + " & maxHitsPerVersion:1" );
-		  
+    	  
     	  //execute the query    
     	  try {
     		  int hitsPerVersion = 1;    		
@@ -809,7 +822,7 @@ public class TextSearchServlet extends HttpServlet {
     		  LOG.error("Search Error", e);    	
     		  hits = new Hits( 0 ,new Hit[ 0 ] );	
     	  }
-
+    	  
     	  HitDetails details = null;
     	  Hit show = null; 
     	  LOG.debug( "hits.length = " + hits.getLength( )+ " hits.total = " + hits.getTotal( ) );
@@ -827,19 +840,12 @@ public class TextSearchServlet extends HttpServlet {
     		  
     		  Hit hit = show;
     		  HitDetails detail = details;
-
+    		  
     		  if( FieldExists( fields , "linkToExtractedText" ) ) {
-    			  String urlEncoded = "";
-    			  try{
-    				  urlEncoded = URLEncoder.encode( id, "UTF-8" );
-    			  } catch( UnsupportedEncodingException un ) {
-    				  LOG.error( un );
-    				  urlEncoded = id; 
-    			  }
     			  String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
     			  item.setParseText( textContent );
-          	  }
-        	  
+    		  } 
+    		  
     		  LOG.debug( "CDXServer["+tstamp+"] Lucene["+detail.getValue( "tstamp" )+"]" );
     		  String url = detail.getValue( "url" );
     		  String title = detail.getValue( "title" );
@@ -936,6 +942,7 @@ public class TextSearchServlet extends HttpServlet {
                 if( FieldExists( fields , "linkToExtractedText" ) ) {
                 	item.setParseText( "" );
                 }
+               
                 
     	  }
     	  //if( hits.getTotal( ) == 0 || hits.getLength( ) == 0 )
@@ -1014,8 +1021,8 @@ public class TextSearchServlet extends HttpServlet {
             try{
             	URL source = new URL( url );
             	id = url.concat( "/" ).concat( tstamp );
-                if( FieldExists( fields , "versionID" ) )
-                	item.setKey( id );
+                /*if( FieldExists( fields , "versionID" ) )
+                	item.setKey( id );*/ //Remove versionID
             } catch( MalformedURLException e ) {
             	LOG.error( e );
             	continue;
@@ -1079,20 +1086,25 @@ public class TextSearchServlet extends HttpServlet {
                 		item.setSnippetForTerms( "" );
                 }
                 
-                
-            	if( FieldExists( fields , "linkToExtractedText" ) ) {
-            		String urlEncoded = "";
-            		//String urlDecoder = "";
+                if( FieldExists( fields , "linkToExtractedText" ) ||  FieldExists( fields , "linkToMetadata" ) ) {
+                	String urlEncoded = "";
             		try{
-            			//urlDecoder = URLDecoder.decode( id, "UTF-8" );
             			urlEncoded = URLEncoder.encode( id, "UTF-8" );
             		} catch( UnsupportedEncodingException un ) {
             			LOG.error( un );
             			urlEncoded = id; 
-            		}
-            		String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
-            		item.setParseText( textContent );
-            	} 
+            		}  
+              		
+                	if( FieldExists( fields , "linkToExtractedText" ) ) {
+                		String textContent = "http://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
+                		item.setParseText( textContent );
+                	} 
+                	
+                	if( FieldExists( fields , "linkToMetadata" ) ) {
+                		String linkToMetadata = "http://".concat( domainService ).concat( infoMetadata ).concat( "=" ).concat( urlEncoded );
+                		item.setLinkToMetadata( linkToMetadata );
+                	} 
+                }
 
             }
             
