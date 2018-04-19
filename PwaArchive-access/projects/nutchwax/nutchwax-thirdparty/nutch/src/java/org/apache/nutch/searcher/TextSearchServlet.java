@@ -155,6 +155,10 @@ public class TextSearchServlet extends HttpServlet {
     throws ServletException, IOException {
 
 	  LOG.info("[doGet] query request from " + request.getRemoteAddr( ) );
+
+    response.addHeader("Access-Control-Allow-Origin", "*");
+    response.addHeader("Access-Control-Allow-Methods", "GET, HEAD");
+    
 	  Calendar DATE_END = currentDate( );
 	  String dateEndString = FORMAT.format( DATE_END.getTime( ) );
 	  int start = 0;
