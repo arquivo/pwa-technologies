@@ -332,6 +332,7 @@ public class TextSearchServlet extends HttpServlet {
       if( siteParameter != null && !siteParameter.equals( "" ) ) {
           String[ ] siteParameters = siteParameter.split( "," );
           if( siteParameters != null ) {
+            hitsPerDup = 0;
         	  for( String siteP : siteParameters ) {
         		  LOG.info( "siteP = " + siteP );
         		  if( siteP.equals( "" ) )
