@@ -74,7 +74,7 @@
 		<div id="header-home">
                                 <div id="logo-home">
                                     <a href="<fmt:message key='home.prizes.href'/>" onclick="ga('send', 'event', 'Homepage', 'premio Arquivopt', 'Click on link (premio Arquivo.pt 10 anos)');">
-                                        <img src="img/banner-premiarquivo-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" style="padding-bottom: 15px;" />
+                                        <img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" style="padding-bottom: 15px;" />
                                     </a>
                                 </div>
                                 <div id="search-home">
