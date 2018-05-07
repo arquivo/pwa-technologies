@@ -73,9 +73,7 @@
 	<div class="wrap">
 		<div id="header-home">
                                 <div id="logo-home">
-                                    <a href="<fmt:message key='home.prizes.href'/>" onclick="ga('send', 'event', 'Homepage', 'premio Arquivopt', 'Click on link (premio Arquivo.pt 10 anos)');">
-                                        <img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" style="padding-bottom: 15px;" />
-                                    </a>
+                                        <img src="img/logo-home-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" />
                                 </div>
                                 <div id="search-home">
                                         <form id="loginForm" action="search.jsp" name="loginForm" method="get">
