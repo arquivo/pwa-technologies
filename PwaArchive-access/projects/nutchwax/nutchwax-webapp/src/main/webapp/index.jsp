@@ -317,8 +317,10 @@ function formatDate ( date ) {
 
 </script>  
 
-<div class="text-center prizes">
-	<a href="<fmt:message key='home.prizes.url'/>"><img width="219" alt="<fmt:message key='home.prizes.alt'/>" title="<fmt:message key='home.prizes.title'/>" src="/img/banner-premiarquivomobile<%=language%>.png"/></a>
+<div class="videoWrapper">
+    <!-- Copy & Pasted from YouTube -->
+
+    <iframe width="260" height="149" src="<fmt:message key='home.video'/>" frameborder="0" allowfullscreen></iframe>
 </div>
 
 
