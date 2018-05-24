@@ -17,14 +17,14 @@ var MENU = MENU || (function(){
 	          					'<a href="/index.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-search padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.home'/></h4></a>' +
 	          					'<a href="/advanced.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></a>' +
 	          					'<a id="shareMenu"><h4><i class="fa fa-share-alt padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.share'/><i id="shareCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></a>'+
+	          					'<a href="<fmt:message key='topbar.menu.examples.href'/>" ><h4><i class="fa fa-globe padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.examples'/></h4></a>'+			          					
 	          					'<div id="shareOptions">'+
 	          						'<a class="addthis_button_facebook" onclick="" href=""><h4 class="submenu"><i class="fa fa-facebook padding-right-menu-icon" aria-hidden="true"></i> Facebook</h4></a>'+
 	          						'<a class="addthis_button_twitter" onclick="" ><h4 class="submenu"><i class="fa fa-twitter padding-right-menu-icon" aria-hidden="true"></i> Twitter</h4></a>'+
-	        /*  ' 			<a title="EmailTitle" href="mailto:?subject=EmailMessage [sub]" onclick="this.href = this.href.replace(\'[sub]\',document.title + \'%0D%0A'+ encodeURIComponent(this.getDatets()) +'%0D%0A %0D%0A\' + encodeURIComponent(window.location.href) ); ga(\'send\', \'event\', \'ReplayBarFunctions\', \'EmailShareClick\', \'http://arquivo.pt/'+_ts+'/'+_url+'\');""><h4 class="submenu"><i class="fa fa-envelope" aria-hidden="true"></i> '+Content.email+'</h4></a>'+*/
-			  					'</div>'+   
-	          					'<a href="" id="switchDesktop" onclick=""><h4><i class="fa fa-desktop padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.desktop'/></h4></a>'+		  	
+			  					'</div>'+   	  					
 	          					'<a href="http://sobre.arquivo.pt/<%=language%>" onclick=""><h4><i class="fa fa-info-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.about'/></h4></a>'+			  					          
 	          					'<a href="<fmt:message key='topbar.menu.help.href'/>" onclick=""><h4><i class="fa fa-question-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.help'/></h4></a>'+
+	          					'<a href="" id="switchDesktop" onclick=""><h4><i class="fa fa-desktop padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.desktop'/></h4></a>'+		          					
 	          					'<a id="changeLanguage" ><h4><i class="fa fa-flag padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.otherLanguage'/></h4></a>'+
 	          				'</div>');
         	this.attachSwitchDesktop();
