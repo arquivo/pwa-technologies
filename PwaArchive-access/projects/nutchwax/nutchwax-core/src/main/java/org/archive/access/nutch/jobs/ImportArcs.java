@@ -609,17 +609,22 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
   {
     boolean decision = false;
     
+    /*We Are only indexing text* and application* mimetypes  */
+    /*We are also excluding CSS, javascript and XML */
+    
     // Are we to index all content?
-    if (!this.indexAll)
-    {
+    //if (!this.indexAll)
+    //{
       if ((mimetype == null)
-        || (!mimetype.startsWith(ImportArcs.TEXT_TYPE) && !mimetype
-        .startsWith(ImportArcs.APPLICATION_TYPE)))
+        || (!mimetype.startsWith(ImportArcs.TEXT_TYPE) && !mimetype.startsWith(ImportArcs.APPLICATION_TYPE))
+        || (mimetype.startsWith(ImportArcs.TEXT_TYPE) && mimetype.toLowerCase().contains("css"))
+    	|| (mimetype.toLowerCase().contains("xml"))
+    	|| (mimetype.toLowerCase().contains("javascript")))  
       {
         // Skip any but basic types.
         decision = true;
       }
-    }
+    //}
     
     return decision;
   }
