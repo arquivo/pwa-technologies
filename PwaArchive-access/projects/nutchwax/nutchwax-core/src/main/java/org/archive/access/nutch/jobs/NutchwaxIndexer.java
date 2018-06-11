@@ -1,8 +1,5 @@
 package org.archive.access.nutch.jobs;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -11,11 +8,7 @@ import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
-import org.apache.hadoop.mapred.JobClient;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.Reporter;
-import org.apache.hadoop.mapred.SequenceFileInputFormat;
+import org.apache.hadoop.mapred.*;
 import org.apache.nutch.crawl.CrawlDatum;
 import org.apache.nutch.crawl.CrawlDb;
 import org.apache.nutch.crawl.LinkDb;
@@ -25,6 +18,9 @@ import org.apache.nutch.parse.ParseText;
 import org.apache.nutch.util.NutchJob;
 import org.archive.access.nutch.Nutchwax;
 import org.archive.access.nutch.NutchwaxConfiguration;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Subclass of nutch Indexer that handles keys that are not just URLs.
@@ -106,7 +102,7 @@ public class NutchwaxIndexer extends Indexer
     job.setOutputValueClass(ObjectWritable.class);
 
     JobClient.runJob(job);
-    
+
     if (LOG.isInfoEnabled())
     {
       LOG.info("Indexer: done");

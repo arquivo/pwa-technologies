@@ -23,34 +23,15 @@
 
 package org.archive.access.nutch.jobs;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.NumberFormat;
-import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.MD5Hash;
-import org.apache.hadoop.io.MapFile;
-import org.apache.hadoop.io.ObjectWritable;
-import org.apache.hadoop.io.SequenceFile;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.*;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
-import org.apache.hadoop.mapred.JobClient;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.RecordWriter;
-import org.apache.hadoop.mapred.Reporter;
-import org.apache.hadoop.mapred.TextInputFormat;
+import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.Progressable;
 import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.util.ToolBase;
@@ -59,25 +40,26 @@ import org.apache.nutch.crawl.MapWritable;
 import org.apache.nutch.fetcher.Fetcher;
 import org.apache.nutch.fetcher.FetcherOutput;
 import org.apache.nutch.fetcher.FetcherOutputFormat;
+import org.apache.nutch.global.Global;
 import org.apache.nutch.metadata.Metadata;
 import org.apache.nutch.metadata.Nutch;
 import org.apache.nutch.net.URLFilters;
 import org.apache.nutch.net.URLNormalizers;
-import org.apache.nutch.parse.Outlink;
-import org.apache.nutch.parse.Parse;
-import org.apache.nutch.parse.ParseData;
-import org.apache.nutch.parse.ParseImpl;
-import org.apache.nutch.parse.ParseOutputFormat;
-import org.apache.nutch.parse.ParseStatus;
-import org.apache.nutch.parse.ParseText;
-import org.apache.nutch.parse.ParseUtil;
-import org.apache.nutch.protocol.Content;
+import org.apache.nutch.parse.*;
 import org.apache.nutch.scoring.ScoringFilterException;
 import org.apache.nutch.scoring.ScoringFilters;
 import org.apache.nutch.util.StringUtil;
 import org.apache.nutch.util.mime.MimeType;
 import org.apache.nutch.util.mime.MimeTypeException;
 import org.apache.nutch.util.mime.MimeTypes;
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.io.TikaInputStream;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.html.HtmlParser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.Link;
+import org.apache.tika.sax.LinkContentHandler;
 import org.archive.access.nutch.Nutchwax;
 import org.archive.access.nutch.NutchwaxConfiguration;
 import org.archive.access.nutch.jobs.sql.SqlSearcher;
@@ -89,7 +71,19 @@ import org.archive.mapred.ARCReporter;
 import org.archive.util.Base32;
 import org.archive.util.MimetypeUtils;
 import org.archive.util.TextUtils;
-import org.apache.nutch.global.Global;
+import org.xml.sax.ContentHandler;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
+
 
 
 /**
@@ -290,10 +284,54 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
 	threadPool.closeAll(); // close the only thread created for this map
   }   
 
+	/*This function returns a string array where the first position contains the parsed text and the second contains the title of the document*/
+	public static String[] parseUsingAutoDetect(byte[] content, TikaConfig tikaConfig,
+			org.apache.tika.metadata.Metadata metadata) throws Exception {
+		AutoDetectParser parser = new AutoDetectParser(tikaConfig);
+		ContentHandler handler = new BodyContentHandler(-1); /*No maximum read limit of characters default is 10 000*/
+		TikaInputStream stream = TikaInputStream.get(content, metadata);
+		parser.parse(stream, handler, metadata, new ParseContext());
+		String title = metadata.get("title");
+		String [] result = new String[2];
+		if(title != null){ /*For historical reasons adding title to the text extracted*/
+			result[0] = title+ " ";
+		}
+		result[0] += handler.toString();
+		result[1] = title;
+		return result;
+	}
+
+	/*Use apache tika to extract outlinks and convert them to Nutch Outlink format*/
+    public  Outlink[] parseLinks(byte[] content, TikaConfig tikaConfig,
+    		org.apache.tika.metadata.Metadata metadata) throws Exception {
+    		List<Outlink> outlinksList = new ArrayList<Outlink>();
+    		HtmlParser parser = new HtmlParser();
+    		LinkContentHandler handler = new LinkContentHandler();
+    		TikaInputStream stream = TikaInputStream.get(content, metadata);
+    		parser.parse(stream, handler, metadata, new ParseContext());
+    		List<Link> links = handler.getLinks();
+    		Iterator<Link> iter = links.iterator();
+			while(iter.hasNext()) {
+				Link link = iter.next();
+				Outlink outlink = null;
+				try{
+					outlink = new Outlink(link.getUri(),link.getText() , conf);
+					outlinksList.add(outlink );
+				} catch(MalformedURLException e){ /*Nutch interface only accepts valid uris*/
+					continue;
+				}
+			}
+			/*convert list to array and return it*/
+			return outlinksList.toArray(new Outlink[outlinksList.size()]);
+    }
+
+
   public void map(final WritableComparable key, final Writable value,
     final OutputCollector output, final Reporter r)
     throws IOException
   {
+	  LOG.info( "MAP ARC" );
+
     // Assumption is that this map is being run by ARCMapRunner.
     // Otherwise, the below casts fail.
     String url = key.toString();
@@ -342,11 +380,14 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
 
     // Copy http headers to nutch metadata.
     final Metadata metaData = new Metadata();
+    org.apache.tika.metadata.Metadata tikaMetadata = new org.apache.tika.metadata.Metadata();
     final Header[] headers = rec.getHttpHeaders();
+    LOG.info( "ARC headers size = " + headers.length );
     for (int j = 0; j < headers.length; j++)
     {
       final Header header = headers[j];
-      
+      tikaMetadata.add(header.getName(), header.getValue());
+
       if (mimetype == null)
       {
         // Special handling. If mimetype is still null, try getting it
@@ -365,6 +406,7 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
       }
       
       metaData.set(header.getName(), header.getValue());
+      LOG.info( "header Name["+header.getName()+"] Value["+header.getValue()+"]" );
     }
 
     // This call to reporter setStatus pings the tasktracker telling it our
@@ -430,12 +472,12 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
     reporter.setStatusIfElapse("closed " + url);
 
     final byte[] contentBytes = this.contentBuffer.toByteArray();
+    LOG.info("ARCContent: " + new String(contentBytes, "UTF-8"));
     final CrawlDatum datum = new CrawlDatum();
     datum.setStatus(CrawlDatum.STATUS_FETCH_SUCCESS);
 
     // Calculate digest or use precalculated sha1.
-    String digest = (this.sha1)? rec.getDigestStr():
-    MD5Hash.digest(contentBytes).toString();
+    String digest = (this.sha1)? rec.getDigestStr():MD5Hash.digest(contentBytes).toString();
     metaData.set(Nutch.SIGNATURE_KEY, digest);
     
     // Set digest back into the arcData so available later when we write
@@ -448,8 +490,30 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
     metaData.set(Nutch.SCORE_KEY, Float.toString(datum.getScore()));
 
     final long startTime = System.currentTimeMillis();
-    final Content content = new Content(url, url, contentBytes, mimetype,
-      metaData, getConf());
+
+    LOG.info("ARC arcData date: " + arcData.getDate());
+    LOG.info("ARC Nutchwax.getDate date: " + Nutchwax.getDate(arcData.getDate()));
+
+	String [] apacheExtractedContent = new String[2];
+	Outlink[] outlinksTika = null;
+	try{
+		TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
+		apacheExtractedContent = parseUsingAutoDetect(contentBytes, tikaConfig,
+				tikaMetadata);
+		LOG.info("Parsing Links");
+		outlinksTika = parseLinks(contentBytes,  tikaConfig, tikaMetadata);
+		LOG.info("End Parsing Links");
+
+	} catch (IOException io){
+		LOG.info("Error parsing tika: " + io);
+		LOG.error("Error parsing tika: ", io);
+	} catch (Exception e){
+		LOG.info("Error parsing tika: " + e);
+		LOG.error("Error parsing tika: ", e);
+	}
+
+
+
     datum.setFetchTime(Nutchwax.getDate(arcData.getDate()));
 
     MapWritable mw = datum.getMetaData();
@@ -470,40 +534,11 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
       new Text(Long.toString(arcData.getOffset())));
     datum.setMetaData(mw);
           
-	TimeoutParsingThread tout=threadPool.getThread(Thread.currentThread().getId(),timeoutIndexingDocument);	
-	tout.setUrl(url);
-    tout.setContent(content);
-    tout.setParseUtil(parseUtil);          
-    tout.wakeupAndWait();        
-	
-	ParseStatus parseStatus=tout.getParseStatus();
-	Parse parse=tout.getParse();		 
+	ParseImpl tikaParseImpl = new ParseImpl(apacheExtractedContent[0], new ParseData(new ParseStatus(1),apacheExtractedContent[1],outlinksTika,metaData));
 	reporter.setStatusIfElapse("parsed " + url);
-	   
-	if (!parseStatus.isSuccess()) {
-      final String status = formatToOneLine(parseStatus.toString());
-      LOG.warn("Error parsing: " + mimetype + " " + url + ": " + status);
-      parse = null;
-    }
-    else {
-      // Was it a slow parse?
-      final double kbPerSecond = getParseRate(startTime,
-        (contentBytes != null) ? contentBytes.length : 0);
-      
-      if (LOG.isDebugEnabled())
-      {
-        LOG.debug(getParseRateLogMessage(url,
-          noSpacesMimetype, kbPerSecond));
-      }
-      else if (kbPerSecond < this.parseThreshold)
-      {
-        LOG.warn(getParseRateLogMessage(url, noSpacesMimetype,
-          kbPerSecond));
-      }
-    }
 
-    Writable v = new FetcherOutput(datum, null,
-      parse != null ? new ParseImpl(parse) : null);       
+
+    Writable v = new FetcherOutput(datum, null, tikaParseImpl);
     if (collectionType.equals(Global.COLLECTION_TYPE_MULTIPLE)) {
     	LOG.info("multiple: "+SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,arcData.getDate())+" "+url); 
     	output.collect(Nutchwax.generateWaxKey(url,SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,arcData.getDate())), v); 
@@ -611,7 +646,7 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
     
     /*We Are only indexing text* and application* mimetypes  */
     /*We are also excluding CSS, javascript and XML */
-    
+
     // Are we to index all content?
     //if (!this.indexAll)
     //{
@@ -619,7 +654,7 @@ public class ImportArcs extends ToolBase implements ARCRecordMapper
         || (!mimetype.startsWith(ImportArcs.TEXT_TYPE) && !mimetype.startsWith(ImportArcs.APPLICATION_TYPE))
         || (mimetype.startsWith(ImportArcs.TEXT_TYPE) && mimetype.toLowerCase().contains("css"))
     	|| (mimetype.toLowerCase().contains("xml"))
-    	|| (mimetype.toLowerCase().contains("javascript")))  
+    	|| (mimetype.toLowerCase().contains("javascript")))
       {
         // Skip any but basic types.
         decision = true;
