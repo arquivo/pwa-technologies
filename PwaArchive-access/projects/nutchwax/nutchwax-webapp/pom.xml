@@ -129,6 +129,7 @@
        <plugin>
          <artifactId>maven-war-plugin</artifactId>
          <configuration>
+             <packagingExcludes>WEB-INF/lib/*tika*jar</packagingExcludes>
            <warSourceExcludes>**/wayback*jar,**/juniversalchardet*,**/archive-mapred*jar,**/commons-codec*jar,**/commons-collections*jar,**/commons-httpclient*jar,**/commons-pool*jar,**/je-*jar,**/junit*jar,**/libidn*jar,**/mg4j*jar,**/nutchwax-thirdparty*jar,**/servlet-api*.jar</warSourceExcludes>
          </configuration>       
       </plugin> 
