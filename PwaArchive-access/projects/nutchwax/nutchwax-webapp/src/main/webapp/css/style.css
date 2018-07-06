@@ -3323,6 +3323,7 @@ overflow: hidden;
 #newFooterWrapper .fright{
 	float: right;
 	margin-right: 4.5em;
+    padding-top: 4px;
 }
 
 #newFooterWrapper .fleft{
