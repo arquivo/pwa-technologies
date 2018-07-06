@@ -50,7 +50,7 @@
 				<div class="inside-site-info grid-container grid-parent">
 						<div class="footer-bar">
 				<aside id="wp_editor_widget-10" class="widget inner-padding WP_Editor_Widget"><div class="footerDiv">
-		<div class="footerImage"><a title="<fmt:message key='footer.sponsor.fccn'/>" href="http://fccn.pt"><img title="<fmt:message key='footer.sponsor.fccn'/>" class="fright size-full wp-image-2912 alignleft" src="http://sobre.arquivo.pt/wp-content/uploads/logo-fccn.png" alt="FCT| FCCN logo oficial" width="" height="49"></a></div>
+		<div class="footerImage"><a title="<fmt:message key='footer.sponsor.fccn'/>" href="http://fccn.pt"><img title="<fmt:message key='footer.sponsor.fccn'/>" class="fright size-full wp-image-2912 alignleft" src="img/logo-fccn.png" alt="FCT| FCCN logo oficial" width="" height="49"></a></div>
 		<div class="footerImage2"><a title="<fmt:message key='footer.sponsor.mctes'/>" href="http://www.portugal.gov.pt/pt/ministerios/mctes.aspx"><img title="<fmt:message key='footer.sponsor.mctes'/>" class="fleft alignnone wp-image-2902" src="http://sobre.arquivo.pt/wp-content/uploads/10-Digital_PT_4C_H_FC_MCTES_cinza.png" alt="Logo oficial <fmt:message key='footer.sponsor.mctes'/>" width="" height="49"></a></div>
 		</div>
 		</aside>	</div>
