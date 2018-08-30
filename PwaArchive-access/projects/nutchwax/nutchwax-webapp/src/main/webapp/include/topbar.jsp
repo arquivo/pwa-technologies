@@ -45,7 +45,7 @@
 <!--	<img src="img/experimental.png" alt="<fmt:message key='topbar.experimental.alt'/>" width="123" height="124" /> -->
 	<div class="wrap">
 		<ul>
-			<li><a href="<c:url value='http://sobre.arquivo.pt/${language}'></c:url>" title="<fmt:message key='topbar.about'/>" class="ajuda"><fmt:message key='topbar.about'/></a></li>
+			<li><a href="<c:url value='//sobre.arquivo.pt/${language}'></c:url>" title="<fmt:message key='topbar.about'/>" class="ajuda"><fmt:message key='topbar.about'/></a></li>
 		<c:choose>
 			<c:when test="${language eq 'pt'}">
 			<script type="text/javascript">

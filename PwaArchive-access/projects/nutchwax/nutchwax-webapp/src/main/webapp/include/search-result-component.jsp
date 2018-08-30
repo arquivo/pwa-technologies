@@ -129,7 +129,7 @@
             // See http://sourceforge.net/tracker/index.php?func=detail&aid=1288990&group_id=118427&atid=681140.
             //String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
 	    // Changed to return in wayback query format
-              String target = "http://"+ collectionsHost +"/"+ ft.format(archiveDate)  +"/"+ url;
+              String target = "//"+ collectionsHost +"/"+ ft.format(archiveDate)  +"/"+ url;
             pageContext.setAttribute("target", target);
             allVersions = "search.jsp?query="+ URLEncoder.encode(url, "UTF-8") +"&dateStart="+ dateStartString + "&dateEnd="+ dateEndString +"&pos="+ String.valueOf(position);
 

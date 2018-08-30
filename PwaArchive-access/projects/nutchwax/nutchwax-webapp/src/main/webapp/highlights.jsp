@@ -101,7 +101,7 @@
 						<div class="mascara-img-gr"></div>
 					</div>
 					<div class="box-info">
-						<a href="http://arquivo.pt/wayback/19961013182712/http://www.publico.pt/" title="<fmt:message key='highlight.publico.link.title'/>"><fmt:message key='highlight.publico.title'/></a>
+						<a href="/wayback/19961013182712/http://www.publico.pt/" title="<fmt:message key='highlight.publico.link.title'/>"><fmt:message key='highlight.publico.title'/></a>
 						<p class="box-sub-title"><fmt:message key='highlight.publico.description'/></p>
 						<p><fmt:message key='highlight.publico.description2'/></p>
 					</div>

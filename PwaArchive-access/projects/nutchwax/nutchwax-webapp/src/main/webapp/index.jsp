@@ -61,7 +61,7 @@
     <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
-    <meta property="og:image" content="http://<%=arquivoHostName%>/img/logoFace.png"/>
+    <meta property="og:image" content="https://<%=arquivoHostName%>/img/logoFace.png"/>
 
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
@@ -200,7 +200,7 @@
                                                 <h1><fmt:message key='home.title'/></h1>
                                                <!-- <h2><fmt:message key='home.subtitle'/></h2> -->
                                                 <p class="green"><fmt:message key='home.description'/></p>
-                                                <!--<a href="http://sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>" onclick="ga('send', 'event', 'Homepage', 'conheca-servico', 'Click on link (sobre.arquivo)');"><fmt:message key='home.know-more'/></a>-->
+                                                <!--<a href="//sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>" onclick="ga('send', 'event', 'Homepage', 'conheca-servico', 'Click on link (sobre.arquivo)');"><fmt:message key='home.know-more'/></a>-->
                                         </div>
                                 </div>
 		</div>
@@ -274,10 +274,10 @@
 <!--Inspect the language for returning the proper highlight page  -->
 <c:choose>
   <c:when test="${language == 'pt'}">
-   <a href="http://sobre.arquivo.pt/pt/exemplos" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
+   <a href="//sobre.arquivo.pt/pt/exemplos" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
   </c:when>
   <c:otherwise>
-    <a href=" http://sobre.arquivo.pt/en/examples" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
+    <a href="//sobre.arquivo.pt/en/examples" title="<fmt:message key='home.highlights.link'/>" id="ver-destaques" onclick="ga('send', 'event', 'Homepage', 'ver-mais-pt', 'Click on link (vermais)');"><fmt:message key='home.highlights'/></a>
   </c:otherwise>
 </c:choose>
 

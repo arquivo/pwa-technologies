@@ -35,8 +35,8 @@
 	<meta name="Keywords" content="<fmt:message key='404.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='404.meta.description'/>" />
 	<%String serverName = request.getServerName(); %>
-	<link rel="shortcut icon" href="img/logo-16.jpg" type="http://<%=serverName%>/image/x-icon" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="http://<%=serverName%>/css/style.css"  media="all" />
+	<link rel="shortcut icon" href="img/logo-16.jpg" type="//<%=serverName%>/image/x-icon" />
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="//<%=serverName%>/css/style.css"  media="all" />
 </head>
 <body>
 	<%@ include file="include/topbar.jsp" %>
@@ -55,12 +55,12 @@
 				<ul>
                     <%	String contactUrl = null;
 						if (language.equals("en"))
-							contactUrl = "http://sobre.arquivo.pt/contact";
+							contactUrl = "//sobre.arquivo.pt/contact";
 						else
-							contactUrl = "http://sobre.arquivo.pt/contacto";
+							contactUrl = "//sobre.arquivo.pt/contacto";
 					%>
                     <li><fmt:message key='404.suggestions.feedback'><fmt:param value='<%=contactUrl%>'/></fmt:message> </a></li>	
-                    <li><a href="http://<%=serverName%>"><fmt:message key='404.suggestions.go-home'/></a></li>
+                    <li><a href="//<%=serverName%>"><fmt:message key='404.suggestions.go-home'/></a></li>
 				</ul>
 			</div>
 		</div>
