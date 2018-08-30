@@ -219,7 +219,7 @@
   <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css" media="all"/>
   <link href="css/csspin.css" rel="stylesheet" type="text/css"/>
 
-  <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>
+  <script type="text/javascript" async="" src="//www.google-analytics.com/ga.js"></script>
   <script type="text/javascript">
                 var minDate = new Date(820450800000);
                 var maxDate = new Date(1451606399842);

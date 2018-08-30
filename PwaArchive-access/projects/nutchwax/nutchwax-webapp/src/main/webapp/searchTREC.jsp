@@ -139,7 +139,7 @@
     <input type="hidden" name="collection" value="<%=collection%>">
  <% } %>
  <input type="submit" value="<i18n:message key="search"/>">
- <small><a href="http://archive-access.sourceforge.net/projects/nutch/help-queries.html">Help</a></small>
+ <small><a href="//archive-access.sourceforge.net/projects/nutch/help-queries.html">Help</a></small>
 <% if (sort != null) { %>
     <input type="hidden" name="sort" value="<%=sort%>">
     <input type="hidden" name="reverse" value="<%=reverse%>">

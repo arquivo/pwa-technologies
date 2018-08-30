@@ -114,7 +114,7 @@
     <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
-    <meta property="og:image" content="http://<%=arquivoHostName%>/img/logoFace.png"/>
+    <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
 
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
@@ -317,7 +317,7 @@ function formatDate ( date ) {
 
 </script>  
 <div class="text-center prizes">
-<a href="http://sobre.arquivo.pt/pt/vencedores-premios-arquivo-pt/"><img width="219" alt="<fmt:message key='home.prizes.alt'/>" title="<fmt:message key='home.prizes.title'/>" src="/img/badge-premiosarquivo-<%=language%>.png"/></a>
+<a href="//sobre.arquivo.pt/pt/vencedores-premios-arquivo-pt/"><img width="219" alt="<fmt:message key='home.prizes.alt'/>" title="<fmt:message key='home.prizes.title'/>" src="/img/badge-premiosarquivo-<%=language%>.png"/></a>
 </div>
 
 

@@ -380,7 +380,7 @@ String[] queryString_splitted=null;
     <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
-    <meta property="og:image" content="http://<%=arquivoHostName%>/img/logoFace.png"/>
+    <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
 
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
@@ -720,10 +720,10 @@ function formatDate ( date ) {
 <script>
       var language =   localStorage.language;
       if( language == 'EN'){
-          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsEN.js"><\/script>');
+          document.write('<script type="text/javascript" language="JavaScript" src="//<%=hostArquivo%>/js/properties/ConstantsEN.js"><\/script>');
       }
       else{
-          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsPT.js"><\/script>');
+          document.write('<script type="text/javascript" language="JavaScript" src="//<%=hostArquivo%>/js/properties/ConstantsPT.js"><\/script>');
       }
 </script>
 <script type="text/javascript">
@@ -802,7 +802,7 @@ function createMatrix(versionsArray, versionsURL){
 
     var dateFormated = getDateSpaceFormated(timestampStr);
 
-    var tdtoInsert = '<a onclick="ga(\'send\', \'event\', \'Versions List\', \'Version Click\', \'http://<%=collectionsHost%>/'+timestampStr+'/'+url+'\');" class="day-version-div text-center" id="'+timestampStr+'" href="http://<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+getDateSpaceFormatedWithoutYear(timestampStr)+'</a>';
+    var tdtoInsert = '<a onclick="ga(\'send\', \'event\', \'Versions List\', \'Version Click\', \'//<%=collectionsHost%>/'+timestampStr+'/'+url+'\');" class="day-version-div text-center" id="'+timestampStr+'" href="//<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+getDateSpaceFormatedWithoutYear(timestampStr)+'</a>';
 
      if(! $('#'+currentYear+'_'+currentMonth).length )  /*Add month if it doesn't exist already*/
     {
@@ -902,7 +902,7 @@ function createErrorPage(){
     var endTs = endYear+endMonth+endDay+'000000';   
 
     //var requestURL = "http://p27.arquivo.pt/wayback/-cdx";
-    var requestURL = "http://<%=collectionsHost%>/" + "cdx";
+    var requestURL = "//<%=collectionsHost%>/" + "cdx";
     var versionsArray = [];
     var versionsURL = [];
 
