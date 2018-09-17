@@ -113,6 +113,7 @@ public class ImageSearchServlet extends HttpServlet {
 	private static PwaFunctionsWritable functions = null;
 	private static int nQueryMatches = 0;
 	private static String collectionsHost = null;
+	private static String solrHost = null
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat( "yyyyMMddHHmmss" );
 	Calendar DATE_END = new GregorianCalendar( );
 	private static final String noFrame = "/noFrame/replay";
@@ -137,6 +138,7 @@ public class ImageSearchServlet extends HttpServlet {
 			this.conf = NutchConfiguration.get( config.getServletContext( ) );
 			bean = NutchBean.get( config.getServletContext( ), this.conf );     
 			collectionsHost = this.conf.get( "wax.host", "arquivo.pt" );
+			solrHost = this.conf.get( "wax.solrhost", "arquivo.pt" );
 			TimeZone zone = TimeZone.getTimeZone( "GMT" );
 			FORMAT.setTimeZone( zone );
 
@@ -274,8 +276,7 @@ public class ImageSearchServlet extends HttpServlet {
 		startTime = System.nanoTime( );
 		//execute the query    
 		try {
-			String urlString = "http://p28.arquivo.pt:8983/solr/SAFE";
-			SolrClient solr = new HttpSolrClient.Builder(urlString).build();
+			SolrClient solr = new HttpSolrClient.Builder(solrHost).build();
 			SolrQuery solrQuery = new SolrQuery();
 			solrQuery.setQuery(q);
 			solrQuery.addFilterQuery(fqString);

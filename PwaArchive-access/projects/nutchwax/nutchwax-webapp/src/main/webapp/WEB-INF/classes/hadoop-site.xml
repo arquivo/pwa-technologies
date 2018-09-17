@@ -17,6 +17,10 @@
       <name>wax.webhost</name>
       <value>p28.arquivo.pt</value>
   </property>
+  <property>
+      <name>wax.solrserver</name>
+      <value>http://p63.arquivo.pt:8983/solr/SAFE</value>
+  </property>
 
   <property>
     <name>hadoop.tmp.dir</name>
