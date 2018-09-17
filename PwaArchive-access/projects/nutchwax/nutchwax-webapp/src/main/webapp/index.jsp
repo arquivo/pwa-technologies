@@ -61,7 +61,11 @@
     <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
+<<<<<<< HEAD
     <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
+=======
+    <meta property="og:image" content="https://<%=arquivoHostName%>/img/logoFace.png"/>
+>>>>>>> 05f67c6573cee2bf584c6bf748a838cc2bb09133
 
 	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />

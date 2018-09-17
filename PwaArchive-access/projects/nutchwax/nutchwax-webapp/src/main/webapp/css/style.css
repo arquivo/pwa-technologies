@@ -1027,10 +1027,13 @@ li.grouped { padding-left: 38px; }
   height: 40px;
   position: relative;
 }
+<<<<<<< HEAD
 #reportBug i:before {
  padding-top: 2px;  
  font-size: 1.5rem!important;
 }
+=======
+>>>>>>> 05f67c6573cee2bf584c6bf748a838cc2bb09133
 
 .sk-fading-circle .sk-circle {
   width: 100%;
