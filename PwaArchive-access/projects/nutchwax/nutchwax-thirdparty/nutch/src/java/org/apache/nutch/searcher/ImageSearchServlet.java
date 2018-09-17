@@ -276,7 +276,7 @@ public class ImageSearchServlet extends HttpServlet {
 		startTime = System.nanoTime( );
 		//execute the query    
 		try {
-			LOG.info("SOLR HOST": + solrHost);
+			LOG.info("SOLR HOST:" + solrHost);
 			SolrClient solr = new HttpSolrClient.Builder(solrHost).build();
 			SolrQuery solrQuery = new SolrQuery();
 			solrQuery.setQuery(q);
