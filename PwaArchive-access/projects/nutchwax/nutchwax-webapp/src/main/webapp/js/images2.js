@@ -471,7 +471,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
 
     $.ajax({
     // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
-       url: "//p28.arquivo.pt:8082/imagesearch",      
+       url: "/imagesearch",      
 
  /*+ " AND pageTstamp:["+dateStart+" TO "+dateEnd+"]"*/
        data: {
