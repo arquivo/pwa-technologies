@@ -462,32 +462,20 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
     numrows =50;
     currentStart = startIndex;
     
-<<<<<<< HEAD
     safeValue = '[0 TO 0.49]';
     safeSearch = true;
     if($('#safeSearch').find(":selected").attr("value") === 'off'){
         safeValue='[0 TO 1]';       
-=======
-    safeSearch = "on";
-    if($('#safeSearch').find(":selected").attr("value") === 'off'){
-    	safeSearch = "off";       
->>>>>>> 05f67c6573cee2bf584c6bf748a838cc2bb09133
     }
 
 
     $.ajax({
     // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
-<<<<<<< HEAD
-       url: "http://p28.arquivo.pt:8983/solr/SAFE/select",
-=======
-       url: "//p28.arquivo.pt:8082/imagesearch",
->>>>>>> 05f67c6573cee2bf584c6bf748a838cc2bb09133
-        
+       url: "//p28.arquivo.pt:8082/imagesearch",      
 
  /*+ " AND pageTstamp:["+dateStart+" TO "+dateEnd+"]"*/
        data: {
           q: input,
-<<<<<<< HEAD
           fq: "imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:"+safeValue,
           defType: 'edismax',                  
           qf: 'imgTitle^4 imgAlt^3 imgSrcTokens^2 pageTitle pageURLTokens', //TODO: improve ranking
@@ -497,34 +485,13 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
           ps2: 2,
           pf3: 'imgTitle^40 imgAlt^30 imgSrcTokens^20 pageTitle^10 pageURLTokens^10', //TODO: improve ranking
           ps3: 3,
-=======
           from: dateStart,
           to: dateEnd,
           offset: startIndex,
           maxItems: numrows,
-          safeSearch:safeSearch
-          /*fq: "imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:"+safeValue,*/          
-          
+          safeSearch:safeSearch        
        },
            
-   /*    data: {
-          q: input,
->>>>>>> 05f67c6573cee2bf584c6bf748a838cc2bb09133
-          start: startIndex,
-          rows: numrows,
-          wt: 'json'
-       },
-<<<<<<< HEAD
-           
-   /*    data: {
-          q: input,
-          start: startIndex,
-          rows: numrows,
-          wt: 'json'
-       },
-=======
->>>>>>> 05f67c6573cee2bf584c6bf748a838cc2bb09133
-    */
        timeout: 300000,
        error: function() {
          console.log("Error In Ajax request to getimages");            
