@@ -62,8 +62,8 @@
   // Prepare the query values to be presented on the page, preserving the session
 
   String imageURL = "";
-  String imgRefURL = "http://arquivo.pt";
-  String previousURL ="http://arquivo.pt";
+  String imgRefURL = "//arquivo.pt";
+  String previousURL ="//arquivo.pt";
   String imgRefTs ="20100000000000";
   String imgRes ="";
   String imageURLDecoded= "";
@@ -188,7 +188,7 @@
 
   </script>
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
-  <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>
+  <script type="text/javascript" async="" src="//www.google-analytics.com/ga.js"></script>
   <script type="text/javascript">
                 var minDate = new Date(820450800000);
                 var maxDate = new Date(1451606399842);

@@ -6,12 +6,16 @@
 <configuration>
   <property>
     <name>searcher.dir</name>
-    <value>/opt/searcher/collections/SearchAll</value>
+    <value>/home/wayback/searcher/deploy/configs</value>
   </property>
 
   <property>
     <name>wax.host</name>
-    <value>arquivo.pt/wayback/wayback</value>
+    <value>p28.arquivo.pt/wayback</value>
+  </property>
+  <property>
+      <name>wax.webhost</name>
+      <value>p28.arquivo.pt</value>
   </property>
 
   <property>
@@ -21,10 +25,3 @@
   </property>
 
 </configuration>
-
-
-
-
-
-
-

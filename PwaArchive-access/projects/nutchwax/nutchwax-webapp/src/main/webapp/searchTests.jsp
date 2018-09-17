@@ -429,7 +429,7 @@ Search took <%= searchTime/1000.0 %> seconds.
     String url = detail.getValue("url");
     // If the collectionsHost includes a path do not add archiveCollection.
     // See http://sourceforge.net/tracker/index.php?func=detail&aid=1288990&group_id=118427&atid=681140.    
-    String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
+    String target = "//"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
     //pageContext.setAttribute("target", target);
 
     int position = i; 

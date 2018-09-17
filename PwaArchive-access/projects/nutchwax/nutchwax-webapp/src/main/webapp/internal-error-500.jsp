@@ -55,9 +55,9 @@
                                 <ul>
                                 	 <%	String contactUrl = null;
 											if (language.equals("en"))
-												contactUrl = "http://sobre.arquivo.pt/contact";
+												contactUrl = "//sobre.arquivo.pt/contact";
 											else
-												contactUrl = "http://sobre.arquivo.pt/contacto";
+												contactUrl = "//sobre.arquivo.pt/contacto";
 									%>
                                         <li><fmt:message key='500.suggestions.feedback'><fmt:param value='<%=contactUrl%>'/></fmt:message> </a></li>
                                         <li><a href="./"><fmt:message key='500.suggestions.go-home'/></a></li>

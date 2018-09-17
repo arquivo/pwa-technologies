@@ -50,8 +50,8 @@
 				<div class="inside-site-info grid-container grid-parent">
 						<div class="footer-bar">
 				<aside id="wp_editor_widget-10" class="widget inner-padding WP_Editor_Widget"><div class="footerDiv">
-		<div class="footerImage"><a title="<fmt:message key='footer.sponsor.fccn'/>" href="http://fccn.pt"><img title="<fmt:message key='footer.sponsor.fccn'/>" class="fright size-full wp-image-2912 alignleft" src="img/logo-fccn.png" alt="FCT| FCCN logo oficial" width="" height="49"></a></div>
-		<div class="footerImage2"><a title="<fmt:message key='footer.sponsor.mctes'/>" href="http://www.portugal.gov.pt/pt/ministerios/mctes.aspx"><img title="<fmt:message key='footer.sponsor.mctes'/>" class="fleft alignnone wp-image-2902" src="http://sobre.arquivo.pt/wp-content/uploads/10-Digital_PT_4C_H_FC_MCTES_cinza.png" alt="Logo oficial <fmt:message key='footer.sponsor.mctes'/>" width="" height="49"></a></div>
+		<div class="footerImage"><a title="<fmt:message key='footer.sponsor.fccn'/>" href="//fccn.pt"><img title="<fmt:message key='footer.sponsor.fccn'/>" class="fright size-full wp-image-2912 alignleft" src="img/logo-fccn.png" alt="FCT| FCCN logo oficial" width="" height="49"></a></div>
+		<div class="footerImage2"><a title="<fmt:message key='footer.sponsor.mctes'/>" href="//www.portugal.gov.pt/pt/ministerios/mctes.aspx"><img title="<fmt:message key='footer.sponsor.mctes'/>" class="fleft alignnone wp-image-2902" src="//sobre.arquivo.pt/wp-content/uploads/10-Digital_PT_4C_H_FC_MCTES_cinza.png" alt="Logo oficial <fmt:message key='footer.sponsor.mctes'/>" width="" height="49"></a></div>
 		</div>
 		</aside>	</div>
 						<div class="copyright-bar">
@@ -84,8 +84,8 @@
                     <li><fmt:message key="footer.section.social.mailinglist"/></li>
                     <li><fmt:message key="footer.section.social.news"/></li>
                     <li><fmt:message key="footer.section.social.twitter"/></li>
-                    <li><a href="http://www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
-                    <li><a href="http://arquivo.pt/rss"><fmt:message key='footer.section.social.rss'/></a></li>
+                    <li><a href="//www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
+                    <li><a href="//arquivo.pt/rss"><fmt:message key='footer.section.social.rss'/></a></li>
                     <li><fmt:message key="footer.section.social.video"/></li>
                 </ul>
             </div>
@@ -116,10 +116,10 @@
     </div>
     <div id="empresa">
         <div class="wrap-footer">
-            <a href="http://www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" >
+            <a href="//www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" >
                 <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="292" height="60" id="fccn" />
             </a>&nbsp;
-            <a href="http://www.portugal.gov.pt/pt/ministerios/mctes.aspx" title="<fmt:message key='footer.sponsor.mctes.alt'/>" >
+            <a href="//www.portugal.gov.pt/pt/ministerios/mctes.aspx" title="<fmt:message key='footer.sponsor.mctes.alt'/>" >
                 <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/gov.png" alt="<fmt:message key='footer.sponsor.mctes.alt'/>" width="292" height="61" id="fccn" />
             </a>
 
@@ -127,8 +127,8 @@
 
 
             <map id="logomap" name="logomap">
-                <area title="<fmt:message key='footer.sponsor.gov'/>" href="http://www.portugal.gov.pt/" coords="0,0,138,40" shape="rect"/>
-                <area title="<fmt:message key='footer.sponsor.mec'/>" href="http://www.portugal.gov.pt/pt/os-ministerios/ministerio-da-educacao-e-ciencia.aspx" coords="141,0,243,40" shape="rect"/>
+                <area title="<fmt:message key='footer.sponsor.gov'/>" href="//www.portugal.gov.pt/" coords="0,0,138,40" shape="rect"/>
+                <area title="<fmt:message key='footer.sponsor.mec'/>" href="//www.portugal.gov.pt/pt/os-ministerios/ministerio-da-educacao-e-ciencia.aspx" coords="141,0,243,40" shape="rect"/>
             </map>
         </div>
     </div>

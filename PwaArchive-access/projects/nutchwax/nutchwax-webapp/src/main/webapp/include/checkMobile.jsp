@@ -11,6 +11,6 @@
         };
         if(mobilecheck() && Cookies.get('forceDesktop')!== 'true' ){
             currentURL = window.location.href;
-            window.location.href = 'http://m.'+currentURL.substr(7,currentURL.length); /*Redirect to mobile version*/
+            window.location.href = '//m.'+currentURL.substr(7,currentURL.length); /*Redirect to mobile version*/
         }   
     </script>

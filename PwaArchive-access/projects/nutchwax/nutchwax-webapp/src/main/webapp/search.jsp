@@ -140,24 +140,28 @@ String[] queryString_splitted=null;
                 queryString += " ";
         }
         if (request.getParameter("site") != null && request.getParameter("site") != "") {
-                queryString += "site:";
                 String siteParameter = request.getParameter("site"); //here split hostname and put it to lowercase
+                String [] sitesToAdd = siteParameter.split(",");
 
-                if (siteParameter.startsWith("http://")) {
-                        URL siteURL = new URL(siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        queryString += siteParameter.substring("http://".length());
-                } else if (siteParameter.startsWith("https://")) {
-                        URL siteURL = new URL(siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        queryString += siteParameter.substring("https://".length());
-                } else {
-                        URL siteURL = new URL("http://"+siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        queryString += siteParameter;
+                for(String currentSite: sitesToAdd){
+                  queryString += "site:";
+                  currentSite = currentSite.replaceAll("\\s+","");
+                  if (currentSite.startsWith("http://")) {
+                          URL siteURL = new URL(currentSite);
+                          String siteHost = siteURL.getHost();
+                          currentSite = currentSite.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
+                          queryString += currentSite.substring("http://".length())+ " ";
+                  } else if (currentSite.startsWith("https://")) {
+                          URL siteURL = new URL(currentSite);
+                          String siteHost = siteURL.getHost();
+                          currentSite = currentSite.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
+                          queryString += currentSite.substring("https://".length()) + " ";
+                  } else {
+                          URL siteURL = new URL("http://"+currentSite);
+                          String siteHost = siteURL.getHost();
+                          currentSite = currentSite.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
+                          queryString += currentSite + " ";
+                  }
                 }
                 /*queryStringParameter = queryString.length();
                 if (siteParameter.startsWith("http://") && siteParameter.startsWith("https://")) {
@@ -362,7 +366,7 @@ String[] queryString_splitted=null;
   <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
   <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
   <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
-  <meta property="og:image" content="http://<%=arquivoHostName%>/img/logoFace.png"/>
+  <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
   <link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
   <link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
   <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
@@ -622,7 +626,7 @@ String[] queryString_splitted=null;
                         </c:catch>
 
 
-    <script src="http://<%=hostArquivo%>/js/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="//<%=hostArquivo%>/js/jquery-latest.min.js" type="text/javascript"></script>
     <script>var $j = jQuery.noConflict(true);</script>
 
 
@@ -745,7 +749,7 @@ function createMatrix(versionsArray, versionsURL){
     var pos = getYearPosition(timestampStr);
     var dateFormated = getDateSpaceFormated(timestampStr);
     var shortDateFormated= getShortDateSpaceFormated(timestampStr);       
-    var tdtoInsert = '<td><a href="http://<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+shortDateFormated+'</a></td>';
+    var tdtoInsert = '<td><a href="//<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+shortDateFormated+'</a></td>';
     matrix[pos].push(tdtoInsert);  
   }
 
@@ -863,7 +867,7 @@ function createErrorPage(){
     var endTs = endYear+endMonth+endDay+'000000';   
 
     //var requestURL = "http://p27.arquivo.pt/wayback/-cdx";
-    var requestURL = "http://<%=collectionsHost%>/" + "cdx";
+    var requestURL = "//<%=collectionsHost%>/" + "cdx";
     var versionsArray = [];
     var versionsURL = [];
 
@@ -910,10 +914,10 @@ function createErrorPage(){
 <script>
       var language = localStorage.language;
       if( language == 'EN'){
-          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsEN.js"><\/script>');
+          document.write('<script type="text/javascript" language="JavaScript" src="//<%=hostArquivo%>/js/properties/ConstantsEN.js"><\/script>');
       }
       else{
-          document.write('<script type="text/javascript" language="JavaScript" src="http://<%=hostArquivo%>/js/properties/ConstantsPT.js"><\/script>');
+          document.write('<script type="text/javascript" language="JavaScript" src="//<%=hostArquivo%>/js/properties/ConstantsPT.js"><\/script>');
       }
 </script> 
 
@@ -997,7 +1001,6 @@ function createErrorPage(){
   &nbsp;
 </div>
 <div id="second-column">
-<h1><fmt:message key='search.query'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></h1>
 
 <%@include file="include/search-result-component.jsp"%>
 

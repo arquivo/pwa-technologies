@@ -9,7 +9,7 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
 <%@include file="include/i18n.jsp" %>
 <fmt:setLocale value="<%=language%>"/>
-<c:set var="rootUrl" scope="page" value="http://${pageContext.request.serverName}${pageContext.request.contextPath}"/>
+<c:set var="rootUrl" scope="page" value="//${pageContext.request.serverName}${pageContext.request.contextPath}"/>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
 		xmlns:time="http://a9.com/-/opensearch/extensions/time/1.0/">
 	<ShortName><fmt:message key="opensearch.title"><fmt:param value="<%=language%>"/></fmt:message></ShortName>

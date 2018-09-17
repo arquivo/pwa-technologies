@@ -1,4 +1,17 @@
+ jQuery.browser = {};
+(function () {
+    jQuery.browser.msie = false;
+    jQuery.browser.version = 0;
+    if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+        jQuery.browser.msie = true;
+        jQuery.browser.version = RegExp.$1;
+    }
+})();
+
+
  imageObjs = []; /*Global array containing images*/
+ imageDigests = []; /*Global array unique image digests*/
+ noMoreResults = false; /*Global variable control if there are no more results*/
 
 function shortenURL( longURL) {
     gapi.client.setApiKey('AIzaSyB7R8gTEu34CTfTBL8rolvjZOchKg2RyAA');
@@ -27,8 +40,17 @@ $( function() {
     autoOpen: false,
     dialogClass: "test",
     modal: true,
-    responsive: true
+    responsive: true,
+    resizable: false
     });
+    $( "#detailsDialog" ).dialog({
+    width: 650,
+    autoOpen: false,
+    dialogClass: "test",
+    modal: true,
+    responsive: true,
+    resizable: false
+    });    
 } );
 
 startPosition = 0; //the default start position to get the images global variable
@@ -46,15 +68,16 @@ $(function() {
 }); 
 
 function getMoreImages(){
-    startPosition += 100;
     $('#moreResults').remove();
-    $('#resultsUl').append('<li id="loadingMoreImages" style="text-align:center; margin-right: 1%; margin-bottom:1%; margin-top:4%; width:100%"> <div style="width: 100%; text-align:center"><div style="text-align:center;" class="cp-spinner cp-round"></div></div> </li>');
-    
+    $('#resultsUl').append('<li id="loadingMoreImages" style="text-align:center; margin-right: 1%; margin-bottom:1%; margin-top:4%; width:100%"> <div style="width: 100%; text-align:center"><div class="sk-fading-circle"><div class="sk-circle1 sk-circle"></div><div class="sk-circle2 sk-circle"></div><div class="sk-circle3 sk-circle"></div><div class="sk-circle4 sk-circle"></div><div class="sk-circle5 sk-circle"></div><div class="sk-circle6 sk-circle"></div><div class="sk-circle7 sk-circle"></div><div class="sk-circle8 sk-circle"></div><div class="sk-circle9 sk-circle"></div><div class="sk-circle10 sk-circle"></div><div class="sk-circle11 sk-circle"></div><div class="sk-circle12 sk-circle"></div></div></div> </li>');
+    startPosition += numrows;
     searchImages(startPosition);
 }
 
 function loadingFinished(){
-    $("#resultsUl").append('<li id="moreResults" style="width:100%; padding-top: 20px;"><button class="search-submit" style="float:none" onclick="getMoreImages()">Mais Resultados</button></li>');
+    if(!noMoreResults){
+        $("#resultsUl").append('<li id="moreResults" style="width:100%; padding-top: 20px;"><button class="search-submit" style="float:none" onclick="getMoreImages()">Mais Resultados</button></li>');
+    }    
     $('#loadingDiv').hide();
     $("#resultsUl").show();
     if($('#loadingMoreImages').length){
@@ -63,6 +86,7 @@ function loadingFinished(){
 }
 
 totalPosition = 0; //global variable
+currentOffset= 0;
 
 function doInitialSearch(){
     startPosition = 0;
@@ -95,6 +119,18 @@ function truncateUrl(url, maxSize)
     else
         return url
 }
+
+/*Truncates large URL in the replay bar*/
+function truncateUrlKeepProtocol(url, maxSize)
+{    
+    if (url.length > maxSize){
+            url = url.substring(0, maxSize-3) + "...";
+            return url;
+    }
+    else
+        return url
+}
+
 
 lastPosition = -1; /*Global var refers to the lastImage the user*/
 lastPress= -1; /*Global var refers to last time user pressed arrow in image viewer*/
@@ -184,11 +220,64 @@ var centerImage = maxImageExpandHeight/2 - expandedImageHeight/2 ;
 
 var liMarginTop = maxImageHeight - imageHeight;
 
-var contentToInsert = '<li position='+position+' id="imageResults'+position+'" style="background:white; margin-right: 1%; margin-bottom:1%; margin-top:'+liMarginTop.toString()+'px;"><h2><button style="cursor:pointer;" onclick = "expandImage('+position+',true)"> <img style="max-height:200px; padding:0px 0px 4px 0px;" height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/> </button></h2> <p class="green" style="font-size:1em!important; text-align: left; padding-left:5px">'+truncateUrl(imageObj.originalURL, 20)+'</p> <p class="date" id="date'+position+'" style="font-weight:normal; font-size:1em!important; text-align: left; padding-left:5px;padding-bottom:2px;">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
-    '<div id="arrowWrapper'+position+'" class="arrowWrapper" ><div id="arrow'+position+'" class="arrow"/></div>' +
-    '<div id="testViewer'+position+'" class="imageExpandedDiv" tabindex="1"><button onclick = "expandImage('+position+',false)" class="expand__close" title="'+close+'"></button> <button onclick="previousImage('+position+')"  class="left__arrow" title="'+leftArrow+'"></button> <button onclick="nextImage('+position+')" class="right__arrow" title="'+rightArrow+'"></button> <div style="width: 60%; display: inline-block;float: left;"> <a target="_blank" href="http://arquivo.pt/wayback/'+imageObj.timestamp+'/'+imageObj.originalURL+'"> <img style="max-width:'+maxImageDivWidth+'px; margin-left: 70px; margin-top:'+ centerImage+'px; margin-bottom:'+ centerImage+'px"class="imageExpanded" id="ExpandedImg'+position+'" src="'+imageObj.currentImageURL+'"> </a> </div> <div style="min-height: 500px;margin-top: -50px;width: 39%;display: inline-block; border-left: solid 1px #454545;"> <div style="padding-top:120px; margin-left: 25px; margin-right:70px; text-align: left;"> <h2 style="color:white; word-wrap: break-word;">'+truncateUrl(imageObj.originalURL, 80)+'</h2> <br/> <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.timestamp)+' </h2><div style="padding-top:20px; padding-bottom:50px;"><h2 style="color:white;word-wrap: break-word;" > <span style="font-weight: bold">'+imageTitle + ' </span>' +imageObj.title+'</h2><br/> <h2 style="color:white;word-wrap: break-word;" > <span style="font-weight: bold">'+imageType+' </span>'+imageObj.type+'</h2> <br/> <h2 style="color:white;word-wrap: break-word;" > <span style="font-weight: bold">'+resolution+' </span>'+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'</h2></div><div style="display: inline; white-space: nowrap; overflow: hidden;"><a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.timestamp+'/'+imageObj.originalURL+'"><span class="imageViewerButton">'+visitPage+'</span></a><a target="_blank" class="imageViewerAnchor" style="margin-left: 20px"  href="'+imageObj.currentImageURL+'"><span class="imageViewerButton">'+showImage+'</span></a><button id="dButton" position='+position+'  class="imageViewerAnchor" style="margin-left: 20px"><span class="imageViewerButton" style="line-height:25px;">'+share+'</span></button></div>  </div> </div> </div>'+ '</li>';     
+var contentToInsert = ''+
+'<li position='+position+' id="imageResults'+position+'" style="background:white; margin-right: 1%; margin-bottom:1%; margin-top:'+liMarginTop.toString()+'px;">'+
+'   <h2>'+
+'       <button style="cursor:pointer;" onclick = "expandImage('+position+',true)">'+
+'           <img style="max-height:200px; padding:0px 0px 4px 0px;" height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
+'       </button>'+
+'   </h2>'+
+'   <p class="green" style="font-size:1.2em!important; text-align: left; padding-left:5px;padding-right:5px;">'+truncateUrl(imageObj.pageURL, 20)+'</p>'+
+'   <p class="date" id="date'+position+'" style="font-weight:normal; font-size:1.4em!important; text-align: left; padding-left:5px;padding-right:5px;padding-bottom:2px;">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
+'   <div id="arrowWrapper'+position+'" class="arrowWrapper" >'+
+'       <div id="arrow'+position+'" class="arrow"/></div>' +
+'       <div id="testViewer'+position+'" class="imageExpandedDiv" tabindex="1">'+
+'           <button onclick = "expandImage('+position+',false)" class="expand__close" title="'+close+'"></button>'+
+'           <button onclick="previousImage('+position+')"  class="left__arrow" title="'+leftArrow+'"></button>'+
+'           <button onclick="nextImage('+position+')" class="right__arrow" title="'+rightArrow+'"></button>'+
+'           <div style="width: 60%; display: inline-block;float: left;">'+
+'               <a target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
+'                   <img style="max-width:'+maxImageDivWidth+'px; margin-left: 70px; margin-top:'+ centerImage+'px; margin-bottom:'+ centerImage+'px"class="imageExpanded" id="ExpandedImg'+position+'" src="'+imageObj.currentImageURL+'">'+
+'               </a>'+
+'           </div>'+
+'           <div style="min-height: 500px;margin-top: -50px;width: 39%;display: inline-block; border-left: solid 1px #454545;">'+
+'               <div style="padding-top:120px; margin-left: 25px; margin-right:70px; text-align: left;">'+
+'                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+pageString+' </h1>'+
+'                   <div style="padding-left:15px">'+
+'                       <h2 style="color:white; word-wrap: break-word;"><a style="color:white" target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageTitle+'</a></h2><br/>'+
+'                       <h2 style="color:white; word-wrap: break-word;">'+truncateUrlKeepProtocol(imageObj.pageURL, 80)+'</h2>'+
+'                       <br/>'+
+'                       <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.pageTstamp)+' </h2>'+
+'                   </div>'+
+'                   <div style="padding-top:20px; padding-bottom:50px;">'+
+'                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+imageString+' </h1>'+
+                    '<div style="padding-left: 15px;">'+
+( imageObj.title !== ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.title+'</a></h2><br/>':'') +
+( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h2><br/>':'') +
+'                           <h2 style="color:white;word-wrap: break-word" >'+imageObj.imgMimeType+' '+parseInt(expandedImageWidth)+' x '+parseInt(expandedImageHeight)+'</h2> <br/>'+
+'                           <h2 style="color:white;word-wrap: break-word; font-weight:bold" > '+getDateSpaceFormated(imageObj.timestamp)+' </h2>'+
+                    '</div>'+
+'                </div>'+
+'                   <div style="display: inline; white-space: nowrap; overflow: hidden;">'+
+'                       <a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
+'                           <span class="imageViewerButton">'+visitPage+'</span>'+
+'                       </a>'+
+'                       <a target="_blank" class="imageViewerAnchor" style="margin-left: 20px"  href="'+imageObj.currentImageURL+'">'+
+'                           <span class="imageViewerButton">'+showImage+'</span>'+
+'                       </a>'+
+'                       <button  id="showDetails" class="imageViewerAnchor" position='+position+' style="margin-left: 20px">'+
+'                           <span class="imageViewerButton" style="">'+showDetails+'</span>'+
+'                       </button>'+
+'                       <button id="dButton" position='+position+'  class="imageViewerAnchor" style="margin-left: 20px">'+
+'                           <span class="imageViewerButton" style="line-height:25px;">'+share+'</span>'+
+'                       </button>'+
+'                   </div>'+
+'               </div>'+
+'           </div>'+
+'   </div>'+ 
+'</li>';     
 
-  /*href="/shareImage.jsp?imgurl='+encodeURIComponent(imageObj.currentImageURL)+'&imgrefurl='+encodeURIComponent(imageObj.originalURL)+'&imgrefts='+imageObj.timestamp+'&imgres='+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'&query='+$('#txtSearch').val()+'"*/
+  /*href="/shareImage.jsp?imgurl='+encodeURIComponent(imageObj.currentImageURL)+'&imgrefurl='+encodeURIComponent(imageObj.pageURL)+'&imgrefts='+imageObj.timestamp+'&imgres='+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'&query='+$('#txtSearch').val()+'"*/
   imageObj.expandedImageWidth = expandedImageWidth;
   imageObj.expandedImageHeight = expandedImageHeight;
   imageObjs[position] = imageObj;
@@ -337,7 +426,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
     }
     var query;
     var input = $('#txtSearch').val();
-    var tokens = input.split(' ');
+    /*var tokens = input.split(' ');
     var size = '';
     var query ='';
     var finalQuery;
@@ -347,21 +436,20 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
       }
       var tokenNoAccents = removeDiacritics(tokens[i]);
       query+= "(imgSrc:*"+tokenNoAccents+"*OR imgSrc:*"+capitalizeFirstLetter(tokenNoAccents)+"* OR imgAlt:*"+capitalizeFirstLetter(tokenNoAccents)+"* imgAlt:*"+tokenNoAccents+"* OR imgSrc:*"+tokenNoAccents.toLowerCase()+"* OR imgAlt:*"+tokenNoAccents.toLowerCase()+"*) AND "; 
-      //query += "imgSrc:*"+tokenNoAccents.toLowerCase()+"* AND ";
     }
     query = query.substring(0, query.length -5); 
-
+    */
     var dateStart= $('#dateStart_top').attr("value");
     dateStart = dateStart.substring(6, 10)+dateStart.substring(3, 5) + dateStart.substring(0, 2)+'000000' ;
     var dateEnd= $('#dateEnd_top').attr("value");
     dateEnd = dateEnd.substring(6, 10)+dateEnd.substring(3, 5) + dateEnd.substring(0, 2)+'000000' ;
 
-    query += "AND (timestamp:["+dateStart+" TO "+dateEnd+"])";
-    console.log(query);
+    //query += "AND (timestamp:["+dateStart+" TO "+dateEnd+"])";
+    //console.log(query);
 
-    if( size === ''){
+    /*if( size === ''){
       size = 'all';
-    }
+    }*/
 
    /* var dateStartTokenes = dateStartWithSlashes.split("/");
     var dateStartTs = dateStartTokenes[2]+ dateStartTokenes[1] + dateStartTokenes[0]+ "000000";
@@ -371,72 +459,152 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
 
     var dateFinal = dateStartTs+"-"+dateEndTs; */
     var showAll = false;
+    numrows =50;
+    currentStart = startIndex;
+    
+    safeValue = '[0 TO 0.49]';
+    safeSearch = true;
+    if($('#safeSearch').find(":selected").attr("value") === 'off'){
+        safeValue='[0 TO 1]';       
+    }
+
 
     $.ajax({
     // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
-       url: "http://p28.arquivo.pt:8983/solr/Europe/select",
-       /*?q=imgSrc:*Patricia*%20OR%20imgSrc:*patricia*&wt=json*/
+       url: "http://p28.arquivo.pt:8983/solr/SAFE/select",
+        
+
+ /*+ " AND pageTstamp:["+dateStart+" TO "+dateEnd+"]"*/
        data: {
-          q: query,
-          rows: '200',
+          q: input,
+          fq: "imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:"+safeValue,
+          defType: 'edismax',                  
+          qf: 'imgTitle^4 imgAlt^3 imgSrcTokens^2 pageTitle pageURLTokens', //TODO: improve ranking
+          pf: 'imgTitle^4000 imgAlt^3000 imgSrcTokens^2000 pageTitle^1000 pageURLTokens^1000', //TODO: improve ranking  
+          ps: 1,
+          pf2: 'imgTitle^400 imgAlt^300 imgSrcTokens^200 pageTitle^100 pageURLTokens^100', //TODO: improve ranking
+          ps2: 2,
+          pf3: 'imgTitle^40 imgAlt^30 imgSrcTokens^20 pageTitle^10 pageURLTokens^10', //TODO: improve ranking
+          ps3: 3,
+          start: startIndex,
+          rows: numrows,
           wt: 'json'
        },
+           
+   /*    data: {
+          q: input,
+          start: startIndex,
+          rows: numrows,
+          wt: 'json'
+       },
+    */
        timeout: 300000,
        error: function() {
          console.log("Error In Ajax request to getimages");            
        },
        dataType: 'text',
        success: function(data) {
-        imageBaseNames = [];
 
         var responseJson = $.parseJSON(data);
 
-        //if(startIndex == 0 ){
+        if(currentStart == 0 ){
             $('#resultsUl').empty();
-        //}
+        }
         var totalResults = responseJson.response.numFound;
         
         if ( totalResults === 0){
+            createErrorPage();
+            console.log("no results found");
+            /*TODO:: help suggestions function*/
+            noMoreResults=true;
             loadingFinished();
         }
         else{
-            for (var i=0; i< totalResults; i++){
-                var currentDocument = responseJson.response.docs[i];
-                if (typeof currentDocument === 'undefined' || !currentDocument){continue;}
-                if (typeof currentDocument.timestamp === 'undefined' || !currentDocument.timestamp){continue;}
+            console.log("Found "+totalResults+ " results");
+            var currentResults
+            if(totalResults > numrows){
+            	currentResults = responseJson.response.numShowing;
+            }else{
+            	currentResults = totalResults;
+            	noMoreResults=true;
+            }
+            var resultsToLoad = currentResults;
+            console.log("Showing "+ currentResults + " results");
 
-                var currentImageURL = 'http://preprod.arquivo.pt/wayback/'+ currentDocument.timestamp +'/'+currentDocument.imgSrc;
-                var imageBaseName = currentDocument.imgSrc.toString().split('/').pop();
+            for (var i=0; i< currentResults; i++){
+                console.log("Result "+i);
+                var currentDocument = responseJson.response.docs[i];
+                if (typeof currentDocument === 'undefined' || !currentDocument){
+                    console.log("undefined document");
+                    continue;
+                }
+                if (typeof currentDocument.imgTstamp === 'undefined' || !currentDocument.imgTstamp){
+                    console.log("No imgtstamp found for image");
+                    continue;
+                }
+
+                var currentImageURL = '//arquivo.pt/wayback/'+ currentDocument.imgTstamp +'/'+currentDocument.imgSrc;
+                var imageDigest = currentDocument.imgDigest;
                 
 
-                if(imageBaseNames.indexOf(imageBaseName.toLowerCase()) > -1){
-                    console.log('Duplicated: ' + imageBaseName);
+                if(imageDigests.indexOf(imageDigest) > -1){
+                    console.log('Duplicated: ' + imageDigest);
+                    console.log('imgDigest: ' +currentDocument.imgDigest);
+                    console.log('pageURL: ' + currentDocument.pageURL);
+                    console.log('pageTstamp: ' + currentDocument.pageTstamp);
+                    
+                    resultsToLoad--;
+                    console.log("current results: "+ resultsToLoad);
                     continue; 
                 }
                 
                 else{
-                    console.log('Basename: ' + imageBaseName);
-                    imageBaseNames.push(imageBaseName.toLowerCase());
+                    console.log('Digest: ' + imageDigest);
+                    imageDigests.push(imageDigest);
                 }
 
-                var originalURL = currentDocument.originalURL;
+                var pageURL = currentDocument.pageURL;
                 var thumbnail = currentImageURL;
 
+                console.log("Creating Image");
                 imageObj = new Image();
-                imageObj.timestamp = currentDocument.timestamp.toString();
-                imageObj.originalURL = originalURL.toString();
+                imageObj.timestamp = currentDocument.imgTstamp.toString();
+                console.log("Image timestamp: " + imageObj.timestamp );
+                imageObj.pageURL = pageURL.toString();
                 imageObj.currentImageURL = currentImageURL.toString();
+                console.log("Image URL: " + imageObj.currentImageURL );
                 imageObj.position = totalPosition;
+                console.log("Position: " + totalPosition );
                 imageObj.expandedHeight = currentDocument.imgHeight;
                 imageObj.expandedWidth = currentDocument.imgWidth;
-                imageObj.type= currentDocument.mimeType.substring(6,currentDocument.mimeType.length);
+                imageObj.imgMimeType= currentDocument.imgMimeType.substring(6,currentDocument.imgMimeType.length);
+                imageObj.imgAlt = currentDocument.imgAlt;
+                imageObj.imgAltFull = currentDocument.imgAlt;
+                if (typeof imageObj.imgAlt === 'undefined' || imageObj.imgAlt =='undefined' ){imageObj.imgAlt ='';}
+                if (typeof imageObj.imgAltFull === 'undefined' || imageObj.imgAltFull =='undefined' ){imageObj.imgAltFull ='';}
+                if(imageObj.imgAlt.length > 40) {imageObj.imgAlt = imageObj.imgAlt.substring(0,37) + "...";}
                 imageObj.title = currentDocument.imgTitle;
-                if (imageObj.title == "undefined") {imageObj.title = imageUndefined;}
+                if (typeof imageObj.title === 'undefined' || imageObj.title == 'undefined' ){imageObj.title ='';}
+                imageObj.titleFull = currentDocument.imgTitle;
+                if (typeof imageObj.titleFull === 'undefined' || imageObj.titleFull == 'undefined' ){imageObj.titleFull ='';}
+                
+                if(imageObj.title.length > 40) {imageObj.title = imageObj.title.substring(0,37) + "...";}
+
+                imageObj.safe = currentDocument.safe;
+                imageObj.pageTstamp = currentDocument.pageTstamp.toString();
+                imageObj.pageTitle = currentDocument.pageTitle;
+                imageObj.pageTitleFull = currentDocument.pageTitle;
+                if (typeof imageObj.pageTitle === 'undefined' || imageObj.pageTitle == 'undefined' ){imageObj.pageTitle ='';}
+                if(imageObj.pageTitle.length > 40) {imageObj.pageTitle = imageObj.pageTitle.substring(0,37) + "...";}
+                if (typeof imageObj.pageTitleFull === 'undefined' || imageObj.pageTitleFull == 'undefined' ){imageObj.pageTitleFull ='';}               
+                imageObj.collection = currentDocument.collection;
+                imageObj.imgSrc = currentDocument.imgSrc;
+                //if (imageObj.title == "undefined") {imageObj.title = imageUndefined; $('#imgTitleLabel'+imageObj.position).hide();}
 
 
                 totalPosition = totalPosition + 1;
 
-                imageObj.src = "data:"+currentDocument.mimeType+";base64," + currentDocument.srcBase64;
+                imageObj.src = "data:"+currentDocument.imgMimeType+";base64," + currentDocument.imgSrcBase64;
 
                 var resizeImageHeight = 200;
 
@@ -446,17 +614,22 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                         $('#loadingMoreImages').remove();
                     }
                             totalResults --;
+                            resultsToLoad --;
+
+                            console.log("current results: "+ resultsToLoad);
+
                                
                             if(this.height <= resizeImageHeight){
-                            insertInPosition(this.position, this, this.height, resizeImageHeight, this.expandedHeight, this.expandedWidth);
+                            insertInPosition(this.position +currentStart, this, this.height, resizeImageHeight, this.expandedHeight, this.expandedWidth);
                             }
                             else{
-                            insertInPosition(this.position, this, resizeImageHeight, resizeImageHeight, this.expandedHeight, this.expandedWidth);
+                            insertInPosition(this.position +currentStart, this, resizeImageHeight, resizeImageHeight, this.expandedHeight, this.expandedWidth);
                             }
                        
-                            if(totalResults <= 0){
+                            if(resultsToLoad <= 0){
                                 loadingFinished();
                             }
+                    console.log("Created Image");                            
                 }
                 
                
@@ -466,8 +639,10 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                         $('#loadingMoreImages').remove();
                     }                
                     totalResults --;
+                    resultsToLoad --;
                     console.log("Error loading: " + this.currentImageURL);
-                    if(totalResults <= 0){
+                    console.log("Results: " + totalResults);
+                    if(resultsToLoad <= 0){
                         loadingFinished();
                     }
                 }
@@ -487,17 +662,66 @@ $(document).ready(function() {
     $(document).on('click', '#dButton', function() {
       var position =  $(this).attr('position');
       var imageObj = imageObjs[position]; /*get Current Image Object*/
-      var shareURL = 'http://' + window.location.hostname + '/shareImage.jsp?l='+language+'&imgurl='+encodeURIComponent(imageObj.currentImageURL)+'&imgrefurl='+encodeURIComponent(imageObj.originalURL)+'&imgrefts='+imageObj.timestamp+'&imgres='+parseInt(imageObj.expandedImageWidth)+'x'+parseInt(imageObj.expandedImageHeight)+'&query='+$('#txtSearch').val();
+      var shareURL = '//' + window.location.hostname + '/shareImage.jsp?l='+language+'&imgurl='+encodeURIComponent(imageObj.currentImageURL)+'&imgrefurl='+encodeURIComponent(imageObj.pageURL)+'&imgrefts='+imageObj.timestamp+'&imgres='+parseInt(imageObj.expandedImageWidth)+'x'+parseInt(imageObj.expandedImageHeight)+'&query='+$('#txtSearch').val();
       shortenURL( shareURL);
       
       $('#h2Copy').html(clickToCopy);
-      $("#dialog").dialog('open'); 
+      $("#dialog").dialog('open');
+
+      /*If click anywhere outside modal lets close it*/
+     $(document).on('click', function(e) {
+            if (e.target.id !== 'dialog'  && !$(e.target).parents("#dialog").length) {
+                $("#dialog").dialog('close');
+                $(this).off(e);
+            }
+            return false;            
+        });      
       return false;
     });
     $(document).on('click', '#dialogClose', function() {
       $("#dialog").dialog('close'); 
       return false;
-    });            
+    }); 
+    
+    $(document).on('click', '#showDetails', function() {
+      var position =  $(this).attr('position');
+      var imageObj = imageObjs[position]; /*get Current Image Object*/
+      $("#detailsDialog").dialog('open');
+      $('#imageDetailImageElements').empty();
+      $('#imageDetailPageElements').empty();
+      $('#imageDetailCollectionElements').empty();
+      /*Insert Page Details*/
+      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> url: </span>'+imageObj.pageURL+'</h3>');
+      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> timestamp: </span>'+imageObj.pageTstamp+'</h3>');
+      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+titleString+': </span>'+imageObj.pageTitleFull+'</h3>');
+      /*Insert Image Details*/
+      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> src: </span>'+imageObj.imgSrc+'</h3>');
+      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> timestamp: </span>'+imageObj.timestamp+'</h3>');
+      if(imageObj.titleFull !== ''){
+        $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+titleString+': </span>'+imageObj.titleFull+'</h3>');
+      }
+      if(imageObj.imgAltFull !== ''){
+        $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> alt: </span>'+imageObj.imgAltFull+'</h3>');
+      }      
+      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+resolutionString+': </span>'+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+' pixels</h3>');
+      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> mimetype: </span>image/'+imageObj.imgMimeType+'</h3>');
+      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> safesearch score: </span>'+imageObj.safe+'</h3>');
+      $('#imageDetailCollectionElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+nameString+': </span>'+imageObj.collection+'</h3>');
+      
+      $(document).on('click', function(e) {
+        if (e.target.id !== 'detailsDialog'  && !$(e.target).parents("#detailsDialog").length) {
+            $("#detailsDialog").dialog('close');
+            $(this).off(e);
+        }
+        return false;
+      });          
+      return false;
+    });
+    $(document).on('click', '#detailsDialogClose', function() {
+      $("#detailsDialog").dialog('close'); 
+      return false;
+    });    
+
 });
 
 var defaultDiacriticsRemovalMap = [
@@ -607,3 +831,26 @@ function removeDiacritics (str) {
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+function createErrorPage(){
+  $(''+
+        '<div id="conteudo-pesquisa-erro">'+
+            '<h2>'+ notFoundTitle+'</h2> <h3>'+$('#txtSearch').val()+'</h3>'+
+            '<div id="sugerimos-que">'+
+                '<p>'+noResultsSuggestions+'</p>'+
+              '<ul>'+
+                '<li>'+noResultsWellWritten+'</li>'+
+                '<li>'+noResultsInterval+'</li>'+                    
+                '<li>'+noResultsKeywords+'</li>'+                    
+                '<li>'+noResultsGenericWords+'</li>'+                    
+              '</ul>'+
+            '</div>'+
+        '</div>'+          
+    '').insertAfter("#resultados-lista");
+    $('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left);
+    $( window ).resize(function() {$('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/$( window ).resize(function() {$('.spell').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/ 
+}
+
+
+
+

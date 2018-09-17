@@ -44,7 +44,6 @@ import org.apache.nutch.util.NutchConfiguration;
  * @author jnobre
  */
 public class TextExtractedServlet extends HttpServlet{
-
 	/**
 	 * 
 	 */
