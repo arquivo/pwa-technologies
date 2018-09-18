@@ -49,7 +49,7 @@
 			$('#menuButton').on('click', function(e){
 				if(parseInt($('.swiper-wrapper').css('transform').split(',')[4]) >= 0){
 					console.log('open menu click');
-					ga('send', 'event', 'ReplayBarFunctions', 'MainMenuClick', 'http://arquivo.pt/');
+					ga('send', 'event', 'ReplayBarFunctions', 'MainMenuClick', 'arquivo.pt/');
 					$('.swiper-wrapper').addClass('active');
 					$('.swiper-wrapper').css('-webkit-transition', 'all 0.3s linear' );
 					$('.swiper-wrapper').css('-moz-transition', 'all 0.3s linear' );

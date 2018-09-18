@@ -224,12 +224,12 @@ Search took <%= searchTime/1000.0 %> seconds.
     String target = null;
     String allVersions = null;
     if (collectionsHost.indexOf('/') > 0) {
-        target = "http://" + collectionsHost + "/" + archiveDate + "/" + url;
-        allVersions = "http://" + collectionsHost + "/*/" + url;
+        target = "//" + collectionsHost + "/" + archiveDate + "/" + url;
+        allVersions = "//" + collectionsHost + "/*/" + url;
     } else {
-        target = "http://" + collectionsHost + "/" + archiveCollection + "/"
+        target = "//" + collectionsHost + "/" + archiveCollection + "/"
             + archiveDate + "/" + url;
-        allVersions = "http://" + collectionsHost + "/" + archiveCollection
+        allVersions = "//" + collectionsHost + "/" + archiveCollection
             + "/*/" + url;
     }
     if (title == null || title.equals("")) {      // use url for docs w/o title

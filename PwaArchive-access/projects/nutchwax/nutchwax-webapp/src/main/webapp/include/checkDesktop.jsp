@@ -7,6 +7,6 @@
         };
         if(!mobilecheck()){
             currentURL = window.location.href;
-            window.location.href = 'http://'+currentURL.substr(9,currentURL.length); /*Redirect to desktop version*/
+            window.location.href = '//'+currentURL.substr(9,currentURL.length); /*Redirect to desktop version*/
         }    
     </script>
