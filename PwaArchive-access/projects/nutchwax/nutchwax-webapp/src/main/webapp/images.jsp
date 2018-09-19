@@ -387,7 +387,7 @@ Content = {
           <script type="text/javascript">
             document.write('<a href="/search.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" style="text-decoration: none; color: #005db4; font-size: 17px; margin-right: 15px; font-size: 17px; font-style: normal;">Web</a>')
           </script>
-           <span  style="text-decoration: none;  font-size: 17px; padding-top: 4px; text-decoration: none; padding-left: 5px; padding-right: 5px;   border-top: 3px solid lightblue; padding-top: 4px; margin-right: -15px" href="/images.jsp"><fmt:message key='images.images'/></span>
+           <span  style="text-decoration: none;  font-size: 17px; padding-top: 4px; text-decoration: none; padding-left: 5px; padding-right: 5px;   border-top: 3px solid lightblue; padding-top: 4px; margin-right: -15px" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
            <div style="float: right;">
              <select id="safeSearch" style="font-size: 17px; color: grey;  text-align-last: right; margin-right: 10px; vertical-align: top;" >
               <% if (safeSearchString.equals("on")) { %>                
@@ -405,9 +405,8 @@ Content = {
             });              
             </script>
             <a target="_blank"style="float right" href="//sobre.arquivo.pt"><i id="safesearchInfo" title="<fmt:message key='images.safeSearch.message'/>" class="ion ion-ios-help"></i></a>          
-          </div>
-         
-      </div>
+          </div>   
+        </div>
       </div>
       </div>           
   <!-- FIM #conteudo-resultado  --> 
