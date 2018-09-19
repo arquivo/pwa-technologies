@@ -19,8 +19,8 @@
                     <li><fmt:message key="footer.section.social.mailinglist"/></li>
                     <li><fmt:message key="footer.section.social.news"/></li>
                     <li><fmt:message key="footer.section.social.twitter"/></li>
-                    <li><a href="http://www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
-                    <li><a href="http://arquivo.pt/rss"><fmt:message key='footer.section.social.rss'/></a></li>
+                    <li><a href="//www.facebook.com/pages/Arquivo-da-Web-Portuguesa/113463705350330"><fmt:message key="footer.section.social.facebook"/></a></li>
+                    <li><a href="//arquivo.pt/rss"><fmt:message key='footer.section.social.rss'/></a></li>
                     <li><fmt:message key="footer.section.social.video"/></li>
                 </ul>
             </div>
@@ -51,13 +51,13 @@
     </div>
     <div id="empresa">
         <div class="wrap-footer" style="position: inherit!important;>
-            <a href="http://www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" >
+            <a href="//www.fccn.pt/" title="<fmt:message key='footer.sponsor.fccn'/>" >
                 <img src="<c:out value="${pageContext.servletContext.contextPath}" />/img/logo-fccn.png" alt="<fmt:message key='footer.sponsor.fccn.alt'/>" width="183" height="46" id="fccn" />
             </a>&nbsp;
             <img usemap="#logomap" alt="<fmt:message key='footer.sponsor.gov.alt'/>" src="<c:out value="${pageContext.servletContext.contextPath}" />/img/mec-web.png" width="243" height="40"/>
             <map id="logomap" name="logomap">
-                <area title="<fmt:message key='footer.sponsor.gov'/>" href="http://www.portugal.gov.pt/" coords="0,0,138,40" shape="rect"/>
-                <area title="<fmt:message key='footer.sponsor.mec'/>" href="http://www.portugal.gov.pt/pt/os-ministerios/ministerio-da-educacao-e-ciencia.aspx" coords="141,0,243,40" shape="rect"/>
+                <area title="<fmt:message key='footer.sponsor.gov'/>" href="//www.portugal.gov.pt/" coords="0,0,138,40" shape="rect"/>
+                <area title="<fmt:message key='footer.sponsor.mec'/>" href="//www.portugal.gov.pt/pt/os-ministerios/ministerio-da-educacao-e-ciencia.aspx" coords="141,0,243,40" shape="rect"/>
             </map>
         </div>
     </div>

@@ -397,6 +397,7 @@
 .ion-ios-heart:before,
 .ion-ios-heart-outline:before,
 .ion-ios-help:before,
+.ion-ios-help-custom:before,
 .ion-ios-help-empty:before,
 .ion-ios-help-outline:before,
 .ion-ios-home:before,
@@ -1172,6 +1173,7 @@
   .ion-ios-heart:hover:before,
   .ion-ios-heart-outline:hover:before,
   .ion-ios-help:hover:before,
+  .ion-ios-help-custom:before,
   .ion-ios-help-empty:hover:before,
   .ion-ios-help-outline:hover:before,
   .ion-ios-home:hover:before,
@@ -2667,6 +2669,8 @@
   content: ""; }
 
 .ion-ios-help:before {
+  content: ""; }
+.ion-ios-help-custom:before{
   content: ""; }
 
 .ion-ios-help-empty:before {

@@ -43,7 +43,10 @@ if (queryString != null) {
 				phrase.append(parcel);
 			} else if (parcel.contains(":")) {				//check for option
 				if (parcel.startsWith("site:")) {
-					site = parcel.substring(parcel.indexOf(':')+1);
+					if(!site.equals("")){
+						site+=",";
+					}
+					site += parcel.substring(parcel.indexOf(':')+1);
 				} else if (parcel.startsWith("type:")) {
 					format += parcel.substring(parcel.indexOf(':')+1) + " ";
 				} else if (parcel.startsWith("size:")) {
