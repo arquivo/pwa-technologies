@@ -66,7 +66,7 @@
     <dependency>
   	  <groupId>org.apache.tika</groupId>
   	  <artifactId>tika-core</artifactId>
-  	  <version>1.17</version>
+  	  <version>1.18</version>
   	</dependency>
 
   	<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-eval -->
@@ -86,15 +86,15 @@
    <dependency>
   	  <groupId>org.apache.tika</groupId>
   	  <artifactId>tika-langdetect</artifactId>
-  	  <version>1.17</version>
-  	</dependency>
+  	  <version>1.18</version>
+   </dependency>
 
 
     <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-parsers -->
     <dependency>
         <groupId>org.apache.tika</groupId>
         <artifactId>tika-parsers</artifactId>
-        <version>1.17</version>
+        <version>1.18</version>
         <exclusions>
             <exclusion>
                 <groupId>de.l3s.boilerpipe</groupId>
