@@ -381,6 +381,10 @@ String[] queryString_splitted=null;
         <% if (language.equals("pt")) { /* load PT i18n for datepicker */ %>
         <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
         <% } %>
+        <script type="text/javascript">
+          calendarBegin = '<fmt:message key="calendar.begin" />';
+          calendarEnd = '<fmt:message key="calendar.end" />';
+        </script>        
         <script type="text/javascript" src="js/configs.js"></script>
         <%@include file="include/analytics.jsp" %>
 </head>

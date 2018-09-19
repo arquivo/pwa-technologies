@@ -214,7 +214,10 @@
                 var minDate = new Date(820450800000);
                 var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
   </script>
-
+  <script type="text/javascript">
+    calendarBegin = '<fmt:message key="calendar.begin" />';
+    calendarEnd = '<fmt:message key="calendar.end" />';
+  </script>
   <script  src="/js/jquery-latest.min.js" type="text/javascript"></script>
   <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css"/>
   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
