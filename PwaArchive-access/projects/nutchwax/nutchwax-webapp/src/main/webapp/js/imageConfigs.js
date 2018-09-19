@@ -35,7 +35,7 @@ $(document).ready( function() {
                                         fuzzySelection: false,
                                         buttonImageOnly: true,
                                         buttonImage: 'img/calendar.gif',
-                                        buttonText: 'Calendário - data inicial',
+                                        buttonText: '<fmt:message key="calendar.begin" />',
                 				})
                         );
 		
@@ -53,7 +53,7 @@ $(document).ready( function() {
                                         fuzzySelection: true,
                                         buttonImageOnly: true,
                                         buttonImage: 'img/calendar.gif',
-                                        buttonText: 'Calendário - data final'
+                                        buttonText: '<fmt:message key="calendar.end" />'
                 				})
                         );
 
