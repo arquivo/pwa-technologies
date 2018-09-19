@@ -215,8 +215,8 @@
                 var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
   </script>
   <script type="text/javascript">
-    calendarBegin = '<fmt:message key="calendar.begin" />';
-    calendarEnd = '<fmt:message key="calendar.end" />';
+    calendarBegin = '<fmt:message key="calendar.begin" />'.replace("calendario", "calendário");
+    calendarEnd = '<fmt:message key="calendar.end" />'.replace("calendario", "calendário");
   </script>
   <script  src="/js/jquery-latest.min.js" type="text/javascript"></script>
   <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css"/>
