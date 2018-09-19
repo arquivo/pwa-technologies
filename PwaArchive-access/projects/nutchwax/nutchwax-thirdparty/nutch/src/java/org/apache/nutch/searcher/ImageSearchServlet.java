@@ -138,7 +138,7 @@ public class ImageSearchServlet extends HttpServlet {
 			this.conf = NutchConfiguration.get( config.getServletContext( ) );
 			bean = NutchBean.get( config.getServletContext( ), this.conf );     
 			collectionsHost = this.conf.get( "wax.host", "arquivo.pt" );
-			solrHost = this.conf.get( "wax.solrserver", "http://56.arquivo.pt:8983/solr/SAFE" );
+			solrHost = this.conf.get( "wax.solrserver", "http://p63.arquivo.pt:8983/solr/SAFE" );
 			TimeZone zone = TimeZone.getTimeZone( "GMT" );
 			FORMAT.setTimeZone( zone );
 
