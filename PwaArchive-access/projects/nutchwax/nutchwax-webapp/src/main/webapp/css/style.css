@@ -1163,7 +1163,7 @@ li.grouped { padding-left: 38px; }
   40% { opacity: 1; } 
 }
 
-.search-anchor{ 
+.search-anchor, .search-anchor:visited{ 
     text-decoration: none; 
     color: #005db4; 
     font-size: 17px; 
@@ -1171,7 +1171,7 @@ li.grouped { padding-left: 38px; }
     font-size: 17px; 
     font-style: normal;
 }
-.search-web{ 
+.search-span{ 
     text-decoration: none; 
     font-size: 17px; 
     margin-right: 15px; 
@@ -1189,7 +1189,7 @@ li.grouped { padding-left: 38px; }
     padding-top: 4px; 
     margin-right: -15px;
 }
-.image-anchor{
+.image-anchor, .image-anchor:visited{
     text-decoration: none;  
     color: #005db4; 
     font-size: 17px; 

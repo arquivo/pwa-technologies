@@ -30,7 +30,7 @@
 %>
 
 <div id="resultados">
-  <span  class="search-anchor"><em>Web</em></span>
+  <span  class="search-span"><em>Web</em></span>
   <script type="text/javascript">
     document.write('<a href="/images.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="image-anchor"><fmt:message key='images.images'/></a>')
   </script>
