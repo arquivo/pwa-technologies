@@ -388,17 +388,17 @@ Content = {
         <div id="second-column">
         <div id="resultados">
           <script type="text/javascript">
-            document.write('<a href="/search.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" style="text-decoration: none; color: #005db4; font-size: 17px; margin-right: 15px; font-size: 17px; font-style: normal;">Web</a>')
+            document.write('<a href="/search.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="search-anchor">Web</a>')
           </script>
-           <span  style="text-decoration: none;  font-size: 17px; padding-top: 4px; text-decoration: none; padding-left: 5px; padding-right: 5px;   border-top: 3px solid lightblue; padding-top: 4px; margin-right: -15px" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
-           <div style="float: right;">
-             <select id="safeSearch" style="font-size: 17px; color: grey;  text-align-last: right; margin-right: 10px; vertical-align: top;" >
+           <span  class="image-span" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
+           <div class="fright">
+             <select id="safeSearch" class="safe-search" >
               <% if (safeSearchString.equals("on")) { %>                
-                <option selected value="on" style="text-align:right;  float: right; direction: rtl;"><fmt:message key='images.safeOnLabel'/></option>
-                <option value="off" style="text-align:right;  float: right;direction: rtl;"><fmt:message key='images.safeOffLabel'/></option>
+                <option selected value="on" class="safe-search-option"><fmt:message key='images.safeOnLabel'/></option>
+                <option value="off" class="safe-search-option"><fmt:message key='images.safeOffLabel'/></option>
               <%} else {%>
-                <option selected value="off" style="text-align:right;  float: right;direction: rtl;"><fmt:message key='images.safeOffLabel'/></option>
-                <option  value="on" style="text-align:right;  float: right; direction: rtl;"><fmt:message key='images.safeOnLabel'/></option>
+                <option selected value="off" class="safe-search-option"><fmt:message key='images.safeOffLabel'/></option>
+                <option  value="on" class="safe-search-option"><fmt:message key='images.safeOnLabel'/></option>
               <%}%>                              
             </select>
             <script type="text/javascript">

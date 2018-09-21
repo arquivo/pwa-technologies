@@ -30,11 +30,10 @@
 %>
 
 <div id="resultados">
-<%--- TODO: updates this values --%>
-<fmt:message key='search.results'>
-        <fmt:param value='<%=new Long((end==0)?0:(start+1))%>'/>
-        <fmt:param value='<%=new Long(end)%>'/>
-        <fmt:param value='<%=new Long(hitsTotal)%>'/></fmt:message>
+  <span  class="search-anchor"><em>Web</em></span>
+  <script type="text/javascript">
+    document.write('<a href="/images.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="images.images">Web</a>')
+  </script>
 </div>
 
 <%-- Show tip if present --%>
