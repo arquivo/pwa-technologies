@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <%@ page
-	session="true"
-	contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"	
+  session="true"
+  contentType="text/html; charset=UTF-8"
+  pageEncoding="UTF-8"  
 
-	import="java.io.File"
-	import="java.util.Calendar"
-	import="java.util.Date"
-	import="java.util.GregorianCalendar"
-	import="java.net.URLEncoder"
-	import= "java.net.*"
-	import= "java.io.*"	
-	import="java.text.DateFormat"
-	import="java.util.Calendar"
-	import="java.util.TimeZone"
-	import="java.util.Date"
-	import="java.util.regex.Matcher"
-	import="java.util.regex.Pattern"
-	import="java.util.GregorianCalendar"
+  import="java.io.File"
+  import="java.util.Calendar"
+  import="java.util.Date"
+  import="java.util.GregorianCalendar"
+  import="java.net.URLEncoder"
+  import= "java.net.*"
+  import= "java.io.*" 
+  import="java.text.DateFormat"
+  import="java.util.Calendar"
+  import="java.util.TimeZone"
+  import="java.util.Date"
+  import="java.util.regex.Matcher"
+  import="java.util.regex.Pattern"
+  import="java.util.GregorianCalendar"
   import="org.apache.hadoop.conf.Configuration"
   import="org.apache.lucene.search.PwaFunctionsWritable"
   import="org.apache.nutch.global.Global"
@@ -35,6 +35,7 @@
   import="org.archive.access.nutch.NutchwaxBean"
   import="org.archive.access.nutch.NutchwaxQuery"
   import="org.archive.access.nutch.NutchwaxConfiguration"
+  import="org.apache.commons.lang.StringEscapeUtils"
 %>
 <% // Set the character encoding to use when interpreting request values.
   request.setCharacterEncoding("UTF-8");
@@ -45,11 +46,11 @@
 <%@ include file="include/i18n.jsp" %>
 <fmt:setLocale value="<%=language%>"/>
 
-<%!	//To please the compiler since logging need those -- check [search.jsp]
-	private static int hitsTotal = -10;		// the value -10 will be used to mark as being "advanced search"
-	private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
-	private static Calendar dateStart = new GregorianCalendar();
-	private static Calendar dateEnd = new GregorianCalendar();
+<%! //To please the compiler since logging need those -- check [search.jsp]
+  private static int hitsTotal = -10;   // the value -10 will be used to mark as being "advanced search"
+  private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
+  private static Calendar dateStart = new GregorianCalendar();
+  private static Calendar dateEnd = new GregorianCalendar();
 %>
 
 <%-- Get the application beans --%>
@@ -151,9 +152,10 @@
             htmlQueryString += "sort:" + sortCriteria + " ";
           }
         }
-  	}
+    }
   //htmlQueryString= htmlQueryString.trim();
   htmlQueryString = Entities.encode(htmlQueryString);
+  htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
 
  /*** Start date ***/
   Calendar dateStart = (Calendar)DATE_START.clone();
@@ -194,10 +196,10 @@
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT"><head>
-  <% if (htmlQueryString.length() > 0) { %>	
-	  <title><%=htmlQueryString%> — Arquivo.pt</title>
+  <% if (htmlQueryString.length() > 0) { %> 
+    <title><c:out value='${requestScope.htmlQueryString}'/> — Arquivo.pt</title>
   <% } else { %>
-  	  <title><fmt:message key='images.imageTitle'/> — Arquivo.pt</title>
+      <title><fmt:message key='images.imageTitle'/> — Arquivo.pt</title>
   <% } %>
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
   
@@ -260,7 +262,7 @@
 function searchImages(startIndex){
     var dateStartWithSlashes = '<%=dateStartString%>';
     var dateEndWithSlashes = '<%=dateEndString%>';
-	  var safeSearchOption = '<%=safeSearchString%>';
+    var safeSearchOption = '<%=safeSearchString%>';
     searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOption,startIndex);
 }
 </script>
@@ -314,10 +316,10 @@ Content = {
     <div id="main">
       <div id="header" style="min-height: 0">
         <div id="logo">
-    		<a href="/index.jsp?l=pt" title="<fmt:message key='header.logo.link'/>">
-            		<img src="/img/logo-pt.png" alt="Logo Arquivo.pt" width="125" height="90">
-    		</a>
-	</div>
+        <a href="/index.jsp?l=pt" title="<fmt:message key='header.logo.link'/>">
+                <img src="/img/logo-pt.png" alt="Logo Arquivo.pt" width="125" height="90">
+        </a>
+  </div>
 
         <div id="search-header">
             <form id="loginForm" action="images.jsp" name="imageSearchForm" method="get">
@@ -351,31 +353,31 @@ Content = {
 
 <!--
 <div style="padding-top: 20px;">
-	<label style="font-size: 1.2em"> <fmt:message key='images.safeSearch'/> </label>
+  <label style="font-size: 1.2em"> <fmt:message key='images.safeSearch'/> </label>
     <select name ="safeSearch" id="safeSearch" style="font-size: 1.2em">
     <% if (safeSearchString ==null || safeSearchString.equals("")){ %>
-    	<option name ="safeSearch" selected= "selected" value="yes"><fmt:message key='images.showSafe'/></option>
-    	<option name ="safeSearch" value="all"><fmt:message key='images.showAll'/></option>
-    	<option name ="safeSearch" value="no"><fmt:message key='images.showUnsafe'/></option>
+      <option name ="safeSearch" selected= "selected" value="yes"><fmt:message key='images.showSafe'/></option>
+      <option name ="safeSearch" value="all"><fmt:message key='images.showAll'/></option>
+      <option name ="safeSearch" value="no"><fmt:message key='images.showUnsafe'/></option>
     <% } else { %>
 
-		<% if (safeSearchString.equals("yes")){%>
-			<option name ="safeSearch" selected= "selected" value="yes"><fmt:message key='images.showSafe'/></option>
-		<% } else { %>
-			<option name ="safeSearch" value="yes"><fmt:message key='images.showSafe'/></option>
-		<%} %>    
+    <% if (safeSearchString.equals("yes")){%>
+      <option name ="safeSearch" selected= "selected" value="yes"><fmt:message key='images.showSafe'/></option>
+    <% } else { %>
+      <option name ="safeSearch" value="yes"><fmt:message key='images.showSafe'/></option>
+    <%} %>    
        <% if (safeSearchString.equals("all")){%>
-       	<option name ="safeSearch"  selected= "selected" value="all"><fmt:message key='images.showAll'/></option>
+        <option name ="safeSearch"  selected= "selected" value="all"><fmt:message key='images.showAll'/></option>
        <%} else{ %>
-       	<option name ="safeSearch" value="all"><fmt:message key='images.showAll'/></option>
+        <option name ="safeSearch" value="all"><fmt:message key='images.showAll'/></option>
        <%} %>
-		<% if (safeSearchString.equals("no")){%>
-			<option name ="safeSearch" selected= "selected" value="no"><fmt:message key='images.showUnsafe'/></option>
-		<% } else { %>
-			<option name ="safeSearch" value="no"><fmt:message key='images.showUnsafe'/></option>
-		<%} %>	
-	<%} %>
-	</select>
+    <% if (safeSearchString.equals("no")){%>
+      <option name ="safeSearch" selected= "selected" value="no"><fmt:message key='images.showUnsafe'/></option>
+    <% } else { %>
+      <option name ="safeSearch" value="no"><fmt:message key='images.showUnsafe'/></option>
+    <%} %>  
+  <%} %>
+  </select>
 </div>
 -->         
             </form>
@@ -448,7 +450,7 @@ Content = {
 </div>
 <style>
 #newFooterWrapper{
-	padding-top:0px!important;
+  padding-top:0px!important;
 }
 </style>
 <%@include file="include/footer.jsp" %>
