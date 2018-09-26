@@ -34,6 +34,7 @@
   import="org.archive.access.nutch.NutchwaxBean"
   import="org.archive.access.nutch.NutchwaxQuery"
   import="org.archive.access.nutch.NutchwaxConfiguration"
+  import="org.apache.commons.lang.StringEscapeUtils"
   import="java.util.Properties"
 %>
 <% // Set the character encoding to use when interpreting request values.
@@ -344,6 +345,7 @@ String[] queryString_splitted=null;
   if ( request.getAttribute("query") != null ) {
         htmlQueryString = request.getAttribute("query").toString();
         htmlQueryString = Entities.encode(htmlQueryString);
+        htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
   }
 
   // Make up query string for use later drawing the 'rss' logo.
@@ -792,7 +794,7 @@ function createMatrix(versionsArray, versionsURL){
   if($('#1 td:nth-child('+String(matrix.length)+')').html() ==='&nbsp;'){ /*If last year in the table doesn't have versions show embargo message*/
     $('#1 td:nth-child('+String(matrix.length)+')').attr('rowspan', '999');
     $('#1 td:nth-child('+String(matrix.length)+')').attr('class', 'td-embargo')
-  	$('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
+    $('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
   }
 }
 
@@ -1058,7 +1060,7 @@ function createErrorPage(){
         <% } else { %>
   <div id="conteudo-pesquisa-erro">
     <h2><fmt:message key='search.no-results.title'/></h2>
-    <h3><%=htmlQueryString%></h3>
+    <h3><c:out value='${requestScope.htmlQueryString}'/></h3>
 
     <div id="sugerimos-que">
         <p><fmt:message key='search.no-results.suggestions'/></p>
