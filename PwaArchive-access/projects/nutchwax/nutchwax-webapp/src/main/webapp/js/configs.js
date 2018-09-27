@@ -147,6 +147,15 @@ $(document).ready( function() {
         	setTimeout( addLoader, timeout, $(this) );
 	});
 
+    /*Remove potentially malicious characters from user input before sending to spellchecker*/
+    function escapeHtml(unsafe) {
+        return unsafe
+             .replace(/&/g, "")
+             .replace(/</g, "")
+             .replace(/>/g, "")
+             .replace(/"/g, "")
+             .replace(/'/g, "");
+     }
 
     /**
      * query spellchecking
@@ -154,7 +163,7 @@ $(document).ready( function() {
 	var params = getUrlVars();
 
 	if ( params['query'] !== undefined && params['query'] !== '' ) {
-		var queryParam = decodeURIComponent(params['query'].replace(/\+/g, ' ') ).trim();
+		var queryParam = escapeHtml(decodeURIComponent(params['query'].replace(/\+/g, ' ') ).trim());
 		var queryCleaned = $( "<div>"+ queryParam +"</div>").text().trim();/* 2nd trim needed to clean after tags are removed */
 		var spellchecker = location.protocol +"//"+ location.host +"/spellchecker/checker";
 		spellchecker += "?query="+ queryCleaned;

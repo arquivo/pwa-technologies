@@ -34,6 +34,7 @@
   import="org.archive.access.nutch.NutchwaxBean"
   import="org.archive.access.nutch.NutchwaxQuery"
   import="org.archive.access.nutch.NutchwaxConfiguration"
+  import="org.apache.commons.lang.StringEscapeUtils"
   import="java.util.Properties"
 %>
 <% // Set the character encoding to use when interpreting request values.
@@ -354,6 +355,7 @@ String[] queryString_splitted=null;
   if ( request.getAttribute("query") != null ) {
         htmlQueryString = request.getAttribute("query").toString();
         htmlQueryString = Entities.encode(htmlQueryString);
+        htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
   }
 
   // Make up query string for use later drawing the 'rss' logo.
@@ -694,6 +696,7 @@ function formatDate ( date ) {
                           /*************************************/
                             queryString=urlQueryParam; //Querying wayback servlet
                             urlQuery=urlQueryParam; //Querying pyWB
+                            urlQuery = import= StringEscapeUtils.escapeHtml(urlQuery);
                         
                             /*************************************************/
                     pageContext.setAttribute("urlQueryParam", urlQueryParam);
@@ -1205,6 +1208,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "&sort=" + sort +
       "&reverse=" + reverse;
     }
+    previousPageUrl = StringEscapeUtils.escapeHtml(previousPageUrl);
 %>
   <li class="previous"><a onclick="ga('send', 'event', 'Full-text search', 'Previous page', document.location.href );" class="myButtonStyle text-center right10" role="button" href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>"><fmt:message key='search.pager.previous'/></a></li>
 <% } %>
@@ -1226,6 +1230,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "&sort=" + sort +
       "&reverse=" + reverse;
     }
+    nextPageUrl = StringEscapeUtils.escapeHtml(nextPageUrl);
 %>
     <li class="next"><a onclick="ga('send', 'event', 'Full-text search', 'Next page', document.location.href );" class="myButtonStyle text-center" role="button" href="<%=nextPageUrl%>" title="<fmt:message key='search.pager.next'/>"><fmt:message key='search.pager.next'/></a></li>
 <% } %>
