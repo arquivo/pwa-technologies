@@ -696,7 +696,7 @@ function formatDate ( date ) {
                           /*************************************/
                             queryString=urlQueryParam; //Querying wayback servlet
                             urlQuery=urlQueryParam; //Querying pyWB
-                            urlQuery = import= StringEscapeUtils.escapeHtml(urlQuery);
+                            urlQuery = StringEscapeUtils.escapeHtml(urlQuery);
                         
                             /*************************************************/
                     pageContext.setAttribute("urlQueryParam", urlQueryParam);
