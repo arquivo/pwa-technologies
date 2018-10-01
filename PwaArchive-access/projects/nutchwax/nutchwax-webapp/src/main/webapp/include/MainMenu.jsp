@@ -81,6 +81,7 @@ var MENU = MENU || (function(){
 			
 		},
 		attachImages: function(){
+			$('#imagesAnchor').click( function(e) {
 				e.preventDefault();
 				queryParam='';
 				var txtSearch = $('#txtSearch').attr('value');
@@ -88,6 +89,7 @@ var MENU = MENU || (function(){
 					queryParam= '&query='+txtSearch;
 				}				
 				window.location = "/images.jsp?l=<%=language%>"+queryParam;
+			});
 		},		
         attachMask: function(){       
 		  $('#mainMask').on('click', function(e){
