@@ -63,11 +63,15 @@
   String htmlQueryString = "";
   boolean safe =true;
   boolean unsafe = false;
-  String safeSearchString ="yes";
+  String safeSearchString ="on";
+  if( request.getParameter("safeSearch") != null && request.getParameter("safeSearch").contains("off") ){
+    safeSearchString = "off";
+  }
 
   if ( request.getParameter("query") != null ) {
         htmlQueryString = request.getParameter("query").toString();
         /*htmlQueryString = Entities.encode(htmlQueryString);*/
+
   }
   else{
         htmlQueryString = "";
@@ -104,20 +108,6 @@
                   }
                 }
         }
-        if( request.getParameter("unsafe") != null && request.getParameter("unsafe").contains("true") ){
-          unsafe = true;
-          if( !(request.getParameter("safe") != null && request.getParameter("safe").contains("true"))){
-            safe = false; /**/
-          }
-        }
-        if(unsafe == false && safe == true){
-          safeSearchString = "yes";
-        } else if (unsafe == true && safe == true){
-          safeSearchString = "all";
-        }else{
-          safeSearchString = "no";
-        }
-
 
         if (request.getParameter("site") != null && request.getParameter("site") != "") {
                 htmlQueryString += "site:";
@@ -222,18 +212,21 @@
   <script type="text/javascript" async="" src="//www.google-analytics.com/ga.js"></script>
   <script type="text/javascript">
                 var minDate = new Date(820450800000);
-                var maxDate = new Date(1451606399842);
+                var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
   </script>
-
+  <script type="text/javascript">
+    calendarBegin = '<fmt:message key="calendar.begin" />'.replace("calendario", "calendário");
+    calendarEnd = '<fmt:message key="calendar.end" />'.replace("calendario", "calendário");
+  </script>
   <script  src="/js/jquery-latest.min.js" type="text/javascript"></script>
-  <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css"/>
   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src='http://rawgit.com/jasonday/jQuery-UI-Dialog-extended/master/jquery.dialogOptions.js'></script>
+  <script src='js/jquery.dialogOptions.js'></script>
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
   <script type="text/javascript" src="js/ui.datepicker.js"></script>
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
-  <script type="text/javascript" src="js/configs.js"></script>
-  <script type="text/javascript" src="js/images.js"></script>
+  <script type="text/javascript" src="js/imageConfigs.js"></script>
+  <script type="text/javascript" src="js/images2.js"></script>
  
   <script type="text/javascript">
     clickToCopy = '<fmt:message key="images.clickToCopy" />';
@@ -293,10 +286,24 @@ Content = {
   leftArrow='<fmt:message key="images.leftArrow"/>';
   rightArrow='<fmt:message key="images.rightArrow"/>';
   resolution='<fmt:message key="images.size" />';
+  imageType='<fmt:message key="images.type" />';
+  imageTitle ='<fmt:message key="images.imageTitle" />';
   visitPage='<fmt:message key="images.visitPage" />';
   showImage='<fmt:message key="images.showImage" />';
+  imageUndefined='<fmt:message key="images.undefined" />';
+  showDetails = '<fmt:message key="images.showDetails" />';
+  pageString =  '<fmt:message key="images.page" />';
+  imageString = '<fmt:message key="images.image" />';
+  titleString= '<fmt:message key="images.title" />';
+  resolutionString= '<fmt:message key="images.resolution" />';
+  nameString= '<fmt:message key="images.name" />';
+  notFoundTitle = '<fmt:message key="search.no-results.title"/>';
+  noResultsSuggestions = '<fmt:message key="search.no-results.suggestions"/>';
+  noResultsWellWritten = '<fmt:message key="search.no-results.suggestions.well-written"/>';
+  noResultsInterval = '<fmt:message key="search.no-results.suggestions.time-interval"/>';
+  noResultsKeywords = '<fmt:message key="search.no-results.suggestions.keywords"/>';
+  noResultsGenericWords = '<fmt:message key="search.no-results.suggestions.generic-words"/>';
 </script>
-
 
 <script type="text/javascript" src="/js/js.cookie.js"></script>
 
@@ -307,10 +314,10 @@ Content = {
     <div id="main">
       <div id="header" style="min-height: 0">
         <div id="logo">
-    <a href="/index.jsp?l=pt" title="<fmt:message key='header.logo.link'/>">
-            <img src="/img/logo-pt.png" alt="Logo Arquivo.pt" width="125" height="90">
-    </a>
-</div>
+    		<a href="/index.jsp?l=pt" title="<fmt:message key='header.logo.link'/>">
+            		<img src="/img/logo-pt.png" alt="Logo Arquivo.pt" width="125" height="90">
+    		</a>
+	</div>
 
         <div id="search-header">
             <form id="loginForm" action="images.jsp" name="imageSearchForm" method="get">
@@ -338,7 +345,8 @@ Content = {
                   <div class="withTip">
                     <input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
                   </div>
-                </div>                
+                </div> 
+                <input id="safeSearchFormInput" style="display: none" name="safeSearch" value="<%=safeSearchString%>" />                
               </fieldset>
 
 <!--
@@ -372,10 +380,42 @@ Content = {
 -->         
             </form>
         </div>
-      </div>      
+      </div> 
+      <div id="conteudo-resultado"> 
+        <div id="first-column">
+          &nbsp;
+        </div>
+        <div id="second-column">
+        <div id="resultados">
+          <script type="text/javascript">
+            document.write('<a href="/search.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="search-anchor">Web</a>')
+          </script>
+           <span  class="image-span" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
+           <div class="fright">
+             <select id="safeSearch" class="safe-search" >
+              <% if (safeSearchString.equals("on")) { %>                
+                <option selected value="on" class="safe-search-option"><fmt:message key='images.safeOnLabel'/></option>
+                <option value="off" class="safe-search-option"><fmt:message key='images.safeOffLabel'/></option>
+              <%} else {%>
+                <option selected value="off" class="safe-search-option"><fmt:message key='images.safeOffLabel'/></option>
+                <option  value="on" class="safe-search-option"><fmt:message key='images.safeOnLabel'/></option>
+              <%}%>                              
+            </select>
+            <script type="text/javascript">
+            $( "#safeSearch" ).change(function() {
+              $('#safeSearchFormInput').attr('value', $('#safeSearch').find(":selected").attr("value"));
+              $('#btnSubmit').click();
+            });              
+            </script>
+            <a target="_blank"style="float right" href="//sobre.arquivo.pt"><i id="safesearchInfo" title="<fmt:message key='images.safeSearch.message'/>" class="ion ion-ios-help"></i></a>          
+          </div>   
+        </div>
+      </div>
+      </div>           
   <!-- FIM #conteudo-resultado  --> 
     </div>
-  </div>
+
+</div>
 
 
 <!-- List Results!-->
@@ -395,7 +435,7 @@ Content = {
 
 <div class="spell hidden"><fmt:message key='search.spellchecker'/> <span class="suggestion"></span></div>
 
-<div id="loadingDiv" style="text-align: center; display: hidden; margin-top: 10%; margin-bottom: 5%" ><div style="text-align: center; display: inline-block;" class="cp-spinner cp-round"></div></div>
+<div id="loadingDiv" style="text-align: center; display: hidden; margin-top: 10%; margin-bottom: 5%" ><div class="sk-fading-circle"><div class="sk-circle1 sk-circle"></div><div class="sk-circle2 sk-circle"></div><div class="sk-circle3 sk-circle"></div><div class="sk-circle4 sk-circle"></div><div class="sk-circle5 sk-circle"></div><div class="sk-circle6 sk-circle"></div><div class="sk-circle7 sk-circle"></div><div class="sk-circle8 sk-circle"></div><div class="sk-circle9 sk-circle"></div><div class="sk-circle10 sk-circle"></div><div class="sk-circle11 sk-circle"></div><div class="sk-circle12 sk-circle"></div></div></div>
 <div id="resultados-lista" style="text-align: center;">
     <ul id="resultsUl" style="list-style-type: none;  display: inline-block; margin-left: 2%; margin-right: 2%; ">
         <li id="imageResults" style="text-align: center"> <h3> <fmt:message key='images.prototype'/> </h3> </li>       
@@ -406,7 +446,12 @@ Content = {
       </div>
 
 </div>
-<%@include file="include/footerImages.jsp" %>
+<style>
+#newFooterWrapper{
+	padding-top:0px!important;
+}
+</style>
+<%@include file="include/footer.jsp" %>
 <script type="text/javascript"> if($('#txtSearch').val().length){doInitialSearch();}</script>
 <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div>
 
@@ -429,6 +474,16 @@ Content = {
           <button data-clipboard-target="#shortURL" id="btnCopy"><h2 style="color:grey; padding-top: 40px;" id="h2Copy"  ><fmt:message key="images.clickToCopy" /></h2></button>
           <h2 id="shortURL" style="padding-top: 10px;padding-bottom: 30px;"> </h2>
   </div>
+  <div id="detailsDialog"  class="content_dialog">
+          <h1 style="color:black; padding-top: 10px;"><fmt:message key="images.details.title" /></h1>
+          <button id="detailsDialogClose" href="" class="expand__close__mini" title="Fechar"></button>
+          <h2 id="imagePage" style="color:black; padding-top: 30px;"><fmt:message key="images.page" /></h2>
+          <div id="imageDetailPageElements"></div> 
+          <h2 id="imageImage" style="color:black; padding-top: 15px;"><fmt:message key="images.image" /></h2>
+          <div id="imageDetailImageElements"></div>    
+          <h2 id="imageDetailCollection" style="color:black; padding-top: 15px;"><fmt:message key="images.collection" /></h2>
+          <div id="imageDetailCollectionElements" style="padding-bottom: 20px;"></div>                  
+  </div>  
 </body>
 </html>
 <%@include file="include/logging.jsp" %>
