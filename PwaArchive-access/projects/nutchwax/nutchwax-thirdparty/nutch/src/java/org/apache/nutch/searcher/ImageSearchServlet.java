@@ -174,6 +174,7 @@ public class ImageSearchServlet extends HttpServlet {
 		ImageSearchResponse imgSearchResponse=null;
 		ImageSearchResults imgSearchResults=null;
 		String safeSearch = "";
+		
 		String fqString ="";
 		String jsonSolrResponse="";
 
@@ -260,12 +261,17 @@ public class ImageSearchServlet extends HttpServlet {
 			}    	
 		}
 		safeSearch = request.getParameter("safeSearch");
-		if("off".equals(safeSearch)){
-			fqString+= "safe:[0 TO 1]";
-		}else{
-			fqString+= "safe:[0 TO 0.49]";
+		if(! "off".equals(safeSearch)){
+			fqString+= "safe:[0 TO 0.49]"; /*Default behaviour is to limit safe score from 0 -> 0.49; else show all images*/
 		}
 		fqString +=" AND imgTstamp:["+dateStart + " TO "+ dateEnd+"]";
+
+		String typeParameter = request.getParameter( "type" );
+	      if( typeParameter == null )
+	    	  typeParameter = "";
+	      if( !typeParameter.equals( "" ) ){
+	    	  fqString += " AND imgMimeType: image/"+ typeParameter;
+	      }		
 		
 		//Pretty print in output message 
 		String prettyPrintParameter = request.getParameter( "prettyPrint" );
