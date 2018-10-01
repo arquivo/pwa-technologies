@@ -15,7 +15,7 @@ var MENU = MENU || (function(){
         	$('.swiper-wrapper').append(
 			            	'<div class="swiper-slide menu swiper-slide-prev">' +       
 	          					'<a href="/index.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-search padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.home'/></h4></a>' +
-	          					'<a href="/advanced.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></a>' +
+	          					'<a id="advancedSearch"><h4><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></a>' +
 	          					'<a id="imagesAnchor"><h4><i class="fa fa-image padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.images'/></h4></a>' +	          					
 	          					'<a id="shareMenu"><h4><i class="fa fa-share-alt padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.share'/><i id="shareCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></a>'+	      
 	          					'<div id="shareOptions">'+
@@ -32,6 +32,7 @@ var MENU = MENU || (function(){
         	this.attachChangeLanguage();
         	this.attachShare();
         	this.attachImages();
+        	this.attachAdvanced();
         },
 		toggleLanguage: function() {
 		    localStorage.setItem("language", "<fmt:message key='topbar.OtherLanguageShort'/>".toUpperCase());			
@@ -90,7 +91,18 @@ var MENU = MENU || (function(){
 				}				
 				window.location = "/images.jsp?l=<%=language%>"+queryParam;
 			});
-		},		
+		},
+		attachAdvanced: function(){
+			$('#advancedSearch').click( function(e) {
+				e.preventDefault();
+				queryParam='';
+				var txtSearch = $('#txtSearch').attr('value');
+				if(txtSearch !='' && txtSearch != undefined){
+					queryParam= '&query='+txtSearch;
+				}				
+				window.location = "/advanced.jsp?l=<%=language%>"+queryParam;
+			});
+		},					
         attachMask: function(){       
 		  $('#mainMask').on('click', function(e){
 		    document.querySelector('.swiper-container').swiper.slideNext();
