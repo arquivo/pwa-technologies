@@ -71,7 +71,6 @@
 
   if ( request.getParameter("query") != null ) {
         htmlQueryString = request.getParameter("query").toString();
-        htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
   }
   else{
         htmlQueryString = "";
@@ -152,8 +151,6 @@
           }
         }
     }
-  //htmlQueryString= htmlQueryString.trim();
-  htmlQueryString = Entities.encode(htmlQueryString);
   htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
 
  /*** Start date ***/
