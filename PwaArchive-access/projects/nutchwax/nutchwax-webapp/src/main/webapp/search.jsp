@@ -352,7 +352,6 @@ String[] queryString_splitted=null;
 
   if ( request.getAttribute("query") != null ) {
         htmlQueryString = request.getAttribute("query").toString();
-        htmlQueryString = Entities.encode(htmlQueryString);
         htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
   }
 

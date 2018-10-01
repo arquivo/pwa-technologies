@@ -71,8 +71,7 @@
 
   if ( request.getParameter("query") != null ) {
         htmlQueryString = request.getParameter("query").toString();
-        /*htmlQueryString = Entities.encode(htmlQueryString);*/
-
+        htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
   }
   else{
         htmlQueryString = "";
