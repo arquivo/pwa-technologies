@@ -6,7 +6,7 @@
 	if (langParam != null) {
 		if (langParam.equals("en")) {
 			language = langParam;
-		} else { /* keep default */ };
+		}
 	}
 	
 	pageContext.setAttribute("language", language);

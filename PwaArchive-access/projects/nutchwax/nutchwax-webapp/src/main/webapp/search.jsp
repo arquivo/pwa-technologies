@@ -271,6 +271,10 @@ String[] queryString_splitted=null;
                 dateStart.setTime( inputDateFormatter.parse(request.getParameter("dateStart")) );
         } catch (NullPointerException e) {
                 bean.LOG.debug("Invalid Start Date:"+ request.getParameter("dateStart") +"|");
+                dateStart = (Calendar)DATE_START.clone();
+        } catch( Exception e){
+                bean.LOG.debug("Invalid Start Date:"+ request.getParameter("dateStart") +"|");
+                dateStart = (Calendar)DATE_START.clone();
         }
   }
 
@@ -284,8 +288,12 @@ String[] queryString_splitted=null;
                 dateEnd.set( Calendar.HOUR_OF_DAY, 23 );
                 dateEnd.set( Calendar.MINUTE, 59 );
                 dateEnd.set( Calendar.SECOND, 59 );
+                dateEnd = (Calendar)DATE_END.clone();
         } catch (NullPointerException e) {
                 bean.LOG.debug("Invalid End Date:"+ request.getParameter("dateEnd") +"|");
+        } catch( Exception e){
+                bean.LOG.debug("Invalid Start Date:"+ request.getParameter("dateStart") +"|");
+                dateEnd = (Calendar)DATE_END.clone();
         }
   }
 
@@ -344,7 +352,6 @@ String[] queryString_splitted=null;
 
   if ( request.getAttribute("query") != null ) {
         htmlQueryString = request.getAttribute("query").toString();
-        htmlQueryString = Entities.encode(htmlQueryString);
         htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
   }
 
@@ -605,7 +612,8 @@ String[] queryString_splitted=null;
                             
                           /*************************************/
                             queryString=urlQueryParam; //Querying wayback servlet
-                            urlQuery=urlQueryParam; //Querying pyWB
+                            urlQuery= urlQueryParam; //Querying pyWB
+                            urlQuery = StringEscapeUtils.escapeHtml(urlQuery); /*escape to prevent xss attacks*/
                         
                             /*************************************************/
                     pageContext.setAttribute("urlQueryParam", urlQueryParam);
@@ -1142,6 +1150,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "&sort=" + sort +
       "&reverse=" + reverse;
     }
+    previousPageUrl = StringEscapeUtils.escapeHtml(previousPageUrl);
 %>
   <li class="previous"><a href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>"><fmt:message key='search.pager.previous'/></a></li>
 <% } %>
@@ -1158,6 +1167,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "&hitsPerDup=" + hitsPerDup +
       "&dedupField=" + dedupField +
       "&l="+ language;
+   pageUrl = StringEscapeUtils.escapeHtml(pageUrl); 
     if (sort != null) {
       pageUrl = pageUrl +
       "&sort=" + sort +
@@ -1187,6 +1197,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "&hitsPerDup=" + hitsPerDup +
       "&dedupField=" + dedupField +
       "&l="+ language;
+      nextPageUrl = StringEscapeUtils.escapeHtml(nextPageUrl);
     if (sort != null) {
       nextPageUrl = nextPageUrl +
       "&sort=" + sort +
