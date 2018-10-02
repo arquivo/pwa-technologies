@@ -286,6 +286,7 @@ public class ImageSearchServlet extends HttpServlet {
 			SolrClient solr = new HttpSolrClient.Builder(solrHost).build();
 			SolrQuery solrQuery = new SolrQuery();
 			solrQuery.setQuery(q);
+			LOG.info("FQ String:" + fqString);
 			solrQuery.addFilterQuery(fqString);
 //			solrQuery.addFilterQuery("imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:[0 TO 0.49]"); /*fq*/
 			solrQuery.set("defType", "edismax");
