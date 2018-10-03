@@ -272,7 +272,12 @@ public class ImageSearchServlet extends HttpServlet {
 	      if( typeParameter == null )
 	    	  typeParameter = "";
 	      if( !typeParameter.equals( "" ) ){
-	    	  fqString += " AND imgMimeType: image/"+ typeParameter;
+	    	  if(typeParameter.toLowerCase().equals("jpeg") || typeParameter.toLowerCase().equals("jpg") ){
+	    		  fqString += " AND (imgMimeType:image/jpeg OR imgMimeType:image/jpg) ";
+	    	  }
+	    	  else{
+	    		  fqString += " AND imgMimeType: image/"+ typeParameter;
+	    	  }
 	      }		
 		
 		//Pretty print in output message 
