@@ -262,9 +262,11 @@ public class ImageSearchServlet extends HttpServlet {
 		}
 		safeSearch = request.getParameter("safeSearch");
 		if(! "off".equals(safeSearch)){
-			fqString+= "safe:[0 TO 0.49]"; /*Default behaviour is to limit safe score from 0 -> 0.49; else show all images*/
+			fqString+= "safe:[0 TO 0.49] AND imgTstamp:["+dateStart + " TO "+ dateEnd+"]"; /*Default behaviour is to limit safe score from 0 -> 0.49; else show all images*/
+		}else{
+			fqString +="imgTstamp:["+dateStart + " TO "+ dateEnd+"]" ;
 		}
-		fqString +=" AND imgTstamp:["+dateStart + " TO "+ dateEnd+"]";
+
 
 		String typeParameter = request.getParameter( "type" );
 	      if( typeParameter == null )
