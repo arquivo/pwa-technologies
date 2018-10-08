@@ -175,7 +175,7 @@ public class ImageSearchServlet extends HttpServlet {
 		ImageSearchResults imgSearchResults=null;
 		String safeSearch = "";
 		
-		String fqString ="";
+		ArrayList<String> fqStrings = new ArrayList<String>();
 		String jsonSolrResponse="";
 
 		// get parameters from request
@@ -260,26 +260,25 @@ public class ImageSearchServlet extends HttpServlet {
 				LOG.error( "Parse Exception: " , e );
 			}    	
 		}
+		fqStrings.add("imgTstamp:["+dateStart + " TO "+ dateEnd+"]");
 		safeSearch = request.getParameter("safeSearch");
 		if(! "off".equals(safeSearch)){
-			fqString+= "safe:[0 TO 0.49] AND imgTstamp:["+dateStart + " TO "+ dateEnd+"]"; /*Default behaviour is to limit safe score from 0 -> 0.49; else show all images*/
-		}else{
-			fqString +="imgTstamp:["+dateStart + " TO "+ dateEnd+"]" ;
+			fqStrings.add("safe:[0 TO 0.49]"); /*Default behaviour is to limit safe score from 0 -> 0.49; else show all images*/
 		}
-
 
 		String typeParameter = request.getParameter( "type" );
 	      if( typeParameter == null )
 	    	  typeParameter = "";
 	      if( !typeParameter.equals( "" ) ){
 	    	  if(typeParameter.toLowerCase().equals("jpeg") || typeParameter.toLowerCase().equals("jpg") ){
-	    		  fqString += " AND (imgMimeType:image/jpeg OR imgMimeType:image/jpg) ";
+	    		  fqStrings.add("imgMimeType:image/jpeg OR imgMimeType:image/jpg");
 	    	  }
 	    	  else{
-	    		  fqString += " AND imgMimeType: image/"+ typeParameter;
+	    		  fqStrings.add("imgMimeType: image/"+ typeParameter);
 	    	  }
 	      }		
-		
+	      String sizeParameter = request.getParameter( "type" );
+	      
 		//Pretty print in output message 
 		String prettyPrintParameter = request.getParameter( "prettyPrint" );
 		boolean prettyOutput = false;
@@ -293,9 +292,12 @@ public class ImageSearchServlet extends HttpServlet {
 			SolrClient solr = new HttpSolrClient.Builder(solrHost).build();
 			SolrQuery solrQuery = new SolrQuery();
 			solrQuery.setQuery(q);
-			LOG.info("FQ String:" + fqString);
-			solrQuery.set("fq", fqString);
-//			solrQuery.addFilterQuery("imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:[0 TO 0.49]"); /*fq*/
+			LOG.info("FilterQuery Strings:" + fqStrings);
+			
+			for(String fq : fqStrings){
+				solrQuery.addFilterQuery(fq);
+			}
+			
 			solrQuery.set("defType", "edismax");
 			solrQuery.set("qf", "imgTitle^4 imgAlt^3 imgSrcTokens^2 pageTitle pageURLTokens");
 			solrQuery.set("pf", "imgTitle^4000 imgAlt^3000 imgSrcTokens^2000 pageTitle^1000 pageURLTokens^1000");
