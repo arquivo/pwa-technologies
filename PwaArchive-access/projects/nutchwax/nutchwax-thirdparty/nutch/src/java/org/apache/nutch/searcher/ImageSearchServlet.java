@@ -277,7 +277,18 @@ public class ImageSearchServlet extends HttpServlet {
 	    		  fqStrings.add("imgMimeType: image/"+ typeParameter);
 	    	  }
 	      }		
-	      String sizeParameter = request.getParameter( "type" );
+	      String sizeParameter = request.getParameter( "size" );
+	      if( sizeParameter == null )
+	    	  sizeParameter = "";
+	      if( !sizeParameter.equals( "" ) ){
+	    	  if(sizeParameter.equals("sm")){
+	    		  fqStrings.add("{!frange u=65536 }product(imgHeight,imgWidth)"); /*images up to 65536pixels² of area - i.e. max square size of 256x256px*/
+	    	  }else if(sizeParameter.equals("md")){
+	    		  fqStrings.add("{!frange l=65537 u=810000 }product(imgHeight,imgWidth)"); /*images between 65537pixels² of area , up to  810000px² of area - i.e. max square size of 900x900px*/ 
+	    	  }else if(sizeParameter.equals("lg")){
+	    		  fqStrings.add("{!frange l=810001}product(imgHeight,imgWidth)"); /*images bigger than 810000px² of area*/
+	    	  }
+	      }
 	      
 		//Pretty print in output message 
 		String prettyPrintParameter = request.getParameter( "prettyPrint" );
