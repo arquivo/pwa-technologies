@@ -425,40 +425,28 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
         safeSearchOption = "yes";
     }
     var query;
+    var site="";
     var input = $('#txtSearch').val();
-    /*var tokens = input.split(' ');
-    var size = '';
-    var query ='';
-    var finalQuery;
-    for (var i= 0; i< tokens.length; i++){
-      if(tokens[i].substring(0, 'size:'.length) === 'size:'){
-        size += tokens[i].substring('size:'.length) + ' ';
-      }
-      var tokenNoAccents = removeDiacritics(tokens[i]);
-      query+= "(imgSrc:*"+tokenNoAccents+"*OR imgSrc:*"+capitalizeFirstLetter(tokenNoAccents)+"* OR imgAlt:*"+capitalizeFirstLetter(tokenNoAccents)+"* imgAlt:*"+tokenNoAccents+"* OR imgSrc:*"+tokenNoAccents.toLowerCase()+"* OR imgAlt:*"+tokenNoAccents.toLowerCase()+"*) AND "; 
+    if ( input.indexOf("site:") !=-1){
+        var newInput ="";
+        var inputTokens = input.split(" ");
+        for (var i = 0; i < inputTokens.length; i++) {
+            if(inputTokens[i].toLowerCase().indexOf("site:") == 0){ /*if token starts with site: */
+                site += inputTokens[i].replace("site:", "")
+                newInput += " " +inputTokens[i].replace("site:", "");
+            }
+            else{ 
+                newInput += " " + inputTokens[i];
+            }
+        }
+        input = newInput
     }
-    query = query.substring(0, query.length -5); 
-    */
+
     var dateStart= $('#dateStart_top').attr("value");
     dateStart = dateStart.substring(6, 10)+dateStart.substring(3, 5) + dateStart.substring(0, 2)+'000000' ;
     var dateEnd= $('#dateEnd_top').attr("value");
     dateEnd = dateEnd.substring(6, 10)+dateEnd.substring(3, 5) + dateEnd.substring(0, 2)+'000000' ;
 
-    //query += "AND (timestamp:["+dateStart+" TO "+dateEnd+"])";
-    //console.log(query);
-
-    /*if( size === ''){
-      size = 'all';
-    }*/
-
-   /* var dateStartTokenes = dateStartWithSlashes.split("/");
-    var dateStartTs = dateStartTokenes[2]+ dateStartTokenes[1] + dateStartTokenes[0]+ "000000";
-
-    var dateEndTokenes = dateEndWithSlashes.split("/");
-    var dateEndTs = dateEndTokenes[2]+ dateEndTokenes[1] + dateEndTokenes[0]+ "000000"     ;
-
-    var dateFinal = dateStartTs+"-"+dateEndTs; */
-    var showAll = false;
     numrows =50;
     currentStart = startIndex;
     
@@ -475,16 +463,9 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
  /*+ " AND pageTstamp:["+dateStart+" TO "+dateEnd+"]"*/
        data: {
           q: input,
-          defType: 'edismax',                  
-          qf: 'imgTitle^4 imgAlt^3 imgSrcTokens^2 pageTitle pageURLTokens', //TODO: improve ranking
-          pf: 'imgTitle^4000 imgAlt^3000 imgSrcTokens^2000 pageTitle^1000 pageURLTokens^1000', //TODO: improve ranking  
-          ps: 1,
-          pf2: 'imgTitle^400 imgAlt^300 imgSrcTokens^200 pageTitle^100 pageURLTokens^100', //TODO: improve ranking
-          ps2: 2,
-          pf3: 'imgTitle^40 imgAlt^30 imgSrcTokens^20 pageTitle^10 pageURLTokens^10', //TODO: improve ranking
-          ps3: 3,
           from: dateStart,
           to: dateEnd,
+          siteSearch: site,
           offset: startIndex,
           maxItems: numrows,
           safeSearch:safeSearch        
