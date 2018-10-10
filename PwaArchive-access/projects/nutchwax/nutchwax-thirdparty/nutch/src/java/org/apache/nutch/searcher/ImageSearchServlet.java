@@ -337,17 +337,19 @@ public class ImageSearchServlet extends HttpServlet {
 			}
 			int invalidDocs = 0;
 			SolrDocumentList documents = new SolrDocumentList();
-			for(SolrDocument doc : responseSolr.getResults()){ /*Iterate Results*/
-				byte[] bytesImgSrc64 = (byte[]) doc.getFieldValue("imgSrcBase64");
-				if(bytesImgSrc64 == null){
-					LOG.info("Null image");
-					invalidDocs++;
-					continue;
+			if(flString.equals("") || flString.contains("imgSrcBase64")){
+				for(SolrDocument doc : responseSolr.getResults()){ /*Iterate Results*/
+					byte[] bytesImgSrc64 = (byte[]) doc.getFieldValue("imgSrcBase64");
+					if(bytesImgSrc64 == null){
+						LOG.info("Null image");
+						invalidDocs++;
+						continue;
+					}
+					byte[] encodedImgSrc64 = Base64.getEncoder().encode(bytesImgSrc64);
+					String imgSrc64 = new String(encodedImgSrc64);
+					doc.setField("imgSrcBase64", imgSrc64); 
+					documents.add(doc);
 				}
-				byte[] encodedImgSrc64 = Base64.getEncoder().encode(bytesImgSrc64);
-				String imgSrc64 = new String(encodedImgSrc64);
-				doc.setField("imgSrcBase64", imgSrc64); 
-				documents.add(doc);
 			}
 			imgSearchResults = new ImageSearchResults(responseSolr.getResults().getNumFound(),limit- invalidDocs ,responseSolr.getResults().getStart() ,documents);
 			imgSearchResponse = new ImageSearchResponse(responseSolr.getResponseHeader(), imgSearchResults );			   		  
