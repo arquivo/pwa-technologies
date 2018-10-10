@@ -293,7 +293,9 @@ public class ImageSearchServlet extends HttpServlet {
 	      if( request.getParameter( "fields" ) != null ){
 	    	  flString = request.getParameter( "fields" );
 	      }
-	      
+	      if( request.getParameter( "siteSearch" ) != null ){
+	    	  fqStrings.add("pageURL:*" + request.getParameter( "siteSearch" )+"*");
+	      }	      
 		//Pretty print in output message 
 		String prettyPrintParameter = request.getParameter( "prettyPrint" );
 		boolean prettyOutput = false;
