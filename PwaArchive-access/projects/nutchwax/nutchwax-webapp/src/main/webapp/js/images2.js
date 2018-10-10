@@ -462,9 +462,9 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
     numrows =50;
     currentStart = startIndex;
     
-    safeSearch = true;
+    safeSearch = "on";
     if($('#safeSearch').find(":selected").attr("value") === 'off'){
-        safeSearch = false;       
+        safeSearch = "off";       
     }
 
 
