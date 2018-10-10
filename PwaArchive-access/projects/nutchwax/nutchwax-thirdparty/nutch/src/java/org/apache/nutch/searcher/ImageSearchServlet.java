@@ -337,8 +337,8 @@ public class ImageSearchServlet extends HttpServlet {
 			}
 			int invalidDocs = 0;
 			SolrDocumentList documents = new SolrDocumentList();
-			if(flString.equals("") || flString.contains("imgSrcBase64")){
-				for(SolrDocument doc : responseSolr.getResults()){ /*Iterate Results*/
+			for(SolrDocument doc : responseSolr.getResults()){ /*Iterate Results*/
+				if(flString.equals("") || flString.contains("imgSrcBase64")){
 					byte[] bytesImgSrc64 = (byte[]) doc.getFieldValue("imgSrcBase64");
 					if(bytesImgSrc64 == null){
 						LOG.info("Null image");
@@ -350,7 +350,11 @@ public class ImageSearchServlet extends HttpServlet {
 					doc.setField("imgSrcBase64", imgSrc64); 
 					documents.add(doc);
 				}
+				else{
+					documents.add(doc);
+				}
 			}
+			
 			imgSearchResults = new ImageSearchResults(responseSolr.getResults().getNumFound(),limit- invalidDocs ,responseSolr.getResults().getStart() ,documents);
 			imgSearchResponse = new ImageSearchResponse(responseSolr.getResponseHeader(), imgSearchResults );			   		  
 		} catch ( IOException e ) {
