@@ -462,10 +462,9 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
     numrows =50;
     currentStart = startIndex;
     
-    safeValue = '[0 TO 0.49]';
     safeSearch = true;
     if($('#safeSearch').find(":selected").attr("value") === 'off'){
-        safeValue='[0 TO 1]';       
+        safeSearch = false;       
     }
 
 
@@ -476,7 +475,6 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
  /*+ " AND pageTstamp:["+dateStart+" TO "+dateEnd+"]"*/
        data: {
           q: input,
-          fq: "imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:"+safeValue,
           defType: 'edismax',                  
           qf: 'imgTitle^4 imgAlt^3 imgSrcTokens^2 pageTitle pageURLTokens', //TODO: improve ranking
           pf: 'imgTitle^4000 imgAlt^3000 imgSrcTokens^2000 pageTitle^1000 pageURLTokens^1000', //TODO: improve ranking  
