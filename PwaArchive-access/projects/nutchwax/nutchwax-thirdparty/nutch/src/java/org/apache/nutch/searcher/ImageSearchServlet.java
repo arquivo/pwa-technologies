@@ -176,6 +176,7 @@ public class ImageSearchServlet extends HttpServlet {
 		String safeSearch = "";
 		
 		ArrayList<String> fqStrings = new ArrayList<String>();
+		String flString =""; /*limit response fields*/
 		String jsonSolrResponse="";
 
 		// get parameters from request
@@ -289,6 +290,9 @@ public class ImageSearchServlet extends HttpServlet {
 	    		  fqStrings.add("{!frange l=810001}product(imgHeight,imgWidth)"); /*images bigger than 810000px² of area*/
 	    	  }
 	      }
+	      if( request.getParameter( "fields" ) != null ){
+	    	  flString = request.getParameter( "fields" );
+	      }
 	      
 		//Pretty print in output message 
 		String prettyPrintParameter = request.getParameter( "prettyPrint" );
@@ -320,6 +324,11 @@ public class ImageSearchServlet extends HttpServlet {
 			solrQuery.setRows(limit); 
 
 			solrQuery.setStart(start);
+			
+			if(!flString.equals("")){
+				solrQuery.set("fl", flString);
+			}
+			
 			QueryResponse responseSolr = null;
 			try{
 				responseSolr = solr.query(solrQuery);
