@@ -16,7 +16,6 @@ var MENU = MENU || (function(){
 			            	'<div class="swiper-slide menu swiper-slide-prev">' +       
 	          					'<a href="/index.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-search padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.home'/></h4></a>' +
 	          					'<a href="/advanced.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></a>' +
-	          					'<a href="/images.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-image padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.images'/></h4></a>' +	          					
 	          					'<a id="shareMenu"><h4><i class="fa fa-share-alt padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.share'/><i id="shareCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></a>'+	      
 	          					'<div id="shareOptions">'+
 	          						'<a class="addthis_button_facebook" onclick="" href=""><h4 class="submenu"><i class="fa fa-facebook padding-right-menu-icon" aria-hidden="true"></i> Facebook</h4></a>'+
