@@ -433,13 +433,15 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
         for (var i = 0; i < inputTokens.length; i++) {
             if(inputTokens[i].toLowerCase().indexOf("site:") == 0){ /*if token starts with site: */
                 site += inputTokens[i].replace("site:", "")
-                newInput += " " +inputTokens[i].replace("site:", "");
             }
             else{ 
                 newInput += " " + inputTokens[i];
             }
         }
         input = newInput
+        if (!input.replace(/\s/g, '').length){
+            input="*:*";
+        }
     }
 
     var dateStart= $('#dateStart_top').attr("value");
@@ -457,10 +459,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
 
 
     $.ajax({
-    // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
        url: "/imagesearch",      
-
- /*+ " AND pageTstamp:["+dateStart+" TO "+dateEnd+"]"*/
        data: {
           q: input,
           from: dateStart,
