@@ -175,7 +175,8 @@ public class ImageSearchServlet extends HttpServlet {
 		ImageSearchResults imgSearchResults=null;
 		String safeSearch = "";
 		
-		String fqString ="";
+		ArrayList<String> fqStrings = new ArrayList<String>();
+		String flString =""; /*limit response fields*/
 		String jsonSolrResponse="";
 
 		// get parameters from request
@@ -260,19 +261,41 @@ public class ImageSearchServlet extends HttpServlet {
 				LOG.error( "Parse Exception: " , e );
 			}    	
 		}
+		fqStrings.add("imgTstamp:["+dateStart + " TO "+ dateEnd+"]");
 		safeSearch = request.getParameter("safeSearch");
 		if(! "off".equals(safeSearch)){
-			fqString+= "safe:[0 TO 0.49]"; /*Default behaviour is to limit safe score from 0 -> 0.49; else show all images*/
+			fqStrings.add("safe:[0 TO 0.49]"); /*Default behaviour is to limit safe score from 0 -> 0.49; else show all images*/
 		}
-		fqString +=" AND imgTstamp:["+dateStart + " TO "+ dateEnd+"]";
 
 		String typeParameter = request.getParameter( "type" );
 	      if( typeParameter == null )
 	    	  typeParameter = "";
 	      if( !typeParameter.equals( "" ) ){
-	    	  fqString += " AND imgMimeType: image/"+ typeParameter;
+	    	  if(typeParameter.toLowerCase().equals("jpeg") || typeParameter.toLowerCase().equals("jpg") ){
+	    		  fqStrings.add("imgMimeType:image/jpeg OR imgMimeType:image/jpg");
+	    	  }
+	    	  else{
+	    		  fqStrings.add("imgMimeType: image/"+ typeParameter);
+	    	  }
 	      }		
-		
+	      String sizeParameter = request.getParameter( "size" );
+	      if( sizeParameter == null )
+	    	  sizeParameter = "";
+	      if( !sizeParameter.equals( "" ) ){
+	    	  if(sizeParameter.equals("sm")){
+	    		  fqStrings.add("{!frange u=65536 }product(imgHeight,imgWidth)"); /*images up to 65536pixels² of area - i.e. max square size of 256x256px*/
+	    	  }else if(sizeParameter.equals("md")){
+	    		  fqStrings.add("{!frange l=65537 u=810000 }product(imgHeight,imgWidth)"); /*images between 65537pixels² of area , up to  810000px² of area - i.e. max square size of 900x900px*/ 
+	    	  }else if(sizeParameter.equals("lg")){
+	    		  fqStrings.add("{!frange l=810001}product(imgHeight,imgWidth)"); /*images bigger than 810000px² of area*/
+	    	  }
+	      }
+	      if( request.getParameter( "fields" ) != null ){
+	    	  flString = request.getParameter( "fields" );
+	      }
+	      if( request.getParameter( "siteSearch" ) != null ){
+	    	  fqStrings.add("pageURL:*" + request.getParameter( "siteSearch" )+"*");
+	      }	      
 		//Pretty print in output message 
 		String prettyPrintParameter = request.getParameter( "prettyPrint" );
 		boolean prettyOutput = false;
@@ -286,9 +309,12 @@ public class ImageSearchServlet extends HttpServlet {
 			SolrClient solr = new HttpSolrClient.Builder(solrHost).build();
 			SolrQuery solrQuery = new SolrQuery();
 			solrQuery.setQuery(q);
-			LOG.info("FQ String:" + fqString);
-			solrQuery.addFilterQuery(fqString);
-//			solrQuery.addFilterQuery("imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:[0 TO 0.49]"); /*fq*/
+			LOG.info("FilterQuery Strings:" + fqStrings);
+			
+			for(String fq : fqStrings){
+				solrQuery.addFilterQuery(fq);
+			}
+			
 			solrQuery.set("defType", "edismax");
 			solrQuery.set("qf", "imgTitle^4 imgAlt^3 imgSrcTokens^2 pageTitle pageURLTokens");
 			solrQuery.set("pf", "imgTitle^4000 imgAlt^3000 imgSrcTokens^2000 pageTitle^1000 pageURLTokens^1000");
@@ -300,6 +326,11 @@ public class ImageSearchServlet extends HttpServlet {
 			solrQuery.setRows(limit); 
 
 			solrQuery.setStart(start);
+			
+			if(!flString.equals("")){
+				solrQuery.set("fl", flString);
+			}
+			
 			QueryResponse responseSolr = null;
 			try{
 				responseSolr = solr.query(solrQuery);
@@ -309,17 +340,23 @@ public class ImageSearchServlet extends HttpServlet {
 			int invalidDocs = 0;
 			SolrDocumentList documents = new SolrDocumentList();
 			for(SolrDocument doc : responseSolr.getResults()){ /*Iterate Results*/
-				byte[] bytesImgSrc64 = (byte[]) doc.getFieldValue("imgSrcBase64");
-				if(bytesImgSrc64 == null){
-					LOG.info("Null image");
-					invalidDocs++;
-					continue;
+				if(flString.equals("") || flString.contains("imgSrcBase64")){
+					byte[] bytesImgSrc64 = (byte[]) doc.getFieldValue("imgSrcBase64");
+					if(bytesImgSrc64 == null){
+						LOG.info("Null image");
+						invalidDocs++;
+						continue;
+					}
+					byte[] encodedImgSrc64 = Base64.getEncoder().encode(bytesImgSrc64);
+					String imgSrc64 = new String(encodedImgSrc64);
+					doc.setField("imgSrcBase64", imgSrc64); 
+					documents.add(doc);
 				}
-				byte[] encodedImgSrc64 = Base64.getEncoder().encode(bytesImgSrc64);
-				String imgSrc64 = new String(encodedImgSrc64);
-				doc.setField("imgSrcBase64", imgSrc64); 
-				documents.add(doc);
+				else{
+					documents.add(doc);
+				}
 			}
+			
 			imgSearchResults = new ImageSearchResults(responseSolr.getResults().getNumFound(),limit- invalidDocs ,responseSolr.getResults().getStart() ,documents);
 			imgSearchResponse = new ImageSearchResponse(responseSolr.getResponseHeader(), imgSearchResults );			   		  
 		} catch ( IOException e ) {
