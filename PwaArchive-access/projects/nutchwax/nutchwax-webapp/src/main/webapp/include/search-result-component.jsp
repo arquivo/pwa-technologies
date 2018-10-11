@@ -29,20 +29,6 @@
 
 %>
 
-<div id="resultados">
-</div>
-
-<%-- Show tip if present --%>
-<%--
-        <% if (showTip != null) { %>
-                <p class="info">
-                        <i18n:message key="seeUrlTip">
-                                <i18n:messageArg value="<%=allVersions%>"/>
-                                <i18n:messageArg value="<%=showTip%>"/>
-                        </i18n:message>
-                </p>
-        <% } %>
---%>
 
 <div class="spell hidden"><fmt:message key="search.spellchecker"/> <span class="suggestion"></span></div>
 
