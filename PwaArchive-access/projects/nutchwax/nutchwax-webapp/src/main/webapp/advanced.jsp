@@ -78,7 +78,7 @@
     <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <meta property="og:image" content="//arquivo.pt/img/logoFace.png"/>	
-	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
+	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
 	<script type="text/javascript">

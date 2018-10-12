@@ -34,7 +34,7 @@
 	<meta http-equiv="Content-Language" content="pt-PT" />
 	<meta name="Keywords" content="<fmt:message key='highlights.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='highlights.meta.description'/>" />
-	<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon" />
+	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
 </head>
 <body>

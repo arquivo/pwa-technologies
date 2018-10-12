@@ -35,7 +35,7 @@
 	<meta name="Keywords" content="<fmt:message key='404.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='404.meta.description'/>" />
 	<%String serverName = request.getServerName(); %>
-	<link rel="shortcut icon" href="img/logo-16.jpg" type="//<%=serverName%>/image/x-icon" />
+	<link rel="shortcut icon" href="img/logo-16.png" type="//<%=serverName%>/image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="//<%=serverName%>/css/style.css"  media="all" />
 </head>
 <body>
