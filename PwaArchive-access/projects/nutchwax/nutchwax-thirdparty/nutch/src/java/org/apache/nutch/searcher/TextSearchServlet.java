@@ -115,7 +115,7 @@ public class TextSearchServlet extends HttpServlet {
   
   static {
     NS_MAP.put( "serviceName" , "Arquivo.pt - the Portuguese web-archive" );
-    NS_MAP.put( "link" , "http://arquivo.pt" ); 
+    NS_MAP.put( "link" , "https://arquivo.pt" ); 
   }  
   
   private static String[ ]  fieldsReponse = {"versionID", "title", "originalURL", "linkToArchive",

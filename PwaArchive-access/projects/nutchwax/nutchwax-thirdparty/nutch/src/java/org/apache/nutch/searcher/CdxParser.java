@@ -112,8 +112,8 @@ public class CdxParser {
 			LOG.error( un );
 			urlEncoded = url; 
 		}
-		  
-		return "http://".concat( "arquivo.pt" ).concat( cdxServer ) 
+		  //TODO:: read from xml file the host name and protocol
+		return "https://".concat( "arquivo.pt" ).concat( cdxServer ) 
 					.concat( "url" )
 					.concat( equalOP )
 					.concat( urlEncoded )
