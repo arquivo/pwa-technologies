@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
+import javax.net.ssl.HttpsURLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -147,8 +148,14 @@ public class CdxParser {
 		ArrayList< JsonObject >  jsonResponse = new ArrayList< JsonObject >( );
 		
 		try {
+			LOG.debug("[OPEN Connection]: " + strurl);
 			URL url = new URL( strurl );
-			URLConnection con = url.openConnection( );
+			URLConnection con;  
+			if(strurl.startsWith("https")){
+				con = (HttpsURLConnection) url.openConnection();
+			}else{
+				con = url.openConnection();
+			}				
 			con.setConnectTimeout( timeoutConn );//3 sec
 			con.setReadTimeout( timeoutreadConn );//5 sec
 			is = con.getInputStream( );
