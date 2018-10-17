@@ -28,7 +28,7 @@ import com.google.gson.reflect.TypeToken;
 public class CdxParser {
 	
 	private static final Log LOG = LogFactory.getLog( CdxParser.class ); 
-	private static final String cdxServer = "/wayback/cdx?";
+	private static final String cdxServer = "/cdx?";
 	private final String equalOP = "=";
 	private final String andOP = "&";
 	private final String outputCDX = "json";
@@ -37,10 +37,13 @@ public class CdxParser {
 	private final String keyMimeType 	= "mime";
 	private final int timeoutConn = 3000;
 	private final int timeoutreadConn = 5000;
+	private String collectionsProtocol;
 	private String collectionsHost;
+	
 
 	
-	public CdxParser( String collectionsHost ) {
+	public CdxParser( String collectionsProtocol, String collectionsHost ) {
+		this.collectionsProtocol = collectionsProtocol;
 		this.collectionsHost = collectionsHost;
 	}
 	
@@ -114,8 +117,8 @@ public class CdxParser {
 			urlEncoded = url; 
 		}
 		  //TODO:: read from xml file the host name and protocol
-		LOG.info("[cdxparser] "+ "https://".concat( "preprod.arquivo.pt" ).concat( cdxServer ) );
-		return "https://".concat( "preprod.arquivo.pt" ).concat( cdxServer ) 
+		LOG.info("[cdxparser] "+ collectionsProtocol.concat( "preprod.arquivo.pt" ).concat( cdxServer ) );
+		return collectionsProtocol.concat(collectionsHost).concat( cdxServer ) 
 					.concat( "url" )
 					.concat( equalOP )
 					.concat( urlEncoded )
@@ -156,7 +159,6 @@ public class CdxParser {
 			}else{
 				con = url.openConnection();
 			}
-			con.setInstanceFollowRedirects(true);
 			con.setConnectTimeout( timeoutConn );//3 sec
 			con.setReadTimeout( timeoutreadConn );//5 sec
 			is = con.getInputStream( );

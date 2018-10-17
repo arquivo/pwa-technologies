@@ -86,7 +86,7 @@ import javax.xml.parsers.*;
  * 
  * @author jnobre
  * @version 1.0
- */
+*/
 public class TextSearchServlet extends HttpServlet {
   /**
    * Class responsible for:
@@ -104,6 +104,8 @@ public class TextSearchServlet extends HttpServlet {
   private static PwaFunctionsWritable functions = null;
   private static int nQueryMatches = 0;
   private static String collectionsHost = null;
+  private static String collectionsProtocol = null;
+  
   private static final SimpleDateFormat FORMAT = new SimpleDateFormat( "yyyyMMddHHmmss" );
   Calendar DATE_END = new GregorianCalendar( );
   private static final String noFrame = "/noFrame/replay";
@@ -135,7 +137,8 @@ public class TextSearchServlet extends HttpServlet {
       functions = PwaFunctionsWritable.parse( this.conf.get( Global.RANKING_FUNCTIONS ) );            
       nQueryMatches=Integer.parseInt( this.conf.get( Global.MAX_FULLTEXT_MATCHES_RANKED ) );
       
-      collectionsHost = this.conf.get( "wax.host", "examples.com" );
+      collectionsHost = this.conf.get( "wax.host", "arquivo.pt/wayback" );
+      collectionsProtocol = this.conf.get( "wax.protocol", "https://" );
 	  TimeZone zone = TimeZone.getTimeZone( "GMT" );
 	  FORMAT.setTimeZone( zone );
 	  
@@ -465,7 +468,7 @@ public class TextSearchServlet extends HttpServlet {
            		  	 LOG.debug(" [Metadata] qExactURL["+qExactURL+"]");
            		  	 
            		  	 hitsPerDup = 1;
-           		  	 CdxParser cdxProcessor = new CdxParser( collectionsHost );
+           		  	 CdxParser cdxProcessor = new CdxParser(collectionsProtocol ,collectionsHost );
            		  	 //get cdx index fields
            		  	 List< ItemCDX > resultsCDX = cdxProcessor.getResults( versionIdsplited[ 0 ], dateStart, dateEnd, -1, 0 );
            		  	 if( resultsCDX != null )
@@ -510,7 +513,7 @@ public class TextSearchServlet extends HttpServlet {
     		  hitsPerDup = 1;
     		  
     		  startTime = System.nanoTime( );
-    		  CdxParser cdxProcessor = new CdxParser( collectionsHost );
+    		  CdxParser cdxProcessor = new CdxParser( collectionsProtocol ,collectionsHost );
     		  //get cdx index fields
     		  List< ItemCDX > resultsCDX = cdxProcessor.getResults( qURL, dateStart, dateEnd, limit, start );
     		  if( resultsCDX != null ) {
@@ -763,10 +766,10 @@ public class TextSearchServlet extends HttpServlet {
 		  
 		  if( itemcdx.getUrl( ) != null ) {
 			  //Lucene index format
-			  String target = "https://"+ collectionsHost +"/"+ FORMAT.format( datet ).toString()  +"/"+ itemcdx.getUrl( );
+			  String target = collectionsProtocol+ collectionsHost +"/"+ FORMAT.format( datet ).toString()  +"/"+ itemcdx.getUrl( );
 			  if( FieldExists( fields , "linkToArchive" ) )
 				  item.setLink( target );
-			  String urlNoFrame = "https://".concat( domainService ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( itemcdx.getUrl( ) );
+			  String urlNoFrame = collectionsProtocol.concat( domainService ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( itemcdx.getUrl( ) );
 			  String urlEncode = "";
 			  try{
 				  urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
@@ -774,7 +777,7 @@ public class TextSearchServlet extends HttpServlet {
 				  LOG.error( e );
 				  continue;
 			  }
-			  String screenShotLink = "https://".concat( domainService ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
+			  String screenShotLink = collectionsProtocol.concat( domainService ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
 			  if( FieldExists( fields , "linkToScreenshot" ) )
 				  item.setScreenShotLink( screenShotLink );
 			  if( FieldExists( fields , "linkToNoFrame" ) )
@@ -805,7 +808,7 @@ public class TextSearchServlet extends HttpServlet {
 		  }
 		  LOG.info( "[linkToMetadata] ID = " + id );
 		  if( FieldExists( fields , "linkToMetadata" ) ) {
-			  String linkToMetadata = "https://".concat( domainService ).concat( infoMetadata ).concat( "=" ).concat( urlEncoded );
+			  String linkToMetadata = collectionsProtocol.concat( domainService ).concat( infoMetadata ).concat( "=" ).concat( urlEncoded );
 			  item.setLinkToMetadata( linkToMetadata );
 			  LOG.info( "Yes linkToMetadata = " + item.getLinkToMetadata( ) );
 		  } else {
@@ -858,7 +861,7 @@ public class TextSearchServlet extends HttpServlet {
     		  HitDetails detail = details;
     		  
     		  if( FieldExists( fields , "linkToExtractedText" ) ) {
-    			  String textContent = "https://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
+    			  String textContent = collectionsProtocol.concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
     			  item.setParseText( textContent );
     		  } 
     		  
@@ -1025,9 +1028,9 @@ public class TextSearchServlet extends HttpServlet {
     		
             if( url != null ) {
             	// Lucene index format
-            	String infoIndex = "https://" + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
+            	String infoIndex = collectionsProtocol + collectionsHost + "/id" + hit.getIndexDocNo( ) + "index" + hit.getIndexNo( );
             	LOG.debug( "Index Information " + infoIndex );
-            	String target = "https://"+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
+            	String target = collectionsProtocol+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
             	if( FieldExists( fields , "linkToArchive" ) )
             		item.setLink( target );
             }
@@ -1064,7 +1067,7 @@ public class TextSearchServlet extends HttpServlet {
             	item.setCollection( collection );
             
             if( url != null ) {
-            	String urlNoFrame = "https://".concat( domainService ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
+            	String urlNoFrame = collectionsProtocol.concat( domainService ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( url );
                 String urlEncode = "";
                 try{
             		urlEncode = URLEncoder.encode( urlNoFrame , "UTF-8" );
@@ -1072,7 +1075,7 @@ public class TextSearchServlet extends HttpServlet {
             		LOG.error( e );
             		continue;
             	}
-            	String screenShotLink = "https://".concat( domainService ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
+            	String screenShotLink = collectionsProtocol.concat( domainService ).concat( screenShotURL ).concat( "=" ).concat( urlEncode );
             	if( FieldExists( fields , "linkToScreenshot" ) )
             		item.setScreenShotLink( screenShotLink );
             	if( FieldExists( fields , "linkToNoFrame" ) )
@@ -1112,12 +1115,12 @@ public class TextSearchServlet extends HttpServlet {
             		}  
               		
                 	if( FieldExists( fields , "linkToExtractedText" ) ) {
-                		String textContent = "https://".concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
+                		String textContent = collectionsProtocol.concat( domainService ).concat( textExtracted ).concat( "=" ).concat( urlEncoded );
                 		item.setParseText( textContent );
                 	} 
                 	
                 	if( FieldExists( fields , "linkToMetadata" ) ) {
-                		String linkToMetadata = "https://".concat( domainService ).concat( infoMetadata ).concat( "=" ).concat( urlEncoded );
+                		String linkToMetadata = collectionsProtocol.concat( domainService ).concat( infoMetadata ).concat( "=" ).concat( urlEncoded );
                 		item.setLinkToMetadata( linkToMetadata );
                 	} 
                 }
