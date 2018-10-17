@@ -176,8 +176,9 @@ public class CdxParser {
 		ArrayList< JsonObject > json = new ArrayList< JsonObject >( );
 		String line;
 		while ( ( line = rd.readLine( ) ) != null ) {
+			LOG.debug("[JSON LINE] : " + line);
 			JsonParser parser = new JsonParser();
-			JsonObject o = parser.parse( line ).getAsJsonObject( );
+			JsonObject o = parser.parse( line.trim()).getAsJsonObject( );
 			json.add( o );
 		}
 		return json;
