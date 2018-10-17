@@ -139,14 +139,7 @@
 	    <groupId>commons-validator</groupId>
 	    <artifactId>commons-validator</artifactId>
 	    <version>1.4.0</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.apache.solr/solr-solrj -->
-	<dependency>
-    	<groupId>org.apache.solr</groupId>
-    	<artifactId>solr-solrj</artifactId>
-    	<version>6.3.0</version>
-	</dependency>
-	
+	</dependency>	
 	
 	
     <dependency>

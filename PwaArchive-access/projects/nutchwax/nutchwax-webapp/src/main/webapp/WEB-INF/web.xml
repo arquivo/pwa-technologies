@@ -30,14 +30,6 @@
   <servlet-name>NutchwaxTextExtracted</servlet-name>
   <url-pattern>/textextracted</url-pattern>
 </servlet-mapping>
-<servlet>
-  <servlet-name>NutchwaxImageSearch</servlet-name>
-  <servlet-class>org.archive.access.nutch.NutchwaxImageSearchServlet</servlet-class>
-</servlet>
-<servlet-mapping>
-  <servlet-name>NutchwaxImageSearch</servlet-name>
-  <url-pattern>/imagesearch</url-pattern>
-</servlet-mapping>
 
 <servlet>
   <servlet-name>NutchwaxTimemap</servlet-name>
