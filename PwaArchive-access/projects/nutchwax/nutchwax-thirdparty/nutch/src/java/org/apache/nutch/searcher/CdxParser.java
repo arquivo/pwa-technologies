@@ -155,7 +155,8 @@ public class CdxParser {
 				con = (HttpsURLConnection) url.openConnection();
 			}else{
 				con = url.openConnection();
-			}				
+			}
+			con.setInstanceFollowRedirects(true);
 			con.setConnectTimeout( timeoutConn );//3 sec
 			con.setReadTimeout( timeoutreadConn );//5 sec
 			is = con.getInputStream( );
