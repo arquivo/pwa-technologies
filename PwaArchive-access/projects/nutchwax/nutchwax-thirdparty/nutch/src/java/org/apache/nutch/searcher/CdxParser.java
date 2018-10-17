@@ -113,7 +113,8 @@ public class CdxParser {
 			urlEncoded = url; 
 		}
 		  //TODO:: read from xml file the host name and protocol
-		return "https://".concat( "arquivo.pt" ).concat( cdxServer ) 
+		LOG.info("[cdxparser] "+ "https://".concat( "preprod.arquivo.pt" ).concat( cdxServer ) );
+		return "https://".concat( "preprod.arquivo.pt" ).concat( cdxServer ) 
 					.concat( "url" )
 					.concat( equalOP )
 					.concat( urlEncoded )
