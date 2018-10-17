@@ -28,7 +28,7 @@ import com.google.gson.reflect.TypeToken;
 public class CdxParser {
 	
 	private static final Log LOG = LogFactory.getLog( CdxParser.class ); 
-	private static final String cdxServer = "/wayback/-cdx?";
+	private static final String cdxServer = "/wayback/cdx?";
 	private final String equalOP = "=";
 	private final String andOP = "&";
 	private final String outputCDX = "json";
