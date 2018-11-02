@@ -288,7 +288,6 @@ String[] queryString_splitted=null;
                 dateEnd.set( Calendar.HOUR_OF_DAY, 23 );
                 dateEnd.set( Calendar.MINUTE, 59 );
                 dateEnd.set( Calendar.SECOND, 59 );
-                dateEnd = (Calendar)DATE_END.clone();
         } catch (NullPointerException e) {
                 bean.LOG.debug("Invalid End Date:"+ request.getParameter("dateEnd") +"|");
         } catch( Exception e){
