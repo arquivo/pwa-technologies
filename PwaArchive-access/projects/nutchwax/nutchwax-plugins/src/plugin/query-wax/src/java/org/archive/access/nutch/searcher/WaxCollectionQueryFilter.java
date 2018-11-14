@@ -12,7 +12,7 @@ public class WaxCollectionQueryFilter extends RawFieldQueryFilter
 
   public WaxCollectionQueryFilter()
   {
-    super("collection", true);
+    super("collection", false);
   }
 
   public Configuration getConf()

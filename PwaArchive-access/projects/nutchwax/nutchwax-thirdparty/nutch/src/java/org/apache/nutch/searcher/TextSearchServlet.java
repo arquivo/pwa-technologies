@@ -361,6 +361,14 @@ public class TextSearchServlet extends HttpServlet {
     	  String type = " type:".concat( typeParameter );
     	  queryString.append( type );
       }
+
+      String collectionParameter = request.getParameter("collection");
+      if(collectionParameter == null)
+          collectionParameter ="";
+      if(!typeParameter.equals("")){
+          String type = " collection:".concat(collectionParameter);
+          queryString.append(type);
+      }
       
       //Pretty print in output message 
       String prettyPrintParameter = request.getParameter( "prettyPrint" );
