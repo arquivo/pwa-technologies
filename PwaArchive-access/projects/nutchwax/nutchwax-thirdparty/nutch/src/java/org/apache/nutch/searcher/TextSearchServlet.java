@@ -221,7 +221,8 @@ public class TextSearchServlet extends HttpServlet {
 	  
 	  if( limit < 0 )
 		  limit = 0;
-	  
+
+	  // TODO get this from configuration
 	  if( limit > 2000 )
 		  limit = 2000;
 	  
@@ -341,7 +342,7 @@ public class TextSearchServlet extends HttpServlet {
           if( siteParameters != null ) {
             hitsPerDup = 0;
         	  for( String siteP : siteParameters ) {
-        		  LOG.info( "siteP = " + siteP );
+        		  LOG.debug( "siteP = " + siteP );
         		  if( siteP.equals( "" ) )
         			  continue;
         		  String site = "";
@@ -364,10 +365,10 @@ public class TextSearchServlet extends HttpServlet {
 
       String collectionParameter = request.getParameter("collection");
       if(collectionParameter == null)
-          collectionParameter ="";
-      if(!typeParameter.equals("")){
-          String type = " collection:".concat(collectionParameter);
-          queryString.append(type);
+          collectionParameter = "";
+      if(!collectionParameter.equals("")){
+          String collection = " collection:".concat(collectionParameter);
+          queryString.append(collection);
       }
       
       //Pretty print in output message 
@@ -554,6 +555,7 @@ public class TextSearchServlet extends HttpServlet {
     	  ParseText[ ] parseTexts = null;
     	  
     	  String qRequest = queryString.toString( );
+    	  LOG.debug(qRequest);
     	  query = Query.parse( qRequest , queryLang , this.conf );
     	  
     	  startTime = System.nanoTime( );
