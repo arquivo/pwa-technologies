@@ -18,6 +18,8 @@ public class TextSearchRequestParameters {
 	private String type;
 	@SerializedName( "siteSearch" )
 	private String site;
+	@SerializedName("collection")
+	private String collection;
 	private String prettyPrint;
 	
 	public TextSearchRequestParameters( ) { }
@@ -85,6 +87,10 @@ public class TextSearchRequestParameters {
 	public void setSite(String site) {
 		this.site = site;
 	}
+
+	public String getCollection() { return collection; }
+
+	public void setCollection(String collection) { this.collection = collection; }
 
 	public String getPrettyPrint() {
 		return prettyPrint;
