@@ -195,7 +195,7 @@
   <meta http-equiv="Content-Language" content="pt-PT"/>
   <meta name="Keywords" content="resultado, pesquisa, buscar, arquivo, Web, português, portuguesa, Portugal"/>
   <meta name="Description" content="Página de resultados de uma pesquisa de imagens feita no Arquivo.pt."/>
-  <link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon"/>
+  <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon"/>
   <link rel="search" type="application/opensearchdescription+xml" title="Arquivo.pt(pt)" href="opensearch.jsp?l=pt"/>
   <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css" media="all"/>
   <link href="css/csspin.css" rel="stylesheet" type="text/css"/>
