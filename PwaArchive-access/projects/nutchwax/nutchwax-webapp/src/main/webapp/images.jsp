@@ -185,11 +185,7 @@
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT"><head>
-  <% if (htmlQueryString.length() > 0) { %> 
-    <title><c:out value='${requestScope.htmlQueryString}'/> — Arquivo.pt</title>
-  <% } else { %>
-      <title><fmt:message key='images.imageTitle'/> — Arquivo.pt</title>
-  <% } %>
+  <title><fmt:message key='images.imageTitle'/>:&nbsp; <%= htmlQueryString %> &nbsp;  &mdash; Arquivo.pt</title>
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
   
   <meta http-equiv="Content-Language" content="pt-PT"/>
