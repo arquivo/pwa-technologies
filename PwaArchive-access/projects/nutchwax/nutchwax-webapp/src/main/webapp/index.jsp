@@ -193,12 +193,8 @@
                                         </form>
                                 </div>
                                 <div id="info">
-                                      <!--  <img src="img/search-icon.gif" width="62" height="71" alt="" /> -->
                                         <div id="info-texto-home">
-						<%-- TODO: wrong H1. The title should be AWP. Merge H1 with logo for the intro page --%>
                                                 <h1><fmt:message key='home.title'/></h1>
-                                               <!-- <h2><fmt:message key='home.subtitle'/></h2> -->
-                                                <!--<a href="//sobre.arquivo.pt?set_language=<%=language%>" title="<fmt:message key='home.know-more.link'/>" onclick="ga('send', 'event', 'Homepage', 'conheca-servico', 'Click on link (sobre.arquivo)');"><fmt:message key='home.know-more'/></a>-->
                                         </div>
                                 </div>
 		</div>

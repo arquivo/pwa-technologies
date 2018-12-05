@@ -566,6 +566,11 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 #conteudo-pesquisa fieldset input[type="text"], fieldset input[type="url"] { background-color: #ffffff; border: 1px solid #949494; height: 22px; width: 320px; font-size: 1.2em; }
 
 #conteudo-pesquisa #labelDateEnd { padding: 4px 11px 0; text-align: center; vertical-align: middle; width: 22px; }
+
+
+.advancedImageSearchSelect{width: 250px; background-color: #ffffff; border: 1px solid #949494; font-size: 1.2em;}
+.advancedImageSearchSelect  #num-result { border: 1px solid #949494; font-size: 1.2em; }
+
 #conteudo-pesquisa #sort, #formatType, #num-result { border: 1px solid #949494; font-size: 1.2em; }
 #conteudo-pesquisa #sort, #formatType { width: 224px; background-color: #ffffff; }
 #conteudo-pesquisa #sort, #imagesFormatType, #num-result { border: 1px solid #949494; font-size: 1.2em; }
@@ -588,7 +593,7 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 
 #conteudo-resultado #second-column { width: 619px; float: left; }
 
-#conteudo-resultado #resultados { border-top: 1px solid #cccccc; padding: 5px 0 8px; color: #464646; font-size: 1.2em; }
+#conteudo-resultado #resultados { border-bottom: 1px solid #cccccc; padding: 5px 0 8px; color: #464646; font-size: 1.2em; }
 #conteudo-resultado #resultados-url { background-color: #ebf7ff; border-top: 1px solid #add4ff; padding: 3px 0 6px; text-align: center; }
 #conteudo-resultado #resultados-url a { text-decoration: underline; font-size: 1.0em; }
 
@@ -955,6 +960,7 @@ li.grouped { padding-left: 38px; }
 	text-shadow:0px 1px 0px #ffffff;
 	text-align: center;
 	height: 25px;
+    width: 60px;
     vertical-align: middle;
     display: inline-block;
     text-decoration: none;
@@ -1165,38 +1171,43 @@ li.grouped { padding-left: 38px; }
 
 .search-anchor, .search-anchor:visited{ 
     text-decoration: none; 
-    color: #005db4; 
-    font-size: 17px; 
+    color: grey; 
+    font-size: 15px; 
     margin-right: 15px; 
-    font-size: 17px; 
     padding-right: 4px;
     font-style: normal;
 }
+.search-anchor:hover{
+    color: black;
+}
+.no-border{
+    border: none!important;
+}
+
 .search-span{ 
     text-decoration: none;
-    font-size: 17px;
+    font-size: 15px;
     margin-right: 15px;
-    font-size: 17px;
     font-style: normal;
-    border-top: 3px solid lightblue;
-    padding-top: 4px;
+    border-bottom: 3px solid lightblue;
+    padding-bottom: 7px;
     padding-right: 4px;
+    color: #005db4
 }
 .image-span{
+    color: #005db4;
     text-decoration: none;  
-    font-size: 17px; 
-    padding-top: 4px; 
-    text-decoration: none; 
+    font-size: 15px; 
     padding-left: 5px; 
     padding-right: 5px;   
-    border-top: 3px solid lightblue; 
-    padding-top: 4px; 
+    border-bottom: 3px solid lightblue; 
+    padding-bottom: 7px; 
     margin-right: -15px;
 }
 .image-anchor, .image-anchor:visited{
     text-decoration: none;  
-    color: #005db4; 
-    font-size: 17px; 
+    color: grey; 
+    font-size: 15px; 
     padding-top: 4px; 
     text-decoration: none; 
     padding-left: 5px; 
@@ -1204,23 +1215,70 @@ li.grouped { padding-left: 38px; }
     padding-top: 4px; 
     margin-right: -15px;
 }
+.image-anchor:hover{
+    color: black;
+}
+
+#width_tmp_select{
+  display : none;
+}
+
+
 .fright{
     float: right;
 }
-.safe-search{
-    font-size: 17px; 
-    color: grey;  
-    text-align-last: right; 
-    margin-right: 10px; 
+.fleft{
+    float: left;
+}
+.safe-search, .safe-search:visited{
+    font-size: 15px;
+    color: grey;
+    vertical-align: top;
+    margin-left: -4px;
+    margin-right: 10px;
+}
+.safe-search:hover{
+    color: black;
+    cursor: pointer;
+}
+
+.safe-search-option{
+ }
+
+.tools-anchor, .tools-anchor:visited{
+    font-size: 15px;
+    color: grey;
     vertical-align: top;
 }
-.safe-search-option{
-    text-align:right;  
-    float: right; 
-    direction: rtl;
+.tools-anchor:hover{
+    color: black;
+    cursor: pointer;
 }
 
 
+
+#tools{
+    display:none;
+    margin-top: 8px;
+}
+
+.beta{
+    margin-top: -5px;
+}
+.beta > span{
+  padding-left: 62px;
+  font-size: 17px;
+  color: #5e8400;
+}
+
+.betasearch{
+    margin-top: -5px;
+}
+.betasearch > span{
+  padding-left: 63px;
+  font-size: 17px;
+  color: #5e8400;
+}
 
 /*GeneratePress CSS*/
 #newFooterWrapper{

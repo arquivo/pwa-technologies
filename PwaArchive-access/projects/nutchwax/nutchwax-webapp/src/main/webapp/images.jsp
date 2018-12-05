@@ -65,9 +65,37 @@
   boolean safe =true;
   boolean unsafe = false;
   String safeSearchString ="on";
+  String type = ""; /*Default mimetype*/
+  String size = "all"; /*Default image size*/
+  String tools = "off"; /*Show toolbar*/
   if( request.getParameter("safeSearch") != null && request.getParameter("safeSearch").contains("off") ){
     safeSearchString = "off";
   }
+  if ( request.getParameter("size") != null && request.getParameter("size") != "") {
+          size = request.getParameter("size");
+          if(! "sm".equals(size) && !"md".equals(size) && ! "lg".equals(size)){
+            size = "all";
+          }
+  }
+
+  if ( request.getParameter("type") != null && request.getParameter("type") != "") {
+          type = request.getParameter("type");
+          if(! "jpg".equals(type) && !"png".equals(type) && ! "gif".equals(type) && ! "bmp".equals(type) && ! "webp".equals(type)){
+            type = "";
+          }
+  }
+
+
+
+  if( ! "".equals(type) || ! "all".equals(size) || ! "on".equals(safeSearchString)){
+    tools = "on";
+  }else if ( request.getParameter("tools") != null && request.getParameter("tools") != "") {
+    tools = request.getParameter("tools");
+    if(! "on".equals(tools)){
+      tools = "off";
+    }
+  }
+  
 
   if ( request.getParameter("query") != null ) {
         htmlQueryString = request.getParameter("query").toString();
@@ -93,21 +121,6 @@
                 htmlQueryString += "filetype:"+ request.getParameter("adv_mime");
                 htmlQueryString += " ";
         }
-        if ( request.getParameterValues("size") != null) {
-                String [] sizes = request.getParameterValues("size");
-                String allSizes = "";
-                for( String currentSize: sizes){
-                  allSizes += currentSize + " ";
-                }
-
-                if(!allSizes.contains("icon") || !allSizes.contains("small") || !allSizes.contains("medium")  || !allSizes.contains("large")){ /*the default case is all sizes, no need to add string if all sizes selected*/
-                  for( String currentSize: sizes){
-                    htmlQueryString += "size:"+ currentSize;
-                    htmlQueryString += " ";
-                  }
-                }
-        }
-
         if (request.getParameter("site") != null && request.getParameter("site") != "") {
                 htmlQueryString += "site:";
                 String siteParameter = request.getParameter("site"); //here split hostname and put it to lowercase
@@ -130,26 +143,6 @@
                 }             
                 htmlQueryString += " ";
         }        
-        if (request.getParameter("format") != null && request.getParameter("format") != "" && !request.getParameter("format").equals("all")) {
-                String [] types = request.getParameterValues("format");
-                String allTypes = "";
-                for( String currentType: types){
-                  allTypes += currentType + " ";
-                }
-
-                if(!allTypes.contains("jpeg") || !allTypes.contains("png") || !allTypes.contains("gif")  || !allTypes.contains("tiff")){ /*the default case is all sizes, no need to add string if all sizes selected*/
-                  for( String currentType: types){
-                    htmlQueryString += "type:"+ currentType;
-                    htmlQueryString += " ";
-                  }
-                }
-        }
-        if (request.getParameter("sort") != null && request.getParameter("sort") != "" && !request.getParameter("sort").equals("relevance")) {
-          String sortCriteria = request.getParameter("sort");
-          if(sortCriteria.equals("new") || sortCriteria.equals("old")){
-            htmlQueryString += "sort:" + sortCriteria + " ";
-          }
-        }
     }
   htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
 
@@ -263,6 +256,10 @@ function searchImages(startIndex){
 }
 </script>
 <script type="text/javascript">
+  var sizeVar = "<%=size%>";
+  var typeVar = "<%=type%>";
+</script>
+<script type="text/javascript">
 Content = {
     months: 
     {  '01': "<fmt:message key="month.0" />",
@@ -320,6 +317,14 @@ Content = {
         <div id="search-header">
             <form id="loginForm" action="images.jsp" name="imageSearchForm" method="get">
               <input type="hidden" name="l" value="<%= language %>" />
+              <input id="sizeFormInput" type="hidden" name="size" value="<%=size%>" />
+              <input id="typeFormInput" type="hidden" name="type" value="<%=type%>" />  
+              <input id="toolsFormInput" type="hidden" name="tools" value="<%=tools%>" />  
+
+              <input id="safeSearchFormInput" type="hidden" name="safeSearch" value="<%=safeSearchString%>" /> 
+
+
+
               <fieldset id="pesquisar">
                 <label for="txtSearch">&nbsp;</label>
                 <input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" onfocus="" onblur="" name="query" id="txtSearch" accesskey="t" />
@@ -344,7 +349,7 @@ Content = {
                     <input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
                   </div>
                 </div> 
-                <input id="safeSearchFormInput" style="display: none" name="safeSearch" value="<%=safeSearchString%>" />                
+                              
               </fieldset>
 
 <!--
@@ -383,14 +388,32 @@ Content = {
         <div id="first-column">
           &nbsp;
         </div>
-        <div id="second-column">
+        <div id="second-column">        
         <div id="resultados">
           <script type="text/javascript">
             document.write('<a href="/search.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="search-anchor">Web</a>')
           </script>
            <span  class="image-span" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
            <div class="fright">
-             <select id="safeSearch" class="safe-search" >
+             <a class="tools-anchor">Ferramentas</a>
+          </div>  
+        </div> 
+          <div id ="tools">
+              <select id="sizeSelect" class="safe-search" >
+                <option selected value="all" class="safe-search-option"><fmt:message key='images.tools.size'/></option> 
+                <option value="sm" class="safe-search-option"><fmt:message key='images.tools.sm'/></option>
+                <option value="md" class="safe-search-option"><fmt:message key='images.tools.md'/></option>
+                <option value="lg" class="safe-search-option"><fmt:message key='images.tools.lg'/></option>                 
+              </select>
+              <select id="typeSelect" class="safe-search" >
+                <option selected value="" class="safe-search-option"><fmt:message key='images.tools.format'/></option> 
+                <option value="jpg" class="safe-search-option">JPEG</option>
+                <option value="png" class="safe-search-option">PNG</option>
+                <option value="gif" class="safe-search-option">GIF</option>
+                <option value="bmp" class="safe-search-option">BMP</option>
+                <option value="webp" class="safe-search-option">WEBP</option>
+              </select>              
+              <select id="safeSearch" class="safe-search" >
               <% if (safeSearchString.equals("on")) { %>                
                 <option selected value="on" class="safe-search-option"><fmt:message key='images.safeOnLabel'/></option>
                 <option value="off" class="safe-search-option"><fmt:message key='images.safeOffLabel'/></option>
@@ -398,16 +421,59 @@ Content = {
                 <option selected value="off" class="safe-search-option"><fmt:message key='images.safeOffLabel'/></option>
                 <option  value="on" class="safe-search-option"><fmt:message key='images.safeOnLabel'/></option>
               <%}%>                              
-            </select>
+              </select>
+              <select id="width_tmp_select">
+                <option class="safe-search-option" id="width_tmp_option"></option>
+              </select>              
             <script type="text/javascript">
+            if($('#toolsFormInput').attr('value') === 'on'){
+              $('#tools').show();  
+            }
+            $("#sizeSelect").val('<%=size%>');
+            if($('#sizeSelect option:selected').text() !== ''){
+              $("#width_tmp_option").html($('#sizeSelect option:selected').text()); 
+              if($("#width_tmp_select").width() > 0 )
+                $("#sizeSelect").width($("#width_tmp_select").width()+25);
+            }
+            $("#width_tmp_option").html($('#safeSearch option:selected').text());
+            if($("#width_tmp_select").width() > 0 ) 
+              $("#safeSearch").width($("#width_tmp_select").width()+43);  
+            if('<%=type%>'!==''){
+              $("#typeSelect").val('<%=type%>');
+              $("#width_tmp_option").html($('#typeSelect option:selected').text()); 
+              if($("#width_tmp_select").width() > 0 )
+                $("#typeSelect").width($("#width_tmp_select").width()+18);              
+            }
+            $('.tools-anchor').on('click', function(e) {
+              $("#tools").slideToggle('slow', function(){
+                if($("#tools").is(":visible")){
+                   $('#toolsFormInput').attr('value', 'on');
+                }
+                else{
+                  $('#toolsFormInput').attr('value', 'off');
+                }
+              });            
+            });
+            $( "#sizeSelect" ).change(function() {
+              $('#sizeFormInput').attr('value', $('#sizeSelect').find(":selected").attr("value"));
+              $("#width_tmp_option").html($('#sizeSelect option:selected').text()); 
+              $(this).width($("#width_tmp_select").width()+25);                
+              $('#btnSubmit').click();
+            });
+            $( "#typeSelect" ).change(function() {
+              $('#typeFormInput').attr('value', $('#typeSelect').find(":selected").attr("value"));
+              $("#width_tmp_option").html($('#typeSelect option:selected').text()); 
+              $(this).width($("#width_tmp_select").width()+18);                 
+              $('#btnSubmit').click();
+            });                                        
             $( "#safeSearch" ).change(function() {
               $('#safeSearchFormInput').attr('value', $('#safeSearch').find(":selected").attr("value"));
+              $("#width_tmp_option").html($('#safeSearch option:selected').text()); 
+              $(this).width($("#width_tmp_select").width()+43);              
               $('#btnSubmit').click();
             });              
-            </script>
-            <a target="_blank"style="float right" href="//sobre.arquivo.pt"><i id="safesearchInfo" title="<fmt:message key='images.safeSearch.message'/>" class="ion ion-ios-help"></i></a>          
-          </div>   
-        </div>
+            </script>            
+          </div>            
       </div>
       </div>           
   <!-- FIM #conteudo-resultado  --> 
@@ -422,11 +488,11 @@ Content = {
   &nbsp;
 </div>
 <div id="second-column" style="width: 100%; background-color: #D8DBDF; padding-bottom: 10%">
+<img src="/img/experimental.png" class="fleft">  
 
 
 
-
-<div id="resultados" style="width: 100%"></div>
+<div id="resultados" style="width: 100%" class="no-border"></div>
 
 
 

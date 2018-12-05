@@ -6,26 +6,27 @@
 <configuration>
   <property>
     <name>searcher.dir</name>
-    <value>/home/wayback/searcher/deploy/configs</value>
-  </property>
+        <value>/home/wayback/searcher/deploy/configs</value>
+          </property>
 
   <property>
-    <name>wax.host</name>
-    <value>p28.arquivo.pt/wayback</value>
-  </property>
+      <name>wax.host</name>
+          <value>p28.arquivo.pt/wayback</value>
+            </property>
+
+  <property>
+      <name>hadoop.tmp.dir</name>
+          <value>/home/wayback/searcher/hadoop-search-servers/tmp</value>
+              <description>A base for other temporary directories.</description>
+                </property>
   <property>
       <name>wax.webhost</name>
       <value>p28.arquivo.pt</value>
   </property>
-  <property>
-      <name>wax.solrserver</name>
-      <value>http://p63.arquivo.pt:8983/solr/SAFE</value>
-  </property>
 
   <property>
-    <name>hadoop.tmp.dir</name>
-    <value>/data/tmp/hadoop-${user.name}</value>
-    <description>A base for other temporary directories.</description>
+      <name>wax.solrserver</name>
+      <value>http://p28.arquivo.pt:8983/solr/SAFE</value>
   </property>
 
 </configuration>

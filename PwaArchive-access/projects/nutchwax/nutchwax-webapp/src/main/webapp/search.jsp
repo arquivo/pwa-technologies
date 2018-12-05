@@ -861,7 +861,7 @@ function createErrorPage(){
                 '</div>'+
                 '</div>'+
               '</div>'+
-           '</div>').insertAfter("#firstWrap"); 
+           '</div>').insertAfter("#search-header"); 
 }
 
 

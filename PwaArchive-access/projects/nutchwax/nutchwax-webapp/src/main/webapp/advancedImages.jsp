@@ -158,118 +158,44 @@
 									<input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
 								</div>
 							</div>
-							<div id="label-data-2">
-								<label for="sort"><fmt:message key='advancedImages.sort'/></label>
-								<select id="sort" name="sort">
-									<%
-									if (sortType == null) {		// use the default sorting behavior %>
-										<option value="relevance" selected="selected"><fmt:message key="advancedImages.sort.relevance"/></option>
-									<% } else{ %>
-										<option value="relevance"><fmt:message key="advancedImages.sort.relevance"/></option>
-									<% }
-									if ("date".equals(sortType) && sortReverse) { %>
-										<option value="new" selected="selected"><fmt:message key='advancedImages.sort.new'/></option>
-									<%} else {%>
-										<option value="new"><fmt:message key='advancedImages.sort.new'/></option>
-									<%}%>
-									<%
-									if ("date".equals(sortType) && !sortReverse) {%>
-										<option value="old" selected="selected"><fmt:message key='advancedImages.sort.old'/></option>
-									<%} else {%>
-										<option value="old"><fmt:message key='advancedImages.sort.old'/></option>
-									<%}%>
-								</select>
-							</div>
 						</div>
 					</fieldset>
 
 					<fieldset id="size">
 						<legend><fmt:message key='advancedImages.size'/></legend>
 						<div class="box-content">
-							<div id="label-size-1">
-								<label for="sizeType"><fmt:message key='advancedImages.size.label'/></label> <br></br>
-								<%
-									if (imagesSize == null /*|| "all".equals(imagesFormat)*/) { %>
-										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="size" value="icon" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.icon'/></span><br /></div>										
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="small" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.small'/></span> <br /></div>
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="medium" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.medium'/></span> <br /></div>
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="large" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.large'/></span> <br/></div>
-									<% } else { %>
-											<% if(imagesSize.contains("icon")){ %>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="size" value="icon" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.icon'/></span><br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="size" value="icon" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.icon'/></span><br /></div>		
-											<% } %>
-											<% if(imagesSize.contains("small")){ %>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="small" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.small'/></span> <br /></div>	
-											<% } else {%>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="small" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.small'/></span> <br /></div>	
-											<% } %>	
-											<% if(imagesSize.contains("medium")){ %>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="medium" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.medium'/></span> <br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="medium" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.medium'/></span> <br /></div>
-											<% } %>		
-											<% if(imagesSize.contains("large")){ %>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="large" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.large'/></span> <br/></div>
-											<% } else {%>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="large" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.large'/></span> <br/></div>
-											<% } %>																				
-									<%}%>																						
-									
+							<div id="label-format-1">
+								<label for="size"><fmt:message key='images.size'/></label>
+								<select id="size" name="size" class="advancedImageSearchSelect">
+									<option value="all" selected="selected"><fmt:message key='images.safeOffLabel'/></option>
+									<option value="sm"><fmt:message key='images.tools.sm'/></option>
+									<option value="md"><fmt:message key='images.tools.md'/></option>
+									<option value="lg"><fmt:message key='images.tools.lg'/></option>
+								</select>
 							</div>
-						</div>
-					</fieldset>
-
-					<fieldset id="safe">
-						<legend>Pesquisa Segura</legend>
-						<div class="box-content">
-							<div id="label-size-1">								
-										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="safe" value="true" checked="checked"><span class="imageFormatLabel">Mostrar imagens seguras</span></div>										
-										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="unsafe" value="true"><span class="imageFormatLabel">Mostrar imagens inseguras</span></div>
-							</div>
-						</div>
-					</fieldset>					
-
-					<fieldset id="format">
-						<legend><fmt:message key='advancedImages.format'/></legend>
+						</div>							
 						<div class="box-content">
 							<div id="label-format-1">
-								<label for="formatType"><fmt:message key='advancedImages.format.label'/></label> <br></br>
-
-								<% if (format == null /*|| "all".equals(format)*/) { %>
-										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="jpeg" checked="checked" /><span class="imageFormatLabel">Joint Photographic Experts Group (.jpeg)</span><br /></div>										
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="png" checked="checked" /><span class="imageFormatLabel">Portable Network Graphics (.png)</span> <br /></div>
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="gif" checked="checked" /><span class="imageFormatLabel">Graphics Interchange Format (.gif)</span> <br /></div>
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="tiff" checked="checked" /><span class="imageFormatLabel">Tagged Image File Format (.tiff)</span> <br/></div>
-									<% } else { %>
-											<% if(format.contains("jpeg")){ %>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="jpeg" checked="checked" /><span class="imageFormatLabel">Joint Photographic Experts Group (.jpeg)</span><br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="jpeg" /><span class="imageFormatLabel">Joint Photographic Experts Group (.jpeg)</span><br /></div>
-											<% } %>			
-											<% if(format.contains("png")){ %>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="png" checked="checked" /><span class="imageFormatLabel">Portable Network Graphics (.png)</span><br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="png" /><span class="imageFormatLabel">Portable Network Graphics (.png)</span><br /></div>
-											<% } %>	
-											<% if(format.contains("gif")){ %>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="gif" checked="checked" /><span class="imageFormatLabel">Graphics Interchange Format (.gif)</span><br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="gif" /><span class="imageFormatLabel">Graphics Interchange Format (.gif)</span><br /></div>
-											<% } %>	
-											<% if(format.contains("tiff")){ %>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="tiff" checked="checked" /><span class="imageFormatLabel">Tagged Image File Format (.tiff)</span> <br/></div>
-											<% } else {%>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="tiff" /><span class="imageFormatLabel">Tagged Image File Format (.tiff)</span> <br/></div>
-											<% } %>														
-
-									<% } %>
-
-
-
+								<label for="formatType"><fmt:message key='images.type'/></label>
+								<select id="type" name="type" class="advancedImageSearchSelect">
+									<option value="all" selected="selected"><fmt:message key='images.tools.all'/></option>
+									<option value="jpg">Joint Photographic Experts Group (.jpeg)</option>
+									<option value="png">Portable Network Graphics (.png)</option>
+									<option value="gif">Graphics Interchange Format (.gif)</option>
+									<option value="bmp">Bitmap Image File (.bmp)</option>
+									<option value="webp">WEBP (.webp)</option>
+								</select>
 							</div>
 						</div>
+						<div class="box-content">
+							<div id="label-format-1">
+								<label for="safeSearch"><fmt:message key='images.safeSearch'/></label>
+								<select id="safeSearch" name="safeSearch" class="advancedImageSearchSelect">
+									<option value="on" selected="selected"><fmt:message key='images.safeOnLabel'/></option>
+									<option value="off"><fmt:message key='images.safeOffLabel'/></option>
+								</select>
+							</div>
+						</div>																
 					</fieldset>
 					
 					<fieldset id="domains">
@@ -282,27 +208,6 @@
 									<span class="tip"><fmt:message key='advanced.website.hint'/></span>
 								</div>
 								<div class="clear"></div>
-							</div>
-						</div>
-					</fieldset>
-
-					<fieldset id="num_result_fieldset">
-						<legend><fmt:message key='advanced.results'/></legend>
-						<div class="box-content">
-							<div id="label-num-result-fieldset-1">
-								<label for="num-result"><fmt:message key='advanced.results.label'/></label>
-								<select id="num-result" name="hitsPerPage">
-								<%
-								int[] hitsPerPageValues = {10, 20, 30, 50, 100};
-								for (int i=0; i < hitsPerPageValues.length; i++) {
-									if (hitsPerPage == hitsPerPageValues[i]) {
-										out.print("<option selected=\"selected\">"+ hitsPerPageValues[i] +"</option>");
-									} else {
-										out.print("<option>"+ hitsPerPageValues[i] +"</option>");
-									}
-								}%>
-								</select>
-								<fmt:message key='advanced.results.label2'/>
 							</div>
 						</div>
 					</fieldset>

@@ -243,7 +243,7 @@ var contentToInsert = ''+
 '           <div style="min-height: 500px;margin-top: -50px;width: 39%;display: inline-block; border-left: solid 1px #454545;">'+
 '               <div style="padding-top:120px; margin-left: 25px; margin-right:70px; text-align: left;">'+
 '                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+pageString+' </h1>'+
-'                   <div style="padding-left:15px">'+
+'                   <div>'+
 '                       <h2 style="color:white; word-wrap: break-word;"><a style="color:white" target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageTitle+'</a></h2><br/>'+
 '                       <h2 style="color:white; word-wrap: break-word;">'+truncateUrlKeepProtocol(imageObj.pageURL, 80)+'</h2>'+
 '                       <br/>'+
@@ -251,7 +251,7 @@ var contentToInsert = ''+
 '                   </div>'+
 '                   <div style="padding-top:20px; padding-bottom:50px;">'+
 '                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+imageString+' </h1>'+
-                    '<div style="padding-left: 15px;">'+
+                    '<div>'+
 ( imageObj.title !== ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.title+'</a></h2><br/>':'') +
 ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h2><br/>':'') +
 '                           <h2 style="color:white;word-wrap: break-word" >'+imageObj.imgMimeType+' '+parseInt(expandedImageWidth)+' x '+parseInt(expandedImageHeight)+'</h2> <br/>'+
@@ -467,7 +467,9 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
           siteSearch: site,
           offset: startIndex,
           maxItems: numrows,
-          safeSearch:safeSearch        
+          safeSearch:safeSearch,
+          size: sizeVar,
+          type: typeVar        
        },
            
        timeout: 300000,
