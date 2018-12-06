@@ -104,7 +104,6 @@
 				</div>
 				<div id="info-texto-termos">
 					<h1><fmt:message key='advancedImages.title'/></h1>
-					<h2><fmt:message key='advancedImages.subtitle'/></h2>
 				</div>
 			</div>
 			<div id="conteudo-pesquisa">
