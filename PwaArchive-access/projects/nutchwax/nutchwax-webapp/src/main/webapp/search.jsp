@@ -45,6 +45,7 @@ response.setHeader("Cache-Control","public, max-age=600");
 %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="include/logging_params.jsp" %>
 <%@ include file="include/i18n.jsp" %>
 <fmt:setLocale value="<%=language%>"/>
@@ -354,8 +355,7 @@ String[] queryString_splitted=null;
 
   if ( request.getAttribute("query") != null ) {
         htmlQueryString = request.getAttribute("query").toString();
-        htmlQueryString = Entities.encode(htmlQueryString);
-        htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
+        request.setAttribute("htmlQueryString", htmlQueryString);
   }
 
   // Make up query string for use later drawing the 'rss' logo.
@@ -413,7 +413,7 @@ String[] queryString_splitted=null;
                 <div id="form_container"> 
                     <div class="input-group stylish-input-group">
                         
-                            <input id="txtSearch" value="<%=htmlQueryString%>" name="query" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>"  autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <input id="txtSearch" value="<c:out value = "${htmlQueryString}"/>" name="query" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>"  autocapitalize="off" autocomplete="off" autocorrect="off">
                             <span class="clear-text"><i class="fa fa-close"></i></span>
                             <span class="input-group-addon no-radius search-button-span">
                                 <button class="search-button" type="submit">
@@ -697,6 +697,7 @@ function formatDate ( date ) {
                             queryString=urlQueryParam; //Querying wayback servlet
                             urlQuery=urlQueryParam; //Querying pyWB
                             urlQuery = StringEscapeUtils.escapeHtml(urlQuery);
+                            request.setAttribute("urlQuery", urlQuery);
                         
                             /*************************************************/
                     pageContext.setAttribute("urlQueryParam", urlQueryParam);
@@ -1072,7 +1073,7 @@ function attachClicks(){
 
 <div id="conteudo-resultado" class="container-fluid display-none col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4"> <%-- START OF: conteudo-resultado --%>
 <div id="second-column">
-<!--<h1><fmt:message key='search.query'><fmt:param><c:out value='${requestScope.query}'/></fmt:param></fmt:message></h1>-->
+
 
 <%@include file="include/search-result-component.jsp"%>
 
@@ -1126,7 +1127,7 @@ function attachClicks(){
         <% } else { %>
   <div id="conteudo-pesquisa-erro">
     <div class="alert alert-danger break-word col-xs-12 my-alert">
-      <p><fmt:message key='search.no-results.title'/> <span class="text-bold"><%=htmlQueryString%></span></p>
+      <p><fmt:message key='search.no-results.title'/> <span class="text-bold"><c:out value = "${htmlQueryString}"/></span></p>
     </div>
     <div id="sugerimos-que" class="col-xs-12 no-padding-left">
         <p class="text-bold"><fmt:message key='search.no-results.suggestions'/></p>
@@ -1137,8 +1138,8 @@ function attachClicks(){
         <li><fmt:message key='search.no-results.suggestions.generic-words'/></li>
         <%-- Show specific suggestions for URL queries --%>
         <% if ( usedWayback) { %>
-        <li><fmt:message key='search.no-results.suggestions.internet-archive'><fmt:param value='<%=urlQuery%>'/></fmt:message></li>
-        <li><fmt:message key='search.no-results.suggestions.suggest'><fmt:param value='<%=urlQuery%>'/></fmt:message></li>
+        <li><fmt:message key='search.no-results.suggestions.internet-archive'><c:out value = "${urlQuery}"/></fmt:message></li>
+        <li><fmt:message key='search.no-results.suggestions.suggest'><c:out value = "${urlQuery}"/></fmt:message></li>
         <% } %>
       </ul>
     </div>
