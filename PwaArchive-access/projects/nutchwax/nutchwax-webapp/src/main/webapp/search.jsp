@@ -351,7 +351,7 @@ String[] queryString_splitted=null;
 
   if ( request.getAttribute("query") != null ) {
         htmlQueryString = request.getAttribute("query").toString();
-        request.setAttribute("htmlQueryString", htmlQueryString)
+        request.setAttribute("htmlQueryString", htmlQueryString);
   }
 
   // Make up query string for use later drawing the 'rss' logo.
