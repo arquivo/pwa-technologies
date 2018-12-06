@@ -144,7 +144,8 @@
                 htmlQueryString += " ";
         }        
     }
-  htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
+  //htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
+  request.setAttribute("htmlQueryString", htmlQueryString);
 
  /*** Start date ***/
   Calendar dateStart = (Calendar)DATE_START.clone();
@@ -185,11 +186,7 @@
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT"><head>
-  <% if (htmlQueryString.length() > 0) { %> 
-    <title><c:out value='${requestScope.htmlQueryString}'/> — Arquivo.pt</title>
-  <% } else { %>
-      <title><fmt:message key='images.imageTitle'/> — Arquivo.pt</title>
-  <% } %>
+  <title><fmt:message key='images.imageTitle'/>:&nbsp; <c:out value = "${htmlQueryString}"/> &nbsp;  &mdash; Arquivo.pt</title>
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
   
   <meta http-equiv="Content-Language" content="pt-PT"/>
@@ -327,7 +324,7 @@ Content = {
 
               <fieldset id="pesquisar">
                 <label for="txtSearch">&nbsp;</label>
-                <input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" onfocus="" onblur="" name="query" id="txtSearch" accesskey="t" />
+                <input class="search-inputtext" type="text" size="15"  value="<c:out value = "${htmlQueryString}"/>" onfocus="" onblur="" name="query" id="txtSearch" accesskey="t" />
                 <input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" onclick="{document.getElementById('txtSearch').setAttribute('value','');}" />
                 
                 <button type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" ><fmt:message key='search.submit'/></button>

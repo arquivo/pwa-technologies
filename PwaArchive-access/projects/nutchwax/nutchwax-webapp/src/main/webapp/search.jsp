@@ -351,7 +351,7 @@ String[] queryString_splitted=null;
 
   if ( request.getAttribute("query") != null ) {
         htmlQueryString = request.getAttribute("query").toString();
-        htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
+        request.setAttribute("htmlQueryString", htmlQueryString)
   }
 
   // Make up query string for use later drawing the 'rss' logo.
@@ -408,7 +408,7 @@ String[] queryString_splitted=null;
               <input type="hidden" name="l" value="<%= language %>" />
               <fieldset id="pesquisar">
                 <label for="txtSearch">&nbsp;</label>
-                <input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" placeholder="<fmt:message key='search.value'/>" onfocus="this.placeholder = ''" onblur="if(this.placeholder == ''){this.placeholder='<fmt:message key='search.value'/>'}" name="query" id="txtSearch" accesskey="t" />
+                <input class="search-inputtext" type="text" size="15"  value="<c:out value = "${htmlQueryString}"/>" placeholder="<fmt:message key='search.value'/>" onfocus="this.placeholder = ''" onblur="if(this.placeholder == ''){this.placeholder='<fmt:message key='search.value'/>'}" name="query" id="txtSearch" accesskey="t" />
                 <input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" onclick="{document.getElementById('txtSearch').setAttribute('value','');}" />
                 <input type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
                 <a href="advanced.jsp?l=<%=language%>" onclick="{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='search.advanced'/>" id="pesquisa-avancada"><fmt:message key='search.advanced'/></a>
@@ -613,6 +613,7 @@ String[] queryString_splitted=null;
                             queryString=urlQueryParam; //Querying wayback servlet
                             urlQuery= urlQueryParam; //Querying pyWB
                             urlQuery = StringEscapeUtils.escapeHtml(urlQuery); /*escape to prevent xss attacks*/
+                            request.setAttribute("urlQuery", urlQuery);
                         
                             /*************************************************/
                     pageContext.setAttribute("urlQueryParam", urlQueryParam);
@@ -850,13 +851,13 @@ function createErrorPage(){
            '  <div id="second-column">'+
            '    <div id="search_stats"></div>'+
            '    <div id="conteudo-pesquisa-erro">'+
-                '<h2>'+Content.noResultsFound+' </h2> <h3><%=urlQuery%></h3>'+
+                '<h2>'+Content.noResultsFound+' </h2> <h3><c:out value = "${urlQuery}"/></h3>'+
                 '<div id="sugerimos-que">'+
                     '<p>'+Content.suggestions+'</p>'+
                   '<ul>'+
                     '<li>'+Content.checkSpelling+'</li>'+
-                    '<li><a style="padding-left: 0px;" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
-                    '<li><a href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>" style="padding-left: 0px;">'+Content.mementoFind+'</a>.</li>'+                    
+                    '<li><a style="padding-left: 0px;" href="'+Content.suggestUrl+'<c:out value = "${urlQuery}"/>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
+                    '<li><a href="http://timetravel.mementoweb.org/list/1996/<c:out value = "${urlQuery}"/>" style="padding-left: 0px;">'+Content.mementoFind+'</a>.</li>'+                    
                   '</ul>'+
                 '</div>'+
                 '</div>'+
@@ -1067,7 +1068,7 @@ function createErrorPage(){
         <% } else { %>
   <div id="conteudo-pesquisa-erro">
     <h2><fmt:message key='search.no-results.title'/></h2>
-    <h3><c:out value='${requestScope.htmlQueryString}'/></h3>
+    <h3><c:out value = "${htmlQueryString}"/></h3>
 
     <div id="sugerimos-que">
         <p><fmt:message key='search.no-results.suggestions'/></p>
@@ -1078,8 +1079,8 @@ function createErrorPage(){
         <li><fmt:message key='search.no-results.suggestions.generic-words'/></li>
         <%-- Show specific suggestions for URL queries --%>
         <% if ( usedWayback) { %>
-        <li><fmt:message key='search.no-results.suggestions.internet-archive'><fmt:param value='<%=urlQuery%>'/></fmt:message></li>
-        <li><fmt:message key='search.no-results.suggestions.suggest'><fmt:param value='<%=urlQuery%>'/></fmt:message></li>
+        <li><fmt:message key='search.no-results.suggestions.internet-archive'><c:out value = "${urlQuery}"/></fmt:message></li>
+        <li><fmt:message key='search.no-results.suggestions.suggest'><c:out value = "${urlQuery}"/></fmt:message></li>
         <% } %>
       </ul>
     </div>
