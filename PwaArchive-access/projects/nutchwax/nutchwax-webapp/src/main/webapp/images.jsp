@@ -388,7 +388,7 @@ Content = {
         <div id="second-column">        
         <div id="resultados">
           <script type="text/javascript">
-            document.write('<a href="/search.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="search-anchor">Web</a>')
+            document.write('<a href="/search.jsp?l=<%=language%>&query='+"<c:out value = "${htmlQueryString}"/>"+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="search-anchor">Web</a>');
           </script>
            <span  class="image-span" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
            <div class="fright">
