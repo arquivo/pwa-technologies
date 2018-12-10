@@ -181,7 +181,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <head>
 <title>Internet Archive: <i18n:message key="title"/></title>
-<link rel="shortcut icon" href="img/logo-16.jpg" type="image/x-icon"/>
+<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon"/>
 <%-- <jsp:include page="/include/style.html"/> --%>
 <!-- <link type="text/css" href="css/style.css" rel="stylesheet" /> -->
 </head>
