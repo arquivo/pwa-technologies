@@ -1,4 +1,8 @@
 <script type="text/javascript">
+String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
+    return this.split(needle).join(replacement);
+}; 
+	
 /*Arquivo.pt specific functions and js code, such as loading constants, cookies, custom html code, etc*/
 var MENU = MENU || (function(){
     return {
@@ -23,7 +27,8 @@ var MENU = MENU || (function(){
 	          						'<a class="addthis_button_twitter" onclick="" ><h4 class="submenu"><i class="fa fa-twitter padding-right-menu-icon" aria-hidden="true"></i> Twitter</h4></a>'+
 			  					'</div>'+
 	          					'<a href="<fmt:message key='topbar.menu.examples.href'/>" ><h4><i class="fa fa-globe padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.examples'/></h4></a>'+				  					   	  			
-	          					'<a href="//sobre.arquivo.pt/<%=language%>" onclick=""><h4><i class="fa fa-info-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.about'/></h4></a>'+			  					          
+	          					'<a href="//sobre.arquivo.pt/<%=language%>" onclick=""><h4><i class="fa fa-info-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.about'/></h4></a>'+
+	          					'<a id="reportBug"><h4><i class="fa fa-bug padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.report'/></h4></a>'+	          								  			          
 	          					'<a href="<fmt:message key='topbar.menu.help.href'/>" onclick=""><h4><i class="fa fa-question-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.help'/></h4></a>'+
 	          					'<a href="" id="switchDesktop" onclick=""><h4><i class="fa fa-desktop padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.desktop'/></h4></a>'+		          					
 	          					'<a id="changeLanguage" ><h4><i class="fa fa-flag padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.otherLanguage'/></h4></a>'+
@@ -33,6 +38,7 @@ var MENU = MENU || (function(){
         	this.attachShare();
         	this.attachImages();
         	this.attachAdvanced();
+        	this.attachReportBug();
         },
 		toggleLanguage: function() {
 		    localStorage.setItem("language", "<fmt:message key='topbar.OtherLanguageShort'/>".toUpperCase());			
@@ -102,7 +108,13 @@ var MENU = MENU || (function(){
 				}				
 				window.location = "/advanced.jsp?l=<%=language%>"+queryParam;
 			});
-		},					
+		},	
+		attachReportBug: function(){
+			$('#reportBug').click( function(e) {
+				e.preventDefault();
+				window.location = '<fmt:message key="topbar.menu.bug" />'+window.location.href.replaceAll('&', '%26');
+			});
+		},							
         attachMask: function(){       
 		  $('#mainMask').on('click', function(e){
 		    document.querySelector('.swiper-container').swiper.slideNext();
