@@ -19,12 +19,12 @@ var MENU = MENU || (function(){
         	$('.swiper-wrapper').append(
 			            	'<div class="swiper-slide menu swiper-slide-prev">' +       
 	          					'<a href="/index.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-search padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.home'/></h4></a>' +
-	          					'<a id="advancedSearch"><h4><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></a>' +
-	          					'<a id="imagesAnchor"><h4><i class="fa fa-image padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.images'/></h4></a>' +	          					
+	          					'<a id="advancedSearch"><h4><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></a>' +         					
 	          					'<a id="shareMenu"><h4><i class="fa fa-share-alt padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.share'/><i id="shareCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></a>'+	      
 	          					'<div id="shareOptions">'+
 	          						'<a class="addthis_button_facebook" onclick="" href=""><h4 class="submenu"><i class="fa fa-facebook padding-right-menu-icon" aria-hidden="true"></i> Facebook</h4></a>'+
 	          						'<a class="addthis_button_twitter" onclick="" ><h4 class="submenu"><i class="fa fa-twitter padding-right-menu-icon" aria-hidden="true"></i> Twitter</h4></a>'+
+	          						' <a title="<fmt:message key='topbar.menu.mailTitle'/>" href="mailto:?subject='+document.title+'&body=[sub]" onclick="this.href = this.href.replace(\'[sub]\',encodeURIComponent(window.location.href) ); ga(\'send\', \'event\', \'ReplayBarFunctions\', \'EmailShareClick\', \''+window.location.href+'\');""><h4 class="submenu"><i class="fa fa-envelope" aria-hidden="true"></i> Email</h4></a>'+
 			  					'</div>'+
 	          					'<a href="<fmt:message key='topbar.menu.examples.href'/>" ><h4><i class="fa fa-globe padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.examples'/></h4></a>'+				  					   	  			
 	          					'<a href="//sobre.arquivo.pt/<%=language%>" onclick=""><h4><i class="fa fa-info-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.about'/></h4></a>'+
@@ -36,7 +36,6 @@ var MENU = MENU || (function(){
         	this.attachSwitchDesktop();
         	this.attachChangeLanguage();
         	this.attachShare();
-        	this.attachImages();
         	this.attachAdvanced();
         	this.attachReportBug();
         },
