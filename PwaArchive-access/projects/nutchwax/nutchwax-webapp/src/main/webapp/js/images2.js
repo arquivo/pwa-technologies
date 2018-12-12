@@ -131,6 +131,30 @@ function truncateUrlKeepProtocol(url, maxSize)
         return url
 }
 
+/*Truncates large URL in the replay bar*/
+function truncateUrlRemoveProtocol(url, maxSize)
+{    
+    url = url.replace(/(^\w+:|^)\/\//, ''); //remove all possible protocols
+    if (url.length > maxSize){
+            url = url.substring(0, maxSize-3) + "...";
+            return url;
+    }
+    else
+        return url
+}
+
+
+function truncateUrlMiddleRemoveProtocol(url, maxSize)
+{    
+    url = url.replace(/(^\w+:|^)\/\//, ''); //remove all possible protocols
+    if (url.length > maxSize){
+            url = url.substring(0, parseInt(maxSize*0.75) -3) + "..." + url.substring(url.length - (parseInt(maxSize*0.25)) , url.length) ;
+            return url;
+    }
+    else
+        return url
+}
+
 
 lastPosition = -1; /*Global var refers to the lastImage the user*/
 lastPress= -1; /*Global var refers to last time user pressed arrow in image viewer*/
@@ -242,21 +266,22 @@ var contentToInsert = ''+
 '           </div>'+
 '           <div style="min-height: 500px;margin-top: -50px;width: 39%;display: inline-block; border-left: solid 1px #454545;">'+
 '               <div style="padding-top:120px; margin-left: 25px; margin-right:70px; text-align: left;">'+
-'                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+pageString+' </h1>'+
-'                   <div>'+
-'                       <h2 style="color:white; word-wrap: break-word;"><a style="color:white" target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageTitle+'</a></h2><br/>'+
-'                       <h2 style="color:white; word-wrap: break-word;">'+truncateUrlKeepProtocol(imageObj.pageURL, 80)+'</h2>'+
-'                       <br/>'+
-'                       <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.pageTstamp)+' </h2>'+
-'                   </div>'+
-'                   <div style="padding-top:20px; padding-bottom:50px;">'+
 '                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+imageString+' </h1>'+
                     '<div>'+
 ( imageObj.title !== ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.title+'</a></h2><br/>':'') +
 ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h2><br/>':'') +
+'                           <h2 style="color:white;word-wrap: break-word" >'+truncateUrlMiddleRemoveProtocol(imageObj.imgSrc, 60)+'</h2><br/>'+
 '                           <h2 style="color:white;word-wrap: break-word" >'+imageObj.imgMimeType+' '+parseInt(expandedImageWidth)+' x '+parseInt(expandedImageHeight)+'</h2> <br/>'+
 '                           <h2 style="color:white;word-wrap: break-word; font-weight:bold" > '+getDateSpaceFormated(imageObj.timestamp)+' </h2>'+
                     '</div>'+
+'                   <div style="padding-top:20px; padding-bottom:50px;">'+
+'                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+pageString+' </h1>'+
+'                   <div>'+
+'                       <h2 style="color:white; word-wrap: break-word;"><a style="color:white" target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageTitle+'</a></h2><br/>'+
+'                       <h2 style="color:white; word-wrap: break-word;">'+truncateUrlRemoveProtocol(imageObj.pageURL, 60)+'</h2>'+
+'                       <br/>'+
+'                       <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.pageTstamp)+' </h2>'+
+'                   </div>'+
 '                </div>'+
 '                   <div style="display: inline; white-space: nowrap; overflow: hidden;">'+
 '                       <a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
