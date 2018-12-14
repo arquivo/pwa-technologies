@@ -1033,7 +1033,7 @@ public class TextSearchServlet extends HttpServlet {
             	if( FieldExists( fields , "linkToArchive" ) )
             		item.setLink( target );
             	if( FieldExists( fields , "linkToOriginalFile" ) ){
-				  String linkToOriginalFile =  collectionsProtocol+ collectionsHost.replace("wayback", "") + noFrame +"/"+ FORMAT.format(datet).toString()  +"id_/"+ url;
+				  String linkToOriginalFile =  collectionsProtocol+ collectionsHost.replace("wayback/", "") + noFrame +"/"+ FORMAT.format(datet).toString()  +"id_/"+ url;
 				  item.setLinkToOriginalFile(linkToOriginalFile);
             	}            	
             }
