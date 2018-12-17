@@ -184,10 +184,6 @@ function expandImage(position, animate){
    var now = Date.now();
    var minimumTime= 100;
 
-   console.log('last Press: ' + lastPress);
-   console.log('now: ' + now);   
-   console.log('position: ' + position);
-
    if(event.keyCode == 37 && position > 0 ) {
         if(lastPress < 0 || (now - lastPress) > minimumTime ){
 		previousImage(''+position);
@@ -271,7 +267,7 @@ var contentToInsert = ''+
 ( imageObj.title !== ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.title+'</a></h2><br/>':'') +
 ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h2><br/>':'') +
 '                           <h2 style="color:white;word-wrap: break-word" >'+truncateUrlMiddleRemoveProtocol(imageObj.imgSrc, 60)+'</h2><br/>'+
-'                           <h2 style="color:white;word-wrap: break-word" >'+imageObj.imgMimeType+' '+parseInt(expandedImageWidth)+' x '+parseInt(expandedImageHeight)+'</h2> <br/>'+
+'                           <h2 style="color:white;word-wrap: break-word" >'+imageObj.imgMimeType+' '+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+'</h2> <br/>'+
 '                           <h2 style="color:white;word-wrap: break-word; font-weight:bold" > '+getDateSpaceFormated(imageObj.timestamp)+' </h2>'+
                     '</div>'+
 '                   <div style="padding-top:20px; padding-bottom:50px;">'+
@@ -493,13 +489,13 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
           offset: startIndex,
           maxItems: numrows,
           safeSearch:safeSearch,
+          more: "imgThumbnailBase64,imgSrcURLDigest,imgDigest,pageProtocol,pageHost,pageImages,safe",
           size: sizeVar,
           type: typeVar        
        },
            
        timeout: 300000,
-       error: function() {
-         console.log("Error In Ajax request to getimages");            
+       error: function() {         
        },
        dataType: 'text',
        success: function(data) {
@@ -509,36 +505,34 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
         if(currentStart == 0 ){
             $('#resultsUl').empty();
         }
-        var totalResults = responseJson.response.numFound;
+        var totalResults = responseJson.totalItems;
         
         if ( totalResults === 0){
             createErrorPage();
-            console.log("no results found");
-            /*TODO:: help suggestions function*/
             noMoreResults=true;
             loadingFinished();
         }
         else{
-            console.log("Found "+totalResults+ " results");
+            
             var currentResults
             if(totalResults > numrows){
-            	currentResults = responseJson.response.numShowing;
+            	currentResults = responseJson.numberOfResponseItems;
             }else{
             	currentResults = totalResults;
             	noMoreResults=true;
             }
             var resultsToLoad = currentResults;
-            console.log("Showing "+ currentResults + " results");
+            
 
             for (var i=0; i< currentResults; i++){
-                console.log("Result "+i);
-                var currentDocument = responseJson.response.docs[i];
+                
+                var currentDocument = responseJson.responseItems[i];
                 if (typeof currentDocument === 'undefined' || !currentDocument){
-                    console.log("undefined document");
+                    
                     continue;
                 }
                 if (typeof currentDocument.imgTstamp === 'undefined' || !currentDocument.imgTstamp){
-                    console.log("No imgtstamp found for image");
+                    
                     continue;
                 }
 
@@ -547,33 +541,33 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                 
 
                 if(imageDigests.indexOf(imageDigest) > -1){
-                    console.log('Duplicated: ' + imageDigest);
-                    console.log('imgDigest: ' +currentDocument.imgDigest);
-                    console.log('pageURL: ' + currentDocument.pageURL);
-                    console.log('pageTstamp: ' + currentDocument.pageTstamp);
+                    
+                    
+                    
+                    
                     
                     resultsToLoad--;
-                    console.log("current results: "+ resultsToLoad);
+                    
                     continue; 
                 }
                 
                 else{
-                    console.log('Digest: ' + imageDigest);
+                    
                     imageDigests.push(imageDigest);
                 }
 
                 var pageURL = currentDocument.pageURL;
                 var thumbnail = currentImageURL;
 
-                console.log("Creating Image");
+                
                 imageObj = new Image();
                 imageObj.timestamp = currentDocument.imgTstamp.toString();
-                console.log("Image timestamp: " + imageObj.timestamp );
+                
                 imageObj.pageURL = pageURL.toString();
                 imageObj.currentImageURL = currentImageURL.toString();
-                console.log("Image URL: " + imageObj.currentImageURL );
+                
                 imageObj.position = totalPosition;
-                console.log("Position: " + totalPosition );
+                
                 imageObj.expandedHeight = currentDocument.imgHeight;
                 imageObj.expandedWidth = currentDocument.imgWidth;
                 imageObj.imgMimeType= currentDocument.imgMimeType.substring(6,currentDocument.imgMimeType.length);
@@ -603,7 +597,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
 
                 totalPosition = totalPosition + 1;
 
-                imageObj.src = "data:"+currentDocument.imgMimeType+";base64," + currentDocument.imgSrcBase64;
+                imageObj.src = "data:"+currentDocument.imgMimeType+";base64," + currentDocument.imgThumbnailBase64;
 
                 var resizeImageHeight = 200;
 
@@ -615,7 +609,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                             totalResults --;
                             resultsToLoad --;
 
-                            console.log("current results: "+ resultsToLoad);
+                            
 
                                
                             if(this.height <= resizeImageHeight){
@@ -628,7 +622,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                             if(resultsToLoad <= 0){
                                 loadingFinished();
                             }
-                    console.log("Created Image");                            
+                    
                 }
                 
                
@@ -639,8 +633,8 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                     }                
                     totalResults --;
                     resultsToLoad --;
-                    console.log("Error loading: " + this.currentImageURL);
-                    console.log("Results: " + totalResults);
+                    
+                    
                     if(resultsToLoad <= 0){
                         loadingFinished();
                     }
@@ -649,8 +643,8 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
             }
         }
 
-        console.log('Query time: ' + responseJson.responseHeader.QTime + 'ms');
-        console.log('Number of Results: ' + responseJson.response.numFound );
+        
+        
        },
        type: 'GET'
     });

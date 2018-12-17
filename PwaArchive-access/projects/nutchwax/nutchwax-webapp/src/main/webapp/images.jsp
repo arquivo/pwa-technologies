@@ -392,7 +392,7 @@ Content = {
           </script>
            <span  class="image-span" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
            <div class="fright">
-             <a class="tools-anchor">Ferramentas</a>
+             <a class="tools-anchor"><fmt:message key='images.options'/></a>
           </div>  
         </div> 
           <div id ="tools">
