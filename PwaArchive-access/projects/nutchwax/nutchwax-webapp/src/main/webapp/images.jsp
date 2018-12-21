@@ -301,6 +301,7 @@ Content = {
 
 
   <%@ include file="include/topbar.jsp" %>
+  <script type="text/javascript">$('#switchMobile').hide();</script>
 
   <div class="wrap" id="firstWrap" style="min-height: 0">
     <div id="main">
@@ -388,11 +389,11 @@ Content = {
         <div id="second-column">        
         <div id="resultados">
           <script type="text/javascript">
-            document.write('<a href="/search.jsp?l=<%=language%>&query='+"<c:out value = "${htmlQueryString}"/>"+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="search-anchor">Web</a>');
+            document.write('<a href="/search.jsp?l=<%=language%>&query='+"<c:out value = "${htmlQueryString}"/>"+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="search-anchor"><fmt:message key='tabs.pages'/></a>');
           </script>
            <span  class="image-span" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
            <div class="fright">
-             <a class="tools-anchor">Ferramentas</a>
+             <a class="tools-anchor"><fmt:message key='images.options'/></a>
           </div>  
         </div> 
           <div id ="tools">

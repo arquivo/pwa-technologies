@@ -40,8 +40,16 @@ public class Item {
 	private String index;
 	private String segment;
 
+	private String linkToOriginalFile;
 
 	public Item( ) { }
+	
+	public String getLinkToOriginalFile(){
+		return linkToOriginalFile;
+	}
+	public void setLinkToOriginalFile(String linkToOriginalFile){
+		this.linkToOriginalFile = linkToOriginalFile;
+	}
 	
 	public String getKey() {
 		return key;

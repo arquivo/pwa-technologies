@@ -92,7 +92,7 @@ public class TextSearchServlet extends HttpServlet {
     NS_MAP.put( "link" , "https://arquivo.pt" );
   }
 
-  private static String[ ]  fieldsReponse = {"versionID", "title", "originalURL", "linkToArchive",
+  private static String[ ]  fieldsReponse = {"versionID", "title", "originalURL", "linkToArchive", "linkToOriginalFile",
 		  "tstamp", "contentLength", "digest", "mimeType", "linkToScreenshot",
 		  "date", "encoding", "linkToNoFrame", "collection", "snippet", "linkToExtractedText","linkToMetadata"}; //input parameters
   
@@ -763,6 +763,11 @@ public class TextSearchServlet extends HttpServlet {
 			  String target = collectionsProtocol+ collectionsHost +"/"+ FORMAT.format( datet ).toString()  +"/"+ itemcdx.getUrl( );
 			  if( FieldExists( fields , "linkToArchive" ) )
 				  item.setLink( target );
+			  if( FieldExists( fields , "linkToOriginalFile" ) ){
+				  String linkToOriginalFile =  collectionsProtocol.concat( domainService ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "id_/" ).concat( itemcdx.getUrl( ) );
+				  item.setLinkToOriginalFile(linkToOriginalFile);
+			  }
+			  
 			  String urlNoFrame = collectionsProtocol.concat( domainService ).concat( noFrame ).concat( "/" ).concat( FORMAT.format( datet ).toString( ) ).concat( "/" ).concat( itemcdx.getUrl( ) );
 			  String urlEncode = "";
 			  try{
@@ -1027,6 +1032,10 @@ public class TextSearchServlet extends HttpServlet {
             	String target = collectionsProtocol+ collectionsHost +"/"+ FORMAT.format(datet).toString()  +"/"+ url;
             	if( FieldExists( fields , "linkToArchive" ) )
             		item.setLink( target );
+            	if( FieldExists( fields , "linkToOriginalFile" ) ){
+				  String linkToOriginalFile =  collectionsProtocol+ collectionsHost.replace("wayback/", "") + noFrame +"/"+ FORMAT.format(datet).toString()  +"id_/"+ url;
+				  item.setLinkToOriginalFile(linkToOriginalFile);
+            	}            	
             }
 
             String mimeType = detail.getValue( "primaryType" ).concat( "/" ).concat( detail.getValue( "subType" ) );
