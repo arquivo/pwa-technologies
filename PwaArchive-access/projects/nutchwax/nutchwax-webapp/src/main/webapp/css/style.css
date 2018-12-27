@@ -585,7 +585,7 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 /* Resultado pesquisa */
 #conteudo-resultado { max-width: 778px; padding-top: 38px; clear: both; }
 
-#conteudo-resultado .spell { font-size: 1.4em; color: #f44800; margin-bottom: 0.5em; }
+#conteudo-resultado .spell { font-size: 1.4em; color: #f44800; margin-top: 1em; margin-bottom: 0.5em; }
 
 #conteudo-resultado #first-column { font-size: 1.2em; width: 159px; float: left; }
 #conteudo-resultado #first-column a { text-decoration: underline; }
