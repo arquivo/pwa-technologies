@@ -73,7 +73,7 @@
       <includes>
         <include>commons-lang*</include>
         <include>lucene*</include>
-        <include>jakarta-oro*</include>
+        <include>oro*</include>
         <include>xerces*</include>
         <include>concurrent*</include>
         <include>archive-commons*</include>
