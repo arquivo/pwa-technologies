@@ -48,7 +48,7 @@ public class WARCMapRunner implements MapRunnable {
     protected WARCRecordMapper mapper;
     private enum Counter {WARCS_COUNT, WARCRECORDS_COUNT,
             BAD_WARC_PARSE_COUNT, WARC_FAILED_DOWNLOAD, LONG_WARCRECORDS_COUNT}
-
+    private String warcLocation;
     /**
      * How long to spend indexing.
      */
@@ -226,7 +226,12 @@ public class WARCMapRunner implements MapRunnable {
                     try {
                         LOG.info("WARCRecord: " + rec);
                         LOG.info("WARCHEADER: " + rec.getHeader());
-                        LOG.info("WARCHEADERURI:" + (String) rec.getHeader().getHeaderValue("WARC-Target-URI") );
+                        warcLocation = (String) rec.getHeader().getHeaderValue("WARC-Target-URI");
+                        LOG.info("WARCHEADERURI:" + warcLocation );
+                        if(warcLocation == null || warcLocation.equals("") ){
+                        	LOG.info("null WARC-Target-URI skipping");
+                        	continue;
+                        }
 
                         WARCMapRunner.this.mapper.map(
                                 new Text((String) rec.getHeader().getHeaderValue("WARC-Target-URI")),

@@ -116,7 +116,6 @@
         <exclude>commons-logging:commons-logging</exclude>
         <exclude>org.apache:hadoop</exclude>
         <exclude>org.apache:nutch</exclude>
-        <exclude>org.apache:nutch</exclude>
         <exclude>com.sleepycat:je</exclude>
         <exclude>junit:junit</exclude>
         <exclude>javax.servlet:servlet-api</exclude>

@@ -524,7 +524,9 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
 
         //LOG.info("Nutch Content start print.... \n" + content.toString());
         //LOG.info("....................................\n");
-        LOG.info("Apache Tika parsed text start print ....\n" + " " + apacheExtractedContent[0].split("\\s+"));
+        LOG.info("Apache Tika parsed text start print ....\n" + " " + apacheExtractedContent[0].replaceAll("\\s+", " ") );
+        LOG.info("Apache Tika parsed links ....\n" + " " + apacheExtractedContent[1]);
+        
         //LOG.info("....................................\n");
 
         datum.setFetchTime(Nutchwax.getDate(getTs(warcData.getDate())));

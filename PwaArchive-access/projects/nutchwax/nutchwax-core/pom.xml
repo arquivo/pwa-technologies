@@ -69,19 +69,6 @@
   	  <version>1.18</version>
   	</dependency>
 
-  	<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-eval -->
-    <dependency>
-  	  <groupId>org.apache.tika</groupId>
-  	  <artifactId>tika-eval</artifactId>
-  	  <version>1.18</version>
-        <exclusions>
-            <exclusion>
-                <artifactId>*</artifactId>
-                <groupId>*</groupId>
-            </exclusion>
-        </exclusions>
-  	</dependency>
-
   	<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-langdetect -->
    <dependency>
   	  <groupId>org.apache.tika</groupId>
@@ -120,6 +107,17 @@
         <artifactId>cxf-core</artifactId>
         <version>3.1.15</version>
     </dependency>
+    
+          <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.7.5</version>
+      </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+          <version>1.7.5</version>
+      </dependency>
 
 
   </dependencies>
