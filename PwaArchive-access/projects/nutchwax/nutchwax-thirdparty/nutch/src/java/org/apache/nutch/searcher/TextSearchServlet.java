@@ -557,7 +557,12 @@ public class TextSearchServlet extends HttpServlet {
     	  if( hits != null && hits.getLength( ) > 0 ) {
     		  show = hits.getHits( start , end-start );
     		  details = bean.getDetails( show ); //get details
-    		  summaries = bean.getSummary( details, query ); //get snippet
+			  try {
+				  summaries = bean.getSummary( details, query ); //get snippet
+			  } catch( IOException e) {
+			  	LOG.warn("Get Summaries Error: ", e);
+			  	summaries = new Summary[0];
+			  }
     	  }
 
     	  itens = luceneQueryProcessor( length, fields, details, request.getParameter( "details" ), show , summaries, query, parseTexts );
