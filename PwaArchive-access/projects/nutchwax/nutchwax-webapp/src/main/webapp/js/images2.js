@@ -131,38 +131,74 @@ function truncateUrlKeepProtocol(url, maxSize)
         return url
 }
 
+/*Truncates large URL in the replay bar*/
+function truncateUrlRemoveProtocol(url, maxSize)
+{    
+    url = url.replace(/(^\w+:|^)\/\//, ''); //remove all possible protocols
+    if (url.length > maxSize){
+            url = url.substring(0, maxSize-3) + "...";
+            return url;
+    }
+    else
+        return url
+}
+
+
+function truncateUrlMiddleRemoveProtocol(url, maxSize)
+{    
+    url = url.replace(/(^\w+:|^)\/\//, ''); //remove all possible protocols
+    if (url.length > maxSize){
+            url = url.substring(0, parseInt(maxSize*0.75) -3) + "..." + url.substring(url.length - (parseInt(maxSize*0.25)) , url.length) ;
+            return url;
+    }
+    else
+        return url
+}
+
 
 lastPosition = -1; /*Global var refers to the lastImage the user*/
 lastPress= -1; /*Global var refers to last time user pressed arrow in image viewer*/
 
 function expandImage(position, animate){
-    var arrowWidth = 16; //width of the arrow
+    //var arrowWidth = 16; //width of the arrow
     if(lastPosition != -1){
         $('#testViewer'+lastPosition).hide();
-        $('#arrowWrapper'+lastPosition).hide();
-        //$('#arrow'+lastPosition).fadeOut();
-
+    //    $('#arrowWrapper'+lastPosition).hide();
     }
     if(lastPosition === position){
         //you clicked twice in the same image, image closed no image selected
-        lastPosition = -1;
+         $('body').css('overflow', 'auto');
+         window.scrollTo( 0 , $("#imageResults"+lastPosition).offset().top);
+         lastPosition = -1;
         return false;
     }
-    (position == 0) ? $('.left__arrow').hide() : $('.left__arrow').show();
-    var arrowMarginLeft = $('#imageResults'+position).width()/2 - arrowWidth/2;
-    $('#arrow'+position).css('margin-left', arrowMarginLeft+'px');
+    
+    //(position == 0) ? $('.left__arrow').hide() : $('.left__arrow').show();
+    
+    //var arrowMarginLeft = $('#imageResults'+position).width()/2 - arrowWidth/2;
+
+    //$('#arrow'+position).css('margin-left', arrowMarginLeft+'px');
     $('#testViewer'+position).show();
-    $('#arrowWrapper'+position).show();
+    $('body').css('overflow', 'hidden');
+    
+    //$('#arrowWrapper'+position).show();
     lastPosition = position;
-    animate ? $('html, body').animate({scrollTop: $('#date'+position).offset().top - 150}, 400) : window.scrollTo( 0 , $('#date'+position).offset().top - 150);
-    $('#testViewer'+position).focus();
- $('#testViewer'+position).bind('keydown', function(event) {
+    
+    //$('#testViewer'+lastPosition +' ion-card').animate({ scrollTop: 0 }, "fast");
+
+    window.scrollTo( 0 , 0);
+
+
+
+    //$(window).scrollTop( $('#testViewer'+lastPosition +' ion-card').offset().top );
+
+
+
+    //$('#testViewer'+position).focus();
+ 
+ /*$('#testViewer'+position).bind('keydown', function(event) {
    var now = Date.now();
    var minimumTime= 100;
-
-   console.log('last Press: ' + lastPress);
-   console.log('now: ' + now);   
-   console.log('position: ' + position);
 
    if(event.keyCode == 37 && position > 0 ) {
         if(lastPress < 0 || (now - lastPress) > minimumTime ){
@@ -176,9 +212,7 @@ function expandImage(position, animate){
 		lastPress = Date.now();
 	}
    }
- });
-
-
+ });*/
 return false;
 }
 
@@ -221,61 +255,17 @@ var centerImage = maxImageExpandHeight/2 - expandedImageHeight/2 ;
 var liMarginTop = maxImageHeight - imageHeight;
 
 var contentToInsert = ''+
-'<li position='+position+' id="imageResults'+position+'" style="background:white; margin-right: 1%; margin-bottom:1%; margin-top:'+liMarginTop.toString()+'px;">'+
-'   <h2>'+
-'       <button style="cursor:pointer;" onclick = "expandImage('+position+',true)">'+
-'           <img style="max-height:200px; padding:0px 0px 4px 0px;" height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
-'       </button>'+
-'   </h2>'+
-'   <p class="green" style="font-size:1.2em!important; text-align: left; padding-left:5px;padding-right:5px;">'+truncateUrl(imageObj.pageURL, 20)+'</p>'+
-'   <p class="date" id="date'+position+'" style="font-weight:normal; font-size:1.4em!important; text-align: left; padding-left:5px;padding-right:5px;padding-bottom:2px;">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
-'   <div id="arrowWrapper'+position+'" class="arrowWrapper" >'+
-'       <div id="arrow'+position+'" class="arrow"/></div>' +
-'       <div id="testViewer'+position+'" class="imageExpandedDiv" tabindex="1">'+
-'           <button onclick = "expandImage('+position+',false)" class="expand__close" title="'+close+'"></button>'+
-'           <button onclick="previousImage('+position+')"  class="left__arrow" title="'+leftArrow+'"></button>'+
-'           <button onclick="nextImage('+position+')" class="right__arrow" title="'+rightArrow+'"></button>'+
-'           <div style="width: 60%; display: inline-block;float: left;">'+
-'               <a target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
-'                   <img style="max-width:'+maxImageDivWidth+'px; margin-left: 70px; margin-top:'+ centerImage+'px; margin-bottom:'+ centerImage+'px"class="imageExpanded" id="ExpandedImg'+position+'" src="'+imageObj.currentImageURL+'">'+
-'               </a>'+
-'           </div>'+
-'           <div style="min-height: 500px;margin-top: -50px;width: 39%;display: inline-block; border-left: solid 1px #454545;">'+
-'               <div style="padding-top:120px; margin-left: 25px; margin-right:70px; text-align: left;">'+
-'                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+pageString+' </h1>'+
-'                   <div style="padding-left:15px">'+
-'                       <h2 style="color:white; word-wrap: break-word;"><a style="color:white" target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageTitle+'</a></h2><br/>'+
-'                       <h2 style="color:white; word-wrap: break-word;">'+truncateUrlKeepProtocol(imageObj.pageURL, 80)+'</h2>'+
-'                       <br/>'+
-'                       <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.pageTstamp)+' </h2>'+
-'                   </div>'+
-'                   <div style="padding-top:20px; padding-bottom:50px;">'+
-'                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+imageString+' </h1>'+
-                    '<div style="padding-left: 15px;">'+
-( imageObj.title !== ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.title+'</a></h2><br/>':'') +
-( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h2><br/>':'') +
-'                           <h2 style="color:white;word-wrap: break-word" >'+imageObj.imgMimeType+' '+parseInt(expandedImageWidth)+' x '+parseInt(expandedImageHeight)+'</h2> <br/>'+
-'                           <h2 style="color:white;word-wrap: break-word; font-weight:bold" > '+getDateSpaceFormated(imageObj.timestamp)+' </h2>'+
-                    '</div>'+
-'                </div>'+
-'                   <div style="display: inline; white-space: nowrap; overflow: hidden;">'+
-'                       <a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
-'                           <span class="imageViewerButton">'+visitPage+'</span>'+
-'                       </a>'+
-'                       <a target="_blank" class="imageViewerAnchor" style="margin-left: 20px"  href="'+imageObj.currentImageURL+'">'+
-'                           <span class="imageViewerButton">'+showImage+'</span>'+
-'                       </a>'+
-'                       <button  id="showDetails" class="imageViewerAnchor" position='+position+' style="margin-left: 20px">'+
-'                           <span class="imageViewerButton" style="">'+showDetails+'</span>'+
-'                       </button>'+
-'                       <button id="dButton" position='+position+'  class="imageViewerAnchor" style="margin-left: 20px">'+
-'                           <span class="imageViewerButton" style="line-height:25px;">'+share+'</span>'+
-'                       </button>'+
-'                   </div>'+
-'               </div>'+
-'           </div>'+
-'   </div>'+ 
-'</li>';     
+
+    '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "expandImage('+position+',false)" style=" break-inside: avoid-column; -webkit-column-break-inside: avoid;">'+
+    '   <img  height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
+    '   <p class="green image-display-url" >'+truncateUrl(imageObj.pageURL, 20)+'</p>'+
+    '   <p class="date image-display-date" id="date'+position+'">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
+    '   <div id="arrowWrapper'+position+'" class="arrowWrapper" >'+
+    '       <div id="arrow'+position+'" class="arrow"/></div>' +
+    '   </div>'+ 
+    '</div>';
+
+    $('#expandedImageViewers').append(insertImageViewer(imageObj, position));
 
   /*href="/shareImage.jsp?imgurl='+encodeURIComponent(imageObj.currentImageURL)+'&imgrefurl='+encodeURIComponent(imageObj.pageURL)+'&imgrefts='+imageObj.timestamp+'&imgres='+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'&query='+$('#txtSearch').val()+'"*/
   imageObj.expandedImageWidth = expandedImageWidth;
@@ -283,25 +273,74 @@ var contentToInsert = ''+
   imageObjs[position] = imageObj;
 
 
-var lengthofUL = $('#resultsUl li').length;
+var lengthofUL = $('#photos .imageContent').length;
 if(lengthofUL === 0){ /*list is empty only the hidden li*/
-  $('#resultsUl').prepend(contentToInsert)
+  $('#photos').prepend(contentToInsert);
 }
 else{
   var inserted = false;
   for (var i = 0 ; i< lengthofUL; i ++){
-    var insertedPos = $('#resultsUl li').eq(i).attr('position');
+    var insertedPos = $('#photos .imageContent').eq(i).attr('position');
     if(position < insertedPos ){
       $('#resultsUl li:eq('+i+')').before(contentToInsert);
+      /*add logic to new column layout*/
       inserted = true;
       break;
     }
   }
   if(inserted === false){
     $('#resultsUl').append(contentToInsert);
+    $('#photos').prepend(contentToInsert);
   }
 }
 }    
+
+function  insertImageViewer(imageObj, position){
+return ''+
+//image-expanded-full-width
+/*If landscaped image show it full width on small screens*/
+'<div id="testViewer'+position+'" class="height-vh image-mobile-expanded-div" tabindex="1">'+
+    '<div onclick="expandImage('+position+',false)" class="image-mobile-expanded-viewer-mask"></div>'+
+    '<div class="row full-height">'+
+        '<div class="full-height col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 text-right">'+
+            '<ion-card id="card'+position+'" class="card-height">'+
+               (parseInt(imageObj.expandedWidth) > parseInt(imageObj.expandedHeight) ? ''+
+               '<ion-icon id="close'+position+'" name="close" class="closeCard" size="large" onclick = "expandImage('+position+',false)"></ion-icon>' : '' +
+               '<ion-icon id="close'+position+'" name="close" class="closeIt" size="large" onclick = "expandImage('+position+',false)"></ion-icon>') +
+               '<a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
+                (parseInt(imageObj.expandedWidth) > parseInt(imageObj.expandedHeight) ? '<img class="image-expanded-viewer image-expanded-full-width" src="'+imageObj.currentImageURL+'">' : '<img class="image-expanded-viewer" src="'+imageObj.currentImageURL+'">')+
+               '</a>'+
+               '<ion-row class="image-viewer-expanded-main-actions">'+
+                    '<ion-col size="6" class="text-left"><a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><ion-button size="small" class="visit-page border-mobile" fill="clear"><ion-icon name="globe" class="middle"></ion-icon><span class="middle"><h5>&nbsp;Visitar</h5></span></ion-button></a></ion-col>'+
+                    '<ion-col size="6" ><ion-button size="small" class="view-details border-mobile" fill="clear" ><ion-icon name="information-circle-outline" class="middle"></ion-icon><span class="middle"><h5>&nbsp;Detalhes</h5></span></ion-button></ion-col>'+
+                '</ion-row>'+
+                '<ion-row>'+
+                    '<h4 class="text-left">Imagem</h4>'+                
+                '</ion-row>'+
+                '<ion-card-content>'+                
+                    '<ion-list class="imageList selected">'+
+    ( imageObj.title !== ""  ? ' <ion-item class="item-borderless" lines="none" ><a target="_blank" href="'+imageObj.currentImageURL+'"><h5>' +imageObj.title+'</a></h5></ion-item>':'') +
+    ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <ion-item id="imgTitleLabel'+position+'" lines="none"><h5><a target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h5></ion-item>':'') +  
+                        '<ion-item lines="none"><h5>' +truncateUrlMiddleRemoveProtocol(imageObj.imgSrc, 40)+'</h5></ion-item>'+
+                        '<ion-item lines="none"><h5>'+imageObj.imgMimeType+' '+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+'</h5></ion-item>'+
+                        '<ion-item lines="none"><h5>'+getDateSpaceFormated(imageObj.timestamp)+'</h5></ion-item>'+             
+                    '</ion-list>'+
+                '</ion-card-content>'+  
+                '<ion-row>'+
+                    '<h4 class="text-left">Página</h4>'+                
+                '</ion-row>'+
+                '<ion-card-content>'+                
+                    '<ion-list>'+
+    '                       <ion-item class="item-borderless" lines="none" ><a target="_blank" href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><h5>'+imageObj.pageTitle+'</h5></a></ion-item>'+
+    '                       <ion-item lines="none" "><h5>'+truncateUrlRemoveProtocol(imageObj.pageURL, 60)+'</h5></ion-item>'+
+    '                       <ion-item lines="none" "><h5>'+getDateSpaceFormated(imageObj.pageTstamp)+'</h5></ion-item>'+          
+                    '</ion-list>'+
+                '</ion-card-content>'+                                
+            '</ion-card> '+
+        '</div>'+
+    '</div>'+    
+'</div>';        
+}
 
 function encodeHtmlEntity(str) {
 
@@ -425,76 +464,55 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
         safeSearchOption = "yes";
     }
     var query;
+    var site="";
     var input = $('#txtSearch').val();
-    /*var tokens = input.split(' ');
-    var size = '';
-    var query ='';
-    var finalQuery;
-    for (var i= 0; i< tokens.length; i++){
-      if(tokens[i].substring(0, 'size:'.length) === 'size:'){
-        size += tokens[i].substring('size:'.length) + ' ';
-      }
-      var tokenNoAccents = removeDiacritics(tokens[i]);
-      query+= "(imgSrc:*"+tokenNoAccents+"*OR imgSrc:*"+capitalizeFirstLetter(tokenNoAccents)+"* OR imgAlt:*"+capitalizeFirstLetter(tokenNoAccents)+"* imgAlt:*"+tokenNoAccents+"* OR imgSrc:*"+tokenNoAccents.toLowerCase()+"* OR imgAlt:*"+tokenNoAccents.toLowerCase()+"*) AND "; 
+    if ( input.indexOf("site:") !=-1){
+        var newInput ="";
+        var inputTokens = input.split(" ");
+        for (var i = 0; i < inputTokens.length; i++) {
+            if(inputTokens[i].toLowerCase().indexOf("site:") == 0){ /*if token starts with site: */
+                site += inputTokens[i].replace("site:", "")
+            }
+            else{ 
+                newInput += " " + inputTokens[i];
+            }
+        }
+        input = newInput
+        if (!input.replace(/\s/g, '').length){
+            input="*:*";
+        }
     }
-    query = query.substring(0, query.length -5); 
-    */
-    var dateStart= $('#dateStart_top').attr("value");
-    dateStart = dateStart.substring(6, 10)+dateStart.substring(3, 5) + dateStart.substring(0, 2)+'000000' ;
-    var dateEnd= $('#dateEnd_top').attr("value");
-    dateEnd = dateEnd.substring(6, 10)+dateEnd.substring(3, 5) + dateEnd.substring(0, 2)+'000000' ;
 
-    //query += "AND (timestamp:["+dateStart+" TO "+dateEnd+"])";
-    //console.log(query);
+    var dateStart= $('#event-start').attr("value") + '0000000000' ;
+    
+    var dateEnd= $('#event-end').attr("value") + '1231235959';
 
-    /*if( size === ''){
-      size = 'all';
-    }*/
-
-   /* var dateStartTokenes = dateStartWithSlashes.split("/");
-    var dateStartTs = dateStartTokenes[2]+ dateStartTokenes[1] + dateStartTokenes[0]+ "000000";
-
-    var dateEndTokenes = dateEndWithSlashes.split("/");
-    var dateEndTs = dateEndTokenes[2]+ dateEndTokenes[1] + dateEndTokenes[0]+ "000000"     ;
-
-    var dateFinal = dateStartTs+"-"+dateEndTs; */
-    var showAll = false;
     numrows =50;
     currentStart = startIndex;
     
-    safeValue = '[0 TO 0.49]';
-    safeSearch = true;
+    safeSearch = "on";
     if($('#safeSearch').find(":selected").attr("value") === 'off'){
-        safeValue='[0 TO 1]';       
+        safeSearch = "off";       
     }
 
 
     $.ajax({
-    // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
        url: "/imagesearch",      
-
- /*+ " AND pageTstamp:["+dateStart+" TO "+dateEnd+"]"*/
        data: {
           q: input,
-          fq: "imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:"+safeValue,
-          defType: 'edismax',                  
-          qf: 'imgTitle^4 imgAlt^3 imgSrcTokens^2 pageTitle pageURLTokens', //TODO: improve ranking
-          pf: 'imgTitle^4000 imgAlt^3000 imgSrcTokens^2000 pageTitle^1000 pageURLTokens^1000', //TODO: improve ranking  
-          ps: 1,
-          pf2: 'imgTitle^400 imgAlt^300 imgSrcTokens^200 pageTitle^100 pageURLTokens^100', //TODO: improve ranking
-          ps2: 2,
-          pf3: 'imgTitle^40 imgAlt^30 imgSrcTokens^20 pageTitle^10 pageURLTokens^10', //TODO: improve ranking
-          ps3: 3,
           from: dateStart,
           to: dateEnd,
+          siteSearch: site,
           offset: startIndex,
           maxItems: numrows,
-          safeSearch:safeSearch        
+          safeSearch:safeSearch,
+          more: "imgThumbnailBase64,imgSrcURLDigest,imgDigest,pageProtocol,pageHost,pageImages,safe",
+          size: sizeVar,
+          type: typeVar        
        },
            
        timeout: 300000,
-       error: function() {
-         console.log("Error In Ajax request to getimages");            
+       error: function() {         
        },
        dataType: 'text',
        success: function(data) {
@@ -504,71 +522,69 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
         if(currentStart == 0 ){
             $('#resultsUl').empty();
         }
-        var totalResults = responseJson.response.numFound;
+        var totalResults = responseJson.totalItems;
         
         if ( totalResults === 0){
             createErrorPage();
-            console.log("no results found");
-            /*TODO:: help suggestions function*/
             noMoreResults=true;
             loadingFinished();
         }
         else{
-            console.log("Found "+totalResults+ " results");
+            
             var currentResults
             if(totalResults > numrows){
-            	currentResults = responseJson.response.numShowing;
+            	currentResults = responseJson.numberOfResponseItems;
             }else{
             	currentResults = totalResults;
             	noMoreResults=true;
             }
             var resultsToLoad = currentResults;
-            console.log("Showing "+ currentResults + " results");
+            
 
             for (var i=0; i< currentResults; i++){
-                console.log("Result "+i);
-                var currentDocument = responseJson.response.docs[i];
+                
+                var currentDocument = responseJson.responseItems[i];
                 if (typeof currentDocument === 'undefined' || !currentDocument){
-                    console.log("undefined document");
+                    
                     continue;
                 }
                 if (typeof currentDocument.imgTstamp === 'undefined' || !currentDocument.imgTstamp){
-                    console.log("No imgtstamp found for image");
+                    
                     continue;
                 }
 
-                var currentImageURL = '//arquivo.pt/wayback/'+ currentDocument.imgTstamp +'/'+currentDocument.imgSrc;
+                var currentImageURL = window.location.protocol+'//'+window.location.hostname+ '/wayback/'+ currentDocument.imgTstamp +'/'+currentDocument.imgSrc;
                 var imageDigest = currentDocument.imgDigest;
                 
 
                 if(imageDigests.indexOf(imageDigest) > -1){
-                    console.log('Duplicated: ' + imageDigest);
-                    console.log('imgDigest: ' +currentDocument.imgDigest);
-                    console.log('pageURL: ' + currentDocument.pageURL);
-                    console.log('pageTstamp: ' + currentDocument.pageTstamp);
+                    
+                    
+                    
+                    
                     
                     resultsToLoad--;
-                    console.log("current results: "+ resultsToLoad);
+                    
                     continue; 
                 }
                 
                 else{
-                    console.log('Digest: ' + imageDigest);
+                    
                     imageDigests.push(imageDigest);
                 }
 
                 var pageURL = currentDocument.pageURL;
                 var thumbnail = currentImageURL;
 
-                console.log("Creating Image");
+                
                 imageObj = new Image();
                 imageObj.timestamp = currentDocument.imgTstamp.toString();
-                console.log("Image timestamp: " + imageObj.timestamp );
+                
                 imageObj.pageURL = pageURL.toString();
                 imageObj.currentImageURL = currentImageURL.toString();
-                console.log("Image URL: " + imageObj.currentImageURL );
+                
                 imageObj.position = totalPosition;
-                console.log("Position: " + totalPosition );
+                
                 imageObj.expandedHeight = currentDocument.imgHeight;
                 imageObj.expandedWidth = currentDocument.imgWidth;
                 imageObj.imgMimeType= currentDocument.imgMimeType.substring(6,currentDocument.imgMimeType.length);
@@ -598,7 +614,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
 
                 totalPosition = totalPosition + 1;
 
-                imageObj.src = "data:"+currentDocument.imgMimeType+";base64," + currentDocument.imgSrcBase64;
+                imageObj.src = "data:"+currentDocument.imgMimeType+";base64," + currentDocument.imgThumbnailBase64;
 
                 var resizeImageHeight = 200;
 
@@ -610,7 +626,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                             totalResults --;
                             resultsToLoad --;
 
-                            console.log("current results: "+ resultsToLoad);
+                            
 
                                
                             if(this.height <= resizeImageHeight){
@@ -623,7 +639,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                             if(resultsToLoad <= 0){
                                 loadingFinished();
                             }
-                    console.log("Created Image");                            
+                    
                 }
                 
                
@@ -634,8 +650,8 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                     }                
                     totalResults --;
                     resultsToLoad --;
-                    console.log("Error loading: " + this.currentImageURL);
-                    console.log("Results: " + totalResults);
+                    
+                    
                     if(resultsToLoad <= 0){
                         loadingFinished();
                     }
@@ -644,8 +660,8 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
             }
         }
 
-        console.log('Query time: ' + responseJson.responseHeader.QTime + 'ms');
-        console.log('Number of Results: ' + responseJson.response.numFound );
+        
+        
        },
        type: 'GET'
     });

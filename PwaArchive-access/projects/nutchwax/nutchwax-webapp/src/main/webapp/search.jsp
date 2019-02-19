@@ -372,7 +372,7 @@ String[] queryString_splitted=null;
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
 	<title><fmt:message key='home.meta.title'/></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
 	<meta http-equiv="Content-Language" content="pt-PT" />
