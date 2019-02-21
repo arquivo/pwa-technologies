@@ -307,23 +307,22 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         final long l = warcData.getLength();
         final long recordLength = (l > b)? (l - b): l;
 
-        // Look at WARCRecord meta data line mimetype. It can be empty.  If so,
-        // two more chances at figuring it either by looking at HTTP headers or
-        // by looking at first couple of bytes of the file.  See below.
         String warcRecordMimetype = warcData.getMimetype();
-        LOG.info("WARC Record MimeType: " + warcRecordMimetype);
+        LOG.info("WARC Record Payload MIME TYPE: " + warcRecordMimetype);
 
         String warcRecordType = (String) warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE);
         LOG.info("WARC Record Type: " + warcRecordType);
 
         if(warcRecordType == null || warcRecordMimetype == null) return;
 
-        /*Check if WARC-TYPE=response and if this record is an http response*/
-        if( ! "response".equals(warcRecordType.trim()) || !warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE)) {
-            LOG.info("Skipping WARCTYPE: "+ warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE) + " MimeType " + warcRecordMimetype );
+        // Check if WARC-TYPE=response and if this record is an http response
+        // Replacing string in WARCConstants.HTTP_RESPONSE_MIMETYPE because brozzler is writing WARCs mimetype this way: application/http;msgtype=response (no space)
+        if( !WARCConstants.RESPONSE.equals(warcRecordType.trim()) ||
+                !(warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE) ||
+                        warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE.replaceAll("\\s", ""))) ) {
+            LOG.info("Skipping WARC: "+ warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE) + " MimeType " + warcRecordMimetype );
             return;
         }
-        LOG.info("WARC Record Payload MIME TYPE: " + warcRecordMimetype);
 
         // TODO: Skip if unindexable type.
         int totalBytesRead = 0;
