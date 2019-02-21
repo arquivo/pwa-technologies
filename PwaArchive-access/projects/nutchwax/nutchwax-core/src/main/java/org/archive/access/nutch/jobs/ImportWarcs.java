@@ -56,8 +56,6 @@ import org.apache.nutch.util.StringUtil;
 import org.apache.nutch.util.mime.MimeType;
 import org.apache.nutch.util.mime.MimeTypeException;
 import org.apache.nutch.util.mime.MimeTypes;
-import org.apache.tika.parser.txt.CharsetDetector;
-import org.apache.tika.parser.txt.CharsetMatch;
 import org.archive.access.nutch.Nutchwax;
 import org.archive.access.nutch.NutchwaxConfiguration;
 import org.archive.access.nutch.jobs.sql.SqlSearcher;
@@ -123,6 +121,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
     public static final String ARCFILENAME_KEY = "arcname";
     public static final String ARCFILEOFFSET_KEY = "arcoffset";
     private static final String CONTENT_TYPE_KEY = "content-type";
+    private static final String TRANSFER_ENCONDING_KEY = "Transfer-Encoding";
     private static final String TEXT_TYPE = "text/";
     private static final String APPLICATION_TYPE = "application/";
     public static final String ARCCOLLECTION_KEY = "collection";
@@ -144,18 +143,6 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
     private String arcName;
     private String collectionType;
     private int timeoutIndexingDocument;
-
-
-    /**
-     * Usually the URL in first record looks like this:
-     * filedesc://IAH-20060315203614-00000-debord.arc.  But in old
-     * ARCs, it can look like this: filedesc://19961022/IA-000001.arc.
-     */
-    private static final Pattern FILEDESC_PATTERN =
-            Pattern.compile("^(?:filedesc://)(?:[0-9]+\\/)?(.+)(?:\\.arc)$");
-
-    private static final Pattern TAIL_PATTERN =
-            Pattern.compile("(?:.*(?:/|\\\\))?(.+)(?:\\.arc|\\.arc\\.gz)$");
 
     /**
      * Buffer to reuse on each ARCRecord indexing.
@@ -759,6 +746,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         LOG.info("WARC Chunked Result: " + result);
         return result;
     }
+
     private boolean isPDF(String mimetype){
         return (PDF_TYPE.equals(mimetype));
     }
@@ -804,26 +792,6 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
             }
         }
         return sb.toString();
-    }
-
-    protected Charset detectCharsetImpl(byte[] buffer) throws Exception
-    {
-        CharsetDetector detector = new CharsetDetector();
-        detector.setText(buffer);
-        CharsetMatch match = detector.detect();
-
-        if(match != null && match.getConfidence() > 35)
-        {
-            try
-            {
-                return Charset.forName(match.getName());
-            }
-            catch(UnsupportedCharsetException e)
-            {
-                this.LOG.info("Charset detected as " + match.getName() + " but the JVM does not support this, detection skipped");
-            }
-        }
-        return null;
     }
 
     protected String getStatus(final String url, String oldUrl,
