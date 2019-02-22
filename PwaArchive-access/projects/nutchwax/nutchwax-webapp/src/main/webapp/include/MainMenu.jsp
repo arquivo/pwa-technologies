@@ -18,26 +18,22 @@ var MENU = MENU || (function(){
         	document.write( '</div></div></div>');
         	$('.swiper-wrapper').append(
 			            	'<div class="swiper-slide menu swiper-slide-prev">' +       
-	          					'<a href="/index.jsp?l=<%=language%>" onclick=""><h4><i class="fa fa-search padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.home'/></h4></a>' +
-	          					'<a id="advancedSearch"><h4><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></a>' +         					
-	          					'<a id="shareMenu"><h4><i class="fa fa-share-alt padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.share'/><i id="shareCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></a>'+	      
-	          					'<div id="shareOptions">'+
-	          						'<a class="addthis_button_facebook" onclick="" href=""><h4 class="submenu"><i class="fa fa-facebook padding-right-menu-icon" aria-hidden="true"></i> Facebook</h4></a>'+
-	          						'<a class="addthis_button_twitter" onclick="" ><h4 class="submenu"><i class="fa fa-twitter padding-right-menu-icon" aria-hidden="true"></i> Twitter</h4></a>'+
-	          						' <a title="<fmt:message key='topbar.menu.mailTitle'/>" href="mailto:?subject='+document.title+'&body=[sub]" onclick="this.href = this.href.replace(\'[sub]\',encodeURIComponent(window.location.href) ); ga(\'send\', \'event\', \'ReplayBarFunctions\', \'EmailShareClick\', \''+window.location.href+'\');""><h4 class="submenu"><i class="fa fa-envelope" aria-hidden="true"></i> Email</h4></a>'+
-			  					'</div>'+
-	          					'<a href="<fmt:message key='topbar.menu.examples.href'/>" ><h4><i class="fa fa-globe padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.examples'/></h4></a>'+				  					   	  			
-	          					'<a href="//sobre.arquivo.pt/<%=language%>" onclick=""><h4><i class="fa fa-info-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.about'/></h4></a>'+
-	          					'<a id="reportBug"><h4><i class="fa fa-bug padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.report'/></h4></a>'+	          								  			          
-	          					'<a href="<fmt:message key='topbar.menu.help.href'/>" onclick=""><h4><i class="fa fa-question-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.help'/></h4></a>'+
-	          					'<a href="" id="switchDesktop" onclick=""><h4><i class="fa fa-desktop padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.desktop'/></h4></a>'+		          					
-	          					'<a id="changeLanguage" ><h4><i class="fa fa-flag padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.otherLanguage'/></h4></a>'+
-	          				'</div>');
-        	this.attachSwitchDesktop();
-        	this.attachChangeLanguage();
-        	this.attachShare();
-        	this.attachAdvanced();
-        	this.attachReportBug();
+			            		'<button class="clean-button" onclick="MENU.copyLink();"><h4><i class="fa fa-link padding-right-menu-icon" aria-hidden="true"></i> Copiar Link</h4></button>' +
+	          					'<button class="clean-button" id="pagesMenu" onclick="MENU.pagesClick();"><h4><i class="fa fa-globe padding-right-menu-icon" aria-hidden="true"></i> Paginas<i id="pagesCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></button>'+	 	
+	          					'<div id="pageOptions">'+	          							            		
+	          						'<a href="/index.jsp?l=<%=language%>" onclick=""><h4 class="submenu"><i class="fa fa-search padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.home'/></h4></a>' +
+	          						'<button class="clean-button" id="advancedSearch" onclick="MENU.advancedPagesClick();"><h4 class="submenu"><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></button>' +         					
+	          					'</div>'+
+	          					'<button class="clean-button" id="imagesMenu" onclick="MENU.imagesClick();"><h4><i class="fa fa-image padding-right-menu-icon" aria-hidden="true"></i> Imagens<i id="imagesCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></button>'+
+	          					'<div id="imageOptions">'+	          							            		
+	          						'<a href="/images.jsp?l=<%=language%>" onclick=""><h4 class="submenu"><i class="fa fa-search padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.home'/></h4></a>' +
+	          						'<button class="clean-button" id="advancedImages" onclick="MENU.advancedImagesClick();"><h4 class="submenu"><i class="fa fa-search-plus padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.advanced'/></h4></button>' +   			
+	          					'</div>'+	          							          						  		
+	          					'<button class="clean-button" id="switchDesktop" onclick="MENU.switchDesktop();"><h4><i class="fa fa-desktop padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.desktop'/></h4></button>'+
+	          					'<button class="clean-button" id="reportBug" onclick="MENU.reportBug();"><h4><i class="fa fa-bug padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.report'/></h4></button>'+	 	        
+	          					'<a href="//sobre.arquivo.pt/<%=language%>" onclick=""><h4><i class="fa fa-info-circle padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.about'/></h4></a>'+	         				
+	          					'<button class="clean-button" id="changeLanguage" onclick="changeLanguage();" ><h4><i class="fa fa-flag padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.otherLanguage'/></h4></button>'+
+	          				'</div>'); 
         },
 		toggleLanguage: function() {
 		    localStorage.setItem("language", "<fmt:message key='topbar.OtherLanguageShort'/>".toUpperCase());			
@@ -63,62 +59,65 @@ var MENU = MENU || (function(){
 		    	rtn=rtn +"?l=<fmt:message key='topbar.OtherLanguageShort'/>";
 		    }
 		    return rtn;
-		},
- 		attachShare: function(){
-		  $('#shareMenu').on('click', function(e){
-		  	//ga('send', 'event', 'ReplayBarFunctions', 'ShareMenuClick', 'http://arquivo.pt/'+_ts+'/'+_url);
-		    $('#shareCarret').toggleClass('fa-caret-up fa-caret-down');
-		    $('#shareOptions').slideToggle( "fast", "linear" );
-		  }); 	 			
- 		}, 			
-		attachChangeLanguage: function(){
-			$('#changeLanguage').click( function(e) {
-					e.preventDefault();
+		},	
+		changeLanguage: function(){					
 					window.location = MENU.toggleLanguage(); 
-					return false; } );
+					return false; 
 		},
-		attachSwitchDesktop: function(){
-			$('#switchDesktop').click( function(e) {
-					e.preventDefault();
+		switchDesktop: function(){
 					Cookies.set('forceDesktop', 'true', { domain: window.location.hostname.substr(2, window.location.hostname.length) });
 					/*redirect current link from mobile to desktop version i.e. remove the m. from current link*/
 					window.location = window.location.href.replace(window.location.hostname , window.location.hostname.substr(2, window.location.hostname.length)) 
-					return false; } );			
+					return false;  			
 			
 		},
-		attachImages: function(){
-			$('#imagesAnchor').click( function(e) {
-				e.preventDefault();
-				queryParam='';
-				var txtSearch = $('#txtSearch').attr('value');
-				if(txtSearch !='' && txtSearch != undefined){
-					queryParam= '&query='+txtSearch;
-				}				
-				window.location = "/images.jsp?l=<%=language%>"+queryParam;
-			});
-		},
-		attachAdvanced: function(){
-			$('#advancedSearch').click( function(e) {
-				e.preventDefault();
+		advancedPagesClick: function(){
 				queryParam='';
 				var txtSearch = $('#txtSearch').attr('value');
 				if(txtSearch !='' && txtSearch != undefined){
 					queryParam= '&query='+txtSearch;
 				}				
 				window.location = "/advanced.jsp?l=<%=language%>"+queryParam;
-			});
 		},	
-		attachReportBug: function(){
-			$('#reportBug').click( function(e) {
-				e.preventDefault();
+		advancedImagesClick: function(){
+				queryParam='';
+				var txtSearch = $('#txtSearch').attr('value');
+				if(txtSearch !='' && txtSearch != undefined){
+					queryParam= '&query='+txtSearch;
+				}				
+				window.location = "/advancedImages.jsp?l=<%=language%>"+queryParam;
+		},			
+		reportBug: function(){
 				window.location = '<fmt:message key="topbar.menu.bug" />'+window.location.href.replaceAll('&', '%26');
-			});
 		},							
         attachMask: function(){       
 		  $('#mainMask').on('click', function(e){
 		    document.querySelector('.swiper-container').swiper.slideNext();
 		  }); 	         	
-        },	 									 		
+        },	 
+        copyLink: function(){
+			var dummy = document.createElement('input'),
+			    text = window.location.href;
+
+			document.body.appendChild(dummy);
+			dummy.value = text;
+			dummy.select();
+			document.execCommand('copy');
+			document.body.removeChild(dummy);
+			$('body').append('<div id="alertCopy" class="alert alert-success alertCopy"><strong>Link Copiado!</strong></div>');
+			$('#alertCopy').show().delay(1500).fadeOut();
+			setTimeout(function(){
+  			$('#alertCopy').remove();
+			}, 2000); /*time to show the notification plus the time to do the fadeout effect*/
+        },
+        pagesClick: function(){
+		    $('#pagesCarret').toggleClass('fa-caret-up fa-caret-down');
+		    $('#pageOptions').slideToggle( "fast", "linear" );
+        },		
+        imagesClick: function(){
+		    $('#imagesCarret').toggleClass('fa-caret-up fa-caret-down');
+		    $('#imageOptions').slideToggle( "fast", "linear" );
+        },	        							 		
     };
 }());	
 </script>

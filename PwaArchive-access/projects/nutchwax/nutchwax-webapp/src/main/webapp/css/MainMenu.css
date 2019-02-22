@@ -143,7 +143,7 @@ body,html{
 	padding-right: 20px;
 }
 
-#shareOptions, #toolsOptions{
+#shareOptions, #toolsOptions, #pageOptions, #imageOptions{
 	display: none;
 }
 
