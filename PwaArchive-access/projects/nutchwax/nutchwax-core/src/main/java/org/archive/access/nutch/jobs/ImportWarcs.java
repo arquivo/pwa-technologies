@@ -23,8 +23,10 @@
 
 package org.archive.access.nutch.jobs;
 
-import org.apache.commons.httpclient.*;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.httpclient.ChunkedInputStream;
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.StatusLine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -47,34 +49,26 @@ import org.apache.nutch.metadata.Nutch;
 import org.apache.nutch.net.URLFilters;
 import org.apache.nutch.net.URLNormalizers;
 import org.apache.nutch.parse.*;
+import org.apache.nutch.protocol.Content;
 import org.apache.nutch.scoring.ScoringFilterException;
 import org.apache.nutch.scoring.ScoringFilters;
 import org.apache.nutch.util.StringUtil;
 import org.apache.nutch.util.mime.MimeType;
 import org.apache.nutch.util.mime.MimeTypeException;
 import org.apache.nutch.util.mime.MimeTypes;
-import org.apache.tika.config.TikaConfig;
-import org.apache.tika.io.TikaInputStream;
-import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.html.HtmlParser;
-import org.apache.tika.parser.txt.CharsetDetector;
-import org.apache.tika.parser.txt.CharsetMatch;
-import org.apache.tika.sax.BodyContentHandler;
-import org.apache.tika.sax.Link;
-import org.apache.tika.sax.LinkContentHandler;
 import org.archive.access.nutch.Nutchwax;
 import org.archive.access.nutch.NutchwaxConfiguration;
 import org.archive.access.nutch.jobs.sql.SqlSearcher;
 import org.archive.io.ArchiveRecordHeader;
+import org.archive.io.warc.WARCConstants;
 import org.archive.io.warc.WARCRecord;
 import org.archive.mapred.WARCMapRunner;
 import org.archive.mapred.WARCRecordMapper;
 import org.archive.mapred.WARCReporter;
 import org.archive.util.Base32;
+import org.archive.util.LaxHttpParser;
 import org.archive.util.MimetypeUtils;
 import org.archive.util.TextUtils;
-import org.xml.sax.ContentHandler;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -83,18 +77,11 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
-
-/*import org.apache.tika.metadata.Metadata;*/
-//import org.apache.tika.mime.MediaType;
-/*import org.apache.tika.mime.MimeTypes;*/
-/*import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
-import org.apache.tika.sax.BodyContentHandler;*/
-
 
 /**
  * Ingests WARCs writing WARC Record parse as Nutch FetcherOutputFormat.
@@ -133,7 +120,8 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
 
     public static final String ARCFILENAME_KEY = "arcname";
     public static final String ARCFILEOFFSET_KEY = "arcoffset";
-    private static final String CONTENT_TYPE_KEY = "Content-Type";
+    private static final String CONTENT_TYPE_KEY = "content-type";
+    private static final String TRANSFER_ENCONDING_KEY = "Transfer-Encoding";
     private static final String TEXT_TYPE = "text/";
     private static final String APPLICATION_TYPE = "application/";
     public static final String ARCCOLLECTION_KEY = "collection";
@@ -155,18 +143,6 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
     private String arcName;
     private String collectionType;
     private int timeoutIndexingDocument;
-
-
-    /**
-     * Usually the URL in first record looks like this:
-     * filedesc://IAH-20060315203614-00000-debord.arc.  But in old
-     * ARCs, it can look like this: filedesc://19961022/IA-000001.arc.
-     */
-    private static final Pattern FILEDESC_PATTERN =
-            Pattern.compile("^(?:filedesc://)(?:[0-9]+\\/)?(.+)(?:\\.arc)$");
-
-    private static final Pattern TAIL_PATTERN =
-            Pattern.compile("(?:.*(?:/|\\\\))?(.+)(?:\\.arc|\\.arc\\.gz)$");
 
     /**
      * Buffer to reuse on each ARCRecord indexing.
@@ -307,6 +283,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         WARCReporter reporter = (WARCReporter)r;
 
         // Its null first time map is called on an ARC.
+
         checkWArcName(rec);
         checkCollectionName();
 
@@ -330,45 +307,30 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         final long l = warcData.getLength();
         final long recordLength = (l > b)? (l - b): l;
 
-        // Look at WARCRecord meta data line mimetype. It can be empty.  If so,
-        // two more chances at figuring it either by looking at HTTP headers or
-        // by looking at first couple of bytes of the file.  See below.
         String warcRecordMimetype = warcData.getMimetype();
-        String warcRecordType = (String) warcData.getHeaderValue("WARC-Type");
+        LOG.info("WARC Record Payload MIME TYPE: " + warcRecordMimetype);
+
+        String warcRecordType = (String) warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE);
+        LOG.info("WARC Record Type: " + warcRecordType);
+
         if(warcRecordType == null || warcRecordMimetype == null) return;
-        /*Check if WARC-TYPE=response and if this record is an http response*/
-        if( ! "response".equals(warcRecordType.trim()) || !
-                warcRecordMimetype.trim().startsWith("application/http")) {
-            LOG.info("Skipping WARCTYPE: "+ warcData.getHeaderValue("WARC-Type") + " MimeType" + warcRecordMimetype );
+
+        // Check if WARC-TYPE=response and if this record is an http response
+        // Replacing string in WARCConstants.HTTP_RESPONSE_MIMETYPE because brozzler is writing WARCs mimetype this way: application/http;msgtype=response (no space)
+        if( !WARCConstants.RESPONSE.equals(warcRecordType.trim()) ||
+                !(warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE) ||
+                        warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE.replaceAll("\\s", ""))) ) {
+            LOG.info("Skipping WARC: "+ warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE) + " MimeType " + warcRecordMimetype );
             return;
         }
-        LOG.info("WARC: http response record mimetype " + warcRecordMimetype);
 
         // TODO: Skip if unindexable type.
         int totalBytesRead = 0;
-        // Read in first block. If mimetype still null, look for MAGIC.
-        int len = rec.read(this.buffer, 0, this.buffer.length);
-        this.contentBuffer.reset();
 
-        // How much do we read total? If pdf, we will read more. If equal to -1,
-        // read all.
+        // handle as if it was a ARCRecordMetaData here
+        // parse HTTP Header to get metadata
+        String statusLinestr = LaxHttpParser.readLine(rec, WARCRecord.WARC_HEADER_ENCODING);
 
-        while ( len != -1 && totalBytesRead < this.contentLimit )
-        {
-            totalBytesRead += len;
-            this.contentBuffer.write(this.buffer, 0, len);
-            len = rec.read(this.buffer, 0, this.buffer.length);
-            reporter.setStatusIfElapse("reading " + url);
-        }
-        final byte[] contentBytes = this.contentBuffer.toByteArray();
-
-        //LOG.info("WARCContent: " + new String(contentBytes, "UTF-8"));
-
-        ByteArrayInputStream contentArrayInputStream = new ByteArrayInputStream(contentBytes);
-        String mimetype = null;
-
-        String statusLinestr = HttpParser.readLine(contentArrayInputStream);
-        /*LOG.info("WARCSTATUSSTR: "+ statusLinestr);*/
         StatusLine statusLine;
         int statusCode = -1;
 
@@ -377,159 +339,121 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
             statusCode= statusLine.getStatusCode();
         } catch (HttpException e ){
             LOG.error("HttpException parsing statusCode isIndex " , e);
-            return;
         } catch (Exception e){
             LOG.error("Exception parsing statusCode isIndex " , e);
-            return;
-        }
-        /*LOG.info("WARCSTATUSCode: "+ statusCode);*/
-        Header[] headers = HttpParser.parseHeaders(contentArrayInputStream , "UTF-8");
-        if (!isIndex(statusCode))
-        {
-            LOG.info("Not indexing this statusCode: ");
-            throw new IOException("Invalid status code!");
-            /*return;*/
-        }
-        final Metadata metaData = new Metadata(); /*Nutch Metadata*/
-        org.apache.tika.metadata.Metadata tikaMetadata = new org.apache.tika.metadata.Metadata();
-        boolean isChunked = false;
-        String contentEncoding ="";
-        /*boolean isGZiped = false;*/
-        LOG.info( "WARC headers size = " + headers.length );
-        for (int j = 0; j < headers.length; j++)
-        {
-            final Header header = headers[j];
-            LOG.info( "header Name["+header.getName()+"] Value["+header.getValue()+"]" );
-            tikaMetadata.add(header.getName(), header.getValue());
-            if(header.getName().equals("Content-Type")){
-                mimetype = header.getValue();
-                metaData.set(header.getName(), header.getValue());
-                metaData.set("content-type", mimetype);
-                LOG.info("WARC mimetype: "+ mimetype);
-            } else if (header.getName().equals("Transfer-Encoding")){
-                if( ((String) header.getValue()).contains("chunked") ){
-                    isChunked = true;
-                    tikaMetadata.remove(header.getName()); /*removing from metada, anyway tika parser does not work with chunked http responses*/
-                    LOG.info("WARC chunked record");
-                    /*Dont save metadata since we are dealing with the chunked record*/
-                }
-            } else if (header.getName().equals("Content-Encoding")){
-                contentEncoding = (String) header.getValue();
-                metaData.set(header.getName(), header.getValue());
-            }
-        }
-        LOG.info("Warc content mimetype: " + mimetype);
-        if(skip(mimetype)){
-            LOG.info("Null or invalid mimetype skipping...");
-            return;
-        }
-        byte [] remainingBytes = null;
-        if(isPDF(mimetype)){ /*PDFs have bigger readlimit in Bytes and we only know it is a pdf after parsing headers in WARC files*/
-            LOG.info("PDF seeing if there are remaining Bytes");
-            remainingBytes = readRemainingBytesPDF(totalBytesRead, rec, reporter,  len );
         }
 
+        if (!isIndex(statusCode)){
+            return;
+        }
+
+
+        // TODO read the first line before feeding to LaxHttpParser
+        Header[] headers = LaxHttpParser.parseHeaders(rec, WARCRecord.WARC_HEADER_ENCODING);
+        String mimetype = null;
+
+        // Copy http headers to nutch metadata.
+        final Metadata metaData = new Metadata();
+        for (int j = 0; j < headers.length; j++)
+        {
+            LOG.info("HTTP Header: " + headers[j].getName());
+            final Header header = headers[j];
+
+            // Special handling. If mimetype is still null, try getting it
+            // from the http header. I've seen arc record lines with empty
+            // content-type and a MIME unparseable file ending; i.e. .MID.
+            if (header.getName().toLowerCase().equals(ImportWarcs.CONTENT_TYPE_KEY))
+            {
+                LOG.info("Validating Content-type header value: " + header.getValue());
+                mimetype = getMimetype(header.getValue(), null, null);
+
+                if (skip(mimetype))
+                {
+                    LOG.info("Skipping Mimetype: " + mimetype);
+                    return;
+                }
+            }
+
+            metaData.set(header.getName(), header.getValue());
+        }
 
         // This call to reporter setStatus pings the tasktracker telling it our
         // status and telling the task tracker we're still alive (so it doesn't
         // time us out).
-        final String noSpacesMimetype =
-                TextUtils.replaceAll(ImportWarcs.WHITESPACE,
-                        ((mimetype == null || mimetype.length() <= 0)?
-                                "TODO": mimetype),
-                        "-");
+        final String noSpacesMimetype = TextUtils.replaceAll(ImportWarcs.WHITESPACE, ((mimetype == null || mimetype.length() <= 0)? "TODO": mimetype), "-");
         final String recordLengthAsStr = Long.toString(recordLength);
 
         reporter.setStatus(getStatus(url, oldUrl, recordLengthAsStr, noSpacesMimetype));
 
-        /*TODO:: use byte array instead of inputstream, merge remaining Bytes with contentBytesNoHeaders*/
-        byte[] contentBytesNoHeaders = null;
-
-        if(isChunked){/*We need to do some parsing in the case of a Chunked http response*/
-            LOG.info("Chunked response");
-            contentBytesNoHeaders = getByteArrayFromInputStreamChunked(contentArrayInputStream, LOG);
-            /*LOG.info("WARCINPUTSTREAM: " + inputStreamStringWithoutHtmlHeaders);*/
-        }
-        else{ /*Just send the bytes without the http headers to Apache Tika*/
-            contentBytesNoHeaders = IOUtils.toByteArray(contentArrayInputStream);
-        }
-        int recordLengthNoHeaders = contentBytesNoHeaders.length;
-
-        metaData.set("contentLength", "" +  recordLengthNoHeaders);
-
-        LOG.info( "Content Length with headers: ["+recordLengthAsStr+"]" );
-        LOG.info( "Content Length without headers: contentLength["+recordLengthNoHeaders+"]");
-
-        if(recordLengthNoHeaders == 0){
-            LOG.info("SKIPPING only headers RECORD, empty content length");
-            return;
-        }
+        // This is a nutch 'more' field.
+        metaData.set("contentLength", recordLengthAsStr);
         reporter.setStatusIfElapse("read headers on " + url);
+
+        // TODO: Skip if unindexable type.
+        int total = 0;
+
+        // Read in first block. If mimetype still null, look for MAGIC.
+        int len = rec.read(this.buffer, 0, this.buffer.length);
+
+        if (mimetype == null)
+        {
+            MimeType mt = this.mimeTypes.getMimeType(this.buffer);
+
+            if (mt == null || mt.getName() == null)
+            {
+                LOG.warn("Failed to get mimetype for: " + url);
+
+                return;
+            }
+
+            mimetype = mt.getName();
+        }
+
+        metaData.set(ImportWarcs.CONTENT_TYPE_KEY, mimetype);
+
+        // How much do we read total? If pdf, we will read more. If equal to -1,
+        // read all.
+        int readLimit = (ImportWarcs.PDF_TYPE.equals(mimetype))?
+                this.pdfContentLimit : this.contentLimit;
+
+        // Reset our contentBuffer so can reuse.  Over the life of an ARC
+        // processing will grow to maximum record size.
+        this.contentBuffer.reset();
+
+        while ((len != -1) && ((readLimit == -1) || (total < readLimit)))
+        {
+            total += len;
+            this.contentBuffer.write(this.buffer, 0, len);
+            len = rec.read(this.buffer, 0, this.buffer.length);
+            reporter.setStatusIfElapse("reading " + url);
+        }
 
         // Close the Record.  We're done with it.  Side-effect is calculation
         // of digest -- if we're digesting.
         rec.close();
         reporter.setStatusIfElapse("closed " + url);
 
+        final byte[] contentBytes = this.contentBuffer.toByteArray();
         final CrawlDatum datum = new CrawlDatum();
         datum.setStatus(CrawlDatum.STATUS_FETCH_SUCCESS);
 
+        // Calculate digest or use precalculated sha1.
+        String digest = (this.sha1)? rec.getDigestStr():
+                MD5Hash.digest(contentBytes).toString();
+        metaData.set(Nutch.SIGNATURE_KEY, digest);
 
-
-        //warcData.setDigest(digest); *Maybe not needed for WARCs*
+        LOG.info("Digest: " + digest);
+        metaData.set(Nutch.SIGNATURE_KEY, digest);
 
         metaData.set(Nutch.SEGMENT_NAME_KEY, this.segmentName);
 
         // Score at this stage is 1.0f.
         metaData.set(Nutch.SCORE_KEY, Float.toString(datum.getScore()));
 
-        //byte[] cleanedRecordContentBytes = inputStreamStringWithoutHtmlHeaders.getBytes();
-        if(remainingBytes != null){
-            /*If it is a pdf we need to append remainingBytes to the end of contentBytesNoHeaders*/
-            byte[] destinationBytes = new byte[contentBytesNoHeaders.length + remainingBytes.length];
-            System.arraycopy(contentBytesNoHeaders, 0, destinationBytes,0, contentBytesNoHeaders.length);
-            System.arraycopy(remainingBytes, 0, destinationBytes, contentBytesNoHeaders.length, remainingBytes.length);
-            contentBytesNoHeaders = destinationBytes;
-        }
-        // Calculate digest or use precalculated sha1.
-        String digest = (this.sha1)? rec.getDigestStr():
-                MD5Hash.digest(contentBytesNoHeaders).toString();
-        metaData.set(Nutch.SIGNATURE_KEY, digest);
+        final long startTime = System.currentTimeMillis();
+        final Content content = new Content(url, url, contentBytes, mimetype, metaData, getConf());
 
-        // Set digest back into the warcData so available later when we write
-        // CDX line.
-        //final long startTime = System.currentTimeMillis();
-		/*Content content = new Content(url, url, contentBytesNoHeaders, mimetype,
-				metaData, getConf());*/
-
-        String [] apacheExtractedContent = new String[2];
-        Outlink[] outlinksTika = null;
-        try{
-            TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
-            apacheExtractedContent = parseUsingAutoDetect(contentBytesNoHeaders, tikaConfig,
-                    tikaMetadata);
-            LOG.info("Parsing Links");
-            outlinksTika = parseLinks(contentBytesNoHeaders,  tikaConfig, tikaMetadata);
-            LOG.info("End Parsing Links");
-
-        } catch (IOException io){
-            LOG.info("Error parsing tika: " + io);
-            LOG.error("Error parsing tika: ", io);
-            return; /*end map for this broken record*/
-        } catch (Exception e){
-            LOG.info("Error parsing tika: " + e);
-            LOG.error("Error parsing tika: ", e);
-            return;  /*end map for this broken record*/
-        }
-
-        //LOG.info("Nutch Content start print.... \n" + content.toString());
-        //LOG.info("....................................\n");
-        LOG.info("Apache Tika parsed text start print ....\n" + " " + apacheExtractedContent[0].replaceAll("\\s+", " ") );
-        LOG.info("Apache Tika parsed links ....\n" + " " + apacheExtractedContent[1]);
-        
-        //LOG.info("....................................\n");
-
-        datum.setFetchTime(Nutchwax.getDate(getTs(warcData.getDate())));
+        datum.setFetchTime(Nutchwax.getDate((String) warcData.getHeaderValue(WARCConstants.HEADER_KEY_DATE)));
 
         MapWritable mw = datum.getMetaData();
 
@@ -539,69 +463,54 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         }
 
         if (collectionType.equals(Global.COLLECTION_TYPE_MULTIPLE)) {
-            mw.put(new Text(ImportWarcs.ARCCOLLECTION_KEY), new Text(SqlSearcher.getCollectionNameWithTimestamp(collectionName,getTs(warcData.getDate()))));
+            mw.put(new Text(ImportWarcs.ARCCOLLECTION_KEY), new Text(SqlSearcher.getCollectionNameWithTimestamp(collectionName,warcData.getDate())));
         }
         else {
             mw.put(new Text(ImportWarcs.ARCCOLLECTION_KEY), new Text(collectionName));
         }
         mw.put(new Text(ImportWarcs.ARCFILENAME_KEY), new Text(arcName));
-        mw.put(new Text(ImportWarcs.ARCFILEOFFSET_KEY),
-                new Text(Long.toString(warcData.getOffset())));
+        mw.put(new Text(ImportWarcs.ARCFILEOFFSET_KEY), new Text(Long.toString(warcData.getOffset())));
         datum.setMetaData(mw);
 
-		/*TimeoutParsingThread tout=threadPool.getThread(Thread.currentThread().getId(),timeoutIndexingDocument);
-		tout.setUrl(url);
-		tout.setContent(content);
-		tout.setParseUtil(parseUtil);
-		tout.wakeupAndWait();
+        TimeoutParsingThread tout=threadPool.getThread(Thread.currentThread().getId(),timeoutIndexingDocument);
+        tout.setUrl(url);
+        tout.setContent(content);
+        tout.setParseUtil(parseUtil);
+        tout.wakeupAndWait();
 
-		ParseStatus parseStatus=tout.getParseStatus();
-		Parse parse=tout.getParse();
-		*/
-        /*Todo: remove Nutch parsing replace with Tika for extracting the parseData*/
-        //ParseData parseData = parse.getData();
-        //LOG.info("Parse DATA \n" + parseData.toString());
-        //LOG.info("Parse DATA - Title \n" + parseData.getTitle());
-        //LOG.info("Parse DATA - MetaData \n" + parseData.getContentMeta().toString());
-        //LOG.info("Parse DATA - Outlinks\n" + parseData.getOutlinks().toString());
-        //LOG.info("Parse DATA - Parse Status\n" + parseData.getStatus().toString());
-
-
-        ParseImpl tikaParseImpl = new ParseImpl(apacheExtractedContent[0], new ParseData(new ParseStatus(1),apacheExtractedContent[1],outlinksTika,metaData));
-        /*using metadata from nutch parse, but the extracted text from Apache Tika*/
-
+        ParseStatus parseStatus=tout.getParseStatus();
+        Parse parse=tout.getParse();
         reporter.setStatusIfElapse("parsed " + url);
 
-        //LOG.info("Parsed URL: " + url);
-        //LOG.info("Parsed Status: " + parseStatus.toString());
-        /*LOG.info("Parsed text: "+ parse.getText());*/
+        LOG.info("Content parsed: " + parse.getText());
 
-		/*if (!parseStatus.isSuccess()) {
-			final String status = formatToOneLine(parseStatus.toString());
-			LOG.info("Error parsing: " + mimetype + " " + url + ": " + status);
-			parse = null;
-		}
-		else {
-			// Was it a slow parse?
-			final double kbPerSecond = getParseRate(startTime,
-					(contentBytes != null) ? contentBytes.length : 0);
+        if (!parseStatus.isSuccess()) {
+            final String status = formatToOneLine(parseStatus.toString());
+            LOG.warn("Error parsing: " + mimetype + " " + url + ": " + status);
+            parse = null;
+        }
+        else {
+            // Was it a slow parse?
+            final double kbPerSecond = getParseRate(startTime,
+                    (contentBytes != null) ? contentBytes.length : 0);
 
-			if (LOG.isDebugEnabled())
-			{
-				LOG.debug(getParseRateLogMessage(url,
-						noSpacesMimetype, kbPerSecond));
-			}
-			else if (kbPerSecond < this.parseThreshold)
-			{
-				LOG.warn(getParseRateLogMessage(url, noSpacesMimetype,
-						kbPerSecond));
-			}
-		}
-		*/
-        Writable v = new FetcherOutput(datum, null, tikaParseImpl);
+            if (LOG.isDebugEnabled())
+            {
+                LOG.debug(getParseRateLogMessage(url,
+                        noSpacesMimetype, kbPerSecond));
+            }
+            else if (kbPerSecond < this.parseThreshold)
+            {
+                LOG.warn(getParseRateLogMessage(url, noSpacesMimetype,
+                        kbPerSecond));
+            }
+        }
+
+        Writable v = new FetcherOutput(datum, null,
+                parse != null ? new ParseImpl(parse) : null);
         if (collectionType.equals(Global.COLLECTION_TYPE_MULTIPLE)) {
-            LOG.info("multiple: "+SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,getTs(warcData.getDate()))+" "+url);
-            output.collect(Nutchwax.generateWaxKey(url,SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,getTs(warcData.getDate()))), v);
+            LOG.info("multiple: "+SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,warcData.getDate())+" "+url);
+            output.collect(Nutchwax.generateWaxKey(url,SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,warcData.getDate())), v);
         }
         else {
             output.collect(Nutchwax.generateWaxKey(url, this.collectionName), v);
@@ -670,7 +579,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
 
     public void checkWArcName(WARCRecord rec)
     {
-        this.arcName= (String) rec.getHeader().getHeaderValue("reader-identifier"); /*url with path to arc*/
+        this.arcName= rec.getHeader().getReaderIdentifier(); /*url with path to arc*/
         this.arcName = arcName.substring(arcName.lastIndexOf('/')+1, arcName.length()); /*filename*/
         this.arcName = arcName.replace(".warc.gz", "");   /*filename without extension*/
         LOG.info("WARCNAME: " + this.arcName);
@@ -836,53 +745,10 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         LOG.info("WARC Chunked Result: " + result);
         return result;
     }
+
     private boolean isPDF(String mimetype){
         return (PDF_TYPE.equals(mimetype));
     }
-
-    /*This function returns a string array where the first position contains the parsed text and the second contains the title of the document*/
-    public static String[] parseUsingAutoDetect(byte[] content, TikaConfig tikaConfig,
-                                                org.apache.tika.metadata.Metadata metadata) throws Exception {
-        AutoDetectParser parser = new AutoDetectParser(tikaConfig);
-        ContentHandler handler = new BodyContentHandler(-1); /*No maximum read limit of characters default is 10 000*/
-        TikaInputStream stream = TikaInputStream.get(content, metadata);
-        parser.parse(stream, handler, metadata, new ParseContext());
-        String title = metadata.get("title");
-        String [] result = new String[2];
-        if(title != null){ /*For historical reasons adding title to the text extracted*/
-            result[0] = title + " ";
-        }
-        result[0] +=handler.toString();
-        result[1] = title;
-        return result;
-    }
-
-    /*Use apache tika to extract outlinks and convert them to Nutch Outlink format*/
-    public  Outlink[] parseLinks(byte[] content, TikaConfig tikaConfig,
-                                 org.apache.tika.metadata.Metadata metadata) throws Exception {
-        List<Outlink> outlinksList = new ArrayList<Outlink>();
-        HtmlParser parser = new HtmlParser();
-        LinkContentHandler handler = new LinkContentHandler();
-        TikaInputStream stream = TikaInputStream.get(content, metadata);
-        parser.parse(stream, handler, metadata, new ParseContext());
-        List<Link> links = handler.getLinks();
-        Iterator<Link> iter = links.iterator();
-        while(iter.hasNext()) {
-            Link link = iter.next();
-            Outlink outlink = null;
-            try{
-                outlink = new Outlink(link.getUri(),link.getText() , conf);
-                outlinksList.add(outlink );
-                //LOG.info("OUTLINK_URI" +link.getUri());
-                //LOG.info("OUTLINK_TEXT:" + link.getText());
-            } catch(MalformedURLException e){ /*Nutch interface only accepts valid uris*/
-                continue;
-            }
-        }
-        /*convert list to array and return it*/
-        return outlinksList.toArray(new Outlink[outlinksList.size()]);
-    }
-
 
     private static String getStringFromInputStreamChunkedBefore(InputStream is, Log LOG) {
         /*Ignore first and last lines (number of bytes to read and 0)*/
@@ -925,26 +791,6 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
             }
         }
         return sb.toString();
-    }
-
-    protected Charset detectCharsetImpl(byte[] buffer) throws Exception
-    {
-        CharsetDetector detector = new CharsetDetector();
-        detector.setText(buffer);
-        CharsetMatch match = detector.detect();
-
-        if(match != null && match.getConfidence() > 35)
-        {
-            try
-            {
-                return Charset.forName(match.getName());
-            }
-            catch(UnsupportedCharsetException e)
-            {
-                this.LOG.info("Charset detected as " + match.getName() + " but the JVM does not support this, detection skipped");
-            }
-        }
-        return null;
     }
 
     protected String getStatus(final String url, String oldUrl,
