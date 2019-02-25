@@ -6,15 +6,6 @@
 
 <web-app>
 <servlet>
-  <servlet-name>NutchwaxOpenSearch</servlet-name>
-  <servlet-class>org.archive.access.nutch.NutchwaxOpenSearchServlet</servlet-class>
-</servlet>
-<servlet-mapping>
-  <servlet-name>NutchwaxOpenSearch</servlet-name>
-  <url-pattern>/opensearch</url-pattern>
-</servlet-mapping>
-
-<servlet>
   <servlet-name>NutchwaxTextSearch</servlet-name>
   <servlet-class>org.archive.access.nutch.NutchwaxTextSearchServlet</servlet-class>
 </servlet>
