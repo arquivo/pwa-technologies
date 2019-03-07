@@ -317,7 +317,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
 
         // Check if WARC-TYPE=response and if this record is an http response
         // Replacing string in WARCConstants.HTTP_RESPONSE_MIMETYPE because brozzler is writing WARCs mimetype this way: application/http;msgtype=response (no space)
-        if( !WARCConstants.WARCRecordType.response.equals(warcRecordType.trim()) ||
+        if( !WARCConstants.WARCRecordType.response.toString().equals(warcRecordType.trim()) ||
                 !(warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE) ||
                         warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE.replaceAll("\\s", ""))) ) {
             LOG.info("Skipping WARC: "+ warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE) + " MimeType " + warcRecordMimetype );
