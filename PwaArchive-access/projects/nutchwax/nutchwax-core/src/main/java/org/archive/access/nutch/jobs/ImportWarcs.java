@@ -60,7 +60,7 @@ import org.archive.access.nutch.Nutchwax;
 import org.archive.access.nutch.NutchwaxConfiguration;
 import org.archive.access.nutch.jobs.sql.SqlSearcher;
 import org.archive.io.ArchiveRecordHeader;
-import org.archive.io.warc.WARCConstants;
+import org.archive.format.warc.WARCConstants;
 import org.archive.io.warc.WARCRecord;
 import org.archive.mapred.WARCMapRunner;
 import org.archive.mapred.WARCRecordMapper;
@@ -317,7 +317,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
 
         // Check if WARC-TYPE=response and if this record is an http response
         // Replacing string in WARCConstants.HTTP_RESPONSE_MIMETYPE because brozzler is writing WARCs mimetype this way: application/http;msgtype=response (no space)
-        if( !WARCConstants.RESPONSE.equals(warcRecordType.trim()) ||
+        if( !WARCConstants.WARCRecordType.response.toString().equals(warcRecordType.trim()) ||
                 !(warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE) ||
                         warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE.replaceAll("\\s", ""))) ) {
             LOG.info("Skipping WARC: "+ warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE) + " MimeType " + warcRecordMimetype );
