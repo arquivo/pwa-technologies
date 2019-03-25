@@ -453,7 +453,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         final long startTime = System.currentTimeMillis();
         final Content content = new Content(url, url, contentBytes, mimetype, metaData, getConf());
 
-        datum.setFetchTime(Nutchwax.getDate((String) warcData.getHeaderValue(WARCConstants.HEADER_KEY_DATE)));
+        datum.setFetchTime(Nutchwax.getDate(getTs(warcData.getDate())));
 
         MapWritable mw = datum.getMetaData();
 
@@ -463,7 +463,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         }
 
         if (collectionType.equals(Global.COLLECTION_TYPE_MULTIPLE)) {
-            mw.put(new Text(ImportWarcs.ARCCOLLECTION_KEY), new Text(SqlSearcher.getCollectionNameWithTimestamp(collectionName,warcData.getDate())));
+            mw.put(new Text(ImportWarcs.ARCCOLLECTION_KEY), new Text(SqlSearcher.getCollectionNameWithTimestamp(collectionName,getTs(warcData.getDate()))));
         }
         else {
             mw.put(new Text(ImportWarcs.ARCCOLLECTION_KEY), new Text(collectionName));
@@ -509,8 +509,8 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         Writable v = new FetcherOutput(datum, null,
                 parse != null ? new ParseImpl(parse) : null);
         if (collectionType.equals(Global.COLLECTION_TYPE_MULTIPLE)) {
-            LOG.info("multiple: "+SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,warcData.getDate())+" "+url);
-            output.collect(Nutchwax.generateWaxKey(url,SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,warcData.getDate())), v);
+            LOG.info("multiple: "+SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,getTs(warcData.getDate()))+" "+url);
+            output.collect(Nutchwax.generateWaxKey(url,SqlSearcher.getCollectionNameWithTimestamp(this.collectionName,getTs(warcData.getDate()))), v);
         }
         else {
             output.collect(Nutchwax.generateWaxKey(url, this.collectionName), v);
@@ -553,8 +553,10 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         String minute = "";
         String second = "";
 
+        LOG.info("WARC getTs - received: " + dateWarc);
         try{
             SimpleDateFormat thedate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", new Locale("pt", "PT"));
+            thedate.parse(dateWarc);
             Calendar mydate = thedate.getCalendar();
 
             year +=  mydate.get(Calendar.YEAR);
