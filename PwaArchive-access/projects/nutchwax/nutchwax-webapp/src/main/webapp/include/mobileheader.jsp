@@ -1,5 +1,11 @@
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">
+                <div class="tabs-services div-underline">
+                  <script type="text/javascript">
+                    document.write('<a id="pagesTab" href="'+pagesHref+'"><fmt:message key="topbar.menu.pages"/></a>');
+                    document.write('<a id="imagesTab" href='+imagesHref+'><fmt:message key="topbar.menu.images"/></a>');
+                  </script>
+                </div>              
                 <form id="searchForm" action="/images.jsp" method="get">
                   <input type="hidden" name="l" value="<%= language %>" />
                   <input id="sizeFormInput" type="hidden" name="size" value="<%=size%>" />
@@ -32,17 +38,7 @@
                     <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
                     <input type="hidden" id="l" name="l" value="<%=language%>"/>
                 </div>   
-<script src="/include/clearForm.js"></script>  
-<script>
-  document.write("<div id='loadingDiv' class='text-center' style='text-align: center; margin-top: 10%; margin-bottom: 5%;'><div style='text-align: center; display: inline-block;'' class='cp-spinner cp-round'></div></div>");
-  $( document ).ready(function() {
-    if(typeof(loading)=="undefined" || loading != true){
-      $('#loadingDiv').hide();
-      $('#conteudo-resultado').show();
-      dateSlider.removeAttribute('disabled');
-    }
-  });
-</script>               
+<script src="/include/clearForm.js"></script>               
 <script type="text/javascript">
   // Create a new date from a string, return as a timestamp.
   dateSlider = document.getElementById('slider-date');
@@ -203,7 +199,36 @@
   }    
 </script>
 
-                </form>
-            </div>
+                </form>  
+                <ion-modal-controller></ion-modal-controller>
+<script type="text/javascript">
+  customElements.define('modal-page', class extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Super Modal</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  Content
+</ion-content>`;
+  }
+});
+
+async function presentModal() {
+  // initialize controller
+  const modalController = document.querySelector('ion-modal-controller');
+  await modalController.componentOnReady();
+
+  // present the modal
+  const modalElement = await modalController.create({
+    component: 'modal-page'
+  });
+  await modalElement.present();
+}
+</script>
+
+            </div>            
         </div>
 <!-- End SearchHeader -->

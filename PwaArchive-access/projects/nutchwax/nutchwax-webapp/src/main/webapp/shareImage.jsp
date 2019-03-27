@@ -167,6 +167,11 @@
   <meta property="og:image:width" content="<%=imageWidth%>" />
   <meta property="og:image:height" content="<%=imageHeight%>" />
   <meta property="og:image" content="<%=imageURLDecoded%>" />
+  <meta name="theme-color" content="#252525">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#252525">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#252525">    
 
   <script type="text/javascript">
   Content = {

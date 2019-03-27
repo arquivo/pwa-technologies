@@ -53,8 +53,6 @@ $( function() {
     });    
 } );
 
-startPosition = 0; //the default start position to get the images global variable
-
 /*When user presses enter submits the input text*/
 $(function() {
     $("#txtSearch").keypress(function (e) {
@@ -67,29 +65,21 @@ $(function() {
     });
 }); 
 
-function getMoreImages(){
-    $('#moreResults').remove();
-    $('#resultsUl').append('<li id="loadingMoreImages" style="text-align:center; margin-right: 1%; margin-bottom:1%; margin-top:4%; width:100%"> <div style="width: 100%; text-align:center"><div class="sk-fading-circle"><div class="sk-circle1 sk-circle"></div><div class="sk-circle2 sk-circle"></div><div class="sk-circle3 sk-circle"></div><div class="sk-circle4 sk-circle"></div><div class="sk-circle5 sk-circle"></div><div class="sk-circle6 sk-circle"></div><div class="sk-circle7 sk-circle"></div><div class="sk-circle8 sk-circle"></div><div class="sk-circle9 sk-circle"></div><div class="sk-circle10 sk-circle"></div><div class="sk-circle11 sk-circle"></div><div class="sk-circle12 sk-circle"></div></div></div> </li>');
-    startPosition += numrows;
-    searchImages(startPosition);
-}
-
-function loadingFinished(){
-    if(!noMoreResults){
-        $("#resultsUl").append('<li id="moreResults" style="width:100%; padding-top: 20px;"><button class="search-submit" style="float:none" onclick="getMoreImages()">Mais Resultados</button></li>');
-    }    
-    $('#loadingDiv').hide();
-    $("#resultsUl").show();
-    if($('#loadingMoreImages').length){
-        $('#loadingMoreImages').remove();
+function loadingFinished(showNextPageButton){
+    if(showNextPageButton){
+        $('#nextImage').css('display','inline-block');
     }
+    $('#previousImage').css('display','inline-block');
+
+    $('#loadingDivImages').hide();
+
 }
 
 totalPosition = 0; //global variable
 currentOffset= 0;
 
 function doInitialSearch(){
-    startPosition = 0;
+    /*startPosition = 0;*/
     searchImages(startPosition);
 }
 
@@ -179,6 +169,11 @@ function expandImage(position, animate){
 
     //$('#arrow'+position).css('margin-left', arrowMarginLeft+'px');
     $('#testViewer'+position).show();
+    $('#card'+position).show();
+    if($('#detailsCard'+position).length >= 0){
+      $('#detailsCard'+position).hide();
+    }
+
     $('body').css('overflow', 'hidden');
     
     //$('#arrowWrapper'+position).show();
@@ -235,74 +230,67 @@ function nextImage(position){
 
 function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expandedImageHeight, expandedImageWidth){
 
-var maxImageExpandHeight = 400; //for now fix later
+    var maxImageExpandHeight = 400;
+    var maxImageDivWidth =  ( ($(window).width() * 0.6) -70 ) * 0.95 ;
 
-var maxImageDivWidth =  ( ($(window).width() * 0.6) -70 ) * 0.95 ;
-
-if(expandedImageHeight > maxImageExpandHeight){
-    expandedImageHeight = maxImageExpandHeight;
-} 
-else if ( expandedImageWidth > maxImageDivWidth ){
-    //resize height in porportion to resized width
-    var ratio = maxImageDivWidth/expandedImageWidth;
-    expandedImageHeight = expandedImageHeight * ratio;
-}
-
-var centerImage;
-
-var centerImage = maxImageExpandHeight/2 - expandedImageHeight/2 ;
-
-var liMarginTop = maxImageHeight - imageHeight;
-
-var contentToInsert = ''+
-
-    '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "expandImage('+position+',false)" style=" break-inside: avoid-column; -webkit-column-break-inside: avoid;">'+
-    '   <img  height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
-    '   <p class="green image-display-url" >'+truncateUrl(imageObj.pageURL, 20)+'</p>'+
-    '   <p class="date image-display-date" id="date'+position+'">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
-    '   <div id="arrowWrapper'+position+'" class="arrowWrapper" >'+
-    '       <div id="arrow'+position+'" class="arrow"/></div>' +
-    '   </div>'+ 
-    '</div>';
-
-    $('#expandedImageViewers').append(insertImageViewer(imageObj, position));
-
-  /*href="/shareImage.jsp?imgurl='+encodeURIComponent(imageObj.currentImageURL)+'&imgrefurl='+encodeURIComponent(imageObj.pageURL)+'&imgrefts='+imageObj.timestamp+'&imgres='+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'&query='+$('#txtSearch').val()+'"*/
-  imageObj.expandedImageWidth = expandedImageWidth;
-  imageObj.expandedImageHeight = expandedImageHeight;
-  imageObjs[position] = imageObj;
-
-
-var lengthofUL = $('#photos .imageContent').length;
-if(lengthofUL === 0){ /*list is empty only the hidden li*/
-  $('#photos').prepend(contentToInsert);
-}
-else{
-  var inserted = false;
-  for (var i = 0 ; i< lengthofUL; i ++){
-    var insertedPos = $('#photos .imageContent').eq(i).attr('position');
-    if(position < insertedPos ){
-      $('#resultsUl li:eq('+i+')').before(contentToInsert);
-      /*add logic to new column layout*/
-      inserted = true;
-      break;
+    if(expandedImageHeight > maxImageExpandHeight){
+        expandedImageHeight = maxImageExpandHeight;
+    } 
+    else if ( expandedImageWidth > maxImageDivWidth ){
+        //resize height in porportion to resized width
+        var ratio = maxImageDivWidth/expandedImageWidth;
+        expandedImageHeight = expandedImageHeight * ratio;
     }
-  }
-  if(inserted === false){
-    $('#resultsUl').append(contentToInsert);
-    $('#photos').prepend(contentToInsert);
-  }
-}
+
+    var centerImage = maxImageExpandHeight/2 - expandedImageHeight/2 ;
+    var liMarginTop = maxImageHeight - imageHeight;
+    var contentToInsert = ''+
+
+        '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "expandImage('+position+',false)" style=" break-inside: avoid-column; -webkit-column-break-inside: avoid;">'+
+        '   <img  height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
+        '   <p class="green image-display-url" >'+truncateUrl(imageObj.pageURL, 20)+'</p>'+
+        '   <p class="date image-display-date" id="date'+position+'">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
+        '   <div id="arrowWrapper'+position+'" class="arrowWrapper" >'+
+        '       <div id="arrow'+position+'" class="arrow"/></div>' +
+        '   </div>'+ 
+        '</div>';
+
+        $('#expandedImageViewers').append(insertImageViewer(imageObj, position));
+
+      imageObj.expandedImageWidth = expandedImageWidth;
+      imageObj.expandedImageHeight = expandedImageHeight;
+      imageObjs[position] = imageObj;
+
+    var lengthofUL = $('#photos .imageContent').length;
+    if(lengthofUL === 0){ /*list is empty only the hidden li*/
+      $('#photos').prepend(contentToInsert);
+    }
+    else{
+      var inserted = false;
+      for (var i = 0 ; i< lengthofUL; i ++){
+        var insertedPos = $('#photos .imageContent').eq(i).attr('position');
+        if(position < insertedPos ){
+          $('#resultsUl li:eq('+i+')').before(contentToInsert);
+          /*add logic to new column layout*/
+          inserted = true;
+          break;
+        }
+      }
+      if(inserted === false){
+        $('#resultsUl').append(contentToInsert);
+        $('#photos').prepend(contentToInsert);
+      }
+    }
 }    
 
 function  insertImageViewer(imageObj, position){
 return ''+
 //image-expanded-full-width
 /*If landscaped image show it full width on small screens*/
-'<div id="testViewer'+position+'" class="height-vh image-mobile-expanded-div" tabindex="1">'+
-    '<div onclick="expandImage('+position+',false)" class="image-mobile-expanded-viewer-mask"></div>'+
-    '<div class="row full-height">'+
-        '<div class="full-height col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 text-right">'+
+'<div id="testViewer'+position+'" class="height-vh image-mobile-expanded-div no-outline" tabindex="1">'+
+    '<div onclick="expandImage('+position+',false)" class="image-mobile-expanded-viewer-mask no-outline"></div>'+
+    '<div class="row full-height no-outline">'+
+        '<div id="insert-card-'+position+'" class="full-height col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 text-right">'+
             '<ion-card id="card'+position+'" class="card-height">'+
                (parseInt(imageObj.expandedWidth) > parseInt(imageObj.expandedHeight) ? ''+
                '<ion-icon id="close'+position+'" name="close" class="closeCard" size="large" onclick = "expandImage('+position+',false)"></ion-icon>' : '' +
@@ -311,11 +299,11 @@ return ''+
                 (parseInt(imageObj.expandedWidth) > parseInt(imageObj.expandedHeight) ? '<img class="image-expanded-viewer image-expanded-full-width" src="'+imageObj.currentImageURL+'">' : '<img class="image-expanded-viewer" src="'+imageObj.currentImageURL+'">')+
                '</a>'+
                '<ion-row class="image-viewer-expanded-main-actions">'+
-                    '<ion-col size="6" class="text-left"><a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><ion-button size="small" class="visit-page border-mobile" fill="clear"><ion-icon name="globe" class="middle"></ion-icon><span class="middle"><h5>&nbsp;Visitar</h5></span></ion-button></a></ion-col>'+
-                    '<ion-col size="6" ><ion-button size="small" class="view-details border-mobile" fill="clear" ><ion-icon name="information-circle-outline" class="middle"></ion-icon><span class="middle"><h5>&nbsp;Detalhes</h5></span></ion-button></ion-col>'+
+                    '<ion-col size="6" class="text-left"><a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><ion-button size="small" class="visit-page border-mobile" fill="clear"><ion-icon name="globe" class="middle"></ion-icon><span class="middle"><h5>&nbsp;'+details.visit+'</h5></span></ion-button></a></ion-col>'+
+                    '<ion-col size="6" ><ion-button size="small" class="view-details border-mobile" onclick="viewDetails('+position+')" fill="clear" ><ion-icon name="information-circle-outline" class="middle"></ion-icon><span class="middle"><h5>&nbsp;'+details.details+'</h5></span></ion-button></ion-col>'+
                 '</ion-row>'+
                 '<ion-row>'+
-                    '<h4 class="text-left">Imagem</h4>'+                
+                    '<h4 class="text-left">'+details.image+'</h4>'+                
                 '</ion-row>'+
                 '<ion-card-content>'+                
                     '<ion-list class="imageList selected">'+
@@ -327,7 +315,7 @@ return ''+
                     '</ion-list>'+
                 '</ion-card-content>'+  
                 '<ion-row>'+
-                    '<h4 class="text-left">Página</h4>'+                
+                    '<h4 class="text-left">'+details.page+'</h4>'+                
                 '</ion-row>'+
                 '<ion-card-content>'+                
                     '<ion-list>'+
@@ -340,6 +328,70 @@ return ''+
         '</div>'+
     '</div>'+    
 '</div>';        
+}
+
+function viewDetails(position){
+  imageObj = imageObjs[position];
+
+  if($('#detailsCard'+position).length == 0) {
+    var detailsCard = ''+
+    '<ion-card id="detailsCard'+position+'" class="card-height">'+
+      '<ion-icon id="closeCard'+position+'" name="close" class="closeItAbsolute" size="large" onclick="closeDetails('+position+')"></ion-icon>'+
+      '<ion-row>'+
+        '<h3 class="text-left">'+details.details+'</h4>'+                
+      '</ion-row>'+            
+      '<ion-row>'+
+        '<h4 class="text-left">'+details.page+'</h4>'+                
+      '</ion-row>'+      
+      '<ion-card-content>'+
+        '<ion-list>'+
+         '<ion-item class="item-borderless" lines="none" ><h5><em>url:</em>&nbsp;<a href="/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageURL+'</a></h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>timestamp:</em> '+imageObj.pageTstamp+'</h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>'+details.title+'</em> '+imageObj.pageTitleFull+'</h5></ion-item>'+
+        '</ion-list>'+
+      '</ion-card-content>'+
+      '<ion-row>'+      
+        '<h4 class="text-left">'+details.image+'</h4>'+                
+      '</ion-row>'+      
+      '<ion-card-content>'+
+        '<ion-list>'+
+          '<ion-item class="item-borderless" lines="none" ><h5><em>src:</em>&nbsp;<a href="/wayback/'+imageObj.timestamp+'/'+imageObj.imgSrc+'">'+imageObj.imgSrc+'</a></h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>timestamp:</em> '+imageObj.timestamp+'</h5></ion-item>'+
+          (imageObj.titleFull != "" ? '<ion-item lines="none" ><h5><em>'+details.title+'</em> '+imageObj.titleFull+'</h5></ion-item>': '') +
+          (imageObj.imgAltFull != "" ? '<ion-item lines="none" ><h5><em>alt:</em> '+imageObj.imgAltFull+'</h5></ion-item>': '') +
+          '<ion-item lines="none" ><h5><em>'+details.resolution+'</em> '+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+' pixels</h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>mimetype:</em> '+imageObj.imgMimeType+'</h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>'+details.safesearch+'</em> '+imageObj.safe+'</h5></ion-item>'+
+        '</ion-list>'+
+      '</ion-card-content>'+      
+      '<ion-row>'+      
+        '<h4 class="text-left">'+details.collection+'</h4>'+                
+      '</ion-row>'+      
+      '<ion-card-content>'+
+        '<ion-list>'+
+          '<ion-item class="item-borderless" lines="none" ><h5><em>'+details.name+'</em> '+imageObj.collection+'</h5></ion-item>'+
+        '</ion-list>'+
+      '</ion-card-content>'+      
+    '</ion-card>';
+
+    $('#insert-card-'+position).append(detailsCard);
+    $('#card'+position).hide();
+  }
+  else{
+    $('#card'+position).hide();
+    $('#detailsCard'+position).show()
+  }
+
+}
+
+function closeDetails(position){
+  
+  //$('#testViewer'+position).hide();
+
+  //$('#card'+position).show();  
+  expandImage(position, false);
+  $('#detailsCard'+position).hide();
+
 }
 
 function encodeHtmlEntity(str) {
@@ -439,15 +491,14 @@ function encodeHtmlEntity(str) {
 }
 
 $(document).ajaxStart(function(){
-  if(startPosition == 0){
-    $('#resultsUl').empty();        
-    $('#loadingDiv').show();
+  if(startPosition == 0){       
+    $('#loadingDivImages').show();
   }
 });
 
 $(document).ajaxStop(function(){
   if(startPosition == 0){       
-    $('#loadingDiv').hide();
+    $('#loadingDivImages').hide();
   }
 });
 
@@ -461,7 +512,7 @@ function initClipboard(linkCopied){
 
 function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOption,startIndex){
     if( safeSearchOption == "null"){
-        safeSearchOption = "yes";
+        safeSearchOption = "on";
     }
     var query;
     var site="";
@@ -486,15 +537,8 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
     var dateStart= $('#event-start').attr("value") + '0000000000' ;
     
     var dateEnd= $('#event-end').attr("value") + '1231235959';
-
-    numrows =50;
     currentStart = startIndex;
     
-    safeSearch = "on";
-    if($('#safeSearch').find(":selected").attr("value") === 'off'){
-        safeSearch = "off";       
-    }
-
 
     $.ajax({
        url: "/imagesearch",      
@@ -505,7 +549,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
           siteSearch: site,
           offset: startIndex,
           maxItems: numrows,
-          safeSearch:safeSearch,
+          safeSearch:safeSearchOption,
           more: "imgThumbnailBase64,imgSrcURLDigest,imgDigest,pageProtocol,pageHost,pageImages,safe",
           size: sizeVar,
           type: typeVar        
@@ -516,18 +560,18 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
        },
        dataType: 'text',
        success: function(data) {
+        $('#imagesDefaultTextDiv').hide(); /*Hiding default message*/
 
         var responseJson = $.parseJSON(data);
 
-        if(currentStart == 0 ){
-            $('#resultsUl').empty();
-        }
-        var totalResults = responseJson.totalItems;
+
+        totalResults = responseJson.totalItems;
+        var showNextPageButton = ((parseInt(startIndex) + parseInt(numrows)) >= totalResults) ? false: true;    
         
         if ( totalResults === 0){
             createErrorPage();
             noMoreResults=true;
-            loadingFinished();
+            loadingFinished(showNextPageButton);
         }
         else{
             
@@ -540,36 +584,20 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
             }
             var resultsToLoad = currentResults;
             
-
             for (var i=0; i< currentResults; i++){
-                
                 var currentDocument = responseJson.responseItems[i];
-                if (typeof currentDocument === 'undefined' || !currentDocument){
-                    
-                    continue;
-                }
-                if (typeof currentDocument.imgTstamp === 'undefined' || !currentDocument.imgTstamp){
-                    
+                if (typeof currentDocument === 'undefined' || !currentDocument || typeof currentDocument.imgTstamp === 'undefined' || !currentDocument.imgTstamp){                    
                     continue;
                 }
 
                 var currentImageURL = window.location.protocol+'//'+window.location.hostname+ '/wayback/'+ currentDocument.imgTstamp +'/'+currentDocument.imgSrc;
                 var imageDigest = currentDocument.imgDigest;
                 
-
-                if(imageDigests.indexOf(imageDigest) > -1){
-                    
-                    
-                    
-                    
-                    
-                    resultsToLoad--;
-                    
+                if(imageDigests.indexOf(imageDigest) > -1){ 
+                    resultsToLoad--;                    
                     continue; 
                 }
-                
                 else{
-                    
                     imageDigests.push(imageDigest);
                 }
 
@@ -609,8 +637,6 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                 if (typeof imageObj.pageTitleFull === 'undefined' || imageObj.pageTitleFull == 'undefined' ){imageObj.pageTitleFull ='';}               
                 imageObj.collection = currentDocument.collection;
                 imageObj.imgSrc = currentDocument.imgSrc;
-                //if (imageObj.title == "undefined") {imageObj.title = imageUndefined; $('#imgTitleLabel'+imageObj.position).hide();}
-
 
                 totalPosition = totalPosition + 1;
 
@@ -621,23 +647,22 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                 imageObj.onload = function() {
                             
                     if( startIndex != 0 &&  totalResults == responseJson.totalResults){
-                        $('#loadingMoreImages').remove();
+                        $('#loadingDivImages').remove();
                     }
                             totalResults --;
                             resultsToLoad --;
-
-                            
-
                                
+                            var insertPosition = (parseInt(this.position)+parseInt(currentStart));   
+
                             if(this.height <= resizeImageHeight){
-                            insertInPosition(this.position +currentStart, this, this.height, resizeImageHeight, this.expandedHeight, this.expandedWidth);
+                            insertInPosition(insertPosition, this, this.height, resizeImageHeight, this.expandedHeight, this.expandedWidth);
                             }
                             else{
-                            insertInPosition(this.position +currentStart, this, resizeImageHeight, resizeImageHeight, this.expandedHeight, this.expandedWidth);
+                            insertInPosition(insertPosition, this, resizeImageHeight, resizeImageHeight, this.expandedHeight, this.expandedWidth);
                             }
                        
                             if(resultsToLoad <= 0){
-                                loadingFinished();
+                                loadingFinished(showNextPageButton);
                             }
                     
                 }
@@ -646,14 +671,14 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                 imageObj.onerror = function() {
                     // image did not load
                     if( startIndex != 0 &&  totalResults == responseJson.totalResults){
-                        $('#loadingMoreImages').remove();
+                        $('#loadingDivImages').remove();
                     }                
                     totalResults --;
                     resultsToLoad --;
                     
                     
                     if(resultsToLoad <= 0){
-                        loadingFinished();
+                        loadingFinished(showNextPageButton);
                     }
                 }
                 
@@ -692,46 +717,7 @@ $(document).ready(function() {
       $("#dialog").dialog('close'); 
       return false;
     }); 
-    
-    $(document).on('click', '#showDetails', function() {
-      var position =  $(this).attr('position');
-      var imageObj = imageObjs[position]; /*get Current Image Object*/
-      $("#detailsDialog").dialog('open');
-      $('#imageDetailImageElements').empty();
-      $('#imageDetailPageElements').empty();
-      $('#imageDetailCollectionElements').empty();
-      /*Insert Page Details*/
-      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> url: </span>'+imageObj.pageURL+'</h3>');
-      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> timestamp: </span>'+imageObj.pageTstamp+'</h3>');
-      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+titleString+': </span>'+imageObj.pageTitleFull+'</h3>');
-      /*Insert Image Details*/
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> src: </span>'+imageObj.imgSrc+'</h3>');
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> timestamp: </span>'+imageObj.timestamp+'</h3>');
-      if(imageObj.titleFull !== ''){
-        $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+titleString+': </span>'+imageObj.titleFull+'</h3>');
-      }
-      if(imageObj.imgAltFull !== ''){
-        $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> alt: </span>'+imageObj.imgAltFull+'</h3>');
-      }      
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+resolutionString+': </span>'+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+' pixels</h3>');
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> mimetype: </span>image/'+imageObj.imgMimeType+'</h3>');
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> safesearch score: </span>'+imageObj.safe+'</h3>');
-      $('#imageDetailCollectionElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+nameString+': </span>'+imageObj.collection+'</h3>');
-      
-      $(document).on('click', function(e) {
-        if (e.target.id !== 'detailsDialog'  && !$(e.target).parents("#detailsDialog").length) {
-            $("#detailsDialog").dialog('close');
-            $(this).off(e);
-        }
-        return false;
-      });          
-      return false;
-    });
-    $(document).on('click', '#detailsDialogClose', function() {
-      $("#detailsDialog").dialog('close'); 
-      return false;
-    });    
-
+   
 });
 
 var defaultDiacriticsRemovalMap = [
@@ -844,23 +830,21 @@ function capitalizeFirstLetter(string) {
 
 function createErrorPage(){
   $(''+
-        '<div id="conteudo-pesquisa-erro">'+
-            '<h2>'+ notFoundTitle+'</h2> <h3>'+$('#txtSearch').val()+'</h3>'+
-            '<div id="sugerimos-que">'+
-                '<p>'+noResultsSuggestions+'</p>'+
-              '<ul>'+
-                '<li>'+noResultsWellWritten+'</li>'+
-                '<li>'+noResultsInterval+'</li>'+                    
-                '<li>'+noResultsKeywords+'</li>'+                    
-                '<li>'+noResultsGenericWords+'</li>'+                    
-              '</ul>'+
-            '</div>'+
-        '</div>'+          
-    '').insertAfter("#resultados-lista");
-    $('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left);
+    '<div id="conteudo-pesquisa-erro">'+
+        '<div class="alert alert-danger break-word col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 my-alert-images">'+
+          '<p>'+notFoundTitle+'<span class="text-bold"> '+$('#txtSearch').attr("value")+'</span></p>'+
+        '</div>'+
+        '<div id="sugerimos-que" class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 no-padding-left">'+
+            '<p class="text-bold">'+noResultsSuggestions+'</p>'+
+          '<ul class="suggestions-no-results">'+
+            '<li>'+noResultsWellWritten+'</li>'+
+            '<li>'+noResultsInterval+'</li>'+
+            '<li>'+noResultsKeywords+'</li>'+
+            '<li>'+noResultsGenericWords+'</li>'+
+          '</ul>'+
+        '</div>'+
+    '</div>'+
+    '').insertBefore("#photos");
+    //$('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left);
     $( window ).resize(function() {$('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/$( window ).resize(function() {$('.spell').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/ 
 }
-
-
-
-

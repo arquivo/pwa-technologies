@@ -68,161 +68,258 @@
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
-	<title><fmt:message key='advancedImages.meta.title'/></title>
+	<title><fmt:message key='advanced.meta.title'/></title>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Language" content="pt-PT" />
-	<meta name="Keywords" content="<fmt:message key='advancedImages.meta.keywords'/>" />
-	<meta name="Description" content="<fmt:message key='advancedImages.meta.description'/>" />
+	<meta name="Keywords" content="<fmt:message key='advanced.meta.keywords'/>" />
+	<meta name="Description" content="<fmt:message key='advanced.meta.description'/>" />
 	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
-	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
+	<meta name="theme-color" content="#252525">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#252525">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#252525">  	
 	<script type="text/javascript">
 		var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
 		var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
 	</script>
-	<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="js/ui.datepicker.js"></script>
-    <% if (language.equals("pt")) { /* load PT i18n for datepicker */ %>
-	<script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
-    <% } %>
-    <script type="text/javascript">
-      calendarBegin = '<fmt:message key="calendar.begin" />'.replace("Calendario", "Calendário");
-      calendarEnd = '<fmt:message key="calendar.end" />'.replace("Calendario", "Calendário");
-    </script>            
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- cookies for language selection -->
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
+    <!-- dual slider dependencies -->
+    <script type="text/javascript" src="/js/nouislider.min.js"></script>
+    <link rel="stylesheet" href="/css/nouislider.min.css">
+    <script type="text/javascript" src="/js/wNumb.js"></script>
+    <!-- left menu dependencies -->
+    <link rel="stylesheet" href="css/leftmenu.css">
+    <!-- end left menu dependencies -->    
 	<script type="text/javascript" src="js/configs.js"></script>
+    <!--Includes mobiscroll (calendars for advanced search)-->
+	<link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
+	<script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    /*Initialization of Datepickers datestart and dateend for the advanced search*/
+        $(function () {
+        	var currDate = new Date();
+            var curr = currDate.getFullYear();
+            var opt = {}
+            opt.date = {preset : 'date'};
+
+      
+            $('#dateStart_top').val('01/01/1996').scroller('destroy').scroller($.extend(opt["date"], { 
+            	theme: "android-ics light",
+            	dateFormat: 'dd/mm/yy', 
+            	dateOrder: 'dMyy' ,
+            	startYear: 1996 , 
+            	endYear: currDate.getFullYear()-1,            	            
+            	monthNamesShort : ['<fmt:message key="smonth.0" />'.toLowerCase(), 
+            	                   '<fmt:message key="smonth.1" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.2" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.3" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.4" />'.toLowerCase(), 
+            	                   '<fmt:message key="smonth.5" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.6" />'.toLowerCase(), 
+            	                   '<fmt:message key="smonth.7" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.8" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.9" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.10" />'.toLowerCase(), 
+            	                   '<fmt:message key="smonth.11" />'.toLowerCase()],
+            	mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
+            }));
+
+            $('#dateEnd_top').val('31/12/'+(currDate.getFullYear()-1).toString()).scroller('destroy').scroller($.extend(opt["date"], { 
+            	theme: "android-ics light",
+            	dateFormat: 'dd/mm/yy', 
+            	dateOrder: 'dMyy' ,
+            	startYear: 1996 , 
+            	endYear: (new Date()).getFullYear()-1,            	            
+            	monthNamesShort : ['<fmt:message key="smonth.0" />'.toLowerCase(), 
+            	                   '<fmt:message key="smonth.1" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.2" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.3" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.4" />'.toLowerCase(), 
+            	                   '<fmt:message key="smonth.5" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.6" />'.toLowerCase(), 
+            	                   '<fmt:message key="smonth.7" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.8" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.9" />'.toLowerCase(),
+            	                   '<fmt:message key="smonth.10" />'.toLowerCase(), 
+            	                   '<fmt:message key="smonth.11" />'.toLowerCase()],
+            	mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
+            }));
+        });
+    </script>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
+<!-- end addthis for sharing on social media --> 	
 </head>
 <body>
 	<%@ include file="include/topbar.jsp" %>
 	<div class="wrap">
-		<div id="main">
-			<div id="header">
-				<div id="logo">
-					<a href="index.jsp" title="<fmt:message key='header.logo.link'/>">
-						<img src="img/logo-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="125" height="90" />
-					</a>
-				</div>
-				<div id="info-texto-termos">
-					<h1><fmt:message key='advancedImages.title'/></h1>
-				</div>
-			</div>
+    <div class="container-fluid topcontainer col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4 " id="headerSearchDiv" >
+		<div id="info-texto-termos" class="row">
+		</div>  
+		<!-- Formulario -->
+		<div id="main" class="main-form-advanced">
 			<div id="conteudo-pesquisa">
 				<form method="get" action="images.jsp">
 					<input type="hidden" name="l" value="<%= language %>" />
-					<div class="pesquisar-por">
-	                                	<p class="titulo"><fmt:message key='advancedImages.form-title'/></p>
-	                                        <input type="submit" value="<fmt:message key='advancedImages.submit'/>" alt="<fmt:message key='advancedImages.submit'/>" class="search-submit" name="btnSubmitTop" id="btnSubmitTop" accesskey="e" />
-	                                </div>
-					<fieldset id="words">
-						<legend><fmt:message key='advancedImages.terms'/></legend>
-						<div class="box-content">
-							<div id="label-palavras-1">
-								<label for="adv_and"><fmt:message key='advancedImages.terms.all'/></label>
-								<div class="withTip">
-									<input type="text" id="adv_and" name="adv_and" value="<%=and.toString()%>" />
-									<br />
-									<span class="tip"><fmt:message key='advancedImages.terms.all.hint'/></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-
-							<div id="label-palavras-2">
-								<label for="adv_phr"><fmt:message key='advancedImages.terms.phrase'/></label>
-								<div class="withTip">
-									<input type="text" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
-									<br />
-									<span class="tip"><fmt:message key='advancedImages.terms.phrase.hint'/></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-
-							<div id="label-palavras-3">
-								<label for="adv_not"><fmt:message key='advancedImages.terms.not'/></label>
-								<div class="withTip">
-									<input type="text" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
-									<br />
-									<span class="tip"><fmt:message key='advancedImages.terms.not.hint'/></span>
-								</div>
-							</div>
-						</div>
-					</fieldset>
-
-					<fieldset id="date">
-						<legend><fmt:message key='advancedImages.date'/></legend>
-						<div class="box-content">
-							<div id="label-data-1">
-								<label for="dateStart_top"><fmt:message key='advancedImages.date.from'/></label>
-								<div class="withTip">
-									<input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" />
+		            <div class="expandable-div">   
+						<fieldset id="words">
+							<legend><fmt:message key='advanced.terms'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
+								<div id="label-palavras-1">
+									<label for="adv_and" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.terms.all'/></label>
+									<div class="withTip ">
+										<input type="text" id="adv_and" class="row  col-xs-10" name="adv_and" value="<%=and.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
+											<span class="tip"><fmt:message key='advanced.terms.all.hint'/></span>
+										</div>										
+									</div>
 								</div>
 
-								<label id="labelDateEnd" for="dateEnd_top"><fmt:message key='advancedImages.date.to'/></label>
-								<div class="withTip">
-									<input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
+								<div id="label-palavras-2">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="adv_phr"><fmt:message key='advanced.terms.phrase'/></label>
+									<div class="withTip">
+										<input type="text" class="row  col-xs-10" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
+											<span class="tip"><fmt:message key='advanced.terms.phrase.hint'/></span>
+										</div>											
+									</div>
 								</div>
-							</div>
-						</div>
-					</fieldset>
 
-					<fieldset id="size">
-						<legend><fmt:message key='advancedImages.size'/></legend>
-						<div class="box-content">
-							<div id="label-format-1">
-								<label for="size"><fmt:message key='images.size'/></label>
-								<select id="size" name="size" class="advancedImageSearchSelect">
-									<option value="all" selected="selected"><fmt:message key='images.safeOffLabel'/></option>
-									<option value="sm"><fmt:message key='images.tools.sm'/></option>
-									<option value="md"><fmt:message key='images.tools.md'/></option>
-									<option value="lg"><fmt:message key='images.tools.lg'/></option>
-								</select>
-							</div>
-						</div>							
-						<div class="box-content">
-							<div id="label-format-1">
-								<label for="formatType"><fmt:message key='images.type'/></label>
-								<select id="type" name="type" class="advancedImageSearchSelect">
-									<option value="all" selected="selected"><fmt:message key='images.tools.all'/></option>
-									<option value="jpg">Joint Photographic Experts Group (.jpeg)</option>
-									<option value="png">Portable Network Graphics (.png)</option>
-									<option value="gif">Graphics Interchange Format (.gif)</option>
-									<option value="bmp">Bitmap Image File (.bmp)</option>
-									<option value="webp">WEBP (.webp)</option>
-								</select>
-							</div>
-						</div>
-						<div class="box-content">
-							<div id="label-format-1">
-								<label for="safeSearch"><fmt:message key='images.safeSearch'/></label>
-								<select id="safeSearch" name="safeSearch" class="advancedImageSearchSelect">
-									<option value="on" selected="selected"><fmt:message key='images.safeOnLabel'/></option>
-									<option value="off"><fmt:message key='images.safeOffLabel'/></option>
-								</select>
-							</div>
-						</div>																
-					</fieldset>
-					
-					<fieldset id="domains">
-						<legend><fmt:message key='advanced.website'/></legend>
-						<div class="box-content">
-							<div id="label-domains-1">
-								<label for="site"><fmt:message key='advanced.website.label'/></label>
-								<div class="withTip">
-									<input type="text" id="site" name="site" value="<%=site%>" /><br />
-									<span class="tip"><fmt:message key='advanced.website.hint'/></span>
+								<div id="label-palavras-3">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="adv_not"><fmt:message key='advanced.terms.not'/></label>
+									<div class="withTip">
+										<input type="text" class="row  col-xs-10" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
+											<span class="tip"><fmt:message key='advanced.terms.not.hint'/></span>
+										</div>	
+									</div>
 								</div>
-								<div class="clear"></div>
 							</div>
-						</div>
-					</fieldset>
-					<div id="bottom-submit">
-						<input type="submit" value="<fmt:message key='advancedImages.submit'/>" alt="<fmt:message key='advancedImages.submit'/>" class="search-submit" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" />
+						</fieldset>
+					</div>	
+
+					<div class="expandable-div">
+						<fieldset id="date">
+							<legend><fmt:message key='advanced.date'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
+								<div id="label-data-1">
+
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
+									<div class="withTip">
+										<input size="10" class="row  date-advanced no-padding-left" type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" /><a class="calendar-anchor-advanced" id="startDateCalendarAnchor"><img src="/img/calendar.gif"/></a>
+									</div>
+
+									<label id="labelDateEnd" class="row  col-xs-12 no-padding-left label-padding-top" for="dateEnd_top"><fmt:message key='advanced.date.to'/></label>
+									<div class="withTip">
+										<input type="text" class="row  date-advanced no-padding-left" id="dateEnd_top" name="dateEnd" size="10" value="<%=dateEndString%>" /><a class="calendar-anchor-advanced" id="endDateCalendarAnchor"><img src="/img/calendar.gif"/></a>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>	
+					<div class="expandable-div">
+						<legend><fmt:message key='advancedImages.size'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
+								<div id="label-format-1">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="formatType"><fmt:message key='advanced.format.label'/></label>
+									<select id="formatType" name="type" class="row  col-xs-10 no-padding-left select-style">
+									<%
+										String[] mimeList = {"jpg", "png", "gif", "bmp", "webp"};
+										String[] mimeListDetail = {"Joint Photographic Experts Group (.jpeg)", "Portable Network Graphics (.png)", "Graphics Interchange Format (.gif)", "Bitmap Image File (.bmp)", "WEBP (.webp)"};
+
+										if (format == null || "all".equals(format)) {%>
+											<option value="all" selected="selected"><fmt:message key='advanced.format.all'/></option>
+										<%} else {%>
+											<option value="all"><fmt:message key='advanced.format.all'/></option>
+										<%}
+
+										for (int i=0; i < mimeList.length; i++) {
+											if (mimeList[i].equals(format)) {
+												out.print("<option value=\""+ mimeList[i] +"\" selected=\"selected\">"+ mimeListDetail[i] +"</option>");
+											} else {
+												out.print("<option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</option>");
+											}
+										}
+									%>
+									</select>
+									<label for="size" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='images.size'/></label>
+									<select id="size" name="size" class="row  col-xs-10 no-padding-left select-style">
+										<option value="all" selected="selected"><fmt:message key='images.safeOffLabel'/></option>
+										<option value="sm"><fmt:message key='images.tools.sm'/></option>
+										<option value="md"><fmt:message key='images.tools.md'/></option>
+										<option value="lg"><fmt:message key='images.tools.lg'/></option>
+									</select>
+									<label for="safeSearch" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='images.safeSearch'/></label>
+									<select id="safeSearch" name="safeSearch" class="row  col-xs-10 no-padding-left select-style">
+										<option value="on" selected="selected"><fmt:message key='images.safeOnLabel'/></option>
+										<option value="off"><fmt:message key='images.safeOffLabel'/></option>
+									</select>										
+
+								</div>							
+							</div>						
+
 					</div>
+					<div class="expandable-div">
+						<fieldset id="domains">
+							<legend><fmt:message key='advanced.website'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
+								<div id="label-domains-1">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="site"><fmt:message key='advanced.website.label'/></label>
+									<div class="withTip">
+										<input class="row  col-xs-10 no-padding-left" type="text" id="site" name="site" value="<%=site%>" />
+										<span class="row  col-xs-10 no-padding-left tip"><fmt:message key='advanced.website.hint'/></span>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>	
+
+					<div id="bottom-submit" class="text-center button-advanced">
+						<button type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="myButtonStyle col-xs-offset-3 col-xs-6" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" >
+						<fmt:message key='advanced.search'/>
+						<span class="glyphicon glyphicon-search padding-left-5"></span>
+						</button>
+					</div>
+
+
 				</form>
                         </div>
-                </div>
+                </div>		
+		<!-- Fim formulário -->      
+    </div>    
+
+<script>
+$(".expandable-div legend").click(function() {
+    $(this).children("i").toggleClass('fa-caret-up fa-caret-down');
+    $(this).next().toggleClass("hidden");
+});
+</script>
+
 <%-- end copy --%>
 	</div>
-<%@include file="include/footer.jsp" %>
+<script>
+	$('#startDateCalendarAnchor').click( function(e) {
+	  e.preventDefault();
+	  $('#dateStart_top').trigger('click');
+	});    
+</script>		
+<script>
+	$('#endDateCalendarAnchor').click( function(e) {
+	  e.preventDefault();
+	  $('#dateEnd_top').trigger('click');
+	});    
+</script>
+<%@ include file="include/footer.jsp" %>
 <%@include file="include/analytics.jsp" %>
 </body>
 </html>

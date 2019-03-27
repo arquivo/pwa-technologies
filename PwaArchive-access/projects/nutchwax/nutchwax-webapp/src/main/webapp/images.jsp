@@ -14,15 +14,11 @@
   import="java.net.URLEncoder"
   import= "java.net.*"
   import= "java.io.*"
-  import="java.net.URLEncoder"
   import="java.text.DateFormat"
   import="java.text.SimpleDateFormat"
-  import="java.util.Calendar"
   import="java.util.TimeZone"
-  import="java.util.Date"
   import="java.util.regex.Matcher"
   import="java.util.regex.Pattern"
-  import="java.util.GregorianCalendar"
   import="org.apache.hadoop.conf.Configuration"
   import="org.apache.lucene.search.PwaFunctionsWritable"
   import="org.apache.nutch.global.Global"
@@ -90,12 +86,20 @@ response.setHeader("Cache-Control","public, max-age=600");
   int queryStringParameter= 0;
   // Prepare the query values to be presented on the page, preserving the session
   String htmlQueryString = "";
+  String query ="";
   boolean safe =true;
   boolean unsafe = false;
   String safeSearchString ="on";
   String type = ""; /*Default mimetype*/
   String size = "all"; /*Default image size*/
   String tools = "off"; /*Show toolbar*/
+  int startPosition = 0;
+  String startString = request.getParameter("start");
+  if (startString != null)
+    startPosition = Integer.parseInt(startString);
+
+
+
   if( request.getParameter("safeSearch") != null && request.getParameter("safeSearch").contains("off") ){
     safeSearchString = "off";
   }
@@ -151,6 +155,8 @@ response.setHeader("Cache-Control","public, max-age=600");
 
   if ( request.getParameter("query") != null ) {
         htmlQueryString = request.getParameter("query").toString();
+        query= request.getParameter("query").toString();
+        query = URLEncoder.encode(query, "UTF-8");
   }
   else{
         htmlQueryString = "";
@@ -244,17 +250,22 @@ response.setHeader("Cache-Control","public, max-age=600");
         request.setAttribute("htmlQueryString", htmlQueryString);
   }
 
-
+  int numrows = 25;
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT"><head>
   <title><fmt:message key='images.imageTitle'/>:&nbsp; <c:out value = "${htmlQueryString}"/> &nbsp;  &mdash; Arquivo.pt</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
-  
   <meta http-equiv="Content-Language" content="pt-PT"/>
   <meta name="Keywords" content="resultado, pesquisa, buscar, arquivo, Web, português, portuguesa, Portugal"/>
   <meta name="Description" content="Página de resultados de uma pesquisa de imagens feita no Arquivo.pt."/>
+  <meta name="theme-color" content="#252525">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#252525">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#252525">  
+
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon"/>
   <link href="css/csspin.css" rel="stylesheet" type="text/css"/>
   <script type="text/javascript">
@@ -264,9 +275,19 @@ response.setHeader("Cache-Control","public, max-age=600");
   <script type="text/javascript">
     calendarBegin = '<fmt:message key="calendar.begin" />'.replace("calendario", "calendário");
     calendarEnd = '<fmt:message key="calendar.end" />'.replace("calendario", "calendário");
+    /*Object with required properties to display in the view details modal*/
+    details = {
+      details : '<fmt:message key="images.details.details"/>',
+      page  : '<fmt:message key="images.details.page"/>',
+      title     : '<fmt:message key="images.details.title"/>',
+      image  : '<fmt:message key="images.details.image"/>',
+      resolution: '<fmt:message key="images.details.resolution"/>',
+      safesearch: '<fmt:message key="images.details.safesearch"/>',
+      collection: '<fmt:message key="images.details.collection"/>',
+      name: '<fmt:message key="images.details.name"/>',
+      visit: '<fmt:message key="images.viewer.visit"/>'
+    };    
   </script>
- 
-
 
   <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
@@ -294,7 +315,9 @@ response.setHeader("Cache-Control","public, max-age=600");
   <script type="text/javascript" src="js/ui.datepicker.js"></script>
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
   <!--<script type="text/javascript" src="js/imageConfigs.js"></script>-->
-  <script type="text/javascript" src="js/images2.js"></script>
+
+
+  <script type="text/javascript" src="js/images2.js?tta"></script>
   <script type="text/javascript">
     $(".border-mobile").click(function(e) {
        // Do something
@@ -372,6 +395,8 @@ Content = {
   noResultsInterval = '<fmt:message key="search.no-results.suggestions.time-interval"/>';
   noResultsKeywords = '<fmt:message key="search.no-results.suggestions.keywords"/>';
   noResultsGenericWords = '<fmt:message key="search.no-results.suggestions.generic-words"/>';
+  startPosition = "<%=startPosition%>";
+  numrows ="<%=numrows%>"; /*Number of Images to show by default*/
 </script>
 
 <script type="text/javascript" src="/js/js.cookie.js"></script>
@@ -380,11 +405,67 @@ Content = {
   <%@ include file="include/topbar.jsp" %>
   <div id="expandedImageViewers"></div>  
   <div class="container-fluid topcontainer" id="headerSearchDiv">
+  <script type="text/javascript">
+    imagesHref = window.location.href;
+    pagesHref = window.location.href.toString().replace("images.jsp", "search.jsp"); /*TODO remove from this href parameters that are only appliable to image search*/
+  </script>    
   <%@ include file="include/mobileheader.jsp" %>
+  <script type="text/javascript">$('#imagesTab').addClass('selected');$('#imagesTab').addClass('primary-underline');</script>
 
 
-  <div class="row">
-    <section id="photos"></section>    
+  <div class="row image-container">
+    <script>
+      document.write("<div id='loadingDiv' class='text-center' style='text-align: center; margin-top: 10%; margin-bottom: 5%;'><div style='text-align: center; display: inline-block;'' class='cp-spinner cp-round'></div></div>");
+      $( document ).ready(function() {
+        if(typeof(loading)=="undefined" || loading != true){
+          $('#loadingDiv').hide();
+          $('#conteudo-resultado').show();
+          dateSlider.removeAttribute('disabled');
+        }
+      });
+    </script>      
+    <div id="imagesDefaultTextDiv" class="text-center">      
+      <h5> Pesquisa de Imagens - versão experimental </h5>
+    </div>
+    <section id="photos">
+    </section>  
+
+    <div class="pagesNextPrevious text-center">
+
+      <ul class="next-previous-ul">
+      <%
+      if (startPosition >= numrows) {
+          int previousPageStart = startPosition - numrows;
+          if(previousPageStart <0){previousPageStart=0;}
+          String previousPageUrl = "images.jsp?" + "query=" + query +
+            "&dateStart="+ dateStartString +
+            "&dateEnd="+ dateEndString +
+            "&pag=prev" +                             // mark as 'previous page' link 
+            "&start=" + previousPageStart +
+            "&l="+ language;
+          previousPageUrl = StringEscapeUtils.escapeHtml(previousPageUrl);
+      %>
+        <li class="previous previous-image" id="previousImage"><a onclick="ga('send', 'event', 'Image search mobile', 'Previous page', document.location.href );" class="myButtonStyle text-center right10" role="button" href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>"><fmt:message key='search.pager.previous'/></a></li>
+      <% } %>
+
+      <%
+        if (true) { /*TODO:: add condition check if there are more results */
+           long nextPageStart = startPosition + numrows;
+           String nextPageUrl = "images.jsp?" +
+            "query=" + query +
+            "&dateStart="+ dateStartString +
+            "&dateEnd="+ dateEndString +
+            "&pag=next" +
+            "&start=" + nextPageStart +
+            "&l="+ language;
+          nextPageUrl = StringEscapeUtils.escapeHtml(nextPageUrl);
+      %>
+          <li class="next next-image" id="nextImage"><a onclick="ga('send', 'event', 'Image search mobile', 'Next page', document.location.href );" class="myButtonStyle text-center" role="button" href="<%=nextPageUrl%>" title="<fmt:message key='search.pager.next'/>"><fmt:message key='search.pager.next'/></a></li>
+      <% } %>
+
+      </ul>
+
+    </div>  
   </div>
 
 </div>  

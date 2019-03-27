@@ -76,6 +76,11 @@
 	<meta name="Keywords" content="<fmt:message key='advanced.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='advanced.meta.description'/>" />
 	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
+	<meta name="theme-color" content="#252525">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#252525">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#252525">  	
 	<script type="text/javascript">
 		var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
 		var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
