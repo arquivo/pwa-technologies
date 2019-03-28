@@ -60,6 +60,15 @@
       </implementation>
    </extension>
 
+    <extension id="org.archive.access.nutch.searcher"
+               name="Internet Archive Domain Query Filter"
+               point="org.apache.nutch.searcher.QueryFilter">
+        <implementation id="WaxDomainQueryFilter"
+                        class="org.archive.access.nutch.searcher.WaxDomainQueryFilter" >
+            <parameter name="raw-fields" value="domain" />
+        </implementation>
+    </extension>
+
    <!-- TODO MC -->   
    <extension id="org.archive.access.nutch.searcher"
           name="Internet Archive ExacturlExpand Query Filter"
