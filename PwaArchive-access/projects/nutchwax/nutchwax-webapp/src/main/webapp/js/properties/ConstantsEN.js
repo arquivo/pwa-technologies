@@ -50,7 +50,7 @@ Content = {
     generalWords:"Try more general words.",
     internetArchive:"Search the",
     suggestSiteArchived:"the site to be archived.", 
-    suggestUrl:"http://sobre.arquivo.pt/how-to-participate/suggest-a-site?suggested-site=",
+    suggestUrl:"https://arquivo.pt/suggest?your-sites=",
     suggest:"Suggest", 
     mementoFind:"Search other web archives",
     embargo:"Embargo",
