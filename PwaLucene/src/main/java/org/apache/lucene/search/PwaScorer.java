@@ -7,11 +7,7 @@ import org.apache.lucene.index.*;
 import org.apache.lucene.search.caches.PwaDateCache;
 import org.apache.lucene.search.caches.PwaIndexStats;
 import org.apache.lucene.search.caches.PwaStopwords;
-import org.apache.lucene.search.filters.PwaFilter;
-import org.apache.lucene.search.filters.PwaDateClosestFilter;
-import org.apache.lucene.search.filters.PwaDateRangeFilter;
-import org.apache.lucene.search.filters.PwaFilterChain;
-import org.apache.lucene.search.filters.PwaBlacklistFilter;
+import org.apache.lucene.search.filters.*;
 import org.apache.lucene.search.queries.PwaClosestQuery;
 import org.apache.lucene.search.queries.PwaSortQuery;
 import org.apache.lucene.search.features.PwaLinearRankingModel;
@@ -312,8 +308,9 @@ public class PwaScorer extends Scorer {
 		}
 		joiner.setPositionsManager(posmanagers);
     
-		// set filter chain
-		filters.add(new PwaBlacklistFilter(reader)); // add the blacklist filter 
+		// set filter
+		filters.add(new PwaBlacklistFilter(reader)); // add the blacklist filter
+		filters.add(new PwaSpamFilter(reader)); // add spam filter
 		chainFilter=new PwaFilterChain(filters,joiner);   // set chain filter
 	}
 	
