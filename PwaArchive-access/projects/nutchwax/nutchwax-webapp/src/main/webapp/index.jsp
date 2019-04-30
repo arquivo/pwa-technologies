@@ -122,7 +122,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#252525">      
 
 	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
