@@ -389,6 +389,7 @@ String[] queryString_splitted=null;
     <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-status-bar-style" content="#252525">  
 	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
+	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -428,6 +429,16 @@ String[] queryString_splitted=null;
     </script>      
     <script type="text/javascript">$('#pagesTab').addClass('selected');$('#pagesTab').addClass('primary-underline');</script>
     <script type="text/javascript" src="/js/searchHeaderMobile.js"></script><!-- In progress-->
+    <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
+            (request.getParameter("adv_and") == null || request.getParameter("adv_and").equals("")) &&
+            (request.getParameter("adv_phr") == null || request.getParameter("adv_phr").equals("")) &&
+            (request.getParameter("adv_not") == null || request.getParameter("adv_not").equals("")) &&
+            (request.getParameter("format") == null || request.getParameter("format").equals("") ) &&
+            (request.getParameter("site") == null || request.getParameter("site").equals(""))
+     ){ 
+    %>
+      <%@ include file="include/intro.jsp" %>
+    <% } %>
 
 
   
@@ -797,7 +808,6 @@ function attachClicks(){
       $(this).toggleClass("preventMonth");
       touched = true;
     }
-    /*$j(this).find("i").toggleClass('fa-caret-up fa-caret-down');*/
   });
 
     $(".yearUl").click(function() {
@@ -833,27 +843,6 @@ function attachClicks(){
               showList = true;                    
               showTip = urlMatch.group(1);
               String queryString_expanded="";
-             // String queryString_expanded=""; TODO bug: search subdomains with site operator 
-              /*if (queryString.contains("site:")){ // It expands an URL since it is an advanced search
-                queryString_splitted = queryString.split(" ");
-                String queryString_expanded="";
-                for (int i =0; i<queryString_splitted.length;i++){
-                 if (queryString_splitted[i].contains("site:")){
-                  queryString_splitted[i] = queryString_splitted[i].replace("site:", "");
-
-
-                  URL queryStringURL = new URL("http://"+queryString_splitted[i]);
-                  String queryStringHost = queryStringURL.getHost();
-                  queryString_splitted[i] = queryString_splitted[i].replace(queryStringHost, queryStringHost.toLowerCase()); // hostname to lowercase
-                  queryString_splitted[i]= NutchwaxQuery.encodeExacturl("exacturlexpand:http://"+queryString_splitted[i]); //TODO: SPLIT HOSTNAME
-
-                 }
-                 queryString_expanded+=" "+queryString_splitted[i];
-                }
-        
-                      query = NutchwaxQuery.parse(queryString_expanded, nutchConf);    //create the query object
-              }
-              else {*/
               bean.LOG.debug("[search.jsp] query input: " + queryString );
               queryString_splitted = queryString.split(" ");
 
@@ -891,52 +880,45 @@ function attachClicks(){
 
 <% } %> <%-- END OF: showList --%>
 
-  <% 
-        if (hitsLength >= end || hitsLength > start) {
-                long pagesAvailable = (long) (hitsTotal / hitsPerPage) ;
-                        if ((hitsTotal % hitsPerPage) != 0) {
-                                pagesAvailable++;
-                        }
+<% 
+      if (hitsLength >= end || hitsLength > start) {
+              long pagesAvailable = (long) (hitsTotal / hitsPerPage) ;
+                      if ((hitsTotal % hitsPerPage) != 0) {
+                              pagesAvailable++;
+                      }
 
-                        // Check if we are in the last page
-                        if (hitsLength == end && hitsPerDup != 0) {
-                                pagesAvailable = (long) (hitsLength / hitsPerPage);
-                                if ((hitsLength % hitsPerPage) != 0) {
-                                        pagesAvailable++;
-                                }
-                        }
-        
-            long currentPage = (long) ((start + 1) / hitsPerPage + 1) ;
-            int maxPagesToShow = 10;
-            long displayMin = (long) (currentPage - (0.5 * maxPagesToShow) );
-        
-            if (displayMin < 1) {
-              displayMin = 1; 
-            }
-        
-            long displayMax = displayMin + maxPagesToShow - 1 ;
-            if (displayMax > pagesAvailable) {
-              displayMax = pagesAvailable;
-            }
-        %>
+                      // Check if we are in the last page
+                      if (hitsLength == end && hitsPerDup != 0) {
+                              pagesAvailable = (long) (hitsLength / hitsPerPage);
+                              if ((hitsLength % hitsPerPage) != 0) {
+                                      pagesAvailable++;
+                              }
+                      }
+      
+          long currentPage = (long) ((start + 1) / hitsPerPage + 1) ;
+          int maxPagesToShow = 10;
+          long displayMin = (long) (currentPage - (0.5 * maxPagesToShow) );
+      
+          if (displayMin < 1) {
+            displayMin = 1; 
+          }
+      
+          long displayMax = displayMin + maxPagesToShow - 1 ;
+          if (displayMax > pagesAvailable) {
+            displayMax = pagesAvailable;
+          }
+%>
 
 <%-- ---------------- --%>
 <%-- No results presentend --%>
 <%-- ---------------- --%>
 
-<% if ( hitsTotal == 0) { %>
 
+<% if ( hitsTotal == 0) { %>
+  
 <%
-        // When empty query → intro page
-        if ( request.getAttribute("query").equals("") ) {
+        if (! request.getAttribute("query").equals("") ) {
 %>
-        <div id="search_stats"></div>
-        <div id="no_results">
-    <c:redirect url='index.jsp'>
-      <c:param name='l' value='${language}'/>
-    </c:redirect>
-  </div>
-        <% } else { %>
   <div id="conteudo-pesquisa-erro">
     <div class="alert alert-danger break-word col-xs-12 my-alert">
       <p><fmt:message key='search.no-results.title'/> <span class="text-bold"><c:out value = "${htmlQueryString}"/></span></p>
@@ -1053,6 +1035,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
 </div>
 <% } %>                 <%-- End of pager IF --%>
 <% } %>
+
 </div>
 
       </div>  <!-- FIM #conteudo-resultado  --> 

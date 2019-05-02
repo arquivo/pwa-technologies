@@ -210,7 +210,7 @@ response.setHeader("Cache-Control","public, max-age=600");
                 }             
                 htmlQueryString += " ";
         }
-        if (request.getParameter("type") != null && request.getParameter("type") != "") {
+        if (request.getParameter("type") != null && request.getParameter("type") != "" && !request.getParameter("type").toLowerCase().equals("all")) {
           htmlQueryString += "type:" + request.getParameter("type") + " " ;
         }
         String sizeParam = request.getParameter("size");
@@ -487,10 +487,18 @@ Content = {
       });
     </script>      
 
-    <div id="imagesDefaultTextDiv" class="text-center <%=homeMessageClass%>">      
-      <h3>Pesquisa de Imagens</h3>
-      <h4>versão experimental</h4>
-    </div>
+    <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
+            (request.getParameter("adv_and") == null || request.getParameter("adv_and").equals("")) &&
+            (request.getParameter("adv_phr") == null || request.getParameter("adv_phr").equals("")) &&
+            (request.getParameter("adv_not") == null || request.getParameter("adv_not").equals("")) &&
+            (request.getParameter("type") == null || request.getParameter("type").equals("") || request.getParameter("type").toLowerCase().equals("all") ) &&
+            (request.getParameter("size") == null || request.getParameter("size").equals("") || request.getParameter("size").toLowerCase().equals("all") ) &&
+            (request.getParameter("safeSearch") == null || request.getParameter("safeSearch").equals("") || request.getParameter("safeSearch").toLowerCase().equals("on") ) &&
+            (request.getParameter("site") == null || request.getParameter("site").equals(""))
+     ){ 
+    %>
+      <%@ include file="include/intro.jsp" %>
+    <% } %>
     <section id="photos">
     </section>  
 
