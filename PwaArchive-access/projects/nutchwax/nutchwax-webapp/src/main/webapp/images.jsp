@@ -36,6 +36,10 @@
   import="org.archive.access.nutch.NutchwaxQuery"
   import="org.archive.access.nutch.NutchwaxConfiguration"
   import="org.apache.commons.lang.StringEscapeUtils"
+  import="java.util.Properties"
+  import="java.util.HashSet"
+  import="java.net.MalformedURLException"
+
 %>
 <% // Set the character encoding to use when interpreting request values.
   request.setCharacterEncoding("UTF-8");
@@ -51,6 +55,19 @@
   private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
   private static Calendar dateStart = new GregorianCalendar();
   private static Calendar dateEnd = new GregorianCalendar();
+
+  //Remove http and https before testing against this url pattern
+  private static final Pattern URL_PATTERN = Pattern.compile("^. ?(([a-zA-Z\\d][-\\w\\.]+)\\.([a-zA-Z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");   
+%>
+<%
+  Properties prop = new Properties();
+  prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("validTLDs/valid.properties"));
+  String tldsLine = prop.getProperty("valid.tld");
+  String tlds[] = tldsLine.split("\t");
+  HashSet<String> validTlds = new HashSet<String>();
+  for(String tld:tlds){
+    validTlds.add(tld);
+  }
 %>
 
 <%-- Get the application beans --%>
@@ -98,7 +115,44 @@
   
 
   if ( request.getParameter("query") != null ) {
+        bean.LOG.debug("Received Query input");
         htmlQueryString = request.getParameter("query").toString();
+        String [] inputWords = htmlQueryString.split("\\s+");
+        StringBuilder reconstructedInputString = new StringBuilder();
+
+        for (String word: inputWords){
+          bean.LOG.debug("WORD: "+ word);
+          if( word.startsWith("https://")){
+            word= word.substring(8, word.length());
+          }else if (word.startsWith("http://")){
+            word = word.substring(7, word.length());
+          }
+          
+          Matcher matcher = URL_PATTERN.matcher(word);
+
+          if (matcher.find()) {
+            
+            try {       
+              bean.LOG.debug("Attempting URL "+ word);
+              URL myURL = new URL("http://" + word);
+              String[] domainNameParts = myURL.getHost().split("\\.");
+                  String tldString ="."+domainNameParts[domainNameParts.length-1].toUpperCase();
+                  bean.LOG.debug("TLD:"+ tldString);                        
+                  if(validTlds.contains(tldString)){
+                    word = "site:" + word;
+                  } 
+                  else{
+                    bean.LOG.debug("Invalid tld in word:"+ word);
+                  }                 
+            } catch (MalformedURLException e) {
+
+              //NOT a valid URL we will not consider it just add the word without the site:         
+            } 
+          }
+          reconstructedInputString.append(word).append(" ");      
+        }
+        htmlQueryString = reconstructedInputString.toString().substring(0, reconstructedInputString.toString().length()-1);          
+        request.setAttribute("htmlQueryString", htmlQueryString);
   }
   else{
         htmlQueryString = "";
