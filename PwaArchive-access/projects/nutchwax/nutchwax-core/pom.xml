@@ -1,36 +1,33 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<parent>
-  <groupId>org.archive</groupId>
-  <artifactId>nutchwax</artifactId>
-  <version>0.11.0-SNAPSHOT</version>
-</parent>
+  <parent>
+    <groupId>org.archive</groupId>
+    <artifactId>nutchwax</artifactId>
+    <version>0.11.0-SNAPSHOT</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.archive.nutchwax</groupId>
   <artifactId>nutchwax-core</artifactId>
   <packaging>jar</packaging>
   <name>NutchWAX Core Jar</name>
   <dependencies>
-
     <dependency>
       <groupId>org.archive.nutchwax</groupId>
       <artifactId>nutchwax-thirdparty</artifactId>
       <scope>compile</scope>
-    </dependency>   
-    
+    </dependency>
+
     <!-- following packages are necessary to compute pagerank -->
     <dependency>
       <groupId>dsi.unimi.it</groupId>
       <artifactId>webgraph</artifactId>
       <version>2.4.1</version>
     </dependency>
-
     <dependency>
       <groupId>dsi.unimi.it</groupId>
       <artifactId>sux4j</artifactId>
       <version>1.0.1</version>
     </dependency>
-
     <dependency>
       <groupId>cern</groupId>
       <artifactId>colt</artifactId>
@@ -55,72 +52,62 @@
       <groupId>martiansoftware.com</groupId>
       <artifactId>jsap</artifactId>
       <version>2.0</version>
-    </dependency> 
-    
+    </dependency>
+
     <dependency>
       <groupId>postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>8.3-604.jdbc4</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.netpreserve.commons/webarchive-commons -->
     <dependency>
-  	  <groupId>org.apache.tika</groupId>
-  	  <artifactId>tika-core</artifactId>
-  	  <version>1.18</version>
-  	</dependency>
-
-  	<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-eval -->
-    <dependency>
-  	  <groupId>org.apache.tika</groupId>
-  	  <artifactId>tika-eval</artifactId>
-  	  <version>1.18</version>
-        <exclusions>
-            <exclusion>
-                <artifactId>*</artifactId>
-                <groupId>*</groupId>
-            </exclusion>
-        </exclusions>
-  	</dependency>
-
-  	<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-langdetect -->
-   <dependency>
-  	  <groupId>org.apache.tika</groupId>
-  	  <artifactId>tika-langdetect</artifactId>
-  	  <version>1.18</version>
-   </dependency>
-
-
-    <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-parsers -->
-    <dependency>
-        <groupId>org.apache.tika</groupId>
-        <artifactId>tika-parsers</artifactId>
-        <version>1.18</version>
-        <exclusions>
-            <exclusion>
-                <groupId>de.l3s.boilerpipe</groupId>
-                <artifactId>boilerpipe</artifactId>
-            </exclusion>
-        </exclusions>
+      <groupId>org.netpreserve.commons</groupId>
+      <artifactId>webarchive-commons</artifactId>
+      <version>1.1.8</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.googlecode.juniversalchardet</groupId>
+          <artifactId>juniversalchardet</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-httpclient</groupId>
+          <artifactId>commons-httpclient</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-lang</groupId>
+          <artifactId>commons-lang</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>it.unimi.dsi</groupId>
+          <artifactId>dsiutils</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>joda-time</groupId>
+          <artifactId>joda-time</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpcore</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.gnu.inet</groupId>
+          <artifactId>libidn</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.htmlparser</groupId>
+          <artifactId>org.json</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
-
-
-    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-
-    <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>2.6</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-core -->
-
-
-    <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-core</artifactId>
-        <version>3.1.15</version>
-    </dependency>
-
 
   </dependencies>
   <build>

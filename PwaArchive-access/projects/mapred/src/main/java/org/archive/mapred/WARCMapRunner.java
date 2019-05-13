@@ -30,6 +30,8 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.ReflectionUtils;
+import org.archive.io.ArchiveReader;
+import org.archive.io.ArchiveReaderFactory;
 import org.archive.io.warc.WARCConstants;
 import org.archive.io.warc.WARCReader;
 import org.archive.io.warc.WARCReaderFactory;
@@ -48,7 +50,7 @@ public class WARCMapRunner implements MapRunnable {
     protected WARCRecordMapper mapper;
     private enum Counter {WARCS_COUNT, WARCRECORDS_COUNT,
             BAD_WARC_PARSE_COUNT, WARC_FAILED_DOWNLOAD, LONG_WARCRECORDS_COUNT}
-
+    private String warcLocation;
     /**
      * How long to spend indexing.
      */
@@ -146,8 +148,8 @@ public class WARCMapRunner implements MapRunnable {
         /**
          * @return Null if fails download.
          */
-        protected WARCReader getArchiveReader() {
-            WARCReader warc = null;
+        protected ArchiveReader getArchiveReader() {
+            ArchiveReader warc = null;
             final int sleeptime = 1000 * 60;
             // Need a thread that will keep updating TaskTracker during long
             // downloads else tasktracker will kill us.
@@ -181,7 +183,7 @@ public class WARCMapRunner implements MapRunnable {
                 };
                 reportingDuringDownload.setDaemon(true);
                 reportingDuringDownload.start();
-                warc = WARCReaderFactory.get(this.location);
+                warc = ArchiveReaderFactory.get(this.location);
             } catch (final Exception e) {
                 //try {
                 final String msg = "Error opening " + this.location
@@ -208,7 +210,7 @@ public class WARCMapRunner implements MapRunnable {
                 return;
             }
 
-            WARCReader warc = getArchiveReader();
+            ArchiveReader warc = getArchiveReader();
             if (warc == null) {
                 return;
             }
@@ -216,7 +218,8 @@ public class WARCMapRunner implements MapRunnable {
             try {
                 WARCMapRunner.this.mapper.onWARCOpen();
                 this.reporter.incrCounter(Counter.WARCS_COUNT, 1);
-                int numberOfRecords = 0 ;
+                int numberOfRecords =  1;
+
                 // Iterate over each WARCRecord.
                 for (final Iterator i = warc.iterator(); i.hasNext();) {
                     final WARCRecord rec = (WARCRecord)i.next();
@@ -226,12 +229,18 @@ public class WARCMapRunner implements MapRunnable {
                     try {
                         LOG.info("WARCRecord: " + rec);
                         LOG.info("WARCHEADER: " + rec.getHeader());
-                        LOG.info("WARCHEADERURI:" + (String) rec.getHeader().getHeaderValue("WARC-Target-URI") );
+                        warcLocation = rec.getHeader().getUrl();
+                        LOG.info("WARCHEADERURI:" + warcLocation );
+                        if(warcLocation == null || warcLocation.equals("") ){
+                        	LOG.info("null WARC-Target-URI skipping");
+                        	continue;
+                        }
 
                         WARCMapRunner.this.mapper.map(
-                                new Text((String) rec.getHeader().getHeaderValue("WARC-Target-URI")),
+                                new Text(rec.getHeader().getUrl()),
                                 new ObjectWritable(rec), this.output,
                                 this.reporter);
+
                         final long b = rec.getHeader().getContentBegin();
                         final long l = rec.getHeader().getLength();
                         final long recordLength = (l > b)? (l - b): l;

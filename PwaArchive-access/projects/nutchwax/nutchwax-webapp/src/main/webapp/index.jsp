@@ -71,8 +71,7 @@
 	<div class="wrap">
 		<div id="header-home">
                                 <div id="logo-home">                                    
-                                        <img src="img/logo-home-<%=language%>.png?release=imgSearch" alt="<fmt:message key='home.title'/>" style="padding-bottom: 15px;" />
-                                                                           
+                                        <img src="img/logo-home-<%=language%>.png?release=imgSearch" alt="<fmt:message key='home.title'/>" style="padding-bottom: 15px;" />                             
                                 </div>
                                 <div id="search-home">
                                         <form id="loginForm" action="search.jsp" name="loginForm" method="get">

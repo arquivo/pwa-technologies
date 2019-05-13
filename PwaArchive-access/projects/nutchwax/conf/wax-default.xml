@@ -212,7 +212,7 @@ is restarted, logs for tasks of same name are overwritten.
 
 <property>
   <name>wax.index.all</name>
-  <value>true</value>
+  <value>false</value>
     <description>If set to true, all content types are indexed.  Otherwise
     we only index text/* and application.
 
@@ -238,7 +238,7 @@ is restarted, logs for tasks of same name are overwritten.
 
 <property>
     <name>wax.index.redirects</name>
-    <value>true</value>
+    <value>false</value>
     <description>If true, we index redirects (status code 30x).
     </description>
 </property>
