@@ -374,9 +374,8 @@ String[] queryString_splitted=null;
   <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
   <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
   <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
-  <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
+  <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png?release=imgSearch"/>
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-  <link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
   <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
   <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
   <script type="text/javascript">

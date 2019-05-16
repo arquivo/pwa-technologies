@@ -61,9 +61,8 @@
     <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
-    <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
+    <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png?release=imgSearch"/>
 	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
     <script src="/js/jquery-latest.min.js"> </script>
 </head>
@@ -71,10 +70,8 @@
 	<%@ include file="include/topbar.jsp" %>
 	<div class="wrap">
 		<div id="header-home">
-                                <div id="logo-home">
-                                    <a href="<fmt:message key='home.prizes.href'/>"> 
-                                        <img src="img/banner-premiosarquivo-<%=language%>.png?v=premio2019" alt="<fmt:message key='header.logo.alt'/>" style="padding-bottom: 15px;" />
-                                    </a>                                        
+                                <div id="logo-home">                                    
+                                        <img src="img/logo-home-<%=language%>.png?release=imgSearch" alt="<fmt:message key='home.title'/>" style="padding-bottom: 15px;" />                             
                                 </div>
                                 <div id="search-home">
                                         <form id="loginForm" action="search.jsp" name="loginForm" method="get">
