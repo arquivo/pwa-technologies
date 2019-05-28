@@ -22,15 +22,75 @@
                     </div>
                 </div>
                 <div id="slider-date" class="col-sm-12"></div>
-                <div id="slider-caption" class="row">
-                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=dateEndYear%>"></input>
-                    <input size="4" maxlength="4" type="number" class="example-val text-center input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=dateEndYear%>"></input>
-                    <input type="hidden" id="dateStart" name="dateStart" value="01/01/<%=dateStartYear%>"/>
-                    <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
+                <div id="slider-caption" class="row">                     
+                    <span class="span-start-year"><input class="label-start-year nooutline" id="dateStart" name="dateStart" value="<%=dateStartDay%>/<%=dateStartMonth%>/<%=dateStartYear%>"></input><button onclick="$('#dateStart').click()" class="calendar-anchor-search clean-button-no-fill fleft"><img src="/img/calendar.gif"/></button></span>                           
+                    <span class="span-end-year"><input class="label-end-year nooutline" id="dateEnd" name="dateEnd" value="<%=dateEndDay%>/<%=dateEndMonth%>/<%=dateEndYear%>"></input><button onclick="$('#dateEnd').click()" class="calendar-anchor-search clean-button-no-fill"><img src="/img/calendar.gif"/></button></span>                    
                     <input type="hidden" id="l" name="l" value="<%=language%>"/>
-                </div>                  
+                </div>        
+<script type="text/javascript">
+/*Initialization of Datepickers datestart and dateend for the advanced search*/
+    $(function () {
+      var currDate = new Date();
+        var curr = currDate.getFullYear();
+        var opt = {}
+        opt.date = {preset : 'date'};
+
+  
+        $('#dateStart').val('<%=dateStartDay%>/<%=dateStartMonth%>/<%=dateStartYear%>').scroller('destroy').scroller($.extend(opt["date"], { 
+          theme: "android-ics light",
+          dateFormat: 'dd/mm/yy', 
+          dateOrder: 'dMyy' ,
+          startYear: 1996 , 
+          endYear: currDate.getFullYear()-1,
+          setText: 'OK',                          
+          monthNamesShort : ['<fmt:message key="smonth.0" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.1" />'.toLowerCase(),
+                             '<fmt:message key="smonth.2" />'.toLowerCase(),
+                             '<fmt:message key="smonth.3" />'.toLowerCase(),
+                             '<fmt:message key="smonth.4" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.5" />'.toLowerCase(),
+                             '<fmt:message key="smonth.6" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.7" />'.toLowerCase(),
+                             '<fmt:message key="smonth.8" />'.toLowerCase(),
+                             '<fmt:message key="smonth.9" />'.toLowerCase(),
+                             '<fmt:message key="smonth.10" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.11" />'.toLowerCase()],
+          mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
+        }));
+
+        $('#dateEnd').val('<%=dateEndDay%>/<%=dateEndMonth%>/<%=dateEndYear%>').scroller('destroy').scroller($.extend(opt["date"], { 
+          theme: "android-ics light",
+          dateFormat: 'dd/mm/yy', 
+          dateOrder: 'dMyy' ,
+          startYear: 1996 , 
+          endYear: (new Date()).getFullYear()-1,                          
+          monthNamesShort : ['<fmt:message key="smonth.0" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.1" />'.toLowerCase(),
+                             '<fmt:message key="smonth.2" />'.toLowerCase(),
+                             '<fmt:message key="smonth.3" />'.toLowerCase(),
+                             '<fmt:message key="smonth.4" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.5" />'.toLowerCase(),
+                             '<fmt:message key="smonth.6" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.7" />'.toLowerCase(),
+                             '<fmt:message key="smonth.8" />'.toLowerCase(),
+                             '<fmt:message key="smonth.9" />'.toLowerCase(),
+                             '<fmt:message key="smonth.10" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.11" />'.toLowerCase()],
+          mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
+        }));
+    });
+</script>                          
                 </form>              
 <script src="/include/clearForm.js"></script>      
+<script type="text/javascript">
+  $("#dateStart").change( function() {
+    dateSlider.noUiSlider.set([$("#dateStart").val().substr($("#dateStart").val().length-4), null])
+    $('.search-button').click(); /*submit form if user changes date on datepicker*/
+  });
+  $("#dateEnd").change( function() {
+    $('.search-button').click(); /*submit form if user changes date on datepicker*/
+  });  
+</script>
 <script type="text/javascript">
 // Create a new date from a string, return as a timestamp.
 
@@ -62,63 +122,7 @@ noUiSlider.create(dateSlider, {
 }); 
 </script>
 <script type="text/javascript">$('.noUi-tooltip').hide();</script>
-<script type="text/javascript">
-  $('#event-start').bind('input', function() { 
-    var currentInputDate = $(this).val();
-    currentInputDateNumber = parseInt(currentInputDate);
-    var currentDateEndNumber =  parseInt($('#event-end').attr('value'));
-    if( (currentInputDate.length) === 4 && currentInputDateNumber >= 1996 && currentInputDateNumber >= parseInt("<%=yearStartNoParameter%>") && currentInputDateNumber <= currentDateEndNumber){ /*if it is a year after 1996 and eventStartDate <= eventEndDate*/
-       /* update the input year of #datestart*/
-       var currentDate = $('#dateStart').attr('value');
-       var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
-       dateSlider.noUiSlider.set([parseInt(currentInputDate) ,null]);
-    }
-    else  if(currentInputDateNumber > parseInt("<%=dateEndYear%>")  ){
-     $('#event-start').val(1996); 
-     dateSlider.noUiSlider.set([1996 , null]);
-    }    
-    if((currentInputDate.length) === 4 && currentInputDateNumber >= currentDateEndNumber  ){
-      dateSlider.noUiSlider.set([currentDateEndNumber , null]);
-      $('#event-start').val(currentDateEndNumber);
-    }
-});
-</script>
-<script type="text/javascript">
-$("#event-end").blur(function() {
-  if( $("#event-end").val().toString().length < 4 ){
-    $('#event-end').val(parseInt("<%=dateEndYear%>"));
-    dateSlider.noUiSlider.set([null , parseInt("<%=dateEndYear%>")]);
-  }
-});
 
-$("#event-start").blur(function() {
-  if( $("#event-start").val().toString().length < 4 || $("#event-start").val() < 1996 ){
-    $('#event-start').val(1996);
-    dateSlider.noUiSlider.set([1996 , null]);
-  }
-});
-
-  $('#event-end').bind('input', function() { 
-    var currentInputDate = $(this).val();
-    currentInputDateNumber = parseInt(currentInputDate);
-    var currentDateStartNumber =  parseInt($('#event-start').attr('value'));
-    if( (currentInputDate.length) === 4 && currentInputDateNumber <= parseInt("<%=dateEndYear%>") && currentInputDateNumber >= currentDateStartNumber ){ 
-      /*if it is a year*/
-       /* update the input year of #dateend*/
-       var currentDate = $('#dateEnd').attr('value');
-       var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
-       dateSlider.noUiSlider.set([null , currentInputDateNumber]);
-    } 
-    if((currentInputDate.length) === 4 && currentInputDateNumber < currentDateStartNumber  ){
-      dateSlider.noUiSlider.set([null , currentDateStartNumber]);
-      $('#event-end').val(currentDateStartNumber);
-    }
-    else  if((currentInputDate.length) >= 4 && currentInputDateNumber > parseInt("<%=dateEndYear%>")  ){
-     $('#event-end').val(parseInt("<%=dateEndYear%>")); 
-     dateSlider.noUiSlider.set([null , parseInt("<%=dateEndYear%>")]);
-    }
-});
-</script>
 <script type="text/javascript">
 // Create a list of day and monthnames.
 var
@@ -134,13 +138,10 @@ var
         "November", "December"
     ];
 
-var dateValues = [
-    document.getElementById('event-start'),
-    document.getElementById('event-end')
-];
-
+changed = false;
 initial = 0; /*do not show tooltips when slider is initialized i.e. when initial < 2*/
 dateSlider.noUiSlider.on('update', function( values, handle ) {
+
   if(initial > 1){
       $(".noUi-handle[data-handle='"+handle.toString()+"'] .noUi-tooltip").show().delay(1000).fadeOut();
     }
@@ -148,13 +149,26 @@ dateSlider.noUiSlider.on('update', function( values, handle ) {
       initial += 1;
     }
     if(handle==0){
-     $('#dateStart').attr('value', '01/01/'+values[handle]);
-     $('#event-start').attr('value', +values[handle]);
+
+      if( $('#dateStart').attr('value').substring(6, 10) != values[handle]){
+        $('#dateStart').val('<%=dateStartDay%>/<%=dateStartMonth%>/'+values[handle]);
+        changed= true;
+      }     
     }else{
-     $('#dateEnd').attr('value', '31/12/'+values[handle]);
-     $('#event-end').attr('value', +values[handle]);
+      if( $('#dateEnd').attr('value').substring(6, 10) != values[handle]){    
+       $('#dateEnd').val('<%=dateEndDay%>/<%=dateEndMonth%>/'+values[handle]);
+       changed=true
+      }
     }
-});      
+});     
+
+dateSlider.noUiSlider.on('set', function( values, handle ) {
+  if(changed){
+    changed=false;
+    $('.search-button').click();
+  }
+});
+
 
 // Append a suffix to dates.
 // Example: 23 => 23rd, 1 => 1st.

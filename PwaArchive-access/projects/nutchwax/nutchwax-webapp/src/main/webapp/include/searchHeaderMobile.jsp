@@ -1,5 +1,5 @@
           <div class="row">  
-            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">
+            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 ">
                 <div class="tabs-services div-underline">
                   <script type="text/javascript">
                     document.write('<a id="pagesTab" href="'+pagesHref+'"><fmt:message key="topbar.menu.pages"/></a>');
@@ -10,7 +10,7 @@
                 <div id="form_container"> 
                     <div class="input-group stylish-input-group">
                         
-                            <input id="txtSearch" value="<c:out value = "${htmlQueryString}"/>" name="query" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>"  autocapitalize="off" autocomplete="off" autocorrect="off">
+                            <input id="txtSearch" value="<c:out value = "${htmlQueryString}"/>" name="query" type="search" class="form-control no-radius search-input swiper-no-swiping" placeholder="<fmt:message key='home.search.placeholder'/>"  autocapitalize="off" autocomplete="off" autocorrect="off">
                             <span class="clear-text"><i class="fa fa-close"></i></span>
                             <span class="input-group-addon no-radius search-button-span">
                                 <button class="search-button" type="submit">
@@ -19,21 +19,27 @@
                             </span>
                         
                     </div>
-                </div>
-                <!--<a href="/advanced.jsp?l=pt">Pesquisa avançada</a>-->
-                
-                    
+                </div>          
+                  
                         <div id="slider-date" class="col-sm-12"></div>
-                    
-                
-                <div id="slider-caption" class="row">
-                    <input size="4" maxlength="4" type="number" class="example-val text-center input-start-year" id="event-start" value="<%=dateStartYear%>" min="1996"  max="<%=yearEndNoParameter%>"></input>
-                    <input size="4" maxlength="4" type="number" class="example-val text-center input-end-year" id="event-end" value="<%=dateEndYear%>" min="1996" max="<%=yearEndNoParameter%>"></input>
-                    <input type="hidden" id="dateStart" name="dateStart" value="01/01/<%=dateStartYear%>"/>
-                    <input type="hidden" id="dateEnd" name="dateEnd" value="31/12/<%=dateEndYear%>"/>
+
+                <div id="slider-caption" class="row">                     
+                    <span class="span-start-year"><input class="label-start-year nooutline" id="dateStart" name="dateStart" value="<%=dateStartDay%>/<%=dateStartMonth%>/<%=dateStartYear%>"></input><button onclick="$('#dateStart').click()" class="calendar-anchor-search clean-button-no-fill"><img src="/img/calendar.gif"/></button></span>
+                           
+                    <span class="span-end-year"><input class="label-end-year nooutline" id="dateEnd" name="dateEnd" value="<%=dateEndDay%>/<%=dateEndMonth%>/<%=dateEndYear%>"></input><button onclick="$('#dateEnd').click()" class="calendar-anchor-search clean-button-no-fill"><img src="/img/calendar.gif"/></button></span>                    
                     <input type="hidden" id="l" name="l" value="<%=language%>"/>
                 </div>   
-<script src="/include/clearForm.js"></script>           
+<script src="/include/clearForm.js"></script> 
+
+<script type="text/javascript">
+  $("#dateStart").change( function() {                                  
+    $('.search-button').click(); /*submit form if user changes date on datepicker*/
+  });
+  $("#dateEnd").change( function() {
+    $('.search-button').click(); /*submit form if user changes date on datepicker*/
+  });  
+</script>
+
 <script type="text/javascript">
 // Create a new date from a string, return as a timestamp.
 
@@ -49,7 +55,7 @@ noUiSlider.create(dateSlider, {
     range: {
         min: [minYear],
         max: [maxYear]
-    },
+    }, 
     tooltips: false,
     connect: true,
 // Steps of one year
@@ -68,63 +74,6 @@ dateSlider.setAttribute('disabled', true);
 </script>
 <script type="text/javascript">$('.noUi-tooltip').hide();</script>
 <script type="text/javascript">
-  $('#event-start').bind('input', function() { 
-    var currentInputDate = $(this).val();
-    currentInputDateNumber = parseInt(currentInputDate);
-    var currentDateEndNumber =  parseInt($('#event-end').attr('value'));
-    if( (currentInputDate.length) === 4 && currentInputDateNumber >= 1996 && currentInputDateNumber >= parseInt("<%=yearStartNoParameter%>") && currentInputDateNumber <= currentDateEndNumber){ /*if it is a year after 1996 and eventStartDate <= eventEndDate*/
-       /* update the input year of #datestart*/
-       var currentDate = $('#dateStart').attr('value');
-       var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
-       dateSlider.noUiSlider.set([parseInt(currentInputDate) ,null]);
-    }
-    else  if(currentInputDateNumber > parseInt("<%=yearEndNoParameter%>")  ){
-     $('#event-start').val(1996); 
-     dateSlider.noUiSlider.set([1996 , null]);
-    }    
-    if((currentInputDate.length) === 4 && currentInputDateNumber >= currentDateEndNumber  ){
-      dateSlider.noUiSlider.set([currentDateEndNumber , null]);
-      $('#event-start').val(currentDateEndNumber);
-    }
-});
-</script>
-<script type="text/javascript">
-$("#event-end").blur(function() {
-  if( $("#event-end").val().toString().length < 4 ){
-    $('#event-end').val(parseInt("<%=yearEndNoParameter%>"));
-    dateSlider.noUiSlider.set([null , parseInt("<%=yearEndNoParameter%>")]);
-  }
-});
-
-$("#event-start").blur(function() {
-  if( $("#event-start").val().toString().length < 4 || $("#event-start").val() < 1996 ){
-    $('#event-start').val(1996);
-    dateSlider.noUiSlider.set([1996 , null]);
-  }
-});
-
-  $('#event-end').bind('input', function() { 
-    var currentInputDate = $(this).val();
-    currentInputDateNumber = parseInt(currentInputDate);
-    var currentDateStartNumber =  parseInt($('#event-start').attr('value'));
-    if( (currentInputDate.length) === 4 && currentInputDateNumber <= parseInt("<%=yearEndNoParameter%>") && currentInputDateNumber >= currentDateStartNumber ){ 
-      /*if it is a year*/
-       /* update the input year of #dateend*/
-       var currentDate = $('#dateEnd').attr('value');
-       var currentDate = currentDate.substring(0, currentDate.length - 4) + currentInputDate.toString();
-       dateSlider.noUiSlider.set([null , currentInputDateNumber]);
-    } 
-    if((currentInputDate.length) === 4 && currentInputDateNumber < currentDateStartNumber  ){
-      dateSlider.noUiSlider.set([null , currentDateStartNumber]);
-      $('#event-end').val(currentDateStartNumber);
-    }
-    else  if((currentInputDate.length) >= 4 && currentInputDateNumber > parseInt("<%=yearEndNoParameter%>")  ){
-     $('#event-end').val(parseInt("<%=yearEndNoParameter%>")); 
-     dateSlider.noUiSlider.set([null , parseInt("<%=yearEndNoParameter%>")]);
-    }
-});
-</script>
-<script type="text/javascript">
 // Create a list of day and monthnames.
 var
     weekdays = [
@@ -139,10 +88,6 @@ var
         "November", "December"
     ];
 
-var dateValues = [
-    document.getElementById('event-start'),
-    document.getElementById('event-end')
-];
 changed = false;
 initial = 0; /*do not show tooltips when slider is initialized i.e. when initial < 2*/
 dateSlider.noUiSlider.on('update', function( values, handle ) {
@@ -156,15 +101,12 @@ dateSlider.noUiSlider.on('update', function( values, handle ) {
     if(handle==0){
 
       if( $('#dateStart').attr('value').substring(6, 10) != values[handle]){
-        $('#dateStart').attr('value', '01/01/'+values[handle]);
-        $('#event-start').attr('value', +values[handle]);
+        $('#dateStart').val('<%=dateStartDay%>/<%=dateStartMonth%>/'+values[handle]);
         changed= true;
-        console.log('changed true')        
       }     
     }else{
       if( $('#dateEnd').attr('value').substring(6, 10) != values[handle]){    
-       $('#dateEnd').attr('value', '31/12/'+values[handle]);
-       $('#event-end').attr('value', +values[handle]);
+       $('#dateEnd').val('<%=dateEndDay%>/<%=dateEndMonth%>/'+values[handle]);
        changed=true
       }
     }
@@ -188,10 +130,60 @@ function nth (d) {
         default: return "th";
     }
 }
- 
-
 </script>
+<script type="text/javascript">
+/*Initialization of Datepickers datestart and dateend */
+    $(function () {
+      var currDate = new Date();
+        var curr = currDate.getFullYear();
+        var opt = {}
+        opt.date = {preset : 'date'};
 
+  
+        $('#dateStart').val('<%=dateStartDay%>/<%=dateStartMonth%>/<%=dateStartYear%>').scroller('destroy').scroller($.extend(opt["date"], { 
+          theme: "android-ics light",
+          dateFormat: 'dd/mm/yy', 
+          dateOrder: 'dMyy' ,
+          startYear: 1996 , 
+          endYear: currDate.getFullYear()-1,                
+          setText: 'OK',               
+          monthNamesShort : ['<fmt:message key="smonth.0" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.1" />'.toLowerCase(),
+                             '<fmt:message key="smonth.2" />'.toLowerCase(),
+                             '<fmt:message key="smonth.3" />'.toLowerCase(),
+                             '<fmt:message key="smonth.4" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.5" />'.toLowerCase(),
+                             '<fmt:message key="smonth.6" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.7" />'.toLowerCase(),
+                             '<fmt:message key="smonth.8" />'.toLowerCase(),
+                             '<fmt:message key="smonth.9" />'.toLowerCase(),
+                             '<fmt:message key="smonth.10" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.11" />'.toLowerCase()],
+          mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
+        }));
+
+        $('#dateEnd').val('<%=dateEndDay%>/<%=dateEndMonth%>/<%=dateEndYear%>').scroller('destroy').scroller($.extend(opt["date"], { 
+          theme: "android-ics light",
+          dateFormat: 'dd/mm/yy', 
+          dateOrder: 'dMyy' ,
+          startYear: 1996 , 
+          endYear: (new Date()).getFullYear()-1,                          
+          monthNamesShort : ['<fmt:message key="smonth.0" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.1" />'.toLowerCase(),
+                             '<fmt:message key="smonth.2" />'.toLowerCase(),
+                             '<fmt:message key="smonth.3" />'.toLowerCase(),
+                             '<fmt:message key="smonth.4" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.5" />'.toLowerCase(),
+                             '<fmt:message key="smonth.6" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.7" />'.toLowerCase(),
+                             '<fmt:message key="smonth.8" />'.toLowerCase(),
+                             '<fmt:message key="smonth.9" />'.toLowerCase(),
+                             '<fmt:message key="smonth.10" />'.toLowerCase(), 
+                             '<fmt:message key="smonth.11" />'.toLowerCase()],
+          mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
+        }));
+    });
+</script>
                 </form>                                
             </div>             
         </div>

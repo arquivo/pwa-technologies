@@ -12,6 +12,9 @@
 		      , resistanceRatio: .00000000000001
 		      , slideToClickedSlide: true
 		      , allowSlideNext: false
+		      , noSwiping: true
+		      , noSwipingClass: 'swiper-no-swiping'
+		      , draggable: false,
 		    })
 
 			swiper.on('slideChangeTransitionEnd', function () {
@@ -35,6 +38,7 @@
 	        $('.swiper-wrapper').css('transition', 'all 0s linear' );
 	        $('.swiper-wrapper').css('transform', 'translate3d(0px, 0px, 0px)' );
 	        $('.swiper-wrapper').css('-webkit-transform', 'translate3d(0px, 0px, 0px)' );	
+			
 			$('#mainMask').on('click', function (e) { 
 		      $('.swiper-wrapper').css('-webkit-transition', 'all 0.3s linear' );
 		      $('.swiper-wrapper').css('-moz-transition', 'all 0.3s linear' );
@@ -46,6 +50,7 @@
 		      $('.swiper-wrapper').removeClass('active');
 		      $('#mainMask').fadeOut(); 
 			});  
+
 			$('#menuButton').on('click', function(e){
 				if(parseInt($('.swiper-wrapper').css('transform').split(',')[4]) >= 0){
 					console.log('open menu click');

@@ -139,7 +139,13 @@ body{
 }
 
 #slider-caption{
-   /* display: none;*/
+    margin-top: 18px;
+}
+
+@media (min-width: 1280px){
+    #slider-caption{
+        margin-top: 40px;
+    }
 }
 
 .noUi-handle-upper{
@@ -458,8 +464,21 @@ h5{
     border: 1px solid #ccc;
     /*color: #a1a1a1;*/
     border-radius: 0px;
+    border:none;
     width: 60px;
     font-size: 14px;
+}
+
+.fleft{
+    float: left;
+}
+
+.label-start-year{
+    float: left;
+    margin-left: 15px;
+    border: 0;
+    width: 75px;
+    font-size: 14px;    
 }
 
 .input-end-year{
@@ -472,7 +491,20 @@ h5{
     width: 60px;   
     font-size: 14px;
 }
+.label-end-year{
+    width: 75px;    
+    font-size: 14px;
+}
 
+.span-end-year{
+    display: inline;
+    float: right;
+    margin-right: 15px;
+}
+.span-start-year{
+    display: inline;
+    margin-top: 5px;
+}
 
 legend.scheduler-border {
     width:inherit; /* Or auto */
@@ -482,9 +514,7 @@ legend.scheduler-border {
 
 .titulo-advanced{
     margin-left:15px;
-    margin-top: 20px;
-
-    
+    margin-top: 20px;    
 }
 
 .main-form-advanced{
@@ -636,6 +666,11 @@ em{
 
 .calendar-anchor-advanced{
     margin-left: 18px;
+    cursor: pointer;
+}
+
+.calendar-anchor-search{
+    margin-left: 5px;
     cursor: pointer;
 }
 
@@ -796,7 +831,7 @@ input:active, input:focus{
 }
 
 #years{
-    margin-top: 30px;
+    /*margin-top: 30px;*/
 	padding-bottom: 40px;
 }
 
@@ -1106,7 +1141,20 @@ h1,h2,h3,h4,h5{
     text-align: inherit;
     width: 100%;
 }
+.clean-button-no-fill{
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    text-align: inherit;
+}
 
+.anchor-color{
+    color: #337ab7;
+}
 
 .alertCopy {
     position: absolute;
@@ -1375,4 +1423,50 @@ ion-list > ion-item > h5{
 
 .last-label{
     margin-bottom: 40px;
+}
+
+
+
+
+#resultsTable {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th.thTV, td.tdTV {
+  text-align: center!important;
+  padding: 4px!important;
+  min-width: 70px;
+  border-right: 1px solid lightgray;
+}
+
+tr.trTV:nth-child(even){background-color: #f2f2f2}
+
+#layoutTV{
+    text-align: center;
+    margin-top: 30px;
+}
+#layoutTV h4{
+    display: inline;
+    padding-right: 15px;
+}
+
+#dateStart.nooutline, #dateEnd.nooutline {
+    box-shadow: none;
+    border: none!important;
+    cursor: pointer;
+}
+
+.noUi-value {
+    display: none;
+}
+
+.noUi-marker-large{
+    display: none;
+}
+
+.noUi-pips-horizontal{
+    height: initial!important;
 }
