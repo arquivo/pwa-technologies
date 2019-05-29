@@ -260,12 +260,22 @@ response.setHeader("Cache-Control","public, max-age=600");
                 bean.LOG.debug("Invalid End Date:"+ request.getParameter("dateEnd") +"|");
         }
   }  
-  String dateStartString = inputDateFormatter.format( dateStart.getTime() );
+ String dateStartString = inputDateFormatter.format( dateStart.getTime() );
+
+  String dateStartDay = dateStartString.substring(0,2);
+
+  String dateStartMonth = dateStartString.substring(3,5);
 
   String dateStartYear = dateStartString.substring(dateStartString.length()-4);
 
   String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
+
+  String dateEndDay = dateEndString.substring(0,2);
+
+  String dateEndMonth = dateEndString.substring(3,5);
+
   String dateEndYear = dateEndString.substring(dateEndString.length()-4);
+
   // Prepare the query values to be presented on the page, preserving the session
   htmlQueryString = "";
 
@@ -369,10 +379,6 @@ response.setHeader("Cache-Control","public, max-age=600");
     <script type="text/javascript" src="js/configs.js"></script>
 
 
-
-  <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css"/>
-  <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src='js/jquery.dialogOptions.js'></script>
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
   <script type="text/javascript" src="js/ui.datepicker.js"></script>
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
@@ -401,6 +407,8 @@ response.setHeader("Cache-Control","public, max-age=600");
         addthis_config.data_track_addressbar = false;
         addthis_config.data_track_clickback = false;
   </script>
+  <link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
+  <script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317" async="async"></script>
   <%@include file="include/analytics.jsp" %>
 </head>
@@ -471,7 +479,7 @@ Content = {
     imagesHref = window.location.href;
     pagesHref = window.location.href.toString().replace("images.jsp", "search.jsp"); /*TODO remove from this href parameters that are only appliable to image search*/
   </script>    
-  <%@ include file="include/mobileheader.jsp" %>
+  <%@ include file="include/imageHeaderMobile.jsp" %>
   <script type="text/javascript">$('#imagesTab').addClass('selected');$('#imagesTab').addClass('primary-underline');</script>
 
 

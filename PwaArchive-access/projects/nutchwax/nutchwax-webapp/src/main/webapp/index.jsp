@@ -43,7 +43,19 @@
 	/*private static Calendar dateStart = new GregorianCalendar();*/
 	private static Calendar dateEnd = new GregorianCalendar();
     String dateStartString = inputDateFormatter.format( dateStart.getTime() );
+    String dateStartDay = dateStartString.substring(0,2);
+
+    String dateStartMonth = dateStartString.substring(3,5);
+
     String dateStartYear = dateStartString.substring(dateStartString.length()-4);
+
+    String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
+
+    String dateEndDay = dateEndString.substring(0,2);
+
+    String dateEndMonth = dateEndString.substring(3,5);
+
+    String dateEndYear = dateEndString.substring(dateEndString.length()-4);
 
     String yearStartNoParameter = "1996";    
 
@@ -141,6 +153,11 @@
     <!-- left menu dependencies -->
     <link rel="stylesheet" href="css/leftmenu.css">
     <!-- end left menu dependencies -->
+
+  <!--Includes mobiscroll (calendars for setting day month and year)-->
+  <link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
+  <script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
+    
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
 	<!-- end addthis for sharing on social media --> 
 

@@ -34,25 +34,6 @@ function shortenURL( longURL) {
     });
 }
 
-$( function() {
-    $( "#dialog" ).dialog({
-    width: 350,
-    autoOpen: false,
-    dialogClass: "test",
-    modal: true,
-    responsive: true,
-    resizable: false
-    });
-    $( "#detailsDialog" ).dialog({
-    width: 650,
-    autoOpen: false,
-    dialogClass: "test",
-    modal: true,
-    responsive: true,
-    resizable: false
-    });    
-} );
-
 /*When user presses enter submits the input text*/
 $(function() {
     $("#txtSearch").keypress(function (e) {
@@ -522,9 +503,9 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
     var query;
     var input = $('#txtSearch').val();
 
-    var dateStart= $('#event-start').attr("value") + '0000000000' ;
+    var dateStart=$('#dateStart').val().substring($('#dateStart').val().length - 4) +''+  $('#dateStart').val().substring(3,5) +''+ $('#dateStart').val().substring(0,2)+ '000000' ;
     
-    var dateEnd= $('#event-end').attr("value") + '1231235959';
+    var dateEnd= $('#dateEnd').val().substring($('#dateEnd').val().length - 4) +''+  $('#dateEnd').val().substring(3,5) +''+ $('#dateEnd').val().substring(0,2)+'235959';
     currentStart = startIndex;
     
 

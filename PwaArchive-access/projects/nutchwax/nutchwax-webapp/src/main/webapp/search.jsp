@@ -315,9 +315,17 @@ String[] queryString_splitted=null;
 
   String dateStartString = inputDateFormatter.format( dateStart.getTime() );
 
+  String dateStartDay = dateStartString.substring(0,2);
+
+  String dateStartMonth = dateStartString.substring(3,5);
+
   String dateStartYear = dateStartString.substring(dateStartString.length()-4);
 
   String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
+
+  String dateEndDay = dateEndString.substring(0,2);
+
+  String dateEndMonth = dateEndString.substring(3,5);
 
   String dateEndYear = dateEndString.substring(dateEndString.length()-4);
 
@@ -406,6 +414,9 @@ String[] queryString_splitted=null;
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
   <!-- end addthis for sharing on social media --> 
   <script type="text/javascript" src="js/configs.js"></script>
+  <!--Includes mobiscroll (calendars for setting day month and year)-->
+  <link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
+  <script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -425,6 +436,9 @@ String[] queryString_splitted=null;
           $('#conteudo-resultado').show();
           dateSlider.removeAttribute('disabled');
         }
+      $("#txtSearch").on('mousedown touchstart', function (e) {
+            e.stopPropagation();
+       });          
       });
     </script>      
     <script type="text/javascript">$('#pagesTab').addClass('selected');$('#pagesTab').addClass('primary-underline');</script>
@@ -606,7 +620,111 @@ function getShortDateSpaceFormated(ts){
   return day + " "+ month;
 }
 
-function createMatrix(versionsArray, versionsURL){
+function createMatrixTable(versionsArray, versionsURL){
+  var today = new Date();
+  numberofVersions = yyyy - 1996;
+  var yyyy = today.getFullYear();
+  var numberofVersions = yyyy - 1996;
+  var matrix = new Array(numberofVersions);
+  for (var i = 0; i < matrix.length; i++) {
+    matrix[i] = [];
+    var yearStr = (1996+i).toString();
+    // add the headers for each year
+    $("#years").append('<th id="th_'+yearStr+'" class="thTV">'+yearStr+'</th>');
+  }
+
+  for (var i = 0; i < versionsArray.length; i++) {
+    var timestamp = versionsArray[i];
+    var timestampStr = timestamp.toString();
+    var url = versionsURL[i];
+    var pos = getYearPosition(timestampStr);
+    var dateFormated = getDateSpaceFormated(timestampStr);
+    var shortDateFormated= getShortDateSpaceFormated(timestampStr);       
+    var tdtoInsert = '<td class="tdTV"><a href="//<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+shortDateFormated+'</a></td>';
+    matrix[pos].push(tdtoInsert);  
+  }
+
+  //find which is the biggest number of versions per year and create empty tds in the other years
+  var maxLength = 0;
+  var lengthi =0;
+  for (var i = 0; i < matrix.length; i++) {
+    lengthi = matrix[i].length;
+    var yearStr = (1996+i).toString();
+    if(lengthi == 0){
+      $("#th_"+yearStr).addClass("inactivo");
+    }
+
+    if(lengthi > maxLength){
+      maxLength = lengthi;
+    }
+  }
+  //iterate again to create empty tds
+  for (var i = 0; i < matrix.length; i++) {
+    lengthi = matrix[i].length;
+    if(maxLength > lengthi){
+      for(var j=0; j<(maxLength - lengthi); j++){
+        matrix[i].push('<td class="tdTV">&nbsp;</td>');
+      }
+    }
+  }
+  //create each row of the table
+  for (var i=0; i<maxLength; i++){
+    rowString ="";
+    for (var j = 0; j < matrix.length; j++) {
+      rowString+= matrix[j][i];
+    }
+    var rowId = (i+1).toString()
+    $("#tableBody").append('<tr class="trTV" id="'+rowId+'">'+rowString+'<tr>');
+  }
+  
+  //if($('#1 td:nth-child('+String(matrix.length)+')').html() ==='&nbsp;'){ /*If last year in the table doesn't have versions show embargo message*/
+  //  $('#1 td:nth-child('+String(matrix.length)+')').attr('rowspan', '999');
+  //  $('#1 td:nth-child('+String(matrix.length)+')').attr('class', 'td-embargo')
+  //  $('#1 td:nth-child('+String(matrix.length)+')').html('<a href="'+Content.embargoUrl+'">'+Content.embargo+'</a>');
+  //}
+}
+function resizeResultsPageHeight(){
+      $('#resultados-lista').css('height', ($(window).height() - $('#resultados-lista').offset().top)*0.95 );
+}
+
+function createResultsTable(numberOfVersions, inputURL){
+
+    $('<div id="resultados-url"></div>'+
+      '<div id="layoutTV">'+
+        '<h4 class="text-bold"><i class="fa fa-table"></i> Tabela </h4>'+
+        '<button class="clean-button-no-fill anchor-color" onclick="localStorage.setItem(\'isList\', \'true\');window.location.reload()"><h4><i class="fa fa-list"></i> Lista</h4></button>'+
+      '</div>'+
+      '<div class="wrap">' +
+             '  <div id="intro">' +
+             '    <h4 class="texto-1" style="text-align: center;padding-bottom: 15px;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+ 
+               (numberOfVersions===1 ?  Content.versionPage : Content.versionsPage )+
+               ' '+ inputURL+
+                '</h4>' +
+             '  </div>' +
+             '</div>' + 
+       '<div id="conteudo-versoes" class="swiper-no-swiping">'+
+             '  <div id="resultados-lista" class="swiper-no-swiping" style="overflow: auto; min-height: 200px!important;">'+
+             '    <table id="resultsTable" class="tabela-principal swiper-no-swiping">'+
+             '      <tbody id="tableBody" class="swiper-no-swiping">'+
+                    '<tr id="years" class="swiper-no-swiping trTV"></tr>'+
+             '      </tbody>'+
+             '    </table>'+
+             '  </div>'+
+             '</div>'        ).insertAfter("#headerSearchDiv");
+
+    $( document ).ready(function() {
+      resizeResultsPageHeight();
+      $("table").on('mousedown touchstart', function (e) {
+            e.stopPropagation();
+       });            
+
+    });
+    
+    window.onresize = resizeResultsPageHeight;
+
+}
+
+function createMatrixList(versionsArray, versionsURL){
   var today = new Date();
   numberofVersions = yyyy - 1996;
   var yyyy = today.getFullYear();
@@ -668,20 +786,34 @@ function createMatrix(versionsArray, versionsURL){
 
 
 
-function createResultsPage(numberOfVersions, inputURL){
+function createResultsList(numberOfVersions, inputURL){
 
     $('<div id="resultados-url">'+Content.resultsQuestion+' \'<a href="searchMobile.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>\'</div>'+
-/*        '<div>' +
-               '    <h3 class="texto-1 text-center">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+ 
-                 (numberOfVersions===1 ?  Content.versionPage : Content.versionsPage )+
-                 ' '+'<strong>'+ inputURL+'</strong>'+'</h3>' +
-        '</div>' + */
+      '<div id="layoutTV">'+
+        '<button class="clean-button-no-fill anchor-color" onclick="localStorage.setItem(\'isList\', \'false\');window.location.reload();"><h4><i class="fa fa-table"></i> Tabela </h4></button>'+
+        '<h4 class="text-bold"><i class="fa fa-list"></i> Lista</h4>'+
+      '</div>'+
+          '<div class="wrap">' +
+             '<div id="intro">' +
+               '<h4 class="texto-1" style="text-align: center;padding-bottom: 15px;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+ 
+                   (numberOfVersions===1 ?  Content.versionPage : Content.versionsPage )+
+                   ' '+ inputURL+
+               '</h4>' +
+             '</div>' +
+          '</div>' + 
           '<div id="years" class="container-fluid col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4 ">' +
           '</div>' +
         '</div>' +
       '</div>').insertAfter("#headerSearchDiv");
-     
 }
+
+
+function isList(){ 
+  if( $(window).width() < 1024 ){
+    return true /*show horizontal list of versions for small screens*/
+  }
+};
+
 
 function formatNumberOfVersions( numberofVersionsString){
   formatedNumberOfVersionsString = '';
@@ -785,8 +917,28 @@ function createErrorPage(){
               }
               
           }); 
-          createResultsPage(tokens.length-1, inputURL);
-          createMatrix(versionsArray, versionsURL);
+          
+
+          if( localStorage.getItem('isList') === null){
+            if(isList()){
+              createResultsList(tokens.length-1, inputURL);
+              createMatrixList(versionsArray, versionsURL);     
+            }
+            else{
+              createResultsTable(tokens.length-1, inputURL);
+              createMatrixTable(versionsArray, versionsURL);    
+            }
+          }
+          else{
+            if(localStorage.getItem('isList') == 'true'){
+              createResultsList(tokens.length-1, inputURL);
+              createMatrixList(versionsArray, versionsURL);               
+            }
+            else{
+              createResultsTable(tokens.length-1, inputURL);
+              createMatrixTable(versionsArray, versionsURL);                
+            }
+          }
           attachClicks();
        },
       
