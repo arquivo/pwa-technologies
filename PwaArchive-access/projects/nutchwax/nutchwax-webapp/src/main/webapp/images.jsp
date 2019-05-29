@@ -385,7 +385,7 @@ response.setHeader("Cache-Control","public, max-age=600");
   <!--<script type="text/javascript" src="js/imageConfigs.js"></script>-->
 
 
-  <script type="text/javascript" src="js/images2.js?tta"></script>
+  <script type="text/javascript" src="js/images2.js?imageSearch"></script>
   <script type="text/javascript">
     $(".border-mobile").click(function(e) {
        // Do something
