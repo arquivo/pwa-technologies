@@ -307,7 +307,9 @@ public class PwaScorer extends Scorer {
 			}			 		    	
 		}
 		joiner.setPositionsManager(posmanagers);
-    
+
+
+
 		// set filter
 		filters.add(new PwaBlacklistFilter(reader)); // add the blacklist filter
 		filters.add(new PwaSpamFilter(reader)); // add spam filter
