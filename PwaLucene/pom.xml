@@ -3,6 +3,7 @@
   <modelVersion>4.0.0</modelVersion> 
   <groupId>pt.arquivo</groupId>
   <artifactId>pwalucene</artifactId>
+
   <name>Lucene extension for engineering searching and ranking models</name>
   <version>1.0.0-SNAPSHOT</version>
   <url>http://arquivo-web.fccn.pt</url>
@@ -18,7 +19,8 @@
   <organization>
     <name>Portuguese Web Archive</name>
     <url>http://arquivo-web.fccn.pt</url>
-  </organization>  
+  </organization>
+
   <developers>
     <developer>
       <name>Miguel Costa</name>
@@ -69,7 +71,6 @@
 								<path refid="maven.compile.classpath"/>
 							</classpath>
     					</javac>
-
             		</tasks>
            		</configuration>      
            		<goals>
@@ -136,11 +137,12 @@
   </repositories>
        
   <dependencies>
-     <dependency>
+      <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.2</version>
-    </dependency>    
+    </dependency>
+
     <dependency>
       <groupId>org.apache</groupId>
       <artifactId>hadoop</artifactId>
@@ -152,6 +154,7 @@
        <artifactId>commons-codec</artifactId>
        <version>1.4</version>		 	  	
     </dependency>
+
     <dependency>
         <groupId>spy</groupId>
         <artifactId>spymemcached</artifactId>
@@ -167,6 +170,12 @@
           <artifactId>commons-logging</artifactId>
           <version>1.2</version>
           <scope>compile</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+          <version>21.0</version>
       </dependency>
 
   </dependencies>
