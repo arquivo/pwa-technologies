@@ -19,7 +19,8 @@
   <organization>
     <name>Portuguese Web Archive</name>
     <url>http://arquivo-web.fccn.pt</url>
-  </organization>  
+  </organization>
+
   <developers>
     <developer>
       <name>Miguel Costa</name>
@@ -135,11 +136,13 @@
     </repository>
   </repositories>
        
-  <dependencies><dependency>
+  <dependencies>
+      <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.2</version>
-    </dependency>    
+    </dependency>
+
     <dependency>
       <groupId>org.apache</groupId>
       <artifactId>hadoop</artifactId>
