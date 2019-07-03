@@ -1,27 +1,29 @@
           <div class="row">  
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 ">
-                <div class="tabs-services div-underline">
-                  <script type="text/javascript">
-                    document.write('<a id="pagesTab" href="'+pagesHref+'"><fmt:message key="topbar.menu.pages"/></a>');
-                    document.write('<a id="imagesTab" href='+imagesHref+'><fmt:message key="topbar.menu.images"/></a>');
-                  </script>
-                </div>                  
+                                
                 <form id="searchForm" action="/search.jsp">
                 <div id="form_container"> 
                     <div class="input-group stylish-input-group">
                         
                             <input id="txtSearch" value="<c:out value = "${htmlQueryString}"/>" name="query" type="search" class="form-control no-radius search-input swiper-no-swiping" placeholder="<fmt:message key='home.search.placeholder'/>"  autocapitalize="off" autocomplete="off" autocorrect="off">
                             <span class="clear-text"><i class="fa fa-close"></i></span>
-                            <span class="input-group-addon no-radius search-button-span">
+                            <span id="buttonSearch" class="input-group-addon no-radius search-button-span">
                                 <button class="search-button" type="submit">
                                     <span class="glyphicon glyphicon-search white"></span>
                                 </button>  
                             </span>
                         
                     </div>
-                </div>          
+                </div>  
+
+                 <div class="tabs-services div-underline">
+                  <script type="text/javascript">
+                    document.write('<a id="pagesTab" href="'+pagesHref+'"><fmt:message key="topbar.menu.pages"/></a>');
+                    document.write('<a id="imagesTab" href='+imagesHref+'><fmt:message key="topbar.menu.images"/></a>');
+                  </script>
+                </div>         
                   
-                        <div id="slider-date" class="col-sm-12"></div>
+                <div id="slider-date" class="col-sm-12"></div>
 
                 <div id="slider-caption" class="row">                     
                     <span class="span-start-year"><input class="label-start-year nooutline" id="dateStart" name="dateStart" value="<%=dateStartDay%>/<%=dateStartMonth%>/<%=dateStartYear%>"></input><button onclick="$('#dateStart').click()" class="calendar-anchor-search clean-button-no-fill"><img src="/img/calendar.gif"/></button></span>

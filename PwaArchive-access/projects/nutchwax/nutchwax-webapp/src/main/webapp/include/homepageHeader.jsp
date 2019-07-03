@@ -7,7 +7,7 @@
                     <div class="input-group stylish-input-group">
                         
                             <input name="query" id="txtSearch" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autofocus autocapitalize="off" autocomplete="off" autocorrect="off">
-                            <!--<span class="clear-text"><i class="fa fa-close"></i></span>-->                            
+                            <span class="clear-text"><i class="fa fa-close"></i></span>                         
                             <span id="buttonSearch" class="input-group-addon no-radius search-button-span">
                                  <button  class="search-button" type="submit">
                                     <span class="glyphicon glyphicon-search white"></span>
@@ -18,7 +18,6 @@
                 </div>
 
                 <!-- starts Paginas and images links option -->
-
                 <div class="tabs-services div-underline">
                   <script type="text/javascript">
                     document.write('<a id="pagesTab" href="'+pagesHref+'"><fmt:message key="topbar.menu.pages"/></a>');
