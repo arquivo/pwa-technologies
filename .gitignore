@@ -3,3 +3,4 @@ nb-configuration.xml
 .project
 .settings/
 target/
+PwaArchive-access/projects/nutchwax/nutchwax-webapp/src/main/webapp/WEB-INF/classes/hadoop-site.xml.*
