@@ -138,6 +138,9 @@
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     
     <!-- bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -161,6 +164,12 @@
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
 	<!-- end addthis for sharing on social media --> 
 
+  <!-- starts New style to override less styles -->
+  <style>
+
+
+  </style>
+  <!-- ends New style to override less styles -->
 
 </head>
 <body>

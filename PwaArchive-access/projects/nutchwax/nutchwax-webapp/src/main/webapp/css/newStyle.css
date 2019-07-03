@@ -1,6 +1,6 @@
 body{
     font-size: 12px!important;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Roboto","Open Sans", sans-serif;    
     outline: none;
 }
 
@@ -11,13 +11,33 @@ body{
 }
 
 #searchForm .form-control{
-    font-size: 16px!important;
-    height: 40px!important;
-    padding-right: 40px!important;
+    font-size: 16px !important;
+    height: 60px !important;
+    /*padding-right: 40px!important;*/
+    border-radius: 100px !important;
+    text-align: center;
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);;/*cursor: pointer;*/;
+    transition: box-shadow 0.5s ease 0s;  
+    /*background-color: #fbfbfb*/
 }
 
+/* NEW STYLE: Hover search bar effect*/
+#searchForm .form-control:hover{
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);;/*cursor: pointer;*/;
+    border:1px solid #ebebeb;
+    background-color: #fff;
+}
+
+#searchForm .form-control:focus {  
+    border:1px solid #ebebeb !important;
+    background-color: #fff;
+}
+
+
 #searchForm{
-    margin-top: 30px;
+    margin-top: /*30*/25px;
 }
 
 #form_container{
@@ -686,7 +706,7 @@ em{
 .search-button-span{
     padding: 0px!important;
     margin: 0;
-    background: #42a5f5!important;
+    background: /*#42a5f5!important*/ none;
     cursor: pointer;
 }
 .search-span{
@@ -778,13 +798,34 @@ em{
 
 .search-button-span:hover, .search-button-span:active{
     /*#2196f3*/
-    background: #2196f3!important;
+    background: none /*#2196f3!important*/;
 }
 
 .search-button{
     height: 38px;
-    padding: 0px 12px 0px 12px!important;
+    padding: 0px /*12px*/0 0px 09px!important;
+    background-color: none !important;    
 }
+/* starts NEW STYLING FOR SEARCH BUTTON */
+span#buttonSearch {    
+    background-color: transparent !important;
+    font-size: 26px !important;
+    border:1px solid transparent;
+    border-radius: 60px;    
+}
+
+span#buttonSearch button span{    
+    color: #777 /*#007AFF*/;
+    background-color: transparent !important;
+    font-size: 22px !important;
+    transition:color 0.5s ease 0s;   
+    font-weight: normal !important;
+}
+
+span#buttonSearch button:hover span{    
+    color: #007AFF;    
+}
+/* ends NEW STYLING FOR SEARCH BUTTON */
 
 .input-start-year:focus, .input-end-year:focus{
     /*#2196f3*/
@@ -803,14 +844,12 @@ input:active, input:focus{
 
 
 .white{
-    color:white;
+    color:black;
 }
 
 .display-none{
     display: none;
 }
-
-
 
 .mime{
     font-size: 10px;
@@ -1198,12 +1237,39 @@ h1,h2,h3,h4,h5{
 
 .tabs-services{
     text-align: left;
-    padding-left: 5px;
+    /*padding-left: 5px;*/
+    margin:20px 0 0px 0;
+    display: block;
+    float: none !important;
+    /*border-bottom: 1px solid #ccc;*/
+    padding-bottom:4px;
+}
+
+/* New style for Advanced Search */
+a#advancedSearch {
+    float: right;   
+    margin:0 !important;
+    padding:10px 15px;
+    border:1px solid #ebebeb;
+    border-radius: 50px;
+    color: #777;
+    font-size:1em;
+    background-color: transparent;
+    transition: background-color 0.5s ease 0s;
+}
+
+a#advancedSearch:hover {   
+    margin:0 !important;
+    padding:10px 15px;
+    border:1px solid #ccc;
+    border-radius: 50px;
+    color: #000;
+    background-color: #fbfbfb;
 }
 
 .tabs-services a,  .tabs-services a:hover, .tabs-services a:active{
-    font-size: 1.2em;
-    margin-right: 1.2em;
+    font-size: 1em;
+    margin-right: 1em;
     text-decoration: none!important;   
 }
 
@@ -1245,7 +1311,7 @@ h1,h2,h3,h4,h5{
   right: 15px;
   top: 23px;
   height: 0;
-  border: 1px solid lightgray;
+  /*border: 1px solid lightgray;*/
   border-radius : 10px;
 }
 
