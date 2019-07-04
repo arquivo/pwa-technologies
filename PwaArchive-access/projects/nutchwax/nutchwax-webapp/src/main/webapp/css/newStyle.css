@@ -11,15 +11,17 @@ body{
 }
 
 #searchForm .form-control{
-    font-size: 16px !important;
-    height: 60px !important;
+    font-size: 18px !important;
+    font-family: "Roboto";
+    height: 52px !important;
     /*padding-right: 40px!important;*/
     border-radius: 100px !important;
-    text-align: center;
+    text-align: left/*center*/;
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0); 
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);;/*cursor: pointer;*/;
     transition: box-shadow 0.5s ease 0s;  
     /*background-color: #fbfbfb*/
+    padding-left: 24px;
 }
 
 /* NEW STYLE: Hover search bar effect*/
@@ -30,11 +32,37 @@ body{
     background-color: #fff;
 }
 
+/* NEW STYLE: forcing 100% width on the search bar */
+#searchBarBlock {
+    position: relative !important;
+    margin-top:-20px;
+    display:block !important;    
+    width: 100% !important;
+
+}
+#buttonSearch button {
+    position: absolute;
+    z-index: 999999;
+    right: 30px !important;
+    padding: 15px 0px 15px 0 !important;
+    outline: none;
+    border:none;
+    background-color: transparent;
+
+}
+
+/* NEW STYLE: slider range circle */
+#sliderCircleRight {padding-right: 12px;padding-top: 10px}
+#sliderCircleLeft {padding-left: 12px;padding-top: 10px}
+
 #searchForm .form-control:focus {  
     border:1px solid #ebebeb !important;
     background-color: #fff;
+    content: "";
 }
 
+#ionSlider {float: left;width:100%;
+}
 
 #searchForm{
     margin-top: /*30*/25px;
@@ -453,6 +481,9 @@ h5{
     background-color: #efefef!important;
 }
 
+input:focus:-webkit-input-placeholder { color:transparent; };
+input:focus:-moz-placeholder { color:transparent; }
+
 h5{
     margin: 0!important;
 }
@@ -716,7 +747,7 @@ em{
 
 #slider-date{
     height: 6px!important;
-    margin-top: 15px;
+    margin-top: /*15px*/20px;
     margin-bottom: 10px;
 }
 
@@ -802,9 +833,12 @@ em{
 }
 
 .search-button{
-    height: 38px;
+    /*height: 38px;*/
     padding: 0px /*12px*/0 0px 09px!important;
-    background-color: none !important;    
+    background-color: none !important; 
+    outline:1px solid red;
+    padding:0 !important;
+    margin:0 !important;   
 }
 /* starts NEW STYLING FOR SEARCH BUTTON */
 span#buttonSearch {    
@@ -876,19 +910,20 @@ input:active, input:focus{
 
 .clear-text{
     position: absolute;
-    font-size: 28px;
-    color: lightgrey;
-    right: 41px;
+    font-size: 40px;
+    color:#777;   
+    right: /*41px*/56px !important;
     z-index: 3;
-    height: 38px;
-    padding: 5px 8px 37px 8px;
-    -webkit-text-stroke: 4px white;
+    height: 38px !important;
+    /*padding: /*5px*//*13px 8px 37px 8px*//*13px;*/
+    -webkit-text-stroke:7px white;
     cursor: pointer;
     display: none;
+    padding: 5px 0;
 }
 
 .clear-text:active, .clear-text:hover{
-    color: #555555;
+    color: /*#555*//*#000*/ /*#007AFF*/red;
 }
 
 .prizes{
@@ -1245,27 +1280,74 @@ h1,h2,h3,h4,h5{
     padding-bottom:4px;
 }
 
-/* New style for Advanced Search */
-a#advancedSearch {
-    float: right;   
-    margin:0 !important;
-    padding:10px 15px;
-    border:1px solid #ebebeb;
-    border-radius: 50px;
-    color: #777;
-    font-size:1em;
-    background-color: transparent;
+a.advancedSearch {
+    float: left;   
+    text-decoration: none;
+    margin:0 8px 0 0 !important;
+    padding: 5px 13px;
+    /*border:1px solid #ebebeb;*/
+    border-radius: 50px;     
+    font-size:1em;    
     transition: background-color 0.5s ease 0s;
+    background-color:transparent;
+    color:#007AFF;
+    border: 1px solid #007AFF; 
+    transition: background-color 0.5s ease 0s;  
+}
+a.advancedSearch:hover {    
+    /*background-color: #fbfbfb;*/   
+    background-color: #007AFF;
+    color:white;
+    border: 1px solid white; 
+    text-decoration: none;
 }
 
-a#advancedSearch:hover {   
-    margin:0 !important;
-    padding:10px 15px;
-    border:1px solid #ccc;
-    border-radius: 50px;
-    color: #000;
-    background-color: #fbfbfb;
+#searchBarButtonsDiv {
+    width: 100%;
+    margin: 0px auto 0 auto;
+    padding:0;
+    height:auto;
+    display: block;
+    height:50px;
+    text-align: center;
+    float: left;
 }
+
+/* New style for Advanced Search */
+a#BotaoPesquisaAvancada {
+    float: right !important;
+    background-color: #007AFF;
+    margin-right: none !important;
+    color: white;
+    cursor: pointer;  
+    margin-right: 0 !important;
+}
+
+a#BotaoPesquisaAvancada:hover {
+    background-color: rgba(0,0,0,0.5);
+    margin-right: none !important;
+    color: white;
+    cursor: pointer;  
+    text-decoration: none;
+    border:1px solid transparent;
+}
+
+
+
+
+a#BotaoPaginas {
+    background-color:transparent;
+    color:#007AFF;
+    border: 1px solid #007AFF; 
+    transition: background-color 0.5s ease 0s;  
+}
+
+a#BotaoPaginas:hover {
+    background-color: #007AFF;
+    color:white;
+    border: 1px solid white;    
+}
+
 
 .tabs-services a,  .tabs-services a:hover, .tabs-services a:active{
     font-size: 1em;

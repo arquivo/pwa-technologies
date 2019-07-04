@@ -3,37 +3,56 @@
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">
                                
                 <form id="searchForm" action="/search.jsp">
+                
                 <div id="form_container"> 
-                    <div class="input-group stylish-input-group">
+                    <div id="searchBarBlock" class="input-group stylish-input-group">
                         
-                            <input name="query" id="txtSearch" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autofocus autocapitalize="off" autocomplete="off" autocorrect="off">
-                            <span class="clear-text"><i class="fa fa-close"></i></span>                         
-                            <span id="buttonSearch" class="input-group-addon no-radius search-button-span">
-                                 <button  class="search-button" type="submit">
-                                    <span class="glyphicon glyphicon-search white"></span>
-                                </button>  
-                            </span>
-                        
+                            <input name="query" id="txtSearch" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autofocus autocapitalize="off" autocomplete="off" autocorrect="off"> 
                     </div>
+                    <!-- starts search lupe and "x" close button -->
+                    <div>
+                      <span class="clear-text"><i class="fa fa-close"></i></span>                         
+                              <span id="buttonSearch" class="input-group-addon no-radius search-button-span">
+                                   <button class="search-button" type="submit">
+                                      <span class="glyphicon glyphicon-search white"></span>
+                                  </button>  
+                      </span>
+                      <ion-item id="ionSlider" lines="none">
+                      <ion-range id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">
+                        <p id="sliderCircleRight" slot="start"><span style="color:#777">1996</span></p>
+                        <p id="sliderCircleLeft" slot="end"><span style="color:#777;">2018</span></p>
+                      </ion-range>                  
+                      <script>
+                        const dualRange = document.querySelector('#dual-range');
+                        dualRange.value = { lower: 1996, upper: 2018 };
+                      </script>                  
+                      </ion-item>   
+                   </div>
+                    <!-- ends search lupe and "x" close button -->
+                </div>
+                <!-- starts Paginas and images links option -->
+                <div id="searchBarButtonsDiv"><br>
+                    <a id="BotaoPaginas" class="advancedSearch" href="/advanced.jsp?l=pt"><span>P&aacute;ginas</span></a>
+                    <a id="BotaoImagens" class="advancedSearch" href="/advanced.jsp?l=pt"><span>Imagens</span></a>
+                    <a id="BotaoPesquisaAvancada" class="advancedSearch "ref="/advanced.jsp?l=pt"><span>Pesquisa Avan&ccedil;ada</span></a>
+                   <!-- ends new element added: Advanced Search link --> 
                 </div>
 
-                <!-- starts Paginas and images links option -->
-                <div class="tabs-services div-underline">
+
+               <!-- <div class="tabs-services div-underline">
                   <script type="text/javascript">
                     document.write('<a id="pagesTab" href="'+pagesHref+'"><fmt:message key="topbar.menu.pages"/></a>');
                     document.write('<a id="imagesTab" href='+imagesHref+'><fmt:message key="topbar.menu.images"/></a>');                   
                    </script>
                    <!-- starts new element added: Advanced Search link --> 
-                   <a id="advancedSearch" href="/advanced.jsp?l=pt"><span>Pesquisa Avan&ccedil;ada</span></a>
-                   <!-- ends new element added: Advanced Search link --> 
-                </div>
-
-                <div id="slider-date" class="col-sm-12"></div>
+                  
+                <!--</div>-->
+                <!--<div id="slider-date" class="col-sm-12"></div>
                 <div id="slider-caption" class="row">                     
                     <span class="span-start-year"><input class="label-start-year nooutline" id="dateStart" name="dateStart" value="<%=dateStartDay%>/<%=dateStartMonth%>/<%=dateStartYear%>"></input><button onclick="$('#dateStart').click()" class="calendar-anchor-search clean-button-no-fill fleft"><img src="/img/calendar.gif"/></button></span>                           
                     <span class="span-end-year"><input class="label-end-year nooutline" id="dateEnd" name="dateEnd" value="<%=dateEndDay%>/<%=dateEndMonth%>/<%=dateEndYear%>"></input><button onclick="$('#dateEnd').click()" class="calendar-anchor-search clean-button-no-fill"><img src="/img/calendar.gif"/></button></span>                    
                     <input type="hidden" id="l" name="l" value="<%=language%>"/>
-                </div>        
+                </div>  -->      
 <script type="text/javascript">
 /*Initialization of Datepickers datestart and dateend for the advanced search*/
     $(function () {
