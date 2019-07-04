@@ -121,7 +121,7 @@ body,html{
 }
 
 .main-menu, .main-menu:active, .main-menu:visited, .main-menu:link, .main-menu:hover{
-	color:/*white*/ #777;
+	color:/*white*/ /*#777*/#000;
 	font-size:24px;
 	padding-left: 15px;
 	padding-right: 15px;
@@ -130,7 +130,12 @@ body,html{
 	cursor: pointer;
 	z-index: 16777270;
 	position: relative;
+	border-radius: 60px;
+	background-color: transparent;
+	transition: background-color 0.5s ease 0s;  
 }
+
+.main-menu:hover {background-color: #ebebeb}
 
 .main-menu-top-div{
 	background-color:#42a5f5
