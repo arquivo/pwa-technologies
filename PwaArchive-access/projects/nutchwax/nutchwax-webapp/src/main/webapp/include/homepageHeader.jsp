@@ -17,8 +17,18 @@
                                       <span class="glyphicon glyphicon-search white"></span>
                                   </button>  
                       </span>
-                      <ion-item id="ionSlider" lines="none">
-                      <ion-range id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">
+
+                      <!-- starts Paginas and images links option -->
+                     <div id="searchBarButtonsDiv"><br>
+                       <a id="BotaoPaginas" class="advancedSearch" href="#"><span>P&aacute;ginas</span></a>
+                       <a id="BotaoImagens" class="advancedSearch" href="#"><span>Imagens</span></a>
+                       <a id="BotaoPesquisaAvancada" class="advancedSearch "ref="/advanced.jsp?l=pt"><span>Pesquisa Avan&ccedil;ada</span></a>                   
+                     </div>
+                     <!-- ends Paginas and images links option -->
+
+                     <!-- starts history range slider -->
+                     <ion-item id="ionSlider" lines="none">
+                     <ion-range id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">
                         <p id="sliderCircleRight" slot="start"><span style="color:#777">1996</span></p>
                         <p id="sliderCircleLeft" slot="end"><span style="color:#777;">2018</span></p>
                       </ion-range>                  
@@ -26,17 +36,13 @@
                         const dualRange = document.querySelector('#dual-range');
                         dualRange.value = { lower: 1996, upper: 2018 };
                       </script>                  
-                      </ion-item>   
+                      </ion-item>  
+                      <!-- ends history range slider --> 
                    </div>
                     <!-- ends search lupe and "x" close button -->
                 </div>
-                <!-- starts Paginas and images links option -->
-                <div id="searchBarButtonsDiv"><br>
-                    <a id="BotaoPaginas" class="advancedSearch" href="/advanced.jsp?l=pt"><span>P&aacute;ginas</span></a>
-                    <a id="BotaoImagens" class="advancedSearch" href="/advanced.jsp?l=pt"><span>Imagens</span></a>
-                    <a id="BotaoPesquisaAvancada" class="advancedSearch "ref="/advanced.jsp?l=pt"><span>Pesquisa Avan&ccedil;ada</span></a>
-                   <!-- ends new element added: Advanced Search link --> 
-                </div>
+
+
 
 
                <!-- <div class="tabs-services div-underline">

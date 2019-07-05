@@ -43,6 +43,7 @@
 <link rel="stylesheet" href="css/swiper.min.css">
 <link rel="stylesheet" href="css/MainMenu.css">
 <%@ include file="MainMenu.jsp" %>
+<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
 <script type="text/javascript">MENU.init()</script> 
 <script type="text/javascript" src="/js/js.cookie.js"></script>
 <script>

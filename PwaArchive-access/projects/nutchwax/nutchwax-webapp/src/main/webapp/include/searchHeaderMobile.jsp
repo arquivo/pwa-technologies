@@ -21,16 +21,19 @@
                     document.write('<a id="pagesTab" href="'+pagesHref+'"><fmt:message key="topbar.menu.pages"/></a>');
                     document.write('<a id="imagesTab" href='+imagesHref+'><fmt:message key="topbar.menu.images"/></a>');
                   </script>
-                </div>         
+                  <!-- starts new element added: Advanced Search link --> 
+                  <a id="advancedSearch" href="/advanced.jsp?l=pt"><span>Pesquisa Avan&ccedil;ada</span></a>
+                  <!-- ends new element added: Advanced Search link --> 
+                </div>        
                   
-                <div id="slider-date" class="col-sm-12"></div>
+                <!--<div id="slider-date" class="col-sm-12"></div>-->
 
-                <div id="slider-caption" class="row">                     
+                <!--<div id="slider-caption" class="row">                     
                     <span class="span-start-year"><input class="label-start-year nooutline" id="dateStart" name="dateStart" value="<%=dateStartDay%>/<%=dateStartMonth%>/<%=dateStartYear%>"></input><button onclick="$('#dateStart').click()" class="calendar-anchor-search clean-button-no-fill"><img src="/img/calendar.gif"/></button></span>
                            
                     <span class="span-end-year"><input class="label-end-year nooutline" id="dateEnd" name="dateEnd" value="<%=dateEndDay%>/<%=dateEndMonth%>/<%=dateEndYear%>"></input><button onclick="$('#dateEnd').click()" class="calendar-anchor-search clean-button-no-fill"><img src="/img/calendar.gif"/></button></span>                    
                     <input type="hidden" id="l" name="l" value="<%=language%>"/>
-                </div>   
+                </div>-->   
 <script src="/include/clearForm.js"></script> 
 
 <script type="text/javascript">

@@ -76,11 +76,35 @@ body{
 #ionSlider:hover {    
     background-color: #ebebeb !important;    
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0); 
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);/*cursor: pointer;*/;     
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);/*cursor: pointer;*/;
+    transition: box-shadow 0.5s ease 0s;  
 }
 
 #searchForm{
     margin-top: /*30*/25px;
+}
+
+/* NEW STYLE: Change placeholder */
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #ccc !important;
+  font-family: "Roboto";
+  font-weight: 100;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #ccc !important;
+  font-family: "Roboto";
+  font-weight: 100;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #ccc !important;
+  font-family: "Roboto";
+  font-weight: 100;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #ccc !important;
+  font-family: "Roboto";
+  font-weight: 100;
 }
 
 #form_container{
@@ -864,54 +888,15 @@ span#buttonSearch {
 }
 
 span#buttonSearch button span{    
-    color: /*#777*/#000 /*#007AFF*/;
+    color: /*#777*/#007AFF;
     background-color: transparent !important;
     font-size: 22px !important;
     transition:color 0.5s ease 0s;   
     font-weight: normal !important;
-    animation: pulse 3s  ease infinite;
-  display: block;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #cca92c;
-  cursor: pointer;
-  box-shadow: 0 0 0 rgba(204,169,44, 0.4);
-  animation: pulse 2s infinite;
 }
-.pulse:hover {
-  animation: none;
-}
-
-@-webkit-keyframes pulse {
-  0% {
-    -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-  }
-  70% {
-      -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-  }
-  100% {
-      -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-  }
-}
-@keyframes pulse {
-  0% {
-    -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-    box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-  }
-  70% {
-      -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-      box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-  }
-  100% {
-      -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-      box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-  }
-}
-
 
 span#buttonSearch button:hover span{    
-    color: #007AFF;    
+    color: #000 /*#007AFF*/;    
 }
 /* ends NEW STYLING FOR SEARCH BUTTON */
 
@@ -964,8 +949,8 @@ input:active, input:focus{
 
 .clear-text{
     position: absolute;
-    font-size: 40px;
-    color:#777;   
+    font-size: 38px;
+    color:/*#777*/red;   
     right: /*41px*/56px !important;
     z-index: 3;
     height: 38px !important;
@@ -1370,15 +1355,16 @@ a.advancedSearch:hover {
 /* New style for Advanced Search */
 a#BotaoPesquisaAvancada {
     float: right !important;
-    background-color: #007AFF;
+    background-color: /*#007AFF*/white;
     margin-right: none !important;
-    color: white;
+    color:black /*#007AFF/* white*/;
     cursor: pointer;  
     margin-right: 0 !important;
+    border:1px solid #ccc;
 }
 
 a#BotaoPesquisaAvancada:hover {
-    background-color: rgba(0,0,0,0.5);
+    background-color: #007AFF;
     margin-right: none !important;
     color: white;
     cursor: pointer;  
@@ -1386,17 +1372,28 @@ a#BotaoPesquisaAvancada:hover {
     border:1px solid transparent;
 }
 
-
-
-
 a#BotaoPaginas {
-    background-color:transparent;
-    color:#007AFF;
+    background-color:#007AFF;
+    color:white;
     border: 1px solid #007AFF; 
     transition: background-color 0.5s ease 0s;  
 }
 
 a#BotaoPaginas:hover {
+    background-color: #007AFF;
+    color:white;
+    border: 1px solid transparent;    
+}
+
+
+a#BotaoImagens {
+    background-color:white;
+    color:black;
+    border: 1px solid #ccc;
+    transition: background-color 0.5s ease 0s;  
+}
+
+a#BotaoImagens:hover {
     background-color: #007AFF;
     color:white;
     border: 1px solid white;    

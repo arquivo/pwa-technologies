@@ -131,11 +131,11 @@ body,html{
 	z-index: 16777270;
 	position: relative;
 	border-radius: 60px;
-	background-color: transparent;
-	transition: background-color 0.5s ease 0s;  
+	/*background-color: transparent;
+	transition: background-color 0.5s ease 0s;  */
 }
 
-.main-menu:hover {background-color: #ebebeb}
+.main-menu:hover {/*background-color: #ebebeb*/}
 
 .main-menu-top-div{
 	background-color:#42a5f5
