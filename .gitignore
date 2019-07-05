@@ -9,6 +9,9 @@ PwaArchive-access/projects/nutchwax/nutchwax-webapp/src/main/webapp/WEB-INF/clas
 *.iml
 .idea
 
+# Ignore files Nutchwax-thirdpart
+PwaArchive-access/projects/nutchwax/nutchwax-thirdparty/nutch/lib/*
+PwaArchive-access/projects/nutchwax/nutchwax-thirdparty/nutch/build/*
 
 # PwaLucene .class files that have a source file
 PwaLucene/src/main/java/org/apache/lucene/search/caches/PwaSpamFilterCache.class
