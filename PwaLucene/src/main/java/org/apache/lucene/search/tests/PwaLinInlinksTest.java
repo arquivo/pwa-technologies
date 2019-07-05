@@ -1,6 +1,6 @@
 package org.apache.lucene.search.tests;
 
-import org.apache.lucene.search.rankers.queryindependent.PwaLinInlinks;
+import org.apache.lucene.search.features.queryindependent.PwaLinInlinks;
 
 import junit.framework.*;
 

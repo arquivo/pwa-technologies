@@ -2,7 +2,7 @@ package org.apache.lucene.search.tests;
 
 import java.net.MalformedURLException;
 
-import org.apache.lucene.search.rankers.queryindependent.PwaUrlSlashes;
+import org.apache.lucene.search.features.queryindependent.PwaUrlSlashes;
 
 import junit.framework.*;
 
