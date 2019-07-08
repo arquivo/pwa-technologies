@@ -70,8 +70,10 @@
 	<%@ include file="include/topbar.jsp" %>
 	<div class="wrap">
 		<div id="header-home">
-                                <div id="logo-home">                                    
-                                        <img src="img/logo-home-<%=language%>.png?release=imgSearch" alt="<fmt:message key='home.title'/>" style="padding-bottom: 15px;" />                             
+                                <div id="logo-home">                               
+                                    <a href="<fmt:message key='home.prizes.winners.href'/>" title="<fmt:message key='home.prizes.winners.title'/>">
+                                        <img src="img/banner-premiarquivo-<%=language%>.png?release=winnersArquivoaward2019" alt="<fmt:message key='home.title'/>" style="padding-bottom: 15px;" />                             
+                                    </a>    
                                 </div>
                                 <div id="search-home">
                                         <form id="loginForm" action="search.jsp" name="loginForm" method="get">
