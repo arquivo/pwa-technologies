@@ -72,7 +72,7 @@
 		<div id="header-home">
                                 <div id="logo-home">                               
                                     <a href="<fmt:message key='home.prizes.winners.href'/>" title="<fmt:message key='home.prizes.winners.title'/>">
-                                        <img src="img/banner-premiarquivo-<%=language%>.png?release=winnersArquivoaward2019" alt="<fmt:message key='home.title'/>" style="padding-bottom: 15px;" />                             
+                                        <img src="img/banner-premiarquivo-<%=language%>.png?release=winnersArquivoaward2019" alt="<fmt:message key='home.title'/>" />                             
                                     </a>    
                                 </div>
                                 <div id="search-home">
