@@ -316,8 +316,8 @@ function formatDate ( date ) {
 }    
 
 </script>  
-<div class="text-center prizes">
-  <a href="<fmt:message key='home.prizes.url'/>"><img width="219" alt="<fmt:message key='home.prizes.alt'/>" title="<fmt:message key='home.prizes.title'/>" src="/img/badge-premiosarquivo-<%=language%>.png?v=premiovencedores2019"/></a>
+<div class="text-center prizes horizontalMarginsAuto">
+  <a href="<fmt:message key='home.prizes.url'/>"><img width="90%" alt="<fmt:message key='home.prizes.alt'/>" title="<fmt:message key='home.prizes.title'/>" src="/img/badge-premiosarquivo-<%=language%>.png?v=premiovencedores2019"/></a>
 </div>
             </div>
         </div>

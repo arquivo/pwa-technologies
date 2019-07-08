@@ -821,4 +821,10 @@ input:active, input:focus{
 
 .prizes{
     margin-top: 50px;
+    max-width: 550px;
+}
+
+.horizontalMarginsAuto{
+    margin-left: auto;
+    margin-right: auto;
 }
