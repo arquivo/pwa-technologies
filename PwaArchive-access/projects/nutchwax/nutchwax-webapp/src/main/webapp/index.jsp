@@ -133,7 +133,8 @@
     <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-status-bar-style" content="#252525">      
 
-	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
@@ -165,10 +166,15 @@
 	<!-- end addthis for sharing on social media --> 
 
   <!-- starts New style to override less styles -->
-  <style>
+  <script type="text/javascript">
+  	$('input,textarea').focus(function(){
+       $(this).removeAttr('placeholder');
+    })
+  </script>
+  <script src="@ionic/core/dist/ionic.js"></script>
+  <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">
 
 
-  </style>
   <!-- ends New style to override less styles -->
 
 </head>

@@ -1,6 +1,7 @@
 body{
     font-size: 12px!important;
-    font-family: "Roboto","Open Sans", sans-serif !important;    
+    font-family: "Roboto", sans-serif !important;
+    font-family: 'Roboto', 'Helvetica' sans-serif;    
     outline: none;
 }
 
@@ -1016,9 +1017,23 @@ input:active, input:focus{
 	width: 83.33333333%!important;
 }
 
-#conteudo-pesquisa-erro{
-	margin-left:15px;
-	margin-right: 15px;
+#conteudo-pesquisa-erro{	
+    margin-left: 15px;
+    margin-right: 15px;
+    border: 1px solid #ebebeb;
+    float: left;
+    background: #fcfcfc;
+    padding: 20px;
+    border-radius: 5px;    
+}
+
+#conteudo-pesquisa-erro .alert-danger{    
+    color: #a94442;
+    text-align: center;
+    background-color: /*#f2dede*/#feefef;
+    border: none !important;
+    font-size: 1.2em;
+}
 }
 
 .spell{
@@ -1412,7 +1427,7 @@ a.advancedSearch {
     padding: 5px 13px;
     /*border:1px solid #ebebeb;*/
     border-radius: 50px;     
-    font-size:/*0.95em*/1em;    
+    font-size:/*0.95em*/0.92em;    
     transition: background-color 0.5s ease 0s;
     background-color:transparent;
     color:#007AFF;
