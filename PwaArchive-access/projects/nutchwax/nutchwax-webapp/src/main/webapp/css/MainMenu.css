@@ -108,7 +108,7 @@ body,html{
 	padding-left: 15px;
 	padding-top:10px;
 	padding-bottom:10px;
-	background-color: #f8f7f7/*#f5f5f5*//*#ebebeb*//*#252525*/ /*transparent*/ !important;
+	background-color: /*#f8f7f7/*#f5f5f5*//*#ebebeb*//*#252525*/ /*transparent*/ #222!important;
 	/*border-bottom: 1px solid #ccc ;*/
 	line-height: 30px;
 }
@@ -121,7 +121,7 @@ body,html{
 }
 
 .main-menu, .main-menu:active, .main-menu:visited, .main-menu:link, .main-menu:hover{
-	color:/*white*/ /*#777*/#000;
+	color: white /*#777*//*#000*/;
 	font-size:24px;
 	padding-left: 15px;
 	padding-right: 15px;

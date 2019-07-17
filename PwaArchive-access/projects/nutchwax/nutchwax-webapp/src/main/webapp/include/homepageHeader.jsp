@@ -1,9 +1,9 @@
     <div class="container-fluid topcontainer">
         <div class="row">
-            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">
-                               
-                <form id="searchForm" action="/search.jsp">
+            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-right">                            
                 
+                <!-- start search box -->
+                <form id="searchForm" action="/search.jsp">                
                 <div id="form_container"> 
                     <div id="searchBarBlock" class="input-group stylish-input-group">
                         
@@ -18,7 +18,7 @@
                                   </button>  
                       </span>
 
-                      <!-- starts Paginas and images links option -->
+                     <!-- starts Paginas and images links option -->
                      <div id="searchBarButtonsDiv"><br>
                        <a id="BotaoPaginas" class="advancedSearch" href="#"><span>P&aacute;ginas</span></a>
                        <a id="BotaoImagens" class="advancedSearch" href="#"><span>Imagens</span></a>
@@ -29,8 +29,8 @@
                      <!-- starts history range slider -->
                      <ion-item id="ionSlider" lines="none">
                      <ion-range id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">
-                        <p id="sliderCircleRight" slot="start"><span style="color:#777">1996</span></p>
-                        <p id="sliderCircleLeft" slot="end"><span style="color:#777;">2018</span></p>
+                        <p id="sliderCircleRight" slot="start"><span>1996</span></p>
+                        <p id="sliderCircleLeft" slot="end"><span>2018</span></p>
                       </ion-range>                  
                       <script>
                         const dualRange = document.querySelector('#dual-range');
@@ -38,27 +38,15 @@
                       </script>                  
                       </ion-item>  
                       <!-- ends history range slider --> 
-                   </div>
+                      <ion-list>
+                     <ion-item>
+                     <ion-range color="danger" pin="true"></ion-range>
+                     </ion-item>
+
+                     </div>
                     <!-- ends search lupe and "x" close button -->
-                </div>
-
-
-
-
-               <!-- <div class="tabs-services div-underline">
-                  <script type="text/javascript">
-                    document.write('<a id="pagesTab" href="'+pagesHref+'"><fmt:message key="topbar.menu.pages"/></a>');
-                    document.write('<a id="imagesTab" href='+imagesHref+'><fmt:message key="topbar.menu.images"/></a>');                   
-                   </script>
-                   <!-- starts new element added: Advanced Search link --> 
-                  
-                <!--</div>-->
-                <!--<div id="slider-date" class="col-sm-12"></div>
-                <div id="slider-caption" class="row">                     
-                    <span class="span-start-year"><input class="label-start-year nooutline" id="dateStart" name="dateStart" value="<%=dateStartDay%>/<%=dateStartMonth%>/<%=dateStartYear%>"></input><button onclick="$('#dateStart').click()" class="calendar-anchor-search clean-button-no-fill fleft"><img src="/img/calendar.gif"/></button></span>                           
-                    <span class="span-end-year"><input class="label-end-year nooutline" id="dateEnd" name="dateEnd" value="<%=dateEndDay%>/<%=dateEndMonth%>/<%=dateEndYear%>"></input><button onclick="$('#dateEnd').click()" class="calendar-anchor-search clean-button-no-fill"><img src="/img/calendar.gif"/></button></span>                    
-                    <input type="hidden" id="l" name="l" value="<%=language%>"/>
-                </div>  -->      
+                    </div>
+            
 <script type="text/javascript">
 /*Initialization of Datepickers datestart and dateend for the advanced search*/
     $(function () {
@@ -112,7 +100,8 @@
         }));
     });
 </script>                          
-                </form>              
+</form>    
+
 <script src="/include/clearForm.js"></script>      
 <script type="text/javascript">
   $("#dateStart").change( function() {

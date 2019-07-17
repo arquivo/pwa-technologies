@@ -275,21 +275,25 @@
                 <%} }%>                
                 <a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%=title%></a>
               </h2>
+              <!-- New position for list versions -->
+              <div class="list-versions-div">
+              <span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span><span> - </span>
+              <script type="text/javascript">
+                document.write('<a onclick="ga(\'send\', \'event\', \'Full-text search\', \'List Versions\', \'/wayback/*/<%= untruncatedURL %>\');" class="outras-datas" href="/search.jsp?l=<%=language%>&query='+encodeURIComponent("<%=untruncatedURL%>")+'"><fmt:message key="search.allVersions"/></a>');                
+              </script>
+              </div>
               <div class="url"><a class="url" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%= url %></a></div>
               <div class="border-bottom"></div>
+
             </div>  
 		<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
             <% showSummary=true; //to show always summaries %>            
             <div class="summary"> 
               <% if (!"".equals(summary) && showSummary) { %>
                 <span class="resumo"><%=summary%></span><br />
-              <% } %>  
-            <div class="list-versions-div"><span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span><span> - </span>
-              <script type="text/javascript">
-                document.write('<a onclick="ga(\'send\', \'event\', \'Full-text search\', \'List Versions\', \'/wayback/*/<%= untruncatedURL %>\');" class="outras-datas" href="/search.jsp?l=<%=language%>&query='+encodeURIComponent("<%=untruncatedURL%>")+'"><fmt:message key="search.allVersions"/></a>');
-                
-              </script>
-            </div></div>            
+            <% } %>  
+           
+          </div>            
             
 <%--
             -
