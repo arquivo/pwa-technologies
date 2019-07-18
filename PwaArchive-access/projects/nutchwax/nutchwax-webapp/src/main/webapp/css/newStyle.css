@@ -1,7 +1,7 @@
 body{
-    font-size: 12px!important;
-    font-family: "Roboto", sans-serif !important;
-    font-family: 'Roboto', 'Helvetica' sans-serif;    
+    font-size: 12px!important;   
+    font-family: 'Roboto', 'Helvetica' sans-serif !important;    
+    font-family: Roboto,HelveticaNeue,Arial,sans-serif !important;
     outline: none;
 }
 
@@ -12,32 +12,32 @@ body{
 }
 
 #searchForm .form-control{
-    font-size: 17px !important;
+    font-size: 18px !important;
     font-family: "Roboto";
     height: 45px !important;
     /*padding-right: 40px!important;*/
-    border-radius: 100px !important;
-    border: 1px solid #dfe1e5;
+    border-radius: 100px !important;    
     text-align: left/*center*/;
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0); 
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);/*cursor: pointer;*/;
     transition: box-shadow 0.5s ease 0s;  
     /*background-color: #fbfbfb*/
-    padding-left: 16px;
+    padding-left: 20px;
+    border: 1px solid #dfe1e5 !important;
 }
 
 /* NEW STYLE: Hover search bar effect*/
 #searchForm .form-control:hover{
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);;/*cursor: pointer;*/;
-    border:1px solid #ebebeb;
+    border:1px solid /*#ebebeb*/#DFE1E5;
     background-color: #fff;
 }
 
 /* NEW STYLE: forcing 100% width on the search bar */
 #searchBarBlock {
     position: relative !important;
-    margin-top:-20px;
+    margin-top:/*-20px*/-28px;
     display:block !important;    
     width: 100% !important;
 
@@ -50,11 +50,9 @@ body{
     outline: none;
     border:none;
     background-color: transparent;
-
 }
 
 #searchForm .form-control:focus {  
-    border:1px solid #ebebeb !important;
     background-color: #fff;
     content: "";
 }
@@ -166,21 +164,25 @@ ion-item {
     
 }
 
-#resultados-lista ul li .resumo{
-font-size: 0.95
+#resultados-lista ul li .resumo{   
+    line-height: 20px !important;
+    font-size: 14px !important;
+    white-space: normal !important;
 }
 
 
 #resultados-lista ul h2 a{
-  color: #1a0dab !important;
-   font-size: 1.18em !important;
+  color: /*#1a0dab*/#1967D2 !important;
+  font-size: 1.18em !important;
+  font-family: 'Roboto', sans-serif;
 }
 
 
 .url{
     word-wrap: break-word;
     color: /*green*/ #006621;
-    margin-bottom: -2px;
+    margin-bottom: -4px;
+    font-size: 12px;
 }
 
 #resultados-lista ul li h2{
@@ -202,9 +204,45 @@ font-size: 0.95
 		border: 1px solid #dfe1e5 ;
 	    margin-bottom: 10px;
 	    border-radius: 4px;
-        margin-left: 15px;
-        margin-right: 15px;
+        margin-left: 7px;
+        margin-right: 7px;
     }
+#searchForm .form-control{
+    padding-left: 14px;
+    border: 1px solid #dfe1e5 !important;
+   }
+#searchBarButtonsDiv {
+    /*margin: -6px auto -5px auto;*/
+   }
+#searchForm .form-control {
+    font-size: 17px !important;
+  }
+    a.advancedSearch {
+    font-size: 0.90em !important;
+}
+
+div.omitted-results {
+    padding: 13px 14px 13px 14px;
+    margin: 7px;
+    color: black /*#715100*/;   
+    background-color: /*#fcf3db*/ #fffbd6;
+    border-radius: 5px;
+    border: 1px solid #dfe1e5;
+    margin-bottom: -24px;
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
+    box-shadow: 0px 4px 5px -2px rgba(255,255,255,1);
+    transition: box-shadow 0.5s ease 0s; 
+    transition: background-color: 0.5s ease 0s; 
+}
+/* NEW STYLE omitted results */
+
+div.omitted-results:hover {
+    background-color: #fcf0d0;
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);  
+}   
+
+
 }
 
 /* CSS For Tablet and Desktop versions*/
@@ -217,6 +255,29 @@ font-size: 0.95
         margin-right: 15px;
         font-size: 0.95em;      
 	}
+
+    div.omitted-results {
+    padding: 13px 14px 13px 14px;
+    margin: 10px 15px 15px 15px;
+    color: black /*#715100*/;    
+    background-color: /*#fcf3db*/ #fffbd6;
+    border-radius: 5px;
+    border: 1px solid #dfe1e5;    
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
+    box-shadow: 0px 4px 5px -2px rgba(255,255,255,1);
+    transition: box-shadow 0.5s ease 0s; 
+    transition: background-color: 0.5s ease 0s; 
+    
+}
+
+/* NEW STYLE omitted results */
+
+div.omitted-results:hover {
+    background-color: #fcf0d0;
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);  
+}   
+
 }
 
 #resultados-lista  ul  li {   
@@ -251,7 +312,7 @@ font-size: 0.95
 #conteudo-resultado{
     padding-left: 0px;
     padding-right: 0px;
-    padding-bottom: 40px;
+    padding-bottom: /*40px*/10px;
     margin-top: 30px;
 }
 
@@ -267,13 +328,17 @@ font-size: 0.95
 .pagesNextPrevious a {
 	margin-top: 20px;
 	background-color: white !important;
-    color: black !important;
-    border: 1px solid /*#ccc*/#dfe1e5 !important;  
+    color: /*black*/ #007AFF !important;
+    border: 1px solid /*#ccc*//*#dfe1e5*/#007AFF !important;
     border-radius: 100px !important;
     text-decoration: none !important;	
 	font-size: 1em !important;
-	padding: 8px 12px !important;
+	padding: 6px 12px !important;
+    text-transform: uppercase;
 	transition: background-color 0.5s ease 0s;
+
+    color: #007AFF;
+    border: 1px solid #007AFF;
 }
 
 .pagesNextPrevious a:hover {
@@ -1018,13 +1083,14 @@ input:active, input:focus{
 }
 
 #conteudo-pesquisa-erro{	
-    margin-left: 15px;
-    margin-right: 15px;
-    border: 1px solid #ebebeb;
+    margin-left: 9px;
+    margin-right: 9px;
+    border: 1px solid #dfe1e5;
     float: left;
     background: #fcfcfc;
     padding: 20px;
-    border-radius: 5px;    
+    border-radius: 5px; 
+    margin-top: -9px;   
 }
 
 #conteudo-pesquisa-erro .alert-danger{    
@@ -1432,7 +1498,8 @@ a.advancedSearch {
     background-color:transparent;
     color:#007AFF;
     border: 1px solid #007AFF; 
-    transition: background-color 0.5s ease 0s;  
+    transition: background-color 0.5s ease 0s; 
+    text-transform: uppercase !important;
 }
 
 a.advancedSearch:hover {    
@@ -1446,8 +1513,7 @@ a.advancedSearch:hover {
 #searchBarButtonsDiv {
     position: relative;
     z-index: 999999;
-    width: 100%;
-    margin: 0px auto 0 auto;
+    width: 100%;    
     padding:0;
     height:auto;
     display: block;
@@ -1465,6 +1531,9 @@ a#BotaoPesquisaAvancada {
     cursor: pointer;  
     margin-right: 0 !important;
     border:1px solid /*#ccc*/#dfe1e5;
+
+    color: #007AFF;
+    border: 1px solid #007AFF;
 }
 
 a#BotaoPesquisaAvancada:hover {
@@ -1497,6 +1566,9 @@ a#BotaoImagens {
     border: 1px solid /*#ccc*/#dfe1e5;
     transition: background-color 0.5s ease 0s;  
     text-decoration: none !important;
+
+    color: #007AFF;
+    border: 1px solid #007AFF;
 }
 
 a#BotaoImagens:hover {
@@ -1777,6 +1849,7 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
     height: initial!important;
 }
 
-
-
-
+.row {
+    margin-right: -22px !important;
+    margin-left: -22px !important;
+}
