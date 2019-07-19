@@ -264,6 +264,8 @@
             <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
             <!-- Changed to return in wayback query format -->
             <div class="urlBlock">
+               <div class="url">&#x2192; <a class="url" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%= url %></a></div>
+              <div class="border-bottom"></div>
               <h2>
                 <% if (showMore) {
                         if (!"text".equalsIgnoreCase(primaryType)) {
@@ -282,8 +284,7 @@
                 document.write('<a onclick="ga(\'send\', \'event\', \'Full-text search\', \'List Versions\', \'/wayback/*/<%= untruncatedURL %>\');" class="outras-datas" href="/search.jsp?l=<%=language%>&query='+encodeURIComponent("<%=untruncatedURL%>")+'"><fmt:message key="search.allVersions"/></a>');                
               </script>
               </div>
-              <div class="url"><a class="url" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%= url %></a></div>
-              <div class="border-bottom"></div>
+             
 
             </div>  
 		<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
