@@ -1097,7 +1097,7 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #337ab7;
+  color: /*#337ab7*/#007AFF !important;
   text-decoration: none;
 }
 a:hover,
@@ -3897,14 +3897,15 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .input-group-addon {
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: /*14px*/20px;
   font-weight: normal;
   line-height: 1;
   color: #555;
   text-align: center;
-  background-color: #eee;
-  border: 1px solid #ccc;
+  background-color: /*#eee*/none !important;
+  border: /*1px solid #ccc*/none !important;
   border-radius: 4px;
+  outline: 1px solid red;
 }
 .input-group-addon.input-sm {
   padding: 5px 10px;

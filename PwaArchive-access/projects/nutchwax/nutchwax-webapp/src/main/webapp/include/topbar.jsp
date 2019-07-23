@@ -53,8 +53,12 @@
 <div class="main-content">
 	<div class="container-fluid">
 		 <div class="row text-center logo-main-div">
-		                    <a href="/?l=<%=language%>"><img src="/img/01_preto.png" id="arquivoLogo" alt="Logo Arquivo.pt" class="text-center logo-main"></a>
-		                    <a class="pull-right main-menu" id="menuButton"><i class="fa fa-bars line-height"></i></a>
+		                    <a class="pull-left main-menu" id="menuButton"><i class="fa fa-bars line-height"></i></a>
+		                    <a href="/?l=<%=language%>"><img src="/img/arquivo-logo-white.svg" id="arquivoLogo" alt="Logo Arquivo.pt" class="text-center logo-main"></a>
+		                    <!-- New code: starts Opções button ans Language selection-->
+		                    <a href="#" class="menu-opcoes" title="Arquivo.pt">Op&ccedil;&otilde;es</a>
+		                    <!--<a href="#" class="select-language" title="Arquivo.pt">EN</a>-->
+		                    <!-- ends Opções button -->
 		 </div> 	
 	</div>
 </div>	
@@ -64,3 +68,6 @@ $('#languageSelection').click( function(e) {
 		window.location = toggleLanguage(); 
 		return false; } );
 </script>
+<!-- NEW - 23.07.19: Call ionic -->
+<script src="@ionic/core/dist/ionic.js"></script>
+<link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">

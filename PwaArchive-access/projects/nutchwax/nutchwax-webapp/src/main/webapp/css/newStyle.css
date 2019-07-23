@@ -1,7 +1,7 @@
 body{
     font-size: 12px!important;   
     font-family: 'Roboto', 'Helvetica' sans-serif !important;    
-    font-family: Roboto,HelveticaNeue,Arial,sans-serif !important;
+    font-family: Roboto,HelveticaNeue,Arial,sans-serif !important;    
     outline: none;
 }
 
@@ -20,18 +20,25 @@ body{
     text-align: left/*center*/;
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0); 
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);/*cursor: pointer;*/;
-    transition: box-shadow 0.5s ease 0s;  
-    /*background-color: #fbfbfb*/
+    transition: box-shadow 0.5s ease 0s; 
+
+    transition: ::-webkit-input-placeholder 0.5s ease 0s;
+    transition: ::-moz-placeholder 0.5s ease 0s;
+    transition: :-ms-input-placeholder 0.5s ease 0s;
+    transition: :-moz-placeholder 0.5s ease 0s;  
+
+    background-color: #fff !important;
     padding-left: 20px;
     border: 1px solid #dfe1e5 !important;
 }
 
 /* NEW STYLE: Hover search bar effect*/
-#searchForm .form-control:hover{
+#searchForm .form-control:hover {
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);;/*cursor: pointer;*/;
-    border:1px solid /*#ebebeb*/#DFE1E5;
-    background-color: #fff;
+    /*background-color: /*#ebebeb*/ /*#f0f0ee*//*#f7f7f7*//* #f0f0ee !important;*/
+    /*transition: background-color 0.5s ease 0s; */
+    border:1px solid /*#ebebeb*/transparent /*#DFE1E5*/; 
 }
 
 /* NEW STYLE: forcing 100% width on the search bar */
@@ -52,22 +59,18 @@ body{
     background-color: transparent;
 }
 
-#searchForm .form-control:focus {  
-    background-color: #fff;
-    content: "";
-}
-
 #ionSlider {    
     float: left;
-    width: 100%;
-    border-radius: 50px ;
-    border-bottom: 1px solid #dfe1e5;
-    margin-top: 0px/*10px*/; 
-    /*ebkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
+    width: 100%;    
+    /*border-bottom: 1px solid #dfe1e5;*/
+    margin-top: 5px/*10px*/; 
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
     box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); /*cursor: pointer;*/;
     /*ansition: box-shadow 0.5s ease 0s;*/
     font-size: 1em !important; 
     text-align: center !important;
+    position: relative;
+    z-index: 999999
 }    
 
 #ionSlider:hover {    
@@ -77,8 +80,29 @@ body{
 }
 
 /* NEW STYLE: slider range circle */
-#sliderCircleRight {padding-right: 13px;padding-top: 10px;}
-#sliderCircleLeft {padding-left: 13px;padding-right: 5px;padding-top: 10px}
+#sliderCircleRight { 
+   padding-right: 20px;
+   padding-top: 10px;
+   margin-left: -1px; 
+   background: transparent url(../img/calendario.svg) no-repeat -17px -15px;
+   background-size: 61px;
+   padding-top: 35px;
+   cursor: pointer;
+   text-decoration: none !important;
+   display: block !important;
+}
+#sliderCircleLeft {
+    padding-left: 20px;
+    padding-right: 0px;
+    padding-top: 10px;
+    margin-right: -5px   
+    background: transparent url(../img/calendario.svg) no-repeat 2px -15px !important;
+    background-size: 61px;
+    padding-top: 35px;
+    cursor: pointer;
+    text-decoration: none !important;
+    display: block !important;
+}
 
 ion-item { 
     --pin-display: none !important;
@@ -208,7 +232,7 @@ ion-item {
         margin-right: 7px;
     }
 #searchForm .form-control{
-    padding-left: 14px;
+    padding-left: 17px;
     border: 1px solid #dfe1e5 !important;
    }
 #searchBarButtonsDiv {
@@ -218,7 +242,7 @@ ion-item {
     font-size: 17px !important;
   }
     a.advancedSearch {
-    font-size: 0.90em !important;
+    font-size: /*0.90em*/1em !important;
 }
 
 div.omitted-results {
@@ -334,7 +358,7 @@ div.omitted-results:hover {
     text-decoration: none !important;	
 	font-size: 1em !important;
 	padding: 6px 12px !important;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 	transition: background-color 0.5s ease 0s;
 
     color: #007AFF;
@@ -1114,7 +1138,7 @@ input:active, input:focus{
 
 .clear-text{
     position: absolute;
-    font-size: 38px;
+    font-size: 37px;
     color:/*#777*/red;   
     right: /*41px*/56px !important;
     z-index: 3;
@@ -1499,7 +1523,7 @@ a.advancedSearch {
     color:#007AFF;
     border: 1px solid #007AFF; 
     transition: background-color 0.5s ease 0s; 
-    text-transform: uppercase !important;
+    /*text-transform: uppercase !important;*/
 }
 
 a.advancedSearch:hover {    
@@ -1520,6 +1544,7 @@ a.advancedSearch:hover {
     height:50px;
     text-align: center;
     float: left;
+    margin-top: -13px;
 }
 
 /* New style for Advanced Search */
@@ -1551,6 +1576,11 @@ a#BotaoPaginas {
     border: 1px solid #007AFF; 
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;  
+
+    /*font: 500 14px/20px Google Sans,Roboto,Arial,sans-serif !important;
+    letter-spacing: .24px  !important;
+    text-transform: none  !important;
+    -webkit-font-smoothing: antialiased  !important;*/
 }
 
 a#BotaoPaginas:hover {
@@ -1575,7 +1605,7 @@ a#BotaoImagens:hover {
     background-color: #007AFF;
     color:white;
     border: 1px solid white; 
-     text-decoration: none !important;   
+    text-decoration: none !important;   
 }
 
 
@@ -1853,3 +1883,131 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
     margin-right: -22px !important;
     margin-left: -22px !important;
 }
+
+/* NEW style */
+.menu-opcoes, .select-language {   
+    /*text-transform: uppercase;*/
+    color: white;
+    margin:0;
+    padding:0 30px 0 0px;
+    float: right !important;
+    text-decoration: none !important;
+
+}
+
+/* NEW style */
+.menu-opcoes:active, .menu-opcoes:visited {   
+    /*text-transform: uppercase;*/
+    color: white; 
+}
+
+/* ----------- iPhone 4 and 4S ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+    #searchBarBlock {}
+}
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+
+}
+
+/* ----------- iPhone 5 and 5S ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+}
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+
+}
+
+/* ----------- iPhone 6 ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+
+}
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) { 
+
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) { 
+
+}
+
+/* ----------- iPhone 6+ ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3) { 
+
+}
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+
+}
+

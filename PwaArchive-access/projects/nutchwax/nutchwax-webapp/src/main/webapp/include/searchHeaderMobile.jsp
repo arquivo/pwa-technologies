@@ -16,30 +16,34 @@
                                   </button>  
                       </span>
 
+                       <!-- starts history range slider -->
+                     <ion-item class="ion-no-padding" id="ionSlider" lines="none">
+                     <ion-range ion-padding-start style="padding:40px 0 0 0 !important;margin-top:-30px;" id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">
+                       
+                        <p id="sliderCircleRight" slot="start"><span><a href="#">1996</a></span></p>
+                        <p style="background: transparent url(../img/calendario.svg) no-repeat 2px -15px;
+                        background-size: 61px;
+                        padding-top: 35px;" id="sliderCircleLeft" slot="end"><span><a href="#">2018</span></a></p>
+                      </ion-range>                  
+                      <script>
+                        const dualRange = document.querySelector('#dual-range');
+                        dualRange.value = { lower: 1996, upper: 2018 };
+                      </script>                  
+                      </ion-item>                     
+                      <ion-list>
+                     <ion-item>
+                     <ion-range color="danger" pin="true"></ion-range>
+                     </ion-item>
+                     <!-- ends history range slider -->
+                    </ion-list>
+
                      <!-- starts Paginas and images links option -->
                      <div id="searchBarButtonsDiv"><br>
                        <a id="BotaoPaginas" class="advancedSearch" href="#"><span>P&aacute;ginas</span></a>
                        <a id="BotaoImagens" class="advancedSearch" href="#"><span>Imagens</span></a>
                        <a id="BotaoPesquisaAvancada" class="advancedSearch "ref="/advanced.jsp?l=pt"><span>Pesquisa Avan&ccedil;ada</span></a>                   
                      </div>
-                     <!-- ends Paginas and images links option -->
-
-                     <!-- starts history range slider -->
-                     <!--<ion-item id="ionSlider" lines="none">
-                     <ion-range id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">
-                        <p id="sliderCircleRight" slot="start"><span>1996</span></p>
-                        <p id="sliderCircleLeft" slot="end"><span>2018</span></p>
-                      </ion-range>                  
-                      <script>
-                        const dualRange = document.querySelector('#dual-range');
-                        dualRange.value = { lower: 1996, upper: 2018 };
-                      </script>                  
-                      </ion-item>  
-                      <!-- ends history range slider --> 
-                      <!--<ion-list>
-                     <ion-item>
-                     <ion-range color="danger" pin="true"></ion-range>
-                     </ion-item>-->
+                   
                 </div>  
 </div>      
                
