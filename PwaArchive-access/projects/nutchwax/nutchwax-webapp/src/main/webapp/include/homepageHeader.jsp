@@ -22,23 +22,18 @@
                      <ion-range ion-padding-start style="padding:40px 0 0 0 !important;margin-top:-30px;" id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">
                        
                         <p id="sliderCircleRight" slot="start"><span><a href="#">1996</a></span></p>
-                        <p style="background: transparent url(../img/calendario.svg) no-repeat 2px -15px;
-                        background-size: 61px;
-                        padding-top: 35px;" id="sliderCircleLeft" slot="end"><span><a href="#">2018</span></a></p>
+                        <p id="sliderCircleLeft" slot="end"><span><a href="#">2018</span></a></p>
                       </ion-range>                  
                       <script>
                         const dualRange = document.querySelector('#dual-range');
                         dualRange.value = { lower: 1996, upper: 2018 };
                       </script>                  
                       </ion-item>                     
-                      <ion-list>
-                     <ion-item>
-                     <ion-range color="danger" pin="true"></ion-range>
-                     </ion-item>
+                     
                      <!-- ends history range slider -->
                      </div>
-                    <!-- ends search lupe and "x" close button -->
-                      <!-- starts Paginas and images links option -->
+                     <!-- ends search lupe and "x" close button -->
+                     <!-- starts Paginas and images links option -->
                      <div id="searchBarButtonsDiv"><br>
                        <a id="BotaoPaginas" class="advancedSearch" href="#"><span>P&aacute;ginas</span></a>
                        <a id="BotaoImagens" class="advancedSearch" href="#"><span>Imagens</span></a>

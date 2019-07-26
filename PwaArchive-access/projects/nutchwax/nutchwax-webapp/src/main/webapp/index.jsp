@@ -127,11 +127,11 @@
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
     <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
-    <meta name="theme-color" content="#252525">
+    <meta name="theme-color" content="#000000">
     <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#252525">
+    <meta name="msapplication-navbutton-color" content="#000000">
     <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#252525">      
+    <meta name="apple-mobile-web-app-status-bar-style" content="#000000">      
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
@@ -179,7 +179,7 @@
   <!-- ends New style to override less styles -->
 
 </head>
-<body>
+<body id="homepage-landing">
   <%@ include file="include/topbar.jsp" %>
   <script type="text/javascript">
     pagesHref = window.location.href;
