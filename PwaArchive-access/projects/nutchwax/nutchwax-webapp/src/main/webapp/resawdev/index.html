@@ -1,0 +1,201 @@
+<html lang="en">
+	<head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+		<meta name="language" content="pt">
+		<title>Resawdev powered by Arquivo.pt</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="robots" content="index, follow">
+        <style>
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+}
+
+a {
+    color: #428bca;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.container {
+    text-align: center;
+    margin: auto;
+    max-width: 750px;
+}
+
+.img-logo {
+    max-width: 500px;
+    max-height: 100px;
+    padding-top: 45px;
+}
+
+.language-div-default {
+    height: 30px;
+}
+
+.language-link{
+    float:  right;
+}
+
+.language-div{
+    float:  right;
+}
+.first-language{
+    padding-right: 8px;
+}
+.second-language{
+    padding-right:  3px;
+}
+
+.center-text{
+    text-align: center
+}
+
+.customMessage {
+    text-align: left;
+}
+
+.defaultMessage {
+    text-align: center
+}
+
+.button-previous-message{
+    padding-top: 15px;
+    margin-bottom: 0px;
+}
+
+.header {
+    font-weight: bold;
+    clear:both;
+    padding-top: 25px;
+}
+
+.searchContainer {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	box-shadow: 0 0 0 1px rgba(0,0,0,.1), 0 2px 4px 1px rgba(0,0,0,.18);
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    height: 40px;
+    padding: 10px;
+    width: 100%;
+}
+
+#searchCriteria {
+	width: 85%;
+    height: 100%;
+    float: left;
+    border: none;
+    font-size: 16px;
+}
+
+#searchCriteria:focus {
+	outline: none;
+	border-color: inherit;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+#searchButton {
+    color: #2484C3;
+    padding: 6px;
+    border: none;
+    background-color: white;
+    float: right;
+}
+
+        </style>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-21825027-8"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-21825027-8', {'page_path': window.location.href});
+        </script> 
+        <script type="text/javascript">
+            gtag('event', 'resawdev', {
+                  'event_category': 'resawdev',
+                  'event_label': 'resawdev',
+                  'value': 1
+                });    
+        </script>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="language-div-default">
+                <a class="language-link" href="#" onclick="changeLanguage(this, 'pt')" data-lang-pt='' data-lang-en='Português'>Português</a>
+                <a class="language-link" href="#" onclick="changeLanguage(this, 'en')" data-lang-pt='English' data-lang-en=''></a>
+            </div>
+
+            <div>
+            	<img class="img-logo" src="research_high.png" />
+            </div>
+
+        	<div class="searchContainer">
+            	<input id="searchCriteria" type="text" value="" placeholder="Insert keyword or URL" autofocus autocapitalize="off" autocomplete="off" autocorrect="off"/>
+            	<button id="searchButton" onclick="search();" >
+            		<i class="fas fa-search fa-2x"></i>
+        	</div>
+
+			<div id="info-texto-home">
+				<h1 data-lang-en-only>Search pages from the past</h1>
+				<h1 data-lang-pt-only style="display: none">Pesquise páginas do passado</h1>
+				<a data-lang-en-only href="https://sobre.arquivo.pt/en/a-first-attempt-to-archive-the-eu-domain/" title="Know the service">Meet the service</a>
+				<a data-lang-pt-only href="https://sobre.arquivo.pt/pt/uma-primeira-tentativa-de-arquivar-o-eu/" title="Conheça o serviço" style="display: none">Conheça o serviço</a>
+			</div>
+            
+        </div>
+
+        <script>
+        	var currentLanguage = 'en';
+
+            function changeLanguage(languageLink, languageCode) {
+
+                document.querySelectorAll('[data-lang-'+languageCode+']').forEach(function(element) { 
+                    element.textContent = element.getAttributeNode('data-lang-'+languageCode).value; 
+                });
+                ['pt','en'].forEach(function(lang) {
+		            document.querySelectorAll('[data-lang-'+lang+'-only]').forEach(function(element) { 
+		            	element.style.display = languageCode == lang ? "block" : "none";
+		            });
+                });
+                if ('pt' == languageCode) {
+                	document.getElementById("searchCriteria").placeholder = 'Insira palavra ou URL';
+                } else {
+                	document.getElementById("searchCriteria").placeholder = 'Insert keyword or URL';
+                }
+
+                currentLanguage = languageCode;
+            }
+
+            function search() {
+            	var arquivo_endpoint = "https://arquivo.pt/search.jsp?";
+            	// Add more collections here separated with ',' char like:
+            	//    collection:EAWP6 collection:EAWP8 collection:EAWP15
+            	var collections = "collection:EAWP6 collection:EAWP8 collection:EAWP15";
+            	var textToSearch = document.getElementById("searchCriteria").value;
+            	console.log(textToSearch);
+            	window.location.href = arquivo_endpoint + "l=" + currentLanguage + "&query=" + textToSearch + " " + collections;
+            }
+            
+			var input = document.getElementById("searchCriteria");
+			input.addEventListener("keyup", function(event) {
+			  if (event.keyCode === 13) {
+			   event.preventDefault();
+			   document.getElementById("searchButton").click();
+			  }
+			});
+        </script>
+        <script src="https://use.fontawesome.com/releases/v5.10.0/js/all.js" data-auto-replace-svg="nest"></script>
+	</body>
+</html>
