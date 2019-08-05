@@ -16,20 +16,19 @@
                                    <button class="search-button" type="submit">
                                       <span class="glyphicon glyphicon-search white"></span>
                                   </button>  
-                      </span>                   
+                     </span>                   
                      <!-- starts history range slider -->
                      <ion-item class="ion-no-padding" id="ionSlider" lines="none">
-                     <ion-range ion-padding-start style="padding:40px 0 0 0 !important;margin-top:-30px;" id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">
-                       
+                     <ion-range ion-padding-start style="padding:40px 0 0 0 !important;margin-top:-30px;" id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">                       
+                        <p id="sliderCircleLeft" slot="end"><span><a href="#">2018</a></span></p>
                         <p id="sliderCircleRight" slot="start"><span><a href="#">1996</a></span></p>
-                        <p id="sliderCircleLeft" slot="end"><span><a href="#">2018</span></a></p>
+                        
                       </ion-range>                  
                       <script>
                         const dualRange = document.querySelector('#dual-range');
                         dualRange.value = { lower: 1996, upper: 2018 };
                       </script>                  
-                      </ion-item>                     
-                     
+                      </ion-item>
                      <!-- ends history range slider -->
                      </div>
                      <!-- ends search lupe and "x" close button -->

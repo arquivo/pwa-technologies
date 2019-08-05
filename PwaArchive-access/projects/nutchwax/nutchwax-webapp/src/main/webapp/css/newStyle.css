@@ -1,7 +1,7 @@
 body{
     font-size: 12px!important;   
-    font-family: 'Roboto', 'Helvetica' sans-serif !important;    
-    font-family: Roboto,HelveticaNeue,Arial,sans-serif !important;    
+    font-family: 'Roboto', 'Helvetica','Arial', sans-serif !important;    
+    /*font-family: Roboto,HelveticaNeue,Arial,sans-serif !important;*/ 
     outline: none;
 }
 
@@ -12,10 +12,11 @@ body{
 }
 
 #searchForm .form-control{
+    position: relative;
     font-size: 18px !important;
-    font-family: "Roboto";
+    font-family: 'Roboto', sans-serif !important;  
     height: 45px !important;
-    /*padding-right: 40px!important;*/
+    /*padding-right: 40px!important;*/    
     border-radius: 100px !important;    
     text-align: left/*center*/;
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0); 
@@ -29,7 +30,9 @@ body{
 
     background-color: #fff !important;
     padding-left: 20px;
-    border: 1px solid #dfe1e5 !important;
+    border: 1px solid #dfe1e5 !important;    
+    border: ;
+    border-top: none !important;
 }
 
 /* NEW STYLE: Hover search bar effect*/
@@ -38,20 +41,22 @@ body{
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);;/*cursor: pointer;*/;
     /*background-color: /*#ebebeb*/ /*#f0f0ee*//*#f7f7f7*//* #f0f0ee !important;*/
     /*transition: background-color 0.5s ease 0s; */
-    border:1px solid /*#ebebeb*/transparent /*#DFE1E5*/; 
+    border-bottom:1px solid /*#ebebeb*/transparent /*#DFE1E5*/; 
 }
 
 /* NEW STYLE: forcing 100% width on the search bar */
 #searchBarBlock {
     position: relative !important;
-    margin-top:/*-20px*/-28px;
+    z-index: 999999;
+    margin-top:/*-20px*//*-28px*/-78px !important;
     display:block !important;    
     width: 100% !important;
-
+    font-family: 'Roboto', sans-serif !important;
 }
+
 #buttonSearch button {
-    position: absolute;
-    z-index: 999999;
+    position: relative;
+    z-index: 9999999999999 !important;
     right: 30px !important;
     padding: 12px 0px 12px 0 !important;
     outline: none;
@@ -63,14 +68,14 @@ body{
     float: left;
     width: 100%;    
     /*border-bottom: 1px solid #dfe1e5;*/
-    margin-top: 5px/*10px*/; 
+    margin-top: 3px/*10px*/; 
     -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
     box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); /*cursor: pointer;*/;
     /*ansition: box-shadow 0.5s ease 0s;*/
     font-size: 1em !important; 
     text-align: center !important;
     position: relative;
-    z-index: 999999
+    z-index: 999997pr
 }    
 
 #ionSlider:hover {    
@@ -80,28 +85,28 @@ body{
 }
 
 /* NEW STYLE: slider range circle */
-#sliderCircleRight { 
-   padding-right: 20px;
-   padding-top: 10px;
-   margin-left: -1px; 
-   background: transparent url(../img/calendario.svg) no-repeat -17px -15px;
-   background-size: 61px;
-   padding-top: 35px;
-   cursor: pointer;
-   text-decoration: none !important;
-   display: block !important;
-}
+
 #sliderCircleLeft {
     padding-left: 20px;
     padding-right: 0px;
     padding-top: 10px;
-    margin-right: -5px   
-    background: transparent url(../img/calendario.svg) no-repeat 2px -15px !important;
-    background-size: 61px;
+    background: transparent url(../img/calendario.svg) no-repeat 6px -9px; 
+    background-size: 52px;
     padding-top: 35px;
     cursor: pointer;
-    text-decoration: none !important;
-    display: block !important;
+    text-decoration: none !important;   
+    font-size: 0.9em;    
+}
+
+#sliderCircleRight { 
+    padding-right: 20px;
+    padding-top: 10px;
+    margin-left: 0px;
+    background: transparent url(../img/calendario.svg) no-repeat -14px -9px;
+    background-size: 52px;
+    padding-top: 35px;
+    text-decoration: none !important;    
+    font-size: 0.9em !important;       
 }
 
 ion-item { 
@@ -116,22 +121,22 @@ ion-item {
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #ccc !important;
   font-family: "Roboto";
-  font-weight: 100;
+  font-weight: 100 !important;
 }
 ::-moz-placeholder { /* Firefox 19+ */
   color: #ccc !important;
   font-family: "Roboto";
-  font-weight: 100;
+  font-weight: 100 !important;
 }
 :-ms-input-placeholder { /* IE 10+ */
   color: #ccc !important;
   font-family: "Roboto";
-  font-weight: 100;
+  font-weight: 100 !important;
 }
 :-moz-placeholder { /* Firefox 18- */
   color: #ccc !important;
   font-family: "Roboto";
-  font-weight: 100;
+  font-weight: 100 !important;
 }
 
 #form_container{
@@ -167,13 +172,18 @@ ion-item {
 }
 
 
+#resultados-lista {
+    font-family: roboto !important;
+}
+
+
 #resultados-lista ul{
     list-style-type: none;
     padding-left: 0px;
     /* NEW STYLE: decrease distance search results area from search bar */
     margin-top: -20px !important;
-    font-size: 1.12em !important;
-    font-family: "Roboto" !important; 
+    font-size: 1.2em !important;
+    font-family: Roboto !important; 
     border: none;
 
 }
@@ -190,14 +200,14 @@ ion-item {
 
 #resultados-lista ul li .resumo{   
     line-height: 20px !important;
-    font-size: 14px !important;
+    font-size: 16px !important;
     white-space: normal !important;
 }
 
 
 #resultados-lista ul h2 a{
   color: /*#1a0dab*/#1967D2 !important;
-  font-size: 1.18em !important;
+  font-size: 1.2em !important;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -206,11 +216,12 @@ ion-item {
     word-wrap: break-word;
     color: /*green*/ #006621;
     margin-bottom: -4px;
-    font-size: 12px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;  
 }
 
 #resultados-lista ul li h2{
-    font-size: 14px;
+    font-size: 17px;
     margin-bottom: 0px;
     padding-top: 0px;
     margin-top: 0px;
@@ -232,20 +243,24 @@ ion-item {
         margin-right: 7px;
     }
 #searchForm .form-control{
-    padding-left: 17px;
+    padding-left: 14px;
     border: 1px solid #dfe1e5 !important;
+    border-top: none !important;
+    outline: none !important;
    }
 #searchBarButtonsDiv {
     /*margin: -6px auto -5px auto;*/
    }
 #searchForm .form-control {
-    font-size: 17px !important;
+    font-size: 19px !important;
+    font-family: 'Roboto', sans-serif;  
   }
     a.advancedSearch {
-    font-size: /*0.90em*/1em !important;
+    font-size: /*0.90em*/1.11em !important;
 }
 
-div.omitted-results {
+/* NEW STYLE omitted results */
+.omitted-results {
     padding: 13px 14px 13px 14px;
     margin: 7px;
     color: black /*#715100*/;   
@@ -258,17 +273,15 @@ div.omitted-results {
     transition: box-shadow 0.5s ease 0s; 
     transition: background-color: 0.5s ease 0s; 
 }
-/* NEW STYLE omitted results */
 
-div.omitted-results:hover {
+
+.omitted-results:hover {
     background-color: #fcf0d0;
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);  
-}   
-
+}  
 
 }
-
 /* CSS For Tablet and Desktop versions*/
 @media screen and (min-width: 768px) {
 	#resultados-lista > ul > li{
@@ -565,9 +578,6 @@ div.omitted-results:hover {
     cursor: pointer;
     background-color: #e3f2fd;
 }
-
-
-
 
 .yearA{
     width: 100%;
@@ -1005,6 +1015,7 @@ em{
 .list-versions-div{
     cursor: pointer;
     padding-top: 4px;
+    font-family: 'Roboto', sans-serif;  
 }
 .list-versions-div:active{
     background: #efefef;
@@ -1025,6 +1036,9 @@ em{
 .summary{
     padding-left: 15px;
     padding-right: 15px;
+    font-size: 1.5em;  
+    font-family: 'Roboto', sans-serif;  
+    line-height: 1.8em !important;   
 }
 
 .border-bottom{
@@ -1037,7 +1051,7 @@ em{
 }
 
 .search-input:active, .search-input:focus {
-    border: 1px solid #42a5f5!important;
+    /*border: 1px solid #42a5f5!important;*/
 }
 
 
@@ -1058,7 +1072,10 @@ span#buttonSearch {
     background-color: transparent !important;
     font-size: 26px !important;
     border:1px solid transparent;
-    border-radius: 60px;    
+    border-radius: 60px;  
+    position: absolute !important;
+    /*top: -1px;*/
+    right: 0px;     
 }
 
 span#buttonSearch button span{    
@@ -1067,6 +1084,9 @@ span#buttonSearch button span{
     font-size: 22px !important;
     transition:color 0.5s ease 0s;   
     font-weight: normal !important;
+    position: absolute !important;
+    top:12px;
+    right: -4px;
 }
 
 span#buttonSearch button:hover span{    
@@ -1079,14 +1099,16 @@ span#buttonSearch button:hover span{
     outline: none;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);    
-    border: 1px solid #42a5f5!important;
+   /* border: 1px solid #42a5f5!important;*/
+   border: 1px solid red;
 }
 
 input:active, input:focus{
-        outline: none;
+    outline: none;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);    
-    border: 1px solid #42a5f5!important;
+    /*border: 1px solid #42a5f5!important;*/
+    border: 1px solid red;
 }
 
 
@@ -1138,16 +1160,16 @@ input:active, input:focus{
 
 .clear-text{
     position: absolute;
-    font-size: 37px;
+    font-size: 33px;
     color:/*#777*/red;   
     right: /*41px*/56px !important;
-    z-index: 3;
-    height: 38px !important;
-    /*padding: /*5px*//*13px 8px 37px 8px*//*13px;*/
-    -webkit-text-stroke:7px white;
+    z-index: 9999999;
+    height: 38px !important;  
+    -webkit-text-stroke:6px white;
     cursor: pointer;
     display: none;
-    padding: 2px 0;
+    padding: 5px 0 0 0;
+    display: none !important;
 }
 
 .clear-text:active, .clear-text:hover{
@@ -1155,10 +1177,157 @@ input:active, input:focus{
 }
 
 .prizes{
-    margin-top: 50px;
+    /*margin-top: 15%;*/
     margin-left: 15%;
     margin-right: 15%;
     word-wrap: break-word;
+}
+
+/* LANDING PAGE NEW AREA */
+
+div#flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items;
+    padding-bottom: 7px;
+
+}
+
+#arquivoPresentation {
+    max-width:100%;
+    max-height: 100%;   
+    border-radius: 5px;
+    padding:0; 
+}
+
+#arquivoPresentation iframe {
+    width:100%;
+    height: 100%;
+    border-radius: 5px !important;
+}
+
+/* NEW style: making cards for mobile landing page */
+
+.leftTopCardInfoTitle {
+    font-weight: 100 !important;
+    font-size: 1.12em !important;
+    border-left: 1px solid #007AFF!important;
+    color: white!important;
+    /*position: relative!important;*/
+    padding-top: 0px
+    padding-left: 5px!important;
+    text-shadow: 1px 1px 4px #777777
+}
+
+.leftTopCardInfoSubtitle {
+    font-weight: 100!important;
+    font-size: 0.9em!important;
+    color: #ccc!important;
+    position: relative!important;
+    top: 13px!important;
+    padding-left: 5px!important;
+    border-left: 1px solid #007AFF!important;
+    text-shadow: 1px 1px 4px #777777
+}
+
+#premios { 
+    background: transparent url(../img/vencedores-premio-2019.png) no-repeat center center;
+    background-size: /*100%*/cover;
+}
+
+#exemplosPaginas { 
+    background: black url(../img/exemplo-de-paginas.png) no-repeat center center;
+    background-size: 100%;
+    text-align: left;
+}
+
+#exposicoes { 
+    background: black url(../img/exposicoes.png) no-repeat center center ;
+    background-size: /*100%*/ cover;
+    text-align: left;
+}
+
+#testemunhos { 
+    background: black url(../img/testemunhos.png) no-repeat center center;
+    background-size: /*100%*/cover;
+    text-align: left;
+}
+
+#exemplosPaginas a, #exposicoes a, #testemunhos a { 
+    /*text-indent: -99999px;*/
+    padding-top: 7px;    
+    color: white;
+    font-family: roboto;
+    display: block;
+    width: 100%;
+    height: 100%; 
+    /*text-transform: uppercase;*/
+    font-weight: bold;
+    font-size: 1.2em;
+    color: rgba(255,255,255,1);
+    vertical-align: bottom;
+    text-decoration:none;    
+}
+
+#exemplosPaginas a:hover, #exposicoes a:hover, #testemunhos a:hover { 
+    color: #007AFF;       
+}
+
+div.call-to-actions  {
+    margin: 7px 7px 0px 7px;
+    height: /*100% /*100vh*/  275px;
+    padding-left: 12px;
+    padding-right: 12px;
+    max-width:100%;
+    max-height: 100%;
+    padding-top: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    border:1px solid #dfe1e5;      
+    color: white;
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,0.25); 
+    box-shadow: 0px 4px 5px -2px rgba(255,255,255,0.25);
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);
+    transition: box-shadow 0.5s ease 0s;   
+    position: relative;
+ 
+}
+
+div.call-to-actions span  {   
+    /*flex: none;*/
+    position: absolute;
+    top:10px;
+    padding-left: 5px;
+}
+
+#premios a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-indent: -999999px;
+}
+.call-to-actions:hover  {
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.50); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.50);
+    cursor: pointer;   
+}
+
+
+.call-to-actions div   {   
+    margin: 5px 0;
+    padding: 0;         
+    color: inherit;
+    flex:1;
+    align-items: stretch;
+    height: 100vh;
+    width: 100%;
+    justify-content:space-around;
+    text-align: center;
+}
+
+.call-to-actions h3  {   
+    color: white;
 }
 
 .image-container{
@@ -1514,16 +1683,17 @@ a.advancedSearch {
     float: left;   
     text-decoration: none;
     margin:0 8px 0 0 !important;
-    padding: 5px 13px;
+    padding: /*3px 7px*/ 4px 9px;
     /*border:1px solid #ebebeb;*/
     border-radius: 50px;     
-    font-size:/*0.95em*/0.92em;    
+    font-size:/*0.95em*/1.3em;    
     transition: background-color 0.5s ease 0s;
     background-color:transparent;
     color:#007AFF;
     border: 1px solid #007AFF; 
     transition: background-color 0.5s ease 0s; 
     /*text-transform: uppercase !important;*/
+
 }
 
 a.advancedSearch:hover {    
@@ -1544,7 +1714,7 @@ a.advancedSearch:hover {
     height:50px;
     text-align: center;
     float: left;
-    margin-top: -13px;
+    margin-top: -8px;
 }
 
 /* New style for Advanced Search */
@@ -1596,9 +1766,8 @@ a#BotaoImagens {
     border: 1px solid /*#ccc*/#dfe1e5;
     transition: background-color 0.5s ease 0s;  
     text-decoration: none !important;
-
     color: #007AFF;
-    border: 1px solid #007AFF;
+    border: 1px solid #007AFF;    
 }
 
 a#BotaoImagens:hover {
@@ -1889,14 +2058,15 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
     /*text-transform: uppercase;*/
     color: white;
     margin:0;
-    padding:0 30px 0 0px;
+    padding:0 31px 0 0px;
     float: right !important;
+    font-size: 1.2em;
     text-decoration: none !important;
 
 }
 
 /* NEW style */
-.menu-opcoes:active, .menu-opcoes:visited {   
+.menu-opcoes:hover, .menu-opcoes:active, .menu-opcoes:visited {   
     /*text-transform: uppercase;*/
     color: white; 
 }
@@ -1936,7 +2106,11 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
   and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2) {
 
+    ou
+
 }
+
+
 
 /* Portrait */
 @media only screen 
@@ -2010,4 +2184,3 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
   and (orientation: landscape) { 
 
 }
-
