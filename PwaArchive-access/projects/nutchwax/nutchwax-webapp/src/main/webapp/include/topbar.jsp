@@ -42,6 +42,7 @@
 <!-- Main Menu Dependencies -->
 <link rel="stylesheet" href="css/swiper.min.css">
 <link rel="stylesheet" href="css/MainMenu.css">
+<link rel="stylesheet" href="css/scroll-fixed-content.css">
 <%@ include file="MainMenu.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
 <script type="text/javascript">MENU.init()</script> 
@@ -55,15 +56,14 @@
 		 <div class="row text-center logo-main-div">
 		                    <a class="pull-left main-menu" id="menuButton"><i class="fa fa-bars line-height"></i></a>
 		                    <a href="/?l=<%=language%>"><img src="/img/arquivo-logo-white.svg" id="arquivoLogo" alt="Logotipo do Arquivo.pt" class="text-center logo-main"></a>
-		                    <!-- New code: starts Opções button ans Language selection-->
-		                    <a href="#" class="menu-opcoes" title="Arquivo.pt">EN</a>
-		                    <!--<a href="#" class="select-language" title="Arquivo.pt">EN</a>-->
-		                    <!-- ends Opções button -->
+		                    <!-- New code: starts Opções button ans Language selection-->                   
+		                    <a href="#" class="select-language" title="Choose your language">EN</a>
+		                    <!-- ends select language button -->
 
 		 </div> 
 
 	</div>
-	<!-- NEW Style: give a black curve effect to the search box -->
+<!-- NEW Style: give a black curve effect to the search box -->
 	<div class="background-top-curve"></div>
 </div>	
 <script type="text/javascript">

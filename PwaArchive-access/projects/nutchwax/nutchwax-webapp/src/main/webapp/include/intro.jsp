@@ -1,7 +1,7 @@
   
- 
-  <!-- starts NEW block of code: home landing page -->
-   <div id="flex-container">
+   <!-- starts NEW block of code: home landing page -->
+  
+   <div id="flex-container" style="overflow: auto;">
 	   <div id="premios" class="call-to-actions">
 	   		<a href="https://sobre.arquivo.pt/pt/conheca-os-vencedores-do-premio-arquivo-pt-2019/" alt="Conheça os vencedores do prémio Arquivo.pt 2019" title="Conheça os vencedores do prémio Arquivo.pt 2019">Conheça os vencedores do prémio Arquivo.pt 2019</a>
 	   </div>
@@ -21,35 +21,3 @@
    	   </div>   	   
    </div>  
   <!-- ends NEW block of code: home landing page -->
-
- <!-- <div class="text-center prizes">
-	<a class="home-anchor" href="<fmt:message key='home.prizes.url'/>" alt="<fmt:message key='home.prizes.alt'/>" title="<fmt:message key='home.prizes.title'/>"  target="_blank">
-		<i class="fa fa-trophy home-icon" aria-hidden="true"></i>
-		<h3 class="top-home-label"><fmt:message key='home.prizes.title'/></h3>
-	</a>	
-  </div>
-  <div class="text-center prizes">
-  	<a class="home-anchor" href="<fmt:message key='home.video'/>" target="_blank">
-		<i class="fa fa-youtube home-icon" aria-hidden="true"></i>
-		<h3 class="top-home-label"><fmt:message key='home.intro'/></h3>
-	</a>		
-  </div>
-  <div class="text-center prizes">
-  	<a class="home-anchor" href="<fmt:message key='home.pages.href'/>" target="_blank">
-		<i class="fa fa-files-o home-icon" aria-hidden="true"></i>
-		<h3 class="top-home-label"><fmt:message key='home.pages'/></h3>
-	</a>	
-  </div>  
-  <div class="text-center prizes">
-  	<a class="home-anchor" href="<fmt:message key='home.exhibitions.href'/>" target="_blank">
-		<i class="fa fa-th-large home-icon" aria-hidden="true"></i>
-		<h3 class="top-home-exhibitions-label"><fmt:message key='home.exhibitions'/></h3>
-	</a>	
-  </div>
-  <div class="text-center prizes">
-  	<a class="home-anchor" href="<fmt:message key='home.testimonials.href'/>" target="_blank">
-		<i class="fa fa-users home-icon" aria-hidden="true"></i>
-		<h3 class="top-home-label last-label"><fmt:message key='home.testimonials'/></h3>
-	</a>	
-  </div>
-  -->
