@@ -1,7 +1,11 @@
-body{
+body {    
+    /*height:100%;*/
+    margin:0;
+    padding:0;
     font-size: 12px!important;   
     font-family: 'Roboto', 'Helvetica','Arial', sans-serif !important;
     outline: none;
+    background-color: white !important;
 }
 
 .stylish-input-group button{
@@ -47,7 +51,7 @@ body{
 #searchBarBlock {
     position: relative !important;
     z-index: 999999;
-    margin-top:/*-20px*//*-28px*/-78px !important;
+    margin-top:/*-20px*//*-28px*//*-78px*/-78px !important;
     display:block !important;    
     width: 100% !important;
     font-family: 'Roboto', sans-serif !important;
@@ -57,6 +61,7 @@ body{
     position: relative;
     z-index: 9999999999999 !important;
     right: 30px !important;
+    top:-1px;
     padding: 12px 0px 12px 0 !important;
     outline: none;
     border:none;
@@ -68,7 +73,7 @@ body{
     width: 100%;    
     /*border-bottom: 1px solid #dfe1e5;*/
     margin-top: 3px/*10px*/; 
-    -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
+   /* -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
     box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); /*cursor: pointer;*/;
     /*ansition: box-shadow 0.5s ease 0s;*/
     font-size: 1em !important; 
@@ -78,9 +83,9 @@ body{
 }    
 
 #ionSlider:hover {    
-    background-color: #ebebeb !important;    
+   /* background-color: #ebebeb !important;    
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0); 
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);/*cursor: pointer;*/;      
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);/*cursor: pointer;*/;    */  
 }
 
 /* NEW STYLE: slider range circle */
@@ -193,7 +198,7 @@ ion-item {
     /* NEW STYLE: decrease distance search results area from search bar */
     margin-top: -20px !important;
     font-family: inherit;
-    background-color: transparent !important;
+    background-color: #fcfafa !important;
     
 }
 
@@ -243,7 +248,7 @@ ion-item {
     }
 #searchForm .form-control{
     padding-left: 14px;
-    border: 1px solid #dfe1e5 !important;
+    border: 1px solid /*#dfe1e5*/#ccc !important;
     border-top: none !important;
     outline: none !important;
    }
@@ -321,7 +326,11 @@ div.omitted-results:hover {
     margin-top: 0px !important; 
     -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
     box-shadow: 0px 4px 5px -2px rgba(255,255,255,1);
-    transition: box-shadow 0.5s ease 0s;  
+    transition: box-shadow 0.5s ease 0s;
+
+    -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
+    -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
+    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);  
 }
 
 #resultados-lista  ul  li:hover {
@@ -364,7 +373,7 @@ div.omitted-results:hover {
 
 .pagesNextPrevious a {
 	margin-top: 20px;
-	background-color: white !important;
+	background-color:/* white*/ transparent !important;
     color: /*black*/ #007AFF !important;
     border: 1px solid /*#ccc*//*#dfe1e5*/#007AFF !important;
     border-radius: 100px !important;
@@ -1191,7 +1200,43 @@ div#flex-container {
     flex-direction: column;
     align-items;
     padding-bottom: 7px;
+    background-color:#f8f8f8;
+}
 
+div#flex-container div:first-child { 
+    -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
+    -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
+    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
+}
+
+div#flex-container div:second-child { 
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+div#flex-container div {
+    border-radius:10px;
+    margin:7px 7px 0 7px;
+    padding:0px;
+    border:1px solid #ebebeb;
+    background-color:#f8f8f8;
+    -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
+    -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
+    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18); 
+
+  }
+
+div#flex-container div div {
+    margin:/*7px*/0;padding:0
+    box-shadow:none !important;
+}
+
+div#flex-container h3 {
+    margin: 5px 0 16px 10px;
+    margin: 5px 0;
+    padding:6px 6px 6px 14px;
+    font-size: 1.6em;  
 }
 
 #arquivoPresentation {
@@ -1285,9 +1330,7 @@ div.call-to-actions  {
     cursor: pointer;
     border-radius: 5px;
     border:1px solid #dfe1e5;      
-    color: white;
-    -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,0.25); 
-    box-shadow: 0px 4px 5px -2px rgba(255,255,255,0.25);
+    color: white;   
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);
     transition: box-shadow 0.5s ease 0s;   
@@ -1307,10 +1350,11 @@ div.call-to-actions span  {
     width: 100%;
     height: 100%;
     text-indent: -999999px;
+    box-shadow: none !important;
 }
 .call-to-actions:hover  {
-    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.50); 
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.50);
+    /*-webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.50); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.50);*/
     cursor: pointer;   
 }
 
@@ -1687,7 +1731,7 @@ a.advancedSearch {
     padding: /*3px 7px*/ 4px 9px;
     /*border:1px solid #ebebeb;*/
     border-radius: 50px;     
-    font-size:/*0.95em*/1.3em;    
+    font-size:/*0.95em*/1.7em;    
     transition: background-color 0.5s ease 0s;
     background-color:transparent;
     color:#007AFF;
@@ -1721,7 +1765,7 @@ a.advancedSearch:hover {
 /* New style for Advanced Search */
 a#BotaoPesquisaAvancada {
     float: right !important;
-    background-color: /*#007AFF*/white;
+    background-color: /*#007AFF*//*white*/ transparent;
     margin-right: none !important;
     color:black /*#007AFF/* white*/;
     cursor: pointer;  
@@ -1762,7 +1806,7 @@ a#BotaoPaginas:hover {
 
 
 a#BotaoImagens {
-    background-color:white;
+    background-color: transparent;
     color:black;
     border: 1px solid /*#ccc*/#dfe1e5;
     transition: background-color 0.5s ease 0s;  
@@ -2055,13 +2099,13 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 }
 
 /* NEW style */
-.menu-opcoes, .select-language {   
+.menu-opcoes, .opcoes-top-direita {   
     /*text-transform: uppercase;*/
     color: white;
-    margin:0;
-    padding:0 30px 0 0px;
+    margin: -8px 0 0 0;
+    padding: 0px 27px 0 0px;
     float: right !important;
-    font-size: 1.26em;
+    font-size: 2.5em;
     text-decoration: none !important;
 
 }
