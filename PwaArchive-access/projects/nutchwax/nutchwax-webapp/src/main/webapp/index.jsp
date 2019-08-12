@@ -116,22 +116,22 @@
 <head>
 	<title><fmt:message key='home.meta.title'/></title>
     
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
 	<meta http-equiv="Content-Language" content="pt-PT" />
 	<meta name="Keywords" content="<fmt:message key='home.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='home.meta.description'/>" />
 
-    <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
-    <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
+  <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
+  <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
-    <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
-    <meta name="theme-color" content="#000000">
+  <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
+  <meta name="theme-color" content="#000000">
     <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#000000">
+  <meta name="msapplication-navbutton-color" content="#000000">
     <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#000000">      
+  <meta name="apple-mobile-web-app-status-bar-style" content="#000000"> 
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
@@ -139,24 +139,24 @@
 	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
 
-    <!-- Google fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <script src="/js/jquery-latest.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/js.cookie.js"></script>
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <script src="/js/jquery-latest.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/js.cookie.js"></script>
     <!-- dual slider dependencies -->
-    <script type="text/javascript" src="/js/nouislider.min.js"></script>
-    <link rel="stylesheet" href="/css/nouislider.min.css">
-    <script type="text/javascript" src="/js/wNumb.js"></script>
-    <!-- end slider dependencies -->
+  <script type="text/javascript" src="/js/nouislider.min.js"></script>
+  <link rel="stylesheet" href="/css/nouislider.min.css">
+  <script type="text/javascript" src="/js/wNumb.js"></script>
+  <!-- end slider dependencies -->
 
-    <!-- left menu dependencies -->
-    <link rel="stylesheet" href="css/leftmenu.css">
+  <!-- left menu dependencies -->
+  <link rel="stylesheet" href="css/leftmenu.css">
     <!-- end left menu dependencies -->
 
   <!--Includes mobiscroll (calendars for setting day month and year)-->
@@ -174,9 +174,11 @@
   </script>
   <script src="@ionic/core/dist/ionic.js"></script>
   <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">
-
-
   <!-- ends New style to override less styles -->
+
+  <!-- starts sticky search bar styles -->
+  <link rel="stylesheet" href="/css/scroll-fixed-content.css">
+  <!-- ends sticky search bar styles -->
 
 </head>
 <body id="homepage-landing">

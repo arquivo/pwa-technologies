@@ -50,19 +50,13 @@
 	localStorage.setItem("language", "<%=language%>".toUpperCase());
 	/*Cookies.set("language", "<%=language%>".toUpperCase());*/
 </script>
-<div class="main-content">	
+<div class="main-content">
 	<div class="container-fluid">
 		 <div class="row text-center logo-main-div">
-		                    <a class="pull-left main-menu" id="menuButton"><i class="fa fa-bars line-height"></i></a>
-		                    <a href="/?l=<%=language%>"><img src="/img/arquivo-logo-white.svg" id="arquivoLogo" alt="Logotipo do Arquivo.pt" class="text-center logo-main"></a>
-		                    <!-- New code: starts Opções button ans Language selection-->                   
-		                    <a href="#" class="opcoes-top-direita" title="choose your language">...</a>
-		                    <!-- ends select language button -->
-		 </div> 
-
+		                    <a href="/?l=<%=language%>"><img src="/img/01_preto.png" id="arquivoLogo" alt="Logo Arquivo.pt" class="text-center logo-main"></a>
+		                    <a class="pull-right main-menu" id="menuButton"><i class="fa fa-bars line-height"></i></a>
+		 </div> 	
 	</div>
-<!-- NEW Style: give a black curve effect to the search box -->
-	<div class="background-top-curve"></div>
 </div>	
 <script type="text/javascript">
 $('#languageSelection').click( function(e) {
@@ -70,4 +64,3 @@ $('#languageSelection').click( function(e) {
 		window.location = toggleLanguage(); 
 		return false; } );
 </script>
-

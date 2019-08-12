@@ -45,7 +45,7 @@ response.setHeader("Cache-Control","public, max-age=600");
 %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="include/logging_params.jsp" %>
 <%@ include file="include/i18n.jsp" %>
 <fmt:setLocale value="<%=language%>"/>
@@ -417,6 +417,9 @@ String[] queryString_splitted=null;
   <!--Includes mobiscroll (calendars for setting day month and year)-->
   <link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
   <script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
+  <!-- NEW - 23.07.19: Call ionic -->
+  <script src="../@ionic/core/dist/ionic.js"></script>
+  <link rel="stylesheet" href="../@ionic/core/css/ionic.bundle.css">
 </head>
 
 <body>
