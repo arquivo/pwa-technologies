@@ -239,10 +239,10 @@ ion-item {
 
 /* CSS For mobile */
 @media screen and (max-width: 767px) {
-	#resultados-lista > ul > li{
-		border: 1px solid #dfe1e5 ;
-	    margin-bottom: 10px;
-	    border-radius: 4px;
+    #resultados-lista > ul > li{
+        border: 1px solid #dfe1e5 ;
+        margin-bottom: 10px;
+        border-radius: 4px;
         margin-left: 7px;
         margin-right: 7px;
     }
@@ -288,14 +288,14 @@ ion-item {
 }
 /* CSS For Tablet and Desktop versions*/
 @media screen and (min-width: 768px) {
-	#resultados-lista > ul > li{
-		border: 1px solid #dfe1e5 ;
-	    margin-bottom: 10px;
-	    border-radius: 4px;
+    #resultados-lista > ul > li{
+        border: 1px solid #dfe1e5 ;
+        margin-bottom: 10px;
+        border-radius: 4px;
         margin-left: 15px;
         margin-right: 15px;
         font-size: 0.95em;      
-	}
+    }
 
     div.omitted-results {
     padding: 13px 14px 13px 14px;
@@ -367,21 +367,21 @@ div.omitted-results:hover {
 }
 
 .pagesNextPrevious{
-	margin-top: 20px;
+    margin-top: 20px;
     margin-bottom: 30px;
 }
 
 .pagesNextPrevious a {
-	margin-top: 20px;
-	background-color:/* white*/ transparent !important;
+    margin-top: 20px;
+    background-color:/* white*/ transparent !important;
     color: /*black*/ #007AFF !important;
     border: 1px solid /*#ccc*//*#dfe1e5*/#007AFF !important;
     border-radius: 100px !important;
-    text-decoration: none !important;	
-	font-size: 1em !important;
-	padding: 6px 12px !important;
+    text-decoration: none !important;   
+    font-size: 1em !important;
+    padding: 6px 12px !important;
     /*text-transform: uppercase;*/
-	transition: background-color 0.5s ease 0s;
+    transition: background-color 0.5s ease 0s;
 
     color: #007AFF;
     border: 1px solid #007AFF;
@@ -442,8 +442,6 @@ div.omitted-results:hover {
     /*left: -18px!important;*/
     left: -36px!important;
 }
-
-
 
 .noUi-horizontal .noUi-handle {
 /*    width: 25px!important;
@@ -806,14 +804,15 @@ legend.scheduler-border {
     /*margin-top: 30px;*/
 }
 
+
 .expandable-div{
-    background-color: #42a5f5;
+    background-color: /*#42a5f5*/ #000;
     /*margin-bottom: 3vh;*/
-    color: grey;
+    color: grey /*white*/;
 }
 
 .expandable-div legend:active{
-    background-color: #2196f3;
+    background-color: /*#2196f3*/#007AFF;
 }
 
 .myButtonStyle:active{
@@ -823,7 +822,7 @@ legend.scheduler-border {
 }
 .myButtonStyle:hover{
     color: #555;
-    text-decoration: none;	
+    text-decoration: none;  
 }
 
 .myButtonStyle:focus{
@@ -834,18 +833,19 @@ legend.scheduler-border {
 
 .myButtonStyle:visited{
     color: #555;
-    text-decoration: none;    	
+    text-decoration: none;      
 }
 
 
 .expandable-div legend{
     color: white;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 30px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    padding-left: 24px;
     margin-bottom: 0px;
-    font-size: 16px;
+    font-size: 17px;
     cursor: pointer;
+    padding-right: 7px;
 }
 
 .box-content{
@@ -865,19 +865,52 @@ legend.scheduler-border {
 .box-content label{
     color: black;
     font-weight: normal;
-    font-size: 13px;
+    font-size: 16px;
+    padding-left: 0px !important;
 }
 
 .box-content input{
     color: initial;
-    padding-left: 5px!important;
-    font-size: 13px;
-    border: 1px solid lightgray;
+    padding: 10px 10px 10px 14px!important;
+    font-size: 17px;
+    width: 100% !important;
+    position: relative;
+    border-radius: 100px;
+    border:none !important;
+    outline: none !important;    
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);/*cursor: pointer;*/;
+    transition: box-shadow 0.5s ease 0s; 
+    position: relative;
+    z-index: 99999999;
+    outline: 1px solid red;
 }
+
+.box-content input:focus {
+
+   -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);;/*cursor: pointer;*/;
+    border-bottom:1px solid transparent #DFE1E5;
+        position: relative;
+    z-index: 99999999;
+    outline: 1px solid red;
+} 
+
+.row .tip, .col-xs-10 {float:left !important; padding-left: 0px !important;padding-top: 2px !important;}
+
+.expandable-div legend {border-bottom:1px solid #555 !important}
 
 .date-advanced{
     width: 150px!important;
 }
+
+
+#label-format-1 select, #label-data-2 select, select#num-result {width: 100% !important;
+   
+    padding: 5px !important;
+    margin-bottom:10px;
+}
+
 
 .number-results-advanced{
     width: 75px;
@@ -952,6 +985,16 @@ em{
 .calendar-anchor-advanced{
     margin-left: 18px;
     cursor: pointer;
+    position: relative;
+
+}
+
+.calendar-anchor-advanced img{
+   position: absolute;
+   top: -23px;
+   right: -7px;
+   z-index: 10;
+   width: 52px;
 }
 
 .calendar-anchor-search{
@@ -1114,11 +1157,10 @@ span#buttonSearch button:hover span{
 }
 
 input:active, input:focus{
-    outline: none;
+   outline: none;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);    
-    /*border: 1px solid #42a5f5!important;*/
-    border: 1px solid red;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);    
+    /*border: 1px solid #42a5f5!important;*/   
 }
 
 
@@ -1135,10 +1177,10 @@ input:active, input:focus{
 }
 
 .select-sort-type{
-	width: 83.33333333%!important;
+    width: 83.33333333%!important;
 }
 
-#conteudo-pesquisa-erro{	
+#conteudo-pesquisa-erro{    
     margin-left: 9px;
     margin-right: 9px;
     border: 1px solid #dfe1e5;
@@ -1165,7 +1207,7 @@ input:active, input:focus{
 
 #years{
     /*margin-top: 30px;*/
-	padding-bottom: 40px;
+    padding-bottom: 40px;
 }
 
 .clear-text{
@@ -1200,7 +1242,7 @@ div#flex-container {
     flex-direction: column;
     align-items;
     padding-bottom: 7px;
-    background-color:#f8f8f8;
+    background-color:/*#f8f8f8*/ #eeeded !important;
 }
 
 div#flex-container div:first-child { 
@@ -2047,9 +2089,6 @@ ion-list > ion-item > h5{
     margin-bottom: 40px;
 }
 
-
-
-
 #resultsTable {
   border-collapse: collapse;
   border-spacing: 0;
@@ -2115,6 +2154,8 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
     /*text-transform: uppercase;*/
     color: white; 
 }
+
+/* NEW*/
 
 /* ----------- iPhone 4 and 4S ----------- */
 

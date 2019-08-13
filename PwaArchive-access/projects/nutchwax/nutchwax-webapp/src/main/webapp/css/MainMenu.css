@@ -27,7 +27,7 @@ font-family: 'Roboto','HelveticaNeue','Arial', sans-serif !important;
 .content {
 	width: 100%;
 	min-height: 100vh;
-	background-color:#f8f8f8 !important;
+	background-color:/*#f8f8f8*/#eeeded!important;
 }
 
 .bar {
@@ -179,3 +179,38 @@ font-family: 'Roboto','HelveticaNeue','Arial', sans-serif !important;
 
 /* New search button  CSS */
 span#buttonSearch {}
+
+
+/* NEW STYLE: WAYBACK ,remove white search bar from advanced  page and advanced image searcg */
+body#advanced .background-top-curve, body#advanced-images .background-top-curve { display: none}
+body#advanced .container-fluid, body#advanced-images .container-fluid{width: 100%;margin:0;padding: 0
+    width: 100%;
+    margin: 0;
+    padding: 0 0 20px 0;
+    background-color:/*#f8f8f8*/ #eeeded!important;;
+}
+body#advanced #main #conteudo-pesquisa, body#advanced-images #main #conteudo-pesquisa{position: relative;z-index: 10; top:-22px;
+}
+
+body#advanced .col-xs-offset-3, body#advanced-images .col-xs-offset-3 {margin:0 !important;width:95% !important;float: none !important;}
+body#advanced .col-xs-6, body#advanced-images .col-xs-6 {width: 90% !important;border-radius: 100px !important;margin: 0 auto;}
+
+body#advanced .main-menu, body#advanced-images .main-menu {
+padding-left: 32px !important;   
+}
+
+body#advanced .opcoes-top-direita, body#advanced-images .opcoes-top-direita {
+padding-right: 42px !important;  
+}
+
+body#advanced .myButtonStyle, body#advanced-images .myButtonStyle  {
+	padding: 11px 0;
+	background-color: #007AFF!important;
+    border: none !important;
+    border-bottom: none !important;        
+    color: white;
+}
+
+body#advanced .glyphicon-search:before, body#advanced-images .glyphicon-search:before {
+	display: none !important
+}

@@ -97,6 +97,7 @@ body.backdrop-no-scroll {
 ion-range {   
    --knob-handle-size: 30px !important;     
    --knob-size: 21px !important;
+   --knob-background: #007AFF !important;
    --knob-height:30px !important;  
    --range-pin-color: black !important;      
    --padding-start:0px !important;
@@ -109,6 +110,11 @@ ion-range {
 ion-item { 
    --padding-start:13px !important;  
    --inner-padding-end: 13px !important;
+}
+
+ion-item{
+   --ion-background-color:/*#f8f8f8*/ #eeeded!important;
+   --knob-background-color: white !important;
 }
 
 .ion-color-dark

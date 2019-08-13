@@ -19,7 +19,7 @@
                      </span>                   
                      <!-- starts history range slider -->
                      <ion-item class="ion-no-padding" id="ionSlider" lines="none">
-                     <ion-range ion-padding-start style="padding:40px 0 0 0 !important;margin-top:-30px;" id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">                       
+                     <ion-range ion-padding-start style="padding:40px 0 0 0 !important;margin-top:-30px;border:none !important" id="dual-range" dual-knobs pin color="dark" min="1996" max="2018" step="1">                       
                         <p id="sliderCircleLeft" slot="end"><span><a href="#">2018</a></span></p>
                         <p id="sliderCircleRight" slot="start"><span><a href="#">1996</a></span></p>
 
@@ -36,20 +36,10 @@
                      <div id="searchBarButtonsDiv"><br>
                        <a id="BotaoPaginas" class="advancedSearch" href="#"><span>P&aacute;ginas</span></a>
                        <a id="BotaoImagens" class="advancedSearch" href="#"><span>Imagens</span></a>
-                       <a id="BotaoPesquisaAvancada" class="advancedSearch "ref="/advanced.jsp?l=pt"><span>Pesquisa Avan&ccedil;ada</span></a>                   
+                       <a id="BotaoPesquisaAvancada" class="advancedSearch" href="/advanced.jsp?l=pt"><span>Pesquisa Avan&ccedil;ada</span></a>                   
                      </div>
-                     <!-- ends Paginas and images links option --> 
-                    </div>  
-
-<script type="text/javascript">
-  
-var fixed = document.getElementById('container-fluid');
-fixed.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-
-}, false);
-
-</script>          
+                     <!-- ends Paginas and images links option -->     
+                    </div>            
 <script type="text/javascript">
 /*Initialization of Datepickers datestart and dateend for the advanced search*/
     $(function () {
