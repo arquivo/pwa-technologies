@@ -8,25 +8,25 @@
 	import="java.io.File"
 	import="java.util.Calendar"
 	import="java.util.Date"
-    import="java.util.regex.Matcher"
-    import="java.util.regex.Pattern"	
+  import="java.util.regex.Matcher"
+  import="java.util.regex.Pattern"	
 	import="java.util.GregorianCalendar"
-    import="org.apache.hadoop.conf.Configuration"
-    import="org.apache.lucene.search.PwaFunctionsWritable"
-    import="org.apache.nutch.global.Global"
-    import="org.apache.nutch.html.Entities"
-    import="org.apache.nutch.metadata.Nutch"
-    import="org.apache.nutch.searcher.Hit"
-    import="org.apache.nutch.searcher.HitDetails"
-    import="org.apache.nutch.searcher.Hits"
-    import="org.apache.nutch.searcher.Query"
-    import="org.apache.nutch.searcher.Query.Clause"
-    import="org.apache.nutch.searcher.NutchBean"
-    import="org.apache.nutch.searcher.Summary"
-    import="org.apache.nutch.searcher.Summary.Fragment"
-    import="org.archive.access.nutch.NutchwaxBean"
-    import="org.archive.access.nutch.NutchwaxQuery"
-    import="org.archive.access.nutch.NutchwaxConfiguration"
+  import="org.apache.hadoop.conf.Configuration"
+  import="org.apache.lucene.search.PwaFunctionsWritable"
+  import="org.apache.nutch.global.Global"
+  import="org.apache.nutch.html.Entities"
+  import="org.apache.nutch.metadata.Nutch"
+  import="org.apache.nutch.searcher.Hit"
+  import="org.apache.nutch.searcher.HitDetails"
+  import="org.apache.nutch.searcher.Hits"
+  import="org.apache.nutch.searcher.Query"
+  import="org.apache.nutch.searcher.Query.Clause"
+  import="org.apache.nutch.searcher.NutchBean"
+  import="org.apache.nutch.searcher.Summary"
+  import="org.apache.nutch.searcher.Summary.Fragment"
+  import="org.archive.access.nutch.NutchwaxBean"
+  import="org.archive.access.nutch.NutchwaxQuery"
+  import="org.archive.access.nutch.NutchwaxConfiguration"
 %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
@@ -35,7 +35,7 @@
 <fmt:setLocale value="<%=language%>"/>
 
 <%!	//To please the compiler since logging need those -- check [search.jsp]
-    private static final Pattern OFFSET_PARAMETER = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
+  private static final Pattern OFFSET_PARAMETER = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
 	private static int hitsTotal = -10;		// the value -10 will be used to mark as being "advanced search"
 	private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
     Calendar dateStart = (Calendar)DATE_START.clone();
@@ -58,7 +58,6 @@
     String dateEndYear = dateEndString.substring(dateEndString.length()-4);
 
     String yearStartNoParameter = "1996";    
-
 
 %>
 
@@ -107,8 +106,6 @@
   }
 %>
 
-
-
 <%---------------------- Start of HTML ---------------------------%>
 
 <%-- TODO: define XML lang --%>
@@ -116,7 +113,7 @@
 <head>
 	<title><fmt:message key='home.meta.title'/></title>
     
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1 viewport-fit=cover">
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
 	<meta http-equiv="Content-Language" content="pt-PT" />
@@ -128,15 +125,15 @@
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
   <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
   <meta name="theme-color" content="#000000">
-    <!-- Windows Phone -->
+  <!-- Windows Phone -->
   <meta name="msapplication-navbutton-color" content="#000000">
-    <!-- iOS Safari -->
-  <meta name="apple-mobile-web-app-status-bar-style" content="#000000"> 
+  <!-- iOS Safari -->   
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#000000">  
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
   <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -149,9 +146,9 @@
   <script src="/js/jquery-latest.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="/js/js.cookie.js"></script>
-    <!-- dual slider dependencies -->
-  <script type="text/javascript" src="/js/nouislider.min.js"></script>
-  <link rel="stylesheet" href="/css/nouislider.min.css">
+  <script type="text/javascript" src="/js/swiper.min.js"></script>
+  
+
   <script type="text/javascript" src="/js/wNumb.js"></script>
   <!-- end slider dependencies -->
 
@@ -162,6 +159,7 @@
   <!--Includes mobiscroll (calendars for setting day month and year)-->
   <link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
   <script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
 	<!-- end addthis for sharing on social media --> 
@@ -172,6 +170,17 @@
        $(this).removeAttr('placeholder');
     })
   </script>
+
+ <!-- starts closing Welcome blue div on homepage -->
+ <script type="text/javascript">
+ $(document).ready(function(){
+  $("#closeMessage").click(function(){
+    $('#welcomeMessage').fadeOut();
+  });
+ }); 
+ </script>
+ <!-- ends closing Welcome blue div on homepage -->
+
   <script src="@ionic/core/dist/ionic.js"></script>
   <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">
   <!-- ends New style to override less styles -->

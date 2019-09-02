@@ -61,6 +61,24 @@
         // Set the default embargo period to: 1 year
         DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1);
   }
+
+  
+  String dateStartDay = dateStartString.substring(0,2);
+
+  String dateStartMonth = dateStartString.substring(3,5);
+
+  String dateStartYear = dateStartString.substring(dateStartString.length()-4);
+
+  String dateStartStringIonic =  dateStartYear + "-" + dateStartMonth + "-" + dateStartDay;
+
+  String dateEndDay = dateEndString.substring(0,2);
+
+  String dateEndMonth = dateEndString.substring(3,5);
+
+  String dateEndYear = dateEndString.substring(dateEndString.length()-4);
+
+  String dateEndStringIonic =  dateEndYear + "-" + dateEndMonth + "-" + dateEndDay;
+
 %>
 
 <%---------------------- Start of HTML ---------------------------%>
@@ -84,6 +102,8 @@
 	<script type="text/javascript">
 		var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
 		var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
+		var minYear = minDate.getFullYear();
+		var maxYear = maxDate.getFullYear();		
 	</script>
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
@@ -94,69 +114,16 @@
     <script src="/js/bootstrap.min.js"></script>
     <!-- cookies for language selection -->
     <script type="text/javascript" src="/js/js.cookie.js"></script>
-    <!-- dual slider dependencies -->
-    <script type="text/javascript" src="/js/nouislider.min.js"></script>
-    <link rel="stylesheet" href="/css/nouislider.min.css">
+
     <script type="text/javascript" src="/js/wNumb.js"></script>
     <!-- left menu dependencies -->
     <link rel="stylesheet" href="css/leftmenu.css">
     <!-- end left menu dependencies -->    
 	<script type="text/javascript" src="js/configs.js"></script>
-    <!--Includes mobiscroll (calendars for advanced search)-->
-	<link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
-	<script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-    /*Initialization of Datepickers datestart and dateend for the advanced search*/
-        $(function () {
-        	var currDate = new Date();
-            var curr = currDate.getFullYear();
-            var opt = {}
-            opt.date = {preset : 'date'};
-
-      
-            $('#dateStart_top').val('01/01/1996').scroller('destroy').scroller($.extend(opt["date"], { 
-            	theme: "android-ics light",
-            	dateFormat: 'dd/mm/yy', 
-            	dateOrder: 'dMyy' ,
-            	startYear: 1996 , 
-            	endYear: currDate.getFullYear()-1,            	            
-            	monthNamesShort : ['<fmt:message key="smonth.0" />'.toLowerCase(), 
-            	                   '<fmt:message key="smonth.1" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.2" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.3" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.4" />'.toLowerCase(), 
-            	                   '<fmt:message key="smonth.5" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.6" />'.toLowerCase(), 
-            	                   '<fmt:message key="smonth.7" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.8" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.9" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.10" />'.toLowerCase(), 
-            	                   '<fmt:message key="smonth.11" />'.toLowerCase()],
-            	mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
-            }));
-
-            $('#dateEnd_top').val('31/12/'+(currDate.getFullYear()-1).toString()).scroller('destroy').scroller($.extend(opt["date"], { 
-            	theme: "android-ics light",
-            	dateFormat: 'dd/mm/yy', 
-            	dateOrder: 'dMyy' ,
-            	startYear: 1996 , 
-            	endYear: (new Date()).getFullYear()-1,            	            
-            	monthNamesShort : ['<fmt:message key="smonth.0" />'.toLowerCase(), 
-            	                   '<fmt:message key="smonth.1" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.2" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.3" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.4" />'.toLowerCase(), 
-            	                   '<fmt:message key="smonth.5" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.6" />'.toLowerCase(), 
-            	                   '<fmt:message key="smonth.7" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.8" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.9" />'.toLowerCase(),
-            	                   '<fmt:message key="smonth.10" />'.toLowerCase(), 
-            	                   '<fmt:message key="smonth.11" />'.toLowerCase()],
-            	mode: "scroller" , display: "modal", lang: '<fmt:message key="advanced.datepicker.lang" />' 
-            }));
-        });
-    </script>
+    <script type="text/javascript" src="/js/swiper.min.js"></script>
+  	<!-- NEW - 23.07.19: Call ionic -->
+  	<script src="../@ionic/core/dist/ionic.js"></script>
+  	<link rel="stylesheet" href="../@ionic/core/css/ionic.bundle.css">    
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
 <!-- end addthis for sharing on social media --> 	
 </head>
@@ -169,6 +136,10 @@
 		<!-- Formulario -->
 		<div id="main" class="main-form-advanced">
 			<div id="conteudo-pesquisa">
+                <script type="text/javascript">
+                  document.write('<ion-datetime id="ionDateStart" class="display-none" display-format="D/MMM/YYYY" min="'+minYear+'-01-01" max="'+maxYear+'-12-31" value="<%=dateStartStringIonic%>"></ion-datetime>');
+                  document.write('<ion-datetime id="ionDateEnd" class="display-none" display-format="D/MMM/YYYY" min="'+minYear+'-01-01" max="'+maxYear+'-12-31" value="<%=dateEndStringIonic%>"></ion-datetime>');                 
+                </script>   
 				<form method="get" action="search.jsp">
 					<input type="hidden" name="l" value="<%= language %>" />
 		            <div class="expandable-div">   
@@ -216,35 +187,34 @@
 
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
 									<div class="withTip">
-										<input size="10" class="row  date-advanced no-padding-left" type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" /><a class="calendar-anchor-advanced" id="startDateCalendarAnchor"><img src="/img/calendario.svg"/></a>
+										<input size="10" class="row  date-advanced no-padding-left" type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" /><a class="calendar-anchor-advanced" id="startDateCalendarAnchor"><img src="/img/calendario-drop-down.svg"/></a>
 									</div>
-
 									<label id="labelDateEnd" class="row  col-xs-12 no-padding-left label-padding-top" for="dateEnd_top"><fmt:message key='advanced.date.to'/></label>
 									<div class="withTip">
-										<input type="text" class="row  date-advanced no-padding-left" id="dateEnd_top" name="dateEnd" size="10" value="<%=dateEndString%>" /><a class="calendar-anchor-advanced" id="endDateCalendarAnchor"><img src="/img/calendario.svg"/></a>
+										<input type="text" class="row  date-advanced no-padding-left" id="dateEnd_top" name="dateEnd" size="10" value="<%=dateEndString%>" /><a class="calendar-anchor-advanced" id="endDateCalendarAnchor"><img src="/img/calendario-drop-down.svg"/></a>
 									</div>
 								</div>
 								<div id="label-data-2">
-									<label for="sort" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.sort'/></label>
-									<select id="sort" name="sort" class="date-advanced row  no-padding-left select-style select-sort-type">
+									<label for="sort" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.sort'/></label>							
+    								<ion-select id="sort" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
 										<%
 										if (sortType == null) {		// use the default sorting behavior %>
-											<option value="relevance" selected="selected"><fmt:message key="advanced.sort.relevance"/></option>
+											<ion-select-option value="relevance" selected><fmt:message key="advanced.sort.relevance"/></ion-select-option>
 										<% } else{ %>
-											<option value="relevance"><fmt:message key="advanced.sort.relevance"/></option>
+											<ion-select-option value="relevance"><fmt:message key="advanced.sort.relevance"/></ion-select-option>
 										<% }
 										if ("date".equals(sortType) && sortReverse) { %>
-											<option value="new" selected="selected"><fmt:message key='advanced.sort.new'/></option>
+											<ion-select-option  value="new" selected><fmt:message key='advanced.sort.new'/></ion-select-option>
 										<%} else {%>
-											<option value="new"><fmt:message key='advanced.sort.new'/></option>
+											<ion-select-option  value="new"><fmt:message key='advanced.sort.new'/></ion-select-option>
 										<%}%>
 										<%
 										if ("date".equals(sortType) && !sortReverse) {%>
-											<option value="old" selected="selected"><fmt:message key='advanced.sort.old'/></option>
+											<ion-select-option  value="old" selected><fmt:message key='advanced.sort.old'/></ion-select-option>
 										<%} else {%>
-											<option value="old"><fmt:message key='advanced.sort.old'/></option>
-										<%}%>
-									</select>
+											<ion-select-option  value="old"><fmt:message key='advanced.sort.old'/></ion-select-option>
+										<%}%>    	
+  								  	</ion-select>									
 								</div>
 							</div>
 						</fieldset>
@@ -255,26 +225,27 @@
 							<div class="box-content container-fluid hidden">
 								<div id="label-format-1">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="formatType"><fmt:message key='advanced.format.label'/></label>
-									<select id="formatType" name="format" class="row  col-xs-10 no-padding-left select-style">
+									
+									<ion-select id="formatType" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
 									<%
 										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
 										String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
 
 										if (format == null || "all".equals(format)) {%>
-											<option value="all" selected="selected"><fmt:message key='advanced.format.all'/></option>
+											<ion-select-option value="all" selected><fmt:message key='advanced.format.all'/></ion-select-option>
 										<%} else {%>
-											<option value="all"><fmt:message key='advanced.format.all'/></option>
+											<ion-select-option value="all"><fmt:message key='advanced.format.all'/></ion-select-option>
 										<%}
 
 										for (int i=0; i < mimeList.length; i++) {
 											if (mimeList[i].equals(format)) {
-												out.print("<option value=\""+ mimeList[i] +"\" selected=\"selected\">"+ mimeListDetail[i] +"</option>");
+												out.print("<ion-select-option value=\""+ mimeList[i] +"\" selected>"+ mimeListDetail[i] +"</ion-select-option");
 											} else {
-												out.print("<option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</option>");
+												out.print("<ion-select-option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</ion-select-option>");
 											}
 										}
-									%>
-									</select>
+									%>										
+									</ion-select>
 								</div>
 							</div>
 						</fieldset>
@@ -302,17 +273,17 @@
 								<div id="label-num-result-fieldset-1">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="num-result"><fmt:message key='advanced.results.label'/></label>
 									<div>
-										<select class="row  col-xs-10 no-padding-left number-results-advanced no-padding-left select-style " id="num-result" name="hitsPerPage">
+										<ion-select id="num-result" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown" id="num-result" name="hitsPerPage">
 										<%
 										int[] hitsPerPageValues = {10, 20, 30, 50, 100};
 										for (int i=0; i < hitsPerPageValues.length; i++) {
 											if (hitsPerPage == hitsPerPageValues[i]) {
-												out.print("<option selected=\"selected\">"+ hitsPerPageValues[i] +"</option>");
+												out.print("<ion-select-option selected>"+ hitsPerPageValues[i] +"</ion-select-option>");
 											} else {
-												out.print("<option>"+ hitsPerPageValues[i] +"</option>");
+												out.print("<ion-select-option>"+ hitsPerPageValues[i] +"</ion-select-option>");
 											}
 										}%>
-										</select>
+										</ion-select >										
 									</div>	
 									<label class="row  col-xs-12 no-padding-left"><fmt:message key='advanced.results.label2'/></label>
 								</div>
@@ -343,6 +314,32 @@ $(".expandable-div legend").click(function() {
 
 <%-- end copy --%>
 	</div>
+
+<script type="text/javascript">
+	$('#dateStart_top').click( function(e) {
+	  e.preventDefault();
+	  $('#ionDateStart').trigger('click');	  
+	}); 
+	$('#dateEnd_top').click( function(e) {
+	  e.preventDefault();
+	  $('#ionDateEnd').trigger('click');	  
+	}); 	
+
+	$('#ionDateStart').on("ionChange", function() {
+		var newStartDate = $('#ionDateStart').val();
+		var newStartDateTokens = newStartDate.split('-');
+		var newStartDateFormated =  newStartDateTokens[2].split('T')[0] + "/" + newStartDateTokens[1]+ "/"+ newStartDateTokens[0]; 
+		/*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
+		$('#dateStart_top').val(newStartDateFormated);
+	});   
+	$('#ionDateEnd').on("ionChange", function() {
+		var newEndDate = $('#ionDateEnd').val();
+		var newEndDateTokens = newEndDate.split('-');
+		var newEndDateFormated =  newEndDateTokens[2].split('T')[0] + "/" + newEndDateTokens[1]+ "/"+ newEndDateTokens[0]; 
+		/*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
+		$('#dateEnd_top').val(newEndDateFormated);
+	});   	
+</script>	
 <script>
 	$('#startDateCalendarAnchor').click( function(e) {
 	  e.preventDefault();
@@ -355,6 +352,32 @@ $(".expandable-div legend").click(function() {
 	  $('#dateEnd_top').trigger('click');
 	});    
 </script>
+<script type="text/javascript">
+  monthShortNamesArray = ["<fmt:message key='smonth.0'/>",'<fmt:message key='smonth.1'/>','<fmt:message key='smonth.2'/>','<fmt:message key='smonth.3'/>','<fmt:message key='smonth.4'/>','<fmt:message key='smonth.5'/>','<fmt:message key='smonth.6'/>','<fmt:message key='smonth.7'/>','<fmt:message key='smonth.8'/>','<fmt:message key='smonth.9'/>','<fmt:message key='smonth.10'/>','<fmt:message key='smonth.11'/>'];
+  function removeZeroInDay(dayStr){
+    if(dayStr.length == 2 && dayStr.charAt(0) === "0"){
+      return dayStr.charAt(1);
+    }
+    return dayStr;
+  }
+  function getMonthShortName(monthPositionStr){
+    return monthShortNamesArray[parseInt(monthPositionStr)-1];
+  }
+</script>
+<script type="text/javascript">
+  $('#ionDateStart')[0].cancelText = "<fmt:message key='picker.cancel'/>";
+  $('#ionDateEnd')[0].cancelText = "<fmt:message key='picker.cancel'/>";
+  $('#ionDateStart')[0].doneText = "<fmt:message key='picker.ok'/>";
+  $('#ionDateEnd')[0].doneText = "<fmt:message key='picker.ok'/>";
+  $('#ionDateStart')[0].monthShortNames = monthShortNamesArray;
+   $('#ionDateEnd')[0].monthShortNames = monthShortNamesArray;
+
+   $('#sort')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
+   $('#formatType')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
+   $('#num-result')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
+   
+</script>   
+
 <%@ include file="include/footer.jsp" %>
 <%@include file="include/analytics.jsp" %>
 </body>

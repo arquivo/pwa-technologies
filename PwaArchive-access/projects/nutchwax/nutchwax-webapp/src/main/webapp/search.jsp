@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <%@page import="java.net.URL"%>
@@ -298,10 +299,10 @@ String[] queryString_splitted=null;
 
   /*** Switch dates if start GT end ***/
     if(dateStart.getTime().compareTo(dateEnd.getTime())>0){
-    Calendar auxCal = dateStart;
-    dateStart = dateEnd;
-    dateEnd = auxCal;
-  }
+      Calendar auxCal = dateStart;
+      dateStart = dateEnd;
+      dateEnd = auxCal; 
+    }
   /**/
 
   /*** Add dates to nutch query ***/
@@ -321,6 +322,9 @@ String[] queryString_splitted=null;
 
   String dateStartYear = dateStartString.substring(dateStartString.length()-4);
 
+  String dateStartStringIonic =  dateStartYear + "-" + dateStartMonth + "-" + dateStartDay;
+
+
   String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
 
   String dateEndDay = dateEndString.substring(0,2);
@@ -328,6 +332,8 @@ String[] queryString_splitted=null;
   String dateEndMonth = dateEndString.substring(3,5);
 
   String dateEndYear = dateEndString.substring(dateEndString.length()-4);
+
+  String dateEndStringIonic =  dateEndYear + "-" + dateEndMonth + "-" + dateEndDay;
 
   //--- not needed, since we use fields. String htmlQueryString = Entities.encode(queryString);
 
@@ -395,9 +401,14 @@ String[] queryString_splitted=null;
     <!-- Windows Phone -->
     <meta name="msapplication-navbutton-color" content="#252525">
     <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#252525">  
+    <meta name="apple-mobile-web-app-status-bar-style" content="#252525"> 
+    <script type="text/javascript">
+      var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
+      var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
+      var minYear = minDate.getFullYear();
+      var maxYear = maxDate.getFullYear();
+    </script>     
 	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<fmt:message key='opensearch.title'><fmt:param value='<%=language%>'/></fmt:message>" href="opensearch.jsp?l=<%=language%>" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -412,14 +423,17 @@ String[] queryString_splitted=null;
     <!-- CSS loading spiner -->
 	<link href="css/csspin.css" rel="stylesheet" type="text/css">
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
-  <!-- end addthis for sharing on social media --> 
+  <!-- end addthis for sharing on soc
+    ial media --> 
   <script type="text/javascript" src="js/configs.js"></script>
-  <!--Includes mobiscroll (calendars for setting day month and year)-->
-  <link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
-  <script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/js/js.cookie.js"></script>
+  <!-- swiper main menu --> 
+   <script type="text/javascript" src="/js/swiper.min.js"></script>
   <!-- NEW - 23.07.19: Call ionic -->
   <script src="../@ionic/core/dist/ionic.js"></script>
   <link rel="stylesheet" href="../@ionic/core/css/ionic.bundle.css">
+
+
 </head>
 
 <body>
@@ -432,12 +446,11 @@ String[] queryString_splitted=null;
     <%@ include file="include/searchHeaderMobile.jsp" %>
 
     <script>
-      document.write("<div id='loadingDiv' class='text-center' style='text-align: center; margin-top: 10%; margin-bottom: 5%;'><div style='text-align: center; display: inline-block;'' class='cp-spinner cp-round'></div></div>");
+      document.write("<div id='loadingDiv' class='text-center lds-ring' style='text-align: center; margin-top: 10%; margin-bottom: 5%;'><div></div><div></div><div></div><div></div></div>");
       $( document ).ready(function() {
         if(typeof(loading)=="undefined" || loading != true){
           $('#loadingDiv').hide();
           $('#conteudo-resultado').show();
-          dateSlider.removeAttribute('disabled');
         }
       $("#txtSearch").on('mousedown touchstart', function (e) {
             e.stopPropagation();
@@ -878,12 +891,10 @@ function createErrorPage(){
 	$( document ).ajaxStop(function() {
     loading = false;
 	  $( "#loadingDiv").hide();
-    dateSlider.removeAttribute('disabled');
 	});
   $( document ).ajaxComplete(function() {
     loading = false;
     $( "#loadingDiv").hide();
-    dateSlider.removeAttribute('disabled');
   });
 
     $.ajax({
@@ -1160,7 +1171,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
     }
     previousPageUrl = StringEscapeUtils.escapeHtml(previousPageUrl);
 %>
-  <li class="previous"><a onclick="ga('send', 'event', 'Full-text search', 'Previous page', document.location.href );" class="myButtonStyle text-center right10" role="button" href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>"><fmt:message key='search.pager.previous'/></a></li>
+  <li class="previous"><a onclick="ga('send', 'event', 'Full-text search', 'Previous page', document.location.href );" class="myButtonStyle text-center right10" role="button" href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>">&larr; <fmt:message key='search.pager.previous'/></a></li>
 <% } %>
 <%
   if (currentPage < pagesAvailable) {
@@ -1182,7 +1193,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
     }
     nextPageUrl = StringEscapeUtils.escapeHtml(nextPageUrl);
 %>
-    <li class="next"><a onclick="ga('send', 'event', 'Full-text search', 'Next page', document.location.href );" class="myButtonStyle text-center" role="button" href="<%=nextPageUrl%>" title="<fmt:message key='search.pager.next'/>"><fmt:message key='search.pager.next'/></a></li>
+    <li class="next"><a onclick="ga('send', 'event', 'Full-text search', 'Next page', document.location.href );" class="myButtonStyle text-center" role="button" href="<%=nextPageUrl%>" title="<fmt:message key='search.pager.next'/>"><fmt:message key='search.pager.next'/> &rarr;</a></li>
 <% } %>
 
 </ul>

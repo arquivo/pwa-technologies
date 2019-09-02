@@ -45,7 +45,7 @@
 			<div id="header">
 				<%@ include file="include/logo.jsp" %>
 				<div id="info-texto-termos">
-					<h1><fmt:message key='404.title'/></h1>
+					<h1><fmt:message key='404.title'/>.</h1>
 					<h2><fmt:message key='404.subtitle'/></h2>
 				</div>
 			</div>

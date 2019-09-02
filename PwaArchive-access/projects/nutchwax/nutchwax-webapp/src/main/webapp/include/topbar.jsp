@@ -53,7 +53,13 @@
 <div class="main-content">	
 	<div class="container-fluid">
 		 <div class="row text-center logo-main-div">
-		                    <a class="pull-left main-menu" id="menuButton"><i class="fa fa-bars line-height"></i></a>
+		                    <a class="pull-left main-menu" id="menuButton">
+								<div class="menu-button">
+									<div class="bar"></div>
+									<div class="bar"></div>
+									<div class="bar"></div>
+								</div>		                    	
+		                    </a>
 		                    <a href="/?l=<%=language%>"><img src="/img/arquivo-logo-white.svg" id="arquivoLogo" alt="Logotipo do Arquivo.pt" class="text-center logo-main"></a>
 		                    <!-- New code: starts Opções button ans Language selection-->                   
 		                    <a href="#" class="opcoes-top-direita" title="choose your language">...</a>

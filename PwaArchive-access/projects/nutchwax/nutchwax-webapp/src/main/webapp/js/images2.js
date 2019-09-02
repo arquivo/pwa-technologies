@@ -130,7 +130,7 @@ function truncateUrlMiddleRemoveProtocol(url, maxSize)
 lastPosition = -1; /*Global var refers to the lastImage the user*/
 lastPress= -1; /*Global var refers to last time user pressed arrow in image viewer*/
 
-function expandImage(position, animate){
+function openImage(position, animate){
     //var arrowWidth = 16; //width of the arrow
     if(lastPosition != -1){
         $('#testViewer'+lastPosition).hide();
@@ -192,19 +192,46 @@ function expandImage(position, animate){
 return false;
 }
 
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+function openImage(position){
+  console.log('opening position: ' + position);
+    $('#showSlides').show();
+    var slides = document.querySelector('ion-slides');
+    // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
+    slides.options = {
+      initialSlide: 1,
+      speed: 400,
+      noSwipingClass: 'hide-me-class-swiper'
+    }       
+   $('ion-slides')[0].slideTo($('ion-slides')[0].slideTo($('#testViewer'+position).prevAll().length));
+   
+   sleep(500).then(() => {
+     document.body.scrollTop = document.documentElement.scrollTop = 0;
+  });
+}
+
+function closeImage(position){
+  console.log('closing position: ' + position);
+  $('#showSlides').hide();
+}
+
+
 function previousImage(position){
     var previousImageLi = $('#imageResults'+position).prev();
     if( previousImageLi.attr('position') != undefined){
-        expandImage(parseInt(position), false); /*Close current image*/
-        expandImage(parseInt(previousImageLi.attr('position')), false);
+        openImage(parseInt(position), false); /*Close current image*/
+        openImage(parseInt(previousImageLi.attr('position')), false);
     }
     return;
 }
 function nextImage(position){
     var nextImageLi = $('#imageResults'+position).next();
     if( nextImageLi.attr('position') != undefined){
-        expandImage(parseInt(position), false); /*Close current image*/
-        expandImage(parseInt(nextImageLi.attr('position')), false);            
+        openImage(parseInt(position), false); /*Close current image*/
+        openImage(parseInt(nextImageLi.attr('position')), false);            
     }
     return;
 }
@@ -227,7 +254,7 @@ function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expan
     var liMarginTop = maxImageHeight - imageHeight;
     var contentToInsert = ''+
 
-        '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "expandImage('+position+',false)" style=" break-inside: avoid-column; -webkit-column-break-inside: avoid;">'+
+        '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "openImage('+position+',false)" style=" break-inside: avoid-column; -webkit-column-break-inside: avoid;">'+
         '   <img  height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
         '   <p class="green image-display-url" >'+truncateUrl(imageObj.pageURL, 20)+'</p>'+
         '   <p class="date image-display-date" id="date'+position+'">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
@@ -265,50 +292,57 @@ function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expan
 }    
 
 function  insertImageViewer(imageObj, position){
+  /*this If should be removed in production*/
+  /*due to lack of configurations and a proper test environment with images configured in solr for test purposes I had to load the images from Arquivo.pt directly*/
+  if(imageObj.currentImageURL.startsWith("http://m.p18")){
+    imageObj.currentImageURL = "https://"+imageObj.currentImageURL.substr(13,imageObj.currentImageURL.length);
+  }
+
 return ''+
 //image-expanded-full-width
 /*If landscaped image show it full width on small screens*/
-'<div id="testViewer'+position+'" class="height-vh image-mobile-expanded-div no-outline" tabindex="1">'+
-    '<div onclick="expandImage('+position+',false)" class="image-mobile-expanded-viewer-mask no-outline"></div>'+
-    '<div class="row full-height no-outline">'+
-        '<div id="insert-card-'+position+'" class="full-height col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 text-right">'+
-            '<ion-card id="card'+position+'" class="card-height">'+
-               (parseInt(imageObj.expandedWidth) > parseInt(imageObj.expandedHeight) ? ''+
-               '<ion-icon id="close'+position+'" name="close" class="closeCard" size="large" onclick = "expandImage('+position+',false)"></ion-icon>' : '' +
-               '<ion-icon id="close'+position+'" name="close" class="closeIt" size="large" onclick = "expandImage('+position+',false)"></ion-icon>') +
-               '<a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
-                (parseInt(imageObj.expandedWidth) > parseInt(imageObj.expandedHeight) ? '<img class="image-expanded-viewer image-expanded-full-width" src="'+imageObj.currentImageURL+'">' : '<img class="image-expanded-viewer" src="'+imageObj.currentImageURL+'">')+
-               '</a>'+
-               '<ion-row class="image-viewer-expanded-main-actions">'+
-                    '<ion-col size="6" class="text-left"><a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><ion-button size="small" class="visit-page border-mobile" fill="clear"><ion-icon name="globe" class="middle"></ion-icon><span class="middle"><h5>&nbsp;'+details.visit+'</h5></span></ion-button></a></ion-col>'+
-                    '<ion-col size="6" ><ion-button size="small" class="view-details border-mobile" onclick="viewDetails('+position+')" fill="clear" ><ion-icon name="information-circle-outline" class="middle"></ion-icon><span class="middle"><h5>&nbsp;'+details.details+'</h5></span></ion-button></ion-col>'+
-                '</ion-row>'+
-                '<ion-row>'+
-                    '<h4 class="text-left">'+details.image+'</h4>'+                
-                '</ion-row>'+
-                '<ion-card-content>'+                
-                    '<ion-list class="imageList selected">'+
-    ( imageObj.title !== ""  ? ' <ion-item class="item-borderless" lines="none" ><a target="_blank" href="'+imageObj.currentImageURL+'"><h5>' +imageObj.title+'</a></h5></ion-item>':'') +
-    ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <ion-item id="imgTitleLabel'+position+'" lines="none"><h5><a target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h5></ion-item>':'') +  
-                        '<ion-item lines="none"><h5>' +truncateUrlMiddleRemoveProtocol(imageObj.imgSrc, 40)+'</h5></ion-item>'+
-                        '<ion-item lines="none"><h5>'+imageObj.imgMimeType+' '+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+'</h5></ion-item>'+
-                        '<ion-item lines="none"><h5>'+getDateSpaceFormated(imageObj.timestamp)+'</h5></ion-item>'+             
-                    '</ion-list>'+
-                '</ion-card-content>'+  
-                '<ion-row>'+
-                    '<h4 class="text-left">'+details.page+'</h4>'+                
-                '</ion-row>'+
-                '<ion-card-content>'+                
-                    '<ion-list>'+
-    '                       <ion-item class="item-borderless" lines="none" ><a target="_blank" href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><h5>'+imageObj.pageTitle+'</h5></a></ion-item>'+
-    '                       <ion-item lines="none" "><h5>'+truncateUrlRemoveProtocol(imageObj.pageURL, 60)+'</h5></ion-item>'+
-    '                       <ion-item lines="none" "><h5>'+getDateSpaceFormated(imageObj.pageTstamp)+'</h5></ion-item>'+          
-                    '</ion-list>'+
-                '</ion-card-content>'+                                
-            '</ion-card> '+
-        '</div>'+
-    '</div>'+    
-'</div>';        
+
+  '<ion-slide id="testViewer'+position+'" class="height-vh image-mobile-expanded-div no-outline" tabindex="1">'+
+      '<div onclick="closeImage('+position+',false)" class="image-mobile-expanded-viewer-mask no-outline"></div>'+
+      '<div class="row full-height no-outline">'+
+          '<div id="insert-card-'+position+'" class="full-height text-right">'+
+              '<ion-card id="card'+position+'" class="card-height">'+
+                 (parseInt(imageObj.expandedWidth) > $( window ).width() ? ''+
+                 '<ion-icon id="close'+position+'" name="close" class="closeCard" size="large" onclick = "closeImage('+position+',false)"></ion-icon>' : '' +
+                 '<ion-icon id="close'+position+'" name="close" class="closeIt" size="large" onclick = "closeImage('+position+',false)"></ion-icon>') +
+                 '<a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
+                  (parseInt(imageObj.expandedWidth) >$( window ).width() ? '<img class="image-expanded-viewer image-expanded-full-width" src="'+imageObj.currentImageURL+'">' : '<img class="image-expanded-viewer" src="'+imageObj.currentImageURL+'">')+
+                 '</a>'+
+                 '<ion-row class="image-viewer-expanded-main-actions">'+
+                      '<ion-col size="6" class="text-left"><a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><ion-button size="small" class="visit-page border-mobile" fill="clear"><ion-icon name="globe" class="middle"></ion-icon><span class="middle"><h5>&nbsp;'+details.visit+'</h5></span></ion-button></a></ion-col>'+
+                      '<ion-col size="6" ><ion-button size="small" class="view-details border-mobile" onclick="viewDetails('+position+')" fill="clear" ><ion-icon name="information-circle-outline" class="middle"></ion-icon><span class="middle"><h5>&nbsp;'+details.details+'</h5></span></ion-button></ion-col>'+
+                  '</ion-row>'+
+                  '<ion-row>'+
+                      '<h4 class="text-left">'+details.image+'</h4>'+                
+                  '</ion-row>'+
+                  '<ion-card-content>'+                
+                      '<ion-list class="imageList selected">'+
+      ( imageObj.title !== ""  ? ' <ion-item class="item-borderless" lines="none" ><a target="_blank" href="'+imageObj.currentImageURL+'"><h5>' +imageObj.title+'</a></h5></ion-item>':'') +
+      ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <ion-item id="imgTitleLabel'+position+'" lines="none"><h5><a target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h5></ion-item>':'') +  
+                          '<ion-item lines="none"><h5>' +truncateUrlMiddleRemoveProtocol(imageObj.imgSrc, 40)+'</h5></ion-item>'+
+                          '<ion-item lines="none"><h5>'+imageObj.imgMimeType+' '+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+'</h5></ion-item>'+
+                          '<ion-item lines="none"><h5>'+getDateSpaceFormated(imageObj.timestamp)+'</h5></ion-item>'+             
+                      '</ion-list>'+
+                  '</ion-card-content>'+  
+                  '<ion-row>'+
+                      '<h4 class="text-left">'+details.page+'</h4>'+                
+                  '</ion-row>'+
+                  '<ion-card-content>'+                
+                      '<ion-list>'+
+      '                       <ion-item class="item-borderless" lines="none" ><a target="_blank" href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><h5>'+imageObj.pageTitle+'</h5></a></ion-item>'+
+      '                       <ion-item lines="none" "><h5>'+truncateUrlRemoveProtocol(imageObj.pageURL, 60)+'</h5></ion-item>'+
+      '                       <ion-item lines="none" "><h5>'+getDateSpaceFormated(imageObj.pageTstamp)+'</h5></ion-item>'+          
+                      '</ion-list>'+
+                  '</ion-card-content>'+                                
+              '</ion-card> '+
+          '</div>'+
+      '</div>'+    
+  '</ion-slide>'; 
 }
 
 function viewDetails(position){
@@ -365,12 +399,89 @@ function viewDetails(position){
 
 }
 
+function swipeRightViewer(position){
+  console.log('swiping right' + position);
+  var previous = $('#testViewer'+position).prev()
+  if(previous[0] != null){
+    $('#testViewer'+position).fadeOut("slow");
+    previous.fadeIn("slow");
+  }
+}
+
+function swipeLeftViewer(position){
+  console.log('swiping left' + position);
+  var next = $('#testViewer'+position).next()
+  if(next[0] != null){
+    $('#testViewer'+position).fadeOut("slow");
+    next.fadeIn("slow");
+  }
+}
+
+function detectTouchElement(selector){
+  console.log('position: ' + selector);
+
+  window.addEventListener('load', function(){
+      console.log('loaded position ' + selector);
+      var touchsurface = document.getElementById('insert-card-'+selector),
+          startX,
+          startY,
+          dist,
+          threshold = 10, //required min distance traveled to be considered swipe
+          allowedTime = 400, // maximum time allowed to travel that distance
+          elapsedTime,
+          startTime
+   
+      function handleswipeRight(isrightswipe){
+          if (isrightswipe){
+             swipeRightViewer(selector);
+          }
+      }
+      function handleswipeLeft(isleftswipe){
+          if (isleftswipe){
+             swipeLeftViewer(selector);  
+          }
+      }      
+   
+      touchsurface.addEventListener('touchstart', function(e){
+          var touchobj = e.changedTouches[0]
+          dist = 0
+          startX = touchobj.pageX
+          startY = touchobj.pageY
+          startTime = new Date().getTime() // record time when finger first makes contact with surface
+          e.preventDefault()
+      }, false)
+   
+      touchsurface.addEventListener('touchmove', function(e){
+          e.preventDefault() // prevent scrolling when inside DIV
+      }, false)
+   
+      touchsurface.addEventListener('touchend', function(e){
+          var touchobj = e.changedTouches[0]
+          dist = touchobj.pageX - startX // get total dist traveled by finger while in contact with surface
+          elapsedTime = new Date().getTime() - startTime // get time elapsed
+          // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
+          if(dist >= 0){
+            var swiperightBol = (elapsedTime <= allowedTime && dist >= threshold && Math.abs(touchobj.pageY - startY) <= 200)
+            handleswipeRight(swiperightBol)
+          }
+          else{
+            var swiperleftBol = (elapsedTime <= allowedTime && Math.abs(dist) >= threshold && Math.abs(touchobj.pageY - startY) <= 200)
+           handleswipeLeft(swiperleftBol) 
+          }
+          e.preventDefault()
+      }, false)
+   
+  }, false) // end window.onload
+}
+
+
+
 function closeDetails(position){
   
   //$('#testViewer'+position).hide();
 
   //$('#card'+position).show();  
-  expandImage(position, false);
+  openImage(position, false);
   $('#detailsCard'+position).hide();
 
 }
@@ -503,9 +614,9 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
     var query;
     var input = $('#txtSearch').val();
 
-    var dateStart=$('#dateStart').val().substring($('#dateStart').val().length - 4) +''+  $('#dateStart').val().substring(3,5) +''+ $('#dateStart').val().substring(0,2)+ '000000' ;
+    var dateStart=$('#dateStart_top').val().substring($('#dateStart_top').val().length - 4) +''+  $('#dateStart_top').val().substring(3,5) +''+ $('#dateStart_top').val().substring(0,2)+ '000000' ;
     
-    var dateEnd= $('#dateEnd').val().substring($('#dateEnd').val().length - 4) +''+  $('#dateEnd').val().substring(3,5) +''+ $('#dateEnd').val().substring(0,2)+'235959';
+    var dateEnd= $('#dateEnd_top').val().substring($('#dateEnd_top').val().length - 4) +''+  $('#dateEnd_top').val().substring(3,5) +''+ $('#dateEnd_top').val().substring(0,2)+'235959';
     currentStart = startIndex;
     
 

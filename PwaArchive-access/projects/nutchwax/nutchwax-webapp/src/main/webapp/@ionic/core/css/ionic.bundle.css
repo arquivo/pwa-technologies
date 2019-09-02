@@ -10,6 +10,11 @@ body.backdrop-no-scroll {
     overflow: hidden
 }
 */
+
+ion-backdrop{
+    opacity: 0.5!important;
+}
+
 .ion-color-primary {
     --ion-color-base: var(--ion-color-primary, #3880ff)!important;
     --ion-color-base-rgb: var(--ion-color-primary-rgb, 56, 128, 255)!important;
@@ -90,7 +95,7 @@ body.backdrop-no-scroll {
     --ion-color-shade: var(--ion-color-dark-shade, #1e2023)!important;
     --ion-color-tint: var(--ion-color-dark-tint, #383a3e)!important;
     /* NEW Style: remove padding from slider */
-    padding-top: 20px !important;  
+    padding-top: /*8px*/6px !important;  
 }
 
 /* New style override IONIC V4 for the handles */
@@ -104,18 +109,21 @@ ion-range {
    --ion-padding: 0px !important;
    --ion-safe-area-left:0px !important;  
    --background: black !important; 
+     padding: 5px 0 0 0 !important;   
 }
 
 /* New style override IONIC V4: removing paddings left and right */
 ion-item { 
-   --padding-start:13px !important;  
-   --inner-padding-end: 13px !important;
+   --padding-start:13px/*0*/ !important;  
+   --inner-padding-end: 13px/*0*/ !important;
 }
 
 ion-item{
-   --ion-background-color:/*#f8f8f8*/ #eeeded!important;
+   --ion-background-color:/*#f8f8f8*/ /*#eeeded*/white!important;
    --knob-background-color: white !important;
 }
+
+.range-pin {outline: 1px solid red !important}
 
 .ion-color-dark
 
