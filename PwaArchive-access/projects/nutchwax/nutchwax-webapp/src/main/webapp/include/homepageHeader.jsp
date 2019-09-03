@@ -7,7 +7,7 @@
                 <div id="form_container"> 
                     <div id="searchBarBlock" class="input-group stylish-input-group">
                         
-                            <input name="query" id="txtSearch" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autocapitalize="off" autocomplete="off" autocorrect="off" autofocus="autofocus"> 
+                            <input name="query" id="txtSearch" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autocapitalize="off" autocomplete="off" autocorrect="off" autofocus="off"> 
                             <input type="hidden" id="l" name="l" value="<%=language%>">
                     </div>
                     <!-- starts search lupe and "x" close button -->
@@ -18,19 +18,11 @@
                                       <span class="glyphicon glyphicon-search white"></span>
                                   </button>  
                      </span> 
-                     </div>
-                     <!-- ends search lupe and "x" close button -->
-                     <!-- starts Paginas and images links option -->
-                     <!--<div id="searchBarButtonsDiv"><br>
-                     <a id="BotaoPaginas" class="advancedSearch" href="#"><span><fmt:message key='home.pages'/></span></a>
-                     <a id="BotaoImagens" class="advancedSearch" href="#"><span><fmt:message key='images.images'/></span></a>
-                     <a id="BotaoPesquisaAvancada" class="advancedSearch" href="advanced.jsp?l=pt"><span><fmt:message key='topbar.menu.advanced'/></span></a>                   
-                     </div>-->
-                     <!-- ends Paginas and images links option -->                       
+                     </div>                                       
                     </div>                                
                  </form>    
 
-<script src="/include/clearForm.js"></script>      
+    <script src="/include/clearForm.js"></script>      
             </div>
         </div>
-</div>
+    </div>

@@ -436,7 +436,7 @@ String[] queryString_splitted=null;
 
 </head>
 
-<body>
+<body id="home-search">
     <%@ include file="include/topbar.jsp" %>
     <div class="container-fluid topcontainer" id="headerSearchDiv">
     <script type="text/javascript">
@@ -823,13 +823,11 @@ function createResultsList(numberOfVersions, inputURL){
       '</div>').insertAfter("#headerSearchDiv");
 }
 
-
 function isList(){ 
   if( $(window).width() < 1024 ){
     return true /*show horizontal list of versions for small screens*/
   }
 };
-
 
 function formatNumberOfVersions( numberofVersionsString){
   formatedNumberOfVersionsString = '';
@@ -988,9 +986,7 @@ function attachClicks(){
 </script> 
 
 
-
-
-                        <c:if test="${not empty exception}">
+        <c:if test="${not empty exception}">
         <% bean.LOG.error("Error while accessing to wayback: "+ pageContext.getAttribute("exception")); %>
         <div id="conteudo-resultado" class="container-fluid display-none col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4"> <%-- START OF: conteudo-resultado --%>
         <div id="second-column">
@@ -998,10 +994,6 @@ function attachClicks(){
                         </c:if>
 
                         <% queryTime = (int) (System.currentTimeMillis() - startQueryTime); //for logging %>
-        
-
-
-
 <%
 
             } else {

@@ -181,6 +181,14 @@
  </script>
  <!-- ends closing Welcome blue div on homepage -->
 
+ <!-- starts accordion -->
+ <script>
+  $( function() {
+    $( "#accordion" ).accordion();
+  } );
+  </script>
+  <!-- ends accordion -->
+
   <script src="@ionic/core/dist/ionic.js"></script>
   <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">
   <!-- ends New style to override less styles -->

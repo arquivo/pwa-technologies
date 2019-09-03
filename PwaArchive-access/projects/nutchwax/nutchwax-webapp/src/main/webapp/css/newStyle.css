@@ -350,12 +350,14 @@ a.advancedSearch {
 /* NEW STYLE omitted results */
 .omitted-results {
     padding: 13px 14px 13px 14px;
-    margin: 7px;
-    color: black /*#715100*/;   
-    background-color: /*#fcf3db*/ #fffbd6;
+    margin: 0px 9px 9px 9px;
+    color: black;
+    background-color: #fffbd6;
     border-radius: 5px;
-    border: 1px solid #dfe1e5;
-    margin-bottom: /*-24px*/0px;   
+    border: 1px solid #dfe1e5;    
+    float: left;
+
+} 
 }
 
 
@@ -1409,10 +1411,11 @@ div#flex-container div:second-child {
 
 div#flex-container div {
     border-radius:10px;
-    margin:7px 8px 0 8px;
+    margin:7px 8px 0 7px;
+    margin: 7px 8px 8px 8px;
     padding:0px;
     border:1px solid #ebebeb;
-    background-color:#f8f8f8;
+    background-color:#f8f8f8;  
     /*-webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
     -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18); */
@@ -1482,8 +1485,14 @@ div#flex-container h3 {
     background-size: /*100%*/cover;
 }
 
-#exemplosPaginas { 
+#exemplos-Paginas-pt { 
     background: black url(../img/exemplo-de-paginas.jpg) no-repeat center center;
+    background-size: cover;
+    text-align: left;
+}
+
+#exemplos-Paginas-en { 
+    background: black url(../img/exemplo-de-paginas-en.jpg) no-repeat center center;
     background-size: cover;
     text-align: left;
 }
@@ -1558,7 +1567,6 @@ div.call-to-actions span  {
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.50);*/
     cursor: pointer;   
 }
-
 
 .call-to-actions div   {   
     margin: 5px 0;
@@ -1969,6 +1977,50 @@ h1,h2,h3,h4,h5{
 }
 
 .list-versions-div a {color:#1a0dab !important} 
+
+#welcomeMessage {
+    position:relative; 
+    width: 96% ;
+    padding: 15px 15px 5px 15px !important;;
+    text-align: center;
+    background-color: none;
+    background-color: #007AFF !important;
+    color: white;
+    margin-top:7px;
+    margin-bottom:7px;
+}
+
+#welcomeMessage #closeMessage {
+    cursor:pointer;
+    position:absolute;
+    top:5px;right:5px;
+    padding: 0px 7px 3px;
+    border: 1px solid white;
+    background-color: white;
+    border-radius: 49px;
+    font-size: 1em !important;
+    color: #007aff;"
+}
+
+#welcomeMessage h2 {
+    text-align: center !important;
+    font-family: roboto !important;
+    font-size:5.6vw !important;
+    margin:0;
+    padding: 0 0 5px 0;
+    max-width:100%;
+    background-color: #007AFF;
+}
+
+#welcomeMessage p {
+    font-size: 3.6vw;
+}
+
+#home-search #welcomeMessage {display: none !important}
+
+#home-search #searchBarButtonsDiv {margin-bottom: 4px}
+
+#home-search #flex-container {display: none !important}
 
 a.advancedSearch {
     float: left;   
