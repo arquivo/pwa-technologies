@@ -1438,14 +1438,14 @@ div#flex-container h3 {
     font-size: 1.6em;  
 }
 
-#arquivoPresentation, #testemunhos {
+#archivePresentation-pt, #archivePresentation-en, #testimonials-en, #testimonials-pt  {
     max-width:100%;
     max-height: 100%;   
     border-radius: 10px;
     padding:0; 
 }
 
-#arquivoPresentation iframe, #testemunhos iframe{
+#archivePresentation-pt iframe, #archivePresentation-en iframe, #testimonials-pt iframe, #testimonials-en iframe {
     width:100%;
     height: 100%;
     border: 3px solid black;
@@ -1476,40 +1476,53 @@ div#flex-container h3 {
     text-shadow: 1px 1px 4px #777777
 }
 
-#premios-pt { 
-    background: transparent url(../img/vencedores-premio-2019-pt.jpg) no-repeat center center; 
-    background-size: /*100%*/cover;
+#award-pt { 
+    background: transparent url(../img/award-winners-2019-pt.jpg) no-repeat center center; 
+    background-size: cover;
 }
-#premios-en { 
-    background: transparent url(../img/vencedores-premio-2019-en.jpg) no-repeat center center; 
-    background-size: /*100%*/cover;
+#award-en { 
+    background: transparent url(../img/award-winners-2019-en.jpg) no-repeat center center; 
+    background-size: cover;
 }
 
-#exemplos-Paginas-pt { 
-    background: black url(../img/exemplo-de-paginas.jpg) no-repeat center center;
+#pagesPreserved-pt { 
+    background: black url(../img/page-examples-pt.jpg) no-repeat center center;
     background-size: cover;
     text-align: left;
 }
 
-#exemplos-Paginas-en { 
-    background: black url(../img/exemplo-de-paginas-en.jpg) no-repeat center center;
+#pagesPreserved-en { 
+    background: black url(../img/page-examples-en.jpg) no-repeat center center;
     background-size: cover;
     text-align: left;
 }
 
-#exposicoes { 
-    background: black url(../img/exposicoes.png) no-repeat center center ;
+#exhibitions-pt { 
+    background: black url(../img/exhibitions-pt.png) no-repeat center center ;
     background-size: /*100%*/ cover;
     text-align: left;
 }
 
-#testemunhos { 
-    background: black url(../img/testemunhos.png) no-repeat center center;
+#exhibitions-en { 
+    background: black url(../img/exhibitions-en.png) no-repeat center center ;
+    background-size: /*100%*/ cover;
+    text-align: left;
+}
+
+
+#testimonials-pt { 
+    background: black url(../img/testimonials-pt.png) no-repeat center center;
     background-size: /*100%*/cover;
     text-align: left;
 }
 
-#exemplosPaginas a, #exposicoes a, #testemunhos a { 
+#testimonials-en { 
+    background: black url(../img/testimonials-en.png) no-repeat center center;
+    background-size: /*100%*/cover;
+    text-align: left;
+}
+
+#examplesPages a, #exhibitions a, #testimonials a { 
     /*text-indent: -99999px;*/
     padding-top: 7px;    
     color: white;
@@ -1525,13 +1538,13 @@ div#flex-container h3 {
     text-decoration:none;    
 }
 
-#exemplosPaginas a:hover, #exposicoes a:hover, #testemunhos a:hover { 
+#pagesPreserved-pt a:hover, #pagesPreserved-en a:hover, #exhibitions-pt a:hover, #exhibitions-en a:hover, #testimonials-pt a:hover, #testimonials-en a:hover { 
     color: #007AFF;       
 }
 
 div.call-to-actions  {
     margin: 7px 7px 0px 7px;
-    height: /*100% /*100vh*/  275px;
+    height: /*100vh*/250px;
     padding-left: 12px;
     padding-right: 12px;
     max-width:100%;
@@ -1555,7 +1568,7 @@ div.call-to-actions span  {
     padding-left: 5px;
 }
 
-#premios-pt a, #premios-en a  {
+#award-pt a, #award-en a, #pagesPreserved-pt a, #pagesPreserved-en a, #exhibitions-pt a, #exhibitions-en a {
     display: block;
     width: 100%;
     height: 100%;
