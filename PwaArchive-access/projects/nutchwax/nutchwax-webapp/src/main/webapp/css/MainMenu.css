@@ -35,7 +35,8 @@ body#adavanced .swiper-container {
 	background-color: black;
 	color: #fff;
     display: initial;
-    z-index: 1;
+    z-index: 1;  
+
 }
 .content {
 	width: 100%;
@@ -172,21 +173,31 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
 }
 
 .logo-main-div{
-	padding-left: 15px;
+	position: fixed;
+	margin: 0 auto;
+	padding-left: 25px;
+    padding-right: 23px;
 	padding-top:/*10px*/8px;
 	padding-bottom:/*10px*/30px;
 	background-color: /*#f8f7f7/*#f5f5f5*//*#ebebeb*//*#252525*/ /*transparent*/ /*#222!important*/#000;
 	/*background: transparent url(../img/background-top-nav.svg) no-repeat 0 -57px;*/
 	/*background-size: cover;*/
-	/*border-bottom: 1px solid #ccc ;*/
-	line-height: 30px;
+	/*border-bottom: 1px solid #ccc ;*/	
 	text-align: center;
+    z-index: 9; 
+    width: 100%;
+    left: 0;
+    right: 0;   
+}
+
+.logo-main-div-fixed{
+	position: fixed!important;
+    width: 102%!important;	
 }
 
 .logo-main{
 	width: auto;
-    max-height: /*23px*/31px;  
-    padding-left: 0px;
+    max-height: /*23px*/31px;      
     /*position: relative;*/
     z-index: 9999999;
     margin: 4px auto 0 auto;
@@ -195,8 +206,8 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
 .main-menu, .main-menu:active, .main-menu:visited, .main-menu:link, .main-menu:hover{
 	color: white /*#777*//*#000*/;
     font-size: 21px;
-    padding-left: 17px !important;
-    padding-right: /*15px*//*13px*/0px;
+    /*padding-left: 17px !important;
+    padding-right: /*15px*//*13px*//*0px;*/
     line-height: 30px;
     vertical-align: middle;
     cursor: pointer;
@@ -222,7 +233,10 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
     width: 100%;      
     position: relative;
     z-index: 8;
-    margin-top: -22px;
+    margin-top: 47px;
+    position: fixed;
+    z-index: 10;
+    margin-top: 49px;
 }
 
 .line-height{
@@ -252,7 +266,7 @@ body#advanced .container-fluid, body#advanced-images .container-fluid{width: 100
     width: 100%;
     margin: 0;
     padding: 0 0 20px 0;    
-    background-color:/*#f8f8f8*//*#f6f6f6*/#eeeeee !important;
+    background-color:/*#f8f8f8*//*#f6f6f6*//*#eeeeee*/ /*#fff*/#f8f8f8 !important;
 }
 body#advanced #main #conteudo-pesquisa, body#advanced-images #main #conteudo-pesquisa{position: relative;z-index: 10; top:-22px;
 }

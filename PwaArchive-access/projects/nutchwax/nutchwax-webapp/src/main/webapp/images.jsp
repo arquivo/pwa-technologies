@@ -493,7 +493,7 @@ Content = {
 
   <div class="row image-container">
     <script>
-      document.write("<div id='loadingDiv' class='text-center lds-ring' style='text-align: center; margin-top: 10%; margin-bottom: 5%;'><div></div><div></div><div></div><div></div></div>");
+      document.write("<div id='loadingDiv' class='text-center lds-ring' style='text-align: center; margin-top: 10%; margin-bottom: 5%;display:block'><div></div><div></div><div></div><div></div></div>");
       $( document ).ready(function() {
         if(typeof(loading)=="undefined" || loading != true){
           $('#loadingDiv').hide();
@@ -567,16 +567,35 @@ Content = {
   };
 </script>
 
-
-<script type="text/javascript"> if($('#txtSearch').val().length){doInitialSearch();}</script>
 <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div>
 
 </div></div></div>
 
-  <script type="text/javascript">$('<div id="showSlides"><ion-slides id="expandedImageViewers"></ion-slides></div>').insertBefore('.background-top-curve');</script>  
   <script type="text/javascript">
+    function rafAsync() {
+        return new Promise(resolve => {
+            requestAnimationFrame(resolve); //faster than set time out
+        });
+    }
 
+    function checkElement(selector) {
+        if (document.querySelector(selector) === null) {
+            return rafAsync().then(() => checkElement(selector));
+        } else {
+            return Promise.resolve(true);
+        }
+    }
   </script>
+  <script type="text/javascript">
+    $('<div id="showSlides"><ion-slides id="expandedImageViewers" onload=slidesLoaded();></ion-slides></div>').insertBefore('.background-top-curve');
+
+    checkElement('#expandedImageViewers > .swiper-wrapper') 
+    .then((element) => {      
+      if($('#txtSearch').val().length){doInitialSearch();}     
+    });
+  </script>  
+
+
   <script type="text/javascript">
     $('#showSlides').hide();
   </script>

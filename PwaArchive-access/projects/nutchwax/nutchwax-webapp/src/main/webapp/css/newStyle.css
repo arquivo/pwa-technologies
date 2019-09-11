@@ -16,7 +16,7 @@ body {
 }
 
 #searchForm .form-control{
-    position: relative;
+    position:fixed;
     height: 45px !important;
     border-radius: 100px !important;
     text-align: left/*center*/;
@@ -24,9 +24,8 @@ body {
     transition: ::-moz-placeholder 0.5s ease 0s;
     transition: :-ms-input-placeholder 0.5s ease 0s;
     transition: :-moz-placeholder 0.5s ease 0s;
-    background-color: #9e9e9e33 !important;
-    padding-left: 20px;
-    padding-left: 15px;
+    background-color:/*#eaeaea*/ white !important;   
+    padding-left: /*15px*/15px;
     border: 1px solid /*#dfe1e5*/transparent !important;
     border-top: none !important;
     outline: none !important;
@@ -34,18 +33,23 @@ body {
     font-family: 'Roboto', sans-serif !important;
     transition: box-shadow 0.5s ease 0s !important;
     transition: background-color 0.5s ease 0s !important;
-    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);   
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);
+    background-color: white /*#ebebeb*/ !important;
     /* border: 1px solid #ccc /*#757575; */
-    padding-top: 3px;
-    margin-top: 2px;
+    padding-top: /*3px*//*3px*/1px;
+    margin-top: /*84px*/80px;
+    width: 96%;
+    left: 0;
+    right: 0;
+    margin: 82px auto 0 auto;
 
 }
 
 /* NEW STYLE: Hover search bar effect*/
 #searchForm .form-control:focus {
-    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.35); 
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.35);   
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.45); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.45);   
     border-bottom:1px solid transparent; 
     background-color: white !important;
     /*border: none !important;*/
@@ -65,7 +69,7 @@ body {
     position: relative;
     z-index: 1000000 !important;
     right: 30px !important;
-    top:-2px;
+    top: 88px;
     padding: 12px 0px 12px 0 !important;
     outline: none;
     border:none;
@@ -74,17 +78,26 @@ body {
 
 #ionSlider {    
     float: left;
-    width: 100%;    
-    /*border-bottom: 1px solid #dfe1e5;*/
-    margin-top: -3px/*10px*//*-20px*/;
-    margin-bottom: 10px; 
-   /* -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
-    box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); /*cursor: pointer;*/;
-    /*ansition: box-shadow 0.5s ease 0s;*/
-    font-size: 1em !important; 
+    /* border-bottom: 1px solid #dfe1e5; */
+    margin-top: 115px/*85px*//*-3px*//*10px*//*-20px*/;
+    margin-bottom: 10px;
+    font-size: 1em !important;
     text-align: center !important;
     position: relative;
-    z-index: 999997
+    z-index: 999997;    
+    /* border-bottom: 1px solid #dfe1e5; */
+    margin-top: 113px/*-3px*//*10px*//*-20px*/ !important;
+    margin-bottom: 10px;
+    font-size: 1em !important;
+    text-align: center !important;
+    position: fixed;
+    z-index: 999997;
+    padding-top: 12px !important;
+    height: 82px;
+    width: 96%;
+    margin: 0 auto;
+    left: 0;    
+    right: 0;
 }    
 
 #ionSlider:hover {    
@@ -129,7 +142,7 @@ body {
 
  #calendarDayLeft {
     position: relative;
-    top: /*12px*/27px;
+    top: /*12px*/29px;
     left: -10px;
     font-size: 1.1em;
     letter-spacing: -1px;
@@ -139,7 +152,7 @@ body {
 
 #calendarMonthLeft {
     position: relative;
-    top: /*-9px*/6.65px;
+    top: /*-9px*//*6.65px*/8px;
     left: 12px;
     font-size: 0.9em;
     letter-spacing: 0px;
@@ -150,7 +163,7 @@ body {
 
 #calendarDayRight {    
         position: relative;
-    top: /*12px*/25px;
+    top: /*12px*/27px;
     left: -9px;
     font-size: 1.1em;
     letter-spacing: -1px;
@@ -160,7 +173,7 @@ body {
 
 #calendarMonthRight {
     position: relative;
-    top: /*-7px*/6.3px;
+    top: /*-7px*/8.3px;
     left: 11px;
     font-size: 0.9em;
     letter-spacing: 0px;
@@ -180,7 +193,7 @@ body {
 
 #calendarYearRight {
     position: relative;
-    bottom: /*11px*/30px;
+    bottom: /*11px*/29px;
     /* border-top: 1px solid /*#007AFF; */
     left: 2px;
     padding-top: 1px !important;
@@ -205,7 +218,10 @@ ion-range#ual-range {
     margin-top:-10px; */  
 }
 #searchForm{
-    margin-top: /*30*/25px;
+    margin-top: /*30*/25px;    
+    position: fixed;
+    z-index: 10;
+    width: 95.5%;
 }
 
 /* NEW STYLE: Change placeholder */
@@ -268,7 +284,7 @@ ion-range#ual-range {
     font-family: roboto !important;
     margin-left: 1px !important;
     margin-right: 1px !important;
-    margin-top: 1px;
+    margin-top: /*1px*/193px;
 }
 
 
@@ -304,6 +320,7 @@ ion-range#ual-range {
   color: /*#1a0dab*/#1967D2 !important;
   font-size: 1.18em !important;
   font-family: 'Roboto', sans-serif;
+  line-height: normal;
 }
 
 
@@ -316,14 +333,14 @@ ion-range#ual-range {
 }
 
 #resultados-lista ul li h2{
-    font-size: 16.3px;
+    font-size: /*16.3px*/17px;
     margin-bottom: 0px;
     padding-top: 0px;
     margin-top: 0px;
 }
 
 #resultados-lista > ul > li{
-    padding-bottom: 14px;
+    padding-bottom: /*14px*/16px;
     border-top: solid 1px lightgrey;
     word-wrap: break-word;
 }
@@ -439,7 +456,7 @@ div.omitted-results:hover {
     padding-left: 0px;
     padding-right: 0px;
     padding-bottom: /*40px*/40px;
-    margin-top: 30px;
+    margin-top: /*30px*/38px;
 }
 
 .date{
@@ -970,10 +987,11 @@ legend.scheduler-border {
     color: initial;
     padding: 10px 10px 10px 14px !important;
     font-size: 17px;
-    width: 99.5% !important;
+    width: 99.7% !important;
     position: relative;
     border-radius: 100px !important;
-    border: 1px solid /*#ccc*/ transparent;
+    /*border: 1px solid /*#ccc*/ /*transparent;*/
+    border: 1px solid #ccc;
     outline: none !important;
     transition: ::-webkit-input-placeholder 0.5s ease 0s;
     transition: ::-moz-placeholder 0.5s ease 0s;
@@ -981,18 +999,23 @@ legend.scheduler-border {
     transition: :-moz-placeholder 0.5s ease 0s;
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
-    /*-webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);*/
-    /* cursor: pointer; */
-    /*transition: box-shadow 0.5s ease 0s;*/
+    box-shadow: none !important;
+
+}
+
+input[type=text] {   
+    /* Remove First */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Then Style */ 
+    background: white !important;
+    outline: none;    
 }
 
 .box-content input:focus {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
-    /*-webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);   
-    border-bottom:1px solid transparent;*/
 } 
 
 .row .tip, .col-xs-10 {float:left !important; padding-left: 2px !important;padding-top: 2px !important;}
@@ -1002,13 +1025,12 @@ legend.scheduler-border {
     border-bottom: /*#007AFF*/ 1px solid #9e9e9e52 !important;
     /*background-color: /*#e6e6e6*//*#dbdbdb*//*#e5e5e5 !important;*/
     background-color: /*#e6e6e6*//*#dbdbdb*/white !important;
-    color: black; !important;
+    color: black !important;
 }
 
 .date-advanced{
     width: 150px!important;
 }
-
 
 #label-format-1 select, #label-data-2 select, select#num-result {width: 100% !important;
    
@@ -1020,7 +1042,6 @@ legend.scheduler-border {
     border-radius: 50px;
     border: none;
 }
-
 
 .number-results-advanced{
     width: 75px;
@@ -1046,7 +1067,6 @@ legend.scheduler-border {
     border-radius: 0px;
     background-color: #fff;
     font-size:13px;
-
 }
 
 .select-style:focus {
@@ -1116,10 +1136,10 @@ em {
 
 body#advanced .calendar-anchor-advanced img, body#advanced-images .calendar-anchor-advanced img{
     position: absolute;
-    top: /*-10px*/-8px;
+    top: -11px/*-8px*/;
     right: 11px;
     z-index: 999999999;
-    width: /*28px*/25px;    
+    width: /*28px*//*25px*/29px;    
 }
 
 .calendar-anchor-advanced img{
@@ -1200,9 +1220,9 @@ body#advanced .calendar-anchor-advanced img, body#advanced-images .calendar-anch
 }
 .list-versions-div{
     cursor: pointer;
-    padding-top: 3px;
+    padding-top: /*3px*//*10px*/8px;
     font-family: 'Roboto', sans-serif;
-    margin-bottom: -3px;
+    margin-bottom: -3px;   
 }
 .list-versions-div:active{
     background: #efefef;
@@ -1263,8 +1283,8 @@ span#buttonSearch {
     border:1px solid transparent;
     border-radius: 60px;  
     position: absolute !important;
-    top: 3px;
-    right: 3px;     
+    top: /*3px*/1px;
+    right: /*3px*/24px;
 }
 
 span#buttonSearch button span{    
@@ -1287,6 +1307,10 @@ span#buttonSearch button span{
     position: absolute !important;
     top:12px;
     right: -4px;
+    /* NEW STYLE
+    */
+    top: -65px;
+    right: -22px;
 } 
 
 span#buttonSearch button:hover span{    
@@ -1327,6 +1351,13 @@ input:active, input:focus{
     width: 83.33333333%!important;
 }
 
+/* Removes native arrow by default from the select option */
+#advanced select, #advanced button {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
 #conteudo-pesquisa-erro{    
     margin-left: /*9px*/9px;
     margin-right: /*9px*/9px;
@@ -1335,7 +1366,7 @@ input:active, input:focus{
     background: /*#feefef*/transparent;
     padding: 20px;
     border-radius: 5px;
-    margin-top: -8px; 
+    margin-top: /*-8px*/0px; 
 }
 
 #conteudo-pesquisa-erro .alert-danger{    
@@ -1346,7 +1377,10 @@ input:active, input:focus{
     font-size: 1.5em;
     padding: 10px 0;
 }
-}
+
+#home-search #searchBarButtonsDiv{       
+    border-bottom: none !important;
+ }
 
 #sugerimos-que {
     margin-top: -12px;
@@ -1395,6 +1429,7 @@ div#flex-container {
     align-items;
     padding-bottom: 7px;
     background-color:white !important;
+    margin-top: 87px;
 }
 
 div#flex-container div:first-child { 
@@ -1611,12 +1646,14 @@ div.call-to-actions span  {
 
 #homeImages .image-container{
     background-color: white !important;
-    margin-top: 2px !important; 
+    margin-top: /*7px*/203px !important; 
     /*margin-left: 0px !important;
     margin-right: 0px !important;*/
     margin-left: -11px !important;
     margin-right: -11px !important;  
 }
+
+#homeImages #homeImages {display: none!important}
 
 #photos {
    /* Prevent vertical gaps */
@@ -1744,7 +1781,7 @@ div.call-to-actions span  {
 
 .imageContent:hover {
    /* background: #fafafa !important; */   
-    background-color: /*#f5f3f3*/ /*#2196f317*/#9e9e9e12!important;
+    /*background-color: /*#f5f3f3*/ /*#2196f317*//*#9e9e9e12!important;*/
     cursor: pointer; 
     -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25); 
     box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);
@@ -2005,9 +2042,10 @@ h1,h2,h3,h4,h5{
 
 #welcomeMessage #closeMessage {
     cursor:pointer;
-    position:absolute;
-    top:5px;right:5px;
-    padding: 0px 7px 3px;
+    position:absolute;   
+    top: 6px;
+    right: 6px;
+    padding: 3px 6px;
     border: 1px solid white;
     background-color: white;
     border-radius: 49px;
@@ -2071,31 +2109,59 @@ a.advancedSearch:hover {
 
 }
 
+#homeImages a#BotaoImagens, #homeImages a#BotaoImagens:active {
+    color: white !important;
+    border: 1px solid /*#ccc*/#dfe1e5;
+    transition: background-color 0.5s ease 0s;
+    text-decoration: none !important;
+    color: /*#007AFF*/#757575;
+    border: 1px solid #007AFF !important;
+    font-size: 1.25em !important;
+    background-color: #007AFF !important;
+}
+
+#homeImages #searchBarButtonsDiv {border-bottom:none !important; }
+
+#homeImages a#BotaoPaginas, #homeImages a#BotaoPaginas:active {   
+    border: 1px solid /*#ccc*/#dfe1e5;
+    transition: background-color 0.5s ease 0s;
+    text-decoration: none !important;
+    color: /*#007AFF*/#007AFF !important;
+    border: 1px solid #007AFF !important;
+    font-size: 1.25em !important;
+    background-color: white !important;
+}
+
 #searchBarButtonsDiv {
-    position: relative;
-    z-index: 999999;
-    width: 100%; 
-    height:auto;
+    position: /*relative*/fixed;
+    background-color: white;
+    z-index: 999996;
+    width: 96%;
+    height: auto;
     display: block;
-    height:50px;
+    height: 66px;
     text-align: center;
-    float: left;  
-    margin-top: -32px;
+    margin-top: 190px;
+    margin-top: 192px;
     margin-bottom: 1px;
+    border-bottom: 1px solid #dfe1e5;
+    margin: 189px auto 0 auto;
+    left: 0;
+    right: 0;
 }
 
 /* New style for Advanced Search */
 a#BotaoPesquisaAvancada {
-    float: right !important;    
-    background-color: /*#007AFF*//*white*//* transparent !important*/ /*#9c27b014*/#9c27b024 !important;
+    float: right !important;
+    background-color: transparent !important;
     margin-right: none !important;
-    color:black /*#007AFF/* white*/;
-    cursor: pointer;  
+    color: black /*#007AFF/* white*/;
+    cursor: pointer;
     margin-right: 0 !important;
-    border: 1px solid /*#007AFF*//*#757575*/#eceff0;
-    color: /*#007AFF*//*#757575*/#673ab7d4;   
+    border: 1px solid #007AFF;
+    color: #007AFF;
     font-size: 1.25em;
-    /*font-weight: 600;*/
+    /* font-weight: 600; */
 }
 
 a#BotaoPesquisaAvancada:hover {
@@ -2108,14 +2174,14 @@ a#BotaoPesquisaAvancada:hover {
 }
 
 a#BotaoPaginas {
-    /*border: 1px solid /*#007AFF*//*#ccc;*/    
+    /* border: 1px solid /*#007AFF; */
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
     font-size: /*0.90em*//*1.11em*/1.25em;
     margin-right: 6px !important;
-    color: /*#757575 !important*/#2196f3 !important;
+    color: /*#757575 !important*/white !important;
     /* font-weight: 600; */
-    background-color: /*#E8F0FF*/#2196f32e !important;
+    background-color: /*#E8F0FF*/#007AFF !important;
     border: 1px solid /*#007AFF*//*#757575*/#eceff0;
 }
 
@@ -2127,23 +2193,18 @@ a#BotaoPaginas {
 a#BotaoPaginas:hover {
     background-color: #007AFF;
     color:white;
-    border: 1px solid transparent;    
+    border: 1px solid transparent;       
 }
 
 
 a#BotaoImagens, a#BotaoImagens:active { 
-       color: /*black*//*#757575 !important /*black*/#009688 !important;
+    color: #007AFF !important;
     border: 1px solid /*#ccc*/#dfe1e5;
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
     color: /*#007AFF*/#757575;
-    border: 1px solid /*#007AFF*//*#757575*/#eceff0;
-    margin-right: 0 !important;
-    font-size: /*0.90em*//*1.11em*/1.25em;
-    /* border: 1px solid #007AFF; */
-    /* font-weight: 600; */
-    /*background-color: #eceff0 !important;*/
-    background-color: /*#00bcd41f*/#00bcd43b !important;
+    border: 1px solid #007AFF;
+    font-size: 1.25em !important;
 }
 
 a#BotaoImagens:hover {
@@ -2420,16 +2481,16 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 }
 
 .row {
-    margin-right: -22px !important;
-    margin-left: -22px !important;
+    margin-right: /*-22px*/0 !important;
+    margin-left: /*-22p*/0 !important;
 }
 
 /* NEW style */
 .menu-opcoes, .opcoes-top-direita {   
     /*text-transform: uppercase;*/
     color: white;
-    margin: -8px 0 0 0;
-    padding: 0px 30px 0 0px;
+    margin: /*-8px*/-15px 0 0 0;
+    /*padding: 0px /*30px*/ /*22px 0 0px;*/
     float: right !important;
     font-size: 2.7em;
     text-decoration: none !important;
@@ -2489,27 +2550,19 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     width: 100% !important;
     /* outline: 1px solid red; */
     background-color: white;
-    /*border: 1px solid #ccc !important;*/
+    border: 1px solid #ccc !important;
     border-radius: 50px !important;
     height: 46px !important;
     padding-left: 14px !important;
-    padding-top: 11px !important;
+    padding-top: 09px !important;
     font-size: 17px;
     color: black;
     margin: /*15px*/7px;       
 }
-.fa-caret-down:before {
-    content: "\f0d7";
-    font-size: 1.1em;
-    /* border: 1px solid #9e9e9e85; */
-    padding: 5px 9px;
-    border-radius: 50px;
-    margin-top: 3px !important;
-    position: relative;
-    top: 3px;
-    right: -4px;
-    background-color: /*#c0c0c096*/ /*#c0c0c069*/ #c0c0c024;
-    color: black;
+
+.select-icon-inner {
+    outline:1px solid red;
+
 }
 
 .fa-caret-up:before {
@@ -2564,6 +2617,8 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     background-color: /*#c0c0c096*/ /*#c0c0c069*/ #c0c0c024;
     top: -2px;
 }
+
+.transform-none {transform: none !important}
 
 
 
@@ -2632,7 +2687,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
   and (device-aspect-ratio: 2/3) {
    
    a.advancedSearch {
-    font-size: /*0.90em*//*1.11em*/1em;       
+    font-size: 1em ;       
    }
    a#BotaoPesquisaAvancada {
     font-size:1em ;     
@@ -2641,7 +2696,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     font-size: 1em ;   
    } 
    a#BotaoImagens {   
-    font-size: 1em;   
+    font-size: 1em ;   
    }
 } 
 
@@ -2675,11 +2730,20 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 /* Portrait and Landscape */
 @media only screen 
   and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2)  
-  and (device-aspect-ratio: 2/3) {    
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (device-aspect-ratio: 2/3) {
+  a.advancedSearch {
+  font-size: 1em ;  }
+  a#BotaoPesquisaAvancada {
+    font-size:1em ;     
+   }
+  a#BotaoPaginas {   
+    font-size: 1em;   
+   } 
+  a#BotaoImagens {   
+    font-size: 1em ;       
+   }  
 }
-
 /* Portrait */
 @media only screen 
   and (min-device-width: 320px) 
@@ -2687,9 +2751,9 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
   and (-webkit-min-device-pixel-ratio: 2)
   and (device-aspect-ratio: 2/3)
   and (orientation: portrait) {
-  #searchBarButtonsDiv {
+  /*#searchBarButtonsDiv {
   margin-top: -26px;  
-  }
+  } */
 }
 
 /* Landscape */
@@ -2768,9 +2832,9 @@ and (min-device-width : 768px)
     top: -40px !important;
     right: -4px !important;
     }
-    #searchBarButtonsDiv {
+    /*#searchBarButtonsDiv {
     margin-top: -8px !important;   
-    }
+    }*/
     div#flex-container { 
     margin: 0 auto;
     width: 83%;
@@ -2792,7 +2856,6 @@ and (min-device-width : 1024px)   {
     }
 
     #searchBarButtonsDiv {
-    margin-top: -8px !important;   
+    /*margin-top: -8px !important; */  
     }
 }
-
