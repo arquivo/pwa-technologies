@@ -157,7 +157,7 @@ body#adavanced .swiper-container {
 	margin-top: 7px;
 }
 #menuButton.cross{
-	margin-left: /*-22px*/-67px;
+	margin-left: /*-22px*/-66px/*-60px*/;
 	margin-top:15px;
 	/*padding: 20px;*/
 }
@@ -169,25 +169,27 @@ body#adavanced .swiper-container {
 }
 
 body#advanced .logo-main-div, body#advanced-images .logo-main-div {
-	padding-bottom: 10px;
+	padding-bottom: /*10px*/18px;
 }
 
 .logo-main-div{
-	position: fixed;
+	position: relative;
 	margin: 0 auto;
-	padding-left: 25px;
+	/*padding-left: 15px;
+	padding-right: 15px;*/
+	padding-left: 31px;
     padding-right: 23px;
 	padding-top:/*10px*/8px;
-	padding-bottom:/*10px*/30px;
+	padding-bottom:/*10px*/38px;
 	background-color: /*#f8f7f7/*#f5f5f5*//*#ebebeb*//*#252525*/ /*transparent*/ /*#222!important*/#000;
 	/*background: transparent url(../img/background-top-nav.svg) no-repeat 0 -57px;*/
 	/*background-size: cover;*/
 	/*border-bottom: 1px solid #ccc ;*/	
 	text-align: center;
     z-index: 9; 
-    width: 100%;
-    left: 0;
-    right: 0;   
+    /*width: 100%;*/
+    /*left: 0;
+    right: 0;  */ 
 }
 
 .logo-main-div-fixed{
@@ -196,11 +198,13 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
 }
 
 .logo-main{
+	position: absolute;
+	z-index: 9999999;
 	width: auto;
-    max-height: /*23px*/31px;      
-    /*position: relative;*/
-    z-index: 9999999;
-    margin: 4px auto 0 auto;
+    max-height: /*23px*/31px;    
+    margin: 4px auto 0 auto;    
+    left: 0;
+    right: 0;
 }
 
 .main-menu, .main-menu:active, .main-menu:visited, .main-menu:link, .main-menu:hover{
@@ -233,10 +237,9 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
     width: 100%;      
     position: relative;
     z-index: 8;
-    margin-top: 47px;
-    position: fixed;
+    margin-top: 47px;    
     z-index: 10;
-    margin-top: 49px;
+    margin-top: -22px;
 }
 
 .line-height{
@@ -275,7 +278,7 @@ body#advanced .col-xs-offset-3, body#advanced-images .col-xs-offset-3 {margin:0 
 body#advanced .col-xs-6, body#advanced-images .col-xs-6 {width: 90% !important;border-radius: 100px !important;margin: 0 auto;}
 
 body#advanced .main-menu, body#advanced-images .main-menu {
-padding-left: 30px !important;   
+padding-left: /*30px*/15px !important;   
 }
 
 body#advanced .opcoes-top-direita, body#advanced-images .opcoes-top-direita {
@@ -283,11 +286,19 @@ padding-right: 42px !important;
 }
 
 body#advanced .myButtonStyle, body#advanced-images .myButtonStyle  {
-	padding: 11px 0;
-	background-color: #007AFF!important;
+    padding: 11px 0;
+    background-color: #ffffff!important;
     border: none !important;
-    border-bottom: none !important;        
-    color: white;
+    border: 1px solid #007AFF!important;
+    color: #007AFF!important;
+}
+
+body#advanced .myButtonStyle:active, body#advanced-images .myButtonStyle:active  {
+    padding: 11px 0;
+    background-color: #007AFF!important;
+    border: none !important;
+    border: 1px solid #007AFF!important;
+    color: white !important;
 }
 
 body#advanced .glyphicon-search:before, body#advanced-images .glyphicon-search:before {

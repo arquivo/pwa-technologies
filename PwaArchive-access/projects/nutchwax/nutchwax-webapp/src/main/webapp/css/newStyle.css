@@ -16,7 +16,7 @@ body {
 }
 
 #searchForm .form-control{
-    position:fixed;
+    position: relative;
     height: 45px !important;
     border-radius: 100px !important;
     text-align: left/*center*/;
@@ -24,8 +24,9 @@ body {
     transition: ::-moz-placeholder 0.5s ease 0s;
     transition: :-ms-input-placeholder 0.5s ease 0s;
     transition: :-moz-placeholder 0.5s ease 0s;
-    background-color:/*#eaeaea*/ white !important;   
-    padding-left: /*15px*/15px;
+    background-color: #9e9e9e33 !important;
+    padding-left: 20px;
+    padding-left: 15px;
     border: 1px solid /*#dfe1e5*/transparent !important;
     border-top: none !important;
     outline: none !important;
@@ -33,23 +34,18 @@ body {
     font-family: 'Roboto', sans-serif !important;
     transition: box-shadow 0.5s ease 0s !important;
     transition: background-color 0.5s ease 0s !important;
-    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);   
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.25);
-    background-color: white /*#ebebeb*/ !important;
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0);
     /* border: 1px solid #ccc /*#757575; */
-    padding-top: /*3px*//*3px*/1px;
-    margin-top: /*84px*/80px;
-    width: 96%;
-    left: 0;
-    right: 0;
-    margin: 82px auto 0 auto;
+    padding-top: 3px;
+    margin-top: /*25px*/4px;
 
 }
 
 /* NEW STYLE: Hover search bar effect*/
 #searchForm .form-control:focus {
-    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.45); 
-    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.45);   
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.35); 
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.35);   
     border-bottom:1px solid transparent; 
     background-color: white !important;
     /*border: none !important;*/
@@ -69,7 +65,7 @@ body {
     position: relative;
     z-index: 1000000 !important;
     right: 30px !important;
-    top: 88px;
+    top: 3px;
     padding: 12px 0px 12px 0 !important;
     outline: none;
     border:none;
@@ -78,26 +74,17 @@ body {
 
 #ionSlider {    
     float: left;
-    /* border-bottom: 1px solid #dfe1e5; */
-    margin-top: 115px/*85px*//*-3px*//*10px*//*-20px*/;
-    margin-bottom: 10px;
-    font-size: 1em !important;
+    width: 100%;    
+    /*border-bottom: 1px solid #dfe1e5;*/
+    margin-top: -3px/*10px*//*-20px*/;
+    margin-bottom: 10px; 
+   /* -webkit-box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); 
+    box-shadow: 0px 4px 5px -2px rgba(255,255,255,1); /*cursor: pointer;*/;
+    /*ansition: box-shadow 0.5s ease 0s;*/
+    font-size: 1em !important; 
     text-align: center !important;
     position: relative;
-    z-index: 999997;    
-    /* border-bottom: 1px solid #dfe1e5; */
-    margin-top: 113px/*-3px*//*10px*//*-20px*/ !important;
-    margin-bottom: 10px;
-    font-size: 1em !important;
-    text-align: center !important;
-    position: fixed;
-    z-index: 999997;
-    padding-top: 12px !important;
-    height: 82px;
-    width: 96%;
-    margin: 0 auto;
-    left: 0;    
-    right: 0;
+    z-index: 999997
 }    
 
 #ionSlider:hover {    
@@ -143,7 +130,7 @@ body {
  #calendarDayLeft {
     position: relative;
     top: /*12px*/29px;
-    left: -10px;
+    left: -11px;
     font-size: 1.1em;
     letter-spacing: -1px;
     color: /* #007AFF*/white;
@@ -164,7 +151,7 @@ body {
 #calendarDayRight {    
         position: relative;
     top: /*12px*/27px;
-    left: -9px;
+    left: -9.4px;
     font-size: 1.1em;
     letter-spacing: -1px;
     color: /* #007AFF*/white;
@@ -189,6 +176,7 @@ body {
     left: 1px;
     padding-top: -2px !important;
     font-size: 1.2em;
+    font-weight: bold;
 }
 
 #calendarYearRight {
@@ -198,6 +186,7 @@ body {
     left: 2px;
     padding-top: 1px !important;
     font-size: 1.2em;
+    font-weight: bold;
 
 }
 
@@ -218,10 +207,7 @@ ion-range#ual-range {
     margin-top:-10px; */  
 }
 #searchForm{
-    margin-top: /*30*/25px;    
-    position: fixed;
-    z-index: 10;
-    width: 95.5%;
+    margin-top: /*30*/25px;
 }
 
 /* NEW STYLE: Change placeholder */
@@ -284,7 +270,7 @@ ion-range#ual-range {
     font-family: roboto !important;
     margin-left: 1px !important;
     margin-right: 1px !important;
-    margin-top: /*1px*/193px;
+    margin-top: 1px;
 }
 
 
@@ -317,10 +303,11 @@ ion-range#ual-range {
 
 
 #resultados-lista ul h2 a{
-  color: /*#1a0dab*/#1967D2 !important;
+  color: /*#1a0dab*//*#1967D2*/ #007aff!important;
   font-size: 1.18em !important;
   font-family: 'Roboto', sans-serif;
   line-height: normal;
+
 }
 
 
@@ -456,7 +443,7 @@ div.omitted-results:hover {
     padding-left: 0px;
     padding-right: 0px;
     padding-bottom: /*40px*/40px;
-    margin-top: /*30px*/38px;
+    margin-top: 30px;
 }
 
 .date{
@@ -980,7 +967,7 @@ legend.scheduler-border {
     color: black;
     font-weight: normal;
     font-size: 16px;
-    padding-left: 1px !important;
+    padding-left: 1px !important;   
 }
 
 .box-content input{
@@ -1026,6 +1013,8 @@ input[type=text] {
     /*background-color: /*#e6e6e6*//*#dbdbdb*//*#e5e5e5 !important;*/
     background-color: /*#e6e6e6*//*#dbdbdb*/white !important;
     color: black !important;
+    /* New code below */
+    font-weight: bold;
 }
 
 .date-advanced{
@@ -1107,13 +1096,14 @@ input[type=text] {
 }
 
 #sugerimos-que .text-bold {
-    padding-left: /*24px*/15px;
+    padding: /*24px*/0 5.1%;
     font-size: 1.3em;
 }
 
 .suggestions-no-results {
     padding-bottom: 3px;
     list-style-position: inside;
+    padding: 0 5.8%;
 }
 
 .suggestions-no-results p {
@@ -1283,8 +1273,8 @@ span#buttonSearch {
     border:1px solid transparent;
     border-radius: 60px;  
     position: absolute !important;
-    top: /*3px*/1px;
-    right: /*3px*/24px;
+    top: /*26px*/0px;
+    right: 3px;     
 }
 
 span#buttonSearch button span{    
@@ -1307,10 +1297,6 @@ span#buttonSearch button span{
     position: absolute !important;
     top:12px;
     right: -4px;
-    /* NEW STYLE
-    */
-    top: -65px;
-    right: -22px;
 } 
 
 span#buttonSearch button:hover span{    
@@ -1323,8 +1309,7 @@ span#buttonSearch button:hover span{
     outline: none;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);    
-   /* border: 1px solid #42a5f5!important;*/
-   border: 1px solid red;
+   /* border: 1px solid #42a5f5!important;*/  
 }
 
 input:active, input:focus{
@@ -1366,7 +1351,7 @@ input:active, input:focus{
     background: /*#feefef*/transparent;
     padding: 20px;
     border-radius: 5px;
-    margin-top: /*-8px*/0px; 
+    margin-top: -8px; 
 }
 
 #conteudo-pesquisa-erro .alert-danger{    
@@ -1374,13 +1359,10 @@ input:active, input:focus{
     text-align: center;
     background-color: transparent/*#f2dede*//*#feefef*/;
     border: none !important;
-    font-size: 1.5em;
-    padding: 10px 0;
+    font-size: 1.5em;   
+    padding: 10px 5%;    
+    text-align: left;   
 }
-
-#home-search #searchBarButtonsDiv{       
-    border-bottom: none !important;
- }
 
 #sugerimos-que {
     margin-top: -12px;
@@ -1429,7 +1411,8 @@ div#flex-container {
     align-items;
     padding-bottom: 7px;
     background-color:white !important;
-    margin-top: 87px;
+    /* New style */
+    margin-top: -7px;
 }
 
 div#flex-container div:first-child { 
@@ -1446,8 +1429,8 @@ div#flex-container div:second-child {
 
 div#flex-container div {
     border-radius:10px;
-    margin:7px 8px 0 7px;
-    margin: 7px 8px 8px 8px;
+    margin: 7px 8px /*8px*/0 8px;   
+    margin: 15px 8px 0px 8px;
     padding:0px;
     border:1px solid #ebebeb;
     background-color:#f8f8f8;  
@@ -1646,7 +1629,7 @@ div.call-to-actions span  {
 
 #homeImages .image-container{
     background-color: white !important;
-    margin-top: /*7px*/203px !important; 
+    margin-top: 7px !important; 
     /*margin-left: 0px !important;
     margin-right: 0px !important;*/
     margin-left: -11px !important;
@@ -1821,7 +1804,7 @@ div.call-to-actions span  {
     padding-bottom: 0px!important;
     max-height: 50vh!important;
     margin: auto;
-    margin-bottom: 10px;
+    margin-bottom: /*10px*/34px;
     width: auto!important;
     min-width: initial!important;
     max-width: calc( 100% - 40px);   
@@ -1847,11 +1830,11 @@ ion-button{
 }
 
 .card-height{
-   background-color: white;
+   background-color: /*white*/#3d3c3c;
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
-   min-width: 80vw;
-   max-width: 95vw;
+   width: /*80vw*/88.3vw/*90*/;
+   /*max-width: 95vw;*/
    margin-top: 0px!important;
    z-index:2;
    overflow-y: auto!important;
@@ -1867,15 +1850,22 @@ ion-button{
 .visit-page{
     --padding-start: 1em;
     margin-left: -1em;
+    color: #00bcd4 !important;
+    --padding-start: 0.45em;
 }
 
 .view-details{
-    --padding-end: 1em;
+    --padding-end: /*1em*/0.75em;
     margin-right:  -1em;
+    color: #00bcd4 !important
 }
 
 .image-mobile-expanded-div ion-list ion-item{
     --min-height: 20px;
+    color: /*white*/#ccc !important; 
+    --ion-background-color:#3d3c3c !important;
+    --ion-padding: 20px !important;
+    --ion-padding-: 0 !important
 }
 
 .image-mobile-expanded-div ion-card ion-row{
@@ -1883,25 +1873,47 @@ ion-button{
     margin-right: 20px;
 }
 
+.hydrated h3 {
+    margin-top: 30px;
+    font-size: 2em;
+    color: #ccc;
+}
+
+.hydrated h4 {
+    font-size: 1.6em !important;
+    color:#ccc !important;}
+
 .image-mobile-expanded-div ion-card-content{
     padding-top: 0px;
 }
 
-.image-mobile-expanded-div ion-list{
-    padding-top: 0px;
-    padding-bottom: 0px;
+.image-mobile-expanded-div ion-list{    
+    padding: 15px 0 8px 0;
+    background: transparent;
+    border-top: 1px solid /*#607d8b*/#435b66;
+    border-bottom: 1px solid /*#607d8b*/#435b66;
+    margin-top: 5px !important;
+    margin-bottom: -17px !important;
 }
 
 .image-mobile-expanded-div ion-list ion-item:first-of-type{
-    border-top: 1px solid lightgray;
-    padding-top: 5px;
+    /*border-top: 1px solid #ccc;*/
+    /*padding-top: 5px;*/
 }
 .image-mobile-expanded-div ion-list ion-item:last-of-type{
-    border-bottom: 1px solid lightgray;
-    padding-bottom: 5px;
+    /*border-bottom: 1px solid lightgray;*/
+    /*padding-bottom: 5px;*/
+    padding:10px 0;
 }
 .image-mobile-expanded-div ion-list ion-item{
     word-wrap: break-word;
+}
+
+.image-mobile-expanded-div ion-list ion-item a{
+    color: #00bcd4 !important;
+    line-height: normal;
+    padding-bottom: 9px !important;
+    display: block;
 }
 
 .image-mobile-expanded-viewer-mask{
@@ -1911,7 +1923,7 @@ ion-button{
 
 .closeIt{
     margin-right: 10px;
-    margin-top: 10px;
+    margin-top: 20px;
     color: white; 
     background: rgba(0,0,0,0.5);
     border-radius: 25px;    
@@ -1920,7 +1932,7 @@ ion-button{
   {
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: 20px;
     color: white; 
     background: rgba(0,0,0,0.5);
     border-radius: 25px;   
@@ -1939,7 +1951,7 @@ ion-button{
   {
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: /*10px*/20px;
     color: white; 
     background: rgba(0,0,0,0.5);
     border-radius: 25px;   
@@ -2036,21 +2048,21 @@ h1,h2,h3,h4,h5{
     background-color: none;
     background-color: #007AFF !important;
     color: white;
-    margin-top:7px;
-    margin-bottom:7px;
+    margin-top:16px !important;
+    margin-bottom:-2px !important;
 }
 
 #welcomeMessage #closeMessage {
     cursor:pointer;
-    position:absolute;   
-    top: 6px;
-    right: 6px;
+    position:absolute;     
+    top: 5px;
+    right: 5px;
     padding: 3px 6px;
     border: 1px solid white;
     background-color: white;
     border-radius: 49px;
     font-size: 1em !important;
-    color: #007aff;"
+    color: #007aff;
 }
 
 #welcomeMessage h2 {
@@ -2109,59 +2121,30 @@ a.advancedSearch:hover {
 
 }
 
-#homeImages a#BotaoImagens, #homeImages a#BotaoImagens:active {
-    color: white !important;
-    border: 1px solid /*#ccc*/#dfe1e5;
-    transition: background-color 0.5s ease 0s;
-    text-decoration: none !important;
-    color: /*#007AFF*/#757575;
-    border: 1px solid #007AFF !important;
-    font-size: 1.25em !important;
-    background-color: #007AFF !important;
-}
-
-#homeImages #searchBarButtonsDiv {border-bottom:none !important; }
-
-#homeImages a#BotaoPaginas, #homeImages a#BotaoPaginas:active {   
-    border: 1px solid /*#ccc*/#dfe1e5;
-    transition: background-color 0.5s ease 0s;
-    text-decoration: none !important;
-    color: /*#007AFF*/#007AFF !important;
-    border: 1px solid #007AFF !important;
-    font-size: 1.25em !important;
-    background-color: white !important;
-}
-
 #searchBarButtonsDiv {
-    position: /*relative*/fixed;
-    background-color: white;
-    z-index: 999996;
-    width: 96%;
-    height: auto;
+    position: relative;
+    z-index: 999999;
+    width: 100%; 
+    height:auto;
     display: block;
-    height: 66px;
+    height:50px;
     text-align: center;
-    margin-top: 190px;
-    margin-top: 192px;
+    float: left;  
+    margin-top: -29px;
     margin-bottom: 1px;
-    border-bottom: 1px solid #dfe1e5;
-    margin: 189px auto 0 auto;
-    left: 0;
-    right: 0;
 }
 
 /* New style for Advanced Search */
 a#BotaoPesquisaAvancada {
-    float: right !important;
-    background-color: transparent !important;
+    float: right !important;    
+    background-color: white !important;
     margin-right: none !important;
-    color: black /*#007AFF/* white*/;
-    cursor: pointer;
+    color: #007AFF;    
     margin-right: 0 !important;
     border: 1px solid #007AFF;
-    color: #007AFF;
+    color: #007AFF;   
     font-size: 1.25em;
-    /* font-weight: 600; */
+    /*font-weight: 600;*/
 }
 
 a#BotaoPesquisaAvancada:hover {
@@ -2174,15 +2157,14 @@ a#BotaoPesquisaAvancada:hover {
 }
 
 a#BotaoPaginas {
-    /* border: 1px solid /*#007AFF; */
+    /*border: 1px solid /*#007AFF*//*#ccc;*/    
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
     font-size: /*0.90em*//*1.11em*/1.25em;
-    margin-right: 6px !important;
-    color: /*#757575 !important*/white !important;
-    /* font-weight: 600; */
-    background-color: /*#E8F0FF*/#007AFF !important;
-    border: 1px solid /*#007AFF*//*#757575*/#eceff0;
+    margin-right: 6px !important; 
+    color: white !important;   
+    background-color: #007AFF !important;
+    border: 1px solid #007Aff;
 }
 
 .botao-selected{
@@ -2193,18 +2175,51 @@ a#BotaoPaginas {
 a#BotaoPaginas:hover {
     background-color: #007AFF;
     color:white;
-    border: 1px solid transparent;       
+    border: 1px solid transparent;    
 }
 
-
-a#BotaoImagens, a#BotaoImagens:active { 
-    color: #007AFF !important;
+body#home-search a#BotaoImagens, a#BotaoImagens:active {
+    color: /*black*//*#757575 !important /*black*/#009688 !important;
     border: 1px solid /*#ccc*/#dfe1e5;
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
-    color: /*#007AFF*/#757575;
+    color: /*#007AFF*/#007AFF !important;
     border: 1px solid #007AFF;
-    font-size: 1.25em !important;
+    margin-right: 0 !important;
+    font-size: /*0.90em*//*1.11em*/1.25em;
+    background-color: white !important;
+}
+
+ a#BotaoPaginas:active {
+    padding: 11px 0;
+    background-color: #ffffff!important;
+    border: none !important;
+    border: 1px solid #007AFF!important;
+    color: #007AFF!important;
+
+}
+
+body#homeImages a#BotaoPaginas, a#BotaoPaginas:active {
+    color: /*black*//*#757575 !important /*black*/#009688 !important;
+    border: 1px solid /*#ccc*/#dfe1e5;
+    transition: background-color 0.5s ease 0s;
+    text-decoration: none !important;
+    color: /*#007AFF*/#007AFF !important;
+    border: 1px solid #007AFF;    
+    font-size: /*0.90em*//*1.11em*/1.25em;
+    background-color: white !important;
+}
+
+a#BotaoImagens, a#BotaoImagens:active { 
+    color: /*black*//*#757575 !important /*black*/#009688 !important;
+    border: 1px solid #007AFF;
+    transition: background-color 0.5s ease 0s;
+    text-decoration: none !important;
+    color: /*#007AFF*/white !important;
+    border: 1px solid #007AFF;
+    margin-right: 0 !important;
+    font-size: /*0.90em*//*1.11em*/1.25em;   
+    background-color: #007AFF !important;
 }
 
 a#BotaoImagens:hover {
@@ -2323,6 +2338,7 @@ a#BotaoImagens:hover {
 
 ion-list > ion-item > h5{
     max-width: 100%;
+    line-height: inherit;
 }
 
 .no-outline{
@@ -2481,16 +2497,16 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 }
 
 .row {
-    margin-right: /*-22px*/0 !important;
-    margin-left: /*-22p*/0 !important;
+    margin-right: -22px !important;
+    margin-left: -22px !important;
 }
 
 /* NEW style */
 .menu-opcoes, .opcoes-top-direita {   
     /*text-transform: uppercase;*/
     color: white;
-    margin: /*-8px*/-15px 0 0 0;
-    /*padding: 0px /*30px*/ /*22px 0 0px;*/
+    margin: -15px 0 0 0;
+    padding: 0px 7px 0 0px;
     float: right !important;
     font-size: 2.7em;
     text-decoration: none !important;
@@ -2578,6 +2594,19 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     right: -4px;
 }
 
+.fa-caret-down:before {
+    content: "\f0d7";
+    font-size: 1.1em;
+   /* border: 1px solid #ffffff4a;*/
+    padding: /*3px*/5px 9px /*7px*/ 4px 9px;
+    border-radius: 50px;
+    margin-top: 3px !important;
+    position: relative;
+    background-color: /*#c0c0c096*/ /*#c0c0c069*/ #c0c0c024;
+    top: /*1px*/3px;
+    right: -4px; 
+}
+
 #pagesMenu .fa-caret-down:before {
     content: "\f0d7";
     font-size: 1.1em;
@@ -2618,7 +2647,11 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     top: -2px;
 }
 
-.transform-none {transform: none !important}
+.sc-ion-card-ios-h {
+    --background: var(--ion-item-background,transparent);
+    --color: /*#00bcd4*/white !important;
+      font-size:0.8em !important;
+      padding-left: 0 !important
 
 
 
@@ -2751,9 +2784,9 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
   and (-webkit-min-device-pixel-ratio: 2)
   and (device-aspect-ratio: 2/3)
   and (orientation: portrait) {
-  /*#searchBarButtonsDiv {
+  #searchBarButtonsDiv {
   margin-top: -26px;  
-  } */
+  } 
 }
 
 /* Landscape */
@@ -2832,9 +2865,9 @@ and (min-device-width : 768px)
     top: -40px !important;
     right: -4px !important;
     }
-    /*#searchBarButtonsDiv {
+    #searchBarButtonsDiv {
     margin-top: -8px !important;   
-    }*/
+    }
     div#flex-container { 
     margin: 0 auto;
     width: 83%;
@@ -2856,6 +2889,6 @@ and (min-device-width : 1024px)   {
     }
 
     #searchBarButtonsDiv {
-    /*margin-top: -8px !important; */  
+    margin-top: -8px !important;   
     }
 }
