@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <%@ page
@@ -113,7 +114,7 @@
 <head>
 	<title><fmt:message key='home.meta.title'/></title>
     
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1 viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1 viewport-fit=cover"/>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
 	<meta http-equiv="Content-Language" content="pt-PT" />
@@ -172,60 +173,15 @@
   </script>
 
  <!-- starts closing Welcome blue div on homepage -->
-<script type="text/javascript">
-$(document).ready(function() {
-
-  // If the 'hide cookie is not set we show the message
-  if (!readCookie('hide')) {
-    $('#welcomeMessage').show();
-  }
-
-  // Add the event that closes the popup and sets the cookie that tells us to
-  // not show it again until one day has passed.
-  $('#closeMessage').click(function() {
+ <script type="text/javascript">
+ $(document).ready(function(){
+  $("#closeMessage").click(function(){
     $('#welcomeMessage').hide();
-    createCookie('hide', true, 1)
-    return false;
+    localStorage.setItem('welcomeMessage', 'false')
   });
-});
-
-// ---
-// And some generic cookie logic
-// ---
-function createCookie(name,value,days) {
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    var expires = "; expires="+date.toGMTString();
-  }
-  else var expires = "";
-  document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
-}
-function eraseCookie(name) {
-  createCookie(name,"",-1);
-}
-</script>
-<!-- starts closing Welcome blue div on homepage -->
-
-
- <!-- starts accordion -->
- <script>
-  $( function() {
-    $( "#accordion" ).accordion();
-  } );
-  </script>
-  <!-- ends accordion -->
+ }); 
+ </script>
+ <!-- ends closing Welcome blue div on homepage -->
 
   <script src="@ionic/core/dist/ionic.js"></script>
   <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">

@@ -48,7 +48,7 @@ body#adavanced .swiper-container {
 .bar {  
     position: relative;
     display: block;
-    width: 23px;
+    width: /*23px*/19px;
     height: 3px;
     margin: 4px auto;
     background-color: #fff;
@@ -99,17 +99,20 @@ body#adavanced .swiper-container {
 	transform: translateY(-13px) rotate(40.5deg);
 }
 /*End menu button*/
-.menu h4{
+.menu h4 {
 	border-top: 1px solid #3E3E3E;;
-	padding-top: 15px;
+	padding-top: /*15px*/20px;
 	margin-bottom: 0px;
-	padding-bottom: 15px;
+	padding-bottom: /*15px*/20px;
 	margin-top: 0px;
 	padding-left: 20px;
 	font-size: 17px;
 	cursor: pointer;
 	text-decoration: none;
 }
+
+font-size: 1.6em !important;
+color: #ccc !important;
 
 .menu h4:hover, .menu h4:visited, .menu h4:link, .menu h4:active
 {
@@ -157,7 +160,7 @@ body#adavanced .swiper-container {
 	margin-top: 7px;
 }
 #menuButton.cross{
-	margin-left: /*-22px*/-66px/*-60px*/;
+	margin-left: /*-22px*//*-66px/*-60px*/-64px;
 	margin-top:15px;
 	/*padding: 20px;*/
 }
@@ -189,7 +192,7 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
     z-index: 9; 
     /*width: 100%;*/
     /*left: 0;
-    right: 0;  */ 
+    right: 0;  */     
 }
 
 .logo-main-div-fixed{
@@ -287,17 +290,15 @@ padding-right: 42px !important;
 
 body#advanced .myButtonStyle, body#advanced-images .myButtonStyle  {
     padding: 11px 0;
-    background-color: #ffffff!important;
-    border: none !important;
+    background-color: #007AFF!important;   
     border: 1px solid #007AFF!important;
-    color: #007AFF!important;
+    color: white !important;
 }
 
 body#advanced .myButtonStyle:active, body#advanced-images .myButtonStyle:active  {
     padding: 11px 0;
-    background-color: #007AFF!important;
-    border: none !important;
-    border: 1px solid #007AFF!important;
+    background-color: #777!important;   
+    border: 1px solid #777!important;
     color: white !important;
 }
 

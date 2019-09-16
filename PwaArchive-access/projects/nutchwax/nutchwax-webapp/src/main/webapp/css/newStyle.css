@@ -395,6 +395,13 @@ a.advancedSearch {
     
 }
 
+.sc-ion-card-ios-s img {
+    display: block;
+    width: 100%;
+    -webkit-box-shadow: 0px 4px 5px -2px rgba(0,0,0,1) !important;
+    box-shadow: 0px 4px 5px -2px rgba(0,0,0,1) !important;
+}
+
 /* NEW STYLE omitted results */
 
 div.omitted-results:hover {
@@ -1406,7 +1413,6 @@ input:active, input:focus{
 /* LANDING PAGE NEW AREA */
 
 div#flex-container {
-    display: flex;
     flex-direction: column;
     align-items;
     padding-bottom: 7px;
@@ -1529,13 +1535,13 @@ div#flex-container h3 {
 
 
 #testimonials-pt { 
-    background: black url(../img/testimonials-pt.png) no-repeat center center;
+    /*background: black url(../img/testimonials-pt.png) no-repeat center center;*/
     background-size: /*100%*/cover;
     text-align: left;
 }
 
 #testimonials-en { 
-    background: black url(../img/testimonials-en.png) no-repeat center center;
+    /*background: black url(../img/testimonials-en.png) no-repeat center center;*/
     background-size: /*100%*/cover;
     text-align: left;
 }
@@ -1807,7 +1813,7 @@ div.call-to-actions span  {
     margin-bottom: /*10px*/34px;
     width: auto!important;
     min-width: initial!important;
-    max-width: calc( 100% - 40px);   
+    max-width: calc(100% - 40px); 
 }
 
 ion-button{
@@ -1830,7 +1836,7 @@ ion-button{
 }
 
 .card-height{
-   background-color: /*white*/#3d3c3c;
+   background-color: /*white*//*#3d3c3c*/ #222 !important;
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
    width: /*80vw*/88.3vw/*90*/;
@@ -1863,7 +1869,7 @@ ion-button{
 .image-mobile-expanded-div ion-list ion-item{
     --min-height: 20px;
     color: /*white*/#ccc !important; 
-    --ion-background-color:#3d3c3c !important;
+    --ion-background-color:/*#3d3c3c*/#222 !important;
     --ion-padding: 20px !important;
     --ion-padding-: 0 !important
 }
@@ -1879,9 +1885,10 @@ ion-button{
     color: #ccc;
 }
 
-.hydrated h4 {
+body#homeImages .hydrated h4 {
     font-size: 1.6em !important;
-    color:#ccc !important;}
+    color:#ccc !important;
+}
 
 .image-mobile-expanded-div ion-card-content{
     padding-top: 0px;
@@ -1959,7 +1966,7 @@ ion-button{
 }
 
 h1,h2,h3,h4,h5{
-    font-family: "Open Sans", sans-serif!important;
+    font-family: roboto,"Open Sans", sans-serif!important;
 }
 
 .clean-button{
@@ -2089,7 +2096,7 @@ a.advancedSearch {
     float: left;   
     text-decoration: none;
     margin:0 8px 0 0 !important;
-    padding:/*3px 7px*/ /*6px*/6px 12px !important;
+    padding:/*3px 7px*/ /*6px*//*6px*/4px 10px 5px 10px/*12px*/ !important;
     /*border:1px solid #ebebeb;*/
     border-radius: 50px;     
     /*font-size:/*0.95em*//*1.7em; */   
@@ -2132,12 +2139,13 @@ a.advancedSearch:hover {
     float: left;  
     margin-top: -29px;
     margin-bottom: 1px;
+    padding: 0 13px;
 }
 
 /* New style for Advanced Search */
 a#BotaoPesquisaAvancada {
     float: right !important;    
-    background-color: white !important;
+    background-color: #fff !important;
     margin-right: none !important;
     color: #007AFF;    
     margin-right: 0 !important;
@@ -2147,13 +2155,19 @@ a#BotaoPesquisaAvancada {
     /*font-weight: 600;*/
 }
 
-a#BotaoPesquisaAvancada:hover {
-    background-color: #007AFF;
+/*a#BotaoPesquisaAvancada:hover {
+    background-color: #007AFF !important;
     margin-right: none !important;
-    color: /*white*/#757575 !important;
+    color: /*white*//*#757575 !important;
     cursor: pointer;  
     text-decoration: none;
     border:1px solid transparent;
+}*/
+
+a#BotaoPesquisaAvancada:active {
+    background-color: #fff!important;   
+    border: 1px solid #777!important;
+    color: #777 !important;
 }
 
 a#BotaoPaginas {
@@ -2653,8 +2667,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
       font-size:0.8em !important;
       padding-left: 0 !important
 
-
-
+}
 
 /***************************************************************************/
 /***************************************************************************/
@@ -2720,16 +2733,16 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
   and (device-aspect-ratio: 2/3) {
    
    a.advancedSearch {
-    font-size: 1em ;       
+    font-size: 1em !important ;       
    }
    a#BotaoPesquisaAvancada {
-    font-size:1em ;     
+    font-size: 1em  !important;     
    }
    a#BotaoPaginas {   
-    font-size: 1em ;   
+    font-size: 1em  !important;   
    } 
    a#BotaoImagens {   
-    font-size: 1em ;   
+    font-size: 1em  !important ;   
    }
 } 
 
