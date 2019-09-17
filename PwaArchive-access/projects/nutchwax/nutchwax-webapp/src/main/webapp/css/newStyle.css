@@ -25,7 +25,7 @@ body {
     transition: :-ms-input-placeholder 0.5s ease 0s;
     transition: :-moz-placeholder 0.5s ease 0s;
     background-color: #9e9e9e33 !important;
-    padding-left: 20px;
+   
     padding-left: 15px;
     border: 1px solid /*#dfe1e5*/transparent !important;
     border-top: none !important;
@@ -1766,6 +1766,8 @@ div.call-to-actions span  {
     background-color: white !important;
     -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0);
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0);
+    -webkit-column-break-inside: avoid;
+    break-inside: avoid-column;
 }
 
 .imageContent:hover {
