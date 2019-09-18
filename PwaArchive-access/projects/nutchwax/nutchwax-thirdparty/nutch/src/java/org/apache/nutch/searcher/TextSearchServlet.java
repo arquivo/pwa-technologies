@@ -110,7 +110,8 @@ public class TextSearchServlet extends HttpServlet {
             nQueryMatchesReturned = Integer.parseInt(this.conf.get(Global.MAX_FULLTEXT_MATCHES_RETURNED));
 
             collectionsHost = this.conf.get("wax.host", "arquivo.pt/wayback");
-            collectionsProtocol = this.conf.get("wax.protocol"+"://", "https://"); /*values should be http or https*/
+            collectionsProtocol = this.conf.get("wax.protocol", "https"); /*values should be http or https*/
+            collectionsProtocol+="://";
             TimeZone zone = TimeZone.getTimeZone("GMT");
             FORMAT.setTimeZone(zone);
 
