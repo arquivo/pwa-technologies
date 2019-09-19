@@ -18,14 +18,13 @@ body {
 #searchForm .form-control{
     position: relative;
     height: 45px !important;
-    border-radius: 100px !important;
+    border-radius: 10px/*100px*/ !important;
     text-align: left/*center*/;
     transition: ::-webkit-input-placeholder 0.5s ease 0s;
     transition: ::-moz-placeholder 0.5s ease 0s;
     transition: :-ms-input-placeholder 0.5s ease 0s;
     transition: :-moz-placeholder 0.5s ease 0s;
     background-color: #9e9e9e33 !important;
-   
     padding-left: 15px;
     border: 1px solid /*#dfe1e5*/transparent !important;
     border-top: none !important;
@@ -39,7 +38,6 @@ body {
     /* border: 1px solid #ccc /*#757575; */
     padding-top: 3px;
     margin-top: /*25px*/4px;
-
 }
 
 /* NEW STYLE: Hover search bar effect*/
@@ -477,7 +475,7 @@ div.omitted-results:hover {
     background-color:/* white*/ #007AFF /*transparent*/ !important;
     color: /*black*//* #007AFF*/ white !important;
     border: 1px solid /*#ccc*//*#dfe1e5*/#007AFF !important;
-    border-radius: 100px !important;
+    border-radius: /*100px*/7px !important;
     text-decoration: none !important;  
     padding: 9px !important;
     transition: background-color 0.5s ease 0s;
@@ -908,7 +906,7 @@ legend.scheduler-border {
     /*margin-top: 30px;*/
     /*margin-top: 30px;*/
     /* height: 0; */
-    height: 264px;
+    /*height: 264px;*/
     display: block;
 }
 
@@ -983,7 +981,7 @@ legend.scheduler-border {
     font-size: 17px;
     width: 99.7% !important;
     position: relative;
-    border-radius: 100px !important;
+    border-radius: /*100px*/9px !important;
     /*border: 1px solid /*#ccc*/ /*transparent;*/
     border: 1px solid #ccc;
     outline: none !important;
@@ -1088,6 +1086,7 @@ input[type=text] {
         /* margin-top: 21px; */
     background-color: white;
     padding: 20px 0;
+    margin-bottom: -20px;
 }
 
 .text-bold{
@@ -1418,7 +1417,7 @@ div#flex-container {
     padding-bottom: 7px;
     background-color:white !important;
     /* New style */
-    margin-top: -7px;
+    /*margin-top: -7px;*/
 }
 
 div#flex-container div:first-child { 
@@ -1435,11 +1434,10 @@ div#flex-container div:second-child {
 
 div#flex-container div {
     border-radius:10px;
-    margin: 7px 8px /*8px*/0 8px;   
-    margin: 15px 8px 0px 8px;
-    padding:0px;
-    border:1px solid #ebebeb;
-    background-color:#f8f8f8;  
+    margin: 7px 8px 12px 8px !important;      
+    padding: 0px;
+    /*border:1px solid #ebebeb;*/
+    background-color:/*#f8f8f8*/#f2f2f2;  
     /*-webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
     -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18); */
@@ -1458,7 +1456,7 @@ div#flex-container div div {
 div#flex-container h3 {
     margin: 5px 0 16px 10px;
     margin: 5px 0;
-    padding:6px 6px 6px 14px;
+    padding: 14px 6px 6px 14px;
     font-size: 1.6em;  
 }
 
@@ -1766,8 +1764,8 @@ div.call-to-actions span  {
     background-color: white !important;
     -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0);
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0);
-    -webkit-column-break-inside: avoid;
     break-inside: avoid-column;
+    -webkit-column-break-inside: avoid;
 }
 
 .imageContent:hover {
@@ -1870,7 +1868,7 @@ ion-button{
 
 .image-mobile-expanded-div ion-list ion-item{
     --min-height: 20px;
-    color: /*white*/#ccc !important; 
+    color: rgba(255,255,255,0.6) !important;
     --ion-background-color:/*#3d3c3c*/#222 !important;
     --ion-padding: 20px !important;
     --ion-padding-: 0 !important
@@ -1884,12 +1882,18 @@ ion-button{
 .hydrated h3 {
     margin-top: 30px;
     font-size: 2em;
-    color: #ccc;
+    color: rgba(255,255,255,0.6) !important;
 }
 
 body#homeImages .hydrated h4 {
     font-size: 1.6em !important;
-    color:#ccc !important;
+    color: rgba(255,255,255,0.6) !important;
+}
+
+body#home-landing.hydrated h3 {
+    margin-top: 30px;
+    font-size: 2em;
+    color: #222 !important;
 }
 
 .image-mobile-expanded-div ion-card-content{
@@ -1899,7 +1903,7 @@ body#homeImages .hydrated h4 {
 .image-mobile-expanded-div ion-list{    
     padding: 15px 0 8px 0;
     background: transparent;
-    border-top: 1px solid /*#607d8b*/#435b66;
+    border-top: 1px solid /*#607d8b*//*#435b66**/#435b6696;
     border-bottom: 1px solid /*#607d8b*/#435b66;
     margin-top: 5px !important;
     margin-bottom: -17px !important;
@@ -1917,7 +1921,6 @@ body#homeImages .hydrated h4 {
 .image-mobile-expanded-div ion-list ion-item{
     word-wrap: break-word;
 }
-
 .image-mobile-expanded-div ion-list ion-item a{
     color: #00bcd4 !important;
     line-height: normal;
@@ -1929,24 +1932,22 @@ body#homeImages .hydrated h4 {
     height:100vh;min-width: 100%;background-color:transparent;position: absolute;top: 0;left:0;z-index:1;
 }
 
-
 .closeIt{
-    margin-right: 10px;
+    margin-right: 8px;
     margin-top: 20px;
-    color: white; 
+    color: rgba(255,255,255,0.5) !important; 
     background: rgba(0,0,0,0.5);
     border-radius: 25px;    
 }
   .closeItAbsolute
   {
     position: absolute;
-    right: 10px;
+    right: 8px;
     top: 20px;
-    color: white; 
+    color: rgba(255,255,255,0.6) !important;
     background: rgba(0,0,0,0.5);
     border-radius: 25px;   
   }
-
 
 @media (max-width: 500px) {
   .image-expanded-full-width.image-expanded-viewer
@@ -2004,9 +2005,14 @@ h1,h2,h3,h4,h5{
     z-index: 4;
     width: 100%;
     margin: 0px;
-    font-family: "Open Sans", sans-serif;
+    font-family: Roboto, "Open Sans", sans-serif;
     font-size: 1.5em;
-    text-align: center
+    font-weight: normal !important;
+    text-align: center;
+    background-color: #007AFF !important;
+    color:white !important;
+    border:none !important;
+    border-radius: none !important
 }
 
 .next-previous-ul{
@@ -2028,7 +2034,6 @@ h1,h2,h3,h4,h5{
     margin-top: 10%; 
     margin-bottom: 5%;
 }
-
 
 #loadingDivImages{
     text-align: center; 
@@ -2062,15 +2067,15 @@ h1,h2,h3,h4,h5{
 }
 
 #welcomeMessage #closeMessage {
-    cursor:pointer;
-    position:absolute;     
-    top: 5px;
-    right: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: -2px;
     padding: 3px 6px;
     border: 1px solid white;
     background-color: white;
     border-radius: 49px;
-    font-size: 1em !important;
+    font-size: 0.8em !important;
     color: #007aff;
 }
 
@@ -2100,7 +2105,7 @@ a.advancedSearch {
     margin:0 8px 0 0 !important;
     padding:/*3px 7px*/ /*6px*//*6px*/4px 10px 5px 10px/*12px*/ !important;
     /*border:1px solid #ebebeb;*/
-    border-radius: 50px;     
+    border-radius: /*50px*/7px;     
     /*font-size:/*0.95em*//*1.7em; */   
     transition: background-color 0.5s ease 0s;
     background-color:transparent;
@@ -2177,7 +2182,7 @@ a#BotaoPaginas {
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
     font-size: /*0.90em*//*1.11em*/1.25em;
-    margin-right: 6px !important; 
+    margin-right: /*6px*/9px !important; 
     color: white !important;   
     background-color: #007AFF !important;
     border: 1px solid #007Aff;
@@ -2583,7 +2588,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     /* outline: 1px solid red; */
     background-color: white;
     border: 1px solid #ccc !important;
-    border-radius: 50px !important;
+    border-radius: /*50px*/10px !important;
     height: 46px !important;
     padding-left: 14px !important;
     padding-top: 09px !important;
@@ -2671,12 +2676,119 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 
 }
 
+#swipeContainer {      
+    background-color: black !important;
+}
+
+
 /***************************************************************************/
 /***************************************************************************/
 /**************             QUERIES               **************************/
 /***************************************************************************/
 /***************************************************************************/
 
+/* Samsung S2 */
+
+@media screen and (device-width: 320px) and (device-height: 534px) and (-webkit-device-pixel-ratio: 1.5) {
+    a.advancedSearch {
+    font-size: /*0.90em*//*1.11em*/0.8em;     
+    font-size: 1em !important;     
+   }
+
+   #welcomeMessage #closeMessage {
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 0px 4px;
+    border: 1px solid white;
+    background-color: white;
+    border-radius: 49px;
+    font-size: 0.9em !important;
+    color: #007aff;   
+}
+}
+
+/* Responsivo Portrait and Landscape */
+@media only screen 
+and (min-device-width : 1024px)   {
+
+    span#buttonSearch button span {
+    color: /*#777*/#007AFF;
+    background-color: transparent !important;
+    font-size: 22px !important;
+    transition: color 0.5s ease 0s;
+    font-weight: normal !important;
+    position: absolute !important;
+    top: -40px !important;
+    right: -4px !important;
+    }
+
+    #searchBarButtonsDiv {
+    margin-top: -8px !important;   
+    }
+}
+
+/*****************************************************************************
+/* **************************  General styles for Mobile Tablet and Desktop */
+/****************************************************************************
+
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {  
+  
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+
+}
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+  
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+  
+}
+
+/**************************************************************
+/*********************** Specific css for specific devices ***/
+/**************************************************************
 
 /* ----------- Samsung S3 ----------- */
 
@@ -2687,16 +2799,19 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
   and (device-aspect-ratio: 2/3) {
    
    a.advancedSearch {
-    font-size: /*0.90em*//*1.11em*/1em;       
-   }
+    font-size: /*0.90em*//*1.11em*//0.8em;       
+  }
    a#BotaoPesquisaAvancada {
-    font-size:1em ;     
+    font-size:0.8em; 
+    outline: 1px solid red !important;   
    }
    a#BotaoPaginas {   
-    font-size: 1em ;   
+    font-size: 0.8em ; 
+     outline: 1px solid red !important;      
    } 
    a#BotaoImagens {   
-    font-size: 1em;   
+    font-size: 0.8em; 
+     outline: 1px solid red !important;      
    }
 } 
 
@@ -2871,39 +2986,87 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 
 /* ----------- iPad Mini ----------- */
 
-/* iPad Mini in portrait & landscape */
+/* iPad Mini in portrait  */
 @media only screen 
 and (min-device-width : 768px) 
+and (max-device-height : 1024px) 
+ { 
+    span#buttonSearch button span {
+    top: -40px !important;
+    right: 1px !important;
+}
+
+    #searchBarBlock { 
+    width: 96.5% !important;   
+    margin: -78px auto 0 auto !important;
+}
+
+    #photos {
+    margin: 0 auto;
+    width: 79.5% !important;
+}
+    span#buttonSearch button span {
+    top: -40px !important;
+    right: 3px !important;
+    }
+
+    #searchBarButtonsDiv {
+    margin-top: -28px !important;   
+    }
+
+    div#flex-container { 
+    margin: 0 auto;
+    width: 80%;
+  }
+
+  div#flex-container div {
+    height: 430px;
+}
+
+   #resultados-lista ul li {
+   width: 93% !important;
+   margin:0 auto;
+   border:1px solid #ccc;
+   border-radius: 10px;
+   margin-bottom: 15px !important;
+   padding:5px 8px 18px 8px;
+
+}
+
+/* iPad Mini in portrait  */
+@media only screen 
+and (min-device-width : 1024px) 
+and (max-device-height : 768px)
  { 
 
     span#buttonSearch button span {
     top: -40px !important;
-    right: -4px !important;
+    right: 3px !important;
     }
     #searchBarButtonsDiv {
     margin-top: -8px !important;   
     }
     div#flex-container { 
     margin: 0 auto;
-    width: 83%;
-
+    width: 63.7%;
+  }
+  #resultados-lista {
+    width: 96% !important;
+    margin: 0px auto !important;
 }
-/* Responsivo Portrait and Landscape */
-@media only screen 
-and (min-device-width : 1024px)   {
+   #resultados-lista ul li {
+   width: 97% !important;
+   margin:0 auto;
+   border:1px solid #ccc;
+   border-radius: 10px;
+   margin-bottom: 15px !important;
+   padding:5px 8px 18px 8px;
+}
+#searchBarButtonsDiv {
+   margin-top: -26px !important;
+}
+#photos {
+    margin: 0 auto;
+    width: 63.5% !important;
 
-    span#buttonSearch button span {
-    color: /*#777*/#007AFF;
-    background-color: transparent !important;
-    font-size: 22px !important;
-    transition: color 0.5s ease 0s;
-    font-weight: normal !important;
-    position: absolute !important;
-    top: -40px !important;
-    right: -4px !important;
-    }
-
-    #searchBarButtonsDiv {
-    margin-top: -8px !important;   
-    }
 }

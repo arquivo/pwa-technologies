@@ -17,27 +17,27 @@ body#adavanced .swiper-container {
 	background-color: white;	
 }
 
-.swiper-slide {
-
-}
 .swiper-wrapper {
 	/*background-color: #252525;*/
 }
 
 
 .menu {
-	/* New code */margin-top: 52px;
-	min-width: 100px;
-	width: /*70%*/69.80%;
-	max-width: 320px;
+	/* New code */	
+	margin-top: 52px;
+	/*min-width: 100px;*/
+	/*width: /*70%
+	max-width: 320px;*/
+	width: 70% /*100%*/;
 	min-height: 100vh;
 	overflow-y: auto;
 	background-color: black;
 	color: #fff;
     display: initial;
-    z-index: 1;  
+    z-index: 1;
 
 }
+
 .content {
 	width: 100%;
 	min-height: 100vh;
@@ -165,6 +165,8 @@ color: #ccc !important;
 	/*padding: 20px;*/
 }
 
+/*.clean-button {outline:1px solid red;}*/
+
 
 .main-content{
 	width:100%;
@@ -233,7 +235,7 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
 
 /* NEW Style: give a black curve effect to the search box*/
 .background-top-curve {
-    border-radius: 100px;
+    border-radius: 10px !important;
     height: 45px;
     /*background-color: /*white*/ /*#f2f2f2 !important;*/
     background-color: /*#f8f8f8*//* #eeeded !important*/white !important;
@@ -271,14 +273,15 @@ body#advanced .background-top-curve, body#advanced-images .background-top-curve 
 body#advanced .container-fluid, body#advanced-images .container-fluid{width: 100%;margin:0;padding: 0
     width: 100%;
     margin: 0;
-    padding: 0 0 20px 0;    
+    /*padding: 0 0 20px 0; */
+    padding: 0px 0 20px 0;   
     background-color:/*#f8f8f8*//*#f6f6f6*//*#eeeeee*/ /*#fff*/#f8f8f8 !important;
 }
-body#advanced #main #conteudo-pesquisa, body#advanced-images #main #conteudo-pesquisa{position: relative;z-index: 10; top:-22px;
+body#advanced #main #conteudo-pesquisa, body#advanced-images #main #conteudo-pesquisa{margin-top:-22px;
 }
 
 body#advanced .col-xs-offset-3, body#advanced-images .col-xs-offset-3 {margin:0 !important;width:95% !important;float: none !important;}
-body#advanced .col-xs-6, body#advanced-images .col-xs-6 {width: 90% !important;border-radius: 100px !important;margin: 0 auto;}
+body#advanced .col-xs-6, body#advanced-images .col-xs-6 {width: /*90%*/88% !important;border-radius: /*100px*/ 9px !important;margin: 0 auto;}
 
 body#advanced .main-menu, body#advanced-images .main-menu {
 padding-left: /*30px*/15px !important;   
