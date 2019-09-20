@@ -45,7 +45,6 @@ import org.apache.nutch.util.mime.MimeTypes;
 import org.archive.access.nutch.NutchwaxConfiguration;
 import org.archive.util.ArchiveUtils;
 import org.archive.util.Base32;
-import org.apache.nutch.global.Global;
 
 
 /**
@@ -136,15 +135,9 @@ public class WaxIndexingFilter implements IndexingFilter
     ParseData pd = parse.getData();
 
     // Add as stored, indexed, and untokenized but not lowercased.
-    if (this.getConf().get(Global.COLLECTION_TYPE).equals(Global.COLLECTION_TYPE_MULTIPLE)) {
-      String collectionName = getMetadataValue(ARCCOLLECTION_KEY, pd, mw);
-      // remove 8 digit timestamp from the name of the collection
-      collectionName = collectionName.substring(0, collectionName.length() - 8);
-      add(urlStr, doc, ARCCOLLECTION_KEY, collectionName, false, true, true, false);
-    } else {
-      add(urlStr, doc, ARCCOLLECTION_KEY, getMetadataValue(ARCCOLLECTION_KEY, pd, mw),
+    add(urlStr, doc, ARCCOLLECTION_KEY,
+      getMetadataValue(ARCCOLLECTION_KEY, pd, mw),
               false, true, true, false);
-    }
 
     // Add as stored, indexed, and untokenized. Preserve case for
     // arcname since eventually it will be used to find an arc on
