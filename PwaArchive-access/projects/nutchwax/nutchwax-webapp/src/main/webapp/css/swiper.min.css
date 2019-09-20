@@ -44,12 +44,11 @@
 	-webkit-box-sizing:content-box;
 	box-sizing:content-box;
 	padding:0 !important;
-	margin:0 !important;
-	outline: 10px solid red !important; 
+	margin:0 !important;	
 }
 .swiper-container-android .swiper-slide,.swiper-wrapper{
-	-webkit-transform:translate3d(0,0,0);
-	transform:translate3d(0,0,0)
+	/*-webkit-transform:translate3d(0,0,0);*/
+	/*transform:translate3d(0,0,0)*/
 }
 .swiper-container-multirow>.swiper-wrapper{
 	-webkit-flex-wrap:wrap;

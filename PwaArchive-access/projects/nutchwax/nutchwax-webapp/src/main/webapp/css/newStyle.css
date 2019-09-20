@@ -72,7 +72,7 @@ body {
 
 #ionSlider {    
     float: left;
-    width: 100%;    
+    width: 100%;      
     /*border-bottom: 1px solid #dfe1e5;*/
     margin-top: -3px/*10px*//*-20px*/;
     margin-bottom: 10px; 
@@ -475,7 +475,7 @@ div.omitted-results:hover {
     background-color:/* white*/ #007AFF /*transparent*/ !important;
     color: /*black*//* #007AFF*/ white !important;
     border: 1px solid /*#ccc*//*#dfe1e5*/#007AFF !important;
-    border-radius: /*100px*/7px !important;
+    border-radius: /*100px*/5px !important;
     text-decoration: none !important;  
     padding: 9px !important;
     transition: background-color 0.5s ease 0s;
@@ -1133,7 +1133,7 @@ em {
 body#advanced .calendar-anchor-advanced img, body#advanced-images .calendar-anchor-advanced img{
     position: absolute;
     top: -11px/*-8px*/;
-    right: 11px;
+    right: /*11px*/4px;
     z-index: 999999999;
     width: /*28px*//*25px*/29px;    
 }
@@ -1357,7 +1357,7 @@ input:active, input:focus{
     background: /*#feefef*/transparent;
     padding: 20px;
     border-radius: 5px;
-    margin-top: -8px; 
+    margin-top: /*-8px*/-37px; 
 }
 
 #conteudo-pesquisa-erro .alert-danger{    
@@ -2182,7 +2182,7 @@ a#BotaoPaginas {
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
     font-size: /*0.90em*//*1.11em*/1.25em;
-    margin-right: /*6px*/9px !important; 
+    margin-right: /*6px*/6px !important; 
     color: white !important;   
     background-color: #007AFF !important;
     border: 1px solid #007Aff;
@@ -2707,7 +2707,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     font-size: 0.9em !important;
     color: #007aff;   
 }
-}
+
 
 /* Responsivo Portrait and Landscape */
 @media only screen 
@@ -2728,6 +2728,51 @@ and (min-device-width : 1024px)   {
     margin-top: -8px !important;   
     }
 }
+
+
+.pulse {
+  margin:100px;
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #cca92c;
+  cursor: pointer;
+  box-shadow: 0 0 0 rgba(204,169,44, 0.4);
+  animation: pulse 2s infinite;
+}
+.pulse:hover {
+  animation: none;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+  }
+  70% {
+      -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+  }
+  100% {
+      -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+  }
+}
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+  }
+  70% {
+      -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+      box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+      box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+  }
+}
+
+
+
 
 /*****************************************************************************
 /* **************************  General styles for Mobile Tablet and Desktop */
@@ -2991,6 +3036,11 @@ and (min-device-width : 1024px)   {
 and (min-device-width : 768px) 
 and (max-device-height : 1024px) 
  { 
+    
+#searchForm .form-control {
+    margin-top: /*25px*/12px;
+}
+
     span#buttonSearch button span {
     top: -40px !important;
     right: 1px !important;
@@ -3006,7 +3056,7 @@ and (max-device-height : 1024px)
     width: 79.5% !important;
 }
     span#buttonSearch button span {
-    top: -40px !important;
+    top: -32px !important;
     right: 3px !important;
     }
 
@@ -3033,14 +3083,14 @@ and (max-device-height : 1024px)
 
 }
 
-/* iPad Mini in portrait  */
+/* iPad Mini in landscape  */
 @media only screen 
 and (min-device-width : 1024px) 
 and (max-device-height : 768px)
  { 
 
     span#buttonSearch button span {
-    top: -40px !important;
+    top: -32px !important;
     right: 3px !important;
     }
     #searchBarButtonsDiv {
@@ -3068,5 +3118,4 @@ and (max-device-height : 768px)
 #photos {
     margin: 0 auto;
     width: 63.5% !important;
-
 }
