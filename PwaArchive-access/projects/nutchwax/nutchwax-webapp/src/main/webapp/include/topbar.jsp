@@ -62,12 +62,13 @@
 		                    </a>
 		                    <a href="/?l=<%=language%>"><img src="/img/arquivo-logo-white.svg" id="arquivoLogo" alt="Logotipo do Arquivo.pt" class="text-center logo-main"></a>
 		                    <!-- New code: starts Opções button ans Language selection-->                   
-		                    <a href="#" class="opcoes-top-direita" title="choose your language">...</a>
+		                    <!--<a href="#" class="opcoes-top-direita" title="choose your language">...</a>-->
 		                    <!-- ends select language button -->
 		 </div> 
 
 	</div>
 <!-- NEW Style: give a black curve effect to the search box -->
+	<div class="curve-background"></div>
 	<div class="background-top-curve"></div>
 </div>	
 <script type="text/javascript">

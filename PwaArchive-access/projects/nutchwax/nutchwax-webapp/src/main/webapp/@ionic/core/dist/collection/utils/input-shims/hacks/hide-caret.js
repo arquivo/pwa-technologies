@@ -3,7 +3,6 @@ export function enableHideCaretOnScroll(componentEl, inputEl, scrollEl) {
     if (!scrollEl || !inputEl) {
         return () => { return; };
     }
-    console.debug('Input: enableHideCaretOnScroll');
     const scrollHideCaret = (shouldHideCaret) => {
         if (isFocused(inputEl)) {
             relocateInput(componentEl, inputEl, shouldHideCaret);

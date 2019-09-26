@@ -4,10 +4,12 @@
    */
   display: block;
   position: relative;
-  color: var(--color); }
+  color: var(--color);
+}
 
 :host(.ion-color) {
-  color: var(--ion-color-base); }
+  color: var(--ion-color-base);
+}
 
 :host {
   --color: var(--ion-text-color, #000);
@@ -21,4 +23,5 @@
   padding-bottom: 0;
   font-size: 28px;
   font-weight: 700;
-  line-height: 1.2; }
+  line-height: 1.2;
+}

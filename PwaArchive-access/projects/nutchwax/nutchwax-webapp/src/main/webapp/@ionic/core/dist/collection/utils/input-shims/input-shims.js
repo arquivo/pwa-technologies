@@ -6,7 +6,8 @@ const INPUT_BLURRING = true;
 const SCROLL_ASSIST = true;
 const SCROLL_PADDING = true;
 const HIDE_CARET = true;
-export function startInputShims(doc, config) {
+export function startInputShims(config) {
+    const doc = document;
     const keyboardHeight = config.getNumber('keyboardHeight', 290);
     const scrollAssist = config.getBoolean('scrollAssist', true);
     const hideCaret = config.getBoolean('hideCaretOnScroll', true);
@@ -15,7 +16,7 @@ export function startInputShims(doc, config) {
     const hideCaretMap = new WeakMap();
     const scrollAssistMap = new WeakMap();
     function registerInput(componentEl) {
-        const inputEl = (componentEl.shadowRoot || componentEl).querySelector('input');
+        const inputEl = (componentEl.shadowRoot || componentEl).querySelector('input') || (componentEl.shadowRoot || componentEl).querySelector('textarea');
         const scrollEl = componentEl.closest('ion-content');
         if (!inputEl) {
             return;
@@ -46,12 +47,15 @@ export function startInputShims(doc, config) {
         }
     }
     if (inputBlurring && INPUT_BLURRING) {
-        enableInputBlurring(doc);
+        enableInputBlurring();
     }
     if (scrollPadding && SCROLL_PADDING) {
-        enableScrollPadding(doc, keyboardHeight);
+        enableScrollPadding(keyboardHeight);
     }
-    const inputs = Array.from(doc.querySelectorAll('ion-input'));
+    // Input might be already loaded in the DOM before ion-device-hacks did.
+    // At this point we need to look for all of the inputs not registered yet
+    // and register them.
+    const inputs = Array.from(doc.querySelectorAll('ion-input, ion-textarea'));
     for (const input of inputs) {
         registerInput(input);
     }

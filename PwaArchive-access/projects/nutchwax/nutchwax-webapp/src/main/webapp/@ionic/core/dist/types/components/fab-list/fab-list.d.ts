@@ -1,9 +1,8 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
 export declare class FabList implements ComponentInterface {
     el: HTMLIonFabElement;
     /**
-     * If `true`, the fab list will be show all fab buttons in the list.
+     * If `true`, the fab list will show all fab buttons in the list.
      */
     activated: boolean;
     protected activatedChanged(activated: boolean): void;
@@ -17,5 +16,5 @@ export declare class FabList implements ComponentInterface {
             'fab-list-active': boolean;
         };
     };
-    render(): JSX.Element;
+    render(): any;
 }

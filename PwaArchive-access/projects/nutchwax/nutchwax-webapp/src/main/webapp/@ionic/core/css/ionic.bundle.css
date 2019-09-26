@@ -112,6 +112,8 @@ ion-range {
      padding: 5px 0 0 0 !important;   
 }
 
+.select-icon-inner { border-top: transparent!important; }
+
 /* New style override IONIC V4: removing paddings left and right */
 ion-item { 
    --padding-start:13px/*0*/ !important;  
@@ -139,6 +141,10 @@ ion-item{
     contain: layout size style;
     overflow: hidden;
     z-index: 0
+}
+
+ion-item item-native {
+    --background: none !important;
 }
 
 .ion-page-hidden,
@@ -1197,3 +1203,4 @@ sub {
 .ion-hide-xl-down {
     display: none!important
 }
+.select-icon-inner {display: none !important}

@@ -1,4 +1,3 @@
-import { QueueApi } from '../../stencil.core';
 import { GESTURE_CONTROLLER } from './gesture-controller';
 export declare function createGesture(config: GestureConfig): Gesture;
 export interface GestureDetail {
@@ -24,7 +23,6 @@ export interface Gesture {
 export interface GestureConfig {
     el: Node;
     disableScroll?: boolean;
-    queue: QueueApi;
     direction?: 'x' | 'y';
     gestureName: string;
     gesturePriority?: number;

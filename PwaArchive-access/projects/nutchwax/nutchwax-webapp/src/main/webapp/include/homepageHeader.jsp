@@ -7,7 +7,7 @@
                 <div id="form_container"> 
                     <div id="searchBarBlock" class="input-group stylish-input-group">
                         
-                            <input name="query" id="txtSearch" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autocapitalize="off" autocomplete="off" autocorrect="off" autofocus="off"> 
+                            <input name="query" id="txtSearch" type="search" class="form-control no-radius search-input" placeholder="<fmt:message key='home.search.placeholder'/>" autocapitalize="off" autocomplete="off" autocorrect="off" autofocus="on"> 
                             <input type="hidden" id="l" name="l" value="<%=language%>">
                     </div>
                     <!-- starts search lupe and "x" close button -->
@@ -18,11 +18,12 @@
                                       <span class="glyphicon glyphicon-search white"></span>
                                   </button>  
                      </span> 
-                     </div>                                       
+                     </div>                 
+                     <!-- ends Paginas and images links option -->                       
                     </div>                                
                  </form>    
 
-    <script src="/include/clearForm.js"></script>      
+<script src="/include/clearForm.js"></script>      
             </div>
         </div>
-    </div>
+</div>

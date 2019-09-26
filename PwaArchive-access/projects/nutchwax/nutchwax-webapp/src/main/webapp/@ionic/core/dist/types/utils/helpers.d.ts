@@ -18,7 +18,7 @@ export declare function pointerCoord(ev: any): {
  * @param side the side
  * @param isRTL whether the application dir is rtl
  */
-export declare function isEndSide(win: Window, side: Side): boolean;
+export declare function isEndSide(side: Side): boolean;
 export declare function deferEvent(event: EventEmitter): EventEmitter;
 export declare function debounceEvent(event: EventEmitter, wait: number): EventEmitter;
 export declare function debounce(func: (...args: any[]) => void, wait?: number): (...args: any[]) => any;

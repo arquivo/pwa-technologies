@@ -1,12 +1,11 @@
-import '../../stencil.core';
-import { ComponentInterface, EventEmitter, EventListenerEnable, QueueApi } from '../../stencil.core';
-import { Config, MenuChangeEventDetail, MenuControllerI, MenuI, Mode, Side } from '../../interface';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { MenuChangeEventDetail, MenuControllerI, MenuI, Side } from '../../interface';
 export declare class Menu implements ComponentInterface, MenuI {
     private animation?;
     private lastOnEnd;
     private gesture?;
     private blocker;
-    mode: Mode;
+    private mode;
     isAnimating: boolean;
     width: number;
     _isOpen: boolean;
@@ -17,13 +16,7 @@ export declare class Menu implements ComponentInterface, MenuI {
     el: HTMLIonMenuElement;
     isPaneVisible: boolean;
     isEndSide: boolean;
-    config: Config;
-    isServer: boolean;
     lazyMenuCtrl: HTMLIonMenuControllerElement;
-    enableListener: EventListenerEnable;
-    win: Window;
-    queue: QueueApi;
-    doc: Document;
     /**
      * The content's id the menu should use.
      */
@@ -139,5 +132,5 @@ export declare class Menu implements ComponentInterface, MenuI {
             'menu-pane-visible': boolean;
         };
     };
-    render(): JSX.Element[];
+    render(): any[];
 }

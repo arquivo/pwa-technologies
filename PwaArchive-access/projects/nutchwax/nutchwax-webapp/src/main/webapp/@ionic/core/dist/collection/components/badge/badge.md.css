@@ -3,10 +3,10 @@
    * @prop --background: Background of the badge
    * @prop --color: Text color of the badge
    *
-   * @prop --padding-top: Padding top of the badge
-   * @prop --padding-end: Padding end of the badge
-   * @prop --padding-bottom: Padding bottom of the badge
-   * @prop --padding-start: Padding start of the badge
+   * @prop --padding-top: Top padding of the badge
+   * @prop --padding-end: Right padding if direction is left-to-right, and left padding if direction is right-to-left of the badge
+   * @prop --padding-bottom: Bottom padding of the badge
+   * @prop --padding-start: Left padding if direction is left-to-right, and right padding if direction is right-to-left of the badge
    */
   --background: var(--ion-color-primary, #3880ff);
   --color: var(--ion-color-primary-contrast, #fff);
@@ -31,26 +31,32 @@
   text-align: center;
   white-space: nowrap;
   contain: content;
-  vertical-align: baseline; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: var(--padding-start);
-      padding-inline-start: var(--padding-start);
-      -webkit-padding-end: var(--padding-end);
-      padding-inline-end: var(--padding-end); } }
+  vertical-align: baseline;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: var(--padding-start);
+    padding-inline-start: var(--padding-start);
+    -webkit-padding-end: var(--padding-end);
+    padding-inline-end: var(--padding-end);
+  }
+}
 
 :host(.ion-color) {
   background: var(--ion-color-base);
-  color: var(--ion-color-contrast); }
+  color: var(--ion-color-contrast);
+}
 
 :host(:empty) {
-  display: none; }
+  display: none;
+}
 
 :host {
   --padding-top: 3px;
   --padding-end: 4px;
   --padding-bottom: 4px;
   --padding-start: 4px;
-  border-radius: 4px; }
+  border-radius: 4px;
+}

@@ -1,9 +1,34 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
 export declare class SkeletonText implements ComponentInterface {
+    el: HTMLElement;
     /**
-     * Width for the element to render at.
+     * If `true`, the skeleton text will animate.
      */
-    width: string;
-    render(): JSX.Element;
+    animated: boolean;
+    /**
+     * @deprecated Use CSS instead. The width of the skeleton text. If supplied, it will override the CSS style.
+     */
+    width?: string;
+    calculateWidth(): {
+        style: {
+            width: string;
+        };
+    } | undefined;
+    render(): any;
+    hostData(): {
+        class: {
+            [x: string]: boolean;
+            'skeleton-text-animated': boolean;
+            'in-media': boolean;
+        };
+    } | {
+        style: {
+            width: string;
+        };
+        class: {
+            [x: string]: boolean;
+            'skeleton-text-animated': boolean;
+            'in-media': boolean;
+        };
+    };
 }

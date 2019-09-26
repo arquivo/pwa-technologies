@@ -1,15 +1,11 @@
-import '../../stencil.core';
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
-import { Color, Mode, TabBarChangedEventDetail } from '../../interface';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { Color, TabBarChangedEventDetail } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class TabBar implements ComponentInterface {
     el: HTMLElement;
-    queue: QueueApi;
-    doc: Document;
     keyboardVisible: boolean;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * The color to use from your application's color palette.
      * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
@@ -37,9 +33,10 @@ export declare class TabBar implements ComponentInterface {
             'tab-bar-translucent': boolean;
             'tab-bar-hidden': boolean;
         } | {
+            [x: string]: boolean;
             'tab-bar-translucent': boolean;
             'tab-bar-hidden': boolean;
         };
     };
-    render(): JSX.Element;
+    render(): any;
 }

@@ -1,4 +1,5 @@
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { Side } from '../../interface';
 declare const enum SlidingState {
     Disabled = 2,
     Enabled = 4,
@@ -21,9 +22,8 @@ export declare class ItemSliding implements ComponentInterface {
     private gesture?;
     el: HTMLIonItemSlidingElement;
     state: SlidingState;
-    queue: QueueApi;
     /**
-     * If `true`, the user cannot interact with the sliding-item.
+     * If `true`, the user cannot interact with the sliding item.
      */
     disabled: boolean;
     disabledChanged(): void;
@@ -46,6 +46,12 @@ export declare class ItemSliding implements ComponentInterface {
      */
     getSlidingRatio(): Promise<number>;
     /**
+     * Open the sliding item.
+     *
+     * @param side The side of the options to open. If a side is not provided, it will open the first set of options it finds within the item.
+     */
+    open(side: Side | undefined): Promise<void>;
+    /**
      * Close the sliding item. Items can also be closed from the [List](../../list/List).
      */
     close(): Promise<void>;
@@ -53,6 +59,13 @@ export declare class ItemSliding implements ComponentInterface {
      * Close all of the sliding items in the list. Items can also be closed from the [List](../../list/List).
      */
     closeOpened(): Promise<boolean>;
+    /**
+     * Given an optional side, return the ion-item-options element.
+     *
+     * @param side This side of the options to get. If a side is not provided it will
+     * return the first one available.
+     */
+    private getOptions;
     private updateOptions;
     private canStart;
     private onStart;
@@ -63,6 +76,7 @@ export declare class ItemSliding implements ComponentInterface {
     private getSlidingRatioSync;
     hostData(): {
         class: {
+            [x: string]: boolean;
             'item-sliding-active-slide': boolean;
             'item-sliding-active-options-end': boolean;
             'item-sliding-active-options-start': boolean;

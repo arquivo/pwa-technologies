@@ -6,13 +6,12 @@ export class NavPop {
         }
     }
     static get is() { return "ion-nav-pop"; }
-    static get properties() { return {
-        "el": {
-            "elementRef": true
-        }
-    }; }
+    static get elementRef() { return "el"; }
     static get listeners() { return [{
-            "name": "child:click",
-            "method": "pop"
+            "name": "click",
+            "method": "pop",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }]; }
 }

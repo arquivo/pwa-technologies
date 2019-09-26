@@ -1,36 +1,78 @@
-import { createThemedClasses } from '../../utils/theme';
+import { h } from '@stencil/core';
+import { config } from '../../global/config';
+import { getIonMode } from '../../global/ionic-global';
+import { sanitizeDOMString } from '../../utils/sanitization';
 export class InfiniteScrollContent {
     componentDidLoad() {
         if (this.loadingSpinner === undefined) {
-            this.loadingSpinner = this.config.get('infiniteLoadingSpinner', this.config.get('spinner', 'lines'));
+            const mode = getIonMode(this);
+            this.loadingSpinner = config.get('infiniteLoadingSpinner', config.get('spinner', mode === 'ios' ? 'lines' : 'crescent'));
         }
     }
     hostData() {
+        const mode = getIonMode(this);
         return {
-            class: createThemedClasses(this.mode, 'infinite-scroll-content')
+            class: {
+                [mode]: true,
+                // Used internally for styling
+                [`infinite-scroll-content-${mode}`]: true
+            }
         };
     }
     render() {
         return (h("div", { class: "infinite-loading" },
             this.loadingSpinner && (h("div", { class: "infinite-loading-spinner" },
                 h("ion-spinner", { name: this.loadingSpinner }))),
-            this.loadingText && (h("div", { class: "infinite-loading-text", innerHTML: this.loadingText }))));
+            this.loadingText && (h("div", { class: "infinite-loading-text", innerHTML: sanitizeDOMString(this.loadingText) }))));
     }
     static get is() { return "ion-infinite-scroll-content"; }
+    static get originalStyleUrls() { return {
+        "ios": ["infinite-scroll-content.ios.scss"],
+        "md": ["infinite-scroll-content.md.scss"]
+    }; }
+    static get styleUrls() { return {
+        "ios": ["infinite-scroll-content.ios.css"],
+        "md": ["infinite-scroll-content.md.css"]
+    }; }
     static get properties() { return {
-        "config": {
-            "context": "config"
-        },
         "loadingSpinner": {
-            "type": String,
-            "attr": "loading-spinner",
-            "mutable": true
+            "type": "string",
+            "mutable": true,
+            "complexType": {
+                "original": "SpinnerTypes | null",
+                "resolved": "\"bubbles\" | \"circles\" | \"crescent\" | \"dots\" | \"lines\" | \"lines-small\" | null | undefined",
+                "references": {
+                    "SpinnerTypes": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "An animated SVG spinner that shows while loading."
+            },
+            "attribute": "loading-spinner",
+            "reflect": false
         },
         "loadingText": {
-            "type": String,
-            "attr": "loading-text"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Optional text to display while loading.\n`loadingText` can accept either plaintext or HTML as a string.\nTo display characters normally reserved for HTML, they\nmust be escaped. For example `<Ionic>` would become\n`&lt;Ionic&gt;`\n\nFor more information: [Security Documentation](https://ionicframework.com/docs/faq/security)"
+            },
+            "attribute": "loading-text",
+            "reflect": false
         }
     }; }
-    static get style() { return "/**style-placeholder:ion-infinite-scroll-content:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-infinite-scroll-content:**/"; }
 }

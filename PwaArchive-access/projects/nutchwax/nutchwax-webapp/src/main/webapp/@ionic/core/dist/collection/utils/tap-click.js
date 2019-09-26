@@ -1,5 +1,5 @@
 import { now, pointerCoord } from './helpers';
-export function startTapClick(doc, config) {
+export function startTapClick(config) {
     let lastTouch = -MOUSE_WAIT * 10;
     let lastActivated = 0;
     let scrollingEl;
@@ -11,6 +11,7 @@ export function startTapClick(doc, config) {
     function isScrolling() {
         return scrollingEl !== undefined && scrollingEl.parentElement !== null;
     }
+    // Touch Events
     function onTouchStart(ev) {
         lastTouch = now(ev);
         pointerDown(ev);
@@ -50,12 +51,14 @@ export function startTapClick(doc, config) {
         setActivatedElement(undefined, ev);
     }
     function setActivatedElement(el, ev) {
+        // do nothing
         if (el && el === activatableEle) {
             return;
         }
         clearTimeout(activeDefer);
         activeDefer = undefined;
         const { x, y } = pointerCoord(ev);
+        // deactivate selected
         if (activatableEle) {
             if (clearDefers.has(activatableEle)) {
                 throw new Error('internal error');
@@ -65,6 +68,7 @@ export function startTapClick(doc, config) {
             }
             removeActivated(true);
         }
+        // activate
         if (el) {
             const deferId = clearDefers.get(el);
             if (deferId) {
@@ -108,6 +112,7 @@ export function startTapClick(doc, config) {
             active.classList.remove(ACTIVATED);
         }
     }
+    const doc = document;
     doc.addEventListener('ionScrollStart', ev => {
         scrollingEl = ev.target;
         cancelActive();

@@ -1,5 +1,4 @@
-import '../../stencil.core';
-import { ComponentInterface, EventListenerEnable, QueueApi } from '../../stencil.core';
+import { ComponentInterface } from '../../stencil.core';
 import { DomRenderFn, HeaderFn, ItemHeightFn, ItemRenderFn } from '../../interface';
 export declare class VirtualScroll implements ComponentInterface {
     private contentEl?;
@@ -15,11 +14,9 @@ export declare class VirtualScroll implements ComponentInterface {
     private currentScrollTop;
     private indexDirty;
     private lastItemLen;
-    el: HTMLStencilElement;
+    private rmEvent;
+    el: HTMLIonVirtualScrollElement;
     totalHeight: number;
-    queue: QueueApi;
-    enableListener: EventListenerEnable;
-    win: Window;
     /**
      * It is important to provide this
      * if virtual item height will be significantly larger than the default
@@ -115,7 +112,6 @@ export declare class VirtualScroll implements ComponentInterface {
     componentDidLoad(): Promise<void>;
     componentDidUpdate(): void;
     componentDidUnload(): void;
-    onScroll(): void;
     onResize(): void;
     /**
      * Returns the position of the virtual item at the given index.
@@ -127,7 +123,7 @@ export declare class VirtualScroll implements ComponentInterface {
      *
      * The subset of items to be updated can are specifing by an offset and a length.
      */
-    checkRange(offset: number, len?: number): void;
+    checkRange(offset: number, len?: number): Promise<void>;
     /**
      * This method marks the tail the items array as dirty, so they can be re-rendered.
      *
@@ -137,7 +133,8 @@ export declare class VirtualScroll implements ComponentInterface {
      * virtualScroll.checkRange(lastItemLen);
      * ```
      */
-    checkEnd(): void;
+    checkEnd(): Promise<void>;
+    private onScroll;
     private updateVirtualScroll;
     private readVS;
     private writeVS;
@@ -155,5 +152,5 @@ export declare class VirtualScroll implements ComponentInterface {
             height: string;
         };
     };
-    render(): JSX.Element | undefined;
+    render(): any;
 }

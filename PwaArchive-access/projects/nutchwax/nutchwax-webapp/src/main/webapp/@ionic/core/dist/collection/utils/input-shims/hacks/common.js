@@ -3,7 +3,6 @@ export function relocateInput(componentEl, inputEl, shouldRelocate, inputRelativ
     if (cloneMap.has(componentEl) === shouldRelocate) {
         return;
     }
-    console.debug(`native-input, hideCaret, shouldHideCaret: ${shouldRelocate}, input value: ${inputEl.value}`);
     if (shouldRelocate) {
         addClone(componentEl, inputEl, inputRelativeY);
     }
@@ -15,7 +14,17 @@ export function isFocused(input) {
     return input === input.getRootNode().activeElement;
 }
 function addClone(componentEl, inputEl, inputRelativeY) {
+    // this allows for the actual input to receive the focus from
+    // the user's touch event, but before it receives focus, it
+    // moves the actual input to a location that will not screw
+    // up the app's layout, and does not allow the native browser
+    // to attempt to scroll the input into place (messing up headers/footers)
+    // the cloned input fills the area of where native input should be
+    // while the native input fakes out the browser by relocating itself
+    // before it receives the actual focus event
+    // We hide the focused input (with the visible caret) invisible by making it scale(0),
     const parentEl = inputEl.parentNode;
+    // DOM WRITES
     const clonedEl = inputEl.cloneNode(false);
     clonedEl.classList.add('cloned-input');
     clonedEl.tabIndex = -1;

@@ -7,7 +7,8 @@
   flex: 1;
   align-items: center;
   transform: translateZ(0);
-  color: var(--color); }
+  color: var(--color);
+}
 
 :host(.title-ios) {
   left: 0;
@@ -22,39 +23,51 @@
   transform: translateZ(0);
   font-size: 17px;
   font-weight: 600;
-  letter-spacing: -.03em;
+  letter-spacing: -0.03em;
   text-align: center;
   box-sizing: border-box;
-  pointer-events: none; }
-  :host([dir=rtl].title-ios) {
-    right: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host(.title-ios) {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 90px;
-      padding-inline-start: 90px;
-      -webkit-padding-end: 90px;
-      padding-inline-end: 90px; } }
+  pointer-events: none;
+}
+:host-context([dir=rtl]):host(.title-ios), :host-context([dir=rtl]).title-ios {
+  left: unset;
+  right: unset;
+  right: 0;
+}
+
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host(.title-ios) {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 90px;
+    padding-inline-start: 90px;
+    -webkit-padding-end: 90px;
+    padding-inline-end: 90px;
+  }
+}
 
 :host(.title-md) {
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-top: 0;
   padding-bottom: 0;
   font-size: 20px;
-  font-weight: 500; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host(.title-md) {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 12px;
-      padding-inline-start: 12px;
-      -webkit-padding-end: 12px;
-      padding-inline-end: 12px; } }
+  font-weight: 500;
+  letter-spacing: 0.0125em;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host(.title-md) {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 20px;
+    padding-inline-start: 20px;
+    -webkit-padding-end: 20px;
+    padding-inline-end: 20px;
+  }
+}
 
 :host(.ion-color) {
-  color: var(--ion-color-base); }
+  color: var(--ion-color-base);
+}
 
 .toolbar-title {
   display: block;
@@ -62,4 +75,5 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  pointer-events: auto; }
+  pointer-events: auto;
+}

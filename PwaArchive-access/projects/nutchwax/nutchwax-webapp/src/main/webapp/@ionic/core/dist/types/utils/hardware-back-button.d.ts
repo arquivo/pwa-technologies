@@ -1,1 +1,1 @@
-export declare function startHardwareBackButton(win: Window): void;
+export declare function startHardwareBackButton(): void;

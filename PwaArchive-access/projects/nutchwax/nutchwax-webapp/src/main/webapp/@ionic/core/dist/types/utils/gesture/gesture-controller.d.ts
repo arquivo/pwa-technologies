@@ -1,11 +1,9 @@
 declare class GestureController {
-    private doc;
     private gestureId;
     private requestedStart;
     private disabledGestures;
     private disabledScroll;
     private capturedId?;
-    constructor(doc: Document);
     /**
      * Creates a gesture delegate based on the GestureConfig passed
      */

@@ -1,3 +1,6 @@
+/**
+ * iOS Toast Leave Animation
+ */
 export function iosLeaveAnimation(AnimationC, baseEl, position) {
     const baseAnimation = new AnimationC();
     const wrapperAnimation = new AnimationC();

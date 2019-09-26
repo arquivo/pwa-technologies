@@ -1,8 +1,9 @@
 :host {
   /**
    * @prop --background: Background of the action sheet group
-   * @prop --background-activated: Background of the activated action sheet button
+   * @prop --background-activated: Background of the action sheet button when pressed
    * @prop --background-selected: Background of the selected action sheet button
+   *
    * @prop --color: Color of the action sheet text
    *
    * @prop --min-width: Minimum width of the action sheet
@@ -31,10 +32,12 @@
   font-family: var(--ion-font-family, inherit);
   touch-action: none;
   user-select: none;
-  z-index: 1000; }
+  z-index: 1000;
+}
 
 :host(.overlay-hidden) {
-  display: none; }
+  display: none;
+}
 
 .action-sheet-wrapper {
   left: 0;
@@ -54,24 +57,29 @@
   min-height: var(--min-height);
   max-height: var(--max-height);
   z-index: 10;
-  pointer-events: none; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .action-sheet-wrapper {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: auto;
-      margin-inline-start: auto;
-      -webkit-margin-end: auto;
-      margin-inline-end: auto; } }
+  pointer-events: none;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .action-sheet-wrapper {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: auto;
+    margin-inline-start: auto;
+    -webkit-margin-end: auto;
+    margin-inline-end: auto;
+  }
+}
 
 .action-sheet-button {
   width: 100%;
   border: 0;
   outline: none;
-  font-family: inherit; }
+  font-family: inherit;
+}
 
 .action-sheet-button.activated {
-  background: var(--background-activated); }
+  background: var(--background-activated);
+}
 
 .action-sheet-button-inner {
   display: flex;
@@ -80,37 +88,44 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+}
 
 .action-sheet-container {
   display: flex;
   flex-flow: column;
   justify-content: flex-end;
   height: 100%;
-  max-height: 100%; }
+  max-height: 100%;
+}
 
 .action-sheet-group {
   flex-shrink: 2;
   overscroll-behavior-y: contain;
-  overflow-y: scroll;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   pointer-events: all;
-  background: var(--background); }
+  background: var(--background);
+}
 
 .action-sheet-group::-webkit-scrollbar {
-  display: none; }
+  display: none;
+}
 
 .action-sheet-group-cancel {
   flex-shrink: 0;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .action-sheet-selected {
-  background: var(--background-selected); }
+  background: var(--background-selected);
+}
 
 :host {
   --background: var(--ion-overlay-background-color, #fff);
   --background-selected: var(--background, );
-  --background-activated: var(--background); }
+  --background-activated: var(--background);
+}
 
 .action-sheet-title {
   padding-left: 16px;
@@ -120,29 +135,33 @@
   height: 60px;
   color: var(--color, rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.54));
   font-size: 16px;
-  text-align: start; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .action-sheet-title {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 16px;
-      padding-inline-start: 16px;
-      -webkit-padding-end: 16px;
-      padding-inline-end: 16px; } }
+  text-align: start;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .action-sheet-title {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 16px;
+    padding-inline-start: 16px;
+    -webkit-padding-end: 16px;
+    padding-inline-end: 16px;
+  }
+}
 
 .action-sheet-sub-title {
   padding-left: 0;
   padding-right: 0;
   padding-top: 16px;
   padding-bottom: 0;
-  font-size: 14px; }
+  font-size: 14px;
+}
 
 .action-sheet-group:first-child {
-  padding-top: 0; }
-
+  padding-top: 0;
+}
 .action-sheet-group:last-child {
-  padding-bottom: 0; }
-
+  padding-bottom: 0;
+}
 .action-sheet-button {
   padding-left: 16px;
   padding-right: 16px;
@@ -155,15 +174,18 @@
   font-size: 16px;
   text-align: start;
   contain: strict;
-  overflow: hidden; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .action-sheet-button {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 16px;
-      padding-inline-start: 16px;
-      -webkit-padding-end: 16px;
-      padding-inline-end: 16px; } }
+  overflow: hidden;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .action-sheet-button {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 16px;
+    padding-inline-start: 16px;
+    -webkit-padding-end: 16px;
+    padding-inline-end: 16px;
+  }
+}
 
 .action-sheet-icon {
   padding-bottom: 4px;
@@ -172,18 +194,23 @@
   margin-top: 0;
   margin-bottom: 0;
   color: var(--color, rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.54));
-  font-size: 24px; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .action-sheet-icon {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: 0;
-      margin-inline-start: 0;
-      -webkit-margin-end: 32px;
-      margin-inline-end: 32px; } }
+  font-size: 24px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .action-sheet-icon {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 0;
+    margin-inline-start: 0;
+    -webkit-margin-end: 32px;
+    margin-inline-end: 32px;
+  }
+}
 
 .action-sheet-button-inner {
-  justify-content: flex-start; }
+  justify-content: flex-start;
+}
 
 .action-sheet-selected {
-  font-weight: bold; }
+  font-weight: bold;
+}

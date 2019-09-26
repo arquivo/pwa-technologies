@@ -1,6 +1,7 @@
-export function startHardwareBackButton(win) {
+export function startHardwareBackButton() {
+    const doc = document;
     let busy = false;
-    win.document.addEventListener('backbutton', () => {
+    doc.addEventListener('backbutton', () => {
         if (busy) {
             return;
         }
@@ -13,7 +14,7 @@ export function startHardwareBackButton(win) {
                 }
             }
         });
-        win.document.dispatchEvent(ev);
+        doc.dispatchEvent(ev);
         if (handlers.length > 0) {
             let selectedPriority = Number.MIN_SAFE_INTEGER;
             let selectedHandler;

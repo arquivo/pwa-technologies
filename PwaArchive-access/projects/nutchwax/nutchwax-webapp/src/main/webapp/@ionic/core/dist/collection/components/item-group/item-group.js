@@ -1,12 +1,24 @@
-import { createThemedClasses } from '../../utils/theme';
+import { getIonMode } from '../../global/ionic-global';
 export class ItemGroup {
     hostData() {
+        const mode = getIonMode(this);
         return {
             'role': 'group',
-            class: Object.assign({}, createThemedClasses(this.mode, 'item-group'), { 'item': true })
+            class: {
+                [mode]: true,
+                // Used internally for styling
+                [`item-group-${mode}`]: true,
+                'item': true
+            }
         };
     }
     static get is() { return "ion-item-group"; }
-    static get style() { return "/**style-placeholder:ion-item-group:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-item-group:**/"; }
+    static get originalStyleUrls() { return {
+        "ios": ["item-group.ios.scss"],
+        "md": ["item-group.md.scss"]
+    }; }
+    static get styleUrls() { return {
+        "ios": ["item-group.ios.css"],
+        "md": ["item-group.md.css"]
+    }; }
 }

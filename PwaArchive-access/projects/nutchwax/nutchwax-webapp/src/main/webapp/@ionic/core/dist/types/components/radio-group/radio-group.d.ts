@@ -31,5 +31,8 @@ export declare class RadioGroup implements ComponentInterface {
     hostData(): {
         'role': string;
         'aria-labelledby': string;
+        class: {
+            [x: string]: boolean;
+        };
     };
 }

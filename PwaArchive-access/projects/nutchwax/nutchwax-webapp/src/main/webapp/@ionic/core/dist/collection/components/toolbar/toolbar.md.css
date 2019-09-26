@@ -1,16 +1,21 @@
 :host {
   /**
    * @prop --background: Background of the toolbar
+   *
    * @prop --border-color: Color of the toolbar border
    * @prop --border-style: Style of the toolbar border
    * @prop --border-width: Width of the toolbar border
+   *
    * @prop --color: Color of the toolbar text
+   *
    * @prop --min-height: Minimum height of the toolbar
+   *
    * @prop --opacity: Opacity of the toolbar background
-   * @prop --padding-bottom: Bottom padding of the toolbar
-   * @prop --padding-end: End padding of the toolbar
-   * @prop --padding-start: Start padding of the toolbar
+   *
    * @prop --padding-top: Top padding of the toolbar
+   * @prop --padding-end: Right padding if direction is left-to-right, and left padding if direction is right-to-left of the toolbar
+   * @prop --padding-bottom: Bottom padding of the toolbar
+   * @prop --padding-start: Left padding if direction is left-to-right, and right padding if direction is right-to-left of the toolbar
    */
   --border-width: 0;
   --border-style: solid;
@@ -26,21 +31,26 @@
   font-family: var(--ion-font-family, inherit);
   contain: content;
   z-index: 10;
-  box-sizing: border-box; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: var(--ion-safe-area-left);
-      padding-inline-start: var(--ion-safe-area-left);
-      -webkit-padding-end: var(--ion-safe-area-right);
-      padding-inline-end: var(--ion-safe-area-right); } }
+  box-sizing: border-box;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: var(--ion-safe-area-left);
+    padding-inline-start: var(--ion-safe-area-left);
+    -webkit-padding-end: var(--ion-safe-area-right);
+    padding-inline-end: var(--ion-safe-area-right);
+  }
+}
 
 :host(.ion-color) {
-  color: var(--ion-color-contrast); }
+  color: var(--ion-color-contrast);
+}
 
 :host(.ion-color) .toolbar-background {
-  background: var(--ion-color-base); }
+  background: var(--ion-color-base);
+}
 
 .toolbar-container {
   padding-left: var(--padding-start);
@@ -57,15 +67,18 @@
   contain: content;
   overflow: hidden;
   z-index: 10;
-  box-sizing: border-box; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .toolbar-container {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: var(--padding-start);
-      padding-inline-start: var(--padding-start);
-      -webkit-padding-end: var(--padding-end);
-      padding-inline-end: var(--padding-end); } }
+  box-sizing: border-box;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .toolbar-container {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: var(--padding-start);
+    padding-inline-start: var(--padding-start);
+    -webkit-padding-end: var(--padding-end);
+    padding-inline-end: var(--padding-end);
+  }
+}
 
 .toolbar-background {
   left: 0;
@@ -81,49 +94,74 @@
   contain: strict;
   opacity: var(--opacity);
   z-index: -1;
-  pointer-events: none; }
-
-:host(.toolbar-segment) {
-  --min-height: auto; }
+  pointer-events: none;
+}
 
 ::slotted(ion-progress-bar) {
   left: 0;
   right: 0;
   bottom: 0;
-  position: absolute; }
+  position: absolute;
+}
 
 :host {
   --background: var(--ion-toolbar-background, var(--ion-background-color, #fff));
   --color: var(--ion-toolbar-color, var(--ion-text-color, #424242));
   --border-color: var(--ion-toolbar-border-color, var(--ion-border-color, var(--ion-color-step-150, #c1c4cd)));
-  --padding-top: 4px;
-  --padding-bottom: 4px;
-  --padding-start: 4px;
-  --padding-end: 4px;
-  --min-height: 56px; }
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --min-height: 56px;
+}
 
 .toolbar-content {
   flex: 1;
   order: 3;
   min-width: 0;
-  max-width: 100%; }
+  max-width: 100%;
+}
 
-:host(.toolbar-segment) {
-  --padding-top: 0;
-  --padding-bottom: 0;
-  --padding-start: 0;
-  --padding-end: 0; }
+::slotted(ion-segment) {
+  min-height: var(--min-height);
+}
 
-::slotted([slot="start"]) {
-  order: 2; }
+::slotted(.buttons-first-slot) {
+  margin-left: 4px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  ::slotted(.buttons-first-slot) {
+    margin-left: unset;
+    -webkit-margin-start: 4px;
+    margin-inline-start: 4px;
+  }
+}
 
-::slotted([slot="secondary"]) {
-  order: 4; }
+::slotted(.buttons-last-slot) {
+  margin-right: 4px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  ::slotted(.buttons-last-slot) {
+    margin-right: unset;
+    -webkit-margin-end: 4px;
+    margin-inline-end: 4px;
+  }
+}
 
-::slotted([slot="primary"]) {
+::slotted([slot=start]) {
+  order: 2;
+}
+
+::slotted([slot=secondary]) {
+  order: 4;
+}
+
+::slotted([slot=primary]) {
   order: 5;
-  text-align: end; }
+  text-align: end;
+}
 
-::slotted([slot="end"]) {
+::slotted([slot=end]) {
   order: 6;
-  text-align: end; }
+  text-align: end;
+}

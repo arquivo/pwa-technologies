@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/ionicons/-/ionicons-4.5.5.tgz",
   "_shasum": "b059958a54dd45cfa127acc0baf11503b8671e51",
   "_spec": "ionicons@4.5.5",
-  "_where": "/home/fmelo/testenodejs/node_modules/@ionic/core",
+  "_where": "/home/fmelo/node_modules/@ionic/core",
   "author": {
     "name": "Ben Sperry",
     "url": "https://twitter.com/benjsperry"

@@ -3,10 +3,12 @@ ion-item-sliding {
   position: relative;
   width: 100%;
   overflow: hidden;
-  user-select: none; }
+  user-select: none;
+}
 
 ion-item-sliding .item {
-  user-select: none; }
+  user-select: none;
+}
 
 .item-sliding-active-slide .item {
   position: relative;
@@ -14,22 +16,27 @@ ion-item-sliding .item {
   opacity: 1;
   z-index: 2;
   pointer-events: none;
-  will-change: transform; }
+  will-change: transform;
+}
 
 .item-sliding-active-swipe-end .item-options-end .item-option-expandable {
   /* stylelint-disable-next-line property-blacklist */
-  padding-left: 90%;
+  padding-left: 100%;
   order: 1;
-  transition-duration: .6s;
-  transition-property: padding-left; }
-  :host-context([dir=rtl]) .item-sliding-active-swipe-end .item-options-end .item-option-expandable {
-    order: -1; }
+  transition-duration: 0.6s;
+  transition-property: padding-left;
+}
+[dir=rtl] .item-sliding-active-swipe-end .item-options-end .item-option-expandable, :host-context([dir=rtl]) .item-sliding-active-swipe-end .item-options-end .item-option-expandable {
+  order: -1;
+}
 
 .item-sliding-active-swipe-start .item-options-start .item-option-expandable {
   /* stylelint-disable-next-line property-blacklist */
-  padding-right: 90%;
+  padding-right: 100%;
   order: -1;
-  transition-duration: .6s;
-  transition-property: padding-right; }
-  :host-context([dir=rtl]) .item-sliding-active-swipe-start .item-options-start .item-option-expandable {
-    order: 1; }
+  transition-duration: 0.6s;
+  transition-property: padding-right;
+}
+[dir=rtl] .item-sliding-active-swipe-start .item-options-start .item-option-expandable, :host-context([dir=rtl]) .item-sliding-active-swipe-start .item-options-start .item-option-expandable {
+  order: 1;
+}

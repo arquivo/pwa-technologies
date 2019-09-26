@@ -11,18 +11,37 @@ export class Router {
         this.busy = false;
         this.state = 0;
         this.lastState = 0;
+        /**
+         * By default `ion-router` will match the routes at the root path ("/").
+         * That can be changed when
+         *
+         */
         this.root = '/';
+        /**
+         * The router can work in two "modes":
+         * - With hash: `/index.html#/path/to/page`
+         * - Without hash: `/path/to/page`
+         *
+         * Using one or another might depend in the requirements of your app and/or where it's deployed.
+         *
+         * Usually "hash-less" navigation works better for SEO and it's more user friendly too, but it might
+         * requires additional server-side configuration in order to properly work.
+         *
+         * On the otherside hash-navigation is much easier to deploy, it even works over the file protocol.
+         *
+         * By default, this property is `true`, change to `false` to allow hash-less URLs.
+         */
         this.useHash = true;
     }
     async componentWillLoad() {
         console.debug('[ion-router] router will load');
-        await waitUntilNavNode(this.win);
+        await waitUntilNavNode();
         console.debug('[ion-router] found nav');
         await this.onRoutesChanged();
     }
     componentDidLoad() {
-        this.win.addEventListener('ionRouteRedirectChanged', debounce(this.onRedirectChanged.bind(this), 10));
-        this.win.addEventListener('ionRouteDataChanged', debounce(this.onRoutesChanged.bind(this), 100));
+        window.addEventListener('ionRouteRedirectChanged', debounce(this.onRedirectChanged.bind(this), 10));
+        window.addEventListener('ionRouteDataChanged', debounce(this.onRoutesChanged.bind(this), 100));
     }
     onPopState() {
         const direction = this.historyDirection();
@@ -33,6 +52,12 @@ export class Router {
     onBackButton(ev) {
         ev.detail.register(0, () => this.back());
     }
+    /**
+     * Navigate to the specified URL.
+     *
+     * @param url The url to navigate to.
+     * @param direction The direction of the animation. Defaults to `"forward"`.
+     */
     push(url, direction = 'forward') {
         if (url.startsWith('.')) {
             url = (new URL(url, window.location.href)).pathname;
@@ -42,22 +67,27 @@ export class Router {
         this.setPath(path, direction);
         return this.writeNavStateRoot(path, direction);
     }
+    /**
+     * Go back to previous page in the window.history.
+     */
     back() {
-        this.win.history.back();
+        window.history.back();
         return Promise.resolve(this.waitPromise);
     }
-    printDebug() {
+    /** @internal */
+    async printDebug() {
         console.debug('CURRENT PATH', this.getPath());
         console.debug('PREVIOUS PATH', this.previousPath);
         printRoutes(readRoutes(this.el));
         printRedirects(readRedirects(this.el));
     }
+    /** @internal */
     async navChanged(direction) {
         if (this.busy) {
             console.warn('[ion-router] router is busy, navChanged was cancelled');
             return false;
         }
-        const { ids, outlet } = await readNavState(this.win.document.body);
+        const { ids, outlet } = await readNavState(window.document.body);
         const routes = readRoutes(this.el);
         const chain = routerIDsToChain(ids, routes);
         if (!chain) {
@@ -84,7 +114,7 @@ export class Router {
         return this.writeNavStateRoot(this.getPath(), ROUTER_INTENT_NONE);
     }
     historyDirection() {
-        const win = this.win;
+        const win = window;
         if (win.history.state === null) {
             this.state++;
             win.history.replaceState(this.state, win.document.title, win.document.location && win.document.location.href);
@@ -107,6 +137,7 @@ export class Router {
             console.error('[ion-router] URL is not part of the routing set');
             return false;
         }
+        // lookup redirect rule
         const redirects = readRedirects(this.el);
         const redirect = routeRedirect(path, redirects);
         let redirectFrom = null;
@@ -115,13 +146,15 @@ export class Router {
             redirectFrom = redirect.from;
             path = redirect.to;
         }
+        // lookup route chain
         const routes = readRoutes(this.el);
         const chain = routerPathToChain(path, routes);
         if (!chain) {
             console.error('[ion-router] the path does not match any route');
             return false;
         }
-        return this.safeWriteNavState(this.win.document.body, chain, direction, path, redirectFrom);
+        // write DOM give
+        return this.safeWriteNavState(document.body, chain, direction, path, redirectFrom);
     }
     async safeWriteNavState(node, chain, direction, path, redirectFrom, index = 0) {
         const unlock = await this.lock();
@@ -150,6 +183,7 @@ export class Router {
             return false;
         }
         this.busy = true;
+        // generate route event and emit will change
         const routeEvent = this.routeChangeEvent(path, redirectFrom);
         if (routeEvent) {
             this.ionRouteWillChange.emit(routeEvent);
@@ -159,6 +193,7 @@ export class Router {
         if (changed) {
             console.debug('[ion-router] route changed', path);
         }
+        // emit did change
         if (routeEvent) {
             this.ionRouteDidChange.emit(routeEvent);
         }
@@ -166,10 +201,10 @@ export class Router {
     }
     setPath(path, direction) {
         this.state++;
-        writePath(this.win.history, this.root, this.useHash, path, direction, this.state);
+        writePath(window.history, this.root, this.useHash, path, direction, this.state);
     }
     getPath() {
-        return readPath(this.win.location, this.root, this.useHash);
+        return readPath(window.location, this.root, this.useHash);
     }
     routeChangeEvent(path, redirectFromPath) {
         const from = this.previousPath;
@@ -187,57 +222,197 @@ export class Router {
     }
     static get is() { return "ion-router"; }
     static get properties() { return {
-        "back": {
-            "method": true
-        },
-        "config": {
-            "context": "config"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "navChanged": {
-            "method": true
-        },
-        "printDebug": {
-            "method": true
-        },
-        "push": {
-            "method": true
-        },
-        "queue": {
-            "context": "queue"
-        },
         "root": {
-            "type": String,
-            "attr": "root"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "By default `ion-router` will match the routes at the root path (\"/\").\nThat can be changed when"
+            },
+            "attribute": "root",
+            "reflect": false,
+            "defaultValue": "'/'"
         },
         "useHash": {
-            "type": Boolean,
-            "attr": "use-hash"
-        },
-        "win": {
-            "context": "window"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The router can work in two \"modes\":\n- With hash: `/index.html#/path/to/page`\n- Without hash: `/path/to/page`\n\nUsing one or another might depend in the requirements of your app and/or where it's deployed.\n\nUsually \"hash-less\" navigation works better for SEO and it's more user friendly too, but it might\nrequires additional server-side configuration in order to properly work.\n\nOn the otherside hash-navigation is much easier to deploy, it even works over the file protocol.\n\nBy default, this property is `true`, change to `false` to allow hash-less URLs."
+            },
+            "attribute": "use-hash",
+            "reflect": false,
+            "defaultValue": "true"
         }
     }; }
     static get events() { return [{
-            "name": "ionRouteWillChange",
             "method": "ionRouteWillChange",
+            "name": "ionRouteWillChange",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Event emitted when the route is about to change"
+            },
+            "complexType": {
+                "original": "RouterEventDetail",
+                "resolved": "RouterEventDetail",
+                "references": {
+                    "RouterEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }, {
-            "name": "ionRouteDidChange",
             "method": "ionRouteDidChange",
+            "name": "ionRouteDidChange",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the route had changed"
+            },
+            "complexType": {
+                "original": "RouterEventDetail",
+                "resolved": "RouterEventDetail",
+                "references": {
+                    "RouterEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }]; }
+    static get methods() { return {
+        "push": {
+            "complexType": {
+                "signature": "(url: string, direction?: RouterDirection) => Promise<boolean>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "url The url to navigate to.",
+                                "name": "param"
+                            }],
+                        "text": "The url to navigate to."
+                    }, {
+                        "tags": [{
+                                "text": "direction The direction of the animation. Defaults to `\"forward\"`.",
+                                "name": "param"
+                            }],
+                        "text": "The direction of the animation. Defaults to `\"forward\"`."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "RouterDirection": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "Navigate to the specified URL.",
+                "tags": [{
+                        "name": "param",
+                        "text": "url The url to navigate to."
+                    }, {
+                        "name": "param",
+                        "text": "direction The direction of the animation. Defaults to `\"forward\"`."
+                    }]
+            }
+        },
+        "back": {
+            "complexType": {
+                "signature": "() => Promise<void>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "Go back to previous page in the window.history.",
+                "tags": []
+            }
+        },
+        "printDebug": {
+            "complexType": {
+                "signature": "() => Promise<void>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "",
+                "tags": [{
+                        "name": "internal",
+                        "text": undefined
+                    }]
+            }
+        },
+        "navChanged": {
+            "complexType": {
+                "signature": "(direction: RouterDirection) => Promise<boolean>",
+                "parameters": [{
+                        "tags": [],
+                        "text": ""
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "RouterDirection": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "",
+                "tags": [{
+                        "name": "internal",
+                        "text": undefined
+                    }]
+            }
+        }
+    }; }
+    static get elementRef() { return "el"; }
     static get listeners() { return [{
-            "name": "window:popstate",
-            "method": "onPopState"
+            "name": "popstate",
+            "method": "onPopState",
+            "target": "window",
+            "capture": false,
+            "passive": false
         }, {
-            "name": "document:ionBackButton",
-            "method": "onBackButton"
+            "name": "ionBackButton",
+            "method": "onBackButton",
+            "target": "document",
+            "capture": false,
+            "passive": false
         }]; }
 }

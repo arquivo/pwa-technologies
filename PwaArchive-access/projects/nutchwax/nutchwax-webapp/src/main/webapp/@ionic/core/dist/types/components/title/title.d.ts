@@ -1,8 +1,6 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
-import { Color, Mode } from '../../interface';
+import { Color } from '../../interface';
 export declare class ToolbarTitle implements ComponentInterface {
-    mode: Mode;
     el: HTMLElement;
     /**
      * The color to use from your application's color palette.
@@ -14,5 +12,5 @@ export declare class ToolbarTitle implements ComponentInterface {
     hostData(): {
         class: {};
     };
-    render(): JSX.Element[];
+    render(): any[];
 }

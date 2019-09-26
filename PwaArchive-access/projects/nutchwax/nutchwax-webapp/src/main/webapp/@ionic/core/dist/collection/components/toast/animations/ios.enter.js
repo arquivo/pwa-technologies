@@ -1,3 +1,6 @@
+/**
+ * iOS Toast Enter Animation
+ */
 export function iosEnterAnimation(AnimationC, baseEl, position) {
     const baseAnimation = new AnimationC();
     const wrapperAnimation = new AnimationC();

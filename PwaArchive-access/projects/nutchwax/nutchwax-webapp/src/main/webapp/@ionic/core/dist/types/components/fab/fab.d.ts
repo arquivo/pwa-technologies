@@ -1,4 +1,3 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
 export declare class Fab implements ComponentInterface {
     el: HTMLElement;
@@ -23,16 +22,11 @@ export declare class Fab implements ComponentInterface {
     activated: boolean;
     activatedChanged(): void;
     componentDidLoad(): void;
-    onClick(): void;
     /**
-     * Close an active FAB list container
+     * Close an active FAB list container.
      */
-    close(): void;
-    hostData(): {
-        class: {
-            [x: string]: boolean;
-            'fab-edge': boolean;
-        };
-    };
-    render(): JSX.Element;
+    close(): Promise<void>;
+    private getFab;
+    private onClick;
+    render(): any;
 }

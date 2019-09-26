@@ -1,14 +1,19 @@
 class GestureController {
-    constructor(doc) {
-        this.doc = doc;
+    constructor() {
         this.gestureId = 0;
         this.requestedStart = new Map();
         this.disabledGestures = new Map();
         this.disabledScroll = new Set();
     }
+    /**
+     * Creates a gesture delegate based on the GestureConfig passed
+     */
     createGesture(config) {
         return new GestureDelegate(this, this.newID(), config.name, config.priority || 0, !!config.disableScroll);
     }
+    /**
+     * Creates a blocker that will block any other gesture events from firing. Set in the ion-gesture component.
+     */
     createBlocker(opts = {}) {
         return new BlockerDelegate(this, this.newID(), opts.disable, !!opts.disableScroll);
     }
@@ -33,7 +38,7 @@ class GestureController {
             this.capturedId = id;
             requestedStart.clear();
             const event = new CustomEvent('ionGestureCaptured', { detail: { gestureName } });
-            this.doc.dispatchEvent(event);
+            document.dispatchEvent(event);
             return true;
         }
         requestedStart.delete(id);
@@ -62,17 +67,18 @@ class GestureController {
     disableScroll(id) {
         this.disabledScroll.add(id);
         if (this.disabledScroll.size === 1) {
-            this.doc.body.classList.add(BACKDROP_NO_SCROLL);
+            document.body.classList.add(BACKDROP_NO_SCROLL);
         }
     }
     enableScroll(id) {
         this.disabledScroll.delete(id);
         if (this.disabledScroll.size === 0) {
-            this.doc.body.classList.remove(BACKDROP_NO_SCROLL);
+            document.body.classList.remove(BACKDROP_NO_SCROLL);
         }
     }
     canStart(gestureName) {
         if (this.capturedId !== undefined) {
+            // a gesture already captured
             return false;
         }
         if (this.isDisabled(gestureName)) {
@@ -180,4 +186,4 @@ class BlockerDelegate {
     }
 }
 const BACKDROP_NO_SCROLL = 'backdrop-no-scroll';
-export const GESTURE_CONTROLLER = new GestureController(document);
+export const GESTURE_CONTROLLER = new GestureController();

@@ -1,6 +1,8 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Color, InputChangeEventDetail, Mode, StyleEventDetail, TextFieldTypes } from '../../interface';
+import { Color, InputChangeEventDetail, StyleEventDetail, TextFieldTypes } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Input implements ComponentInterface {
     private nativeInput?;
     private inputId;
@@ -13,10 +15,6 @@ export declare class Input implements ComponentInterface {
      * For more information on colors, see [theming](/docs/theming/basics).
      */
     color?: Color;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * If the value of the type attribute is `"file"`, then this attribute will indicate the types of files that the server accepts, otherwise it will be ignored. The value must be a comma-separated list of unique content type specifiers.
      */
@@ -163,7 +161,7 @@ export declare class Input implements ComponentInterface {
      * Sets focus on the specified `ion-input`. Use this method instead of the global
      * `input.focus()`.
      */
-    setFocus(): void;
+    setFocus(): Promise<void>;
     /**
      * Returns the native `<input>` element used under the hood.
      */
@@ -183,9 +181,10 @@ export declare class Input implements ComponentInterface {
             'has-value': boolean;
             'has-focus': boolean;
         } | {
+            [x: string]: boolean;
             'has-value': boolean;
             'has-focus': boolean;
         };
     };
-    render(): JSX.Element[];
+    render(): any[];
 }

@@ -1,6 +1,6 @@
 const PADDING_TIMER_KEY = '$ionPaddingTimer';
-export function enableScrollPadding(doc, keyboardHeight) {
-    console.debug('Input: enableScrollPadding');
+export function enableScrollPadding(keyboardHeight) {
+    const doc = document;
     function onFocusin(ev) {
         setScrollPadding(ev.target, keyboardHeight);
     }
@@ -19,6 +19,11 @@ function setScrollPadding(input, keyboardHeight) {
         return;
     }
     if (input.parentElement && input.parentElement.tagName === 'ION-INPUT') {
+        return;
+    }
+    if (input.parentElement &&
+        input.parentElement.parentElement &&
+        input.parentElement.parentElement.tagName === 'ION-SEARCHBAR') {
         return;
     }
     const el = input.closest('ion-content');

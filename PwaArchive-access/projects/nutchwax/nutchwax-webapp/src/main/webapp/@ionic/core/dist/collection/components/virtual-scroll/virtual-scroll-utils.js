@@ -1,10 +1,12 @@
 import { CELL_TYPE_FOOTER, CELL_TYPE_HEADER, CELL_TYPE_ITEM, NODE_CHANGE_CELL, NODE_CHANGE_NONE, NODE_CHANGE_POSITION } from './constants';
 const MIN_READS = 2;
 export function updateVDom(dom, heightIndex, cells, range) {
+    // reset dom
     for (const node of dom) {
         node.change = NODE_CHANGE_NONE;
         node.d = true;
     }
+    // try to match into exisiting dom
     const toMutate = [];
     const end = range.offset + range.length;
     for (let i = range.offset; i < end; i++) {
@@ -22,10 +24,11 @@ export function updateVDom(dom, heightIndex, cells, range) {
             toMutate.push(cell);
         }
     }
+    // needs to append
     const pool = dom.filter(n => n.d);
     for (const cell of toMutate) {
         const node = pool.find(n => n.d && n.cell.type === cell.type);
-        const index = cell.index;
+        const index = cell.i;
         if (node) {
             node.d = false;
             node.change = NODE_CHANGE_CELL;
@@ -56,6 +59,7 @@ export function doRender(el, nodeRender, dom, updateCellHeight) {
     for (let i = 0; i < dom.length; i++) {
         const node = dom[i];
         const cell = node.cell;
+        // the cell change, the content must be updated
         if (node.change === NODE_CHANGE_CELL) {
             if (i < childrenNu) {
                 child = children[i];
@@ -72,9 +76,11 @@ export function doRender(el, nodeRender, dom, updateCellHeight) {
         else {
             child = children[i];
         }
+        // only update position when it changes
         if (node.change !== NODE_CHANGE_NONE) {
             child.style.transform = `translate3d(0,${node.top}px,0)`;
         }
+        // update visibility
         const visible = cell.visible;
         if (node.visible !== visible) {
             if (visible) {
@@ -85,6 +91,7 @@ export function doRender(el, nodeRender, dom, updateCellHeight) {
             }
             node.visible = visible;
         }
+        // dynamic height
         if (cell.reads > 0) {
             updateCellHeight(cell, child);
             cell.reads--;
@@ -114,6 +121,7 @@ export function getViewport(scrollTop, vierportHeight, margin) {
 export function getRange(heightIndex, viewport, buffer) {
     const topPos = viewport.top;
     const bottomPos = viewport.bottom;
+    // find top index
     let i = 0;
     for (; i < heightIndex.length; i++) {
         if (heightIndex[i] > topPos) {
@@ -121,6 +129,7 @@ export function getRange(heightIndex, viewport, buffer) {
         }
     }
     const offset = Math.max(i - buffer - 1, 0);
+    // find bottom index
     for (; i < heightIndex.length; i++) {
         if (heightIndex[i] >= bottomPos) {
             break;
@@ -137,7 +146,7 @@ export function getShouldUpdate(dirtyIndex, currentRange, range) {
         currentRange.length !== range.length);
 }
 export function findCellIndex(cells, index) {
-    const max = cells[cells.length - 1].index || 0;
+    const max = cells.length > 0 ? cells[cells.length - 1].index : 0;
     if (index === 0) {
         return 0;
     }

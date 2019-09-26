@@ -1,5 +1,11 @@
+import { h } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
+/**
+ * @internal
+ */
 export class SelectPopover {
     constructor() {
+        /** Array of options for the popover */
         this.options = [];
     }
     onSelect(ev) {
@@ -7,6 +13,14 @@ export class SelectPopover {
         if (option && option.handler) {
             option.handler();
         }
+    }
+    hostData() {
+        const mode = getIonMode(this);
+        return {
+            class: {
+                [mode]: true,
+            }
+        };
     }
     render() {
         return (h("ion-list", null,
@@ -22,27 +36,91 @@ export class SelectPopover {
     }
     static get is() { return "ion-select-popover"; }
     static get encapsulation() { return "scoped"; }
+    static get originalStyleUrls() { return {
+        "$": ["select-popover.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["select-popover.css"]
+    }; }
     static get properties() { return {
         "header": {
-            "type": String,
-            "attr": "header"
-        },
-        "message": {
-            "type": String,
-            "attr": "message"
-        },
-        "options": {
-            "type": "Any",
-            "attr": "options"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Header text for the popover"
+            },
+            "attribute": "header",
+            "reflect": false
         },
         "subHeader": {
-            "type": String,
-            "attr": "sub-header"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Subheader text for the popover"
+            },
+            "attribute": "sub-header",
+            "reflect": false
+        },
+        "message": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Text for popover body"
+            },
+            "attribute": "message",
+            "reflect": false
+        },
+        "options": {
+            "type": "unknown",
+            "mutable": false,
+            "complexType": {
+                "original": "SelectPopoverOption[]",
+                "resolved": "SelectPopoverOption[]",
+                "references": {
+                    "SelectPopoverOption": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Array of options for the popover"
+            },
+            "defaultValue": "[]"
         }
     }; }
     static get listeners() { return [{
             "name": "ionSelect",
-            "method": "onSelect"
+            "method": "onSelect",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }]; }
-    static get style() { return "/**style-placeholder:ion-select-popover:**/"; }
 }

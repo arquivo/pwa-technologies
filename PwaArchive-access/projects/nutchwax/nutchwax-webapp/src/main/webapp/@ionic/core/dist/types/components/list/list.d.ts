@@ -1,11 +1,9 @@
 import { ComponentInterface } from '../../stencil.core';
-import { Mode } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class List implements ComponentInterface {
     el: HTMLElement;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * How the bottom border should be displayed on all items.
      */

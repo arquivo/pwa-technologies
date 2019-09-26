@@ -1,20 +1,48 @@
+import { config } from '../global/config';
 let lastId = 0;
-export function createOverlay(element, opts) {
-    const doc = element.ownerDocument;
-    connectListeners(doc);
-    Object.assign(element, opts);
-    element.classList.add('overlay-hidden');
-    const overlayIndex = lastId++;
-    element.overlayIndex = overlayIndex;
-    if (!element.hasAttribute('id')) {
-        element.id = `ion-overlay-${overlayIndex}`;
-    }
-    getAppRoot(doc).appendChild(element);
-    return element.componentOnReady();
-}
-export function connectListeners(doc) {
+const createController = (tagName) => {
+    return {
+        create(options) {
+            return createOverlay(tagName, options);
+        },
+        dismiss(data, role, id) {
+            return dismissOverlay(document, data, role, tagName, id);
+        },
+        async getTop() {
+            return getOverlay(document, tagName);
+        }
+    };
+};
+export const alertController = /*@__PURE__*/ createController('ion-alert');
+export const actionSheetController = /*@__PURE__*/ createController('ion-action-sheet');
+export const loadingController = /*@__PURE__*/ createController('ion-loading');
+export const modalController = /*@__PURE__*/ createController('ion-modal');
+export const pickerController = /*@__PURE__*/ createController('ion-picker');
+export const popoverController = /*@__PURE__*/ createController('ion-popover');
+export const toastController = /*@__PURE__*/ createController('ion-toast');
+export const createOverlay = (tagName, opts) => {
+    return customElements.whenDefined(tagName).then(() => {
+        const doc = document;
+        const element = doc.createElement(tagName);
+        connectListeners(doc);
+        // convert the passed in overlay options into props
+        // that get passed down into the new overlay
+        Object.assign(element, opts);
+        element.classList.add('overlay-hidden');
+        const overlayIndex = lastId++;
+        element.overlayIndex = overlayIndex;
+        if (!element.hasAttribute('id')) {
+            element.id = `ion-overlay-${overlayIndex}`;
+        }
+        // append the overlay element to the document body
+        getAppRoot(doc).appendChild(element);
+        return element.componentOnReady();
+    });
+};
+export const connectListeners = (doc) => {
     if (lastId === 0) {
         lastId = 1;
+        // trap focus inside overlays
         doc.addEventListener('focusin', ev => {
             const lastOverlay = getOverlay(doc);
             if (lastOverlay && lastOverlay.backdropDismiss && !isDescendant(lastOverlay, ev.target)) {
@@ -24,6 +52,7 @@ export function connectListeners(doc) {
                 }
             }
         });
+        // handle back-button click
         doc.addEventListener('ionBackButton', ev => {
             const lastOverlay = getOverlay(doc);
             if (lastOverlay && lastOverlay.backdropDismiss) {
@@ -32,6 +61,7 @@ export function connectListeners(doc) {
                 });
             }
         });
+        // handle ESC to close overlay
         doc.addEventListener('keyup', ev => {
             if (ev.key === 'Escape') {
                 const lastOverlay = getOverlay(doc);
@@ -41,43 +71,44 @@ export function connectListeners(doc) {
             }
         });
     }
-}
-export function dismissOverlay(doc, data, role, overlayTag, id) {
+};
+export const dismissOverlay = (doc, data, role, overlayTag, id) => {
     const overlay = getOverlay(doc, overlayTag, id);
     if (!overlay) {
         return Promise.reject('overlay does not exist');
     }
     return overlay.dismiss(data, role);
-}
-export function getOverlays(doc, overlayTag) {
+};
+export const getOverlays = (doc, overlayTag) => {
     const overlays = Array.from(getAppRoot(doc).children).filter(c => c.overlayIndex > 0);
     if (overlayTag === undefined) {
         return overlays;
     }
     overlayTag = overlayTag.toUpperCase();
     return overlays.filter(c => c.tagName === overlayTag);
-}
-export function getOverlay(doc, overlayTag, id) {
+};
+export const getOverlay = (doc, overlayTag, id) => {
     const overlays = getOverlays(doc, overlayTag);
     return (id === undefined)
         ? overlays[overlays.length - 1]
         : overlays.find(o => o.id === id);
-}
-export async function present(overlay, name, iosEnterAnimation, mdEnterAnimation, opts) {
+};
+export const present = async (overlay, name, iosEnterAnimation, mdEnterAnimation, opts) => {
     if (overlay.presented) {
         return;
     }
     overlay.presented = true;
     overlay.willPresent.emit();
+    // get the user's animation fn if one was provided
     const animationBuilder = (overlay.enterAnimation)
         ? overlay.enterAnimation
-        : overlay.config.get(name, overlay.mode === 'ios' ? iosEnterAnimation : mdEnterAnimation);
+        : config.get(name, overlay.mode === 'ios' ? iosEnterAnimation : mdEnterAnimation);
     const completed = await overlayAnimation(overlay, animationBuilder, overlay.el, opts);
     if (completed) {
         overlay.didPresent.emit();
     }
-}
-export async function dismiss(overlay, data, role, name, iosLeaveAnimation, mdLeaveAnimation, opts) {
+};
+export const dismiss = async (overlay, data, role, name, iosLeaveAnimation, mdLeaveAnimation, opts) => {
     if (!overlay.presented) {
         return false;
     }
@@ -86,7 +117,7 @@ export async function dismiss(overlay, data, role, name, iosLeaveAnimation, mdLe
         overlay.willDismiss.emit({ data, role });
         const animationBuilder = (overlay.leaveAnimation)
             ? overlay.leaveAnimation
-            : overlay.config.get(name, overlay.mode === 'ios' ? iosLeaveAnimation : mdLeaveAnimation);
+            : config.get(name, overlay.mode === 'ios' ? iosLeaveAnimation : mdLeaveAnimation);
         await overlayAnimation(overlay, animationBuilder, overlay.el, opts);
         overlay.didDismiss.emit({ data, role });
     }
@@ -95,21 +126,22 @@ export async function dismiss(overlay, data, role, name, iosLeaveAnimation, mdLe
     }
     overlay.el.remove();
     return true;
-}
-function getAppRoot(doc) {
+};
+const getAppRoot = (doc) => {
     return doc.querySelector('ion-app') || doc.body;
-}
-async function overlayAnimation(overlay, animationBuilder, baseEl, opts) {
+};
+const overlayAnimation = async (overlay, animationBuilder, baseEl, opts) => {
     if (overlay.animation) {
         overlay.animation.destroy();
         overlay.animation = undefined;
         return false;
     }
+    // Make overlay visible in case it's hidden
     baseEl.classList.remove('overlay-hidden');
     const aniRoot = baseEl.shadowRoot || overlay.el;
-    const animation = overlay.animation = await import('./animation').then(mod => mod.create(animationBuilder, aniRoot, opts));
+    const animation = await import('./animation').then(mod => mod.create(animationBuilder, aniRoot, opts));
     overlay.animation = animation;
-    if (!overlay.animated || !overlay.config.getBoolean('animated', true)) {
+    if (!overlay.animated || !config.getBoolean('animated', true)) {
         animation.duration(0);
     }
     if (overlay.keyboardClose) {
@@ -125,8 +157,8 @@ async function overlayAnimation(overlay, animationBuilder, baseEl, opts) {
     animation.destroy();
     overlay.animation = undefined;
     return hasCompleted;
-}
-export function autoFocus(containerEl) {
+};
+export const autoFocus = (containerEl) => {
     const focusableEls = containerEl.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]');
     if (focusableEls.length > 0) {
         const el = focusableEls[0];
@@ -134,26 +166,26 @@ export function autoFocus(containerEl) {
         return el;
     }
     return undefined;
-}
-export function eventMethod(element, eventName) {
+};
+export const eventMethod = (element, eventName) => {
     let resolve;
     const promise = new Promise(r => resolve = r);
     onceEvent(element, eventName, (event) => {
         resolve(event.detail);
     });
     return promise;
-}
-export function onceEvent(element, eventName, callback) {
+};
+export const onceEvent = (element, eventName, callback) => {
     const handler = (ev) => {
         element.removeEventListener(eventName, handler);
         callback(ev);
     };
     element.addEventListener(eventName, handler);
-}
-export function isCancel(role) {
+};
+export const isCancel = (role) => {
     return role === 'cancel' || role === BACKDROP;
-}
-function isDescendant(parent, child) {
+};
+const isDescendant = (parent, child) => {
     while (child) {
         if (child === parent) {
             return true;
@@ -161,5 +193,5 @@ function isDescendant(parent, child) {
         child = child.parentElement;
     }
     return false;
-}
+};
 export const BACKDROP = 'backdrop';

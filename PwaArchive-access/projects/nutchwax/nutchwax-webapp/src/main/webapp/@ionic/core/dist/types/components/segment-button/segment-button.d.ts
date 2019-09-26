@@ -1,12 +1,11 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Mode, SegmentButtonLayout } from '../../interface';
-export declare class SegmentButton implements ComponentInterface {
+import { SegmentButtonLayout } from '../../interface';
+import { ButtonInterface } from '../../utils/element-interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
+export declare class SegmentButton implements ComponentInterface, ButtonInterface {
     el: HTMLElement;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * If `true`, the segment button is selected.
      */
@@ -20,6 +19,10 @@ export declare class SegmentButton implements ComponentInterface {
      */
     layout?: SegmentButtonLayout;
     /**
+     * The type of the button.
+     */
+    type: 'submit' | 'reset' | 'button';
+    /**
      * The value of the segment button.
      */
     value: string;
@@ -28,22 +31,8 @@ export declare class SegmentButton implements ComponentInterface {
      */
     ionSelect: EventEmitter<void>;
     checkedChanged(checked: boolean, prev: boolean): void;
-    onClick(): void;
     private readonly hasLabel;
     private readonly hasIcon;
-    hostData(): {
-        'aria-disabled': string | null;
-        class: {
-            [x: string]: boolean;
-            'segment-button-has-label': boolean;
-            'segment-button-has-icon': boolean;
-            'segment-button-has-label-only': boolean;
-            'segment-button-has-icon-only': boolean;
-            'segment-button-disabled': boolean;
-            'segment-button-checked': boolean;
-            'ion-activatable': boolean;
-            'ion-activatable-instant': boolean;
-        };
-    };
-    render(): JSX.Element[];
+    private onClick;
+    render(): any;
 }

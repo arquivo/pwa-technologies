@@ -1,18 +1,85 @@
+import { h } from '@stencil/core';
+import { config } from '../../global/config';
+import { getIonMode } from '../../global/ionic-global';
+import { hostContext } from '../../utils/theme';
 export class SkeletonText {
     constructor() {
-        this.width = '100%';
+        /**
+         * If `true`, the skeleton text will animate.
+         */
+        this.animated = false;
+    }
+    calculateWidth() {
+        // If width was passed in to the property use that first
+        if (this.width !== undefined) {
+            return {
+                style: {
+                    width: this.width
+                }
+            };
+        }
+        return;
     }
     render() {
-        return h("span", { style: { width: this.width } }, "\u00A0");
+        return (h("span", null, "\u00A0"));
+    }
+    hostData() {
+        const animated = this.animated && config.getBoolean('animated', true);
+        const inMedia = hostContext('ion-avatar', this.el) || hostContext('ion-thumbnail', this.el);
+        const mode = getIonMode(this);
+        return Object.assign({ class: {
+                [mode]: true,
+                'skeleton-text-animated': animated,
+                'in-media': inMedia
+            } }, this.calculateWidth());
     }
     static get is() { return "ion-skeleton-text"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "$": ["skeleton-text.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["skeleton-text.css"]
+    }; }
     static get properties() { return {
+        "animated": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the skeleton text will animate."
+            },
+            "attribute": "animated",
+            "reflect": false,
+            "defaultValue": "false"
+        },
         "width": {
-            "type": String,
-            "attr": "width"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [{
+                        "text": "Use CSS instead. The width of the skeleton text. If supplied, it will override the CSS style.",
+                        "name": "deprecated"
+                    }],
+                "text": ""
+            },
+            "attribute": "width",
+            "reflect": false
         }
     }; }
-    static get style() { return "/**style-placeholder:ion-skeleton-text:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-skeleton-text:**/"; }
+    static get elementRef() { return "el"; }
 }

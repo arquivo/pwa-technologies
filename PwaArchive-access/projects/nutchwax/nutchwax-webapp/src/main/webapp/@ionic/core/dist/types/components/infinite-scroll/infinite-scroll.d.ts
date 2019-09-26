@@ -1,4 +1,4 @@
-import { ComponentInterface, EventEmitter, EventListenerEnable, QueueApi } from '../../stencil.core';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
 export declare class InfiniteScroll implements ComponentInterface {
     private thrPx;
     private thrPc;
@@ -7,8 +7,6 @@ export declare class InfiniteScroll implements ComponentInterface {
     private isBusy;
     el: HTMLElement;
     isLoading: boolean;
-    queue: QueueApi;
-    enableListener: EventListenerEnable;
     /**
      * The threshold distance from the bottom
      * of the content to call the `infinite` output event when scrolled.
@@ -30,7 +28,7 @@ export declare class InfiniteScroll implements ComponentInterface {
      * the infinite scroll is no longer needed.
      */
     disabled: boolean;
-    protected disabledChanged(val: boolean): void;
+    protected disabledChanged(): void;
     /**
      * The position of the infinite scroll element.
      * The value can be either `top` or `bottom`.
@@ -45,7 +43,7 @@ export declare class InfiniteScroll implements ComponentInterface {
     ionInfinite: EventEmitter<void>;
     componentDidLoad(): Promise<void>;
     componentDidUnload(): void;
-    protected onScroll(): 1 | 2 | 3 | 4;
+    private onScroll;
     /**
      * Call `complete()` within the `ionInfinite` output event handler when
      * your async operation has completed. For example, the `loading`
@@ -56,13 +54,7 @@ export declare class InfiniteScroll implements ComponentInterface {
      * This method will change the infinite scroll's state from `loading`
      * to `enabled`.
      */
-    complete(): void;
+    complete(): Promise<void>;
     private canStart;
-    private enableScrollEvents;
-    hostData(): {
-        class: {
-            'infinite-scroll-loading': boolean;
-            'infinite-scroll-enabled': boolean;
-        };
-    };
+    render(): any;
 }

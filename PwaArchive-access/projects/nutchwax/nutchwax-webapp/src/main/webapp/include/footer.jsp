@@ -4,7 +4,11 @@
 	<!-- Initialize Swiper -->
     var menuButton = document.querySelector('#menuButton');
     var openMenu = function () {
-	  swiper.allowSlidePrev = true;    	
+      console.log('open');
+      $('.logo-main-div').css("position:fixed!important; width:initial;");
+      $('#menuWrapper').removeClass('transform-none');
+      $('#menuSwiperSlide').removeClass('hidden');           
+	    swiper.allowSlidePrev = true;    	
       swiper.slidePrev();
     };
     var swiper = new Swiper('.swiper-container', {
@@ -14,7 +18,7 @@
       slideToClickedSlide: true,
       draggable: false,      
       on: {
-        slideChangeTransitionStart: function () {
+        slideChangeTransitionStart: function () {    
           var slider = this;
           if (slider.activeIndex === 0) { /*open menu*/
           	this.allowSlidePrev = true;
@@ -39,5 +43,7 @@
       }
     });
     swiper.allowSlidePrev = false;
-
+    /*$( "#menuButton" ).click(function() {
+      openMenu();
+    });*/
 </script>

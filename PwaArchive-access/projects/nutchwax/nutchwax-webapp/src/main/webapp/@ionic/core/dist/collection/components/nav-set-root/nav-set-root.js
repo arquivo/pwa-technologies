@@ -9,19 +9,54 @@ export class NavSetRoot {
     static get is() { return "ion-nav-set-root"; }
     static get properties() { return {
         "component": {
-            "type": String,
-            "attr": "component"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "NavComponent",
+                "resolved": "Function | HTMLElement | ViewController | null | string | undefined",
+                "references": {
+                    "NavComponent": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Component you want to make root for the navigation stack"
+            },
+            "attribute": "component",
+            "reflect": false
         },
         "componentProps": {
-            "type": "Any",
-            "attr": "component-props"
-        },
-        "el": {
-            "elementRef": true
+            "type": "unknown",
+            "mutable": false,
+            "complexType": {
+                "original": "ComponentProps",
+                "resolved": "undefined | { [key: string]: any; }",
+                "references": {
+                    "ComponentProps": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Data you want to pass to the component as props"
+            }
         }
     }; }
+    static get elementRef() { return "el"; }
     static get listeners() { return [{
-            "name": "child:click",
-            "method": "push"
+            "name": "click",
+            "method": "push",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }]; }
 }

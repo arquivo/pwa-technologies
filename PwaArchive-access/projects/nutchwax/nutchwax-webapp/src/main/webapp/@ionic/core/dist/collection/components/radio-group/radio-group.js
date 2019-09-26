@@ -1,9 +1,16 @@
+import { getIonMode } from '../../global/ionic-global';
 export class RadioGroup {
     constructor() {
         this.inputId = `ion-rg-${radioGroupIds++}`;
         this.labelId = `${this.inputId}-lbl`;
         this.radios = [];
+        /**
+         * If `true`, the radios can be deselected.
+         */
         this.allowEmptySelection = false;
+        /**
+         * The name of the control, which is submitted with the form data.
+         */
         this.name = this.inputId;
     }
     valueChanged(value) {
@@ -13,7 +20,11 @@ export class RadioGroup {
     onRadioDidLoad(ev) {
         const radio = ev.target;
         radio.name = this.name;
+        // add radio to internal list
         this.radios.push(radio);
+        // this radio-group does not have a value
+        // but this radio is checked, so let's set the
+        // radio-group's value from the checked radio
         if (this.value == null && radio.checked) {
             this.value = radio.value;
         }
@@ -43,6 +54,8 @@ export class RadioGroup {
         }
     }
     componentDidLoad() {
+        // Get the list header if it exists and set the id
+        // this is used to set aria-labelledby
         let header = this.el.querySelector('ion-list-header');
         if (!header) {
             header = this.el.querySelector('ion-item-divider');
@@ -60,59 +73,135 @@ export class RadioGroup {
         let hasChecked = false;
         for (const radio of this.radios) {
             if (!hasChecked && radio.value === value) {
+                // correct value for this radio
+                // but this radio isn't checked yet
+                // and we haven't found a checked yet
                 hasChecked = true;
                 radio.checked = true;
             }
             else {
+                // this radio doesn't have the correct value
+                // or the radio group has been already checked
                 radio.checked = false;
             }
         }
     }
     hostData() {
+        const mode = getIonMode(this);
         return {
             'role': 'radiogroup',
-            'aria-labelledby': this.labelId
+            'aria-labelledby': this.labelId,
+            class: {
+                [mode]: true,
+            }
         };
     }
     static get is() { return "ion-radio-group"; }
     static get properties() { return {
         "allowEmptySelection": {
-            "type": Boolean,
-            "attr": "allow-empty-selection"
-        },
-        "el": {
-            "elementRef": true
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the radios can be deselected."
+            },
+            "attribute": "allow-empty-selection",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "name": {
-            "type": String,
-            "attr": "name"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The name of the control, which is submitted with the form data."
+            },
+            "attribute": "name",
+            "reflect": false,
+            "defaultValue": "this.inputId"
         },
         "value": {
-            "type": "Any",
-            "attr": "value",
+            "type": "any",
             "mutable": true,
-            "watchCallbacks": ["valueChanged"]
+            "complexType": {
+                "original": "any | null",
+                "resolved": "any",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "the value of the radio group."
+            },
+            "attribute": "value",
+            "reflect": false
         }
     }; }
     static get events() { return [{
-            "name": "ionChange",
             "method": "ionChange",
+            "name": "ionChange",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the value has changed."
+            },
+            "complexType": {
+                "original": "RadioGroupChangeEventDetail",
+                "resolved": "RadioGroupChangeEventDetail",
+                "references": {
+                    "RadioGroupChangeEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
+        }]; }
+    static get elementRef() { return "el"; }
+    static get watchers() { return [{
+            "propName": "value",
+            "methodName": "valueChanged"
         }]; }
     static get listeners() { return [{
             "name": "ionRadioDidLoad",
-            "method": "onRadioDidLoad"
+            "method": "onRadioDidLoad",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }, {
             "name": "ionRadioDidUnload",
-            "method": "onRadioDidUnload"
+            "method": "onRadioDidUnload",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }, {
             "name": "ionSelect",
-            "method": "onRadioSelect"
+            "method": "onRadioSelect",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }, {
             "name": "ionDeselect",
-            "method": "onRadioDeselect"
+            "method": "onRadioDeselect",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }]; }
 }
 let radioGroupIds = 0;

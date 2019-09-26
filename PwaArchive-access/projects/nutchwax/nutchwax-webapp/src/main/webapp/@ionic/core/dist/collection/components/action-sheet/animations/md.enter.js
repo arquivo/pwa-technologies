@@ -1,3 +1,6 @@
+/**
+ * MD Action Sheet Enter Animation
+ */
 export function mdEnterAnimation(AnimationC, baseEl) {
     const baseAnimation = new AnimationC();
     const backdropAnimation = new AnimationC();

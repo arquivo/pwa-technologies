@@ -1,3 +1,4 @@
+import { getIonMode } from '../../global/ionic-global';
 export class Slide {
     componentDidLoad() {
         this.ionSlideChanged.emit();
@@ -6,19 +7,39 @@ export class Slide {
         this.ionSlideChanged.emit();
     }
     hostData() {
+        const mode = getIonMode(this);
         return {
             class: {
-                'swiper-slide': true
+                [mode]: true,
+                'swiper-slide': true,
+                'swiper-zoom-container': true
             }
         };
     }
     static get is() { return "ion-slide"; }
+    static get originalStyleUrls() { return {
+        "$": ["slide.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["slide.css"]
+    }; }
     static get events() { return [{
-            "name": "ionSlideChanged",
             "method": "ionSlideChanged",
+            "name": "ionSlideChanged",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }]; }
-    static get style() { return "/**style-placeholder:ion-slide:**/"; }
 }

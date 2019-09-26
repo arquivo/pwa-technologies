@@ -1,10 +1,12 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
-import { Color, Config, Mode } from '../../interface';
-export declare class BackButton implements ComponentInterface {
+import { Color } from '../../interface';
+import { ButtonInterface } from '../../utils/element-interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
+export declare class BackButton implements ComponentInterface, ButtonInterface {
+    private mode;
     el: HTMLElement;
-    config: Config;
-    win: Window;
     /**
      * The color to use from your application's color palette.
      * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
@@ -12,13 +14,13 @@ export declare class BackButton implements ComponentInterface {
      */
     color?: Color;
     /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
-    /**
      * The url to navigate back to by default when there is no history.
      */
     defaultHref?: string;
+    /**
+     * If `true`, the user cannot interact with the button.
+     */
+    disabled: boolean;
     /**
      * The icon name to use for the back button.
      */
@@ -27,17 +29,14 @@ export declare class BackButton implements ComponentInterface {
      * The text to display in the back button.
      */
     text?: string | null;
-    onClick(ev: Event): Promise<boolean>;
-    hostData(): {
-        class: {
-            'button': boolean;
-            'ion-activatable': boolean;
-            'show-back-button': boolean;
-        } | {
-            'button': boolean;
-            'ion-activatable': boolean;
-            'show-back-button': boolean;
-        };
-    };
-    render(): JSX.Element;
+    /**
+     * The type of the button.
+     */
+    type: 'submit' | 'reset' | 'button';
+    private readonly backButtonIcon;
+    private readonly backButtonText;
+    private readonly hasIconOnly;
+    private readonly rippleType;
+    private onClick;
+    render(): any;
 }

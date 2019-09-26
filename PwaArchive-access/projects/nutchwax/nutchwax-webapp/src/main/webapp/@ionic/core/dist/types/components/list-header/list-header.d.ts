@@ -1,11 +1,9 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
-import { Color, Mode } from '../../interface';
+import { Color } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class ListHeader implements ComponentInterface {
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * The color to use from your application's color palette.
      * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
@@ -13,7 +11,7 @@ export declare class ListHeader implements ComponentInterface {
      */
     color?: Color;
     hostData(): {
-        class: import("../../interface").CssClassMap | undefined;
+        class: {};
     };
-    render(): JSX.Element;
+    render(): any;
 }

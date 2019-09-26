@@ -1,8 +1,6 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
 export declare class Col implements ComponentInterface {
-    win: Window;
-    el: HTMLStencilElement;
+    el: HTMLIonColElement;
     /**
      * The amount to offset the column, in terms of how many columns it should shift to the end
      * of the total available.
@@ -131,7 +129,10 @@ export declare class Col implements ComponentInterface {
     private calculatePull;
     private calculatePush;
     hostData(): {
+        class: {
+            [x: string]: boolean;
+        };
         style: {};
     };
-    render(): JSX.Element;
+    render(): any;
 }

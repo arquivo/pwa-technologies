@@ -5,10 +5,16 @@ export const SIZE_TO_MEDIA = {
     'lg': '(min-width: 992px)',
     'xl': '(min-width: 1200px)',
 };
-export function matchBreakpoint(win, breakpoint) {
+// Check if the window matches the media query
+// at the breakpoint passed
+// e.g. matchBreakpoint('sm') => true if screen width exceeds 576px
+export function matchBreakpoint(breakpoint) {
     if (breakpoint === undefined || breakpoint === '') {
         return true;
     }
-    const mediaQuery = SIZE_TO_MEDIA[breakpoint];
-    return win.matchMedia(mediaQuery).matches;
+    if (window.matchMedia) {
+        const mediaQuery = SIZE_TO_MEDIA[breakpoint];
+        return window.matchMedia(mediaQuery).matches;
+    }
+    return false;
 }

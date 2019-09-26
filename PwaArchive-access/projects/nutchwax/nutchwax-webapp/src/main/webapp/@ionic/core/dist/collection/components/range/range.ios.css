@@ -17,16 +17,20 @@
   align-items: center;
   font-family: var(--ion-font-family, inherit);
   user-select: none;
-  z-index: 2; }
+  z-index: 2;
+}
 
 :host(.range-disabled) {
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 ::slotted(ion-label) {
-  flex: initial; }
+  flex: initial;
+}
 
 ::slotted(ion-icon[slot]) {
-  font-size: 24px; }
+  font-size: 24px;
+}
 
 .range-slider {
   position: relative;
@@ -35,17 +39,20 @@
   height: var(--height);
   contain: size layout style;
   cursor: grab;
-  touch-action: pan-y; }
+  touch-action: pan-y;
+}
 
 :host(.range-pressed) .range-slider {
-  cursor: grabbing; }
+  cursor: grabbing;
+}
 
 .range-pin {
   position: absolute;
   background: var(--ion-color-base);
   color: var(--ion-color-contrast);
   text-align: center;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 .range-knob-handle {
   left: 0;
@@ -54,16 +61,29 @@
   position: absolute;
   width: var(--knob-handle-size);
   height: var(--knob-handle-size);
-  text-align: center; }
-  :host-context([dir=rtl]) .range-knob-handle {
-    right: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .range-knob-handle {
-      margin-left: unset;
-      -webkit-margin-start: calc(0px - var(--knob-handle-size) / 2);
-      margin-inline-start: calc(0px - var(--knob-handle-size) / 2); } }
-  .range-knob-handle:active, .range-knob-handle:focus {
-    outline: none; }
+  text-align: center;
+}
+[dir=rtl] .range-knob-handle, :host-context([dir=rtl]) .range-knob-handle {
+  left: unset;
+  right: unset;
+  right: 0;
+}
+
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .range-knob-handle {
+    margin-left: unset;
+    -webkit-margin-start: calc(0px - var(--knob-handle-size) / 2);
+    margin-inline-start: calc(0px - var(--knob-handle-size) / 2);
+  }
+}
+[dir=rtl] .range-knob-handle, :host-context([dir=rtl]) .range-knob-handle {
+  /* stylelint-disable-next-line property-blacklist */
+  left: unset;
+}
+
+.range-knob-handle:active, .range-knob-handle:focus {
+  outline: none;
+}
 
 .range-bar {
   border-radius: var(--bar-border-radius);
@@ -73,9 +93,18 @@
   width: 100%;
   height: var(--bar-height);
   background: var(--bar-background);
-  pointer-events: none; }
-  :host-context([dir=rtl]) .range-bar {
-    right: 0; }
+  pointer-events: none;
+}
+[dir=rtl] .range-bar, :host-context([dir=rtl]) .range-bar {
+  left: unset;
+  right: unset;
+  right: 0;
+}
+
+[dir=rtl] .range-bar, :host-context([dir=rtl]) .range-bar {
+  /* stylelint-disable-next-line property-blacklist */
+  left: unset;
+}
 
 .range-knob {
   border-radius: var(--knob-border-radius);
@@ -87,21 +116,30 @@
   background: var(--knob-background);
   box-shadow: var(--knob-box-shadow);
   z-index: 2;
-  pointer-events: none; }
-  :host-context([dir=rtl]) .range-knob {
-    right: calc(50% - var(--knob-size) / 2); }
+  pointer-events: none;
+}
+[dir=rtl] .range-knob, :host-context([dir=rtl]) .range-knob {
+  left: unset;
+  right: unset;
+  right: calc(50% - var(--knob-size) / 2);
+}
+
+[dir=rtl] .range-knob, :host-context([dir=rtl]) .range-knob {
+  /* stylelint-disable-next-line property-blacklist */
+  left: unset;
+}
 
 :host(.range-pressed) .range-bar-active {
-  will-change: left, right; }
-
-:host(.range-pressed) .range-knob-handle {
-  will-change: left; }
+  will-change: left, right;
+}
 
 :host(.in-item) {
-  width: 100%; }
+  width: 100%;
+}
 
 :host(.in-item) ::slotted(ion-label) {
-  align-self: center; }
+  align-self: center;
+}
 
 :host {
   --knob-border-radius: 50%;
@@ -116,55 +154,66 @@
   padding-left: 16px;
   padding-right: 16px;
   padding-top: 8px;
-  padding-bottom: 8px; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 16px;
-      padding-inline-start: 16px;
-      -webkit-padding-end: 16px;
-      padding-inline-end: 16px; } }
+  padding-bottom: 8px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 16px;
+    padding-inline-start: 16px;
+    -webkit-padding-end: 16px;
+    padding-inline-end: 16px;
+  }
+}
 
 :host(.ion-color) .range-bar-active,
 :host(.ion-color) .range-tick-active {
-  background: var(--ion-color-base); }
+  background: var(--ion-color-base);
+}
 
-::slotted([slot="start"]) {
+::slotted([slot=start]) {
   margin-left: 0;
   margin-right: 16px;
   margin-top: 0;
-  margin-bottom: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    ::slotted([slot="start"]) {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: 0;
-      margin-inline-start: 0;
-      -webkit-margin-end: 16px;
-      margin-inline-end: 16px; } }
+  margin-bottom: 0;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  ::slotted([slot=start]) {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 0;
+    margin-inline-start: 0;
+    -webkit-margin-end: 16px;
+    margin-inline-end: 16px;
+  }
+}
 
-::slotted([slot="end"]) {
+::slotted([slot=end]) {
   margin-left: 16px;
   margin-right: 0;
   margin-top: 0;
-  margin-bottom: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    ::slotted([slot="end"]) {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: 16px;
-      margin-inline-start: 16px;
-      -webkit-margin-end: 0;
-      margin-inline-end: 0; } }
+  margin-bottom: 0;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  ::slotted([slot=end]) {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 16px;
+    margin-inline-start: 16px;
+    -webkit-margin-end: 0;
+    margin-inline-end: 0;
+  }
+}
 
 :host(.range-has-pin) {
-  padding-top: 20px; }
-
+  padding-top: 20px;
+}
 .range-bar-active {
   bottom: 0;
   width: auto;
-  background: var(--bar-background-active); }
+  background: var(--bar-background-active);
+}
 
 .range-tick {
   margin-left: -0.5px;
@@ -174,15 +223,19 @@
   width: 1px;
   height: 8px;
   background: var(--ion-color-step-250, #bfbfbf);
-  pointer-events: none; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .range-tick {
-      margin-left: unset;
-      -webkit-margin-start: -0.5px;
-      margin-inline-start: -0.5px; } }
+  pointer-events: none;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .range-tick {
+    margin-left: unset;
+    -webkit-margin-start: -0.5px;
+    margin-inline-start: -0.5px;
+  }
+}
 
 .range-tick-active {
-  background: var(--bar-background-active); }
+  background: var(--bar-background-active);
+}
 
 .range-pin {
   transform: translate3d(0,  28px,  0) scale(0.01);
@@ -198,18 +251,23 @@
   background: transparent;
   color: var(--ion-text-color, #000);
   font-size: 12px;
-  text-align: center; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .range-pin {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 8px;
-      padding-inline-start: 8px;
-      -webkit-padding-end: 8px;
-      padding-inline-end: 8px; } }
+  text-align: center;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .range-pin {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 8px;
+    padding-inline-start: 8px;
+    -webkit-padding-end: 8px;
+    padding-inline-end: 8px;
+  }
+}
 
 .range-knob-pressed .range-pin {
-  transform: translate3d(0,  0,  0) scale(1); }
+  transform: translate3d(0,  0,  0) scale(1);
+}
 
 :host(.range-disabled) {
-  opacity: .5; }
+  opacity: 0.5;
+}

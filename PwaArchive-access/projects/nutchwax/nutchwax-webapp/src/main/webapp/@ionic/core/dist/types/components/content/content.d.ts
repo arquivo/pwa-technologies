@@ -1,6 +1,9 @@
-import '../../stencil.core';
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
-import { Color, Config, Mode, ScrollBaseDetail, ScrollDetail } from '../../interface';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { Color, ScrollBaseDetail, ScrollDetail } from '../../interface';
+/**
+ * @slot - Content is placed in the scrollable area if provided without a slot.
+ * @slot fixed - Should be used for fixed content that should not scroll.
+ */
 export declare class Content implements ComponentInterface {
     private watchDog;
     private isScrolling;
@@ -10,11 +13,7 @@ export declare class Content implements ComponentInterface {
     private cBottom;
     private scrollEl;
     private detail;
-    mode: Mode;
-    el: HTMLStencilElement;
-    config: Config;
-    queue: QueueApi;
-    win: Window;
+    el: HTMLIonContentElement;
     /**
      * The color to use from your application's color palette.
      * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
@@ -67,44 +66,43 @@ export declare class Content implements ComponentInterface {
     private readDimensions;
     private onScroll;
     /**
-     * Returns the element where the actual scrolling takes places.
-     * This element is the one you could subscribe to `scroll` events or manually modify
-     * `scrollTop`, however, it's recommended to use the API provided by `ion-content`:
+     * Get the element where the actual scrolling takes place.
+     * This element can be used to subscribe to `scroll` events or manually modify
+     * `scrollTop`. However, it's recommended to use the API provided by `ion-content`:
      *
-     * Ie. Using `ionScroll`, `ionScrollStart`, `ionScrollEnd` for scrolling events
-     * and scrollToPoint() to scroll the content into a certain point.
+     * i.e. Using `ionScroll`, `ionScrollStart`, `ionScrollEnd` for scrolling events
+     * and `scrollToPoint()` to scroll the content into a certain point.
      */
     getScrollElement(): Promise<HTMLElement>;
     /**
-     * Scroll to the top of the component
+     * Scroll to the top of the component.
+     *
+     * @param duration The amount of time to take scrolling to the top. Defaults to `0`.
      */
     scrollToTop(duration?: number): Promise<void>;
     /**
-     * Scroll to the bottom of the component
+     * Scroll to the bottom of the component.
+     *
+     * @param duration The amount of time to take scrolling to the bottom. Defaults to `0`.
      */
     scrollToBottom(duration?: number): Promise<void>;
     /**
-     * Scroll by a specified X/Y distance in the component
+     * Scroll by a specified X/Y distance in the component.
+     *
+     * @param x The amount to scroll by on the horizontal axis.
+     * @param y The amount to scroll by on the vertical axis.
+     * @param duration The amount of time to take scrolling by that amount.
      */
     scrollByPoint(x: number, y: number, duration: number): Promise<void>;
     /**
-     * Scroll to a specified X/Y location in the component
+     * Scroll to a specified X/Y location in the component.
+     *
+     * @param x The point to scroll to on the horizontal axis.
+     * @param y The point to scroll to on the vertical axis.
+     * @param duration The amount of time to take scrolling to that point. Defaults to `0`.
      */
     scrollToPoint(x: number | undefined | null, y: number | undefined | null, duration?: number): Promise<void>;
     private onScrollStart;
     private onScrollEnd;
-    hostData(): {
-        class: {
-            'content-sizing': boolean;
-            'overscroll': boolean;
-        } | {
-            'content-sizing': boolean;
-            'overscroll': boolean;
-        };
-        style: {
-            '--offset-top': string;
-            '--offset-bottom': string;
-        };
-    };
-    render(): JSX.Element[];
+    render(): any;
 }
