@@ -146,7 +146,7 @@
 		            <div class="expandable-div">   
 						<fieldset id="words">
 							<legend><fmt:message key='advanced.terms'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid hidden">
+							<div class="box-content container-fluid">
 								<div id="label-palavras-1">
 									<label for="adv_and" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.terms.all'/></label>
 									<div class="withTip ">
@@ -183,7 +183,7 @@
 					<div class="expandable-div">
 						<fieldset id="date">
 							<legend><fmt:message key='advanced.date'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid hidden">
+							<div class="box-content container-fluid">
 								<div id="label-data-1">
 
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
@@ -223,7 +223,7 @@
 					<div class="expandable-div">
 						<fieldset id="format">
 							<legend><fmt:message key='advanced.format'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid hidden">
+							<div class="box-content container-fluid ">
 								<div id="label-format-1">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="formatType"><fmt:message key='advanced.format.label'/></label>
 									
@@ -255,7 +255,7 @@
 					<div class="expandable-div">
 						<fieldset id="domains">
 							<legend><fmt:message key='advanced.website'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid hidden">
+							<div class="box-content container-fluid ">
 								<div id="label-domains-1">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="site"><fmt:message key='advanced.website.label'/></label>
 									<div class="withTip">
@@ -270,7 +270,7 @@
 					<div class="expandable-div">
 						<fieldset id="num_result_fieldset">
 							<legend><fmt:message key='advanced.results'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid hidden">
+							<div class="box-content container-fluid ">
 								<div id="label-num-result-fieldset-1">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="num-result"><fmt:message key='advanced.results.label'/></label>
 									<div>
@@ -308,8 +308,21 @@
 
 <script>
 $(".expandable-div legend").click(function() {
-    $(this).children("i").toggleClass('fa-caret-up fa-caret-down');
-    $(this).next().toggleClass("hidden");
+	$('fieldset > legend > i').removeClass('fa-caret-up').addClass('fa-caret-down')
+
+    var isVisible =  $(this).next().is(':visible');
+    
+	$('fieldset > .box-content').slideUp('fast');
+
+	if (isVisible){		
+		$(this).next().slideUp('fast');
+		$(this).children("i").removeClass('fa-caret-up').addClass('fa-caret-down');
+	}
+	else{
+		console.log('not visible')
+		$(this).next().slideDown('fast').show().slideDown('fast');
+		$(this).children("i").removeClass('fa-caret-down').addClass('fa-caret-up');		
+	}
 });
 </script>
 

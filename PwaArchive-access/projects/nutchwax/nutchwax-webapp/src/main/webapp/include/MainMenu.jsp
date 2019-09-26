@@ -1,4 +1,5 @@
 <script type="text/javascript">
+/*Auxiliary functions*/
 String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
     return this.split(needle).join(replacement);
 };
@@ -8,6 +9,8 @@ if (!String.prototype.startsWith) {
     return this.indexOf(searchString, position) === position;
   };
 } 
+
+
 
 
 function encodeHtmlEntity(str) {
@@ -104,6 +107,33 @@ function encodeHtmlEntity(str) {
              .replaceAll(' ','+');
     return str;
 }
+async function getCurrentImageHref(){	
+	var result = await document.querySelector('ion-slides').getActiveIndex().then(function(result){
+	    console.log('index: ' + result);
+		return $('ion-slide:nth-child('+(result+1)).find('.imageHref').attr('href');
+	});
+	return result;
+}
+function getSlidePosition(){
+	console.log('slides length:' + $('ion-slide').length);
+	for(i=0; i< $('ion-slide').length; i++){
+		console.log('element i: ' + i);
+		console.log('element left offset: ' + $('ion-slide:nth-child('+(i+1)+')').offset().left);
+		if($('ion-slide:nth-child('+(i+1)+')').offset().left >= -10  && $('ion-slide:nth-child('+(i+1)+')').offset().left <= 10){
+			console.log('found posistion: ' + i);
+			return i+1
+		}
+	}
+	return -1
+}
+
+function getImageHref(position){
+	return $('ion-slide:nth-child('+(position)).find('.imageHref').attr('href');
+}
+
+
+/*End Auxiliary functions*/
+
 
 
 	
@@ -113,7 +143,7 @@ var MENU = MENU || (function(){
         init : function() {
         	document.write(''+
 				'<div class="swiper-container">'+
-					'<div class="swiper-wrapper">'+
+					'<div id="menuWrapper" class="swiper-wrapper">'+
 						'<div class="swiper-slide content"><div id="mainMask"></div>');     
         	this.attachMask();
 
@@ -121,7 +151,7 @@ var MENU = MENU || (function(){
         close: function(){
         	document.write( '</div></div></div>');
         	$('.swiper-wrapper').prepend(
-			            	'<div class="swiper-slide menu swiper-slide-prev">' +       
+			            	'<div id="menuSwiperSlide" class="swiper-slide menu swiper-slide-prev">' +       
 			            		'<button class="clean-button" onclick="MENU.copyLink();"><h4><i class="fa fa-link padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.copy'/></h4></button>' +
 	          					'<button class="clean-button" id="pagesMenu" onclick="MENU.pagesClick();"><h4><i class="fa fa-globe padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.pages'/><i id="pagesCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></button>'+	 	
 	          					'<div id="pageOptions">'+	          							            		
@@ -200,46 +230,30 @@ var MENU = MENU || (function(){
 		    document.querySelector('.swiper-container').swiper.slideNext();
 		  }); 	         	
         },	 
-        copyLink: function(){
-			var dummy = document.createElement('input')			    
+        copyLink: function(){				    
 			var urlToCopy;
-			if( window.location.pathname.startsWith("/images.jsp") && lastPosition != -1 ){ /*Image expanded OR details expanded*/
-				imageObj = imageObjs[lastPosition];
-				if($('#card'+lastPosition).is(":visible")){ /*share a custom link to the image expanded*/					 
-					 urlToCopy =  window.location.origin+"/imageexp.jsp?"+
-					 			"imgSrc="+ encodeURIComponent(imageObj.imgSrc)+"&"+
-					 			"imgTstamp="+ imageObj.timestamp+"&"+
-					 			"imgWidth="+ parseInt(imageObj.expandedWidth)+"&"+
-					 			"imgHeight="+ parseInt(imageObj.expandedHeight) +"&"+
-    (imageObj.titleFull != "" ? "imgTitle="+imageObj.titleFull+"&"  : "") +			
-    (imageObj.imgAltFull != "" ? "imgAlt="+imageObj.imgAltFull+"&"  : "") +	
-    							"imgMimeType="+imageObj.imgMimeType+ "&" +
-					 			"pageURL="+encodeURIComponent(imageObj.pageURL)+ "&"+
-					 			"pageTitle="+imageObj.pageTitle+ "&"+
-					 			"pageTstamp="+imageObj.pageTstamp+ "&"+
-					 			"backURL="+encodeURIComponent(window.location.href);
-				}	
-				else{ /*share a custom link to the details card of the current image*/
-					 urlToCopy =  window.location.origin+"/imagedet.jsp?"+
-					 			"imgSrc="+ encodeURIComponent(imageObj.imgSrc)+"&"+
-					 			"imgTstamp="+ imageObj.timestamp+"&"+
-					 			"imgWidth="+ parseInt(imageObj.expandedWidth)+"&"+
-					 			"imgHeight="+ parseInt(imageObj.expandedHeight) +"&"+
-    (imageObj.titleFull != "" ? "imgTitle="+imageObj.titleFull+"&"  : "") +			
-    (imageObj.imgAltFull != "" ? "imgAlt="+imageObj.imgAltFull+"&"  : "") +	
-    							"imgMimeType="+imageObj.imgMimeType+ "&" +
-					 			"pageURL="+encodeURIComponent(imageObj.pageURL)+ "&"+
-					 			"pageTitle="+encodeURIComponent(imageObj.pageTitleFull)+ "&"+
-					 			"pageTstamp="+imageObj.pageTstamp+ "&"+
-					 			"safe="+imageObj.safe+"&"+
-					 			"collection="+imageObj.collection+"&"+
-					 			"backURL="+encodeURIComponent(window.location.href);					
-				}
+			if (typeof openImageViewer !== 'undefined' && openImageViewer === true){ 
+				console.log(imageHref);	
+				$('#mainMask').click();		
+				const sleep = (milliseconds) => {
+				  return new Promise(resolve => setTimeout(resolve, milliseconds))
+				}				
+				sleep(500).then(() => {
+     				console.log('href: ' + getImageHref(getSlidePosition()));
+     				MENU.copyURL(getImageHref(getSlidePosition()));
+  				});
+				/*imageHref.then(MENU.copyURL());*/
 			}
 			else{ /*Default case copy current url*/
 				urlToCopy = window.location.href;
+				MENU.copyURL(urlToCopy);
 			}
 
+
+        },
+        copyURL: function(urlToCopy){        	
+        	console.log("urlToCopy: " + urlToCopy);
+        	var dummy = document.createElement('input')		
 			document.body.appendChild(dummy);
 			dummy.value = urlToCopy;
 			dummy.select();

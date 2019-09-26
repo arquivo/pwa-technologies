@@ -357,9 +357,10 @@ a.advancedSearch {
     background-color: #fffbd6;
     border-radius: 5px;
     border: 1px solid #dfe1e5;    
-    float: left;
+    /*float: left;*/
+    width:100% !important;
 
-} 
+  } 
 }
 
 
@@ -486,9 +487,6 @@ div.omitted-results:hover {
     margin-bottom: 10px !important;
     
 }
-
-
-
 
 .pagesNextPrevious a:hover {
     background-color: #007AFF !important;
@@ -981,7 +979,7 @@ legend.scheduler-border {
     font-size: 17px;
     width: 99.7% !important;
     position: relative;
-    border-radius: /*100px*/9px !important;
+    border-radius: /*100px*/5px !important;
     /*border: 1px solid /*#ccc*/ /*transparent;*/
     border: 1px solid #ccc;
     outline: none !important;
@@ -1020,6 +1018,14 @@ input[type=text] {
     color: black !important;
     /* New code below */
     font-weight: bold;
+
+    transition:background-color 0.5s;
+}
+.expandable-div legend:active {
+
+    background-color: /*#e6e6e6*//*#dbdbdb*/#ccc !important;
+    color:black !important;
+   
 }
 
 .date-advanced{
@@ -1136,6 +1142,10 @@ body#advanced .calendar-anchor-advanced img, body#advanced-images .calendar-anch
     right: /*11px*/4px;
     z-index: 999999999;
     width: /*28px*//*25px*/29px;    
+}
+
+body#advanced .box-content,  body#advanced-images .box-content{
+    display: none;
 }
 
 .calendar-anchor-advanced img{
@@ -1349,6 +1359,10 @@ input:active, input:focus{
   appearance: none !important;
 }
 
+body#home-search #conteudo-pesquisa-erro{    
+    margin-top: /*-8px*/-11px; 
+}
+
 #conteudo-pesquisa-erro{    
     margin-left: /*9px*/9px;
     margin-right: /*9px*/9px;
@@ -1424,6 +1438,7 @@ div#flex-container div:first-child {
     /*-webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
     -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);*/
+    margin-bottom: 12px !important
 }
 
 div#flex-container div:second-child { 
@@ -1434,8 +1449,9 @@ div#flex-container div:second-child {
 
 div#flex-container div {
     border-radius:10px;
-    margin: 7px 8px 12px 8px !important;      
+    margin: 7px 8px /*12px*/18px 8px !important;      
     padding: 0px;
+    /*height: auto !important;*/
     /*border:1px solid #ebebeb;*/
     background-color:/*#f8f8f8*/#f2f2f2;  
     /*-webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
@@ -1458,6 +1474,7 @@ div#flex-container h3 {
     margin: 5px 0;
     padding: 14px 6px 6px 14px;
     font-size: 1.6em;  
+    color: black !important;
 }
 
 #archivePresentation-pt, #archivePresentation-en, #testimonials-en, #testimonials-pt  {
@@ -1593,7 +1610,7 @@ div.call-to-actions span  {
 #award-pt a, #award-en a, #pagesPreserved-pt a, #pagesPreserved-en a, #exhibitions-pt a, #exhibitions-en a {
     display: block;
     width: 100%;
-    height: 100%;
+    height: 430px;
     text-indent: -999999px;
     box-shadow: none !important;
 }
@@ -1782,11 +1799,9 @@ div.call-to-actions span  {
 }
 
 .image-mobile-expanded-div{  
-
     width: 100%;    
     left: 0;
     position: absolute;
-    margin-top: 8px;
     box-sizing: content-box;
     overflow: hidden;
     z-index: 2147483646;
@@ -1814,6 +1829,9 @@ div.call-to-actions span  {
     width: auto!important;
     min-width: initial!important;
     max-width: calc(100% - 40px); 
+    padding-top: /*10px*/20px;/*
+    padding-left: 15px;
+    padding-right: 15px;*/
 }
 
 ion-button{
@@ -1836,19 +1854,18 @@ ion-button{
 }
 
 .card-height{
-   background-color: /*white*//*#3d3c3c*/ #222 !important;
+   background-color: /*white*//*#3d3c3c*/ /*#222*/#303a3f !important;
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
-   width: /*80vw*/88.3vw/*90*/;
-   /*max-width: 95vw;*/
+   width: 100vw;
    margin-top: 0px!important;
    z-index:2;
    overflow-y: auto!important;
    outline: none;   
+   border-radius: 10px;
 }
 
-#showSlides{
-    margin-top: -20px;
+#showSlides{    
     z-index: 99999999999999999;
     height: calc(100vh - 18px);
 }
@@ -1869,7 +1886,7 @@ ion-button{
 .image-mobile-expanded-div ion-list ion-item{
     --min-height: 20px;
     color: rgba(255,255,255,0.6) !important;
-    --ion-background-color:/*#3d3c3c*/#222 !important;
+    --ion-background-color:/*#3d3c3c*//*#222*/#303a3f !important;
     --ion-padding: 20px !important;
     --ion-padding-: 0 !important
 }
@@ -1933,17 +1950,21 @@ body#home-landing.hydrated h3 {
 }
 
 .closeIt{
-    margin-right: 8px;
-    margin-top: 20px;
-    color: rgba(255,255,255,0.5) !important; 
+    position: absolute;
+    color: rgba(255,255,255,0.5) !important;
     background: rgba(0,0,0,0.5);
-    border-radius: 25px;    
+    border-radius: 25px;
+    top: 5px;
+    right: 6px;
+    z-index: 2;
 }
   .closeItAbsolute
   {
+    display: none;
     position: absolute;
-    right: 8px;
-    top: 20px;
+    top: 5px;
+    right: 6px;
+    z-index: 2;
     color: rgba(255,255,255,0.6) !important;
     background: rgba(0,0,0,0.5);
     border-radius: 25px;   
@@ -1952,6 +1973,7 @@ body#home-landing.hydrated h3 {
 @media (max-width: 500px) {
   .image-expanded-full-width.image-expanded-viewer
   {   
+    padding-top: 0px;
     padding-bottom: 0px!important;
     max-height: initial;
     margin-bottom: 10px;
@@ -2071,6 +2093,8 @@ h1,h2,h3,h4,h5{
     position: absolute;
     top: 0px;
     right: -2px;
+    width: auto !important;
+    height: auto !important;
     padding: 3px 6px;
     border: 1px solid white;
     background-color: white;
@@ -2131,7 +2155,7 @@ a.advancedSearch:hover {
     background: /*#feefef*/transparent;
     padding: 20px;
     border-radius: 5px;
-    margin-top: 10px;
+    margin-top: 6px;
 
 }
 
@@ -2588,13 +2612,17 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     /* outline: 1px solid red; */
     background-color: white;
     border: 1px solid #ccc !important;
-    border-radius: /*50px*/10px !important;
+    border-radius: /*50px*/5px !important;
     height: 46px !important;
     padding-left: 14px !important;
     padding-top: 09px !important;
     font-size: 17px;
     color: black;
     margin: /*15px*/7px;       
+}
+
+#safeSearch, #dateEnd_top, #label-palavras-3 span, #label-domains-1 span {
+    margin-bottom: 20px !important;
 }
 
 .select-icon-inner {
@@ -2681,6 +2709,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 }
 
 
+
 /***************************************************************************/
 /***************************************************************************/
 /**************             QUERIES               **************************/
@@ -2689,10 +2718,11 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 
 /* Samsung S2 */
 
-@media screen and (device-width: 320px) and (device-height: 534px) and (-webkit-device-pixel-ratio: 1.5) {
-    a.advancedSearch {
-    font-size: /*0.90em*//*1.11em*/0.8em;     
-    font-size: 1em !important;     
+@media screen 
+and (device-width: 320px) and (device-height: 534px) and (-webkit-device-pixel-ratio: 1.5) {
+   /*a.advancedSearch {
+    font-size: /*0.90em*//*1.11em*//*0.8em;     
+   font-size: 1em !important;     
    }
 
    #welcomeMessage #closeMessage {
@@ -2705,7 +2735,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     background-color: white;
     border-radius: 49px;
     font-size: 0.9em !important;
-    color: #007aff;   
+    color: #007aff; */
 }
 
 
@@ -2730,107 +2760,6 @@ and (min-device-width : 1024px)   {
 }
 
 
-.pulse {
-  margin:100px;
-  display: block;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #cca92c;
-  cursor: pointer;
-  box-shadow: 0 0 0 rgba(204,169,44, 0.4);
-  animation: pulse 2s infinite;
-}
-.pulse:hover {
-  animation: none;
-}
-
-@-webkit-keyframes pulse {
-  0% {
-    -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-  }
-  70% {
-      -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-  }
-  100% {
-      -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-  }
-}
-@keyframes pulse {
-  0% {
-    -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-    box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-  }
-  70% {
-      -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-      box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-  }
-  100% {
-      -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-      box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-  }
-}
-
-
-
-
-/*****************************************************************************
-/* **************************  General styles for Mobile Tablet and Desktop */
-/****************************************************************************
-
-  ##Device = Desktops
-  ##Screen = 1281px to higher resolution desktops
-*/
-
-@media (min-width: 1281px) {  
-  
-}
-
-/* 
-  ##Device = Laptops, Desktops
-  ##Screen = B/w 1025px to 1280px
-*/
-
-@media (min-width: 1025px) and (max-width: 1280px) {
-
-}
-
-/* 
-  ##Device = Tablets, Ipads (portrait)
-  ##Screen = B/w 768px to 1024px
-*/
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  
-}
-
-/* 
-  ##Device = Tablets, Ipads (landscape)
-  ##Screen = B/w 768px to 1024px
-*/
-
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  
-}
-
-/* 
-  ##Device = Low Resolution Tablets, Mobiles (Landscape)
-  ##Screen = B/w 481px to 767px
-*/
-
-@media (min-width: 481px) and (max-width: 767px) {
-  
-}
-
-/* 
-  ##Device = Most of the Smartphones Mobiles (Portrait)
-  ##Screen = B/w 320px to 479px
-*/
-
-@media (min-width: 320px) and (max-width: 480px) {
-  
-}
-
 /**************************************************************
 /*********************** Specific css for specific devices ***/
 /**************************************************************
@@ -2844,7 +2773,7 @@ and (min-device-width : 1024px)   {
   and (device-aspect-ratio: 2/3) {
    
    a.advancedSearch {
-    font-size: /*0.90em*//*1.11em*//0.8em;       
+    font-size: /*0.90em*//*1.11em*/0.8em;       
   }
    a#BotaoPesquisaAvancada {
     font-size:0.8em; 
@@ -2885,52 +2814,40 @@ and (min-device-width : 1024px)   {
   }
 }
 
-
 /* ----------- iPhone 4 and 4S ----------- */
 
 /* Portrait and Landscape */
 @media only screen 
   and (min-device-width: 320px) 
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (device-aspect-ratio: 2/3) {
-   
-   a.advancedSearch {
-    font-size: 1em !important ;       
-   }
-   a#BotaoPesquisaAvancada {
-    font-size: 1em  !important;     
-   }
-   a#BotaoPaginas {   
-    font-size: 1em  !important;   
-   } 
-   a#BotaoImagens {   
-    font-size: 1em  !important ;   
-   }
-} 
+  and (max-device-height: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) { 
+
+}
 
 /* Portrait */
 @media only screen 
   and (min-device-width: 320px) 
-  and (max-device-width: 480px)
+  and (max-device-height: 480px) 
   and (-webkit-min-device-pixel-ratio: 2)
-  and (device-aspect-ratio: 2/3)
   and (orientation: portrait) {
-  body#homepage-landing #searchBarButtonsDiv {
-  margin-top: -2px !important;   
-  }
+
+#searchBarButtonsDiv .advancedSearch {
+    font-size: 1em !important ;       
+ }
+ div#flex-container div:first-child {   
+ margin-bottom: 11px !important;   
+ width: 94.79% !important;
+ }
+
 }
 
 /* Landscape */
 @media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 480px)
+  and (min-device-width: 480px) 
+  and (max-device-width: 320px)
   and (-webkit-min-device-pixel-ratio: 2)
-  and (device-aspect-ratio: 2/3)
   and (orientation: landscape) {
 
-  #searchBarButtonsDiv {
-  margin-bottom: 0px;
-  }
 }
 
 /* ----------- iPhone 5 and 5S ----------- */
@@ -2940,30 +2857,30 @@ and (min-device-width : 1024px)   {
   and (min-device-width: 320px) 
   and (-webkit-min-device-pixel-ratio: 2)
   and (device-aspect-ratio: 2/3) {
-  a.advancedSearch {
-  font-size: 1em ;  }
-  a#BotaoPesquisaAvancada {
-    font-size:1em ;     
-   }
-  a#BotaoPaginas {   
-    font-size: 1em;   
-   } 
-  a#BotaoImagens {   
-    font-size: 1em ;       
-   }  
+ 
 }
 /* Portrait */
 @media only screen 
   and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (device-aspect-ratio: 2/3)
+  and (max-device-height: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)  
   and (orientation: portrait) {
+  
+  #searchBarButtonsDiv .advancedSearch {
+    font-size: 1em !important ;       
+ }
   #searchBarButtonsDiv {
   margin-top: -26px;  
   } 
-}
+  #searchBarButtonsDiv .advancedSearch {
+    font-size: 1em !important ;       
+ }
 
+ div#flex-container div:first-child {   
+ margin-bottom: 11px !important;   
+ width: 94.79% !important;
+ }
+}
 /* Landscape */
 @media only screen 
   and (min-device-width: 320px) 
@@ -2981,6 +2898,7 @@ and (min-device-width : 1024px)   {
   and (max-device-width: 667px) 
   and (-webkit-min-device-pixel-ratio: 2) 
   and (device-aspect-ratio: 2/3) { 
+
 }
 
 /* Portrait */
@@ -2990,6 +2908,7 @@ and (min-device-width : 1024px)   {
   and (-webkit-min-device-pixel-ratio: 2)
   and (device-aspect-ratio: 2/3)
   and (orientation: portrait) { 
+
 }
 
 /* Landscape */
@@ -3028,17 +2947,127 @@ and (min-device-width : 1024px)   {
   and (device-aspect-ratio: 2/3)
   and (orientation: landscape) { 
 }
+}
 
-/* ----------- iPad Mini ----------- */
+/* ----------- iPhone X ----------- */
 
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3) { 
+
+}
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3) {  
+ 
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+
+}
+
+/* ----------- iPhone XR ****************** */
+
+@media only screen 
+    and (min-device-width : 896px) 
+    and (device-height : 414px) 
+    and (-webkit-device-pixel-ratio : 3) {
+ 
+}
+
+/* ----------- iPhone XS ****************** */
+
+/* 2436x1125px at 458ppi */
+@media only screen 
+    and (device-width : 375px) 
+    and (device-height : 812px) 
+    and (-webkit-device-pixel-ratio : 3) { }
+
+/* ----------- iPhone XS ****************** */
+
+/* 2688x1242px at 458ppi */
+@media only screen 
+    and (device-width : 414px) 
+    and (device-height : 896px) 
+    and (-webkit-device-pixel-ratio : 3) { }
+
+
+/* ----------- iPad / iPad Mini ----------- */
 /* iPad Mini in portrait  */
 @media only screen 
 and (min-device-width : 768px) 
 and (max-device-height : 1024px) 
  { 
+
+
+.image-expanded-viewer {
+
+    padding-top: /*10px*/61px;
+}
+
+    .sc-ion-card-ios-h {
+    padding-left: 25% !important;
+    padding-right: 25% !important;
+}
+
+    .imageContent{
+     width: 94% !important;   
+    }
+
+    .imgClass {
+    display: block;
+    margin: auto;
+    padding-top: /*5%*//*50%*/53%;
+    width: 41%;
+}
+    .myButtonStyle {
+    max-width: 41%;   
+}
+    #welcomeMessage #closeMessage {
+
+    cursor: pointer;
+    position: absolute;
+    top: -12px;
+    right: 5px;
+    outline: 1px solid red
+}
+
+div#flex-container div:first-child {
+    width: 97.2% !important;
+    margin: 18px auto 0 auto !important;
+}
+
+div#flex-container div {
+    height: auto !important;
+}
+div#flex-container div#into-award {
+    margin-top: 18px !important
+}
+
+#welcomeMessage {
+    height: auto !important;
+}
+
+#welcomeMessage h2 {  
+    font-size: 3vw !important;    
+}
+
+#welcomeMessage p {
+    font-size: 1.7vw;
+}
     
 #searchForm .form-control {
-    margin-top: /*25px*/12px;
+    margin-top: /*25px*/12px;    
 }
 
     span#buttonSearch button span {
@@ -3071,6 +3100,7 @@ and (max-device-height : 1024px)
 
   div#flex-container div {
     height: 430px;
+    box-shadow: none !important;
 }
 
    #resultados-lista ul li {
@@ -3083,12 +3113,20 @@ and (max-device-height : 1024px)
 
 }
 
-/* iPad Mini in landscape  */
+/* iPad / iPad Mini in landscape  */
 @media only screen 
 and (min-device-width : 1024px) 
 and (max-device-height : 768px)
  { 
 
+    div#flex-container div {
+  }
+    .pagesNextPrevious {    
+    width: 92%;
+    padding: 0px; 
+    float: none !important;  
+    margin: 0 auto !important;
+}
     span#buttonSearch button span {
     top: -32px !important;
     right: 3px !important;
@@ -3098,8 +3136,9 @@ and (max-device-height : 768px)
     }
     div#flex-container { 
     margin: 0 auto;
-    width: 63.7%;
+    width: 63.9% !important;
   }
+
   #resultados-lista {
     width: 96% !important;
     margin: 0px auto !important;
@@ -3118,4 +3157,120 @@ and (max-device-height : 768px)
 #photos {
     margin: 0 auto;
     width: 63.5% !important;
+  }
 }
+
+/* ----------- iPad Pro ----------- */
+
+/* iPad Pro in portrait  */
+@media only screen 
+and (min-device-width : 1024px) 
+and (max-device-height : 1366px) 
+ {
+ 
+}
+
+/* ----------- iPad Pro 10.5" ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 834px) 
+  and (max-device-width: 1112px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+}
+
+/* Portrait */
+/* Declare the same value for min- and max-width to avoid colliding with desktops */
+/* Source: https://medium.com/connect-the-dots/css-media-queries-for-ipad-pro-8cad10e17106*/
+@media only screen 
+  and (min-device-width: 834px) 
+  and (max-device-height: 834px)   
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+ 
+    div#flex-container {
+    width: 80.7% !important;
+    margin: 0 auto;
+    box-shadow: none;
+}
+
+ .image-expanded-viewer {
+
+    padding-top: /*10px*/61px;
+}
+
+    .sc-ion-card-ios-h {
+    padding-left: 25% !important;
+    padding-right: 25% !important;
+} 
+   
+}
+
+/* Landscape */
+/* Declare the same value for min- and max-width to avoid colliding with desktops */
+/* Source: https://medium.com/connect-the-dots/css-media-queries-for-ipad-pro-8cad10e17106*/
+@media only screen 
+  and (min-device-width: 1112px) 
+  and (max-device-width: 1112px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+    div#flex-container {
+    width: 80.7% !important;
+    margin: 0 auto;
+    box-shadow: none;
+}
+
+ .image-expanded-viewer {
+
+    padding-top: /*10px*/61px;
+}
+
+    .sc-ion-card-ios-h {
+    padding-left: 25% !important;
+    padding-right: 25% !important;
+} 
+}
+
+/* ----------- iPad Pro 12.9" ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1366px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+
+
+}
+
+/* Portrait */
+/* Declare the same value for min- and max-width to avoid colliding with desktops */
+/* Source: https://medium.com/connect-the-dots/css-media-queries-for-ipad-pro-8cad10e17106*/
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1024px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+    div#flex-container {
+    width: 63.9% !important;
+    margin: 0 auto;
+    box-shadow: none;
+}
+
+}
+
+/* Landscape */
+/* Declare the same value for min- and max-width to avoid colliding with desktops */
+/* Source: https://medium.com/connect-the-dots/css-media-queries-for-ipad-pro-8cad10e17106*/
+@media only screen 
+  and (min-device-width: 1366px) 
+  and (max-device-width: 1366px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+}
+
+
+

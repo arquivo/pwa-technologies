@@ -587,7 +587,7 @@ Content = {
     }
   </script>
   <script type="text/javascript">
-    $('<div id="showSlides"><ion-slides id="expandedImageViewers" onload=slidesLoaded();></ion-slides></div>').insertBefore('.background-top-curve');
+    $('<div id="showSlides"><ion-slides id="expandedImageViewers" onload=slidesLoaded();></ion-slides></div>').insertBefore('.curve-background');
 
     checkElement('#expandedImageViewers > .swiper-wrapper') 
     .then((element) => {      

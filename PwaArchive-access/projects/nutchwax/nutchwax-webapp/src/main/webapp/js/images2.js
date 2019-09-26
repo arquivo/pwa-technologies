@@ -91,6 +91,13 @@ function truncateUrl(url, maxSize)
         return url
 }
 
+function removeWWW(url){
+    if(url.startsWith('www.')){
+    	return url.substring(4, url.length);
+    }
+    return url;
+}
+
 /*Truncates large URL in the replay bar*/
 function truncateUrlKeepProtocol(url, maxSize)
 {    
@@ -131,6 +138,9 @@ lastPosition = -1; /*Global var refers to the lastImage the user*/
 lastPress= -1; /*Global var refers to last time user pressed arrow in image viewer*/
 
 function openImage(position, animate){
+	console.log('open image');
+	openImageViewer = true;
+	imageHref = getCurrentImageHref();
     //var arrowWidth = 16; //width of the arrow
     if(lastPosition != -1){
         $('#testViewer'+lastPosition).hide();
@@ -196,8 +206,20 @@ const sleep = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
+async function getCurrentImageHref(){
+	var result = await document.querySelector('ion-slides').getActiveIndex().then(function(result){
+	    console.log('index: ' + result);
+		return $('ion-slide:nth-child('+(result+1)).find('.imageHref').attr('href');
+	});
+	return result;
+}
+
+
+
 function openImage(position){
-  console.log('opening position: ' + position);
+  	console.log('opening position: ' + position);
+    openImageViewer = true;
+    imageHref = getCurrentImageHref();
     $('#showSlides').show();
     var slides = document.querySelector('ion-slides');
     // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
@@ -211,10 +233,27 @@ function openImage(position){
    sleep(500).then(() => {
      document.body.scrollTop = document.documentElement.scrollTop = 0;
   });
+
+var slides = document.getElementById('expandedImageViewers');
+ 
+
+ console.log('active index: ' + slides.getActiveIndex());
+
+   
+    /*checkElement('#close'+position) 
+    .then((element) => {      
+                 $('#close'+position).css('right',  parseInt($(window).width() - ($("#card"+position).offset().left + $("#card"+position).outerWidth())) + 8+'px' );
+                  console.log('position: ' + position);
+                  console.log('window width: ' + $(window).width());
+                  console.log('card offset left: ' + $("#card"+position).offset().left) % $(window).width();
+                  console.log('card outer width: ' + $("#card"+position).outerWidth());           
+    }); */
+  
 }
 
-function closeImage(position){
+function closeImage(position){	
   console.log('closing position: ' + position);
+  openImageViewer = false;
   $('#showSlides').hide();
 }
 
@@ -236,6 +275,20 @@ function nextImage(position){
     return;
 }
 
+function rafAsync() {
+    return new Promise(resolve => {
+        requestAnimationFrame(resolve); //faster than set time out
+    });
+}
+
+function checkElement(selector) {
+    if (document.querySelector(selector) === null) {
+        return rafAsync().then(() => checkElement(selector));
+    } else {
+        return Promise.resolve(true);
+    }
+}
+
 function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expandedImageHeight, expandedImageWidth){
 
     var maxImageExpandHeight = 400;
@@ -254,16 +307,24 @@ function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expan
     var liMarginTop = maxImageHeight - imageHeight;
     var contentToInsert = ''+
 
-        '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "openImage('+position+',false)" style=" break-inside: avoid-column; -webkit-column-break-inside: avoid;">'+
+        '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "openImage('+position+',false)">'+
         '   <img  height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
-        '   <p class="green image-display-url" >'+truncateUrl(imageObj.pageURL, 20)+'</p>'+
+        '   <p class="green image-display-url" >→ '+removeWWW(truncateUrl(imageObj.pageURL, 20))+'</p>'+
         '   <p class="date image-display-date" id="date'+position+'">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
         '   <div id="arrowWrapper'+position+'" class="arrowWrapper" >'+
         '       <div id="arrow'+position+'" class="arrow"/></div>' +
         '   </div>'+ 
         '</div>';
 
-        $('#expandedImageViewers').append(insertImageViewer(imageObj, position));
+        if($("#expandedImageViewers > .swiper-wrapper") !== null)
+        {
+                  $('#expandedImageViewers > .swiper-wrapper').append(insertImageViewer(imageObj, position));  
+
+        }
+        else{
+            console.log('unexpected error loading image viewer');      
+        }
+
 
       imageObj.expandedImageWidth = expandedImageWidth;
       imageObj.expandedImageHeight = expandedImageHeight;
@@ -291,6 +352,8 @@ function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expan
     }
 }    
 
+
+
 function  insertImageViewer(imageObj, position){
   /*this If should be removed in production*/
   /*due to lack of configurations and a proper test environment with images configured in solr for test purposes I had to load the images from Arquivo.pt directly*/
@@ -307,9 +370,6 @@ return ''+
       '<div class="row full-height no-outline">'+
           '<div id="insert-card-'+position+'" class="full-height text-right">'+
               '<ion-card id="card'+position+'" class="card-height">'+
-                 (parseInt(imageObj.expandedWidth) > $( window ).width() ? ''+
-                 '<ion-icon id="close'+position+'" name="close" class="closeCard" size="large" onclick = "closeImage('+position+',false)"></ion-icon>' : '' +
-                 '<ion-icon id="close'+position+'" name="close" class="closeIt" size="large" onclick = "closeImage('+position+',false)"></ion-icon>') +
                  '<a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
                   (parseInt(imageObj.expandedWidth) >$( window ).width() ? '<img class="image-expanded-viewer image-expanded-full-width" src="'+imageObj.currentImageURL+'">' : '<img class="image-expanded-viewer" src="'+imageObj.currentImageURL+'">')+
                  '</a>'+
@@ -322,8 +382,8 @@ return ''+
                   '</ion-row>'+
                   '<ion-card-content>'+                
                       '<ion-list class="imageList selected">'+
-      ( imageObj.title !== ""  ? ' <ion-item class="item-borderless" lines="none" ><a target="_blank" href="'+imageObj.currentImageURL+'"><h5>' +imageObj.title+'</a></h5></ion-item>':'') +
-      ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <ion-item id="imgTitleLabel'+position+'" lines="none"><h5><a target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h5></ion-item>':'') +  
+      ( imageObj.title !== ""  ? ' <ion-item class="item-borderless" lines="none" ><a class="imageHref" target="_blank" href="'+imageObj.currentImageURL+'"><h5>' +imageObj.title+'</a></h5></ion-item>':'') +
+      ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <ion-item id="imgTitleLabel'+position+'" lines="none"><h5><a class="imageHref" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h5></ion-item>':'') +  
                           '<ion-item lines="none"><h5>' +truncateUrlMiddleRemoveProtocol(imageObj.imgSrc, 40)+'</h5></ion-item>'+
                           '<ion-item lines="none"><h5>'+imageObj.imgMimeType+' '+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+'</h5></ion-item>'+
                           '<ion-item lines="none"><h5>'+getDateSpaceFormated(imageObj.timestamp)+'</h5></ion-item>'+             
@@ -340,6 +400,9 @@ return ''+
                       '</ion-list>'+
                   '</ion-card-content>'+                                
               '</ion-card> '+
+           /*  (parseInt(imageObj.expandedWidth) > $( window ).width() ? ''+
+             '<ion-icon id="close'+position+'" name="close" class="closeCard" size="large" onclick = "closeImage('+position+',false)"></ion-icon>' : '' +*/
+             '<ion-icon id="close'+position+'" name="close" class="closeIt" size="large" onclick = "closeImage('+position+',false)"></ion-icon>' +              /*change to closeIt*/
           '</div>'+
       '</div>'+    
   '</ion-slide>'; 
@@ -351,7 +414,6 @@ function viewDetails(position){
   if($('#detailsCard'+position).length == 0) {
     var detailsCard = ''+
     '<ion-card id="detailsCard'+position+'" class="card-height">'+
-      '<ion-icon id="closeCard'+position+'" name="close" class="closeItAbsolute" size="large" onclick="closeDetails('+position+')"></ion-icon>'+
       '<ion-row>'+
         '<h3 class="text-left">'+details.details+'</h4>'+                
       '</ion-row>'+            
@@ -387,14 +449,17 @@ function viewDetails(position){
           '<ion-item class="item-borderless" lines="none" ><h5><em>'+details.name+'</em> '+imageObj.collection+'</h5></ion-item>'+
         '</ion-list>'+
       '</ion-card-content>'+      
-    '</ion-card>';
+    '</ion-card>'+
+    '<ion-icon id="closeCard'+position+'" name="close" class="closeItAbsolute" size="large" onclick="closeDetails('+position+')"></ion-icon>';
 
     $('#insert-card-'+position).append(detailsCard);
     $('#card'+position).hide();
+    $('#closeCard'+position).show();
   }
   else{
     $('#card'+position).hide();
     $('#detailsCard'+position).show()
+    $('#closeCard'+position).show();
   }
 
 }
@@ -475,15 +540,11 @@ function detectTouchElement(selector){
 }
 
 
-
+/*Closes the Details Card and Opens Image viewer card*/
 function closeDetails(position){
-  
-  //$('#testViewer'+position).hide();
-
-  //$('#card'+position).show();  
-  openImage(position, false);
   $('#detailsCard'+position).hide();
-
+  $('#closeCard'+position).hide();
+  $('#card'+position).show();
 }
 
 function encodeHtmlEntity(str) {
@@ -582,16 +643,12 @@ function encodeHtmlEntity(str) {
     return str;
 }
 
-$(document).ajaxStart(function(){
-  if(startPosition == 0){       
-    $('#loadingDivImages').show();
-  }
+$(document).ajaxStart(function(){	
+    $('#loadingDiv').show();
 });
 
 $(document).ajaxStop(function(){
-  if(startPosition == 0){       
-    $('#loadingDivImages').hide();
-  }
+ $('#loadingDiv').hide();  
 });
 
 function initClipboard(linkCopied){
@@ -920,7 +977,6 @@ function createErrorPage(){
           '</ul>'+
         '</div>'+
     '</div>'+
-    '').insertBefore("#photos");
-    //$('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left);
+    '').insertBefore("#photos");    
     $( window ).resize(function() {$('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/$( window ).resize(function() {$('.spell').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/ 
 }
