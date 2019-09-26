@@ -7,7 +7,7 @@ body { font: 60% arial; /*overflow: hidden;*/
     -webkit-text-size-adjust: 100%; }
 
 h1 { font-size: 2.6em; }
-h2 { font-size: 1.6em; color: #5e8400; }
+h2 { font-size: /*1.6em*/1.4em; /*color: #5e8400;*/ }
 
 a { color: #005db4; }
 a:visited { color: purple; }
@@ -22,10 +22,11 @@ cite { font-family: monospace; font-size: 1.2em; font-style: normal; }
 
 .clear {clear: both; }
 .wrap { 
-	width: 1002px; 
+	width: /*1002px*/100%; 
 	margin: 0 auto; /* position: relative; 110715 */ 
 	min-height: 100%; 
-	clear: both; 
+	clear: both;     
+    text-align: -webkit-center;
 }
 
 .wrapModified {
@@ -378,7 +379,7 @@ height: 100%;
 .title { font-size: 1.8em; }
 .sub-title { font-size: 1.4em; }
 
-#main-home, #main { margin: 0 25px; width: 960px; }
+#main-home, #main { margin:/* 0 25px;*/ width: 100%; }
 #main-home { padding-top: 126px; }
 #main-home h3 { font-size: 1.8em; }
 #main-home h4 { font-size: 1.4em; }
@@ -387,10 +388,10 @@ height: 100%;
 #header-home { width: 656px; padding-top: 75px; clear: both; }
 #header-home h1 { font-size: 2.1em; padding-bottom: 0; font-weight: normal; }
 #header-home h2 { font-size: 1.4em; color: #000000; padding-bottom: 8px; font-weight: normal; }
-#header, #header1 { width: 978px; padding-top: 10px; clear: both; height: 90px; }
-#header img { float: left; padding-right: 37px; position: relative; }
+#header, #header1 { width: 100%; padding-top: 10px; clear: both; height: 90px; }
+#header img { position: relative; }
 #logo-home { padding-bottom: 11px; text-align: center; }
-#logo { float: left; width: 159px; }
+#logo { width: 159px; }
 
 #language {     
     background-color: #222222;
@@ -473,8 +474,9 @@ height: 100%;
 #ver-destaques { padding: 0 20px 0 0; }
 
 /* Termos e Condições */
-#info-texto-termos { float: left; max-width: 619px; padding-top: 18px; }
+#info-texto-termos { float: left; width: 100%;text-align: center;}
 #conteudo-termos { padding: 18px 0 33px 159px; clear: both; max-width: 619px; }
+#info-texto-termos h1 {font-size: /*1.6em*/1.4em}
 #conteudo-termos h3, #conteudo-termos h4 { font-weight: bold; padding: 33px 0 19px; color: #000000; }
 #conteudo-termos h3 { font-size: 1.6em; }
 #conteudo-termos h4 { font-size: 1.3em; font-weight: bold;  }
@@ -488,14 +490,14 @@ height: 100%;
 #conteudo-termos ol li p { font-size: 1em; color: #000000; padding-bottom: 9px; font-weight: normal; }
 #conteudo-termos ol li ol { padding: 0 0 4px 25px; font-weight: bold; font-size: 1.2em; }
 
-#conteudo-erro { padding: 18px 0 33px 159px; clear: both; max-width: 619px; }
+#conteudo-erro { padding: 18px /*0 33px 159px*/; clear: both; max-width: /*619px*/width:100%; }
 #conteudo-erro h3, #conteudo-erro h4 { font-weight: bold; padding: 33px 0 19px; color: #000000; }
 #conteudo-erro h3 { font-size: 1.6em; }
 #conteudo-erro h4 { font-size: 1.3em; font-weight: bold;  }
 #conteudo-erro a:link { color: #005DB4; }
 #conteudo-erro p { font-size: 1.2em; line-height: 15px; margin-bottom: 10px; }
 #conteudo-erro ul { list-style: square url("../img/ul.png"); list-style: none; color: #5e8400; }
-#conteudo-erro ul li {     font-size: 1.7em; color: #000000; padding-bottom: 14px; }
+#conteudo-erro ul li { /*font-size: 1.7em; color: #000000; padding-bottom: 14px; */font-size: 1.2em;color: #000000;padding-bottom: 5px; }
 #conteudo-erro img {margin: 4em 0 0 98px}
 
 .ultima-modificacao { padding: 0 0 41px 159px; }

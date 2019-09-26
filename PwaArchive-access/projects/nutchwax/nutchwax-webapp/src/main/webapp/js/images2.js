@@ -34,27 +34,6 @@ function shortenURL( longURL) {
     });
 }
 
-$( function() {
-    $( "#dialog" ).dialog({
-    width: 350,
-    autoOpen: false,
-    dialogClass: "test",
-    modal: true,
-    responsive: true,
-    resizable: false
-    });
-    $( "#detailsDialog" ).dialog({
-    width: 650,
-    autoOpen: false,
-    dialogClass: "test",
-    modal: true,
-    responsive: true,
-    resizable: false
-    });    
-} );
-
-startPosition = 0; //the default start position to get the images global variable
-
 /*When user presses enter submits the input text*/
 $(function() {
     $("#txtSearch").keypress(function (e) {
@@ -67,29 +46,21 @@ $(function() {
     });
 }); 
 
-function getMoreImages(){
-    $('#moreResults').remove();
-    $('#resultsUl').append('<li id="loadingMoreImages" style="text-align:center; margin-right: 1%; margin-bottom:1%; margin-top:4%; width:100%"> <div style="width: 100%; text-align:center"><div class="sk-fading-circle"><div class="sk-circle1 sk-circle"></div><div class="sk-circle2 sk-circle"></div><div class="sk-circle3 sk-circle"></div><div class="sk-circle4 sk-circle"></div><div class="sk-circle5 sk-circle"></div><div class="sk-circle6 sk-circle"></div><div class="sk-circle7 sk-circle"></div><div class="sk-circle8 sk-circle"></div><div class="sk-circle9 sk-circle"></div><div class="sk-circle10 sk-circle"></div><div class="sk-circle11 sk-circle"></div><div class="sk-circle12 sk-circle"></div></div></div> </li>');
-    startPosition += numrows;
-    searchImages(startPosition);
-}
-
-function loadingFinished(){
-    if(!noMoreResults){
-        $("#resultsUl").append('<li id="moreResults" style="width:100%; padding-top: 20px;"><button class="search-submit" style="float:none" onclick="getMoreImages()">Mais Resultados</button></li>');
-    }    
-    $('#loadingDiv').hide();
-    $("#resultsUl").show();
-    if($('#loadingMoreImages').length){
-        $('#loadingMoreImages').remove();
+function loadingFinished(showNextPageButton){
+    if(showNextPageButton){
+        $('#nextImage').css('display','inline-block');
     }
+    $('#previousImage').css('display','inline-block');
+
+    $('#loadingDivImages').hide();
+
 }
 
 totalPosition = 0; //global variable
 currentOffset= 0;
 
 function doInitialSearch(){
-    startPosition = 0;
+    /*startPosition = 0;*/
     searchImages(startPosition);
 }
 
@@ -120,6 +91,13 @@ function truncateUrl(url, maxSize)
         return url
 }
 
+function removeWWW(url){
+    if(url.startsWith('www.')){
+    	return url.substring(4, url.length);
+    }
+    return url;
+}
+
 /*Truncates large URL in the replay bar*/
 function truncateUrlKeepProtocol(url, maxSize)
 {    
@@ -131,38 +109,82 @@ function truncateUrlKeepProtocol(url, maxSize)
         return url
 }
 
+/*Truncates large URL in the replay bar*/
+function truncateUrlRemoveProtocol(url, maxSize)
+{    
+    url = url.replace(/(^\w+:|^)\/\//, ''); //remove all possible protocols
+    if (url.length > maxSize){
+            url = url.substring(0, maxSize-3) + "...";
+            return url;
+    }
+    else
+        return url
+}
+
+
+function truncateUrlMiddleRemoveProtocol(url, maxSize)
+{    
+    url = url.replace(/(^\w+:|^)\/\//, ''); //remove all possible protocols
+    if (url.length > maxSize){
+            url = url.substring(0, parseInt(maxSize*0.75) -3) + "..." + url.substring(url.length - (parseInt(maxSize*0.25)) , url.length) ;
+            return url;
+    }
+    else
+        return url
+}
+
 
 lastPosition = -1; /*Global var refers to the lastImage the user*/
 lastPress= -1; /*Global var refers to last time user pressed arrow in image viewer*/
 
-function expandImage(position, animate){
-    var arrowWidth = 16; //width of the arrow
+function openImage(position, animate){
+	console.log('open image');
+	openImageViewer = true;
+	imageHref = getCurrentImageHref();
+    //var arrowWidth = 16; //width of the arrow
     if(lastPosition != -1){
         $('#testViewer'+lastPosition).hide();
-        $('#arrowWrapper'+lastPosition).hide();
-        //$('#arrow'+lastPosition).fadeOut();
-
+    //    $('#arrowWrapper'+lastPosition).hide();
     }
     if(lastPosition === position){
         //you clicked twice in the same image, image closed no image selected
-        lastPosition = -1;
+         $('body').css('overflow', 'auto');
+         window.scrollTo( 0 , $("#imageResults"+lastPosition).offset().top);
+         lastPosition = -1;
         return false;
     }
-    (position == 0) ? $('.left__arrow').hide() : $('.left__arrow').show();
-    var arrowMarginLeft = $('#imageResults'+position).width()/2 - arrowWidth/2;
-    $('#arrow'+position).css('margin-left', arrowMarginLeft+'px');
+    
+    //(position == 0) ? $('.left__arrow').hide() : $('.left__arrow').show();
+    
+    //var arrowMarginLeft = $('#imageResults'+position).width()/2 - arrowWidth/2;
+
+    //$('#arrow'+position).css('margin-left', arrowMarginLeft+'px');
     $('#testViewer'+position).show();
-    $('#arrowWrapper'+position).show();
+    $('#card'+position).show();
+    if($('#detailsCard'+position).length >= 0){
+      $('#detailsCard'+position).hide();
+    }
+
+    $('body').css('overflow', 'hidden');
+    
+    //$('#arrowWrapper'+position).show();
     lastPosition = position;
-    animate ? $('html, body').animate({scrollTop: $('#date'+position).offset().top - 150}, 400) : window.scrollTo( 0 , $('#date'+position).offset().top - 150);
-    $('#testViewer'+position).focus();
- $('#testViewer'+position).bind('keydown', function(event) {
+    
+    //$('#testViewer'+lastPosition +' ion-card').animate({ scrollTop: 0 }, "fast");
+
+    window.scrollTo( 0 , 0);
+
+
+
+    //$(window).scrollTop( $('#testViewer'+lastPosition +' ion-card').offset().top );
+
+
+
+    //$('#testViewer'+position).focus();
+ 
+ /*$('#testViewer'+position).bind('keydown', function(event) {
    var now = Date.now();
    var minimumTime= 100;
-
-   console.log('last Press: ' + lastPress);
-   console.log('now: ' + now);   
-   console.log('position: ' + position);
 
    if(event.keyCode == 37 && position > 0 ) {
         if(lastPress < 0 || (now - lastPress) > minimumTime ){
@@ -176,132 +198,354 @@ function expandImage(position, animate){
 		lastPress = Date.now();
 	}
    }
- });
-
-
+ });*/
 return false;
 }
+
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+async function getCurrentImageHref(){
+	var result = await document.querySelector('ion-slides').getActiveIndex().then(function(result){
+	    console.log('index: ' + result);
+		return $('ion-slide:nth-child('+(result+1)).find('.imageHref').attr('href');
+	});
+	return result;
+}
+
+
+
+function openImage(position){
+  	console.log('opening position: ' + position);
+    openImageViewer = true;
+    imageHref = getCurrentImageHref();
+    $('#showSlides').show();
+    var slides = document.querySelector('ion-slides');
+    // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
+    slides.options = {
+      initialSlide: 1,
+      speed: 400,
+      noSwipingClass: 'hide-me-class-swiper'
+    }       
+   $('ion-slides')[0].slideTo($('ion-slides')[0].slideTo($('#testViewer'+position).prevAll().length));
+   
+   sleep(500).then(() => {
+     document.body.scrollTop = document.documentElement.scrollTop = 0;
+  });
+
+var slides = document.getElementById('expandedImageViewers');
+ 
+
+ console.log('active index: ' + slides.getActiveIndex());
+
+   
+    /*checkElement('#close'+position) 
+    .then((element) => {      
+                 $('#close'+position).css('right',  parseInt($(window).width() - ($("#card"+position).offset().left + $("#card"+position).outerWidth())) + 8+'px' );
+                  console.log('position: ' + position);
+                  console.log('window width: ' + $(window).width());
+                  console.log('card offset left: ' + $("#card"+position).offset().left) % $(window).width();
+                  console.log('card outer width: ' + $("#card"+position).outerWidth());           
+    }); */
+  
+}
+
+function closeImage(position){	
+  console.log('closing position: ' + position);
+  openImageViewer = false;
+  $('#showSlides').hide();
+}
+
 
 function previousImage(position){
     var previousImageLi = $('#imageResults'+position).prev();
     if( previousImageLi.attr('position') != undefined){
-        expandImage(parseInt(position), false); /*Close current image*/
-        expandImage(parseInt(previousImageLi.attr('position')), false);
+        openImage(parseInt(position), false); /*Close current image*/
+        openImage(parseInt(previousImageLi.attr('position')), false);
     }
     return;
 }
 function nextImage(position){
     var nextImageLi = $('#imageResults'+position).next();
     if( nextImageLi.attr('position') != undefined){
-        expandImage(parseInt(position), false); /*Close current image*/
-        expandImage(parseInt(nextImageLi.attr('position')), false);            
+        openImage(parseInt(position), false); /*Close current image*/
+        openImage(parseInt(nextImageLi.attr('position')), false);            
     }
     return;
 }
 
+function rafAsync() {
+    return new Promise(resolve => {
+        requestAnimationFrame(resolve); //faster than set time out
+    });
+}
+
+function checkElement(selector) {
+    if (document.querySelector(selector) === null) {
+        return rafAsync().then(() => checkElement(selector));
+    } else {
+        return Promise.resolve(true);
+    }
+}
+
 function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expandedImageHeight, expandedImageWidth){
 
-var maxImageExpandHeight = 400; //for now fix later
+    var maxImageExpandHeight = 400;
+    var maxImageDivWidth =  ( ($(window).width() * 0.6) -70 ) * 0.95 ;
 
-var maxImageDivWidth =  ( ($(window).width() * 0.6) -70 ) * 0.95 ;
-
-if(expandedImageHeight > maxImageExpandHeight){
-    expandedImageHeight = maxImageExpandHeight;
-} 
-else if ( expandedImageWidth > maxImageDivWidth ){
-    //resize height in porportion to resized width
-    var ratio = maxImageDivWidth/expandedImageWidth;
-    expandedImageHeight = expandedImageHeight * ratio;
-}
-
-var centerImage;
-
-var centerImage = maxImageExpandHeight/2 - expandedImageHeight/2 ;
-
-var liMarginTop = maxImageHeight - imageHeight;
-
-var contentToInsert = ''+
-'<li position='+position+' id="imageResults'+position+'" style="background:white; margin-right: 1%; margin-bottom:1%; margin-top:'+liMarginTop.toString()+'px;">'+
-'   <h2>'+
-'       <button style="cursor:pointer;" onclick = "expandImage('+position+',true)">'+
-'           <img style="max-height:200px; padding:0px 0px 4px 0px;" height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
-'       </button>'+
-'   </h2>'+
-'   <p class="green" style="font-size:1.2em!important; text-align: left; padding-left:5px;padding-right:5px;">'+truncateUrl(imageObj.pageURL, 20)+'</p>'+
-'   <p class="date" id="date'+position+'" style="font-weight:normal; font-size:1.4em!important; text-align: left; padding-left:5px;padding-right:5px;padding-bottom:2px;">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
-'   <div id="arrowWrapper'+position+'" class="arrowWrapper" >'+
-'       <div id="arrow'+position+'" class="arrow"/></div>' +
-'       <div id="testViewer'+position+'" class="imageExpandedDiv" tabindex="1">'+
-'           <button onclick = "expandImage('+position+',false)" class="expand__close" title="'+close+'"></button>'+
-'           <button onclick="previousImage('+position+')"  class="left__arrow" title="'+leftArrow+'"></button>'+
-'           <button onclick="nextImage('+position+')" class="right__arrow" title="'+rightArrow+'"></button>'+
-'           <div style="width: 60%; display: inline-block;float: left;">'+
-'               <a target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
-'                   <img style="max-width:'+maxImageDivWidth+'px; margin-left: 70px; margin-top:'+ centerImage+'px; margin-bottom:'+ centerImage+'px"class="imageExpanded" id="ExpandedImg'+position+'" src="'+imageObj.currentImageURL+'">'+
-'               </a>'+
-'           </div>'+
-'           <div style="min-height: 500px;margin-top: -50px;width: 39%;display: inline-block; border-left: solid 1px #454545;">'+
-'               <div style="padding-top:120px; margin-left: 25px; margin-right:70px; text-align: left;">'+
-'                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+pageString+' </h1>'+
-'                   <div style="padding-left:15px">'+
-'                       <h2 style="color:white; word-wrap: break-word;"><a style="color:white" target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageTitle+'</a></h2><br/>'+
-'                       <h2 style="color:white; word-wrap: break-word;">'+truncateUrlKeepProtocol(imageObj.pageURL, 80)+'</h2>'+
-'                       <br/>'+
-'                       <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.pageTstamp)+' </h2>'+
-'                   </div>'+
-'                   <div style="padding-top:20px; padding-bottom:50px;">'+
-'                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+imageString+' </h1>'+
-                    '<div style="padding-left: 15px;">'+
-( imageObj.title !== ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.title+'</a></h2><br/>':'') +
-( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <h2 style="color:white;word-wrap: break-word" id="imgTitleLabel'+position+'" ><a style="color:white" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h2><br/>':'') +
-'                           <h2 style="color:white;word-wrap: break-word" >'+imageObj.imgMimeType+' '+parseInt(expandedImageWidth)+' x '+parseInt(expandedImageHeight)+'</h2> <br/>'+
-'                           <h2 style="color:white;word-wrap: break-word; font-weight:bold" > '+getDateSpaceFormated(imageObj.timestamp)+' </h2>'+
-                    '</div>'+
-'                </div>'+
-'                   <div style="display: inline; white-space: nowrap; overflow: hidden;">'+
-'                       <a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
-'                           <span class="imageViewerButton">'+visitPage+'</span>'+
-'                       </a>'+
-'                       <a target="_blank" class="imageViewerAnchor" style="margin-left: 20px"  href="'+imageObj.currentImageURL+'">'+
-'                           <span class="imageViewerButton">'+showImage+'</span>'+
-'                       </a>'+
-'                       <button  id="showDetails" class="imageViewerAnchor" position='+position+' style="margin-left: 20px">'+
-'                           <span class="imageViewerButton" style="">'+showDetails+'</span>'+
-'                       </button>'+
-'                       <button id="dButton" position='+position+'  class="imageViewerAnchor" style="margin-left: 20px">'+
-'                           <span class="imageViewerButton" style="line-height:25px;">'+share+'</span>'+
-'                       </button>'+
-'                   </div>'+
-'               </div>'+
-'           </div>'+
-'   </div>'+ 
-'</li>';     
-
-  /*href="/shareImage.jsp?imgurl='+encodeURIComponent(imageObj.currentImageURL)+'&imgrefurl='+encodeURIComponent(imageObj.pageURL)+'&imgrefts='+imageObj.timestamp+'&imgres='+parseInt(expandedImageWidth)+'x'+parseInt(expandedImageHeight)+'&query='+$('#txtSearch').val()+'"*/
-  imageObj.expandedImageWidth = expandedImageWidth;
-  imageObj.expandedImageHeight = expandedImageHeight;
-  imageObjs[position] = imageObj;
-
-
-var lengthofUL = $('#resultsUl li').length;
-if(lengthofUL === 0){ /*list is empty only the hidden li*/
-  $('#resultsUl').prepend(contentToInsert)
-}
-else{
-  var inserted = false;
-  for (var i = 0 ; i< lengthofUL; i ++){
-    var insertedPos = $('#resultsUl li').eq(i).attr('position');
-    if(position < insertedPos ){
-      $('#resultsUl li:eq('+i+')').before(contentToInsert);
-      inserted = true;
-      break;
+    if(expandedImageHeight > maxImageExpandHeight){
+        expandedImageHeight = maxImageExpandHeight;
+    } 
+    else if ( expandedImageWidth > maxImageDivWidth ){
+        //resize height in porportion to resized width
+        var ratio = maxImageDivWidth/expandedImageWidth;
+        expandedImageHeight = expandedImageHeight * ratio;
     }
+
+    var centerImage = maxImageExpandHeight/2 - expandedImageHeight/2 ;
+    var liMarginTop = maxImageHeight - imageHeight;
+    var contentToInsert = ''+
+
+        '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "openImage('+position+',false)">'+
+        '   <img  height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
+        '   <p class="green image-display-url" >→ '+removeWWW(truncateUrl(imageObj.pageURL, 20))+'</p>'+
+        '   <p class="date image-display-date" id="date'+position+'">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
+        '   <div id="arrowWrapper'+position+'" class="arrowWrapper" >'+
+        '       <div id="arrow'+position+'" class="arrow"/></div>' +
+        '   </div>'+ 
+        '</div>';
+
+        if($("#expandedImageViewers > .swiper-wrapper") !== null)
+        {
+                  $('#expandedImageViewers > .swiper-wrapper').append(insertImageViewer(imageObj, position));  
+
+        }
+        else{
+            console.log('unexpected error loading image viewer');      
+        }
+
+
+      imageObj.expandedImageWidth = expandedImageWidth;
+      imageObj.expandedImageHeight = expandedImageHeight;
+      imageObjs[position] = imageObj;
+
+    var lengthofUL = $('#photos .imageContent').length;
+    if(lengthofUL === 0){ /*list is empty only the hidden li*/
+      $('#photos').prepend(contentToInsert);
+    }
+    else{
+      var inserted = false;
+      for (var i = 0 ; i< lengthofUL; i ++){
+        var insertedPos = $('#photos .imageContent').eq(i).attr('position');
+        if(position < insertedPos ){
+          $('#resultsUl li:eq('+i+')').before(contentToInsert);
+          /*add logic to new column layout*/
+          inserted = true;
+          break;
+        }
+      }
+      if(inserted === false){
+        $('#resultsUl').append(contentToInsert);
+        $('#photos').prepend(contentToInsert);
+      }
+    }
+}    
+
+
+
+function  insertImageViewer(imageObj, position){
+  /*this If should be removed in production*/
+  /*due to lack of configurations and a proper test environment with images configured in solr for test purposes I had to load the images from Arquivo.pt directly*/
+  if(imageObj.currentImageURL.startsWith("http://m.p18")){
+    imageObj.currentImageURL = "https://"+imageObj.currentImageURL.substr(13,imageObj.currentImageURL.length);
   }
-  if(inserted === false){
-    $('#resultsUl').append(contentToInsert);
+
+return ''+
+//image-expanded-full-width
+/*If landscaped image show it full width on small screens*/
+
+  '<ion-slide id="testViewer'+position+'" class="height-vh image-mobile-expanded-div no-outline" tabindex="1">'+
+      '<div onclick="closeImage('+position+',false)" class="image-mobile-expanded-viewer-mask no-outline"></div>'+
+      '<div class="row full-height no-outline">'+
+          '<div id="insert-card-'+position+'" class="full-height text-right">'+
+              '<ion-card id="card'+position+'" class="card-height">'+
+                 '<a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
+                  (parseInt(imageObj.expandedWidth) >$( window ).width() ? '<img class="image-expanded-viewer image-expanded-full-width" src="'+imageObj.currentImageURL+'">' : '<img class="image-expanded-viewer" src="'+imageObj.currentImageURL+'">')+
+                 '</a>'+
+                 '<ion-row class="image-viewer-expanded-main-actions">'+
+                      '<ion-col size="6" class="text-left"><a href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><ion-button size="small" class="visit-page border-mobile" fill="clear"><ion-icon name="globe" class="middle"></ion-icon><span class="middle"><h5>&nbsp;'+details.visit+'</h5></span></ion-button></a></ion-col>'+
+                      '<ion-col size="6" ><ion-button size="small" class="view-details border-mobile" onclick="viewDetails('+position+')" fill="clear" ><ion-icon name="information-circle-outline" class="middle"></ion-icon><span class="middle"><h5>&nbsp;'+details.details+'</h5></span></ion-button></ion-col>'+
+                  '</ion-row>'+
+                  '<ion-row>'+
+                      '<h4 class="text-left">'+details.image+'</h4>'+                
+                  '</ion-row>'+
+                  '<ion-card-content>'+                
+                      '<ion-list class="imageList selected">'+
+      ( imageObj.title !== ""  ? ' <ion-item class="item-borderless" lines="none" ><a class="imageHref" target="_blank" href="'+imageObj.currentImageURL+'"><h5>' +imageObj.title+'</a></h5></ion-item>':'') +
+      ( imageObj.imgAlt !== "" &&  imageObj.title == ""  ? ' <ion-item id="imgTitleLabel'+position+'" lines="none"><h5><a class="imageHref" target="_blank" href="'+imageObj.currentImageURL+'">' +imageObj.imgAlt+'</a></h5></ion-item>':'') +  
+                          '<ion-item lines="none"><h5>' +truncateUrlMiddleRemoveProtocol(imageObj.imgSrc, 40)+'</h5></ion-item>'+
+                          '<ion-item lines="none"><h5>'+imageObj.imgMimeType+' '+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+'</h5></ion-item>'+
+                          '<ion-item lines="none"><h5>'+getDateSpaceFormated(imageObj.timestamp)+'</h5></ion-item>'+             
+                      '</ion-list>'+
+                  '</ion-card-content>'+  
+                  '<ion-row>'+
+                      '<h4 class="text-left">'+details.page+'</h4>'+                
+                  '</ion-row>'+
+                  '<ion-card-content>'+                
+                      '<ion-list>'+
+      '                       <ion-item class="item-borderless" lines="none" ><a target="_blank" href="'+window.location.protocol+'//'+window.location.hostname+'/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'"><h5>'+imageObj.pageTitle+'</h5></a></ion-item>'+
+      '                       <ion-item lines="none" "><h5>'+truncateUrlRemoveProtocol(imageObj.pageURL, 60)+'</h5></ion-item>'+
+      '                       <ion-item lines="none" "><h5>'+getDateSpaceFormated(imageObj.pageTstamp)+'</h5></ion-item>'+          
+                      '</ion-list>'+
+                  '</ion-card-content>'+                                
+              '</ion-card> '+
+           /*  (parseInt(imageObj.expandedWidth) > $( window ).width() ? ''+
+             '<ion-icon id="close'+position+'" name="close" class="closeCard" size="large" onclick = "closeImage('+position+',false)"></ion-icon>' : '' +*/
+             '<ion-icon id="close'+position+'" name="close" class="closeIt" size="large" onclick = "closeImage('+position+',false)"></ion-icon>' +              /*change to closeIt*/
+          '</div>'+
+      '</div>'+    
+  '</ion-slide>'; 
+}
+
+function viewDetails(position){
+  imageObj = imageObjs[position];
+
+  if($('#detailsCard'+position).length == 0) {
+    var detailsCard = ''+
+    '<ion-card id="detailsCard'+position+'" class="card-height">'+
+      '<ion-row>'+
+        '<h3 class="text-left">'+details.details+'</h4>'+                
+      '</ion-row>'+            
+      '<ion-row>'+
+        '<h4 class="text-left">'+details.page+'</h4>'+                
+      '</ion-row>'+      
+      '<ion-card-content>'+
+        '<ion-list>'+
+         '<ion-item class="item-borderless" lines="none" ><h5><em>url:</em>&nbsp;<a href="/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageURL+'</a></h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>timestamp:</em> '+imageObj.pageTstamp+'</h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>'+details.title+'</em> '+imageObj.pageTitleFull+'</h5></ion-item>'+
+        '</ion-list>'+
+      '</ion-card-content>'+
+      '<ion-row>'+      
+        '<h4 class="text-left">'+details.image+'</h4>'+                
+      '</ion-row>'+      
+      '<ion-card-content>'+
+        '<ion-list>'+
+          '<ion-item class="item-borderless" lines="none" ><h5><em>src:</em>&nbsp;<a href="/wayback/'+imageObj.timestamp+'/'+imageObj.imgSrc+'">'+imageObj.imgSrc+'</a></h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>timestamp:</em> '+imageObj.timestamp+'</h5></ion-item>'+
+          (imageObj.titleFull != "" ? '<ion-item lines="none" ><h5><em>'+details.title+'</em> '+imageObj.titleFull+'</h5></ion-item>': '') +
+          (imageObj.imgAltFull != "" ? '<ion-item lines="none" ><h5><em>alt:</em> '+imageObj.imgAltFull+'</h5></ion-item>': '') +
+          '<ion-item lines="none" ><h5><em>'+details.resolution+'</em> '+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+' pixels</h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>mimetype:</em> '+imageObj.imgMimeType+'</h5></ion-item>'+
+          '<ion-item lines="none" ><h5><em>'+details.safesearch+'</em> '+imageObj.safe+'</h5></ion-item>'+
+        '</ion-list>'+
+      '</ion-card-content>'+      
+      '<ion-row>'+      
+        '<h4 class="text-left">'+details.collection+'</h4>'+                
+      '</ion-row>'+      
+      '<ion-card-content>'+
+        '<ion-list>'+
+          '<ion-item class="item-borderless" lines="none" ><h5><em>'+details.name+'</em> '+imageObj.collection+'</h5></ion-item>'+
+        '</ion-list>'+
+      '</ion-card-content>'+      
+    '</ion-card>'+
+    '<ion-icon id="closeCard'+position+'" name="close" class="closeItAbsolute" size="large" onclick="closeDetails('+position+')"></ion-icon>';
+
+    $('#insert-card-'+position).append(detailsCard);
+    $('#card'+position).hide();
+    $('#closeCard'+position).show();
+  }
+  else{
+    $('#card'+position).hide();
+    $('#detailsCard'+position).show()
+    $('#closeCard'+position).show();
+  }
+
+}
+
+function swipeRightViewer(position){
+  console.log('swiping right' + position);
+  var previous = $('#testViewer'+position).prev()
+  if(previous[0] != null){
+    $('#testViewer'+position).fadeOut("slow");
+    previous.fadeIn("slow");
   }
 }
-}    
+
+function swipeLeftViewer(position){
+  console.log('swiping left' + position);
+  var next = $('#testViewer'+position).next()
+  if(next[0] != null){
+    $('#testViewer'+position).fadeOut("slow");
+    next.fadeIn("slow");
+  }
+}
+
+function detectTouchElement(selector){
+  console.log('position: ' + selector);
+
+  window.addEventListener('load', function(){
+      console.log('loaded position ' + selector);
+      var touchsurface = document.getElementById('insert-card-'+selector),
+          startX,
+          startY,
+          dist,
+          threshold = 10, //required min distance traveled to be considered swipe
+          allowedTime = 400, // maximum time allowed to travel that distance
+          elapsedTime,
+          startTime
+   
+      function handleswipeRight(isrightswipe){
+          if (isrightswipe){
+             swipeRightViewer(selector);
+          }
+      }
+      function handleswipeLeft(isleftswipe){
+          if (isleftswipe){
+             swipeLeftViewer(selector);  
+          }
+      }      
+   
+      touchsurface.addEventListener('touchstart', function(e){
+          var touchobj = e.changedTouches[0]
+          dist = 0
+          startX = touchobj.pageX
+          startY = touchobj.pageY
+          startTime = new Date().getTime() // record time when finger first makes contact with surface
+          e.preventDefault()
+      }, false)
+   
+      touchsurface.addEventListener('touchmove', function(e){
+          e.preventDefault() // prevent scrolling when inside DIV
+      }, false)
+   
+      touchsurface.addEventListener('touchend', function(e){
+          var touchobj = e.changedTouches[0]
+          dist = touchobj.pageX - startX // get total dist traveled by finger while in contact with surface
+          elapsedTime = new Date().getTime() - startTime // get time elapsed
+          // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
+          if(dist >= 0){
+            var swiperightBol = (elapsedTime <= allowedTime && dist >= threshold && Math.abs(touchobj.pageY - startY) <= 200)
+            handleswipeRight(swiperightBol)
+          }
+          else{
+            var swiperleftBol = (elapsedTime <= allowedTime && Math.abs(dist) >= threshold && Math.abs(touchobj.pageY - startY) <= 200)
+           handleswipeLeft(swiperleftBol) 
+          }
+          e.preventDefault()
+      }, false)
+   
+  }, false) // end window.onload
+}
+
+
+/*Closes the Details Card and Opens Image viewer card*/
+function closeDetails(position){
+  $('#detailsCard'+position).hide();
+  $('#closeCard'+position).hide();
+  $('#card'+position).show();
+}
 
 function encodeHtmlEntity(str) {
 
@@ -399,17 +643,12 @@ function encodeHtmlEntity(str) {
     return str;
 }
 
-$(document).ajaxStart(function(){
-  if(startPosition == 0){
-    $('#resultsUl').empty();        
+$(document).ajaxStart(function(){	
     $('#loadingDiv').show();
-  }
 });
 
 $(document).ajaxStop(function(){
-  if(startPosition == 0){       
-    $('#loadingDiv').hide();
-  }
+ $('#loadingDiv').hide();  
 });
 
 function initClipboard(linkCopied){
@@ -421,154 +660,92 @@ function initClipboard(linkCopied){
 }
 
 function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOption,startIndex){
+  //TODO:: Decide if we just send the API query in the form of 
+  // /imagesearch?q=sapo%20site:sapo.pt%20type:jpeg      
+  // or if we parse each word in the input and send the API query in the form off
+  // /imagesearch?q=sapo&siteSearch=sapo.pt&type=jpeg */
+
     if( safeSearchOption == "null"){
-        safeSearchOption = "yes";
+        safeSearchOption = "on";
     }
     var query;
     var input = $('#txtSearch').val();
-    /*var tokens = input.split(' ');
-    var size = '';
-    var query ='';
-    var finalQuery;
-    for (var i= 0; i< tokens.length; i++){
-      if(tokens[i].substring(0, 'size:'.length) === 'size:'){
-        size += tokens[i].substring('size:'.length) + ' ';
-      }
-      var tokenNoAccents = removeDiacritics(tokens[i]);
-      query+= "(imgSrc:*"+tokenNoAccents+"*OR imgSrc:*"+capitalizeFirstLetter(tokenNoAccents)+"* OR imgAlt:*"+capitalizeFirstLetter(tokenNoAccents)+"* imgAlt:*"+tokenNoAccents+"* OR imgSrc:*"+tokenNoAccents.toLowerCase()+"* OR imgAlt:*"+tokenNoAccents.toLowerCase()+"*) AND "; 
-    }
-    query = query.substring(0, query.length -5); 
-    */
-    var dateStart= $('#dateStart_top').attr("value");
-    dateStart = dateStart.substring(6, 10)+dateStart.substring(3, 5) + dateStart.substring(0, 2)+'000000' ;
-    var dateEnd= $('#dateEnd_top').attr("value");
-    dateEnd = dateEnd.substring(6, 10)+dateEnd.substring(3, 5) + dateEnd.substring(0, 2)+'000000' ;
 
-    //query += "AND (timestamp:["+dateStart+" TO "+dateEnd+"])";
-    //console.log(query);
-
-    /*if( size === ''){
-      size = 'all';
-    }*/
-
-   /* var dateStartTokenes = dateStartWithSlashes.split("/");
-    var dateStartTs = dateStartTokenes[2]+ dateStartTokenes[1] + dateStartTokenes[0]+ "000000";
-
-    var dateEndTokenes = dateEndWithSlashes.split("/");
-    var dateEndTs = dateEndTokenes[2]+ dateEndTokenes[1] + dateEndTokenes[0]+ "000000"     ;
-
-    var dateFinal = dateStartTs+"-"+dateEndTs; */
-    var showAll = false;
-    numrows =50;
+    var dateStart=$('#dateStart_top').val().substring($('#dateStart_top').val().length - 4) +''+  $('#dateStart_top').val().substring(3,5) +''+ $('#dateStart_top').val().substring(0,2)+ '000000' ;
+    
+    var dateEnd= $('#dateEnd_top').val().substring($('#dateEnd_top').val().length - 4) +''+  $('#dateEnd_top').val().substring(3,5) +''+ $('#dateEnd_top').val().substring(0,2)+'235959';
     currentStart = startIndex;
     
-    safeValue = '[0 TO 0.49]';
-    safeSearch = true;
-    if($('#safeSearch').find(":selected").attr("value") === 'off'){
-        safeValue='[0 TO 1]';       
-    }
-
 
     $.ajax({
-    // example request to the cdx-server api - 'http://arquivo.pt/pywb/replay-cdx?url=http://www.sapo.pt/index.html&output=json&fl=url,timestamp'
        url: "/imagesearch",      
-
- /*+ " AND pageTstamp:["+dateStart+" TO "+dateEnd+"]"*/
        data: {
           q: input,
-          fq: "imgTstamp:["+dateStart+" TO "+dateEnd+"] AND safe:"+safeValue,
-          defType: 'edismax',                  
-          qf: 'imgTitle^4 imgAlt^3 imgSrcTokens^2 pageTitle pageURLTokens', //TODO: improve ranking
-          pf: 'imgTitle^4000 imgAlt^3000 imgSrcTokens^2000 pageTitle^1000 pageURLTokens^1000', //TODO: improve ranking  
-          ps: 1,
-          pf2: 'imgTitle^400 imgAlt^300 imgSrcTokens^200 pageTitle^100 pageURLTokens^100', //TODO: improve ranking
-          ps2: 2,
-          pf3: 'imgTitle^40 imgAlt^30 imgSrcTokens^20 pageTitle^10 pageURLTokens^10', //TODO: improve ranking
-          ps3: 3,
           from: dateStart,
           to: dateEnd,
           offset: startIndex,
           maxItems: numrows,
-          safeSearch:safeSearch        
+          more: "imgThumbnailBase64,imgSrcURLDigest,imgDigest,pageProtocol,pageHost,pageImages,safe",
        },
            
        timeout: 300000,
-       error: function() {
-         console.log("Error In Ajax request to getimages");            
+       error: function() {         
        },
        dataType: 'text',
        success: function(data) {
+        $('#imagesDefaultTextDiv').hide(); /*Hiding default message*/
 
         var responseJson = $.parseJSON(data);
 
-        if(currentStart == 0 ){
-            $('#resultsUl').empty();
-        }
-        var totalResults = responseJson.response.numFound;
+
+        totalResults = responseJson.totalItems;
+        var showNextPageButton = ((parseInt(startIndex) + parseInt(numrows)) >= totalResults) ? false: true;    
         
         if ( totalResults === 0){
             createErrorPage();
-            console.log("no results found");
-            /*TODO:: help suggestions function*/
             noMoreResults=true;
-            loadingFinished();
+            loadingFinished(showNextPageButton);
         }
         else{
-            console.log("Found "+totalResults+ " results");
+            
             var currentResults
             if(totalResults > numrows){
-            	currentResults = responseJson.response.numShowing;
+            	currentResults = responseJson.numberOfResponseItems;
             }else{
             	currentResults = totalResults;
             	noMoreResults=true;
             }
             var resultsToLoad = currentResults;
-            console.log("Showing "+ currentResults + " results");
-
+            
             for (var i=0; i< currentResults; i++){
-                console.log("Result "+i);
-                var currentDocument = responseJson.response.docs[i];
-                if (typeof currentDocument === 'undefined' || !currentDocument){
-                    console.log("undefined document");
-                    continue;
-                }
-                if (typeof currentDocument.imgTstamp === 'undefined' || !currentDocument.imgTstamp){
-                    console.log("No imgtstamp found for image");
+                var currentDocument = responseJson.responseItems[i];
+                if (typeof currentDocument === 'undefined' || !currentDocument || typeof currentDocument.imgTstamp === 'undefined' || !currentDocument.imgTstamp){                    
                     continue;
                 }
 
-                var currentImageURL = '//arquivo.pt/wayback/'+ currentDocument.imgTstamp +'/'+currentDocument.imgSrc;
+                var currentImageURL = window.location.protocol+'//'+window.location.hostname+ '/wayback/'+ currentDocument.imgTstamp +'/'+currentDocument.imgSrc;
                 var imageDigest = currentDocument.imgDigest;
                 
-
-                if(imageDigests.indexOf(imageDigest) > -1){
-                    console.log('Duplicated: ' + imageDigest);
-                    console.log('imgDigest: ' +currentDocument.imgDigest);
-                    console.log('pageURL: ' + currentDocument.pageURL);
-                    console.log('pageTstamp: ' + currentDocument.pageTstamp);
-                    
-                    resultsToLoad--;
-                    console.log("current results: "+ resultsToLoad);
+                if(imageDigests.indexOf(imageDigest) > -1){ 
+                    resultsToLoad--;                    
                     continue; 
                 }
-                
                 else{
-                    console.log('Digest: ' + imageDigest);
                     imageDigests.push(imageDigest);
                 }
 
                 var pageURL = currentDocument.pageURL;
                 var thumbnail = currentImageURL;
 
-                console.log("Creating Image");
+                
                 imageObj = new Image();
                 imageObj.timestamp = currentDocument.imgTstamp.toString();
-                console.log("Image timestamp: " + imageObj.timestamp );
+                
                 imageObj.pageURL = pageURL.toString();
                 imageObj.currentImageURL = currentImageURL.toString();
-                console.log("Image URL: " + imageObj.currentImageURL );
+                
                 imageObj.position = totalPosition;
-                console.log("Position: " + totalPosition );
+                
                 imageObj.expandedHeight = currentDocument.imgHeight;
                 imageObj.expandedWidth = currentDocument.imgWidth;
                 imageObj.imgMimeType= currentDocument.imgMimeType.substring(6,currentDocument.imgMimeType.length);
@@ -593,59 +770,56 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                 if (typeof imageObj.pageTitleFull === 'undefined' || imageObj.pageTitleFull == 'undefined' ){imageObj.pageTitleFull ='';}               
                 imageObj.collection = currentDocument.collection;
                 imageObj.imgSrc = currentDocument.imgSrc;
-                //if (imageObj.title == "undefined") {imageObj.title = imageUndefined; $('#imgTitleLabel'+imageObj.position).hide();}
-
 
                 totalPosition = totalPosition + 1;
 
-                imageObj.src = "data:"+currentDocument.imgMimeType+";base64," + currentDocument.imgSrcBase64;
+                imageObj.src = "data:"+currentDocument.imgMimeType+";base64," + currentDocument.imgThumbnailBase64;
 
                 var resizeImageHeight = 200;
 
                 imageObj.onload = function() {
                             
                     if( startIndex != 0 &&  totalResults == responseJson.totalResults){
-                        $('#loadingMoreImages').remove();
+                        $('#loadingDivImages').remove();
                     }
                             totalResults --;
                             resultsToLoad --;
-
-                            console.log("current results: "+ resultsToLoad);
-
                                
+                            var insertPosition = (parseInt(this.position)+parseInt(currentStart));   
+
                             if(this.height <= resizeImageHeight){
-                            insertInPosition(this.position +currentStart, this, this.height, resizeImageHeight, this.expandedHeight, this.expandedWidth);
+                            insertInPosition(insertPosition, this, this.height, resizeImageHeight, this.expandedHeight, this.expandedWidth);
                             }
                             else{
-                            insertInPosition(this.position +currentStart, this, resizeImageHeight, resizeImageHeight, this.expandedHeight, this.expandedWidth);
+                            insertInPosition(insertPosition, this, resizeImageHeight, resizeImageHeight, this.expandedHeight, this.expandedWidth);
                             }
                        
                             if(resultsToLoad <= 0){
-                                loadingFinished();
+                                loadingFinished(showNextPageButton);
                             }
-                    console.log("Created Image");                            
+                    
                 }
                 
                
                 imageObj.onerror = function() {
                     // image did not load
                     if( startIndex != 0 &&  totalResults == responseJson.totalResults){
-                        $('#loadingMoreImages').remove();
+                        $('#loadingDivImages').remove();
                     }                
                     totalResults --;
                     resultsToLoad --;
-                    console.log("Error loading: " + this.currentImageURL);
-                    console.log("Results: " + totalResults);
+                    
+                    
                     if(resultsToLoad <= 0){
-                        loadingFinished();
+                        loadingFinished(showNextPageButton);
                     }
                 }
                 
             }
         }
 
-        console.log('Query time: ' + responseJson.responseHeader.QTime + 'ms');
-        console.log('Number of Results: ' + responseJson.response.numFound );
+        
+        
        },
        type: 'GET'
     });
@@ -676,46 +850,7 @@ $(document).ready(function() {
       $("#dialog").dialog('close'); 
       return false;
     }); 
-    
-    $(document).on('click', '#showDetails', function() {
-      var position =  $(this).attr('position');
-      var imageObj = imageObjs[position]; /*get Current Image Object*/
-      $("#detailsDialog").dialog('open');
-      $('#imageDetailImageElements').empty();
-      $('#imageDetailPageElements').empty();
-      $('#imageDetailCollectionElements').empty();
-      /*Insert Page Details*/
-      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> url: </span>'+imageObj.pageURL+'</h3>');
-      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> timestamp: </span>'+imageObj.pageTstamp+'</h3>');
-      $('#imageDetailPageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+titleString+': </span>'+imageObj.pageTitleFull+'</h3>');
-      /*Insert Image Details*/
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> src: </span>'+imageObj.imgSrc+'</h3>');
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> timestamp: </span>'+imageObj.timestamp+'</h3>');
-      if(imageObj.titleFull !== ''){
-        $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+titleString+': </span>'+imageObj.titleFull+'</h3>');
-      }
-      if(imageObj.imgAltFull !== ''){
-        $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> alt: </span>'+imageObj.imgAltFull+'</h3>');
-      }      
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+resolutionString+': </span>'+parseInt(imageObj.expandedWidth)+' x '+parseInt(imageObj.expandedHeight)+' pixels</h3>');
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> mimetype: </span>image/'+imageObj.imgMimeType+'</h3>');
-      $('#imageDetailImageElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> safesearch score: </span>'+imageObj.safe+'</h3>');
-      $('#imageDetailCollectionElements').append('<h3 style="margin-left: 10px; margin-right: 10px;word-wrap: break-word;"> <span style="font-weight: bold;"> '+nameString+': </span>'+imageObj.collection+'</h3>');
-      
-      $(document).on('click', function(e) {
-        if (e.target.id !== 'detailsDialog'  && !$(e.target).parents("#detailsDialog").length) {
-            $("#detailsDialog").dialog('close');
-            $(this).off(e);
-        }
-        return false;
-      });          
-      return false;
-    });
-    $(document).on('click', '#detailsDialogClose', function() {
-      $("#detailsDialog").dialog('close'); 
-      return false;
-    });    
-
+   
 });
 
 var defaultDiacriticsRemovalMap = [
@@ -828,23 +963,20 @@ function capitalizeFirstLetter(string) {
 
 function createErrorPage(){
   $(''+
-        '<div id="conteudo-pesquisa-erro">'+
-            '<h2>'+ notFoundTitle+'</h2> <h3>'+$('#txtSearch').val()+'</h3>'+
-            '<div id="sugerimos-que">'+
-                '<p>'+noResultsSuggestions+'</p>'+
-              '<ul>'+
-                '<li>'+noResultsWellWritten+'</li>'+
-                '<li>'+noResultsInterval+'</li>'+                    
-                '<li>'+noResultsKeywords+'</li>'+                    
-                '<li>'+noResultsGenericWords+'</li>'+                    
-              '</ul>'+
-            '</div>'+
-        '</div>'+          
-    '').insertAfter("#resultados-lista");
-    $('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left);
+    '<div id="conteudo-pesquisa-erro">'+
+        '<div class="alert alert-danger break-word col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 my-alert-images">'+
+          '<p>'+notFoundTitle+'<span class="text-bold"> '+$('#txtSearch').attr("value")+'</span></p>'+
+        '</div>'+
+        '<div id="sugerimos-que" class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 no-padding-left">'+
+            '<p class="text-bold">'+noResultsSuggestions+'</p>'+
+          '<ul class="suggestions-no-results">'+
+            '<li>'+noResultsWellWritten+'</li>'+
+            '<li>'+noResultsInterval+'</li>'+
+            '<li>'+noResultsKeywords+'</li>'+
+            '<li>'+noResultsGenericWords+'</li>'+
+          '</ul>'+
+        '</div>'+
+    '</div>'+
+    '').insertBefore("#photos");    
     $( window ).resize(function() {$('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/$( window ).resize(function() {$('.spell').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/ 
 }
-
-
-
-

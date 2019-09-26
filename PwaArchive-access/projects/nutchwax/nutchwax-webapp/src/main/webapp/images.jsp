@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<%@page import="java.net.URL"%>
 <%@ page
-	session="true"
-	contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"	
+  session="true"
+  contentType="text/html; charset=UTF-8"
+  pageEncoding="UTF-8"  
 
-	import="java.io.File"
-	import="java.util.Calendar"
-	import="java.util.Date"
-	import="java.util.GregorianCalendar"
-	import="java.net.URLEncoder"
-	import= "java.net.*"
-	import= "java.io.*"	
-	import="java.text.DateFormat"
-	import="java.util.Calendar"
-	import="java.util.TimeZone"
-	import="java.util.Date"
-	import="java.util.regex.Matcher"
-	import="java.util.regex.Pattern"
-	import="java.util.GregorianCalendar"
+  import="java.io.File"
+  import="java.io.IOException"
+  import="java.util.Calendar"
+  import="java.util.Date"
+  import="java.util.GregorianCalendar"
+  import="java.net.URLEncoder"
+  import= "java.net.*"
+  import= "java.io.*"
+  import="java.text.DateFormat"
+  import="java.text.SimpleDateFormat"
+  import="java.util.TimeZone"
+  import="java.util.regex.Matcher"
+  import="java.util.regex.Pattern"
   import="org.apache.hadoop.conf.Configuration"
   import="org.apache.lucene.search.PwaFunctionsWritable"
   import="org.apache.nutch.global.Global"
@@ -35,21 +35,47 @@
   import="org.archive.access.nutch.NutchwaxBean"
   import="org.archive.access.nutch.NutchwaxQuery"
   import="org.archive.access.nutch.NutchwaxConfiguration"
+  import="org.apache.commons.lang.StringEscapeUtils"
+  import="java.util.Properties"
+  import="java.util.HashSet"
+  import="java.net.MalformedURLException"
+
 %>
 <% // Set the character encoding to use when interpreting request values.
   request.setCharacterEncoding("UTF-8");
 %>
+<%
+response.setHeader("Cache-Control","public, max-age=600");
+%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="include/logging_params.jsp" %>
 <%@ include file="include/i18n.jsp" %>
 <fmt:setLocale value="<%=language%>"/>
 
-<%!	//To please the compiler since logging need those -- check [search.jsp]
-	private static int hitsTotal = -10;		// the value -10 will be used to mark as being "advanced search"
-	private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
-	private static Calendar dateStart = new GregorianCalendar();
-	private static Calendar dateEnd = new GregorianCalendar();
+<%! //To please the compiler since logging need those 
+  private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
+  private static final DateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+  //TODO: remove dateStart & dateEnd ???
+  //private static Calendar dateStart = new GregorianCalendar();
+  //private static Calendar dateEnd = new GregorianCalendar();
+  private static final DateFormat OFFSET_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+  private static final Pattern OFFSET_PARAMETER = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
+
+  //Remove http and https before testing against this url pattern
+  private static final Pattern URL_PATTERN = Pattern.compile("^. ?(([a-zA-Z\\d][-\\w\\.]+)\\.([a-zA-Z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");   
+%>
+
+<%
+  Properties prop = new Properties();
+  prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("validTLDs/valid.properties"));
+  String tldsLine = prop.getProperty("valid.tld");
+  String tlds[] = tldsLine.split("\t");
+  HashSet<String> validTlds = new HashSet<String>();
+  for(String tld:tlds){
+    validTlds.add(tld);
+  }
 %>
 
 <%-- Get the application beans --%>
@@ -57,21 +83,89 @@
   Configuration nutchConf = NutchwaxConfiguration.getConfiguration(application);
   NutchBean bean = NutchwaxBean.get(application, nutchConf);
 %>
-
+<%-- Define the default end date --%>
 <%
+  Calendar DATE_END = new GregorianCalendar();
+  DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) );
+  DATE_END.set( Calendar.MONTH, 12-1 );
+  DATE_END.set( Calendar.DAY_OF_MONTH, 31 );
+  DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
+  DATE_END.set( Calendar.MINUTE, 59 );
+  DATE_END.set( Calendar.SECOND, 59 );
+  int queryStringParameter= 0;
   // Prepare the query values to be presented on the page, preserving the session
   String htmlQueryString = "";
+  String query ="";
   boolean safe =true;
   boolean unsafe = false;
   String safeSearchString ="on";
+  String type = ""; /*Default mimetype*/
+  String size = "all"; /*Default image size*/
+  String tools = "off"; /*Show toolbar*/
+  int startPosition = 0;
+  String startString = request.getParameter("start");
+  if (startString != null)
+    startPosition = Integer.parseInt(startString);
+
+
+
   if( request.getParameter("safeSearch") != null && request.getParameter("safeSearch").contains("off") ){
     safeSearchString = "off";
   }
+  if ( request.getParameter("size") != null && request.getParameter("size") != "") {
+          size = request.getParameter("size");
+          if(! "sm".equals(size) && !"md".equals(size) && ! "lg".equals(size)){
+            size = "all";
+          }
+  }
+
+ /** Read the embargo offset value from the configuration page. If not present, default to: -1 year */
+  try {
+        String offsetDateString = getServletContext().getInitParameter("embargo-offset");
+
+        Matcher offsetMatcher = OFFSET_PARAMETER.matcher( offsetDateString );
+        offsetMatcher.matches();
+        int offsetYear = Integer.parseInt(offsetMatcher.group(1));
+        int offsetMonth = Integer.parseInt(offsetMatcher.group(2));
+        int offsetDay = Integer.parseInt(offsetMatcher.group(3));
+
+        DATE_END.set(Calendar.YEAR, DATE_END.get(Calendar.YEAR) - offsetYear);
+        DATE_END.set(Calendar.MONTH, DATE_END.get(Calendar.MONTH) - offsetMonth);
+        DATE_END.set(Calendar.DAY_OF_MONTH, DATE_END.get(Calendar.DAY_OF_MONTH) - offsetDay );
+  } catch(IllegalStateException e) {
+        // Set the default embargo period to: 1 year
+        DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1);
+        bean.LOG.error("Embargo offset parameter isn't in a valid format");
+  } catch(NullPointerException e) {
+        // Set the default embargo period to: 1 year
+        DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1);
+        bean.LOG.error("Embargo offset parameter isn't present");
+  }
+
+
+  if ( request.getParameter("type") != null && request.getParameter("type") != "") {
+          type = request.getParameter("type");
+          if(! "jpg".equals(type) && !"png".equals(type) && ! "gif".equals(type) && ! "bmp".equals(type) && ! "webp".equals(type)){
+            type = "";
+          }
+  }
+
+
+
+  if( ! "".equals(type) || ! "all".equals(size) || ! "on".equals(safeSearchString)){
+    tools = "on";
+  }else if ( request.getParameter("tools") != null && request.getParameter("tools") != "") {
+    tools = request.getParameter("tools");
+    if(! "on".equals(tools)){
+      tools = "off";
+    }
+  }
+  
 
   if ( request.getParameter("query") != null ) {
-        htmlQueryString = request.getParameter("query").toString();
-        /*htmlQueryString = Entities.encode(htmlQueryString);*/
-
+        htmlQueryString = request.getParameter("query").toString();   
+        query= htmlQueryString;
+        query = URLEncoder.encode(query, "UTF-8");
   }
   else{
         htmlQueryString = "";
@@ -94,21 +188,6 @@
                 htmlQueryString += "filetype:"+ request.getParameter("adv_mime");
                 htmlQueryString += " ";
         }
-        if ( request.getParameterValues("size") != null) {
-                String [] sizes = request.getParameterValues("size");
-                String allSizes = "";
-                for( String currentSize: sizes){
-                  allSizes += currentSize + " ";
-                }
-
-                if(!allSizes.contains("icon") || !allSizes.contains("small") || !allSizes.contains("medium")  || !allSizes.contains("large")){ /*the default case is all sizes, no need to add string if all sizes selected*/
-                  for( String currentSize: sizes){
-                    htmlQueryString += "size:"+ currentSize;
-                    htmlQueryString += " ";
-                  }
-                }
-        }
-
         if (request.getParameter("site") != null && request.getParameter("site") != "") {
                 htmlQueryString += "site:";
                 String siteParameter = request.getParameter("site"); //here split hostname and put it to lowercase
@@ -130,51 +209,45 @@
                         htmlQueryString += siteParameter;
                 }             
                 htmlQueryString += " ";
-        }        
-        if (request.getParameter("format") != null && request.getParameter("format") != "" && !request.getParameter("format").equals("all")) {
-                String [] types = request.getParameterValues("format");
-                String allTypes = "";
-                for( String currentType: types){
-                  allTypes += currentType + " ";
-                }
-
-                if(!allTypes.contains("jpeg") || !allTypes.contains("png") || !allTypes.contains("gif")  || !allTypes.contains("tiff")){ /*the default case is all sizes, no need to add string if all sizes selected*/
-                  for( String currentType: types){
-                    htmlQueryString += "type:"+ currentType;
-                    htmlQueryString += " ";
-                  }
-                }
         }
-        if (request.getParameter("sort") != null && request.getParameter("sort") != "" && !request.getParameter("sort").equals("relevance")) {
-          String sortCriteria = request.getParameter("sort");
-          if(sortCriteria.equals("new") || sortCriteria.equals("old")){
-            htmlQueryString += "sort:" + sortCriteria + " ";
+        if (request.getParameter("type") != null && request.getParameter("type") != "" && !request.getParameter("type").toLowerCase().equals("all")) {
+          htmlQueryString += "type:" + request.getParameter("type") + " " ;
+        }
+        String sizeParam = request.getParameter("size");
+        if (sizeParam != null && sizeParam != "") {
+          sizeParam = sizeParam.toLowerCase();
+          if(sizeParam.equals("sm") || sizeParam.equals("md") || sizeParam.equals("lg")){
+            htmlQueryString += "size:" + sizeParam + " " ;
           }
         }
-  	}
-  //htmlQueryString= htmlQueryString.trim();
-  htmlQueryString = Entities.encode(htmlQueryString);
+        if (request.getParameter("safeSearch") != null && request.getParameter("safeSearch").toLowerCase().equals("off")) {        
+          htmlQueryString += "safe:off ";
+        }                
+
+    }
+  //htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
+  request.setAttribute("htmlQueryString", htmlQueryString);
 
  /*** Start date ***/
   Calendar dateStart = (Calendar)DATE_START.clone();
-  Calendar DATE_END = new GregorianCalendar();
-  DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1 );
-  DATE_END.set( Calendar.MONTH, 12-1 );
-  DATE_END.set( Calendar.DAY_OF_MONTH, 31 );
-  DATE_END.set( Calendar.HOUR_OF_DAY, 23 );
-  DATE_END.set( Calendar.MINUTE, 59 );
-  DATE_END.set( Calendar.SECOND, 59 );
+
   SimpleDateFormat inputDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 
   if ( request.getParameter("dateStart") != null && !request.getParameter("dateStart").equals("") ) {
         try {
                 dateStart.setTime( inputDateFormatter.parse(request.getParameter("dateStart")) );
         } catch (NullPointerException e) {
-              /*TODO:: log this*/
+                bean.LOG.debug("Invalid Start Date:"+ request.getParameter("dateStart") +"|");
         }
   }
   /*** End date ***/
-  Calendar dateEnd = (Calendar)DATE_END.clone();                                // Setting current date
+  Calendar dateEnd = (Calendar)DATE_END.clone();  
+
+  String dateEndNoParameter = inputDateFormatter.format( dateEnd.getTime() );
+  String yearEndNoParameter =dateEndNoParameter.substring(dateEndNoParameter.length()-4);
+  String yearStartNoParameter = "1996";
+
+  // Setting current date
 
   if ( request.getParameter("dateEnd") != null && !request.getParameter("dateEnd").equals("") ) {
         try {
@@ -189,44 +262,147 @@
   }  
   String dateStartString = inputDateFormatter.format( dateStart.getTime() );
 
+  String dateStartDay = dateStartString.substring(0,2);
+
+  String dateStartMonth = dateStartString.substring(3,5);
+
+  String dateStartYear = dateStartString.substring(dateStartString.length()-4);
+
+  String dateStartStringIonic =  dateStartYear + "-" + dateStartMonth + "-" + dateStartDay;
+
   String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
 
+  String dateEndDay = dateEndString.substring(0,2);
+
+  String dateEndMonth = dateEndString.substring(3,5);
+
+  String dateEndYear = dateEndString.substring(dateEndString.length()-4);
+
+  String dateEndStringIonic =  dateEndYear + "-" + dateEndMonth + "-" + dateEndDay;
+
+  // Prepare the query values to be presented on the page, preserving the session
+  htmlQueryString = "";
+
+  if ( request.getParameter("query") != null ) {
+        bean.LOG.debug("Received Query input");
+        htmlQueryString = request.getParameter("query").toString();
+        String [] inputWords = htmlQueryString.split("\\s+");
+        StringBuilder reconstructedInputString = new StringBuilder();
+
+        for (String word: inputWords){
+          bean.LOG.debug("WORD: "+ word);
+          if( word.startsWith("https://")){
+            word= word.substring(8, word.length());
+          }else if (word.startsWith("http://")){
+            word = word.substring(7, word.length());
+          }
+          
+          Matcher matcher = URL_PATTERN.matcher(word);
+
+          if (matcher.find()) {
+            
+            try {       
+              bean.LOG.debug("Attempting URL "+ word);
+              URL myURL = new URL("http://" + word);
+              String[] domainNameParts = myURL.getHost().split("\\.");
+                  String tldString ="."+domainNameParts[domainNameParts.length-1].toUpperCase();
+                  bean.LOG.debug("TLD:"+ tldString);                        
+                  if(validTlds.contains(tldString)){
+                    word = "site:" + word;
+                  } 
+                  else{
+                    bean.LOG.debug("Invalid tld in word:"+ word);
+                  }                 
+            } catch (MalformedURLException e) {
+
+              //NOT a valid URL we will not consider it just add the word without the site:         
+            } 
+          }
+          reconstructedInputString.append(word).append(" ");      
+        }
+        htmlQueryString = reconstructedInputString.toString().substring(0, reconstructedInputString.toString().length()-1);          
+        request.setAttribute("htmlQueryString", htmlQueryString);
+  }
+
+  int numrows = 25;
+  String homeMessageClass= (htmlQueryString.equals("")) ? "" :  "hidden";
+  String loaderDefaultClass = (homeMessageClass.equals("")) ? "hidden" : "";
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT"><head>
-  <% if (htmlQueryString.length() > 0) { %>	
-	  <title><%=htmlQueryString%> — Arquivo.pt</title>
-  <% } else { %>
-  	  <title><fmt:message key='images.imageTitle'/> — Arquivo.pt</title>
-  <% } %>
+  <title><fmt:message key='images.imageTitle'/>:&nbsp; <c:out value = "${htmlQueryString}"/> &nbsp;  &mdash; Arquivo.pt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
-  
   <meta http-equiv="Content-Language" content="pt-PT"/>
   <meta name="Keywords" content="resultado, pesquisa, buscar, arquivo, Web, português, portuguesa, Portugal"/>
   <meta name="Description" content="Página de resultados de uma pesquisa de imagens feita no Arquivo.pt."/>
-  <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon"/>
-  <link rel="search" type="application/opensearchdescription+xml" title="Arquivo.pt(pt)" href="opensearch.jsp?l=pt"/>
-  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css" media="all"/>
-  <link href="css/csspin.css" rel="stylesheet" type="text/css"/>
+  <meta name="theme-color" content="#252525">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#252525">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#252525">  
 
-  <script type="text/javascript" async="" src="//www.google-analytics.com/ga.js"></script>
+  <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon"/>
+  <link href="css/csspin.css" rel="stylesheet" type="text/css"/>
   <script type="text/javascript">
-                var minDate = new Date(820450800000);
-                var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
+      var minDate = new Date(820450800000);
+      var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
+      var minYear = minDate.getFullYear();
+      var maxYear = maxDate.getFullYear();                
   </script>
   <script type="text/javascript">
     calendarBegin = '<fmt:message key="calendar.begin" />'.replace("calendario", "calendário");
     calendarEnd = '<fmt:message key="calendar.end" />'.replace("calendario", "calendário");
+    /*Object with required properties to display in the view details modal*/
+    details = {
+      details : '<fmt:message key="images.details.details"/>',
+      page  : '<fmt:message key="images.details.page"/>',
+      title     : '<fmt:message key="images.details.title"/>',
+      image  : '<fmt:message key="images.details.image"/>',
+      resolution: '<fmt:message key="images.details.resolution"/>',
+      safesearch: '<fmt:message key="images.details.safesearch"/>',
+      collection: '<fmt:message key="images.details.collection"/>',
+      name: '<fmt:message key="images.details.name"/>',
+      visit: '<fmt:message key="images.viewer.visit"/>'
+    };    
   </script>
-  <script  src="/js/jquery-latest.min.js" type="text/javascript"></script>
-  <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css"/>
-  <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src='js/jquery.dialogOptions.js'></script>
+
+  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- dual slider dependencies -->
+    <script type="text/javascript" src="/js/nouislider.min.js"></script>
+    <link rel="stylesheet" href="/css/nouislider.min.css">
+    <script type="text/javascript" src="/js/wNumb.js"></script>
+    <!-- CSS loading spiner -->
+    <link href="css/csspin.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
+    <!-- end addthis for sharing on social media --> 
+    <script type="text/javascript" src="js/configs.js"></script>
+
+
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
   <script type="text/javascript" src="js/ui.datepicker.js"></script>
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
-  <script type="text/javascript" src="js/imageConfigs.js"></script>
-  <script type="text/javascript" src="js/images2.js"></script>
+  <!--<script type="text/javascript" src="js/imageConfigs.js"></script>-->
+
+
+  <script type="text/javascript" src="js/images2.js?imageSearch"></script>
+  <script type="text/javascript">
+    $(".border-mobile").click(function(e) {
+       // Do something
+       e.stopPropagation();
+       console.log("button clicked");
+    });    
+  </script>
+
+  <!-- NEW - 23.07.19: Call ionic -->
+  <script src="../@ionic/core/dist/ionic.js"></script>
+  <link rel="stylesheet" href="../@ionic/core/css/ionic.bundle.css">
  
   <script type="text/javascript">
     clickToCopy = '<fmt:message key="images.clickToCopy" />';
@@ -239,30 +415,24 @@
         addthis_config.data_track_addressbar = false;
         addthis_config.data_track_clickback = false;
   </script>
-  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317" async="async"/>
-  <script type="text/javascript">
-  /*Google Analytics*/
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', 'UA-21825027-1']);
-          _gaq.push(['_setDomainName', '.arquivo.pt']);
-          _gaq.push(['_trackPageview']);
-          (function() {
-                  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
-  </script>
-
+      <!-- swiper main menu --> 
+   <script type="text/javascript" src="/js/swiper.min.js"></script>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317" async="async"></script>
+  <%@include file="include/analytics.jsp" %>
 </head>
-<body>
-  <!--?xml version="1.0" encoding="UTF-8"?-->
+<body id="homeImages">
+<!--?xml version="1.0" encoding="UTF-8"?-->
 <script type="text/javascript">
 function searchImages(startIndex){
     var dateStartWithSlashes = '<%=dateStartString%>';
     var dateEndWithSlashes = '<%=dateEndString%>';
-	  var safeSearchOption = '<%=safeSearchString%>';
+    var safeSearchOption = '<%=safeSearchString%>';
     searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOption,startIndex);
 }
+</script>
+<script type="text/javascript">
+  var sizeVar = "<%=size%>";
+  var typeVar = "<%=type%>";
 </script>
 <script type="text/javascript">
 Content = {
@@ -303,187 +473,135 @@ Content = {
   noResultsInterval = '<fmt:message key="search.no-results.suggestions.time-interval"/>';
   noResultsKeywords = '<fmt:message key="search.no-results.suggestions.keywords"/>';
   noResultsGenericWords = '<fmt:message key="search.no-results.suggestions.generic-words"/>';
+  startPosition = "<%=startPosition%>";
+  numrows ="<%=numrows%>"; /*Number of Images to show by default*/
 </script>
 
 <script type="text/javascript" src="/js/js.cookie.js"></script>
 
 
   <%@ include file="include/topbar.jsp" %>
-
-  <div class="wrap" id="firstWrap" style="min-height: 0">
-    <div id="main">
-      <div id="header" style="min-height: 0">
-        <div id="logo">
-    		<a href="/index.jsp?l=pt" title="<fmt:message key='header.logo.link'/>">
-            		<img src="/img/logo-pt.png" alt="Logo Arquivo.pt" width="125" height="90">
-    		</a>
-	</div>
-
-        <div id="search-header">
-            <form id="loginForm" action="images.jsp" name="imageSearchForm" method="get">
-              <input type="hidden" name="l" value="<%= language %>" />
-              <fieldset id="pesquisar">
-                <label for="txtSearch">&nbsp;</label>
-                <input class="search-inputtext" type="text" size="15"  value="<%=htmlQueryString%>" onfocus="" onblur="" name="query" id="txtSearch" accesskey="t" />
-                <input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" onclick="{document.getElementById('txtSearch').setAttribute('value','');}" />
-                
-                <button type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" ><fmt:message key='search.submit'/></button>
-                <a href="advancedImages.jsp?l=<%=language%>" onclick="{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='images.advancedSearch'/>" id="pesquisa-avancada"><fmt:message key='images.advancedSearch'/></a>
-                <script type="text/javascript">
-                  String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
-                      return this.split(needle).join(replacement);
-                  };
-                </script>
-              </fieldset>
-              <fieldset id="search-date">
-                <div id="search-label-data">
-                  <label id="search-dateStart_top" for="dateStart_top"><fmt:message key='search.query-form.from'/></label>
-                  <div class="search-withTip">
-                    <input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" />
-                  </div>
-                  <label id="search-labelDateEnd" for="dateEnd_top"><fmt:message key='search.query-form.to'/></label>
-                  <div class="withTip">
-                    <input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
-                  </div>
-                </div> 
-                <input id="safeSearchFormInput" style="display: none" name="safeSearch" value="<%=safeSearchString%>" />                
-              </fieldset>
-
-<!--
-<div style="padding-top: 20px;">
-	<label style="font-size: 1.2em"> <fmt:message key='images.safeSearch'/> </label>
-    <select name ="safeSearch" id="safeSearch" style="font-size: 1.2em">
-    <% if (safeSearchString ==null || safeSearchString.equals("")){ %>
-    	<option name ="safeSearch" selected= "selected" value="yes"><fmt:message key='images.showSafe'/></option>
-    	<option name ="safeSearch" value="all"><fmt:message key='images.showAll'/></option>
-    	<option name ="safeSearch" value="no"><fmt:message key='images.showUnsafe'/></option>
-    <% } else { %>
-
-		<% if (safeSearchString.equals("yes")){%>
-			<option name ="safeSearch" selected= "selected" value="yes"><fmt:message key='images.showSafe'/></option>
-		<% } else { %>
-			<option name ="safeSearch" value="yes"><fmt:message key='images.showSafe'/></option>
-		<%} %>    
-       <% if (safeSearchString.equals("all")){%>
-       	<option name ="safeSearch"  selected= "selected" value="all"><fmt:message key='images.showAll'/></option>
-       <%} else{ %>
-       	<option name ="safeSearch" value="all"><fmt:message key='images.showAll'/></option>
-       <%} %>
-		<% if (safeSearchString.equals("no")){%>
-			<option name ="safeSearch" selected= "selected" value="no"><fmt:message key='images.showUnsafe'/></option>
-		<% } else { %>
-			<option name ="safeSearch" value="no"><fmt:message key='images.showUnsafe'/></option>
-		<%} %>	
-	<%} %>
-	</select>
-</div>
--->         
-            </form>
-        </div>
-      </div> 
-      <div id="conteudo-resultado"> 
-        <div id="first-column">
-          &nbsp;
-        </div>
-        <div id="second-column">
-        <div id="resultados">
-          <script type="text/javascript">
-            document.write('<a href="/search.jsp?l=<%=language%>&query='+ $('.search-inputtext').attr("value")+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="search-anchor">Web</a>')
-          </script>
-           <span  class="image-span" href="/images.jsp"><em><fmt:message key='images.images'/></em></span>
-           <div class="fright">
-             <select id="safeSearch" class="safe-search" >
-              <% if (safeSearchString.equals("on")) { %>                
-                <option selected value="on" class="safe-search-option"><fmt:message key='images.safeOnLabel'/></option>
-                <option value="off" class="safe-search-option"><fmt:message key='images.safeOffLabel'/></option>
-              <%} else {%>
-                <option selected value="off" class="safe-search-option"><fmt:message key='images.safeOffLabel'/></option>
-                <option  value="on" class="safe-search-option"><fmt:message key='images.safeOnLabel'/></option>
-              <%}%>                              
-            </select>
-            <script type="text/javascript">
-            $( "#safeSearch" ).change(function() {
-              $('#safeSearchFormInput').attr('value', $('#safeSearch').find(":selected").attr("value"));
-              $('#btnSubmit').click();
-            });              
-            </script>
-            <a target="_blank"style="float right" href="//sobre.arquivo.pt"><i id="safesearchInfo" title="<fmt:message key='images.safeSearch.message'/>" class="ion ion-ios-help"></i></a>          
-          </div>   
-        </div>
-      </div>
-      </div>           
-  <!-- FIM #conteudo-resultado  --> 
-    </div>
-
-</div>
+  <div class="container-fluid topcontainer" id="headerSearchDiv">
+  <script type="text/javascript">
+    imagesHref = window.location.href;
+    pagesHref = window.location.href.toString().replace("images.jsp", "search.jsp"); /*TODO remove from this href parameters that are only appliable to image search*/
+    advancedHref = window.location.href.toString().replace("images.jsp", "advancedImages.jsp");
+  </script>    
+  <%@ include file="include/imageHeaderMobile.jsp" %>
+  <script type="text/javascript">$('#imagesTab').addClass('selected');$('#imagesTab').addClass('primary-underline');</script>
 
 
-<!-- List Results!-->
-<div id="conteudo-resultado" style="width: 100%; max-width: 100%"> 
-<div id="first-column" style="width: 100%">
-  &nbsp;
-</div>
-<div id="second-column" style="width: 100%; background-color: #D8DBDF; padding-bottom: 10%">
+  <div class="row image-container">
+    <script>
+      document.write("<div id='loadingDiv' class='text-center lds-ring' style='text-align: center; margin-top: 10%; margin-bottom: 5%;display:block'><div></div><div></div><div></div><div></div></div>");
+      $( document ).ready(function() {
+        if(typeof(loading)=="undefined" || loading != true){
+          $('#loadingDiv').hide();
+          $('#conteudo-resultado').show();
+        }
+      });
+    </script>      
+
+    <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
+            (request.getParameter("adv_and") == null || request.getParameter("adv_and").equals("")) &&
+            (request.getParameter("adv_phr") == null || request.getParameter("adv_phr").equals("")) &&
+            (request.getParameter("adv_not") == null || request.getParameter("adv_not").equals("")) &&
+            (request.getParameter("type") == null || request.getParameter("type").equals("") || request.getParameter("type").toLowerCase().equals("all") ) &&
+            (request.getParameter("size") == null || request.getParameter("size").equals("") || request.getParameter("size").toLowerCase().equals("all") ) &&
+            (request.getParameter("safeSearch") == null || request.getParameter("safeSearch").equals("") || request.getParameter("safeSearch").toLowerCase().equals("on") ) &&
+            (request.getParameter("site") == null || request.getParameter("site").equals(""))
+     ){ 
+    %>
+      <%@ include file="include/intro.jsp" %>
+    <% } %>
+    <section id="photos">
+    </section>  
+
+    <div class="pagesNextPrevious text-center">
+
+      <ul class="next-previous-ul">
+      <%
+      if (startPosition >= numrows) {
+          int previousPageStart = startPosition - numrows;
+          if(previousPageStart <0){previousPageStart=0;}
+          String previousPageUrl = "images.jsp?" + "query=" + query +
+            "&dateStart="+ dateStartString +
+            "&dateEnd="+ dateEndString +
+            "&pag=prev" +                             // mark as 'previous page' link 
+            "&start=" + previousPageStart +
+            "&l="+ language;
+          previousPageUrl = StringEscapeUtils.escapeHtml(previousPageUrl);
+      %>
+        <li class="previous previous-image" id="previousImage"><a onclick="ga('send', 'event', 'Image search mobile', 'Previous page', document.location.href );" class="myButtonStyle text-center right10" role="button" href="<%=previousPageUrl%>" title="<fmt:message key='search.pager.previous'/>">&larr; <fmt:message key='search.pager.previous'/></a></li>
+      <% } %>
+
+      <%
+        if (true) { /*TODO:: add condition check if there are more results */
+           long nextPageStart = startPosition + numrows;
+           String nextPageUrl = "images.jsp?" +
+            "query=" + query +
+            "&dateStart="+ dateStartString +
+            "&dateEnd="+ dateEndString +
+            "&pag=next" +
+            "&start=" + nextPageStart +
+            "&l="+ language;
+          nextPageUrl = StringEscapeUtils.escapeHtml(nextPageUrl);
+      %>
+          <li class="next next-image" id="nextImage">
+            <a onclick="ga('send', 'event', 'Image search mobile', 'Next page', document.location.href );" class="myButtonStyle text-center" role="button" href="<%=nextPageUrl%>" title="<fmt:message key='search.pager.next'/>"><fmt:message key='search.pager.next'/> &rarr;</a>
+          </li>
+      <% } %>
+
+      </ul>
+
+    </div>  
+  </div>
+
+</div>  
 
 
 
+<script type="text/javascript">
+  String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
+      return this.split(needle).join(replacement);
+  };
+</script>
 
-<div id="resultados" style="width: 100%"></div>
-
-
-
-
-<div class="spell hidden"><fmt:message key='search.spellchecker'/> <span class="suggestion"></span></div>
-
-<div id="loadingDiv" style="text-align: center; display: hidden; margin-top: 10%; margin-bottom: 5%" ><div class="sk-fading-circle"><div class="sk-circle1 sk-circle"></div><div class="sk-circle2 sk-circle"></div><div class="sk-circle3 sk-circle"></div><div class="sk-circle4 sk-circle"></div><div class="sk-circle5 sk-circle"></div><div class="sk-circle6 sk-circle"></div><div class="sk-circle7 sk-circle"></div><div class="sk-circle8 sk-circle"></div><div class="sk-circle9 sk-circle"></div><div class="sk-circle10 sk-circle"></div><div class="sk-circle11 sk-circle"></div><div class="sk-circle12 sk-circle"></div></div></div>
-<div id="resultados-lista" style="text-align: center;">
-    <ul id="resultsUl" style="list-style-type: none;  display: inline-block; margin-left: 2%; margin-right: 2%; ">
-        <li id="imageResults" style="text-align: center"> <h3> <fmt:message key='images.prototype'/> </h3> </li>       
-    </ul>
-</div> 
-<!-- FIM #resultados-lista  --> 
-
-      </div>
-
-</div>
-<style>
-#newFooterWrapper{
-	padding-top:0px!important;
-}
-</style>
-<%@include file="include/footer.jsp" %>
-<script type="text/javascript"> if($('#txtSearch').val().length){doInitialSearch();}</script>
 <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div>
 
-  <script  src="/js/clipboard.min.js" type="text/javascript"></script>
+</div></div></div>
+
   <script type="text/javascript">
-    var linkCopied =   '<fmt:message key="images.linkCopied"/>';
-    initClipboard(linkCopied);
+    function rafAsync() {
+        return new Promise(resolve => {
+            requestAnimationFrame(resolve); //faster than set time out
+        });
+    }
+
+    function checkElement(selector) {
+        if (document.querySelector(selector) === null) {
+            return rafAsync().then(() => checkElement(selector));
+        } else {
+            return Promise.resolve(true);
+        }
+    }
+  </script>
+  <script type="text/javascript">
+    $('<div id="showSlides"><ion-slides id="expandedImageViewers" onload=slidesLoaded();></ion-slides></div>').insertBefore('.curve-background');
+
+    checkElement('#expandedImageViewers > .swiper-wrapper') 
+    .then((element) => {      
+      if($('#txtSearch').val().length){doInitialSearch();}     
+    });
   </script>  
 
 
+  <script type="text/javascript">
+    $('#showSlides').hide();
+  </script>
 
-  <!-- Share Popup -->
-  <div id="dialog"  class="content_dialog">
-          <h1 style="color:black; padding-top: 10px;"><fmt:message key="images.share" /></h1>
-          <button id="dialogClose" href="" class="expand__close__mini" title="Fechar"></button>
-
-          <a class="addthis_button_facebook" style="text-decoration: none;"><h2 style="color:black; padding-top: 30px;"> <img width="40px" style="vertical-align: middle" src="/img/FB-f-Logo__blue_144.png"> <span style="padding-left: 10px;">Facebook</span></h2></a>
-          <a class="addthis_button_twitter" style="text-decoration: none;"><h2 style="color:black; padding-top: 30px;"> <img width="40px" style="vertical-align: middle" src="/img/Twitter_Logo_White_On_Blue.png"> <span style="padding-left: 10px;">Twitter</span></h2></a>
-
-          <button data-clipboard-target="#shortURL" id="btnCopy"><h2 style="color:grey; padding-top: 40px;" id="h2Copy"  ><fmt:message key="images.clickToCopy" /></h2></button>
-          <h2 id="shortURL" style="padding-top: 10px;padding-bottom: 30px;"> </h2>
-  </div>
-  <div id="detailsDialog"  class="content_dialog">
-          <h1 style="color:black; padding-top: 10px;"><fmt:message key="images.details.title" /></h1>
-          <button id="detailsDialogClose" href="" class="expand__close__mini" title="Fechar"></button>
-          <h2 id="imagePage" style="color:black; padding-top: 30px;"><fmt:message key="images.page" /></h2>
-          <div id="imageDetailPageElements"></div> 
-          <h2 id="imageImage" style="color:black; padding-top: 15px;"><fmt:message key="images.image" /></h2>
-          <div id="imageDetailImageElements"></div>    
-          <h2 id="imageDetailCollection" style="color:black; padding-top: 15px;"><fmt:message key="images.collection" /></h2>
-          <div id="imageDetailCollectionElements" style="padding-bottom: 20px;"></div>                  
-  </div>  
+<%@include file="include/analytics.jsp" %>
+<%@include file="include/footer.jsp" %>
 </body>
 </html>
-<%@include file="include/logging.jsp" %>
+

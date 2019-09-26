@@ -200,6 +200,17 @@
             if ( url.length() > 55) {
                 String newUrl = url.substring(0, 52) + "..."/*+ url.substring((url.length()-12),url.length())*/;
                 url = newUrl;
+
+            }
+            String displayURL = url;
+            if(displayURL.startsWith("https://")){
+              displayURL = displayURL.substring(8, displayURL.length());
+            }else if(displayURL.startsWith("http://")){
+              displayURL = displayURL.substring(7, displayURL.length());
+            }
+
+            if(displayURL.startsWith("www.")){
+              displayURL = displayURL.substring(4, displayURL.length());
             }
 
             // Build the summary
@@ -264,6 +275,8 @@
             <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
             <!-- Changed to return in wayback query format -->
             <div class="urlBlock">
+               <div class="url">&#x2192; <a class="url" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%= displayURL %></a></div>
+              <div class="border-bottom"></div>
               <h2>
                 <% if (showMore) {
                         if (!"text".equalsIgnoreCase(primaryType)) {
@@ -275,21 +288,20 @@
                 <%} }%>                
                 <a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%=title%></a>
               </h2>
-              <div class="url"><a class="url" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%= url %></a></div>
-              <div class="border-bottom"></div>
+              <!-- New position for list versions -->
+              <div class="list-versions-div">
+              <span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span>              
+              </div>             
+
             </div>  
-		<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
+	        	<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
             <% showSummary=true; //to show always summaries %>            
             <div class="summary"> 
               <% if (!"".equals(summary) && showSummary) { %>
                 <span class="resumo"><%=summary%></span><br />
-              <% } %>  
-            <div class="list-versions-div"><span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span><span> - </span>
-              <script type="text/javascript">
-                document.write('<a onclick="ga(\'send\', \'event\', \'Full-text search\', \'List Versions\', \'/wayback/*/<%= untruncatedURL %>\');" class="outras-datas" href="/search.jsp?l=<%=language%>&query='+encodeURIComponent("<%=untruncatedURL%>")+'"><fmt:message key="search.allVersions"/></a>');
-                
-              </script>
-            </div></div>            
+            <% } %>  
+           
+          </div>            
             
 <%--
             -

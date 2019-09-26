@@ -61,6 +61,22 @@
         // Set the default embargo period to: 1 year
         DATE_END.set( Calendar.YEAR, DATE_END.get(Calendar.YEAR) - 1);
   }
+ 
+  String dateStartDay = dateStartString.substring(0,2);
+
+  String dateStartMonth = dateStartString.substring(3,5);
+
+  String dateStartYear = dateStartString.substring(dateStartString.length()-4);
+
+  String dateStartStringIonic =  dateStartYear + "-" + dateStartMonth + "-" + dateStartDay;
+
+  String dateEndDay = dateEndString.substring(0,2);
+
+  String dateEndMonth = dateEndString.substring(3,5);
+
+  String dateEndYear = dateEndString.substring(dateEndString.length()-4);
+
+  String dateEndStringIonic =  dateEndYear + "-" + dateEndMonth + "-" + dateEndDay;  
 %>
 
 <%---------------------- Start of HTML ---------------------------%>
@@ -68,253 +84,262 @@
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
-	<title><fmt:message key='advancedImages.meta.title'/></title>
+	<title><fmt:message key='advanced.meta.title'/></title>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Language" content="pt-PT" />
-	<meta name="Keywords" content="<fmt:message key='advancedImages.meta.keywords'/>" />
-	<meta name="Description" content="<fmt:message key='advancedImages.meta.description'/>" />
+	<meta name="Keywords" content="<fmt:message key='advanced.meta.keywords'/>" />
+	<meta name="Description" content="<fmt:message key='advanced.meta.description'/>" />
 	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/style.css"  media="all" />
-	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.custom.css" />
+	<meta name="theme-color" content="#252525">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#252525">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#252525">  	
 	<script type="text/javascript">
 		var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
 		var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
+		var minYear = minDate.getFullYear();
+		var maxYear = maxDate.getFullYear();			
 	</script>
-	<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="js/ui.datepicker.js"></script>
-    <% if (language.equals("pt")) { /* load PT i18n for datepicker */ %>
-	<script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
-    <% } %>
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- cookies for language selection -->
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
+    <!-- dual slider dependencies -->
+    <script type="text/javascript" src="/js/nouislider.min.js"></script>
+    <link rel="stylesheet" href="/css/nouislider.min.css">
+    <script type="text/javascript" src="/js/wNumb.js"></script>
+    <!-- left menu dependencies -->
+    <link rel="stylesheet" href="css/leftmenu.css">
+    <!-- end left menu dependencies -->    
 	<script type="text/javascript" src="js/configs.js"></script>
+   <!-- swiper main menu --> 
+   <script type="text/javascript" src="/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
+  	<script src="../@ionic/core/dist/ionic.js"></script>
+  	<link rel="stylesheet" href="../@ionic/core/css/ionic.bundle.css">        
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
+<!-- end addthis for sharing on social media --> 	
 </head>
-<body>
+<body id="advanced-images">
 	<%@ include file="include/topbar.jsp" %>
 	<div class="wrap">
-		<div id="main">
-			<div id="header">
-				<div id="logo">
-					<a href="index.jsp" title="<fmt:message key='header.logo.link'/>">
-						<img src="img/logo-<%=language%>.png" alt="<fmt:message key='header.logo.alt'/>" width="125" height="90" />
-					</a>
-				</div>
-				<div id="info-texto-termos">
-					<h1><fmt:message key='advancedImages.title'/></h1>
-					<h2><fmt:message key='advancedImages.subtitle'/></h2>
-				</div>
-			</div>
+    <div class="container-fluid topcontainer col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4 " id="headerSearchDiv" >
+		<div id="info-texto-termos" class="row">
+		</div>  
+		<!-- Formulario -->
+		<div id="main" class="main-form-advanced">
 			<div id="conteudo-pesquisa">
+                <script type="text/javascript">
+                  document.write('<ion-datetime id="ionDateStart" class="display-none" display-format="D/MMM/YYYY" min="'+minYear+'-01-01" max="'+maxYear+'-12-31" value="<%=dateStartStringIonic%>"></ion-datetime>');
+                  document.write('<ion-datetime id="ionDateEnd" class="display-none" display-format="D/MMM/YYYY" min="'+minYear+'-01-01" max="'+maxYear+'-12-31" value="<%=dateEndStringIonic%>"></ion-datetime>');                 
+                </script>   				
 				<form method="get" action="images.jsp">
 					<input type="hidden" name="l" value="<%= language %>" />
-					<div class="pesquisar-por">
-	                                	<p class="titulo"><fmt:message key='advancedImages.form-title'/></p>
-	                                        <input type="submit" value="<fmt:message key='advancedImages.submit'/>" alt="<fmt:message key='advancedImages.submit'/>" class="search-submit" name="btnSubmitTop" id="btnSubmitTop" accesskey="e" />
-	                                </div>
-					<fieldset id="words">
-						<legend><fmt:message key='advancedImages.terms'/></legend>
-						<div class="box-content">
-							<div id="label-palavras-1">
-								<label for="adv_and"><fmt:message key='advancedImages.terms.all'/></label>
-								<div class="withTip">
-									<input type="text" id="adv_and" name="adv_and" value="<%=and.toString()%>" />
-									<br />
-									<span class="tip"><fmt:message key='advancedImages.terms.all.hint'/></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-
-							<div id="label-palavras-2">
-								<label for="adv_phr"><fmt:message key='advancedImages.terms.phrase'/></label>
-								<div class="withTip">
-									<input type="text" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
-									<br />
-									<span class="tip"><fmt:message key='advancedImages.terms.phrase.hint'/></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-
-							<div id="label-palavras-3">
-								<label for="adv_not"><fmt:message key='advancedImages.terms.not'/></label>
-								<div class="withTip">
-									<input type="text" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
-									<br />
-									<span class="tip"><fmt:message key='advancedImages.terms.not.hint'/></span>
-								</div>
-							</div>
-						</div>
-					</fieldset>
-
-					<fieldset id="date">
-						<legend><fmt:message key='advancedImages.date'/></legend>
-						<div class="box-content">
-							<div id="label-data-1">
-								<label for="dateStart_top"><fmt:message key='advancedImages.date.from'/></label>
-								<div class="withTip">
-									<input type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" />
+		            <div class="expandable-div">   
+						<fieldset id="words">
+							<legend><fmt:message key='advanced.terms'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
+								<div id="label-palavras-1">
+									<label for="adv_and" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.terms.all'/></label>
+									<div class="withTip ">
+										<input type="text" id="adv_and" class="row  col-xs-10" name="adv_and" value="<%=and.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
+											<span class="tip"><fmt:message key='advanced.terms.all.hint'/></span>
+										</div>										
+									</div>
 								</div>
 
-								<label id="labelDateEnd" for="dateEnd_top"><fmt:message key='advancedImages.date.to'/></label>
-								<div class="withTip">
-									<input type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
+								<div id="label-palavras-2">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="adv_phr"><fmt:message key='advanced.terms.phrase'/></label>
+									<div class="withTip">
+										<input type="text" class="row  col-xs-10" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
+											<span class="tip"><fmt:message key='advanced.terms.phrase.hint'/></span>
+										</div>											
+									</div>
+								</div>
+
+								<div id="label-palavras-3">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="adv_not"><fmt:message key='advanced.terms.not'/></label>
+									<div class="withTip">
+										<input type="text" class="row  col-xs-10" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
+										<div class="row  col-xs-10 no-padding-left">
+											<span class="tip"><fmt:message key='advanced.terms.not.hint'/></span>
+										</div>	
+									</div>
 								</div>
 							</div>
-							<div id="label-data-2">
-								<label for="sort"><fmt:message key='advancedImages.sort'/></label>
-								<select id="sort" name="sort">
+						</fieldset>
+					</div>	
+
+					<div class="expandable-div">
+						<fieldset id="date">
+							<legend><fmt:message key='advanced.date'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
+								<div id="label-data-1">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="dateStart_top"><fmt:message key='advanced.date.from'/></label>
+									<div class="withTip">
+										<input size="10" class="row  date-advanced no-padding-left" type="text" id="dateStart_top" name="dateStart" value="<%=dateStartString%>" /><a class="calendar-anchor-advanced" id="startDateCalendarAnchor"><img src="/img/calendario-drop-down.svg"/></a>
+									</div>
+									<label id="labelDateEnd" class="row  col-xs-12 no-padding-left label-padding-top" for="dateEnd_top"><fmt:message key='advanced.date.to'/></label>
+									<div class="withTip">
+										<input type="text" class="row  date-advanced no-padding-left" id="dateEnd_top" name="dateEnd" size="10" value="<%=dateEndString%>" /><a class="calendar-anchor-advanced" id="endDateCalendarAnchor"><img src="/img/calendario-drop-down.svg"/></a>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>	
+					<div class="expandable-div">
+						<legend><fmt:message key='advancedImages.size'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
+								<div id="label-format-1">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="formatType"><fmt:message key='advanced.format.label'/></label>
+									<ion-select id="formatType" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown" name="type">									
 									<%
-									if (sortType == null) {		// use the default sorting behavior %>
-										<option value="relevance" selected="selected"><fmt:message key="advancedImages.sort.relevance"/></option>
-									<% } else{ %>
-										<option value="relevance"><fmt:message key="advancedImages.sort.relevance"/></option>
-									<% }
-									if ("date".equals(sortType) && sortReverse) { %>
-										<option value="new" selected="selected"><fmt:message key='advancedImages.sort.new'/></option>
-									<%} else {%>
-										<option value="new"><fmt:message key='advancedImages.sort.new'/></option>
-									<%}%>
-									<%
-									if ("date".equals(sortType) && !sortReverse) {%>
-										<option value="old" selected="selected"><fmt:message key='advancedImages.sort.old'/></option>
-									<%} else {%>
-										<option value="old"><fmt:message key='advancedImages.sort.old'/></option>
-									<%}%>
-								</select>
-							</div>
-						</div>
-					</fieldset>
+										String[] mimeList = {"jpg", "png", "gif", "bmp", "webp"};
+										String[] mimeListDetail = {"Joint Photographic Experts Group (.jpeg)", "Portable Network Graphics (.png)", "Graphics Interchange Format (.gif)", "Bitmap Image File (.bmp)", "WEBP (.webp)"};
 
-					<fieldset id="size">
-						<legend><fmt:message key='advancedImages.size'/></legend>
-						<div class="box-content">
-							<div id="label-size-1">
-								<label for="sizeType"><fmt:message key='advancedImages.size.label'/></label> <br></br>
-								<%
-									if (imagesSize == null /*|| "all".equals(imagesFormat)*/) { %>
-										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="size" value="icon" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.icon'/></span><br /></div>										
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="small" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.small'/></span> <br /></div>
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="medium" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.medium'/></span> <br /></div>
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="large" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.large'/></span> <br/></div>
-									<% } else { %>
-											<% if(imagesSize.contains("icon")){ %>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="size" value="icon" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.icon'/></span><br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="size" value="icon" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.icon'/></span><br /></div>		
-											<% } %>
-											<% if(imagesSize.contains("small")){ %>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="small" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.small'/></span> <br /></div>	
-											<% } else {%>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="small" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.small'/></span> <br /></div>	
-											<% } %>	
-											<% if(imagesSize.contains("medium")){ %>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="medium" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.medium'/></span> <br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="medium" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.medium'/></span> <br /></div>
-											<% } %>		
-											<% if(imagesSize.contains("large")){ %>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="large" checked="checked" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.large'/></span> <br/></div>
-											<% } else {%>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="size" value="large" /><span class="imageFormatLabel"><fmt:message key='advancedImages.imagesFormat.large'/></span> <br/></div>
-											<% } %>																				
-									<%}%>																						
-									
-							</div>
-						</div>
-					</fieldset>
+										if (format == null || "all".equals(format)) {%>
+											<ion-select-option value="all" selected><fmt:message key='advanced.format.all'/></ion-select-option>
+										<%} else {%>
+											<ion-select-option value="all"><fmt:message key='advanced.format.all'/></ion-select-option>
+										<%}
 
-					<fieldset id="safe">
-						<legend>Pesquisa Segura</legend>
-						<div class="box-content">
-							<div id="label-size-1">								
-										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="safe" value="true" checked="checked"><span class="imageFormatLabel">Mostrar imagens seguras</span></div>										
-										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="unsafe" value="true"><span class="imageFormatLabel">Mostrar imagens inseguras</span></div>
-							</div>
-						</div>
-					</fieldset>					
+										for (int i=0; i < mimeList.length; i++) {
+											if (mimeList[i].equals(format)) {
+												out.print("<ion-select-option value=\""+ mimeList[i] +"\" selected>"+ mimeListDetail[i] +"</ion-select-option");
+											} else {
+												out.print("<ion-select-option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</ion-select-option>");
+											}
+										}
+									%>
+									</ion-select>
+									<label for="size" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='images.size'/></label>
+									<ion-select id="size" name="size" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
+										<ion-select-option value="all" selected><fmt:message key='images.safeOffLabel'/></ion-select-option>
+										<ion-select-option value="sm"><fmt:message key='images.tools.sm'/></ion-select-option>
+										<ion-select-option value="md"><fmt:message key='images.tools.md'/></ion-select-option>
+										<ion-select-option value="lg"><fmt:message key='images.tools.lg'/></ion-select-option>
+									</ion-select>
+									<label for="safeSearch" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='images.safeSearch'/></label>
+									<ion-select id="safeSearch" interface="action-sheet" placeholder="Select One" name="safeSearch" class="row  col-xs-10 no-padding-left formatTypeDropdown">
+										<ion-select-option value="on" selected><fmt:message key='images.safeOnLabel'/></ion-select-option>
+										<ion-select-option value="off"><fmt:message key='images.safeOffLabel'/></ion-select-option>
+									</ion-select>										
 
-					<fieldset id="format">
-						<legend><fmt:message key='advancedImages.format'/></legend>
-						<div class="box-content">
-							<div id="label-format-1">
-								<label for="formatType"><fmt:message key='advancedImages.format.label'/></label> <br></br>
+								</div>							
+							</div>						
 
-								<% if (format == null /*|| "all".equals(format)*/) { %>
-										<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="jpeg" checked="checked" /><span class="imageFormatLabel">Joint Photographic Experts Group (.jpeg)</span><br /></div>										
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="png" checked="checked" /><span class="imageFormatLabel">Portable Network Graphics (.png)</span> <br /></div>
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="gif" checked="checked" /><span class="imageFormatLabel">Graphics Interchange Format (.gif)</span> <br /></div>
-										<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="tiff" checked="checked" /><span class="imageFormatLabel">Tagged Image File Format (.tiff)</span> <br/></div>
-									<% } else { %>
-											<% if(format.contains("jpeg")){ %>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="jpeg" checked="checked" /><span class="imageFormatLabel">Joint Photographic Experts Group (.jpeg)</span><br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="jpeg" /><span class="imageFormatLabel">Joint Photographic Experts Group (.jpeg)</span><br /></div>
-											<% } %>			
-											<% if(format.contains("png")){ %>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="png" checked="checked" /><span class="imageFormatLabel">Portable Network Graphics (.png)</span><br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="png" /><span class="imageFormatLabel">Portable Network Graphics (.png)</span><br /></div>
-											<% } %>	
-											<% if(format.contains("gif")){ %>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="gif" checked="checked" /><span class="imageFormatLabel">Graphics Interchange Format (.gif)</span><br /></div>
-											<% } else {%>
-												<div class="imageSizeDiv"> <input class="imageCheckbox" type="checkbox" name="format" value="gif" /><span class="imageFormatLabel">Graphics Interchange Format (.gif)</span><br /></div>
-											<% } %>	
-											<% if(format.contains("tiff")){ %>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="tiff" checked="checked" /><span class="imageFormatLabel">Tagged Image File Format (.tiff)</span> <br/></div>
-											<% } else {%>
-												<div class="imageSizeDiv"><input class="imageCheckbox" type="checkbox" name="format" value="tiff" /><span class="imageFormatLabel">Tagged Image File Format (.tiff)</span> <br/></div>
-											<% } %>														
-
-									<% } %>
-
-
-
-							</div>
-						</div>
-					</fieldset>
-					
-					<fieldset id="domains">
-						<legend><fmt:message key='advanced.website'/></legend>
-						<div class="box-content">
-							<div id="label-domains-1">
-								<label for="site"><fmt:message key='advanced.website.label'/></label>
-								<div class="withTip">
-									<input type="text" id="site" name="site" value="<%=site%>" /><br />
-									<span class="tip"><fmt:message key='advanced.website.hint'/></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-						</div>
-					</fieldset>
-
-					<fieldset id="num_result_fieldset">
-						<legend><fmt:message key='advanced.results'/></legend>
-						<div class="box-content">
-							<div id="label-num-result-fieldset-1">
-								<label for="num-result"><fmt:message key='advanced.results.label'/></label>
-								<select id="num-result" name="hitsPerPage">
-								<%
-								int[] hitsPerPageValues = {10, 20, 30, 50, 100};
-								for (int i=0; i < hitsPerPageValues.length; i++) {
-									if (hitsPerPage == hitsPerPageValues[i]) {
-										out.print("<option selected=\"selected\">"+ hitsPerPageValues[i] +"</option>");
-									} else {
-										out.print("<option>"+ hitsPerPageValues[i] +"</option>");
-									}
-								}%>
-								</select>
-								<fmt:message key='advanced.results.label2'/>
-							</div>
-						</div>
-					</fieldset>
-					<div id="bottom-submit">
-						<input type="submit" value="<fmt:message key='advancedImages.submit'/>" alt="<fmt:message key='advancedImages.submit'/>" class="search-submit" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" />
 					</div>
+					<div class="expandable-div">
+						<fieldset id="domains">
+							<legend><fmt:message key='advanced.website'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
+							<div class="box-content container-fluid hidden">
+								<div id="label-domains-1">
+									<label class="row  col-xs-12 no-padding-left label-padding-top" for="site"><fmt:message key='advanced.website.label'/></label>
+									<div class="withTip">
+										<input class="row  col-xs-10 no-padding-left" type="text" id="site" name="site" value="<%=site%>" />
+										<span class="row  col-xs-10 no-padding-left tip"><fmt:message key='advanced.website.hint'/></span>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>	
+
+					<div id="bottom-submit" class="text-center button-advanced">
+						<button type="submit" value="<fmt:message key='advanced.submit'/>" alt="<fmt:message key='advanced.submit'/>" class="myButtonStyle col-xs-offset-3 col-xs-6" name="btnSubmitBottom" id="btnSubmitBottom" accesskey="e" >
+						<fmt:message key='advanced.search'/>
+						<span class="glyphicon glyphicon-search padding-left-5"></span>
+						</button>
+					</div>
+
+
 				</form>
                         </div>
-                </div>
+                </div>		
+		<!-- Fim formulário -->      
+    </div>    
+
+<script>
+$(".expandable-div legend").click(function() {
+    $(this).children("i").toggleClass('fa-caret-up fa-caret-down');
+    $(this).next().toggleClass("hidden");
+});
+</script>
+<script type="text/javascript">
+	$('#dateStart_top').click( function(e) {
+	  e.preventDefault();
+	  $('#ionDateStart').trigger('click');	  
+	}); 
+	$('#dateEnd_top').click( function(e) {
+	  e.preventDefault();
+	  $('#ionDateEnd').trigger('click');	  
+	}); 	
+
+	$('#ionDateStart').on("ionChange", function() {
+		var newStartDate = $('#ionDateStart').val();
+		var newStartDateTokens = newStartDate.split('-');
+		var newStartDateFormated =  newStartDateTokens[2].split('T')[0] + "/" + newStartDateTokens[1]+ "/"+ newStartDateTokens[0]; 
+		/*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
+		$('#dateStart_top').val(newStartDateFormated);
+	});   
+	$('#ionDateEnd').on("ionChange", function() {
+		var newEndDate = $('#ionDateEnd').val();
+		var newEndDateTokens = newEndDate.split('-');
+		var newEndDateFormated =  newEndDateTokens[2].split('T')[0] + "/" + newEndDateTokens[1]+ "/"+ newEndDateTokens[0]; 
+		/*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
+		$('#dateEnd_top').val(newEndDateFormated);
+	});   	
+</script>	
+<script>
+	$('#startDateCalendarAnchor').click( function(e) {
+	  e.preventDefault();
+	  $('#dateStart_top').trigger('click');
+	});    
+</script>		
+<script>
+	$('#endDateCalendarAnchor').click( function(e) {
+	  e.preventDefault();
+	  $('#dateEnd_top').trigger('click');
+	});    
+</script>
+<script type="text/javascript">
+  monthShortNamesArray = ["<fmt:message key='smonth.0'/>",'<fmt:message key='smonth.1'/>','<fmt:message key='smonth.2'/>','<fmt:message key='smonth.3'/>','<fmt:message key='smonth.4'/>','<fmt:message key='smonth.5'/>','<fmt:message key='smonth.6'/>','<fmt:message key='smonth.7'/>','<fmt:message key='smonth.8'/>','<fmt:message key='smonth.9'/>','<fmt:message key='smonth.10'/>','<fmt:message key='smonth.11'/>'];
+  function removeZeroInDay(dayStr){
+    if(dayStr.length == 2 && dayStr.charAt(0) === "0"){
+      return dayStr.charAt(1);
+    }
+    return dayStr;
+  }
+  function getMonthShortName(monthPositionStr){
+    return monthShortNamesArray[parseInt(monthPositionStr)-1];
+  }
+</script>
+<script type="text/javascript">
+  $('#ionDateStart')[0].cancelText = "<fmt:message key='picker.cancel'/>";
+  $('#ionDateEnd')[0].cancelText = "<fmt:message key='picker.cancel'/>";
+  $('#ionDateStart')[0].doneText = "<fmt:message key='picker.ok'/>";
+  $('#ionDateEnd')[0].doneText = "<fmt:message key='picker.ok'/>";
+  $('#ionDateStart')[0].monthShortNames = monthShortNamesArray;
+  $('#ionDateEnd')[0].monthShortNames = monthShortNamesArray;
+
+  $('#formatType')[0].cancelText =  "<fmt:message key='picker.cancel'/>";  
+  $('#size')[0].cancelText =  "<fmt:message key='picker.cancel'/>";  
+  $('#safeSearch')[0].cancelText =  "<fmt:message key='picker.cancel'/>";  
+   
+</script>   
+
 <%-- end copy --%>
 	</div>
-<%@include file="include/footer.jsp" %>
+<%@ include file="include/footer.jsp" %>
 <%@include file="include/analytics.jsp" %>
 </body>
 </html>
