@@ -2935,8 +2935,16 @@ and (min-device-width : 1024px)   {
   and (min-device-width: 414px) 
   and (max-device-width: 736px) 
   and (-webkit-min-device-pixel-ratio: 3)
-  and (device-aspect-ratio: 2/3)
-  and (orientation: portrait) { 
+ { 
+
+        .imgClass {
+    padding-top:11% !important;
+    width: 46% !important;
+    outline: 1px solid red;
+}
+    .myButtonStyle {
+    max-width: 46%;
+  }
 }
 
 /* Landscape */
@@ -2946,7 +2954,7 @@ and (min-device-width : 1024px)   {
   and (-webkit-min-device-pixel-ratio: 3)
   and (device-aspect-ratio: 2/3)
   and (orientation: landscape) { 
-}
+
 }
 
 /* ----------- iPhone X ----------- */
@@ -3202,8 +3210,7 @@ and (max-device-height : 1366px)
     .sc-ion-card-ios-h {
     padding-left: 25% !important;
     padding-right: 25% !important;
-} 
-   
+}    
 }
 
 /* Landscape */
