@@ -1,22 +1,66 @@
+import { h } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
 import { debounceEvent, findItemLabel } from '../../utils/helpers';
 import { createColorClasses } from '../../utils/theme';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export class Input {
     constructor() {
         this.inputId = `ion-input-${inputIds++}`;
         this.didBlurAfterEdit = false;
         this.hasFocus = false;
+        /**
+         * Indicates whether and how the text value should be automatically capitalized as it is entered/edited by the user.
+         */
         this.autocapitalize = 'off';
+        /**
+         * Indicates whether the value of the control can be automatically completed by the browser.
+         */
         this.autocomplete = 'off';
+        /**
+         * Whether auto correction should be enabled when the user is entering/editing the text value.
+         */
         this.autocorrect = 'off';
+        /**
+         * This Boolean attribute lets you specify that a form control should have input focus when the page loads.
+         */
         this.autofocus = false;
+        /**
+         * If `true`, a clear icon will appear in the input when there is a value. Clicking it clears the input.
+         */
         this.clearInput = false;
+        /**
+         * Set the amount of time, in milliseconds, to wait to trigger the `ionChange` event after each keystroke.
+         */
         this.debounce = 0;
+        /**
+         * If `true`, the user cannot interact with the input.
+         */
         this.disabled = false;
+        /**
+         * The name of the control, which is submitted with the form data.
+         */
         this.name = this.inputId;
+        /**
+         * If `true`, the user cannot modify the value.
+         */
         this.readonly = false;
+        /**
+         * If `true`, the user must fill in a value before submitting a form.
+         */
         this.required = false;
+        /**
+         * If `true`, the element will have its spelling and grammar checked.
+         */
         this.spellcheck = false;
+        /**
+         * The type of control to display. The default type is text.
+         */
         this.type = 'text';
+        /**
+         * The value of the input.
+         */
         this.value = '';
         this.onInput = (ev) => {
             const input = ev.target;
@@ -39,14 +83,29 @@ export class Input {
         };
         this.onKeydown = () => {
             if (this.clearOnEdit) {
+                // Did the input value change after it was blurred and edited?
                 if (this.didBlurAfterEdit && this.hasValue()) {
+                    // Clear the input
                     this.clearTextInput();
                 }
+                // Reset the flag
                 this.didBlurAfterEdit = false;
             }
         };
-        this.clearTextInput = () => {
+        this.clearTextInput = (ev) => {
+            if (this.clearInput && !this.readonly && !this.disabled && ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
             this.value = '';
+            /**
+             * This is needed for clearOnEdit
+             * Otherwise the value will not be cleared
+             * if user is inside the input
+             */
+            if (this.nativeInput) {
+                this.nativeInput.value = '';
+            }
         };
     }
     debounceChanged() {
@@ -55,11 +114,15 @@ export class Input {
     disabledChanged() {
         this.emitStyle();
     }
+    /**
+     * Update the native input element when the value changes
+     */
     valueChanged() {
         this.emitStyle();
         this.ionChange.emit({ value: this.value });
     }
     componentWillLoad() {
+        // By default, password inputs clear after focus when they have content
         if (this.clearOnEdit === undefined && this.type === 'password') {
             this.clearOnEdit = true;
         }
@@ -72,11 +135,18 @@ export class Input {
     componentDidUnload() {
         this.ionInputDidUnload.emit();
     }
-    setFocus() {
+    /**
+     * Sets focus on the specified `ion-input`. Use this method instead of the global
+     * `input.focus()`.
+     */
+    async setFocus() {
         if (this.nativeInput) {
             this.nativeInput.focus();
         }
     }
+    /**
+     * Returns the native `<input>` element used under the hood.
+     */
     getInputElement() {
         return Promise.resolve(this.nativeInput);
     }
@@ -94,6 +164,7 @@ export class Input {
         });
     }
     focusChanged() {
+        // If clearOnEdit is enabled and the input blurred but has a value, set a flag
         if (this.clearOnEdit && !this.hasFocus && this.hasValue()) {
             this.didBlurAfterEdit = true;
         }
@@ -102,9 +173,10 @@ export class Input {
         return this.getValue().length > 0;
     }
     hostData() {
+        const mode = getIonMode(this);
         return {
             'aria-disabled': this.disabled ? 'true' : null,
-            class: Object.assign({}, createColorClasses(this.color), { 'has-value': this.hasValue(), 'has-focus': this.hasFocus })
+            class: Object.assign({}, createColorClasses(this.color), { [mode]: true, 'has-value': this.hasValue(), 'has-focus': this.hasFocus })
         };
     }
     render() {
@@ -121,177 +193,660 @@ export class Input {
     }
     static get is() { return "ion-input"; }
     static get encapsulation() { return "scoped"; }
+    static get originalStyleUrls() { return {
+        "ios": ["input.ios.scss"],
+        "md": ["input.md.scss"]
+    }; }
+    static get styleUrls() { return {
+        "ios": ["input.ios.css"],
+        "md": ["input.md.css"]
+    }; }
     static get properties() { return {
+        "color": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "Color",
+                "resolved": "string | undefined",
+                "references": {
+                    "Color": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The color to use from your application's color palette.\nDefault options are: `\"primary\"`, `\"secondary\"`, `\"tertiary\"`, `\"success\"`, `\"warning\"`, `\"danger\"`, `\"light\"`, `\"medium\"`, and `\"dark\"`.\nFor more information on colors, see [theming](/docs/theming/basics)."
+            },
+            "attribute": "color",
+            "reflect": false
+        },
         "accept": {
-            "type": String,
-            "attr": "accept"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "If the value of the type attribute is `\"file\"`, then this attribute will indicate the types of files that the server accepts, otherwise it will be ignored. The value must be a comma-separated list of unique content type specifiers."
+            },
+            "attribute": "accept",
+            "reflect": false
         },
         "autocapitalize": {
-            "type": String,
-            "attr": "autocapitalize"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Indicates whether and how the text value should be automatically capitalized as it is entered/edited by the user."
+            },
+            "attribute": "autocapitalize",
+            "reflect": false,
+            "defaultValue": "'off'"
         },
         "autocomplete": {
-            "type": String,
-            "attr": "autocomplete"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "'on' | 'off'",
+                "resolved": "\"off\" | \"on\"",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Indicates whether the value of the control can be automatically completed by the browser."
+            },
+            "attribute": "autocomplete",
+            "reflect": false,
+            "defaultValue": "'off'"
         },
         "autocorrect": {
-            "type": String,
-            "attr": "autocorrect"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "'on' | 'off'",
+                "resolved": "\"off\" | \"on\"",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Whether auto correction should be enabled when the user is entering/editing the text value."
+            },
+            "attribute": "autocorrect",
+            "reflect": false,
+            "defaultValue": "'off'"
         },
         "autofocus": {
-            "type": Boolean,
-            "attr": "autofocus"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "This Boolean attribute lets you specify that a form control should have input focus when the page loads."
+            },
+            "attribute": "autofocus",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "clearInput": {
-            "type": Boolean,
-            "attr": "clear-input"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, a clear icon will appear in the input when there is a value. Clicking it clears the input."
+            },
+            "attribute": "clear-input",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "clearOnEdit": {
-            "type": Boolean,
-            "attr": "clear-on-edit",
-            "mutable": true
-        },
-        "color": {
-            "type": String,
-            "attr": "color"
+            "type": "boolean",
+            "mutable": true,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the value will be cleared after focus upon edit. Defaults to `true` when `type` is `\"password\"`, `false` for all other types."
+            },
+            "attribute": "clear-on-edit",
+            "reflect": false
         },
         "debounce": {
-            "type": Number,
-            "attr": "debounce",
-            "watchCallbacks": ["debounceChanged"]
+            "type": "number",
+            "mutable": false,
+            "complexType": {
+                "original": "number",
+                "resolved": "number",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Set the amount of time, in milliseconds, to wait to trigger the `ionChange` event after each keystroke."
+            },
+            "attribute": "debounce",
+            "reflect": false,
+            "defaultValue": "0"
         },
         "disabled": {
-            "type": Boolean,
-            "attr": "disabled",
-            "watchCallbacks": ["disabledChanged"]
-        },
-        "el": {
-            "elementRef": true
-        },
-        "getInputElement": {
-            "method": true
-        },
-        "hasFocus": {
-            "state": true
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the user cannot interact with the input."
+            },
+            "attribute": "disabled",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "inputmode": {
-            "type": String,
-            "attr": "inputmode"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "A hint to the browser for which keyboard to display.\nThis attribute applies when the value of the type attribute is `\"text\"`, `\"password\"`, `\"email\"`, or `\"url\"`. Possible values are: `\"verbatim\"`, `\"latin\"`, `\"latin-name\"`, `\"latin-prose\"`, `\"full-width-latin\"`, `\"kana\"`, `\"katakana\"`, `\"numeric\"`, `\"tel\"`, `\"email\"`, `\"url\"`."
+            },
+            "attribute": "inputmode",
+            "reflect": false
         },
         "max": {
-            "type": String,
-            "attr": "max"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The maximum value, which must not be less than its minimum (min attribute) value."
+            },
+            "attribute": "max",
+            "reflect": false
         },
         "maxlength": {
-            "type": Number,
-            "attr": "maxlength"
+            "type": "number",
+            "mutable": false,
+            "complexType": {
+                "original": "number",
+                "resolved": "number | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "If the value of the type attribute is `text`, `email`, `search`, `password`, `tel`, or `url`, this attribute specifies the maximum number of characters that the user can enter."
+            },
+            "attribute": "maxlength",
+            "reflect": false
         },
         "min": {
-            "type": String,
-            "attr": "min"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The minimum value, which must not be greater than its maximum (max attribute) value."
+            },
+            "attribute": "min",
+            "reflect": false
         },
         "minlength": {
-            "type": Number,
-            "attr": "minlength"
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
+            "type": "number",
+            "mutable": false,
+            "complexType": {
+                "original": "number",
+                "resolved": "number | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "If the value of the type attribute is `text`, `email`, `search`, `password`, `tel`, or `url`, this attribute specifies the minimum number of characters that the user can enter."
+            },
+            "attribute": "minlength",
+            "reflect": false
         },
         "multiple": {
-            "type": Boolean,
-            "attr": "multiple"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the user can enter more than one value. This attribute applies when the type attribute is set to `\"email\"` or `\"file\"`, otherwise it is ignored."
+            },
+            "attribute": "multiple",
+            "reflect": false
         },
         "name": {
-            "type": String,
-            "attr": "name"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The name of the control, which is submitted with the form data."
+            },
+            "attribute": "name",
+            "reflect": false,
+            "defaultValue": "this.inputId"
         },
         "pattern": {
-            "type": String,
-            "attr": "pattern"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "A regular expression that the value is checked against. The pattern must match the entire value, not just some subset. Use the title attribute to describe the pattern to help the user. This attribute applies when the value of the type attribute is `\"text\"`, `\"search\"`, `\"tel\"`, `\"url\"`, `\"email\"`, or `\"password\"`, otherwise it is ignored."
+            },
+            "attribute": "pattern",
+            "reflect": false
         },
         "placeholder": {
-            "type": String,
-            "attr": "placeholder"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | null",
+                "resolved": "null | string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Instructional text that shows before the input has a value."
+            },
+            "attribute": "placeholder",
+            "reflect": false
         },
         "readonly": {
-            "type": Boolean,
-            "attr": "readonly"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the user cannot modify the value."
+            },
+            "attribute": "readonly",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "required": {
-            "type": Boolean,
-            "attr": "required"
-        },
-        "setFocus": {
-            "method": true
-        },
-        "size": {
-            "type": Number,
-            "attr": "size"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the user must fill in a value before submitting a form."
+            },
+            "attribute": "required",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "spellcheck": {
-            "type": Boolean,
-            "attr": "spellcheck"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the element will have its spelling and grammar checked."
+            },
+            "attribute": "spellcheck",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "step": {
-            "type": String,
-            "attr": "step"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Works with the min and max attributes to limit the increments at which a value can be set.\nPossible values are: `\"any\"` or a positive floating point number."
+            },
+            "attribute": "step",
+            "reflect": false
+        },
+        "size": {
+            "type": "number",
+            "mutable": false,
+            "complexType": {
+                "original": "number",
+                "resolved": "number | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The initial size of the control. This value is in pixels unless the value of the type attribute is `\"text\"` or `\"password\"`, in which case it is an integer number of characters. This attribute applies only when the `type` attribute is set to `\"text\"`, `\"search\"`, `\"tel\"`, `\"url\"`, `\"email\"`, or `\"password\"`, otherwise it is ignored."
+            },
+            "attribute": "size",
+            "reflect": false
         },
         "type": {
-            "type": String,
-            "attr": "type"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "TextFieldTypes",
+                "resolved": "\"date\" | \"email\" | \"number\" | \"password\" | \"search\" | \"tel\" | \"text\" | \"time\" | \"url\"",
+                "references": {
+                    "TextFieldTypes": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The type of control to display. The default type is text."
+            },
+            "attribute": "type",
+            "reflect": false,
+            "defaultValue": "'text'"
         },
         "value": {
-            "type": String,
-            "attr": "value",
+            "type": "string",
             "mutable": true,
-            "watchCallbacks": ["valueChanged"]
+            "complexType": {
+                "original": "string | null",
+                "resolved": "null | string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The value of the input."
+            },
+            "attribute": "value",
+            "reflect": false,
+            "defaultValue": "''"
         }
     }; }
+    static get states() { return {
+        "hasFocus": {}
+    }; }
     static get events() { return [{
-            "name": "ionInput",
             "method": "ionInput",
+            "name": "ionInput",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when a keyboard input ocurred."
+            },
+            "complexType": {
+                "original": "KeyboardEvent",
+                "resolved": "KeyboardEvent",
+                "references": {
+                    "KeyboardEvent": {
+                        "location": "global"
+                    }
+                }
+            }
         }, {
-            "name": "ionChange",
             "method": "ionChange",
+            "name": "ionChange",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the value has changed."
+            },
+            "complexType": {
+                "original": "InputChangeEventDetail",
+                "resolved": "InputChangeEventDetail",
+                "references": {
+                    "InputChangeEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }, {
-            "name": "ionBlur",
             "method": "ionBlur",
+            "name": "ionBlur",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the input loses focus."
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionFocus",
             "method": "ionFocus",
+            "name": "ionFocus",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the input has focus."
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionInputDidLoad",
             "method": "ionInputDidLoad",
+            "name": "ionInputDidLoad",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": "Emitted when the input has been created."
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionInputDidUnload",
             "method": "ionInputDidUnload",
+            "name": "ionInputDidUnload",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": "Emitted when the input has been removed."
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionStyle",
             "method": "ionStyle",
+            "name": "ionStyle",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": "Emitted when the styles change."
+            },
+            "complexType": {
+                "original": "StyleEventDetail",
+                "resolved": "StyleEventDetail",
+                "references": {
+                    "StyleEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }]; }
-    static get style() { return "/**style-placeholder:ion-input:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-input:**/"; }
+    static get methods() { return {
+        "setFocus": {
+            "complexType": {
+                "signature": "() => Promise<void>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "Sets focus on the specified `ion-input`. Use this method instead of the global\n`input.focus()`.",
+                "tags": []
+            }
+        },
+        "getInputElement": {
+            "complexType": {
+                "signature": "() => Promise<HTMLInputElement>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "HTMLInputElement": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<HTMLInputElement>"
+            },
+            "docs": {
+                "text": "Returns the native `<input>` element used under the hood.",
+                "tags": []
+            }
+        }
+    }; }
+    static get elementRef() { return "el"; }
+    static get watchers() { return [{
+            "propName": "debounce",
+            "methodName": "debounceChanged"
+        }, {
+            "propName": "disabled",
+            "methodName": "disabledChanged"
+        }, {
+            "propName": "value",
+            "methodName": "valueChanged"
+        }]; }
 }
 let inputIds = 0;

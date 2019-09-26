@@ -1,7 +1,17 @@
+import { getIonMode } from '../../global/ionic-global';
 import { createColorClasses } from '../../utils/theme';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export class Segment {
     constructor() {
+        /**
+         * If `true`, the user cannot interact with the segment.
+         */
         this.disabled = false;
+        /**
+         * If `true`, the segment buttons will overflow and the user can swipe to see them.
+         */
         this.scrollable = false;
     }
     valueChanged(value) {
@@ -39,56 +49,149 @@ export class Segment {
         return Array.from(this.el.querySelectorAll('ion-segment-button'));
     }
     hostData() {
+        const mode = getIonMode(this);
         return {
-            class: Object.assign({}, createColorClasses(this.color), { 'segment-disabled': this.disabled, 'segment-scrollable': this.scrollable })
+            class: Object.assign({}, createColorClasses(this.color), { [mode]: true, 'segment-disabled': this.disabled, 'segment-scrollable': this.scrollable })
         };
     }
     static get is() { return "ion-segment"; }
     static get encapsulation() { return "scoped"; }
+    static get originalStyleUrls() { return {
+        "ios": ["segment.ios.scss"],
+        "md": ["segment.md.scss"]
+    }; }
+    static get styleUrls() { return {
+        "ios": ["segment.ios.css"],
+        "md": ["segment.md.css"]
+    }; }
     static get properties() { return {
         "color": {
-            "type": String,
-            "attr": "color"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "Color",
+                "resolved": "string | undefined",
+                "references": {
+                    "Color": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The color to use from your application's color palette.\nDefault options are: `\"primary\"`, `\"secondary\"`, `\"tertiary\"`, `\"success\"`, `\"warning\"`, `\"danger\"`, `\"light\"`, `\"medium\"`, and `\"dark\"`.\nFor more information on colors, see [theming](/docs/theming/basics)."
+            },
+            "attribute": "color",
+            "reflect": false
         },
         "disabled": {
-            "type": Boolean,
-            "attr": "disabled"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the user cannot interact with the segment."
+            },
+            "attribute": "disabled",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "scrollable": {
-            "type": Boolean,
-            "attr": "scrollable"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the segment buttons will overflow and the user can swipe to see them."
+            },
+            "attribute": "scrollable",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "value": {
-            "type": String,
-            "attr": "value",
+            "type": "string",
             "mutable": true,
-            "watchCallbacks": ["valueChanged"]
+            "complexType": {
+                "original": "string | null",
+                "resolved": "null | string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "the value of the segment."
+            },
+            "attribute": "value",
+            "reflect": false
         }
     }; }
     static get events() { return [{
-            "name": "ionChange",
             "method": "ionChange",
+            "name": "ionChange",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the value property has changed."
+            },
+            "complexType": {
+                "original": "SegmentChangeEventDetail",
+                "resolved": "SegmentChangeEventDetail",
+                "references": {
+                    "SegmentChangeEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }, {
-            "name": "ionStyle",
             "method": "ionStyle",
+            "name": "ionStyle",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the styles change."
+            },
+            "complexType": {
+                "original": "StyleEventDetail",
+                "resolved": "StyleEventDetail",
+                "references": {
+                    "StyleEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
+        }]; }
+    static get elementRef() { return "el"; }
+    static get watchers() { return [{
+            "propName": "value",
+            "methodName": "valueChanged"
         }]; }
     static get listeners() { return [{
             "name": "ionSelect",
-            "method": "segmentClick"
+            "method": "segmentClick",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }]; }
-    static get style() { return "/**style-placeholder:ion-segment:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-segment:**/"; }
 }

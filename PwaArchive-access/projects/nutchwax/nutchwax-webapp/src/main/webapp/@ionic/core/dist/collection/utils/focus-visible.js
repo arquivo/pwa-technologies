@@ -1,7 +1,8 @@
 const ION_FOCUSED = 'ion-focused';
 const ION_FOCUSABLE = 'ion-focusable';
 const FOCUS_KEYS = ['Tab', 'ArrowDown', 'Space', 'Escape', ' ', 'Shift', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp'];
-export function startFocusVisible(doc) {
+export function startFocusVisible() {
+    const doc = document;
     let currentFocus = [];
     let keyboardMode = true;
     function setFocus(elements) {

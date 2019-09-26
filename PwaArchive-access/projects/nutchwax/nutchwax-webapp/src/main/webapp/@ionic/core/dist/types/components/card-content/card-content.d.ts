@@ -1,11 +1,11 @@
 import { ComponentInterface } from '../../stencil.core';
-import { Mode } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class CardContent implements ComponentInterface {
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     hostData(): {
-        class: import("../../interface").CssClassMap;
+        class: {
+            [x: string]: boolean;
+        };
     };
 }

@@ -2,7 +2,6 @@ import { ComponentInterface, EventEmitter } from '../../stencil.core';
 export declare class Backdrop implements ComponentInterface {
     private lastClick;
     private blocker;
-    doc: Document;
     /**
      * If `true`, the backdrop will be visible.
      */
@@ -27,6 +26,7 @@ export declare class Backdrop implements ComponentInterface {
     hostData(): {
         tabindex: string;
         class: {
+            [x: string]: boolean;
             'backdrop-hide': boolean;
             'backdrop-no-tappable': boolean;
         };

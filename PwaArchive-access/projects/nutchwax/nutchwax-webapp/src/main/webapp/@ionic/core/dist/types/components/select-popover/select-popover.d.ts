@@ -1,11 +1,9 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
-import { Mode, SelectPopoverOption } from '../../interface';
+import { SelectPopoverOption } from '../../interface';
 /**
  * @internal
  */
 export declare class SelectPopover implements ComponentInterface {
-    mode: Mode;
     /** Header text for the popover */
     header?: string;
     /** Subheader text for the popover */
@@ -15,5 +13,10 @@ export declare class SelectPopover implements ComponentInterface {
     /** Array of options for the popover */
     options: SelectPopoverOption[];
     onSelect(ev: any): void;
-    render(): JSX.Element;
+    hostData(): {
+        class: {
+            [x: string]: boolean;
+        };
+    };
+    render(): any;
 }

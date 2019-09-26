@@ -34,12 +34,17 @@
   font-family: var(--ion-font-family, inherit);
   contain: strict;
   user-select: none;
-  z-index: 1000; }
-  :host([dir=rtl]) + b {
-    right: 0; }
+  z-index: 1000;
+}
+:host-context([dir=rtl]) {
+  left: unset;
+  right: unset;
+  right: 0;
+}
 
 :host(.overlay-hidden) {
-  display: none; }
+  display: none;
+}
 
 .picker-wrapper {
   border-radius: var(--border-radius);
@@ -66,28 +71,34 @@
   background: var(--background);
   contain: strict;
   overflow: hidden;
-  z-index: 10; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .picker-wrapper {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: auto;
-      margin-inline-start: auto;
-      -webkit-margin-end: auto;
-      margin-inline-end: auto; } }
+  z-index: 10;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .picker-wrapper {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: auto;
+    margin-inline-start: auto;
+    -webkit-margin-end: auto;
+    margin-inline-end: auto;
+  }
+}
 
 .picker-toolbar {
   width: 100%;
   background: transparent;
   contain: strict;
-  z-index: 1; }
+  z-index: 1;
+}
 
 .picker-button {
   border: 0;
-  font-family: inherit; }
+  font-family: inherit;
+}
 
 .picker-button:active, .picker-button:focus {
-  outline: none; }
+  outline: none;
+}
 
 .picker-columns {
   display: flex;
@@ -96,24 +107,28 @@
   margin-bottom: var(--ion-safe-area-bottom, 0);
   contain: strict;
   direction: ltr;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .picker-above-highlight,
 .picker-below-highlight {
   display: none;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 :host {
   --background: var(--ion-background-color, #fff);
   --border-width: 0.55px 0 0;
   --border-color: var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
   --height: 260px;
-  color: var(--ion-item-color, var(--ion-text-color, #000)); }
+  color: var(--ion-item-color, var(--ion-text-color, #000));
+}
 
 .picker-toolbar {
   display: flex;
   justify-content: flex-end;
-  height: 44px; }
+  height: 44px;
+}
 
 .picker-button,
 .picker-button.activated {
@@ -131,20 +146,24 @@
   font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;
-  box-shadow: none; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .picker-button,
-    .picker-button.activated {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 1.1em;
-      padding-inline-start: 1.1em;
-      -webkit-padding-end: 1.1em;
-      padding-inline-end: 1.1em; } }
+  box-shadow: none;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .picker-button,
+.picker-button.activated {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 1.1em;
+    padding-inline-start: 1.1em;
+    -webkit-padding-end: 1.1em;
+    padding-inline-end: 1.1em;
+  }
+}
 
 .picker-columns {
   height: 216px;
-  perspective: 1800px; }
+  perspective: 1800px;
+}
 
 .picker-above-highlight {
   left: 0;
@@ -155,9 +174,13 @@
   height: 81px;
   border-bottom: 1px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
   background: linear-gradient(to bottom, var(--ion-background-color, #fff) 20%, rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8) 100%);
-  z-index: 10; }
-  :host-context([dir=rtl]) .picker-above-highlight {
-    right: 0; }
+  z-index: 10;
+}
+[dir=rtl] .picker-above-highlight, :host-context([dir=rtl]) .picker-above-highlight {
+  left: unset;
+  right: unset;
+  right: 0;
+}
 
 .picker-below-highlight {
   left: 0;
@@ -168,6 +191,10 @@
   height: 119px;
   border-top: 1px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
   background: linear-gradient(to top, var(--ion-background-color, #fff) 30%, rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8) 100%);
-  z-index: 11; }
-  :host-context([dir=rtl]) .picker-below-highlight {
-    right: 0; }
+  z-index: 11;
+}
+[dir=rtl] .picker-below-highlight, :host-context([dir=rtl]) .picker-below-highlight {
+  left: unset;
+  right: unset;
+  right: 0;
+}

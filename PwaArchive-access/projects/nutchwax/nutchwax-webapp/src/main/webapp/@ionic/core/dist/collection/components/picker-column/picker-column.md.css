@@ -5,12 +5,14 @@
   justify-content: center;
   height: 100%;
   box-sizing: content-box;
-  contain: content; }
+  contain: content;
+}
 
 .picker-opts {
   position: relative;
   flex: 1;
-  max-width: 100%; }
+  max-width: 100%;
+}
 
 .picker-opt {
   left: 0;
@@ -24,55 +26,65 @@
   white-space: nowrap;
   contain: strict;
   overflow: hidden;
-  will-change: transform; }
-  :host-context([dir=rtl]) .picker-opt {
-    right: 0; }
+  will-change: transform;
+}
+[dir=rtl] .picker-opt, :host-context([dir=rtl]) .picker-opt {
+  left: unset;
+  right: unset;
+  right: 0;
+}
 
 .picker-opt.picker-opt-disabled {
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 .picker-opt-disabled {
-  opacity: 0; }
+  opacity: 0;
+}
 
 .picker-opts-left {
-  justify-content: flex-start; }
-  :host-context([dir=rtl]) .picker-opts-left {
-    justify-content: flex-end; }
+  justify-content: flex-start;
+}
 
 .picker-opts-right {
-  justify-content: flex-end; }
-  :host-context([dir=rtl]) .picker-opts-right {
-    justify-content: flex-start; }
+  justify-content: flex-end;
+}
 
 .picker-opt:active, .picker-opt:focus {
-  outline: none; }
+  outline: none;
+}
 
 .picker-prefix {
   position: relative;
   flex: 1;
   text-align: end;
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 
 .picker-suffix {
   position: relative;
   flex: 1;
   text-align: start;
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 
 .picker-col {
   padding-left: 8px;
   padding-right: 8px;
   padding-top: 0;
   padding-bottom: 0;
-  transform-style: preserve-3d; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .picker-col {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 8px;
-      padding-inline-start: 8px;
-      -webkit-padding-end: 8px;
-      padding-inline-end: 8px; } }
+  transform-style: preserve-3d;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .picker-col {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 8px;
+    padding-inline-start: 8px;
+    -webkit-padding-end: 8px;
+    padding-inline-end: 8px;
+  }
+}
 
 .picker-prefix,
 .picker-suffix,
@@ -82,7 +94,8 @@
   color: inherit;
   font-size: 22px;
   line-height: 42px;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 .picker-opt {
   margin-left: 0;
@@ -100,9 +113,11 @@
   font-size: 22px;
   line-height: 42px;
   backface-visibility: hidden;
-  pointer-events: auto; }
+  pointer-events: auto;
+}
 
 .picker-prefix,
 .picker-suffix,
 .picker-opt.picker-opt-selected {
-  color: var(--ion-color-primary, #3880ff); }
+  color: var(--ion-color-primary, #3880ff);
+}

@@ -1,4 +1,3 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
 import { ComponentRef, FrameworkDelegate } from '../../interface';
 export declare class Tab implements ComponentInterface {
@@ -30,5 +29,5 @@ export declare class Tab implements ComponentInterface {
             'tab-hidden': boolean;
         };
     };
-    render(): JSX.Element;
+    render(): any;
 }

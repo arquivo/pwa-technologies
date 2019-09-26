@@ -20,11 +20,13 @@
   min-height: 40px;
   background: var(--background);
   color: var(--color);
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 :host(.ion-color) {
   background: var(--ion-color-base);
-  color: var(--ion-color-contrast); }
+  color: var(--ion-color-contrast);
+}
 
 :host {
   --background: transparent;
@@ -34,9 +36,12 @@
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 1px;
-  text-transform: uppercase; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      padding-left: unset;
-      -webkit-padding-start: calc(var(--ion-safe-area-left, 0px) + 16px);
-      padding-inline-start: calc(var(--ion-safe-area-left, 0px) + 16px); } }
+  text-transform: uppercase;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    padding-left: unset;
+    -webkit-padding-start: calc(var(--ion-safe-area-left, 0px) + 16px);
+    padding-inline-start: calc(var(--ion-safe-area-left, 0px) + 16px);
+  }
+}

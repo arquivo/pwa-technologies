@@ -1,15 +1,17 @@
 import { createGesture } from './index';
-export function createSwipeBackGesture(el, queue, canStartHandler, onStartHandler, onMoveHandler, onEndHandler) {
+export function createSwipeBackGesture(el, canStartHandler, onStartHandler, onMoveHandler, onEndHandler) {
     const win = el.ownerDocument.defaultView;
     function canStart(detail) {
         return detail.startX <= 50 && canStartHandler();
     }
     function onMove(detail) {
+        // set the transition animation's progress
         const delta = detail.deltaX;
         const stepValue = delta / win.innerWidth;
         onMoveHandler(stepValue);
     }
     function onEnd(detail) {
+        // the swipe back gesture has ended
         const delta = detail.deltaX;
         const width = win.innerWidth;
         const stepValue = delta / width;
@@ -27,7 +29,6 @@ export function createSwipeBackGesture(el, queue, canStartHandler, onStartHandle
     }
     return createGesture({
         el,
-        queue,
         gestureName: 'goback-swipe',
         gesturePriority: 40,
         threshold: 10,

@@ -1,7 +1,15 @@
+import { h } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
 import { createColorClasses } from '../../utils/theme';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export class TabBar {
     constructor() {
         this.keyboardVisible = false;
+        /**
+         * If `true`, the tab bar will be translucent.
+         */
         this.translucent = false;
     }
     selectedTabChanged() {
@@ -22,10 +30,11 @@ export class TabBar {
     }
     hostData() {
         const { color, translucent, keyboardVisible } = this;
+        const mode = getIonMode(this);
         return {
             'role': 'tablist',
             'aria-hidden': keyboardVisible ? 'true' : null,
-            class: Object.assign({}, createColorClasses(color), { 'tab-bar-translucent': translucent, 'tab-bar-hidden': keyboardVisible })
+            class: Object.assign({}, createColorClasses(color), { [mode]: true, 'tab-bar-translucent': translucent, 'tab-bar-hidden': keyboardVisible })
         };
     }
     render() {
@@ -33,51 +42,116 @@ export class TabBar {
     }
     static get is() { return "ion-tab-bar"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "ios": ["tab-bar.ios.scss"],
+        "md": ["tab-bar.md.scss"]
+    }; }
+    static get styleUrls() { return {
+        "ios": ["tab-bar.ios.css"],
+        "md": ["tab-bar.md.css"]
+    }; }
     static get properties() { return {
         "color": {
-            "type": String,
-            "attr": "color"
-        },
-        "doc": {
-            "context": "document"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "keyboardVisible": {
-            "state": true
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "queue": {
-            "context": "queue"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "Color",
+                "resolved": "string | undefined",
+                "references": {
+                    "Color": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The color to use from your application's color palette.\nDefault options are: `\"primary\"`, `\"secondary\"`, `\"tertiary\"`, `\"success\"`, `\"warning\"`, `\"danger\"`, `\"light\"`, `\"medium\"`, and `\"dark\"`.\nFor more information on colors, see [theming](/docs/theming/basics)."
+            },
+            "attribute": "color",
+            "reflect": false
         },
         "selectedTab": {
-            "type": String,
-            "attr": "selected-tab",
-            "watchCallbacks": ["selectedTabChanged"]
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The selected tab component"
+            },
+            "attribute": "selected-tab",
+            "reflect": false
         },
         "translucent": {
-            "type": Boolean,
-            "attr": "translucent"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the tab bar will be translucent."
+            },
+            "attribute": "translucent",
+            "reflect": false,
+            "defaultValue": "false"
         }
     }; }
+    static get states() { return {
+        "keyboardVisible": {}
+    }; }
     static get events() { return [{
-            "name": "ionTabBarChanged",
             "method": "ionTabBarChanged",
+            "name": "ionTabBarChanged",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            },
+            "complexType": {
+                "original": "TabBarChangedEventDetail",
+                "resolved": "TabBarChangedEventDetail",
+                "references": {
+                    "TabBarChangedEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
+        }]; }
+    static get elementRef() { return "el"; }
+    static get watchers() { return [{
+            "propName": "selectedTab",
+            "methodName": "selectedTabChanged"
         }]; }
     static get listeners() { return [{
-            "name": "window:keyboardWillHide",
-            "method": "onKeyboardWillHide"
+            "name": "keyboardWillHide",
+            "method": "onKeyboardWillHide",
+            "target": "window",
+            "capture": false,
+            "passive": false
         }, {
-            "name": "window:keyboardWillShow",
-            "method": "onKeyboardWillShow"
+            "name": "keyboardWillShow",
+            "method": "onKeyboardWillShow",
+            "target": "window",
+            "capture": false,
+            "passive": false
         }]; }
-    static get style() { return "/**style-placeholder:ion-tab-bar:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-tab-bar:**/"; }
 }

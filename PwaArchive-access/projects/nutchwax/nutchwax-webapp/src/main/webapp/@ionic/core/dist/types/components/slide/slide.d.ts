@@ -7,7 +7,9 @@ export declare class Slide implements ComponentInterface {
     componentDidUnload(): void;
     hostData(): {
         class: {
+            [x: string]: boolean;
             'swiper-slide': boolean;
+            'swiper-zoom-container': boolean;
         };
     };
 }

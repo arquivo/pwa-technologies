@@ -30,5 +30,8 @@ export declare class SelectOption implements ComponentInterface {
     hostData(): {
         'role': string;
         'id': string;
+        class: {
+            [x: string]: boolean;
+        };
     };
 }

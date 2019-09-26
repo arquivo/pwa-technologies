@@ -1,5 +1,11 @@
+import { Host, h, readTask } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
 import { isPlatform } from '../../utils/platform';
 import { createColorClasses, hostContext } from '../../utils/theme';
+/**
+ * @slot - Content is placed in the scrollable area if provided without a slot.
+ * @slot fixed - Should be used for fixed content that should not scroll.
+ */
 export class Content {
     constructor() {
         this.isScrolling = false;
@@ -7,6 +13,9 @@ export class Content {
         this.queued = false;
         this.cTop = -1;
         this.cBottom = -1;
+        // Detail is used in a hot loop in the scroll event, by allocating it here
+        // V8 will be able to inline any read/write to it since it's a monomorphic class.
+        // https://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html
         this.detail = {
             scrollTop: 0,
             scrollLeft: 0,
@@ -25,14 +34,30 @@ export class Content {
             data: undefined,
             isScrolling: true,
         };
+        /**
+         * If `true`, the content will scroll behind the headers
+         * and footers. This effect can easily be seen by setting the toolbar
+         * to transparent.
+         */
         this.fullscreen = false;
+        /**
+         * If you want to enable the content scrolling in the X axis, set this property to `true`.
+         */
         this.scrollX = false;
+        /**
+         * If you want to disable the content scrolling in the Y axis, set this property to `false`.
+         */
         this.scrollY = true;
+        /**
+         * Because of performance reasons, ionScroll events are disabled by default, in order to enable them
+         * and start listening from (ionScroll), set this property to `true`.
+         */
         this.scrollEvents = false;
     }
     componentWillLoad() {
         if (this.forceOverscroll === undefined) {
-            this.forceOverscroll = this.mode === 'ios' && isPlatform(this.win, 'mobile');
+            const mode = getIonMode(this);
+            this.forceOverscroll = mode === 'ios' && isPlatform(window, 'mobile');
         }
     }
     componentDidLoad() {
@@ -49,7 +74,7 @@ export class Content {
     }
     resize() {
         if (this.fullscreen) {
-            this.queue.read(this.readDimensions.bind(this));
+            readTask(this.readDimensions.bind(this));
         }
         else if (this.cTop !== 0 || this.cBottom !== 0) {
             this.cTop = this.cBottom = 0;
@@ -76,7 +101,7 @@ export class Content {
         }
         if (!this.queued && this.scrollEvents) {
             this.queued = true;
-            this.queue.read(ts => {
+            readTask(ts => {
                 this.queued = false;
                 this.detail.event = ev;
                 updateScrollDetail(this.detail, this.scrollEl, ts, shouldStart);
@@ -84,19 +109,51 @@ export class Content {
             });
         }
     }
+    /**
+     * Get the element where the actual scrolling takes place.
+     * This element can be used to subscribe to `scroll` events or manually modify
+     * `scrollTop`. However, it's recommended to use the API provided by `ion-content`:
+     *
+     * i.e. Using `ionScroll`, `ionScrollStart`, `ionScrollEnd` for scrolling events
+     * and `scrollToPoint()` to scroll the content into a certain point.
+     */
     getScrollElement() {
         return Promise.resolve(this.scrollEl);
     }
+    /**
+     * Scroll to the top of the component.
+     *
+     * @param duration The amount of time to take scrolling to the top. Defaults to `0`.
+     */
     scrollToTop(duration = 0) {
         return this.scrollToPoint(undefined, 0, duration);
     }
+    /**
+     * Scroll to the bottom of the component.
+     *
+     * @param duration The amount of time to take scrolling to the bottom. Defaults to `0`.
+     */
     scrollToBottom(duration = 0) {
         const y = this.scrollEl.scrollHeight - this.scrollEl.clientHeight;
         return this.scrollToPoint(undefined, y, duration);
     }
+    /**
+     * Scroll by a specified X/Y distance in the component.
+     *
+     * @param x The amount to scroll by on the horizontal axis.
+     * @param y The amount to scroll by on the vertical axis.
+     * @param duration The amount of time to take scrolling by that amount.
+     */
     scrollByPoint(x, y, duration) {
         return this.scrollToPoint(x + this.scrollEl.scrollLeft, y + this.scrollEl.scrollTop, duration);
     }
+    /**
+     * Scroll to a specified X/Y location in the component.
+     *
+     * @param x The point to scroll to on the horizontal axis.
+     * @param y The point to scroll to on the vertical axis.
+     * @param duration The amount of time to take scrolling to that point. Defaults to `0`.
+     */
     async scrollToPoint(x, y, duration = 0) {
         const el = this.scrollEl;
         if (duration < 32) {
@@ -115,6 +172,7 @@ export class Content {
         const fromX = el.scrollLeft;
         const deltaY = y != null ? y - fromY : 0;
         const deltaX = x != null ? x - fromX : 0;
+        // scroll loop
         const step = (timeStamp) => {
             const linearTime = Math.min(1, ((timeStamp - startTime) / duration)) - 1;
             const easedT = Math.pow(linearTime, 3) + 1;
@@ -125,12 +183,16 @@ export class Content {
                 el.scrollLeft = Math.floor((easedT * deltaX) + fromX);
             }
             if (easedT < 1) {
+                // do not use DomController here
+                // must use nativeRaf in order to fire in the next frame
+                // TODO: remove as any
                 requestAnimationFrame(step);
             }
             else {
                 resolve();
             }
         };
+        // chill out for a frame first
         requestAnimationFrame(ts => {
             startTime = ts;
             step(ts);
@@ -145,6 +207,7 @@ export class Content {
         if (this.watchDog) {
             clearInterval(this.watchDog);
         }
+        // watchdog
         this.watchDog = setInterval(() => {
             if (this.lastScroll < Date.now() - 120) {
                 this.onScrollEnd();
@@ -161,19 +224,14 @@ export class Content {
             });
         }
     }
-    hostData() {
-        return {
-            class: Object.assign({}, createColorClasses(this.color), { 'content-sizing': hostContext('ion-popover', this.el), 'overscroll': !!this.forceOverscroll }),
-            style: {
-                '--offset-top': `${this.cTop}px`,
-                '--offset-bottom': `${this.cBottom}px`,
-            }
-        };
-    }
     render() {
+        const mode = getIonMode(this);
         const { scrollX, scrollY, forceOverscroll } = this;
         this.resize();
-        return [
+        return (h(Host, { class: Object.assign({}, createColorClasses(this.color), { [mode]: true, 'content-sizing': hostContext('ion-popover', this.el), 'overscroll': !!this.forceOverscroll }), style: {
+                '--offset-top': `${this.cTop}px`,
+                '--offset-bottom': `${this.cBottom}px`,
+            } },
             h("div", { class: {
                     'inner-scroll': true,
                     'scroll-x': scrollX,
@@ -181,96 +239,363 @@ export class Content {
                     'overscroll': (scrollX || scrollY) && !!forceOverscroll
                 }, ref: el => this.scrollEl = el, onScroll: ev => this.onScroll(ev) },
                 h("slot", null)),
-            h("slot", { name: "fixed" })
-        ];
+            h("slot", { name: "fixed" })));
     }
     static get is() { return "ion-content"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "$": ["content.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["content.css"]
+    }; }
     static get properties() { return {
         "color": {
-            "type": String,
-            "attr": "color"
-        },
-        "config": {
-            "context": "config"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "forceOverscroll": {
-            "type": Boolean,
-            "attr": "force-overscroll",
-            "mutable": true
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "Color",
+                "resolved": "string | undefined",
+                "references": {
+                    "Color": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The color to use from your application's color palette.\nDefault options are: `\"primary\"`, `\"secondary\"`, `\"tertiary\"`, `\"success\"`, `\"warning\"`, `\"danger\"`, `\"light\"`, `\"medium\"`, and `\"dark\"`.\nFor more information on colors, see [theming](/docs/theming/basics)."
+            },
+            "attribute": "color",
+            "reflect": false
         },
         "fullscreen": {
-            "type": Boolean,
-            "attr": "fullscreen"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the content will scroll behind the headers\nand footers. This effect can easily be seen by setting the toolbar\nto transparent."
+            },
+            "attribute": "fullscreen",
+            "reflect": false,
+            "defaultValue": "false"
         },
-        "getScrollElement": {
-            "method": true
-        },
-        "queue": {
-            "context": "queue"
-        },
-        "scrollByPoint": {
-            "method": true
-        },
-        "scrollEvents": {
-            "type": Boolean,
-            "attr": "scroll-events"
-        },
-        "scrollToBottom": {
-            "method": true
-        },
-        "scrollToPoint": {
-            "method": true
-        },
-        "scrollToTop": {
-            "method": true
+        "forceOverscroll": {
+            "type": "boolean",
+            "mutable": true,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "If `true` and the content does not cause an overflow scroll, the scroll interaction will cause a bounce.\nIf the content exceeds the bounds of ionContent, nothing will change.\nNote, the does not disable the system bounce on iOS. That is an OS level setting."
+            },
+            "attribute": "force-overscroll",
+            "reflect": false
         },
         "scrollX": {
-            "type": Boolean,
-            "attr": "scroll-x"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If you want to enable the content scrolling in the X axis, set this property to `true`."
+            },
+            "attribute": "scroll-x",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "scrollY": {
-            "type": Boolean,
-            "attr": "scroll-y"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If you want to disable the content scrolling in the Y axis, set this property to `false`."
+            },
+            "attribute": "scroll-y",
+            "reflect": false,
+            "defaultValue": "true"
         },
-        "win": {
-            "context": "window"
+        "scrollEvents": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Because of performance reasons, ionScroll events are disabled by default, in order to enable them\nand start listening from (ionScroll), set this property to `true`."
+            },
+            "attribute": "scroll-events",
+            "reflect": false,
+            "defaultValue": "false"
         }
     }; }
     static get events() { return [{
-            "name": "ionScrollStart",
             "method": "ionScrollStart",
+            "name": "ionScrollStart",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the scroll has started."
+            },
+            "complexType": {
+                "original": "ScrollBaseDetail",
+                "resolved": "ScrollBaseDetail",
+                "references": {
+                    "ScrollBaseDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }, {
-            "name": "ionScroll",
             "method": "ionScroll",
+            "name": "ionScroll",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted while scrolling. This event is disabled by default.\nLook at the property: `scrollEvents`"
+            },
+            "complexType": {
+                "original": "ScrollDetail",
+                "resolved": "ScrollDetail",
+                "references": {
+                    "ScrollDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }, {
-            "name": "ionScrollEnd",
             "method": "ionScrollEnd",
+            "name": "ionScrollEnd",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the scroll has ended."
+            },
+            "complexType": {
+                "original": "ScrollBaseDetail",
+                "resolved": "ScrollBaseDetail",
+                "references": {
+                    "ScrollBaseDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }]; }
+    static get methods() { return {
+        "getScrollElement": {
+            "complexType": {
+                "signature": "() => Promise<HTMLElement>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "HTMLElement": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<HTMLElement>"
+            },
+            "docs": {
+                "text": "Get the element where the actual scrolling takes place.\nThis element can be used to subscribe to `scroll` events or manually modify\n`scrollTop`. However, it's recommended to use the API provided by `ion-content`:\n\ni.e. Using `ionScroll`, `ionScrollStart`, `ionScrollEnd` for scrolling events\nand `scrollToPoint()` to scroll the content into a certain point.",
+                "tags": []
+            }
+        },
+        "scrollToTop": {
+            "complexType": {
+                "signature": "(duration?: number) => Promise<void>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "duration The amount of time to take scrolling to the top. Defaults to `0`.",
+                                "name": "param"
+                            }],
+                        "text": "The amount of time to take scrolling to the top. Defaults to `0`."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "Scroll to the top of the component.",
+                "tags": [{
+                        "name": "param",
+                        "text": "duration The amount of time to take scrolling to the top. Defaults to `0`."
+                    }]
+            }
+        },
+        "scrollToBottom": {
+            "complexType": {
+                "signature": "(duration?: number) => Promise<void>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "duration The amount of time to take scrolling to the bottom. Defaults to `0`.",
+                                "name": "param"
+                            }],
+                        "text": "The amount of time to take scrolling to the bottom. Defaults to `0`."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "Scroll to the bottom of the component.",
+                "tags": [{
+                        "name": "param",
+                        "text": "duration The amount of time to take scrolling to the bottom. Defaults to `0`."
+                    }]
+            }
+        },
+        "scrollByPoint": {
+            "complexType": {
+                "signature": "(x: number, y: number, duration: number) => Promise<void>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "x The amount to scroll by on the horizontal axis.",
+                                "name": "param"
+                            }],
+                        "text": "The amount to scroll by on the horizontal axis."
+                    }, {
+                        "tags": [{
+                                "text": "y The amount to scroll by on the vertical axis.",
+                                "name": "param"
+                            }],
+                        "text": "The amount to scroll by on the vertical axis."
+                    }, {
+                        "tags": [{
+                                "text": "duration The amount of time to take scrolling by that amount.",
+                                "name": "param"
+                            }],
+                        "text": "The amount of time to take scrolling by that amount."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "Scroll by a specified X/Y distance in the component.",
+                "tags": [{
+                        "name": "param",
+                        "text": "x The amount to scroll by on the horizontal axis."
+                    }, {
+                        "name": "param",
+                        "text": "y The amount to scroll by on the vertical axis."
+                    }, {
+                        "name": "param",
+                        "text": "duration The amount of time to take scrolling by that amount."
+                    }]
+            }
+        },
+        "scrollToPoint": {
+            "complexType": {
+                "signature": "(x: number | null | undefined, y: number | null | undefined, duration?: number) => Promise<void>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "x The point to scroll to on the horizontal axis.",
+                                "name": "param"
+                            }],
+                        "text": "The point to scroll to on the horizontal axis."
+                    }, {
+                        "tags": [{
+                                "text": "y The point to scroll to on the vertical axis.",
+                                "name": "param"
+                            }],
+                        "text": "The point to scroll to on the vertical axis."
+                    }, {
+                        "tags": [{
+                                "text": "duration The amount of time to take scrolling to that point. Defaults to `0`.",
+                                "name": "param"
+                            }],
+                        "text": "The amount of time to take scrolling to that point. Defaults to `0`."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "Scroll to a specified X/Y location in the component.",
+                "tags": [{
+                        "name": "param",
+                        "text": "x The point to scroll to on the horizontal axis."
+                    }, {
+                        "name": "param",
+                        "text": "y The point to scroll to on the vertical axis."
+                    }, {
+                        "name": "param",
+                        "text": "duration The amount of time to take scrolling to that point. Defaults to `0`."
+                    }]
+            }
+        }
+    }; }
+    static get elementRef() { return "el"; }
     static get listeners() { return [{
             "name": "click",
             "method": "onClick",
-            "capture": true
+            "target": undefined,
+            "capture": true,
+            "passive": false
         }]; }
-    static get style() { return "/**style-placeholder:ion-content:**/"; }
 }
 function getParentElement(el) {
     if (el.parentElement) {
+        // normal element with a parent element
         return el.parentElement;
     }
     if (el.parentNode && el.parentNode.host) {
+        // shadow dom's document fragment
         return el.parentNode.host;
     }
     return null;
@@ -286,6 +611,7 @@ function getPageElement(el) {
     }
     return getParentElement(el);
 }
+// ******** DOM READ ****************
 function updateScrollDetail(detail, el, timestamp, shouldStart) {
     const prevX = detail.currentX;
     const prevY = detail.currentY;
@@ -293,6 +619,7 @@ function updateScrollDetail(detail, el, timestamp, shouldStart) {
     const currentX = el.scrollLeft;
     const currentY = el.scrollTop;
     if (shouldStart) {
+        // remember the start positions
         detail.startTimeStamp = timestamp;
         detail.startX = currentX;
         detail.startY = currentY;

@@ -1,9 +1,9 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
 export declare class Img implements ComponentInterface {
     private io?;
     el: HTMLElement;
     loadSrc?: string;
+    loadError?: () => void;
     /**
      * This attribute defines the alternative text describing the image.
      * Users will see this text displayed if the image URL is wrong,
@@ -15,11 +15,22 @@ export declare class Img implements ComponentInterface {
      */
     src?: string;
     srcChanged(): void;
-    /** Emitted when the img src is loaded */
+    /** Emitted when the img src has been set */
+    ionImgWillLoad: EventEmitter<void>;
+    /** Emitted when the image has finished loading */
     ionImgDidLoad: EventEmitter<void>;
+    /** Emitted when the img fails to load */
+    ionError: EventEmitter<void>;
     componentDidLoad(): void;
     private addIO;
     private load;
+    private onLoad;
+    private onError;
     private removeIO;
-    render(): JSX.Element;
+    hostData(): {
+        class: {
+            [x: string]: boolean;
+        };
+    };
+    render(): any;
 }

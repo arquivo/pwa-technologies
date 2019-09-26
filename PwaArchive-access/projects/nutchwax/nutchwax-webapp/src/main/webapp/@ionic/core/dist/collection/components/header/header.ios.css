@@ -3,20 +3,26 @@ ion-header {
   position: relative;
   order: -1;
   width: 100%;
-  z-index: 10; }
+  z-index: 10;
+}
 
 ion-header ion-toolbar:first-child {
-  padding-top: var(--ion-safe-area-top, 0); }
+  padding-top: var(--ion-safe-area-top, 0);
+}
 
 .header-ios ion-toolbar:last-child {
-  --border-width: 0 0 0.55px; }
+  --border-width: 0 0 0.55px;
+}
 
 .header-ios[no-border] ion-toolbar:last-child {
-  --border-width: 0; }
+  --border-width: 0;
+}
 
 .header-translucent-ios {
-  backdrop-filter: saturate(180%) blur(20px); }
+  backdrop-filter: saturate(180%) blur(20px);
+}
 
 .header-translucent-ios ion-toolbar {
   --opacity: .8;
-  --backdrop-filter: saturate(180%) blur(20px); }
+  --backdrop-filter: saturate(180%) blur(20px);
+}

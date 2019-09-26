@@ -1,9 +1,9 @@
 :host {
   /**
    * @prop --padding-top: Top padding of the select
-   * @prop --padding-end: End padding of the select
+   * @prop --padding-end: Right padding if direction is left-to-right, and left padding if direction is right-to-left of the select
    * @prop --padding-bottom: Bottom padding of the select
-   * @prop --padding-start: Start padding of the select
+   * @prop --padding-start: Left padding if direction is left-to-right, and right padding if direction is right-to-left of the select
    */
   padding-left: var(--padding-start);
   padding-right: var(--padding-end);
@@ -13,30 +13,37 @@
   position: relative;
   font-family: var(--ion-font-family, inherit);
   overflow: hidden;
-  z-index: 2; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: var(--padding-start);
-      padding-inline-start: var(--padding-start);
-      -webkit-padding-end: var(--padding-end);
-      padding-inline-end: var(--padding-end); } }
+  z-index: 2;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: var(--padding-start);
+    padding-inline-start: var(--padding-start);
+    -webkit-padding-end: var(--padding-end);
+    padding-inline-end: var(--padding-end);
+  }
+}
 
 :host(.in-item) {
   position: static;
-  max-width: 45%; }
+  max-width: 45%;
+}
 
 :host(.select-disabled) {
-  opacity: .4;
-  pointer-events: none; }
+  opacity: 0.4;
+  pointer-events: none;
+}
 
 :host(.ion-focused) button {
-  border: 2px solid #5e9ed6; }
+  border: 2px solid #5e9ed6;
+}
 
 .select-placeholder {
   color: currentColor;
-  opacity: .33; }
+  opacity: 0.33;
+}
 
 button {
   left: 0;
@@ -52,14 +59,21 @@ button {
   background: transparent;
   cursor: pointer;
   appearance: none;
-  outline: none; }
-  :host-context([dir=rtl]) button {
-    right: 0; }
-  button::-moz-focus-inner {
-    border: 0; }
+  outline: none;
+}
+[dir=rtl] button, :host-context([dir=rtl]) button {
+  left: unset;
+  right: unset;
+  right: 0;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
 
 .select-icon {
-  position: relative; }
+  position: relative;
+}
 
 .select-text {
   flex: 1;
@@ -67,7 +81,8 @@ button {
   font-size: inherit;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .select-icon-inner {
   left: 5px;
@@ -80,17 +95,23 @@ button {
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
   color: currentColor;
-  opacity: .33;
-  pointer-events: none; }
-  :host-context([dir=rtl]) .select-icon-inner {
-    right: 5px; }
+  opacity: 0.33;
+  pointer-events: none;
+}
+[dir=rtl] .select-icon-inner, :host-context([dir=rtl]) .select-icon-inner {
+  left: unset;
+  right: unset;
+  right: 5px;
+}
 
 :host {
   --padding-top: 10px;
   --padding-end: 0;
   --padding-bottom: 11px;
-  --padding-start: 16px; }
+  --padding-start: 16px;
+}
 
 .select-icon {
   width: 19px;
-  height: 19px; }
+  height: 19px;
+}

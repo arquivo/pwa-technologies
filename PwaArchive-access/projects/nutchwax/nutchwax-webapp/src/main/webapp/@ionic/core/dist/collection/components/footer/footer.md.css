@@ -3,10 +3,12 @@ ion-footer {
   position: relative;
   order: 1;
   width: 100%;
-  z-index: 10; }
+  z-index: 10;
+}
 
 ion-footer ion-toolbar:last-child {
-  padding-bottom: var(--ion-safe-area-bottom, 0); }
+  padding-bottom: var(--ion-safe-area-bottom, 0);
+}
 
 .footer-md::before {
   left: 0;
@@ -18,11 +20,18 @@ ion-footer ion-toolbar:last-child {
   height: 2px;
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAHBAMAAADzDtBxAAAAD1BMVEUAAAAAAAAAAAAAAAAAAABPDueNAAAABXRSTlMUCS0gBIh/TXEAAAAaSURBVAjXYxCEAgY4UIICBmMogMsgFLtAAQCNSwXZKOdPxgAAAABJRU5ErkJggg==");
   background-repeat: repeat-x;
-  content: ""; }
-  :host-context([dir=rtl]) .footer-md::before {
-    right: 0; }
-  :host-context([dir=rtl]) .footer-md::before {
-    background-position: right 0 top 0; }
+  content: "";
+}
+[dir=rtl] .footer-md::before, :host-context([dir=rtl]) .footer-md::before {
+  left: unset;
+  right: unset;
+  right: 0;
+}
+
+[dir=rtl] .footer-md::before, :host-context([dir=rtl]) .footer-md::before {
+  background-position: right 0 top 0;
+}
 
 .footer-md[no-border]::before {
-  display: none; }
+  display: none;
+}

@@ -1,9 +1,9 @@
 :host {
   /**
-   * @prop --padding-top: Padding top of the datetime
-   * @prop --padding-end: Padding end of the datetime
-   * @prop --padding-bottom: Padding bottom of the datetime
-   * @prop --padding-start: Padding start of the datetime
+   * @prop --padding-top: Top padding of the datetime
+   * @prop --padding-end: Right padding if direction is left-to-right, and left padding if direction is right-to-left of the datetime
+   * @prop --padding-bottom: Bottom padding of the datetime
+   * @prop --padding-start: Left padding if direction is left-to-right, and right padding if direction is right-to-left of the datetime
    *
    * @prop --placeholder-color: Color of the datetime placeholder
    */
@@ -19,28 +19,35 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  z-index: 2; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: var(--padding-start);
-      padding-inline-start: var(--padding-start);
-      -webkit-padding-end: var(--padding-end);
-      padding-inline-end: var(--padding-end); } }
+  z-index: 2;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: var(--padding-start);
+    padding-inline-start: var(--padding-start);
+    -webkit-padding-end: var(--padding-end);
+    padding-inline-end: var(--padding-end);
+  }
+}
 
 :host(.in-item) {
-  position: static; }
+  position: static;
+}
 
 :host(.datetime-placeholder) {
-  color: var(--placeholder-color); }
+  color: var(--placeholder-color);
+}
 
 :host(.datetime-disabled) {
-  opacity: .3;
-  pointer-events: none; }
+  opacity: 0.3;
+  pointer-events: none;
+}
 
 :host(.datetime-readonly) {
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 button {
   left: 0;
@@ -56,11 +63,17 @@ button {
   background: transparent;
   cursor: pointer;
   appearance: none;
-  outline: none; }
-  :host-context([dir=rtl]) button {
-    right: 0; }
-  button::-moz-focus-inner {
-    border: 0; }
+  outline: none;
+}
+[dir=rtl] button, :host-context([dir=rtl]) button {
+  left: unset;
+  right: unset;
+  right: 0;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
 
 .datetime-text {
   font-family: inherit;
@@ -77,11 +90,16 @@ button {
   flex: 1;
   min-height: inherit;
   direction: ltr;
-  overflow: inherit; }
+  overflow: inherit;
+}
+[dir=rtl] .datetime-text, :host-context([dir=rtl]) .datetime-text {
+  direction: rtl;
+}
 
 :host {
   --placeholder-color: var(--ion-placeholder-color, var(--ion-color-step-400, #999999));
   --padding-top: 10px;
   --padding-end: 0;
   --padding-bottom: 11px;
-  --padding-start: 16px; }
+  --padding-start: 16px;
+}

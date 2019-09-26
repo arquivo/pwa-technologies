@@ -1,4 +1,9 @@
 import { baseAnimation } from './base';
+/**
+ * Menu Push Type
+ * The content slides over to reveal the menu underneath.
+ * The menu itself also slides over to reveal its bad self.
+ */
 export function menuPushAnimation(AnimationC, _, menu) {
     let contentOpenedX;
     let menuClosedX;

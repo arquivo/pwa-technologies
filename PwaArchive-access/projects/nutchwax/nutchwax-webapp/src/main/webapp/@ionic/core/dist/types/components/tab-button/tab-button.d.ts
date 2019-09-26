@@ -1,61 +1,64 @@
-import '../../stencil.core';
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
-import { Config, Mode, TabBarChangedEventDetail, TabButtonClickEventDetail, TabButtonLayout } from '../../interface';
-export declare class TabButton implements ComponentInterface {
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { TabBarChangedEventDetail, TabButtonClickEventDetail, TabButtonLayout } from '../../interface';
+import { AnchorInterface } from '../../utils/element-interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
+export declare class TabButton implements ComponentInterface, AnchorInterface {
     el: HTMLElement;
-    queue: QueueApi;
-    doc: Document;
-    config: Config;
     /**
-     * The selected tab component
+     * If `true`, the user cannot interact with the tab button.
      */
-    selected: boolean;
+    disabled: boolean;
     /**
-     * The mode determines which platform styles to use.
+     * This attribute instructs browsers to download a URL instead of navigating to
+     * it, so the user will be prompted to save it as a local file. If the attribute
+     * has a value, it is used as the pre-filled file name in the Save prompt
+     * (the user can still change the file name if they want).
      */
-    mode: Mode;
+    download: string | undefined;
+    /**
+     * Contains a URL or a URL fragment that the hyperlink points to.
+     * If this property is set, an anchor tag will be rendered.
+     */
+    href: string | undefined;
+    /**
+     * Specifies the relationship of the target object to the link object.
+     * The value is a space-separated list of [link types](https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types).
+     */
+    rel: string | undefined;
     /**
      * Set the layout of the text and icon in the tab bar.
      * It defaults to `'icon-top'`.
      */
     layout?: TabButtonLayout;
     /**
-     * The URL which will be used as the `href` within this tab's button anchor.
+     * The selected tab component
      */
-    href?: string;
+    selected: boolean;
     /**
      * A tab id must be provided for each `ion-tab`. It's used internally to reference
      * the selected tab or by the router to switch between them.
      */
     tab?: string;
     /**
-     * The selected tab component
+     * Specifies where to display the linked URL.
+     * Only applies when an `href` is provided.
+     * Special keywords: `"_blank"`, `"_self"`, `"_parent"`, `"_top"`.
      */
-    disabled: boolean;
+    target: string | undefined;
     /**
      * Emitted when the tab bar is clicked
      * @internal
      */
     ionTabButtonClick: EventEmitter<TabButtonClickEventDetail>;
     onTabBarChanged(ev: CustomEvent<TabBarChangedEventDetail>): void;
-    onClick(ev: Event): void;
     componentWillLoad(): void;
+    private selectTab;
     private readonly hasLabel;
     private readonly hasIcon;
-    hostData(): {
-        'role': string;
-        'aria-selected': string | null;
-        'id': string | null;
-        class: {
-            [x: string]: boolean;
-            'tab-selected': boolean;
-            'tab-disabled': boolean;
-            'tab-has-label': boolean;
-            'tab-has-icon': boolean;
-            'tab-has-label-only': boolean;
-            'tab-has-icon-only': boolean;
-            'ion-activatable': boolean;
-        };
-    };
-    render(): JSX.Element;
+    private readonly tabIndex;
+    private onKeyUp;
+    private onClick;
+    render(): any;
 }

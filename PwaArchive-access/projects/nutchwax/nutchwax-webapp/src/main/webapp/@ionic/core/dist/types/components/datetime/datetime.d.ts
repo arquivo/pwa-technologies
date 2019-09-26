@@ -1,6 +1,8 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { DatetimeChangeEventDetail, DatetimeOptions, Mode, StyleEventDetail } from '../../interface';
+import { DatetimeChangeEventDetail, DatetimeOptions, StyleEventDetail } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Datetime implements ComponentInterface {
     private inputId;
     private locale;
@@ -10,11 +12,6 @@ export declare class Datetime implements ComponentInterface {
     private buttonEl?;
     el: HTMLIonDatetimeElement;
     isExpanded: boolean;
-    pickerCtrl: HTMLIonPickerControllerElement;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * The name of the control, which is submitted with the form data.
      */
@@ -134,7 +131,7 @@ export declare class Datetime implements ComponentInterface {
     dayShortNames?: string[] | string;
     /**
      * Any additional options that the picker interface can accept.
-     * See the [Picker API docs](../../picker/Picker) for the picker options.
+     * See the [Picker API docs](../picker) for the picker options.
      */
     pickerOptions?: DatetimeOptions;
     /**
@@ -172,7 +169,6 @@ export declare class Datetime implements ComponentInterface {
      */
     ionStyle: EventEmitter<StyleEventDetail>;
     componentWillLoad(): void;
-    onClick(): void;
     /**
      * Opens the datetime overlay.
      */
@@ -184,23 +180,11 @@ export declare class Datetime implements ComponentInterface {
     private validate;
     private calcMinMax;
     private validateColumn;
-    private getText;
+    private readonly text;
     private hasValue;
     private setFocus;
+    private onClick;
     private onFocus;
     private onBlur;
-    hostData(): {
-        'role': string;
-        'aria-disabled': string | null;
-        'aria-expanded': string;
-        'aria-haspopup': string;
-        'aria-labelledby': string;
-        class: {
-            'datetime-disabled': boolean;
-            'datetime-readonly': boolean;
-            'datetime-placeholder': boolean;
-            'in-item': boolean;
-        };
-    };
-    render(): JSX.Element[];
+    render(): any;
 }

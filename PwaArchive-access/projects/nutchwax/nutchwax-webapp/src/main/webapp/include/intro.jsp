@@ -5,7 +5,7 @@
            <h2><fmt:message key='home.intro.welcome'/></h2>
             <p><fmt:message key='home.intro.welcome.description'/></p>
        </div>         
-	   <div>
+	   <div id="into-award">
 	   	   <h3><fmt:message key='home.intro.award'/></h3>
 		   <div id="award-<%=language%>" class="call-to-actions">
 		   		<a href="<fmt:message key='home.intro.award.href'/>" alt="<fmt:message key='home.intro.award'/>" title="<fmt:message key='home.intro.award'/>">

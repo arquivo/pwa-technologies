@@ -10,6 +10,7 @@ export function mdTransitionAnimation(AnimationC, _, opts) {
         .addElement(ionPageElement)
         .beforeRemoveClass('ion-page-invisible');
     const backDirection = (opts.direction === 'back');
+    // animate the component itself
     if (backDirection) {
         rootTransition
             .duration(opts.duration || 200)
@@ -22,13 +23,16 @@ export function mdTransitionAnimation(AnimationC, _, opts) {
             .fromTo(TRANSLATEY, OFF_BOTTOM, CENTER, true)
             .fromTo('opacity', 0.01, 1, true);
     }
+    // Animate toolbar if it's there
     const enteringToolbarEle = ionPageElement.querySelector('ion-toolbar');
     if (enteringToolbarEle) {
         const enteringToolBar = new AnimationC();
         enteringToolBar.addElement(enteringToolbarEle);
         rootTransition.add(enteringToolBar);
     }
+    // setup leaving view
     if (leavingEl && backDirection) {
+        // leaving content
         rootTransition
             .duration(opts.duration || 200)
             .easing('cubic-bezier(0.47,0,0.745,0.715)');
@@ -49,5 +53,6 @@ function getIonPageElement(element) {
     if (ionPage) {
         return ionPage;
     }
+    // idk, return the original element so at least something animates and we don't have a null pointer
     return element;
 }

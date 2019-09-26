@@ -23,10 +23,12 @@
   bottom: 0;
   display: none;
   position: absolute;
-  contain: strict; }
+  contain: strict;
+}
 
 :host(.show-menu) {
-  display: block; }
+  display: block;
+}
 
 .menu-inner {
   left: 0;
@@ -45,46 +47,60 @@
   min-height: var(--min-height);
   max-height: var(--max-height);
   background: var(--background);
-  contain: strict; }
-  :host-context([dir=rtl]) .menu-inner {
-    left: auto;
-    right: 0; }
-  :host-context([dir=rtl]) .menu-inner {
-    transform: translate3d(calc(-1 * -9999px),  0,  0); }
+  contain: strict;
+}
+[dir=rtl] .menu-inner, :host-context([dir=rtl]) .menu-inner {
+  left: unset;
+  right: unset;
+  left: auto;
+  right: 0;
+}
+
+[dir=rtl] .menu-inner, :host-context([dir=rtl]) .menu-inner {
+  transform: translate3d(calc(-1 * -9999px),  0,  0);
+}
 
 :host(.menu-side-start) .menu-inner {
   --ion-safe-area-right: 0px;
   /* stylelint-disable property-blacklist */
   right: auto;
-  left: 0; }
+  left: 0;
+}
 
 :host(.menu-side-end) .menu-inner {
   --ion-safe-area-left: 0px;
   right: 0;
   left: auto;
-  /* stylelint-enable property-blacklist */ }
+  /* stylelint-enable property-blacklist */
+}
 
 ion-backdrop {
   display: none;
-  opacity: .01;
-  z-index: -1; }
+  opacity: 0.01;
+  z-index: -1;
+}
 
 @media (max-width: 340px) {
   .menu-inner {
-    --width: 264px; } }
-
+    --width: 264px;
+  }
+}
 :host(.menu-type-reveal) {
-  z-index: 0; }
+  z-index: 0;
+}
 
 :host(.menu-type-reveal.show-menu) .menu-inner {
-  transform: translate3d(0,  0,  0); }
+  transform: translate3d(0,  0,  0);
+}
 
 :host(.menu-type-overlay) {
-  z-index: 80; }
+  z-index: 80;
+}
 
 :host(.menu-type-overlay) .show-backdrop {
   display: block;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 :host(.menu-pane-visible) .menu-inner {
   left: 0;
@@ -92,11 +108,14 @@ ion-backdrop {
   width: auto;
   /* stylelint-disable declaration-no-important */
   transform: none !important;
-  box-shadow: none !important; }
+  box-shadow: none !important;
+}
 
 :host(.menu-pane-visible) ion-backdrop {
   display: hidden !important;
-  /* stylelint-enable declaration-no-important */ }
+  /* stylelint-enable declaration-no-important */
+}
 
 :host(.menu-type-overlay) .menu-inner {
-  box-shadow: 0 2px 22px 0 rgba(0, 0, 0, 0.09), 4px 0 16px 0 rgba(0, 0, 0, 0.18); }
+  box-shadow: 0 2px 22px 0 rgba(0, 0, 0, 0.09), 4px 0 16px 0 rgba(0, 0, 0, 0.18);
+}

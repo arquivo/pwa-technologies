@@ -1,6 +1,9 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Mode, OverlaySelect, SelectChangeEventDetail, SelectInterface, StyleEventDetail } from '../../interface';
+import { SelectChangeEventDetail, SelectInterface, StyleEventDetail } from '../../interface';
+import { SelectCompareFn } from './select-interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Select implements ComponentInterface {
     private childOpts;
     private inputId;
@@ -8,14 +11,7 @@ export declare class Select implements ComponentInterface {
     private didInit;
     private buttonEl?;
     el: HTMLIonSelectElement;
-    actionSheetCtrl: HTMLIonActionSheetControllerElement;
-    alertCtrl: HTMLIonAlertControllerElement;
-    popoverCtrl: HTMLIonPopoverControllerElement;
     isExpanded: boolean;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * If `true`, the user cannot interact with the select.
      */
@@ -57,6 +53,10 @@ export declare class Select implements ComponentInterface {
      */
     interfaceOptions: any;
     /**
+     * A property name or function used to compare object values
+     */
+    compareWith?: string | SelectCompareFn | null;
+    /**
      * the value of the select.
      */
     value?: any | null;
@@ -84,14 +84,19 @@ export declare class Select implements ComponentInterface {
     disabledChanged(): void;
     valueChanged(): void;
     selectOptionChanged(): Promise<void>;
-    onClick(ev: UIEvent): void;
     componentDidLoad(): Promise<void>;
     /**
-     * Opens the select overlay, it could be an alert, action-sheet or popover,
-     * based in `ion-select` settings.
+     * Open the select overlay. The overlay is either an alert, action sheet, or popover,
+     * depending on the `interface` property on the `ion-select`.
+     *
+     * @param event The user interface event that called the open.
      */
-    open(ev?: UIEvent): Promise<OverlaySelect | undefined>;
+    open(event?: UIEvent): Promise<any>;
     private createOverlay;
+    private updateOverlayOptions;
+    private createActionSheetButtons;
+    private createAlertInputs;
+    private createPopoverOptions;
     private openPopover;
     private openActionSheet;
     private openAlert;
@@ -106,18 +111,8 @@ export declare class Select implements ComponentInterface {
     private getText;
     private setFocus;
     private emitStyle;
+    private onClick;
     private onFocus;
     private onBlur;
-    hostData(): {
-        'role': string;
-        'aria-disabled': string | null;
-        'aria-expanded': string;
-        'aria-haspopup': string;
-        'aria-labelledby': string;
-        class: {
-            'in-item': boolean;
-            'select-disabled': boolean;
-        };
-    };
-    render(): JSX.Element[];
+    render(): any;
 }

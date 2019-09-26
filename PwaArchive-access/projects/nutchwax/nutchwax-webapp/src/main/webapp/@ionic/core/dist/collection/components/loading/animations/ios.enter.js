@@ -1,3 +1,6 @@
+/**
+ * iOS Loading Enter Animation
+ */
 export function iosEnterAnimation(AnimationC, baseEl) {
     const baseAnimation = new AnimationC();
     const backdropAnimation = new AnimationC();

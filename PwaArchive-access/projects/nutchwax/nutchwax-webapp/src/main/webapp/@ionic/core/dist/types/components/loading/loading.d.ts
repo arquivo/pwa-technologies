@@ -1,18 +1,16 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Animation, AnimationBuilder, Config, Mode, OverlayEventDetail, OverlayInterface, SpinnerTypes } from '../../interface';
+import { Animation, AnimationBuilder, OverlayEventDetail, OverlayInterface, SpinnerTypes } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Loading implements ComponentInterface, OverlayInterface {
     private durationTimeout;
     presented: boolean;
     animation?: Animation;
+    mode: "ios" | "md";
     el: HTMLElement;
-    config: Config;
     /** @internal */
     overlayIndex: number;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * If `true`, the keyboard will be automatically dismissed when the overlay is presented.
      */
@@ -75,13 +73,18 @@ export declare class Loading implements ComponentInterface, OverlayInterface {
      */
     didDismiss: EventEmitter<OverlayEventDetail>;
     componentWillLoad(): void;
-    protected onBackdropTap(): void;
     /**
      * Present the loading overlay after it has been created.
      */
     present(): Promise<void>;
     /**
      * Dismiss the loading overlay after it has been presented.
+     *
+     * @param data Any data to emit in the dismiss events.
+     * @param role The role of the element that is dismissing the loading.
+     * This can be useful in a button handler for determining which button was
+     * clicked to dismiss the loading.
+     * Some examples include: ``"cancel"`, `"destructive"`, "selected"`, and `"backdrop"`.
      */
     dismiss(data?: any, role?: string): Promise<boolean>;
     /**
@@ -92,13 +95,6 @@ export declare class Loading implements ComponentInterface, OverlayInterface {
      * Returns a promise that resolves when the loading will dismiss.
      */
     onWillDismiss(): Promise<OverlayEventDetail>;
-    hostData(): {
-        style: {
-            zIndex: number;
-        };
-        class: {
-            'loading-translucent': boolean;
-        };
-    };
-    render(): JSX.Element[];
+    private onBackdropTap;
+    render(): any;
 }

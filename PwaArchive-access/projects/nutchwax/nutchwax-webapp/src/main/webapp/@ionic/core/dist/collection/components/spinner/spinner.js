@@ -1,19 +1,27 @@
+import { h } from '@stencil/core';
+import { config } from '../../global/config';
+import { getIonMode } from '../../global/ionic-global';
 import { createColorClasses } from '../../utils/theme';
 import { SPINNERS } from './spinner-configs';
 export class Spinner {
     constructor() {
+        /**
+         * If `true`, the spinner's animation will be paused.
+         */
         this.paused = false;
     }
     getName() {
-        const name = this.name || this.config.get('spinner');
+        const name = this.name || config.get('spinner');
+        const mode = getIonMode(this);
         if (name) {
             return name;
         }
-        return (this.mode === 'ios') ? 'lines' : 'crescent';
+        return (mode === 'ios') ? 'lines' : 'crescent';
     }
     hostData() {
+        const mode = getIonMode(this);
         return {
-            class: Object.assign({}, createColorClasses(this.color), { [`spinner-${this.getName()}`]: true, 'spinner-paused': !!this.paused || this.config.getBoolean('_testing') })
+            class: Object.assign({}, createColorClasses(this.color), { [mode]: true, [`spinner-${this.getName()}`]: true, 'spinner-paused': !!this.paused || config.getBoolean('_testing') })
         };
     }
     render() {
@@ -35,28 +43,93 @@ export class Spinner {
     }
     static get is() { return "ion-spinner"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "$": ["spinner.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["spinner.css"]
+    }; }
     static get properties() { return {
         "color": {
-            "type": String,
-            "attr": "color"
-        },
-        "config": {
-            "context": "config"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "Color",
+                "resolved": "string | undefined",
+                "references": {
+                    "Color": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The color to use from your application's color palette.\nDefault options are: `\"primary\"`, `\"secondary\"`, `\"tertiary\"`, `\"success\"`, `\"warning\"`, `\"danger\"`, `\"light\"`, `\"medium\"`, and `\"dark\"`.\nFor more information on colors, see [theming](/docs/theming/basics)."
+            },
+            "attribute": "color",
+            "reflect": false
         },
         "duration": {
-            "type": Number,
-            "attr": "duration"
+            "type": "number",
+            "mutable": false,
+            "complexType": {
+                "original": "number",
+                "resolved": "number | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "Duration of the spinner animation in milliseconds. The default varies based on the spinner."
+            },
+            "attribute": "duration",
+            "reflect": false
         },
         "name": {
-            "type": String,
-            "attr": "name"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "SpinnerTypes",
+                "resolved": "\"bubbles\" | \"circles\" | \"crescent\" | \"dots\" | \"lines\" | \"lines-small\" | undefined",
+                "references": {
+                    "SpinnerTypes": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The name of the SVG spinner to use. If a name is not provided, the platform's default\nspinner will be used."
+            },
+            "attribute": "name",
+            "reflect": false
         },
         "paused": {
-            "type": Boolean,
-            "attr": "paused"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the spinner's animation will be paused."
+            },
+            "attribute": "paused",
+            "reflect": false,
+            "defaultValue": "false"
         }
     }; }
-    static get style() { return "/**style-placeholder:ion-spinner:**/"; }
 }
 function buildCircle(spinner, duration, index, total) {
     const data = spinner.fn(duration, index, total);

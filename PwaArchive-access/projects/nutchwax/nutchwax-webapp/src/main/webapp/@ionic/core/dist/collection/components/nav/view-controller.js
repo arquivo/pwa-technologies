@@ -16,6 +16,9 @@ export class ViewController {
             this.element = await attachComponent(this.delegate, container, component, ['ion-page', 'ion-page-invisible'], this.params);
         }
     }
+    /**
+     * DOM WRITE
+     */
     _destroy() {
         assert(this.state !== VIEW_STATE_DESTROYED, 'view state must be ATTACHED');
         const element = this.element;
@@ -53,6 +56,7 @@ export function matches(view, id, params) {
     if (keysA.length !== keysB.length) {
         return false;
     }
+    // Test for A's keys different from B.
     for (const key of keysA) {
         if (currentParams[key] !== params[key]) {
             return false;

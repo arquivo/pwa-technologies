@@ -1,9 +1,10 @@
+import { writeTask } from '@stencil/core';
 import { LIFECYCLE_DID_ENTER, LIFECYCLE_DID_LEAVE, LIFECYCLE_WILL_ENTER, LIFECYCLE_WILL_LEAVE } from '../../components/nav/constants';
 const iosTransitionAnimation = () => import('./ios.transition');
 const mdTransitionAnimation = () => import('./md.transition');
 export function transition(opts) {
     return new Promise((resolve, reject) => {
-        opts.queue.write(() => {
+        writeTask(() => {
             beforeTransition(opts);
             runTransition(opts).then(result => {
                 if (result.animation) {
@@ -37,7 +38,7 @@ async function runTransition(opts) {
     const animationBuilder = await getAnimationBuilder(opts);
     const ani = (animationBuilder)
         ? animation(animationBuilder, opts)
-        : noAnimation(opts);
+        : noAnimation(opts); // fast path for no animation
     return ani;
 }
 function afterTransition(opts) {
@@ -106,13 +107,20 @@ async function notifyViewReady(viewIsReady, enteringEl) {
 function playTransition(trans, opts) {
     const progressCallback = opts.progressCallback;
     const promise = new Promise(resolve => trans.onFinish(resolve));
+    // cool, let's do this, start the transition
     if (progressCallback) {
+        // this is a swipe to go back, just get the transition progress ready
+        // kick off the swipe animation start
         trans.progressStart();
         progressCallback(trans);
     }
     else {
+        // only the top level transition should actually start "play"
+        // kick it off and let it play through
+        // ******** DOM WRITE ****************
         trans.play();
     }
+    // create a callback for when the animation is done
     return promise;
 }
 function fireWillEvents(enteringEl, leavingEl) {

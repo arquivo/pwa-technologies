@@ -1,3 +1,6 @@
+/**
+ * iOS Popover Enter Animation
+ */
 export function iosEnterAnimation(AnimationC, baseEl, ev) {
     let originY = 'top';
     let originX = 'left';
@@ -5,8 +8,9 @@ export function iosEnterAnimation(AnimationC, baseEl, ev) {
     const contentDimentions = contentEl.getBoundingClientRect();
     const contentWidth = contentDimentions.width;
     const contentHeight = contentDimentions.height;
-    const bodyWidth = window.innerWidth;
-    const bodyHeight = window.innerHeight;
+    const bodyWidth = baseEl.ownerDocument.defaultView.innerWidth;
+    const bodyHeight = baseEl.ownerDocument.defaultView.innerHeight;
+    // If ev was passed, use that for target element
     const targetDim = ev && ev.target && ev.target.getBoundingClientRect();
     const targetTop = targetDim != null && 'top' in targetDim ? targetDim.top : bodyHeight / 2 - contentHeight / 2;
     const targetLeft = targetDim != null && 'left' in targetDim ? targetDim.left : bodyWidth / 2;
@@ -27,22 +31,36 @@ export function iosEnterAnimation(AnimationC, baseEl, ev) {
         top: targetTop + targetHeight + (arrowHeight - 1),
         left: targetLeft + targetWidth / 2 - contentWidth / 2
     };
+    // If the popover left is less than the padding it is off screen
+    // to the left so adjust it, else if the width of the popover
+    // exceeds the body width it is off screen to the right so adjust
+    //
     let checkSafeAreaLeft = false;
     let checkSafeAreaRight = false;
+    // If the popover left is less than the padding it is off screen
+    // to the left so adjust it, else if the width of the popover
+    // exceeds the body width it is off screen to the right so adjust
+    // 25 is a random/arbitrary number. It seems to work fine for ios11
+    // and iPhoneX. Is it perfect? No. Does it work? Yes.
     if (popoverCSS.left < POPOVER_IOS_BODY_PADDING + 25) {
         checkSafeAreaLeft = true;
         popoverCSS.left = POPOVER_IOS_BODY_PADDING;
     }
     else if (contentWidth + POPOVER_IOS_BODY_PADDING + popoverCSS.left + 25 > bodyWidth) {
+        // Ok, so we're on the right side of the screen,
+        // but now we need to make sure we're still a bit further right
+        // cus....notchurally... Again, 25 is random. It works tho
         checkSafeAreaRight = true;
         popoverCSS.left = bodyWidth - contentWidth - POPOVER_IOS_BODY_PADDING;
         originX = 'right';
     }
+    // make it pop up if there's room above
     if (targetTop + targetHeight + contentHeight > bodyHeight && targetTop - contentHeight > 0) {
         arrowCSS.top = targetTop - (arrowHeight + 1);
         popoverCSS.top = targetTop - contentHeight - (arrowHeight - 1);
         baseEl.className = baseEl.className + ' popover-bottom';
         originY = 'bottom';
+        // If there isn't room for it to pop up above the target cut it off
     }
     else if (targetTop + targetHeight + contentHeight > bodyHeight) {
         contentEl.style.bottom = POPOVER_IOS_BODY_PADDING + '%';

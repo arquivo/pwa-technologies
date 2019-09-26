@@ -1,6 +1,5 @@
-import '../../stencil.core';
-import { EventEmitter, QueueApi } from '../../stencil.core';
-import { AnimationBuilder, ComponentProps, Config, FrameworkDelegate, Mode, NavComponent, NavOptions, NavOutlet, RouteID, RouteWrite, RouterDirection, TransitionDoneFn, ViewController } from '../../interface';
+import { EventEmitter } from '../../stencil.core';
+import { AnimationBuilder, ComponentProps, FrameworkDelegate, NavComponent, NavOptions, NavOutlet, RouteID, RouteWrite, RouterDirection, TransitionDoneFn, ViewController } from '../../interface';
 export declare class Nav implements NavOutlet {
     private transInstr;
     private sbAni?;
@@ -9,11 +8,7 @@ export declare class Nav implements NavOutlet {
     private destroyed;
     private views;
     private gesture?;
-    mode: Mode;
     el: HTMLElement;
-    queue: QueueApi;
-    config: Config;
-    win: Window;
     /** @internal */
     delegate?: FrameworkDelegate;
     /**
@@ -45,7 +40,7 @@ export declare class Nav implements NavOutlet {
      */
     ionNavWillLoad: EventEmitter<void>;
     /**
-     * Event fired when the nav will components
+     * Event fired when the nav will change components
      */
     ionNavWillChange: EventEmitter<void>;
     /**
@@ -56,39 +51,88 @@ export declare class Nav implements NavOutlet {
     componentDidLoad(): Promise<void>;
     componentDidUnload(): void;
     /**
-     * Push a new component onto the current navigation stack. Pass any additional information along as an object. This additional information is accessible through NavParams
+     * Push a new component onto the current navigation stack. Pass any additional
+     * information along as an object. This additional information is accessible
+     * through NavParams.
+     *
+     * @param component The component to push onto the navigation stack.
+     * @param componentProps Any properties of the component.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     push<T extends NavComponent>(component: T, componentProps?: ComponentProps<T> | null, opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /**
-     * Inserts a component into the nav stack at the specified index. This is useful if you need to add a component at any point in your navigation stack.
+     * Inserts a component into the navigation stack at the specified index.
+     * This is useful to add a component at any point in the navigation stack.
+     *
+     * @param insertIndex The index to insert the component at in the stack.
+     * @param component The component to insert into the navigation stack.
+     * @param componentProps Any properties of the component.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     insert<T extends NavComponent>(insertIndex: number, component: T, componentProps?: ComponentProps<T> | null, opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /**
-     * Inserts an array of components into the nav stack at the specified index. The last component in the array will become instantiated as a view, and animate in to become the active view.
+     * Inserts an array of components into the navigation stack at the specified index.
+     * The last component in the array will become instantiated as a view, and animate
+     * in to become the active view.
+     *
+     * @param insertIndex The index to insert the components at in the stack.
+     * @param insertComponents The components to insert into the navigation stack.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     insertPages(insertIndex: number, insertComponents: NavComponent[], opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /**
-     * Call to navigate back from a current component. Similar to push(), you can also pass navigation options.
+     * Pop a component off of the navigation stack. Navigates back from the current
+     * component.
+     *
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     pop(opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /**
-     * Pop to a specific index in the navigation stack
+     * Pop to a specific index in the navigation stack.
+     *
+     * @param indexOrViewCtrl The index or view controller to pop to.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     popTo(indexOrViewCtrl: number | ViewController, opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /**
      * Navigate back to the root of the stack, no matter how far back that is.
+     *
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     popToRoot(opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /**
-     * Removes a page from the nav stack at the specified index.
+     * Removes a component from the navigation stack at the specified index.
+     *
+     * @param startIndex The number to begin removal at.
+     * @param removeCount The number of components to remove.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     removeIndex(startIndex: number, removeCount?: number, opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /**
-     * Set the root for the current navigation stack.
+     * Set the root for the current navigation stack to a component.
+     *
+     * @param component The component to set as the root of the navigation stack.
+     * @param componentProps Any properties of the component.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     setRoot<T extends NavComponent>(component: T, componentProps?: ComponentProps<T> | null, opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /**
-     * Set the views of the current navigation stack and navigate to the last view. By default animations are disabled, but they can be enabled by passing options to the navigation controller.You can also pass any navigation params to the individual pages in the array.
+     * Set the views of the current navigation stack and navigate to the last view.
+     * By default animations are disabled, but they can be enabled by passing options
+     * to the navigation controller. Navigation parameters can also be passed to the
+     * individual pages in the array.
+     *
+     * @param views The list of views to set as the navigation stack.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
      */
     setPages(views: any[], opts?: NavOptions | null, done?: TransitionDoneFn): Promise<boolean>;
     /** @internal */
@@ -96,19 +140,25 @@ export declare class Nav implements NavOutlet {
     /** @internal */
     getRouteId(): Promise<RouteID | undefined>;
     /**
-     * Gets the active view
+     * Get the active view.
      */
     getActive(): Promise<ViewController | undefined>;
     /**
-     * Returns the view at the index
+     * Get the view at the specified index.
+     *
+     * @param index The index of the view.
      */
     getByIndex(index: number): Promise<ViewController | undefined>;
     /**
-     * Returns `true` or false if the current view can go back
+     * Returns `true` if the current view can go back.
+     *
+     * @param view The view to check.
      */
     canGoBack(view?: ViewController): Promise<boolean>;
     /**
-     * Gets the previous view
+     * Get the previous view.
+     *
+     * @param view The view to get.
      */
     getPrevious(view?: ViewController): Promise<ViewController | undefined>;
     getLength(): number;
@@ -137,5 +187,5 @@ export declare class Nav implements NavOutlet {
     private onStart;
     private onMove;
     private onEnd;
-    render(): JSX.Element;
+    render(): any;
 }

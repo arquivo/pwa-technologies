@@ -1,14 +1,16 @@
-import '../../stencil.core';
 import { EventEmitter } from '../../stencil.core';
-import { Config, NavOutlet, RouteID, RouteWrite, TabButtonClickEventDetail } from '../../interface';
+import { NavOutlet, RouteID, RouteWrite } from '../../interface';
+/**
+ * @slot - Content is placed between the named slots if provided without a slot.
+ * @slot top - Content is placed at the top of the screen.
+ * @slot bottom - Content is placed at the bottom of the screen.
+ */
 export declare class Tabs implements NavOutlet {
     private transitioning;
     private leavingTab?;
-    el: HTMLStencilElement;
+    el: HTMLIonTabsElement;
     tabs: HTMLIonTabElement[];
     selectedTab?: HTMLIonTabElement;
-    config: Config;
-    doc: Document;
     /** @internal */
     useRouter: boolean;
     /**
@@ -28,21 +30,23 @@ export declare class Tabs implements NavOutlet {
     ionTabsDidChange: EventEmitter<{
         tab: string;
     }>;
-    componentWillLoad(): Promise<void>;
-    componentDidLoad(): void;
+    componentWillLoad(): void;
     componentDidUnload(): void;
     componentWillUpdate(): void;
-    protected onTabClicked(ev: CustomEvent<TabButtonClickEventDetail>): void;
     /**
-     * Index or the Tab instance, of the tab to select.
+     * Select a tab by the value of its `tab` property or an element reference.
+     *
+     * @param tab The tab instance to select. If passed a string, it should be the value of the tab's `tab` property.
      */
     select(tab: string | HTMLIonTabElement): Promise<boolean>;
     /**
-     * Get the tab element given the tab name
+     * Get a specific tab by the value of its `tab` property or an element reference.
+     *
+     * @param tab The tab instance to select. If passed a string, it should be the value of the tab's `tab` property.
      */
     getTab(tab: string | HTMLIonTabElement): Promise<HTMLIonTabElement | undefined>;
     /**
-     * Get the currently selected tab
+     * Get the currently selected tab.
      */
     getSelected(): Promise<string | undefined>;
     /** @internal */
@@ -54,5 +58,6 @@ export declare class Tabs implements NavOutlet {
     private tabSwitch;
     private notifyRouter;
     private shouldSwitch;
-    render(): JSX.Element[];
+    private onTabClicked;
+    render(): any;
 }

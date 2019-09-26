@@ -1,14 +1,18 @@
-import '../../stencil.core';
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
-import { Color, Mode, RangeChangeEventDetail, RangeValue, StyleEventDetail } from '../../interface';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { Color, RangeChangeEventDetail, RangeValue, StyleEventDetail } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ *
+ * @slot start - Content is placed to the left of the range slider in LTR, and to the right in RTL.
+ * @slot end - Content is placed to the right of the range slider in LTR, and to the left in RTL.
+ */
 export declare class Range implements ComponentInterface {
     private noUpdate;
     private rect;
     private hasFocus;
     private rangeSlider?;
     private gesture?;
-    el: HTMLStencilElement;
-    queue: QueueApi;
+    el: HTMLIonRangeElement;
     private ratioA;
     private ratioB;
     private pressedKnob;
@@ -18,10 +22,6 @@ export declare class Range implements ComponentInterface {
      * For more information on colors, see [theming](/docs/theming/basics).
      */
     color?: Color;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * How long, in milliseconds, to wait to trigger the
      * `ionChange` event after each change in the range value.
@@ -61,6 +61,11 @@ export declare class Range implements ComponentInterface {
      */
     step: number;
     /**
+     * If `true`, tick marks are displayed based on the step value.
+     * Only applies when `snaps` is `true`.
+     */
+    ticks: boolean;
+    /**
      * If `true`, the user cannot interact with the range.
      */
     disabled: boolean;
@@ -70,6 +75,8 @@ export declare class Range implements ComponentInterface {
      */
     value: RangeValue;
     protected valueChanged(value: RangeValue): void;
+    private clampBounds;
+    private ensureValueInBounds;
     /**
      * Emitted when the value property has changed.
      */
@@ -87,8 +94,6 @@ export declare class Range implements ComponentInterface {
      * Emitted when the range loses focus.
      */
     ionBlur: EventEmitter<void>;
-    onBlur(): void;
-    onFocus(): void;
     componentWillLoad(): void;
     componentDidLoad(): Promise<void>;
     componentDidUnload(): void;
@@ -106,18 +111,7 @@ export declare class Range implements ComponentInterface {
     private updateRatio;
     private updateValue;
     private setFocus;
-    hostData(): {
-        class: {
-            'in-item': boolean;
-            'range-disabled': boolean;
-            'range-pressed': boolean;
-            'range-has-pin': boolean;
-        } | {
-            'in-item': boolean;
-            'range-disabled': boolean;
-            'range-pressed': boolean;
-            'range-has-pin': boolean;
-        };
-    };
-    render(): JSX.Element[];
+    private onBlur;
+    private onFocus;
+    render(): any;
 }

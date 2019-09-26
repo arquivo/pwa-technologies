@@ -1,3 +1,6 @@
+/**
+ * iOS Modal Leave Animation
+ */
 export function iosLeaveAnimation(AnimationC, baseEl) {
     const baseAnimation = new AnimationC();
     const backdropAnimation = new AnimationC();
@@ -7,7 +10,7 @@ export function iosLeaveAnimation(AnimationC, baseEl) {
     wrapperAnimation.addElement(wrapperEl);
     const wrapperElRect = wrapperEl.getBoundingClientRect();
     wrapperAnimation.beforeStyles({ 'opacity': 1 })
-        .fromTo('translateY', '0%', `${window.innerHeight - wrapperElRect.top}px`);
+        .fromTo('translateY', '0%', `${baseEl.ownerDocument.defaultView.innerHeight - wrapperElRect.top}px`);
     backdropAnimation.fromTo('opacity', 0.4, 0.0);
     return Promise.resolve(baseAnimation
         .addElement(baseEl)

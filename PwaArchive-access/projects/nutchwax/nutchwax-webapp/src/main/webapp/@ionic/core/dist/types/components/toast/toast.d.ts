@@ -1,20 +1,18 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Animation, AnimationBuilder, Color, Config, Mode, OverlayEventDetail, OverlayInterface } from '../../interface';
+import { Animation, AnimationBuilder, Color, OverlayEventDetail, OverlayInterface, ToastButton } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Toast implements ComponentInterface, OverlayInterface {
     private durationTimeout;
     presented: boolean;
+    animation?: Animation;
+    mode: "ios" | "md";
     el: HTMLElement;
-    animation: Animation | undefined;
-    config: Config;
     /**
      * @internal
      */
     overlayIndex: number;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * The color to use from your application's color palette.
      * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
@@ -30,10 +28,6 @@ export declare class Toast implements ComponentInterface, OverlayInterface {
      */
     leaveAnimation?: AnimationBuilder;
     /**
-     * Text to display in the close button.
-     */
-    closeButtonText?: string;
-    /**
      * Additional classes to apply for custom CSS. If multiple classes are
      * provided they should be separated by spaces.
      */
@@ -43,6 +37,10 @@ export declare class Toast implements ComponentInterface, OverlayInterface {
      * until `dismiss()` is called.
      */
     duration: number;
+    /**
+     * Header to be shown in the toast.
+     */
+    header?: string;
     /**
      * Message to be shown in the toast.
      */
@@ -59,6 +57,14 @@ export declare class Toast implements ComponentInterface, OverlayInterface {
      * If `true`, the close button will be displayed.
      */
     showCloseButton: boolean;
+    /**
+     * Text to display in the close button.
+     */
+    closeButtonText?: string;
+    /**
+     * An array of buttons for the toast.
+     */
+    buttons?: (ToastButton | string)[];
     /**
      * If `true`, the toast will be translucent.
      */
@@ -89,6 +95,12 @@ export declare class Toast implements ComponentInterface, OverlayInterface {
     present(): Promise<void>;
     /**
      * Dismiss the toast overlay after it has been presented.
+     *
+     * @param data Any data to emit in the dismiss events.
+     * @param role The role of the element that is dismissing the toast.
+     * This can be useful in a button handler for determining which button was
+     * clicked to dismiss the toast.
+     * Some examples include: ``"cancel"`, `"destructive"`, "selected"`, and `"backdrop"`.
      */
     dismiss(data?: any, role?: string): Promise<boolean>;
     /**
@@ -99,6 +111,9 @@ export declare class Toast implements ComponentInterface, OverlayInterface {
      * Returns a promise that resolves when the toast will dismiss.
      */
     onWillDismiss(): Promise<OverlayEventDetail>;
+    private getButtons;
+    private buttonClick;
+    private callButtonHandler;
     hostData(): {
         style: {
             zIndex: number;
@@ -109,5 +124,6 @@ export declare class Toast implements ComponentInterface, OverlayInterface {
             'toast-translucent': boolean;
         };
     };
-    render(): JSX.Element;
+    renderButtons(buttons: ToastButton[], side: 'start' | 'end'): any;
+    render(): any;
 }

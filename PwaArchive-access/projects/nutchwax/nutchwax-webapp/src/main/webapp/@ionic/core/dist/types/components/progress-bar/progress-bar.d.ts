@@ -1,12 +1,9 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
-import { Color, Config, Mode } from '../../interface';
+import { Color } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class ProgressBar implements ComponentInterface {
-    config: Config;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * The state of the progress bar, based on if the time the process takes is known or not.
      * Default options are: `"determinate"` (no animation), `"indeterminate"` (animate from left to right).
@@ -47,5 +44,5 @@ export declare class ProgressBar implements ComponentInterface {
             'progress-bar-reversed': boolean;
         };
     };
-    render(): JSX.Element[];
+    render(): any[];
 }

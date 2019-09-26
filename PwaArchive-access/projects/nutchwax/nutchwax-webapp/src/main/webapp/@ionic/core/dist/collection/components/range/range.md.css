@@ -17,16 +17,20 @@
   align-items: center;
   font-family: var(--ion-font-family, inherit);
   user-select: none;
-  z-index: 2; }
+  z-index: 2;
+}
 
 :host(.range-disabled) {
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 ::slotted(ion-label) {
-  flex: initial; }
+  flex: initial;
+}
 
 ::slotted(ion-icon[slot]) {
-  font-size: 24px; }
+  font-size: 24px;
+}
 
 .range-slider {
   position: relative;
@@ -35,17 +39,20 @@
   height: var(--height);
   contain: size layout style;
   cursor: grab;
-  touch-action: pan-y; }
+  touch-action: pan-y;
+}
 
 :host(.range-pressed) .range-slider {
-  cursor: grabbing; }
+  cursor: grabbing;
+}
 
 .range-pin {
   position: absolute;
   background: var(--ion-color-base);
   color: var(--ion-color-contrast);
   text-align: center;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 .range-knob-handle {
   left: 0;
@@ -54,16 +61,29 @@
   position: absolute;
   width: var(--knob-handle-size);
   height: var(--knob-handle-size);
-  text-align: center; }
-  :host-context([dir=rtl]) .range-knob-handle {
-    right: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .range-knob-handle {
-      margin-left: unset;
-      -webkit-margin-start: calc(0px - var(--knob-handle-size) / 2);
-      margin-inline-start: calc(0px - var(--knob-handle-size) / 2); } }
-  .range-knob-handle:active, .range-knob-handle:focus {
-    outline: none; }
+  text-align: center;
+}
+[dir=rtl] .range-knob-handle, :host-context([dir=rtl]) .range-knob-handle {
+  left: unset;
+  right: unset;
+  right: 0;
+}
+
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .range-knob-handle {
+    margin-left: unset;
+    -webkit-margin-start: calc(0px - var(--knob-handle-size) / 2);
+    margin-inline-start: calc(0px - var(--knob-handle-size) / 2);
+  }
+}
+[dir=rtl] .range-knob-handle, :host-context([dir=rtl]) .range-knob-handle {
+  /* stylelint-disable-next-line property-blacklist */
+  left: unset;
+}
+
+.range-knob-handle:active, .range-knob-handle:focus {
+  outline: none;
+}
 
 .range-bar {
   border-radius: var(--bar-border-radius);
@@ -73,9 +93,18 @@
   width: 100%;
   height: var(--bar-height);
   background: var(--bar-background);
-  pointer-events: none; }
-  :host-context([dir=rtl]) .range-bar {
-    right: 0; }
+  pointer-events: none;
+}
+[dir=rtl] .range-bar, :host-context([dir=rtl]) .range-bar {
+  left: unset;
+  right: unset;
+  right: 0;
+}
+
+[dir=rtl] .range-bar, :host-context([dir=rtl]) .range-bar {
+  /* stylelint-disable-next-line property-blacklist */
+  left: unset;
+}
 
 .range-knob {
   border-radius: var(--knob-border-radius);
@@ -87,21 +116,30 @@
   background: var(--knob-background);
   box-shadow: var(--knob-box-shadow);
   z-index: 2;
-  pointer-events: none; }
-  :host-context([dir=rtl]) .range-knob {
-    right: calc(50% - var(--knob-size) / 2); }
+  pointer-events: none;
+}
+[dir=rtl] .range-knob, :host-context([dir=rtl]) .range-knob {
+  left: unset;
+  right: unset;
+  right: calc(50% - var(--knob-size) / 2);
+}
+
+[dir=rtl] .range-knob, :host-context([dir=rtl]) .range-knob {
+  /* stylelint-disable-next-line property-blacklist */
+  left: unset;
+}
 
 :host(.range-pressed) .range-bar-active {
-  will-change: left, right; }
-
-:host(.range-pressed) .range-knob-handle {
-  will-change: left; }
+  will-change: left, right;
+}
 
 :host(.in-item) {
-  width: 100%; }
+  width: 100%;
+}
 
 :host(.in-item) ::slotted(ion-label) {
-  align-self: center; }
+  align-self: center;
+}
 
 :host {
   --knob-border-radius: 50%;
@@ -119,18 +157,22 @@
   padding-right: 14px;
   padding-top: 8px;
   padding-bottom: 8px;
-  font-size: 12px; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 14px;
-      padding-inline-start: 14px;
-      -webkit-padding-end: 14px;
-      padding-inline-end: 14px; } }
+  font-size: 12px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 14px;
+    padding-inline-start: 14px;
+    -webkit-padding-end: 14px;
+    padding-inline-end: 14px;
+  }
+}
 
 :host(.ion-color) .range-bar {
-  background: rgba(var(--ion-color-base-rgb), 0.26); }
+  background: rgba(var(--ion-color-base-rgb), 0.26);
+}
 
 :host(.ion-color) .range-bar-active,
 :host(.ion-color) .range-knob,
@@ -138,50 +180,59 @@
 :host(.ion-color) .range-pin::before,
 :host(.ion-color) .range-tick {
   background: var(--ion-color-base);
-  color: var(--ion-color-contrast); }
+  color: var(--ion-color-contrast);
+}
 
-::slotted([slot="start"]) {
+::slotted([slot=start]) {
   margin-left: 0;
   margin-right: 14px;
   margin-top: 0;
-  margin-bottom: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    ::slotted([slot="start"]) {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: 0;
-      margin-inline-start: 0;
-      -webkit-margin-end: 14px;
-      margin-inline-end: 14px; } }
+  margin-bottom: 0;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  ::slotted([slot=start]) {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 0;
+    margin-inline-start: 0;
+    -webkit-margin-end: 14px;
+    margin-inline-end: 14px;
+  }
+}
 
-::slotted([slot="end"]) {
+::slotted([slot=end]) {
   margin-left: 14px;
   margin-right: 0;
   margin-top: 0;
-  margin-bottom: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    ::slotted([slot="end"]) {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: 14px;
-      margin-inline-start: 14px;
-      -webkit-margin-end: 0;
-      margin-inline-end: 0; } }
+  margin-bottom: 0;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  ::slotted([slot=end]) {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 14px;
+    margin-inline-start: 14px;
+    -webkit-margin-end: 0;
+    margin-inline-end: 0;
+  }
+}
 
 :host(.range-has-pin) {
-  padding-top: 28px; }
-
+  padding-top: 28px;
+}
 .range-bar-active {
   bottom: 0;
   width: auto;
-  background: var(--bar-background-active); }
+  background: var(--bar-background-active);
+}
 
 .range-knob {
   transform: scale(0.67);
   transition-duration: 120ms;
   transition-property: transform, background-color, border;
   transition-timing-function: ease;
-  z-index: 2; }
+  z-index: 2;
+}
 
 .range-tick {
   position: absolute;
@@ -190,10 +241,12 @@
   height: var(--bar-height);
   background: var(--bar-background-active);
   z-index: 1;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 .range-tick-active {
-  background: transparent; }
+  background: transparent;
+}
 
 .range-pin {
   padding-left: 0;
@@ -209,48 +262,57 @@
   transition: transform 120ms ease, background 120ms ease;
   background: var(--pin-background);
   color: var(--pin-color);
-  text-align: center; }
+  text-align: center;
+}
+.range-pin::before {
+  left: 50%;
+  top: 3px;
+  margin-left: -13px;
+  /* stylelint-disable-next-line property-blacklist */
+  border-radius: 50% 50% 50% 0;
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  transform: rotate(-45deg);
+  transition: background 120ms ease;
+  background: var(--pin-background);
+  content: "";
+  z-index: -1;
+}
+[dir=rtl] .range-pin::before, :host-context([dir=rtl]) .range-pin::before {
+  left: unset;
+  right: unset;
+  right: 50%;
+}
+
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
   .range-pin::before {
-    left: 50%;
-    top: 3px;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 0;
-    margin-left: -13px;
-    position: absolute;
-    width: 26px;
-    height: 26px;
-    transform: rotate(-45deg);
-    transition: background 120ms ease;
-    background: var(--pin-background);
-    content: "";
-    z-index: -1; }
-    :host-context([dir=rtl]) .range-pin::before {
-      right: 50%; }
-    :host-context([dir=rtl]) .range-pin::before {
-      border-top-left-radius: 50%;
-      border-top-right-radius: 50%;
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 50%; }
-    @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-      .range-pin::before {
-        margin-left: unset;
-        -webkit-margin-start: -13px;
-        margin-inline-start: -13px; } }
+    margin-left: unset;
+    -webkit-margin-start: -13px;
+    margin-inline-start: -13px;
+  }
+}
+[dir=rtl] .range-pin::before, :host-context([dir=rtl]) .range-pin::before {
+  /* stylelint-disable-next-line property-blacklist */
+  left: unset;
+}
 
 .range-knob-pressed .range-pin {
-  transform: translate3d(0,  -24px,  0) scale(1); }
+  transform: translate3d(0,  -24px,  0) scale(1);
+}
 
 :host(:not(.range-has-pin)) .range-knob-pressed .range-knob {
-  transform: scale(1); }
+  transform: scale(1);
+}
 
 :host(.range-disabled) .range-bar-active,
 :host(.range-disabled) .range-bar,
 :host(.range-disabled) .range-tick {
-  background-color: var(--ion-color-step-250, #bfbfbf); }
+  background-color: var(--ion-color-step-250, #bfbfbf);
+}
 
 :host(.range-disabled) .range-knob {
   transform: scale(0.55);
   outline: 5px solid #fff;
-  background-color: var(--ion-color-step-250, #bfbfbf); }
+  background-color: var(--ion-color-step-250, #bfbfbf);
+}

@@ -26,7 +26,6 @@ export function createPointerEvents(el, pointerDown, pointerMove, pointerUp, opt
     }
     function handleMouseDown(ev) {
         if (lastTouchEvent > Date.now()) {
-            console.debug('mousedown event dropped because of previous touch');
             return;
         }
         if (!pointerDown(ev)) {

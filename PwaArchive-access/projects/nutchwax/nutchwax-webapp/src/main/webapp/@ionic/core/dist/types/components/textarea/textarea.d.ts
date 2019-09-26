@@ -1,16 +1,14 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Color, Mode, StyleEventDetail, TextareaChangeEventDetail } from '../../interface';
+import { Color, StyleEventDetail, TextareaChangeEventDetail } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Textarea implements ComponentInterface {
     private nativeInput?;
     private inputId;
     private didBlurAfterEdit;
     el: HTMLElement;
     hasFocus: boolean;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * The color to use from your application's color palette.
      * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
@@ -80,6 +78,10 @@ export declare class Textarea implements ComponentInterface {
      */
     wrap?: 'hard' | 'soft' | 'off';
     /**
+     * If `true`, the element height will increase based on the value.
+     */
+    autoGrow: boolean;
+    /**
      * The value of the textarea.
      */
     value?: string | null;
@@ -108,13 +110,25 @@ export declare class Textarea implements ComponentInterface {
      * Emitted when the input has focus.
      */
     ionFocus: EventEmitter<void>;
+    /**
+     * Emitted when the input has been created.
+     * @internal
+     */
+    ionInputDidLoad: EventEmitter<void>;
+    /**
+     * Emitted when the input has been removed.
+     * @internal
+     */
+    ionInputDidUnload: EventEmitter<void>;
     componentWillLoad(): void;
     componentDidLoad(): void;
+    private runAutoGrow;
+    componentDidUnload(): void;
     /**
      * Sets focus on the specified `ion-textarea`. Use this method instead of the global
      * `input.focus()`.
      */
-    setFocus(): void;
+    setFocus(): Promise<void>;
     /**
      * Returns the native `<textarea>` element used under the hood.
      */
@@ -131,9 +145,5 @@ export declare class Textarea implements ComponentInterface {
     private onFocus;
     private onBlur;
     private onKeyDown;
-    hostData(): {
-        'aria-disabled': string | null;
-        class: import("../../interface").CssClassMap | undefined;
-    };
-    render(): JSX.Element;
+    render(): any;
 }
