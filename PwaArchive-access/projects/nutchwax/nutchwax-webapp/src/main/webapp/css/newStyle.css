@@ -631,7 +631,8 @@ div.omitted-results:hover {
 }
 
 .yearUl{
-    background: #42a5f5;
+    background: /*#42a5f5*/#007aff;
+    border-radius: 5px;
     text-align: left;
     padding-top: 5px;
     margin-bottom: 1px;
@@ -647,6 +648,11 @@ div.omitted-results:hover {
 .yearUl > div:nth-child(3){
     margin-top: 42px;
     border-top: 1px solid white;
+}
+
+.yearUl .row{
+    margin-left: 0px!important;
+    margin-right: 0px!important;
 }
 
 .preventYear:active{
@@ -1360,7 +1366,7 @@ input:active, input:focus{
 }
 
 body#home-search #conteudo-pesquisa-erro{    
-    margin-top: /*-8px*/-11px; 
+    margin-top: /*-8px*//*-11px*/-38px; 
 }
 
 #conteudo-pesquisa-erro{    
@@ -1396,6 +1402,7 @@ body#home-search #conteudo-pesquisa-erro{
 #years{
     /*margin-top: 30px;*/
     padding-bottom: 40px;
+    margin: 0 29px;
 }
 
 .clear-text{
@@ -1829,7 +1836,7 @@ div.call-to-actions span  {
     width: auto!important;
     min-width: initial!important;
     max-width: calc(100% - 40px); 
-    padding-top: /*10px*/20px;/*
+    padding-top: /*10px*/17px;/*
     padding-left: 15px;
     padding-right: 15px;*/
 }
@@ -1855,6 +1862,14 @@ ion-button{
 
 .card-height{
    background-color: /*white*//*#3d3c3c*/ /*#222*/#303a3f !important;
+
+   /* Gradient */
+   background: #45484d; /* Old browsers */
+   background: -moz-linear-gradient(top,  #45484d 0%, #000000 100%); /* FF3.6-15 */
+   background: -webkit-linear-gradient(top,  #45484d 0%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
+   background: linear-gradient(to bottom,  #45484d 0%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
    width: 100vw;
@@ -1886,7 +1901,7 @@ ion-button{
 .image-mobile-expanded-div ion-list ion-item{
     --min-height: 20px;
     color: rgba(255,255,255,0.6) !important;
-    --ion-background-color:/*#3d3c3c*//*#222*/#303a3f !important;
+    --ion-background-color:/*#3d3c3c*//*#222*//*#303a3f*/ transparent !important;
     --ion-padding: 20px !important;
     --ion-padding-: 0 !important
 }
@@ -1949,10 +1964,10 @@ body#home-landing.hydrated h3 {
     height:100vh;min-width: 100%;background-color:transparent;position: absolute;top: 0;left:0;z-index:1;
 }
 
-.closeIt{
+.closeIt{   
     position: absolute;
-    color: rgba(255,255,255,0.5) !important;
-    background: rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.7) !important;
+    background: rgba(0,0,0,0.2);
     border-radius: 25px;
     top: 5px;
     right: 6px;
@@ -2028,7 +2043,7 @@ h1,h2,h3,h4,h5{
     width: 100%;
     margin: 0px;
     font-family: Roboto, "Open Sans", sans-serif;
-    font-size: 1.5em;
+    font-size: 1.4em;
     font-weight: normal !important;
     text-align: center;
     background-color: #007AFF !important;
@@ -2516,11 +2531,18 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 
 #layoutTV{
     text-align: center;
-    margin-top: 30px;
+    margin-top: 16px;
+    margin-bottom: 15px;
 }
 #layoutTV h4{
     display: inline;
     padding-right: 15px;
+    /* New code below */    
+    color: #007aff;
+}
+
+#intro .texto-1 { /*temporary removing number of versions to be displayed in mobile Table/List of versions */
+    display: none;
 }
 
 #dateStart.nooutline, #dateEnd.nooutline {
@@ -3197,7 +3219,7 @@ and (max-device-height : 1366px)
 
  
     div#flex-container {
-    width: 80.7% !important;
+    width: 80.63% !important;
     margin: 0 auto;
     box-shadow: none;
 }
@@ -3278,6 +3300,9 @@ and (max-device-height : 1366px)
   and (-webkit-min-device-pixel-ratio: 2) {
 
 }
+
+
+
 
 
 
