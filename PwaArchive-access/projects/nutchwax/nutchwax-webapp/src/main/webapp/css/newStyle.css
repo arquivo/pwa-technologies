@@ -38,6 +38,7 @@ body {
     /* border: 1px solid #ccc /*#757575; */
     padding-top: 3px;
     margin-top: /*25px*/4px;
+    padding-right: 13% !important;
 }
 
 /* NEW STYLE: Hover search bar effect*/
@@ -631,7 +632,8 @@ div.omitted-results:hover {
 }
 
 .yearUl{
-    background: #42a5f5;
+    background: /*#42a5f5*/#007aff;
+    border-radius: 5px;
     text-align: left;
     padding-top: 5px;
     margin-bottom: 1px;
@@ -647,6 +649,11 @@ div.omitted-results:hover {
 .yearUl > div:nth-child(3){
     margin-top: 42px;
     border-top: 1px solid white;
+}
+
+.yearUl .row{
+    margin-left: 0px!important;
+    margin-right: 0px!important;
 }
 
 .preventYear:active{
@@ -813,8 +820,8 @@ h5{
     background-color: #efefef!important;
 }
 
-input:focus:-webkit-input-placeholder { color:transparent;outline:1px solid red; };
-input:focus:-moz-placeholder { color:transparent;outline:1px solid red; }
+input:focus:-webkit-input-placeholder { color:transparent;}
+input:focus:-moz-placeholder { color:transparent;}
 
 h5{
     margin: 0!important;
@@ -827,7 +834,6 @@ h5{
 .month-margins{
     padding-bottom: 15px!important;
     padding-top: 15px!important;
-    border-bottom: 1px solid white;
     margin-top:0px;
     margin-bottom: 0px;
 }
@@ -1360,7 +1366,7 @@ input:active, input:focus{
 }
 
 body#home-search #conteudo-pesquisa-erro{    
-    margin-top: /*-8px*/-11px; 
+    margin-top: /*-8px*//*-11px*/-10px !important; 
 }
 
 #conteudo-pesquisa-erro{    
@@ -1395,7 +1401,7 @@ body#home-search #conteudo-pesquisa-erro{
 
 #years{
     /*margin-top: 30px;*/
-    padding-bottom: 40px;
+    padding-bottom: 40px;    
 }
 
 .clear-text{
@@ -1829,7 +1835,7 @@ div.call-to-actions span  {
     width: auto!important;
     min-width: initial!important;
     max-width: calc(100% - 40px); 
-    padding-top: /*10px*/20px;/*
+    padding-top: /*10px*/17px;/*
     padding-left: 15px;
     padding-right: 15px;*/
 }
@@ -1855,6 +1861,14 @@ ion-button{
 
 .card-height{
    background-color: /*white*//*#3d3c3c*/ /*#222*/#303a3f !important;
+
+   /* Gradient */
+   background: #45484d; /* Old browsers */
+   background: -moz-linear-gradient(top,  #45484d 0%, #000000 100%); /* FF3.6-15 */
+   background: -webkit-linear-gradient(top,  #45484d 0%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
+   background: linear-gradient(to bottom,  #45484d 0%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
    width: 100vw;
@@ -1886,7 +1900,7 @@ ion-button{
 .image-mobile-expanded-div ion-list ion-item{
     --min-height: 20px;
     color: rgba(255,255,255,0.6) !important;
-    --ion-background-color:/*#3d3c3c*//*#222*/#303a3f !important;
+    --ion-background-color:/*#3d3c3c*//*#222*//*#303a3f*/ transparent !important;
     --ion-padding: 20px !important;
     --ion-padding-: 0 !important
 }
@@ -1949,10 +1963,10 @@ body#home-landing.hydrated h3 {
     height:100vh;min-width: 100%;background-color:transparent;position: absolute;top: 0;left:0;z-index:1;
 }
 
-.closeIt{
+.closeIt{   
     position: absolute;
-    color: rgba(255,255,255,0.5) !important;
-    background: rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.7) !important;
+    background: rgba(0,0,0,0.2);
     border-radius: 25px;
     top: 5px;
     right: 6px;
@@ -2028,7 +2042,7 @@ h1,h2,h3,h4,h5{
     width: 100%;
     margin: 0px;
     font-family: Roboto, "Open Sans", sans-serif;
-    font-size: 1.5em;
+    font-size: 1.4em;
     font-weight: normal !important;
     text-align: center;
     background-color: #007AFF !important;
@@ -2274,11 +2288,10 @@ a#BotaoImagens:hover {
     text-decoration: none !important;   
 }
 
-
 .tabs-services a,  .tabs-services a:hover, .tabs-services a:active{
     font-size: 1em;
     margin-right: 1em;
-    text-decoration: none!important;   
+    text-decoration: none!important;  
 }
 
 .tabs-services .selected{
@@ -2287,7 +2300,6 @@ a#BotaoImagens:hover {
    /* padding-bottom: 2px;
     border-bottom: 2px solid #337ab7;*/
 }
-
 .primary-underline{
   position: relative;
   display: inline-block;
@@ -2304,8 +2316,6 @@ a#BotaoImagens:hover {
   border: 1px solid #42a5f5;
   border-radius : 10px;
 }
-
-
 .div-underline{
   z-index:0;
 }
@@ -2419,8 +2429,6 @@ ion-list > ion-item > h5{
         height: 0;
     }
 }
-
-
 .homeLinkWrapper {
     width: 75%;
     margin-left: 12.5%;
@@ -2454,24 +2462,18 @@ ion-list > ion-item > h5{
     text-decoration: none!important;
     cursor: pointer
 }
-
-
 .homeLinkWrapper:last-of-type{
     margin-bottom: 35px;
 }
-
 .border-home{
     border: 1px solid lightgray;
 }
-
 .lightgreen{
     background-color: lightgreen;
 }
-
 .lightgoldenrodyellow{
     background-color: lightgoldenrodyellow;
 }
-
 .lightseagreen{
     background-color: lightseagreen;
 }
@@ -2516,11 +2518,18 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 
 #layoutTV{
     text-align: center;
-    margin-top: 30px;
+    margin-top: 16px;
+    margin-bottom: 15px;
 }
 #layoutTV h4{
     display: inline;
     padding-right: 15px;
+    /* New code below */    
+    color: #007aff;
+}
+
+#intro .texto-1 { /*temporary removing number of versions to be displayed in mobile Table/List of versions */
+    display: none;
 }
 
 #dateStart.nooutline, #dateEnd.nooutline {
@@ -2555,7 +2564,6 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
     float: right !important;
     font-size: 2.7em;
     text-decoration: none !important;
-
 }
 
 /* NEW style */
@@ -2567,7 +2575,6 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 .picker-button, .picker-button.sc-ion-picker-md, .picker-button.activated.sc-ion-picker-md{
     text-transform: none!important;
 }
-
 
 .lds-ring {
   display: inline-block;
@@ -2608,8 +2615,7 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 }
 /* Ionic Advsnced seach */
 body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
-    width: 100% !important;
-    /* outline: 1px solid red; */
+    width: 100% !important;    
     background-color: white;
     border: 1px solid #ccc !important;
     border-radius: /*50px*/5px !important;
@@ -2625,15 +2631,13 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     margin-bottom: 20px !important;
 }
 
-.select-icon-inner {
-    outline:1px solid red;
+.select-icon-inner {   
 
 }
 
 .fa-caret-up:before {
     content: "\f0d7";
-    font-size: 1.1em;
-   /* border: 1px solid #ffffff4a;*/
+    font-size: 1.1em;  
     padding: 3px 9px 7px 9px;
     border-radius: 50px;
     margin-top: 3px !important;
@@ -2707,9 +2711,6 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 #swipeContainer {      
     background-color: black !important;
 }
-
-
-
 /***************************************************************************/
 /***************************************************************************/
 /**************             QUERIES               **************************/
@@ -2737,8 +2738,6 @@ and (device-width: 320px) and (device-height: 534px) and (-webkit-device-pixel-r
     font-size: 0.9em !important;
     color: #007aff; */
 }
-
-
 /* Responsivo Portrait and Landscape */
 @media only screen 
 and (min-device-width : 1024px)   {
@@ -2758,8 +2757,6 @@ and (min-device-width : 1024px)   {
     margin-top: -8px !important;   
     }
 }
-
-
 /**************************************************************
 /*********************** Specific css for specific devices ***/
 /**************************************************************
@@ -2776,19 +2773,16 @@ and (min-device-width : 1024px)   {
     font-size: /*0.90em*//*1.11em*/0.8em;       
   }
    a#BotaoPesquisaAvancada {
-    font-size:0.8em; 
-    outline: 1px solid red !important;   
-   }
+    font-size:0.8em;
+    }   
+
    a#BotaoPaginas {   
-    font-size: 0.8em ; 
-     outline: 1px solid red !important;      
+    font-size: 0.8em ;      
    } 
    a#BotaoImagens {   
-    font-size: 0.8em; 
-     outline: 1px solid red !important;      
+    font-size: 0.8em;     
    }
 } 
-
 /* Portrait */
 @media only screen 
   and (min-device-width: 360px) 
@@ -2800,7 +2794,6 @@ and (min-device-width : 1024px)   {
   margin-top: -2px !important;   
   }
 }
-
 /* Landscape */
 @media only screen 
   and (min-device-width: 640px) 
@@ -2813,17 +2806,26 @@ and (min-device-width : 1024px)   {
   margin-bottom: 0px;
   }
 }
-
 /* ----------- iPhone 4 and 4S ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (max-device-width: 320px)
+  and (-webkit-min-device-pixel-ratio: 2) { 
+#searchBarButtonsDiv .advancedSearch {
+    font-size: 1em !important ;       
+ }
+ body#home-search #conteudo-pesquisa-erro {
+    margin-top: /*-8px*//*-11px*/-12px;
+}
+}
 
 /* Portrait and Landscape */
 @media only screen 
   and (min-device-width: 320px) 
   and (max-device-height: 480px)
   and (-webkit-min-device-pixel-ratio: 2) { 
-
 }
-
 /* Portrait */
 @media only screen 
   and (min-device-width: 320px) 
@@ -2840,14 +2842,12 @@ and (min-device-width : 1024px)   {
  }
 
 }
-
 /* Landscape */
 @media only screen 
   and (min-device-width: 480px) 
   and (max-device-width: 320px)
   and (-webkit-min-device-pixel-ratio: 2)
   and (orientation: landscape) {
-
 }
 
 /* ----------- iPhone 5 and 5S ----------- */
@@ -2868,7 +2868,7 @@ and (min-device-width : 1024px)   {
   
   #searchBarButtonsDiv .advancedSearch {
     font-size: 1em !important ;       
- }
+  }
   #searchBarButtonsDiv {
   margin-top: -26px;  
   } 
@@ -2935,8 +2935,15 @@ and (min-device-width : 1024px)   {
   and (min-device-width: 414px) 
   and (max-device-width: 736px) 
   and (-webkit-min-device-pixel-ratio: 3)
-  and (device-aspect-ratio: 2/3)
-  and (orientation: portrait) { 
+ { 
+
+.imgClass {
+    padding-top:11% !important;
+    width: 46% !important;
+}
+.myButtonStyle {
+    max-width: 46%;
+  }
 }
 
 /* Landscape */
@@ -2947,8 +2954,6 @@ and (min-device-width : 1024px)   {
   and (device-aspect-ratio: 2/3)
   and (orientation: landscape) { 
 }
-}
-
 /* ----------- iPhone X ----------- */
 
 /* Portrait and Landscape */
@@ -2956,15 +2961,12 @@ and (min-device-width : 1024px)   {
   and (min-device-width: 375px) 
   and (max-device-width: 812px) 
   and (-webkit-min-device-pixel-ratio: 3) { 
-
 }
-
 /* Portrait */
 @media only screen 
   and (min-device-width: 375px) 
   and (max-device-width: 812px) 
-  and (-webkit-min-device-pixel-ratio: 3) {  
- 
+  and (-webkit-min-device-pixel-ratio: 3) {   
 }
 
 /* Landscape */
@@ -2973,7 +2975,6 @@ and (min-device-width : 1024px)   {
   and (max-device-width: 812px) 
   and (-webkit-min-device-pixel-ratio: 3)
   and (orientation: landscape) { 
-
 }
 
 /* ----------- iPhone XR ****************** */
@@ -2981,8 +2982,7 @@ and (min-device-width : 1024px)   {
 @media only screen 
     and (min-device-width : 896px) 
     and (device-height : 414px) 
-    and (-webkit-device-pixel-ratio : 3) {
- 
+    and (-webkit-device-pixel-ratio : 3) { 
 }
 
 /* ----------- iPhone XS ****************** */
@@ -2991,7 +2991,8 @@ and (min-device-width : 1024px)   {
 @media only screen 
     and (device-width : 375px) 
     and (device-height : 812px) 
-    and (-webkit-device-pixel-ratio : 3) { }
+    and (-webkit-device-pixel-ratio : 3) { 
+}
 
 /* ----------- iPhone XS ****************** */
 
@@ -3009,7 +3010,13 @@ and (min-device-width : 768px)
 and (max-device-height : 1024px) 
  { 
 
+.myButtonStyle {
+   max-width:100% !important;
+}
 
+body#home-search #conteudo-pesquisa-erro{    
+    margin-top: /*-8px*//*-11px*/-10px; 
+}
 .image-expanded-viewer {
 
     padding-top: /*10px*/61px;
@@ -3039,7 +3046,6 @@ and (max-device-height : 1024px)
     position: absolute;
     top: -12px;
     right: 5px;
-    outline: 1px solid red
 }
 
 div#flex-container div:first-child {
@@ -3115,8 +3121,8 @@ div#flex-container div#into-award {
 
 /* iPad / iPad Mini in landscape  */
 @media only screen 
-and (min-device-width : 1024px) 
-and (max-device-height : 768px)
+and (device-width : 1024px) 
+and (device-height : 768px)
  { 
 
     div#flex-container div {
@@ -3164,10 +3170,10 @@ and (max-device-height : 768px)
 
 /* iPad Pro in portrait  */
 @media only screen 
-and (min-device-width : 1024px) 
-and (max-device-height : 1366px) 
+and (device-width : 1024px) 
+and (device-height : 1366px) 
  {
- 
+    div {outline: 1px solid red !important;}     
 }
 
 /* ----------- iPad Pro 10.5" ----------- */
@@ -3187,12 +3193,6 @@ and (max-device-height : 1366px)
   and (max-device-height: 834px)   
   and (-webkit-min-device-pixel-ratio: 2) {
 
- 
-    div#flex-container {
-    width: 80.7% !important;
-    margin: 0 auto;
-    box-shadow: none;
-}
 
  .image-expanded-viewer {
 
@@ -3203,7 +3203,6 @@ and (max-device-height : 1366px)
     padding-left: 25% !important;
     padding-right: 25% !important;
 } 
-   
 }
 
 /* Landscape */
@@ -3223,7 +3222,7 @@ and (max-device-height : 1366px)
 
  .image-expanded-viewer {
 
-    padding-top: /*10px*/61px;
+    padding-top: /*10px*//61px;
 }
 
     .sc-ion-card-ios-h {
@@ -3239,9 +3238,6 @@ and (max-device-height : 1366px)
   and (min-device-width: 1024px) 
   and (max-device-width: 1366px)
   and (-webkit-min-device-pixel-ratio: 2) {
-
-
-
 }
 
 /* Portrait */
@@ -3258,6 +3254,10 @@ and (max-device-height : 1366px)
     margin: 0 auto;
     box-shadow: none;
 }
+#photos {
+    margin: 0 auto;
+    width: 63.5% !important;   
+}
 
 }
 
@@ -3271,6 +3271,113 @@ and (max-device-height : 1366px)
   and (-webkit-min-device-pixel-ratio: 2) {
 
 }
+
+/**************************************************
+/* General styles for mobile, tablet and desktop */
+
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+  
+  
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  
+  //CSS
+  
+}
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  
+  //CSS
+  
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  
+  //CSS
+  
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+  
+  //CSS
+  
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+  
+ 
+}
+@media (min-width: 320px) and (max-width: 768px) {   
+}
+
+
+
+@media (min-width:769px ) and (max-width: 1024px) {
+  div#flex-container {
+    margin: 0 auto;
+   /* width: 63.9% !important;*/
+}
+#photos {
+    margin: 0 auto;
+    width: 63.9% !important; 
+}
+}
+
+@media (min-width:1025px ) and (max-width: 1440px) {
+  div#flex-container {
+    margin: 0 auto;
+    width: 47.9% !important;   
+}
+#photos {
+    margin: 0 auto;
+    width: 47.9% !important; 
+}
+}
+
+@media (min-width:1441px ) and (max-width: 2560px) {
+  div#flex-container {
+    margin: 0 auto;
+    width: 47.9% !important;   
+}
+
+#photos {
+    margin: 0 auto;
+    width: 47.9% !important; 
+}
+}
+
+
 
 
 
