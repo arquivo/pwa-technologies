@@ -390,7 +390,10 @@ response.setHeader("Cache-Control","public, max-age=600");
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
   <!--<script type="text/javascript" src="js/imageConfigs.js"></script>-->
 
-
+  <% String imageSearchAPI = nutchConf.get("wax.image.search.API", "https://arquivo.pt/imagesearch"); %>
+  <script type="text/javascript">
+  	imageSearchAPI = "<%=imageSearchAPI%>";
+  </script>
   <script type="text/javascript" src="js/images2.js?imageSearch"></script>
   <script type="text/javascript">
     $(".border-mobile").click(function(e) {
