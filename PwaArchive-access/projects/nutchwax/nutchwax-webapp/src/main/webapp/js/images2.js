@@ -432,7 +432,7 @@ function viewDetails(position){
       '</ion-row>'+      
       '<ion-card-content>'+
         '<ion-list>'+
-          '<ion-item class="item-borderless" lines="none" ><h5><em>src:</em>&nbsp;<a href="/wayback/'+imageObj.timestamp+'/'+imageObj.imgSrc+'">'+imageObj.imgSrc+'</a></h5></ion-item>'+
+          '<ion-item class="item-borderless" lines="none" ><h5><em>src:</em>&nbsp;<a href="/wayback/'+imageObj.timestamp+'im_/'+imageObj.imgSrc+'">'+imageObj.imgSrc+'</a></h5></ion-item>'+
           '<ion-item lines="none" ><h5><em>timestamp:</em> '+imageObj.timestamp+'</h5></ion-item>'+
           (imageObj.titleFull != "" ? '<ion-item lines="none" ><h5><em>'+details.title+'</em> '+imageObj.titleFull+'</h5></ion-item>': '') +
           (imageObj.imgAltFull != "" ? '<ion-item lines="none" ><h5><em>alt:</em> '+imageObj.imgAltFull+'</h5></ion-item>': '') +
@@ -678,7 +678,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
     
 
     $.ajax({
-       url: "/imagesearch",      
+       url: imageSearchAPI,      
        data: {
           q: input,
           from: dateStart,
@@ -723,7 +723,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                     continue;
                 }
 
-                var currentImageURL = window.location.protocol+'//'+window.location.hostname+ '/wayback/'+ currentDocument.imgTstamp +'/'+currentDocument.imgSrc;
+                var currentImageURL = window.location.protocol+'//'+window.location.hostname+ '/wayback/'+ currentDocument.imgTstamp +'im_/'+currentDocument.imgSrc;
                 var imageDigest = currentDocument.imgDigest;
                 
                 if(imageDigests.indexOf(imageDigest) > -1){ 
