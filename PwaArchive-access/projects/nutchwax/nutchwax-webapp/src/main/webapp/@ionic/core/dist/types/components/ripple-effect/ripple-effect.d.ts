@@ -1,8 +1,6 @@
-import { ComponentInterface, QueueApi } from '../../stencil.core';
+import { ComponentInterface } from '../../stencil.core';
 export declare class RippleEffect implements ComponentInterface {
     el: HTMLElement;
-    queue: QueueApi;
-    win: Window;
     /**
      * Sets the type of ripple-effect:
      *
@@ -14,13 +12,17 @@ export declare class RippleEffect implements ComponentInterface {
      */
     type: 'bounded' | 'unbounded';
     /**
-     * Adds the ripple effect to the parent element
+     * Adds the ripple effect to the parent element.
+     *
+     * @param x The horizontal coordinate of where the ripple should start.
+     * @param y The vertical coordinate of where the ripple should start.
      */
-    addRipple(pageX: number, pageY: number): Promise<() => void>;
+    addRipple(x: number, y: number): Promise<() => void>;
     private readonly unbounded;
     hostData(): {
         role: string;
         class: {
+            [x: string]: boolean;
             'unbounded': boolean;
         };
     };

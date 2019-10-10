@@ -30,10 +30,12 @@
   contain: strict;
   touch-action: none;
   user-select: none;
-  z-index: 1000; }
+  z-index: 1000;
+}
 
 :host(.overlay-hidden) {
-  display: none; }
+  display: none;
+}
 
 .loading-wrapper {
   display: flex;
@@ -47,7 +49,8 @@
   max-height: var(--max-height);
   background: var(--background);
   opacity: 0;
-  z-index: 10; }
+  z-index: 10;
+}
 
 .spinner-lines,
 .spinner-lines-small,
@@ -55,7 +58,8 @@
 .spinner-circles,
 .spinner-crescent,
 .spinner-dots {
-  color: var(--spinner-color); }
+  color: var(--spinner-color);
+}
 
 :host {
   --background: var(--ion-color-step-50, #f2f2f2);
@@ -63,34 +67,43 @@
   --max-height: 90%;
   --spinner-color: var(--ion-color-step-600, #666666);
   color: var(--ion-text-color, #000);
-  font-size: 14px; }
+  font-size: 14px;
+}
 
 .loading-wrapper {
   border-radius: 8px;
   padding-left: 34px;
   padding-right: 34px;
   padding-top: 24px;
-  padding-bottom: 24px; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .loading-wrapper {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 34px;
-      padding-inline-start: 34px;
-      -webkit-padding-end: 34px;
-      padding-inline-end: 34px; } }
+  padding-bottom: 24px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .loading-wrapper {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 34px;
+    padding-inline-start: 34px;
+    -webkit-padding-end: 34px;
+    padding-inline-end: 34px;
+  }
+}
 
 :host(.loading-translucent) .loading-wrapper {
   background-color: rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);
-  backdrop-filter: saturate(180%) blur(20px); }
+  backdrop-filter: saturate(180%) blur(20px);
+}
 
 .loading-content {
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 .loading-spinner + .loading-content {
-  margin-left: 16px; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .loading-spinner + .loading-content {
-      margin-left: unset;
-      -webkit-margin-start: 16px;
-      margin-inline-start: 16px; } }
+  margin-left: 16px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .loading-spinner + .loading-content {
+    margin-left: unset;
+    -webkit-margin-start: 16px;
+    margin-inline-start: 16px;
+  }
+}

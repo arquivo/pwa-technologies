@@ -1,2 +1,2 @@
 import { Config } from '../../interface';
-export declare function startInputShims(doc: Document, config: Config): void;
+export declare function startInputShims(config: Config): void;

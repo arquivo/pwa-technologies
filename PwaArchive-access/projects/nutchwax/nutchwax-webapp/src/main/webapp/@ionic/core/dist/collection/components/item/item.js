@@ -1,12 +1,37 @@
+import { Host, h } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
 import { createColorClasses, hostContext, openURL } from '../../utils/theme';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ *
+ * @slot - Content is placed between the named slots if provided without a slot.
+ * @slot start - Content is placed to the left of the item text in LTR, and to the right in RTL.
+ * @slot end - Content is placed to the right of the item text in LTR, and to the left in RTL.
+ */
 export class Item {
     constructor() {
         this.itemStyles = new Map();
         this.multipleInputs = false;
+        /**
+         * If `true`, a button tag will be rendered and the item will be tappable.
+         */
         this.button = false;
+        /**
+         * The icon to use when `detail` is set to `true`.
+         */
         this.detailIcon = 'ios-arrow-forward';
+        /**
+         * If `true`, the user cannot interact with the item.
+         */
         this.disabled = false;
+        /**
+         * When using a router, it specifies the transition direction when navigating to
+         * another page using `href`.
+         */
         this.routerDirection = 'forward';
+        /**
+         * The type of the button. Only used when an `onclick` or `button` property is present.
+         */
         this.type = 'button';
     }
     itemStyle(ev) {
@@ -17,50 +42,64 @@ export class Item {
         const childStyles = this.itemStyles.get(tagName) || {};
         let hasStyleChange = false;
         Object.keys(updatedStyles).forEach(key => {
-            const itemKey = `item-${key}`;
-            const newValue = updatedStyles[key];
-            if (newValue !== childStyles[itemKey]) {
-                hasStyleChange = true;
-            }
-            if (newValue) {
+            if (updatedStyles[key]) {
+                const itemKey = `item-${key}`;
+                if (!childStyles[itemKey]) {
+                    hasStyleChange = true;
+                }
                 newStyles[itemKey] = true;
             }
         });
+        if (!hasStyleChange && Object.keys(newStyles).length !== Object.keys(childStyles).length) {
+            hasStyleChange = true;
+        }
         if (hasStyleChange) {
             this.itemStyles.set(tagName, newStyles);
             this.el.forceUpdate();
         }
     }
     componentDidLoad() {
-        Array.from(this.el.querySelectorAll('ion-button')).forEach(button => {
-            if (button.size === undefined) {
-                button.size = 'small';
-            }
-        });
+        // Check for multiple inputs to change the position to relative
         const inputs = this.el.querySelectorAll('ion-select, ion-datetime');
         this.multipleInputs = inputs.length > 1 ? true : false;
     }
+    // If the item contains an input including a radio, checkbox, datetime, etc.
+    // then the item will have a clickable input cover that should
+    // get the hover, focused and activated states UNLESS it has multiple
+    // inputs, then those need to individually get the click
+    hasCover() {
+        const inputs = this.el.querySelectorAll('ion-checkbox, ion-datetime, ion-select, ion-radio');
+        return inputs.length > 0 && !this.multipleInputs;
+    }
+    // If the item has an href or button property it will render a native
+    // anchor or button that is clickable
     isClickable() {
         return (this.href !== undefined || this.button);
     }
-    hostData() {
+    canActivate() {
+        return (this.isClickable() || this.hasCover());
+    }
+    render() {
+        const { detail, detailIcon, download, lines, disabled, href, rel, target, routerDirection } = this;
         const childStyles = {};
+        const mode = getIonMode(this);
+        const clickable = this.isClickable();
+        const canActivate = this.canActivate();
+        const TagType = clickable ? (href === undefined ? 'button' : 'a') : 'div';
+        const attrs = (TagType === 'button')
+            ? { type: this.type }
+            : {
+                download,
+                href,
+                rel,
+                target
+            };
+        const showDetail = detail !== undefined ? detail : mode === 'ios' && clickable;
         this.itemStyles.forEach(value => {
             Object.assign(childStyles, value);
         });
-        return {
-            'aria-disabled': this.disabled ? 'true' : null,
-            class: Object.assign({}, childStyles, createColorClasses(this.color), { [`item-lines-${this.lines}`]: this.lines !== undefined, 'item-disabled': this.disabled, 'in-list': hostContext('ion-list', this.el), 'item': true, 'item-multiple-inputs': this.multipleInputs, 'ion-activatable': this.isClickable(), 'ion-focusable': true })
-        };
-    }
-    render() {
-        const { href, detail, mode, win, detailIcon, routerDirection, type } = this;
-        const clickable = this.isClickable();
-        const TagType = clickable ? (href === undefined ? 'button' : 'a') : 'div';
-        const attrs = TagType === 'button' ? { type } : { href };
-        const showDetail = detail !== undefined ? detail : mode === 'ios' && clickable;
-        return [
-            h(TagType, Object.assign({}, attrs, { class: "item-native", disabled: this.disabled, onClick: (ev) => openURL(win, href, ev, routerDirection) }),
+        return (h(Host, { "aria-disabled": disabled ? 'true' : null, class: Object.assign({}, childStyles, createColorClasses(this.color), { 'item': true, [mode]: true, [`item-lines-${lines}`]: lines !== undefined, 'item-disabled': disabled, 'in-list': hostContext('ion-list', this.el), 'item-multiple-inputs': this.multipleInputs, 'ion-activatable': canActivate, 'ion-focusable': true }) },
+            h(TagType, Object.assign({}, attrs, { class: "item-native", disabled: disabled, onClick: (ev) => openURL(href, ev, routerDirection) }),
                 h("slot", { name: "start" }),
                 h("div", { class: "item-inner" },
                     h("div", { class: "input-wrapper" },
@@ -68,67 +107,249 @@ export class Item {
                     h("slot", { name: "end" }),
                     showDetail && h("ion-icon", { icon: detailIcon, lazy: false, class: "item-detail-icon" }),
                     h("div", { class: "item-inner-highlight" })),
-                clickable && mode === 'md' && h("ion-ripple-effect", null)),
-            h("div", { class: "item-highlight" })
-        ];
+                canActivate && mode === 'md' && h("ion-ripple-effect", null)),
+            h("div", { class: "item-highlight" })));
     }
     static get is() { return "ion-item"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "ios": ["item.ios.scss"],
+        "md": ["item.md.scss"]
+    }; }
+    static get styleUrls() { return {
+        "ios": ["item.ios.css"],
+        "md": ["item.md.css"]
+    }; }
     static get properties() { return {
-        "button": {
-            "type": Boolean,
-            "attr": "button"
-        },
         "color": {
-            "type": String,
-            "attr": "color"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "Color",
+                "resolved": "string | undefined",
+                "references": {
+                    "Color": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The color to use from your application's color palette.\nDefault options are: `\"primary\"`, `\"secondary\"`, `\"tertiary\"`, `\"success\"`, `\"warning\"`, `\"danger\"`, `\"light\"`, `\"medium\"`, and `\"dark\"`.\nFor more information on colors, see [theming](/docs/theming/basics)."
+            },
+            "attribute": "color",
+            "reflect": false
+        },
+        "button": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, a button tag will be rendered and the item will be tappable."
+            },
+            "attribute": "button",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "detail": {
-            "type": Boolean,
-            "attr": "detail"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, a detail arrow will appear on the item. Defaults to `false` unless the `mode`\nis `ios` and an `href` or `button` property is present."
+            },
+            "attribute": "detail",
+            "reflect": false
         },
         "detailIcon": {
-            "type": String,
-            "attr": "detail-icon"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The icon to use when `detail` is set to `true`."
+            },
+            "attribute": "detail-icon",
+            "reflect": false,
+            "defaultValue": "'ios-arrow-forward'"
         },
         "disabled": {
-            "type": Boolean,
-            "attr": "disabled"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the user cannot interact with the item."
+            },
+            "attribute": "disabled",
+            "reflect": false,
+            "defaultValue": "false"
         },
-        "el": {
-            "elementRef": true
+        "download": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | undefined",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "This attribute instructs browsers to download a URL instead of navigating to\nit, so the user will be prompted to save it as a local file. If the attribute\nhas a value, it is used as the pre-filled file name in the Save prompt\n(the user can still change the file name if they want)."
+            },
+            "attribute": "download",
+            "reflect": false
         },
         "href": {
-            "type": String,
-            "attr": "href"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | undefined",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Contains a URL or a URL fragment that the hyperlink points to.\nIf this property is set, an anchor tag will be rendered."
+            },
+            "attribute": "href",
+            "reflect": false
+        },
+        "rel": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | undefined",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Specifies the relationship of the target object to the link object.\nThe value is a space-separated list of [link types](https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types)."
+            },
+            "attribute": "rel",
+            "reflect": false
         },
         "lines": {
-            "type": String,
-            "attr": "lines"
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "multipleInputs": {
-            "state": true
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "'full' | 'inset' | 'none'",
+                "resolved": "\"full\" | \"inset\" | \"none\" | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "How the bottom border should be displayed on the item."
+            },
+            "attribute": "lines",
+            "reflect": false
         },
         "routerDirection": {
-            "type": String,
-            "attr": "router-direction"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "RouterDirection",
+                "resolved": "\"back\" | \"forward\" | \"root\"",
+                "references": {
+                    "RouterDirection": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "When using a router, it specifies the transition direction when navigating to\nanother page using `href`."
+            },
+            "attribute": "router-direction",
+            "reflect": false,
+            "defaultValue": "'forward'"
+        },
+        "target": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | undefined",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Specifies where to display the linked URL.\nOnly applies when an `href` is provided.\nSpecial keywords: `\"_blank\"`, `\"_self\"`, `\"_parent\"`, `\"_top\"`."
+            },
+            "attribute": "target",
+            "reflect": false
         },
         "type": {
-            "type": String,
-            "attr": "type"
-        },
-        "win": {
-            "context": "window"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "'submit' | 'reset' | 'button'",
+                "resolved": "\"button\" | \"reset\" | \"submit\"",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The type of the button. Only used when an `onclick` or `button` property is present."
+            },
+            "attribute": "type",
+            "reflect": false,
+            "defaultValue": "'button'"
         }
     }; }
+    static get states() { return {
+        "multipleInputs": {}
+    }; }
+    static get elementRef() { return "el"; }
     static get listeners() { return [{
             "name": "ionStyle",
-            "method": "itemStyle"
+            "method": "itemStyle",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }]; }
-    static get style() { return "/**style-placeholder:ion-item:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-item:**/"; }
 }

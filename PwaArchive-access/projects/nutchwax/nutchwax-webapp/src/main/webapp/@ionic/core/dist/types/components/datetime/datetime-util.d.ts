@@ -1,3 +1,9 @@
+/**
+ * Gets a date value given a format
+ * Defaults to the current date if
+ * no date given
+ */
+export declare function getDateValue(date: DatetimeData, format: string): number;
 export declare function renderDatetime(template: string, value: DatetimeData | undefined, locale: LocaleData): string | undefined;
 export declare function renderTextFormat(format: string, value: any, date: DatetimeData | undefined, locale: LocaleData): string | undefined;
 export declare function dateValueRange(format: string, min: DatetimeData, max: DatetimeData): any[];
@@ -6,6 +12,13 @@ export declare function dateDataSortValue(data: DatetimeData): number;
 export declare function daysInMonth(month: number, year: number): number;
 export declare function isLeapYear(year: number): boolean;
 export declare function parseDate(val: string | undefined | null): DatetimeData | undefined;
+/**
+ * Converts a valid UTC datetime string
+ * To the user's local timezone
+ * Note: This is not meant for time strings
+ * such as "01:47"
+ */
+export declare const getLocalDateTime: (dateString?: any) => Date;
 export declare function updateDate(existingData: DatetimeData, newData: any): boolean;
 export declare function parseTemplate(template: string): string[];
 export declare function getValueFromFormat(date: DatetimeData, format: string): any;

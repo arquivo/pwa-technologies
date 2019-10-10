@@ -1,3 +1,5 @@
+import { Build } from '@stencil/core';
+import { config } from '../../global/config';
 import { menuOverlayAnimation } from './animations/overlay';
 import { menuPushAnimation } from './animations/push';
 import { menuRevealAnimation } from './animations/reveal';
@@ -9,101 +11,190 @@ export class MenuController {
         this.registerAnimation('push', menuPushAnimation);
         this.registerAnimation('overlay', menuOverlayAnimation);
     }
-    async open(menuId) {
-        const menu = await this.get(menuId);
-        if (menu) {
-            return menu.open();
+    /**
+     * Open the menu. If a menu is not provided then it will open the first
+     * menu found. If the specified menu is `start` or `end`, then it will open
+     * the enabled menu on that side. Otherwise, it will try to find the menu
+     * using the menu's `id` property. If a menu is not found then it will
+     * return `false`.
+     *
+     * @param menu The menuId or side of the menu to open.
+     */
+    async open(menu) {
+        const menuEl = await this.get(menu);
+        if (menuEl) {
+            return menuEl.open();
         }
         return false;
     }
-    async close(menuId) {
-        const menu = await (menuId !== undefined ? this.get(menuId) : this.getOpen());
-        if (menu !== undefined) {
-            return menu.close();
+    /**
+     * Close the menu. If a menu is specified, it will close that menu.
+     * If no menu is specified, then it will close any menu that is open.
+     * If it does not find any open menus, it will return `false`.
+     *
+     * @param menu The menuId or side of the menu to close.
+     */
+    async close(menu) {
+        const menuEl = await (menu !== undefined ? this.get(menu) : this.getOpen());
+        if (menuEl !== undefined) {
+            return menuEl.close();
         }
         return false;
     }
-    async toggle(menuId) {
-        const menu = await this.get(menuId);
-        if (menu) {
-            return menu.toggle();
+    /**
+     * Toggle the menu open or closed. If the menu is already open, it will try to
+     * close the menu, otherwise it will try to open it. Returns `false` if
+     * a menu is not found.
+     *
+     * @param menu The menuId or side of the menu to toggle.
+     */
+    async toggle(menu) {
+        const menuEl = await this.get(menu);
+        if (menuEl) {
+            return menuEl.toggle();
         }
         return false;
     }
-    async enable(shouldEnable, menuId) {
-        const menu = await this.get(menuId);
-        if (menu) {
-            menu.disabled = !shouldEnable;
+    /**
+     * Enable or disable a menu. Disabling a menu will not allow gestures
+     * for that menu or any calls to open it. This is useful when there are
+     * multiple menus on the same side and only one of them should be allowed
+     * to open. Enabling a menu will automatically disable all other menus
+     * on that side.
+     *
+     * @param enable If `true`, the menu should be enabled.
+     * @param menu The menuId or side of the menu to enable or disable.
+     */
+    async enable(enable, menu) {
+        const menuEl = await this.get(menu);
+        if (menuEl) {
+            menuEl.disabled = !enable;
         }
-        return menu;
+        return menuEl;
     }
-    async swipeGesture(shouldEnable, menuId) {
-        const menu = await this.get(menuId);
-        if (menu) {
-            menu.swipeGesture = shouldEnable;
+    /**
+     * Enable or disable the ability to swipe open the menu.
+     *
+     * @param enable If `true`, the menu swipe gesture should be enabled.
+     * @param menu The menuId or side of the menu to enable or disable the swipe gesture on.
+     */
+    async swipeGesture(enable, menu) {
+        const menuEl = await this.get(menu);
+        if (menuEl) {
+            menuEl.swipeGesture = enable;
         }
-        return menu;
+        return menuEl;
     }
-    async isOpen(menuId) {
-        if (menuId != null) {
-            const menu = await this.get(menuId);
-            return (menu !== undefined && menu.isOpen());
+    /**
+     * Get whether or not the menu is open. Returns `true` if the specified
+     * menu is open. If a menu is not specified, it will return `true` if
+     * any menu is currently open.
+     *
+     * @param menu The menuId or side of the menu that is being checked.
+     */
+    async isOpen(menu) {
+        if (menu != null) {
+            const menuEl = await this.get(menu);
+            return (menuEl !== undefined && menuEl.isOpen());
         }
         else {
-            const menu = await this.getOpen();
-            return menu !== undefined;
+            const menuEl = await this.getOpen();
+            return menuEl !== undefined;
         }
     }
-    async isEnabled(menuId) {
-        const menu = await this.get(menuId);
-        if (menu) {
-            return !menu.disabled;
+    /**
+     * Get whether or not the menu is enabled. Returns `true` if the
+     * specified menu is enabled. Returns `false` if a menu is disabled
+     * or not found.
+     *
+     * @param menu The menuId or side of the menu that is being checked.
+     */
+    async isEnabled(menu) {
+        const menuEl = await this.get(menu);
+        if (menuEl) {
+            return !menuEl.disabled;
         }
         return false;
     }
-    async get(menuId) {
+    /**
+     * Get a menu instance. If a menu is not provided then it will return the first
+     * menu found. If the specified menu is `start` or `end`, then it will return the
+     * enabled menu on that side. Otherwise, it will try to find the menu using the menu's
+     * `id` property. If a menu is not found then it will return `null`.
+     *
+     * @param menu The menuId or side of the menu.
+     */
+    async get(menu) {
         if (Build.isDev) {
-            if (menuId === 'left') {
+            if (menu === 'left') {
                 console.error('menu.side=left is deprecated, use "start" instead');
                 return undefined;
             }
-            if (menuId === 'right') {
+            if (menu === 'right') {
                 console.error('menu.side=right is deprecated, use "end" instead');
                 return undefined;
             }
         }
         await this.waitUntilReady();
-        if (menuId === 'start' || menuId === 'end') {
-            const menuRef = this.find(m => m.side === menuId && !m.disabled);
+        if (menu === 'start' || menu === 'end') {
+            // there could be more than one menu on the same side
+            // so first try to get the enabled one
+            const menuRef = this.find(m => m.side === menu && !m.disabled);
             if (menuRef) {
                 return menuRef;
             }
-            return this.find(m => m.side === menuId);
+            // didn't find a menu side that is enabled
+            // so try to get the first menu side found
+            return this.find(m => m.side === menu);
         }
-        else if (menuId != null) {
-            return this.find(m => m.menuId === menuId);
+        else if (menu != null) {
+            // the menuId was not left or right
+            // so try to get the menu by its "id"
+            return this.find(m => m.menuId === menu);
         }
-        const menu = this.find(m => !m.disabled);
-        if (menu) {
-            return menu;
+        // return the first enabled menu
+        const menuEl = this.find(m => !m.disabled);
+        if (menuEl) {
+            return menuEl;
         }
+        // get the first menu in the array, if one exists
         return this.menus.length > 0 ? this.menus[0].el : undefined;
     }
+    /**
+     * Get the instance of the opened menu. Returns `null` if a menu is not found.
+     */
     async getOpen() {
         await this.waitUntilReady();
         return this.getOpenSync();
     }
+    /**
+     * Get all menu instances.
+     */
     async getMenus() {
         await this.waitUntilReady();
         return this.getMenusSync();
     }
+    /**
+     * Get whether or not a menu is animating. Returns `true` if any
+     * menu is currently animating.
+     */
     async isAnimating() {
         await this.waitUntilReady();
         return this.isAnimatingSync();
     }
-    registerAnimation(name, animation) {
+    /**
+     * Registers a new animation that can be used with any `ion-menu` by
+     * passing the name of the animation in its `type` property.
+     *
+     * @param name The name of the animation to register.
+     * @param animation The animation function to register.
+     */
+    async registerAnimation(name, animation) {
         this.menuAnimations.set(name, animation);
     }
+    /**
+     * @internal
+     */
     _getInstance() {
         return Promise.resolve(this);
     }
@@ -123,6 +214,9 @@ export class MenuController {
         }
     }
     _setActiveMenu(menu) {
+        // if this menu should be enabled
+        // then find all the other menus on this same side
+        // and automatically disable other same side menus
         const side = menu.side;
         this.menus
             .filter(m => m.side === side && m !== menu)
@@ -147,7 +241,7 @@ export class MenuController {
         }
         const animation = await import('../../utils/animation')
             .then(mod => mod.create(animationBuilder, null, menuCmp));
-        if (!this.config.getBoolean('animated', true)) {
+        if (!config.getBoolean('animated', true)) {
             animation.duration(0);
         }
         return animation;
@@ -169,56 +263,358 @@ export class MenuController {
         return undefined;
     }
     waitUntilReady() {
-        return Promise.all(Array.from(this.doc.querySelectorAll('ion-menu'))
+        return Promise.all(Array.from(document.querySelectorAll('ion-menu'))
             .map(menu => menu.componentOnReady()));
     }
     static get is() { return "ion-menu-controller"; }
-    static get properties() { return {
-        "_getInstance": {
-            "method": true
+    static get originalStyleUrls() { return {
+        "$": ["menu-controller.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["menu-controller.css"]
+    }; }
+    static get methods() { return {
+        "open": {
+            "complexType": {
+                "signature": "(menu?: string | null | undefined) => Promise<boolean>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "menu The menuId or side of the menu to open.",
+                                "name": "param"
+                            }],
+                        "text": "The menuId or side of the menu to open."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "Open the menu. If a menu is not provided then it will open the first\nmenu found. If the specified menu is `start` or `end`, then it will open\nthe enabled menu on that side. Otherwise, it will try to find the menu\nusing the menu's `id` property. If a menu is not found then it will\nreturn `false`.",
+                "tags": [{
+                        "name": "param",
+                        "text": "menu The menuId or side of the menu to open."
+                    }]
+            }
         },
         "close": {
-            "method": true
-        },
-        "config": {
-            "context": "config"
-        },
-        "doc": {
-            "context": "document"
-        },
-        "enable": {
-            "method": true
-        },
-        "get": {
-            "method": true
-        },
-        "getMenus": {
-            "method": true
-        },
-        "getOpen": {
-            "method": true
-        },
-        "isAnimating": {
-            "method": true
-        },
-        "isEnabled": {
-            "method": true
-        },
-        "isOpen": {
-            "method": true
-        },
-        "open": {
-            "method": true
-        },
-        "registerAnimation": {
-            "method": true
-        },
-        "swipeGesture": {
-            "method": true
+            "complexType": {
+                "signature": "(menu?: string | null | undefined) => Promise<boolean>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "menu The menuId or side of the menu to close.",
+                                "name": "param"
+                            }],
+                        "text": "The menuId or side of the menu to close."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "Close the menu. If a menu is specified, it will close that menu.\nIf no menu is specified, then it will close any menu that is open.\nIf it does not find any open menus, it will return `false`.",
+                "tags": [{
+                        "name": "param",
+                        "text": "menu The menuId or side of the menu to close."
+                    }]
+            }
         },
         "toggle": {
-            "method": true
+            "complexType": {
+                "signature": "(menu?: string | null | undefined) => Promise<boolean>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "menu The menuId or side of the menu to toggle.",
+                                "name": "param"
+                            }],
+                        "text": "The menuId or side of the menu to toggle."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "Toggle the menu open or closed. If the menu is already open, it will try to\nclose the menu, otherwise it will try to open it. Returns `false` if\na menu is not found.",
+                "tags": [{
+                        "name": "param",
+                        "text": "menu The menuId or side of the menu to toggle."
+                    }]
+            }
+        },
+        "enable": {
+            "complexType": {
+                "signature": "(enable: boolean, menu?: string | null | undefined) => Promise<HTMLIonMenuElement | undefined>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "enable If `true`, the menu should be enabled.",
+                                "name": "param"
+                            }],
+                        "text": "If `true`, the menu should be enabled."
+                    }, {
+                        "tags": [{
+                                "text": "menu The menuId or side of the menu to enable or disable.",
+                                "name": "param"
+                            }],
+                        "text": "The menuId or side of the menu to enable or disable."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "HTMLIonMenuElement": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<HTMLIonMenuElement | undefined>"
+            },
+            "docs": {
+                "text": "Enable or disable a menu. Disabling a menu will not allow gestures\nfor that menu or any calls to open it. This is useful when there are\nmultiple menus on the same side and only one of them should be allowed\nto open. Enabling a menu will automatically disable all other menus\non that side.",
+                "tags": [{
+                        "name": "param",
+                        "text": "enable If `true`, the menu should be enabled."
+                    }, {
+                        "name": "param",
+                        "text": "menu The menuId or side of the menu to enable or disable."
+                    }]
+            }
+        },
+        "swipeGesture": {
+            "complexType": {
+                "signature": "(enable: boolean, menu?: string | null | undefined) => Promise<HTMLIonMenuElement | undefined>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "enable If `true`, the menu swipe gesture should be enabled.",
+                                "name": "param"
+                            }],
+                        "text": "If `true`, the menu swipe gesture should be enabled."
+                    }, {
+                        "tags": [{
+                                "text": "menu The menuId or side of the menu to enable or disable the swipe gesture on.",
+                                "name": "param"
+                            }],
+                        "text": "The menuId or side of the menu to enable or disable the swipe gesture on."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "HTMLIonMenuElement": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<HTMLIonMenuElement | undefined>"
+            },
+            "docs": {
+                "text": "Enable or disable the ability to swipe open the menu.",
+                "tags": [{
+                        "name": "param",
+                        "text": "enable If `true`, the menu swipe gesture should be enabled."
+                    }, {
+                        "name": "param",
+                        "text": "menu The menuId or side of the menu to enable or disable the swipe gesture on."
+                    }]
+            }
+        },
+        "isOpen": {
+            "complexType": {
+                "signature": "(menu?: string | null | undefined) => Promise<boolean>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "menu The menuId or side of the menu that is being checked.",
+                                "name": "param"
+                            }],
+                        "text": "The menuId or side of the menu that is being checked."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "Get whether or not the menu is open. Returns `true` if the specified\nmenu is open. If a menu is not specified, it will return `true` if\nany menu is currently open.",
+                "tags": [{
+                        "name": "param",
+                        "text": "menu The menuId or side of the menu that is being checked."
+                    }]
+            }
+        },
+        "isEnabled": {
+            "complexType": {
+                "signature": "(menu?: string | null | undefined) => Promise<boolean>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "menu The menuId or side of the menu that is being checked.",
+                                "name": "param"
+                            }],
+                        "text": "The menuId or side of the menu that is being checked."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "Get whether or not the menu is enabled. Returns `true` if the\nspecified menu is enabled. Returns `false` if a menu is disabled\nor not found.",
+                "tags": [{
+                        "name": "param",
+                        "text": "menu The menuId or side of the menu that is being checked."
+                    }]
+            }
+        },
+        "get": {
+            "complexType": {
+                "signature": "(menu?: string | null | undefined) => Promise<HTMLIonMenuElement | undefined>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "menu The menuId or side of the menu.",
+                                "name": "param"
+                            }],
+                        "text": "The menuId or side of the menu."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "HTMLIonMenuElement": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<HTMLIonMenuElement | undefined>"
+            },
+            "docs": {
+                "text": "Get a menu instance. If a menu is not provided then it will return the first\nmenu found. If the specified menu is `start` or `end`, then it will return the\nenabled menu on that side. Otherwise, it will try to find the menu using the menu's\n`id` property. If a menu is not found then it will return `null`.",
+                "tags": [{
+                        "name": "param",
+                        "text": "menu The menuId or side of the menu."
+                    }]
+            }
+        },
+        "getOpen": {
+            "complexType": {
+                "signature": "() => Promise<HTMLIonMenuElement | undefined>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "HTMLIonMenuElement": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<HTMLIonMenuElement | undefined>"
+            },
+            "docs": {
+                "text": "Get the instance of the opened menu. Returns `null` if a menu is not found.",
+                "tags": []
+            }
+        },
+        "getMenus": {
+            "complexType": {
+                "signature": "() => Promise<HTMLIonMenuElement[]>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "HTMLIonMenuElement": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<HTMLIonMenuElement[]>"
+            },
+            "docs": {
+                "text": "Get all menu instances.",
+                "tags": []
+            }
+        },
+        "isAnimating": {
+            "complexType": {
+                "signature": "() => Promise<boolean>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "Get whether or not a menu is animating. Returns `true` if any\nmenu is currently animating.",
+                "tags": []
+            }
+        },
+        "registerAnimation": {
+            "complexType": {
+                "signature": "(name: string, animation: AnimationBuilder) => Promise<void>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "name The name of the animation to register.",
+                                "name": "param"
+                            }],
+                        "text": "The name of the animation to register."
+                    }, {
+                        "tags": [{
+                                "text": "animation The animation function to register.",
+                                "name": "param"
+                            }],
+                        "text": "The animation function to register."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "AnimationBuilder": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "Registers a new animation that can be used with any `ion-menu` by\npassing the name of the animation in its `type` property.",
+                "tags": [{
+                        "name": "param",
+                        "text": "name The name of the animation to register."
+                    }, {
+                        "name": "param",
+                        "text": "animation The animation function to register."
+                    }]
+            }
+        },
+        "_getInstance": {
+            "complexType": {
+                "signature": "() => Promise<MenuControllerI>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "MenuControllerI": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                },
+                "return": "Promise<MenuControllerI>"
+            },
+            "docs": {
+                "text": "",
+                "tags": [{
+                        "name": "internal",
+                        "text": undefined
+                    }]
+            }
         }
     }; }
-    static get style() { return "/**style-placeholder:ion-menu-controller:**/"; }
 }

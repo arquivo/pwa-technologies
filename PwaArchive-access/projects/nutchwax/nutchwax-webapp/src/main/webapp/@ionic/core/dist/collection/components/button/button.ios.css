@@ -1,12 +1,14 @@
 :host {
   /**
    * @prop --background: Background of the button
-   * @prop --background-activated: Background of the button when activated
-   * @prop --background-focused: Background of the button when focused
+   * @prop --background-activated: Background of the button when pressed
+   * @prop --background-focused: Background of the button when focused with the tab key
+   * @prop --background-hover: Background of the button on hover
    *
    * @prop --color: Text color of the button
-   * @prop --color-activated: Text color of the button when activated
-   * @prop --color-focused: Text color of the button when focused
+   * @prop --color-activated: Text color of the button when pressed
+   * @prop --color-focused: Text color of the button when focused with the tab key
+   * @prop --color-hover: Text color of the button when hover
    *
    * @prop --transition: Transition of the button
    *
@@ -20,16 +22,17 @@
    * @prop --box-shadow: Box shadow of the button
    * @prop --opacity: Opacity of the button
    *
-   * @prop --padding-top: Padding top of the button
-   * @prop --padding-end: Padding end of the button
-   * @prop --padding-bottom: Padding bottom of the button
-   * @prop --padding-start: Padding start of the button
+   * @prop --padding-top: Top padding of the button
+   * @prop --padding-end: Right padding if direction is left-to-right, and left padding if direction is right-to-left of the button
+   * @prop --padding-bottom: Bottom padding of the button
+   * @prop --padding-start: Left padding if direction is left-to-right, and right padding if direction is right-to-left of the button
    */
   --overflow: hidden;
   --ripple-color: currentColor;
   --border-width: initial;
   --border-color: initial;
   --border-style: initial;
+  --color-hover: initial;
   --box-shadow: none;
   display: inline-block;
   width: auto;
@@ -43,63 +46,78 @@
   vertical-align: top;
   vertical-align: -webkit-baseline-middle;
   pointer-events: auto;
-  font-kerning: none; }
+  font-kerning: none;
+}
 
 :host(.button-disabled) {
-  pointer-events: none; }
+  --opacity: .5;
+  pointer-events: none;
+}
 
 :host(.button-disabled) .button-native {
   cursor: default;
-  opacity: .5;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 :host(.button-solid) {
   --background: var(--ion-color-primary, #3880ff);
   --background-focused: var(--ion-color-primary-shade, #3171e0);
+  --background-hover: var(--ion-color-primary-tint, #4c8dff);
   --color: var(--ion-color-primary-contrast, #fff);
   --color-activated: var(--ion-color-primary-contrast, #fff);
-  --color-focused: var(--ion-color-primary-contrast, #fff); }
+  --color-focused: var(--ion-color-primary-contrast, #fff);
+}
 
 :host(.button-solid.ion-color) .button-native {
   background: var(--ion-color-base);
-  color: var(--ion-color-contrast); }
+  color: var(--ion-color-contrast);
+}
 
 :host(.button-solid.ion-color.ion-focused) .button-native {
-  background: var(--ion-color-shade); }
+  background: var(--ion-color-shade);
+}
 
 :host(.button-outline) {
   --border-color: var(--ion-color-primary, #3880ff);
   --background: transparent;
   --color: var(--ion-color-primary, #3880ff);
-  --color-focused: var(--ion-color-primary, #3880ff); }
+  --color-focused: var(--ion-color-primary, #3880ff);
+}
 
 :host(.button-outline.ion-color) .button-native {
   border-color: var(--ion-color-base);
   background: transparent;
-  color: var(--ion-color-base); }
+  color: var(--ion-color-base);
+}
 
 :host(.button-outline.ion-focused.ion-color) .button-native {
   background: rgba(var(--ion-color-base-rgb), 0.1);
-  color: var(--ion-color-base); }
+  color: var(--ion-color-base);
+}
 
 :host(.button-clear) {
   --border-width: 0;
   --background: transparent;
-  --color: var(--ion-color-primary, #3880ff); }
+  --color: var(--ion-color-primary, #3880ff);
+}
 
 :host(.button-clear.ion-color) .button-native {
   background: transparent;
-  color: var(--ion-color-base); }
+  color: var(--ion-color-base);
+}
 
 :host(.button-clear.ion-focused.ion-color) .button-native {
   background: rgba(var(--ion-color-base-rgb), 0.1);
-  color: var(--ion-color-base); }
+  color: var(--ion-color-base);
+}
 
 :host(.button-clear.activated.ion-color) .button-native {
-  background: transparent; }
+  background: transparent;
+}
 
 :host(.button-block) {
-  display: block; }
+  display: block;
+}
 
 :host(.button-block) .button-native {
   margin-left: 0;
@@ -107,25 +125,30 @@
   display: block;
   width: 100%;
   clear: both;
-  contain: content; }
+  contain: content;
+}
 
 :host(.button-block) .button-native::after {
-  clear: both; }
+  clear: both;
+}
 
 :host(.button-full) {
-  display: block; }
+  display: block;
+}
 
 :host(.button-full) .button-native {
   margin-left: 0;
   margin-right: 0;
   display: block;
   width: 100%;
-  contain: content; }
+  contain: content;
+}
 
 :host(.button-full:not(.button-round)) .button-native {
   border-radius: 0;
   border-right-width: 0;
-  border-left-width: 0; }
+  border-left-width: 0;
+}
 
 .button-native {
   border-radius: var(--border-radius);
@@ -168,26 +191,22 @@
   overflow: var(--overflow);
   z-index: 0;
   box-sizing: border-box;
-  appearance: none; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .button-native {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: var(--padding-start);
-      padding-inline-start: var(--padding-start);
-      -webkit-padding-end: var(--padding-end);
-      padding-inline-end: var(--padding-end); } }
+  appearance: none;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .button-native {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: var(--padding-start);
+    padding-inline-start: var(--padding-start);
+    -webkit-padding-end: var(--padding-end);
+    padding-inline-end: var(--padding-end);
+  }
+}
 
 .button-native::-moz-focus-inner {
-  border: 0; }
-
-:host(.ion-focused) .button-native {
-  background: var(--background-focused);
-  color: var(--color-focused); }
-
-:host(.activated) .button-native {
-  background: var(--background-activated);
-  color: var(--color-activated); }
+  border: 0;
+}
 
 .button-inner {
   display: flex;
@@ -196,46 +215,72 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+}
 
 ::slotted(ion-icon) {
   font-size: 1.4em;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
-::slotted(ion-icon[slot="start"]) {
+::slotted(ion-icon[slot=start]) {
   margin-left: -0.3em;
   margin-right: 0.3em;
   margin-top: 0;
-  margin-bottom: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    ::slotted(ion-icon[slot="start"]) {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: -0.3em;
-      margin-inline-start: -0.3em;
-      -webkit-margin-end: 0.3em;
-      margin-inline-end: 0.3em; } }
+  margin-bottom: 0;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  ::slotted(ion-icon[slot=start]) {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: -0.3em;
+    margin-inline-start: -0.3em;
+    -webkit-margin-end: 0.3em;
+    margin-inline-end: 0.3em;
+  }
+}
 
-::slotted(ion-icon[slot="end"]) {
+::slotted(ion-icon[slot=end]) {
   margin-left: 0.3em;
   margin-right: -0.2em;
   margin-top: 0;
-  margin-bottom: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    ::slotted(ion-icon[slot="end"]) {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: 0.3em;
-      margin-inline-start: 0.3em;
-      -webkit-margin-end: -0.2em;
-      margin-inline-end: -0.2em; } }
+  margin-bottom: 0;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  ::slotted(ion-icon[slot=end]) {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 0.3em;
+    margin-inline-start: 0.3em;
+    -webkit-margin-end: -0.2em;
+    margin-inline-end: -0.2em;
+  }
+}
 
-::slotted(ion-icon[slot="icon-only"]) {
-  font-size: 1.8em; }
+::slotted(ion-icon[slot=icon-only]) {
+  font-size: 1.8em;
+}
 
 ion-ripple-effect {
-  color: var(--ripple-color); }
+  color: var(--ripple-color);
+}
 
+:host(.ion-focused) .button-native {
+  background: var(--background-focused);
+  color: var(--color-focused);
+}
+
+:host(.activated) .button-native {
+  background: var(--background-activated);
+  color: var(--color-activated);
+}
+
+@media (any-hover: hover) {
+  :host(:hover) .button-native {
+    background: var(--background-hover);
+    color: var(--color-hover);
+  }
+}
 :host {
   --border-radius: 10px;
   --padding-top: 0;
@@ -250,21 +295,30 @@ ion-ripple-effect {
   height: 2.8em;
   font-size: 16px;
   font-weight: 500;
-  letter-spacing: -0.03em; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      margin-left: unset;
-      margin-right: unset;
-      -webkit-margin-start: 2px;
-      margin-inline-start: 2px;
-      -webkit-margin-end: 2px;
-      margin-inline-end: 2px; } }
+  letter-spacing: -0.03em;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 2px;
+    margin-inline-start: 2px;
+    -webkit-margin-end: 2px;
+    margin-inline-end: 2px;
+  }
+}
 
 :host(.button-solid) {
-  --background-activated: var(--ion-color-primary-shade, #3171e0); }
+  --background-activated: var(--ion-color-primary-shade, #3171e0);
+}
 
 :host(.button-solid.activated) {
-  --opacity: 1; }
+  --opacity: 1;
+}
+
+:host(.button-solid.activated.ion-color) .button-native {
+  background: var(--ion-color-shade);
+}
 
 :host(.button-outline) {
   --border-radius: 10px;
@@ -272,27 +326,24 @@ ion-ripple-effect {
   --border-style: solid;
   --background-activated: var(--ion-color-primary, #3880ff);
   --background-focused: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.1);
-  --color-activated: var(--ion-color-primary-contrast, #fff); }
+  --color-activated: var(--ion-color-primary-contrast, #fff);
+}
 
 :host(.button-outline.activated.ion-color) .button-native {
   background: var(--ion-color-base);
-  color: var(--ion-color-contrast); }
+  color: var(--ion-color-contrast);
+}
 
 :host(.button-clear.activated) {
-  --opacity: 0.4; }
+  --opacity: 0.4;
+}
 
 :host(.button-clear) {
   --background-activated: transparent;
   --background-focused: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.1);
   --color-activated: var(--ion-color-primary, #3880ff);
-  --color-focused: var(--ion-color-primary, #3880ff); }
-
-:host(.button-round) {
-  --border-radius: 64px;
-  --padding-top: 0;
-  --padding-start: 26px;
-  --padding-end: 26px;
-  --padding-bottom: 0; }
+  --color-focused: var(--ion-color-primary, #3880ff);
+}
 
 :host(.button-large) {
   --border-radius: 12px;
@@ -301,7 +352,8 @@ ion-ripple-effect {
   --padding-end: 1em;
   --padding-bottom: 0;
   height: 2.8em;
-  font-size: 20px; }
+  font-size: 20px;
+}
 
 :host(.button-small) {
   --border-radius: 6px;
@@ -310,13 +362,38 @@ ion-ripple-effect {
   --padding-end: 0.9em;
   --padding-bottom: 0;
   height: 2.1em;
-  font-size: 13px; }
+  font-size: 13px;
+}
+
+:host(.button-round) {
+  --border-radius: 64px;
+  --padding-top: 0;
+  --padding-start: 26px;
+  --padding-end: 26px;
+  --padding-bottom: 0;
+}
 
 :host(.button-strong) {
-  font-weight: 600; }
+  font-weight: 600;
+}
 
 @media (any-hover: hover) {
   :host(.button-solid:hover) {
-    --opacity: 0.8; }
-  :host(.button-clear:hover) {
-    --opacity: 0.6; } }
+    --opacity: 0.8;
+  }
+
+  :host(.button-clear:hover),
+:host(.button-outline:hover) {
+    --opacity: 0.6;
+  }
+
+  :host(.ion-focused:hover) {
+    --background-hover: var(--background-focused);
+    --color-hover: var(--color-focused);
+  }
+
+  :host(.activated:hover) {
+    --background-hover: var(--background-activated);
+    --color-hover: var(--color-activated);
+  }
+}

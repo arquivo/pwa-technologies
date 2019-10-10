@@ -1,1 +1,1 @@
-export declare function startFocusVisible(doc: Document): void;
+export declare function startFocusVisible(): void;

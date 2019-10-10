@@ -1,14 +1,12 @@
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
-import { Mode, RefresherEventDetail } from '../../interface';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { RefresherEventDetail } from '../../interface';
 export declare class Refresher implements ComponentInterface {
     private appliedStyles;
     private didStart;
     private progress;
     private scrollEl?;
     private gesture?;
-    mode: Mode;
     el: HTMLElement;
-    queue: QueueApi;
     /**
      * The current state which the refresher is in. The refresher's states include:
      *
@@ -40,6 +38,18 @@ export declare class Refresher implements ComponentInterface {
      */
     snapbackDuration: string;
     /**
+     * How much to multiply the pull speed by. To slow the pull animation down,
+     * pass a number less than `1`. To speed up the pull, pass a number greater
+     * than `1`. The default value is `1` which is equal to the speed of the cursor.
+     * If a negative value is passed in, the factor will be `1` instead.
+     *
+     * For example: If the value passed is `1.2` and the content is dragged by
+     * `10` pixels, instead of `10` pixels the content will be pulled by `12` pixels
+     * (an increase of 20 percent). If the value passed is `0.8`, the dragged amount
+     * will be `8` pixels, less than the amount the cursor has moved.
+     */
+    pullFactor: number;
+    /**
      * If `true`, the refresher will be hidden.
      */
     disabled: boolean;
@@ -70,11 +80,11 @@ export declare class Refresher implements ComponentInterface {
      * the refresher. This method also changes the refresher's state from
      * `refreshing` to `completing`.
      */
-    complete(): void;
+    complete(): Promise<void>;
     /**
      * Changes the refresher's state from `refreshing` to `cancelling`.
      */
-    cancel(): void;
+    cancel(): Promise<void>;
     /**
      * A number representing how far down the user has pulled.
      * The number `0` represents the user hasn't pulled down at all. The
@@ -95,6 +105,7 @@ export declare class Refresher implements ComponentInterface {
     hostData(): {
         slot: string;
         class: {
+            [x: string]: boolean;
             'refresher-active': boolean;
             'refresher-pulling': boolean;
             'refresher-ready': boolean;

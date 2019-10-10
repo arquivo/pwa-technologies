@@ -1,16 +1,18 @@
-export function startStatusTap(win, queue) {
+import { readTask, writeTask } from '@stencil/core';
+export function startStatusTap() {
+    const win = window;
     win.addEventListener('statusTap', () => {
-        queue.read(() => {
+        readTask(() => {
             const width = win.innerWidth;
             const height = win.innerHeight;
-            const el = win.document.elementFromPoint(width / 2, height / 2);
+            const el = document.elementFromPoint(width / 2, height / 2);
             if (!el) {
                 return;
             }
             const contentEl = el.closest('ion-content');
             if (contentEl) {
                 contentEl.componentOnReady().then(() => {
-                    queue.write(() => contentEl.scrollToTop(300));
+                    writeTask(() => contentEl.scrollToTop(300));
                 });
             }
         });

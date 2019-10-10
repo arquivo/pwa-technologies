@@ -1,6 +1,5 @@
-import '../../stencil.core';
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
-import { AnimationBuilder, ComponentProps, Config, FrameworkDelegate, Mode, NavOutlet, RouteID, RouteWrite, RouterDirection, RouterOutletOptions, SwipeGestureHandler } from '../../interface';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { AnimationBuilder, ComponentProps, FrameworkDelegate, NavOutlet, RouteID, RouteWrite, RouterDirection, RouterOutletOptions, SwipeGestureHandler } from '../../interface';
 export declare class RouterOutlet implements ComponentInterface, NavOutlet {
     private activeEl;
     private activeComponent;
@@ -8,11 +7,6 @@ export declare class RouterOutlet implements ComponentInterface, NavOutlet {
     private gesture?;
     private ani?;
     el: HTMLElement;
-    config: Config;
-    win: Window;
-    queue: QueueApi;
-    /** @internal */
-    mode: Mode;
     /** @internal */
     delegate?: FrameworkDelegate;
     /**
@@ -45,5 +39,5 @@ export declare class RouterOutlet implements ComponentInterface, NavOutlet {
     private setRoot;
     private transition;
     private lock;
-    render(): JSX.Element;
+    render(): any;
 }

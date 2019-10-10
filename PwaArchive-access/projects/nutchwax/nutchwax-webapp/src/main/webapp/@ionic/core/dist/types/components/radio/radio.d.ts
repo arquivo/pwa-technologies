@@ -1,6 +1,8 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Color, Mode, RadioChangeEventDetail, StyleEventDetail } from '../../interface';
+import { Color, RadioChangeEventDetail, StyleEventDetail } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Radio implements ComponentInterface {
     private inputId;
     el: HTMLElement;
@@ -10,10 +12,6 @@ export declare class Radio implements ComponentInterface {
      * For more information on colors, see [theming](/docs/theming/basics).
      */
     color?: Color;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * The name of the control, which is submitted with the form data.
      */
@@ -68,26 +66,9 @@ export declare class Radio implements ComponentInterface {
     componentWillLoad(): void;
     componentDidLoad(): void;
     componentDidUnload(): void;
-    onClick(): void;
     private emitStyle;
     private onFocus;
     private onBlur;
-    hostData(): {
-        'role': string;
-        'aria-disabled': string | null;
-        'aria-checked': string;
-        'aria-labelledby': string;
-        class: {
-            'in-item': boolean;
-            'interactive': boolean;
-            'radio-checked': boolean;
-            'radio-disabled': boolean;
-        } | {
-            'in-item': boolean;
-            'interactive': boolean;
-            'radio-checked': boolean;
-            'radio-disabled': boolean;
-        };
-    };
-    render(): JSX.Element[];
+    private onClick;
+    render(): any;
 }

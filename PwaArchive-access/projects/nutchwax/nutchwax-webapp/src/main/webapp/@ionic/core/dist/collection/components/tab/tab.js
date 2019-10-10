@@ -1,7 +1,9 @@
+import { Build, h } from '@stencil/core';
 import { attachComponent } from '../../utils/framework-delegate';
 export class Tab {
     constructor() {
         this.loaded = false;
+        /** @internal */
         this.active = false;
     }
     componentWillLoad() {
@@ -14,6 +16,7 @@ export class Tab {
             }
         }
     }
+    /** Set the active component for the tab */
     async setActive() {
         await this.prepareLazyLoaded();
         this.active = true;
@@ -47,30 +50,114 @@ export class Tab {
     }
     static get is() { return "ion-tab"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "$": ["tab.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["tab.css"]
+    }; }
     static get properties() { return {
         "active": {
-            "type": Boolean,
-            "attr": "active",
-            "mutable": true
-        },
-        "component": {
-            "type": String,
-            "attr": "component"
+            "type": "boolean",
+            "mutable": true,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            },
+            "attribute": "active",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "delegate": {
-            "type": "Any",
-            "attr": "delegate"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "setActive": {
-            "method": true
+            "type": "unknown",
+            "mutable": false,
+            "complexType": {
+                "original": "FrameworkDelegate",
+                "resolved": "FrameworkDelegate | undefined",
+                "references": {
+                    "FrameworkDelegate": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            }
         },
         "tab": {
-            "type": String,
-            "attr": "tab"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": true,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "A tab id must be provided for each `ion-tab`. It's used internally to reference\nthe selected tab or by the router to switch between them."
+            },
+            "attribute": "tab",
+            "reflect": false
+        },
+        "component": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "ComponentRef",
+                "resolved": "Function | HTMLElement | null | string | undefined",
+                "references": {
+                    "ComponentRef": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The component to display inside of the tab."
+            },
+            "attribute": "component",
+            "reflect": false
         }
     }; }
-    static get style() { return "/**style-placeholder:ion-tab:**/"; }
+    static get methods() { return {
+        "setActive": {
+            "complexType": {
+                "signature": "() => Promise<void>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "Set the active component for the tab",
+                "tags": []
+            }
+        }
+    }; }
+    static get elementRef() { return "el"; }
 }

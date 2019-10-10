@@ -1,66 +1,178 @@
+import { Host, h } from '@stencil/core';
+import { config } from '../../global/config';
+import { getIonMode } from '../../global/ionic-global';
 import { createColorClasses, openURL } from '../../utils/theme';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export class BackButton {
-    async onClick(ev) {
-        const nav = this.el.closest('ion-nav');
-        ev.preventDefault();
-        if (nav && await nav.canGoBack()) {
-            return nav.pop({ skipIfBusy: true });
-        }
-        return openURL(this.win, this.defaultHref, ev, 'back');
-    }
-    hostData() {
-        const showBackButton = this.defaultHref !== undefined;
-        return {
-            class: Object.assign({}, createColorClasses(this.color), { 'button': true, 'ion-activatable': true, 'show-back-button': showBackButton })
+    constructor() {
+        this.mode = getIonMode(this);
+        /**
+         * If `true`, the user cannot interact with the button.
+         */
+        this.disabled = false;
+        /**
+         * The type of the button.
+         */
+        this.type = 'button';
+        this.onClick = async (ev) => {
+            const nav = this.el.closest('ion-nav');
+            ev.preventDefault();
+            if (nav && await nav.canGoBack()) {
+                return nav.pop({ skipIfBusy: true });
+            }
+            return openURL(this.defaultHref, ev, 'back');
         };
     }
-    render() {
+    get backButtonIcon() {
+        return this.icon != null ? this.icon : config.get('backButtonIcon', 'arrow-back');
+    }
+    get backButtonText() {
         const defaultBackButtonText = this.mode === 'ios' ? 'Back' : null;
-        const backButtonIcon = this.icon != null ? this.icon : this.config.get('backButtonIcon', 'arrow-back');
-        const backButtonText = this.text != null ? this.text : this.config.get('backButtonText', defaultBackButtonText);
-        return (h("button", { type: "button", class: "button-native" },
-            h("span", { class: "button-inner" },
-                backButtonIcon && h("ion-icon", { icon: backButtonIcon, lazy: false }),
-                backButtonText && h("span", { class: "button-text" }, backButtonText)),
-            this.mode === 'md' && h("ion-ripple-effect", { type: "unbounded" })));
+        return this.text != null ? this.text : config.get('backButtonText', defaultBackButtonText);
+    }
+    get hasIconOnly() {
+        return this.backButtonIcon && !this.backButtonText;
+    }
+    get rippleType() {
+        // If the button only has an icon we use the unbounded
+        // "circular" ripple effect
+        if (this.hasIconOnly) {
+            return 'unbounded';
+        }
+        return 'bounded';
+    }
+    render() {
+        const { color, defaultHref, disabled, type, mode, hasIconOnly, backButtonIcon, backButtonText } = this;
+        const showBackButton = defaultHref !== undefined;
+        return (h(Host, { onClick: this.onClick, class: Object.assign({}, createColorClasses(color), { [mode]: true, 'button': true, 'back-button-disabled': disabled, 'back-button-has-icon-only': hasIconOnly, 'ion-activatable': true, 'ion-focusable': true, 'show-back-button': showBackButton }) },
+            h("button", { type: type, disabled: disabled, class: "button-native" },
+                h("span", { class: "button-inner" },
+                    backButtonIcon && h("ion-icon", { icon: backButtonIcon, lazy: false }),
+                    backButtonText && h("span", { class: "button-text" }, backButtonText)),
+                mode === 'md' && h("ion-ripple-effect", { type: this.rippleType }))));
     }
     static get is() { return "ion-back-button"; }
     static get encapsulation() { return "scoped"; }
+    static get originalStyleUrls() { return {
+        "ios": ["back-button.ios.scss"],
+        "md": ["back-button.md.scss"]
+    }; }
+    static get styleUrls() { return {
+        "ios": ["back-button.ios.css"],
+        "md": ["back-button.md.css"]
+    }; }
     static get properties() { return {
         "color": {
-            "type": String,
-            "attr": "color"
-        },
-        "config": {
-            "context": "config"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "Color",
+                "resolved": "string | undefined",
+                "references": {
+                    "Color": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The color to use from your application's color palette.\nDefault options are: `\"primary\"`, `\"secondary\"`, `\"tertiary\"`, `\"success\"`, `\"warning\"`, `\"danger\"`, `\"light\"`, `\"medium\"`, and `\"dark\"`.\nFor more information on colors, see [theming](/docs/theming/basics)."
+            },
+            "attribute": "color",
+            "reflect": false
         },
         "defaultHref": {
-            "type": String,
-            "attr": "default-href"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The url to navigate back to by default when there is no history."
+            },
+            "attribute": "default-href",
+            "reflect": false
         },
-        "el": {
-            "elementRef": true
+        "disabled": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the user cannot interact with the button."
+            },
+            "attribute": "disabled",
+            "reflect": true,
+            "defaultValue": "false"
         },
         "icon": {
-            "type": String,
-            "attr": "icon"
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | null",
+                "resolved": "null | string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The icon name to use for the back button."
+            },
+            "attribute": "icon",
+            "reflect": false
         },
         "text": {
-            "type": String,
-            "attr": "text"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | null",
+                "resolved": "null | string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The text to display in the back button."
+            },
+            "attribute": "text",
+            "reflect": false
         },
-        "win": {
-            "context": "window"
+        "type": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "'submit' | 'reset' | 'button'",
+                "resolved": "\"button\" | \"reset\" | \"submit\"",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The type of the button."
+            },
+            "attribute": "type",
+            "reflect": false,
+            "defaultValue": "'button'"
         }
     }; }
-    static get listeners() { return [{
-            "name": "click",
-            "method": "onClick"
-        }]; }
-    static get style() { return "/**style-placeholder:ion-back-button:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-back-button:**/"; }
+    static get elementRef() { return "el"; }
 }

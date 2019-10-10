@@ -1,13 +1,16 @@
+import { h } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
 import { createColorClasses } from '../../utils/theme';
 export class ToolbarTitle {
     getMode() {
+        const mode = getIonMode(this);
         const toolbar = this.el.closest('ion-toolbar');
-        return (toolbar && toolbar.mode) || this.mode;
+        return (toolbar && toolbar.mode) || mode;
     }
     hostData() {
         const mode = this.getMode();
         return {
-            class: Object.assign({}, createColorClasses(this.color), { [`title-${mode}`]: true })
+            class: Object.assign({ [mode]: true, [`title-${mode}`]: true }, createColorClasses(this.color))
         };
     }
     render() {
@@ -18,14 +21,35 @@ export class ToolbarTitle {
     }
     static get is() { return "ion-title"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "$": ["title.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["title.css"]
+    }; }
     static get properties() { return {
         "color": {
-            "type": String,
-            "attr": "color"
-        },
-        "el": {
-            "elementRef": true
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "Color",
+                "resolved": "string | undefined",
+                "references": {
+                    "Color": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The color to use from your application's color palette.\nDefault options are: `\"primary\"`, `\"secondary\"`, `\"tertiary\"`, `\"success\"`, `\"warning\"`, `\"danger\"`, `\"light\"`, `\"medium\"`, and `\"dark\"`.\nFor more information on colors, see [theming](/docs/theming/basics)."
+            },
+            "attribute": "color",
+            "reflect": false
         }
     }; }
-    static get style() { return "/**style-placeholder:ion-title:**/"; }
+    static get elementRef() { return "el"; }
 }

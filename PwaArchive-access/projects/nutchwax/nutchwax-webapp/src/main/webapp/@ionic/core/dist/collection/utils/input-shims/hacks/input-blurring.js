@@ -1,6 +1,6 @@
 const SKIP_SELECTOR = 'input, textarea, [no-blur]';
-export function enableInputBlurring(doc) {
-    console.debug('Input: enableInputBlurring');
+export function enableInputBlurring() {
+    const doc = document;
     let focused = true;
     let didScroll = false;
     function onScroll() {
@@ -10,6 +10,7 @@ export function enableInputBlurring(doc) {
         focused = true;
     }
     function onTouchend(ev) {
+        // if app did scroll return early
         if (didScroll) {
             didScroll = false;
             return;
@@ -18,9 +19,11 @@ export function enableInputBlurring(doc) {
         if (!active) {
             return;
         }
+        // only blur if the active element is a text-input or a textarea
         if (active.matches(SKIP_SELECTOR)) {
             return;
         }
+        // if the selected target is the active element, do not blur
         const tapped = ev.target;
         if (tapped === active) {
             return;
@@ -29,6 +32,7 @@ export function enableInputBlurring(doc) {
             return;
         }
         focused = false;
+        // TODO: find a better way, why 50ms?
         setTimeout(() => {
             if (!focused) {
                 active.blur();

@@ -7,6 +7,7 @@ export interface LoadingOptions {
     duration?: number;
     translucent?: boolean;
     animated?: boolean;
+    backdropDismiss?: boolean;
     mode?: Mode;
     keyboardClose?: boolean;
     id?: string;

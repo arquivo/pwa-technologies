@@ -1,5 +1,11 @@
 export class Route {
     constructor() {
+        /**
+         * Relative path that needs to match in order for this route to apply.
+         *
+         * Accepts paths similar to expressjs so that you can define parameters
+         * in the url /foo/:bar where bar would be available in incoming props.
+         */
         this.url = '';
     }
     onUpdate(newValue) {
@@ -30,27 +36,81 @@ export class Route {
     }
     static get is() { return "ion-route"; }
     static get properties() { return {
+        "url": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Relative path that needs to match in order for this route to apply.\n\nAccepts paths similar to expressjs so that you can define parameters\nin the url /foo/:bar where bar would be available in incoming props."
+            },
+            "attribute": "url",
+            "reflect": false,
+            "defaultValue": "''"
+        },
         "component": {
-            "type": String,
-            "attr": "component",
-            "watchCallbacks": ["onUpdate"]
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": true,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Name of the component to load/select in the navigation outlet (`ion-tabs`, `ion-nav`)\nwhen the route matches.\n\nThe value of this property is not always the tagname of the component to load,\nin `ion-tabs` it actually refers to the name of the `ion-tab` to select."
+            },
+            "attribute": "component",
+            "reflect": false
         },
         "componentProps": {
-            "type": "Any",
-            "attr": "component-props",
-            "watchCallbacks": ["onComponentProps"]
-        },
-        "url": {
-            "type": String,
-            "attr": "url",
-            "watchCallbacks": ["onUpdate"]
+            "type": "unknown",
+            "mutable": false,
+            "complexType": {
+                "original": "{[key: string]: any}",
+                "resolved": "undefined | { [key: string]: any; }",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "A key value `{ 'red': true, 'blue': 'white'}` containing props that should be passed\nto the defined component when rendered."
+            }
         }
     }; }
     static get events() { return [{
-            "name": "ionRouteDataChanged",
             "method": "ionRouteDataChanged",
+            "name": "ionRouteDataChanged",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Used internally by `ion-router` to know when this route did change."
+            },
+            "complexType": {
+                "original": "any",
+                "resolved": "any",
+                "references": {}
+            }
+        }]; }
+    static get watchers() { return [{
+            "propName": "url",
+            "methodName": "onUpdate"
+        }, {
+            "propName": "component",
+            "methodName": "onUpdate"
+        }, {
+            "propName": "componentProps",
+            "methodName": "onComponentProps"
         }]; }
 }

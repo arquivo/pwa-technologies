@@ -1,5 +1,5 @@
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
-import { BackButtonEvent, Config, RouterDirection, RouterEventDetail } from '../../interface';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { BackButtonEvent, RouterDirection, RouterEventDetail } from '../../interface';
 export declare class Router implements ComponentInterface {
     private previousPath;
     private busy;
@@ -7,9 +7,6 @@ export declare class Router implements ComponentInterface {
     private lastState;
     private waitPromise?;
     el: HTMLElement;
-    config: Config;
-    queue: QueueApi;
-    win: Window;
     /**
      * By default `ion-router` will match the routes at the root path ("/").
      * That can be changed when
@@ -45,6 +42,9 @@ export declare class Router implements ComponentInterface {
     protected onBackButton(ev: BackButtonEvent): void;
     /**
      * Navigate to the specified URL.
+     *
+     * @param url The url to navigate to.
+     * @param direction The direction of the animation. Defaults to `"forward"`.
      */
     push(url: string, direction?: RouterDirection): Promise<boolean>;
     /**
@@ -52,7 +52,7 @@ export declare class Router implements ComponentInterface {
      */
     back(): Promise<void>;
     /** @internal */
-    printDebug(): void;
+    printDebug(): Promise<void>;
     /** @internal */
     navChanged(direction: RouterDirection): Promise<boolean>;
     private onRedirectChanged;

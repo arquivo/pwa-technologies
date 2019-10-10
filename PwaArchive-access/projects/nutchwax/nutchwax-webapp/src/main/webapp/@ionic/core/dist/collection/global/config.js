@@ -1,5 +1,8 @@
 export class Config {
-    constructor(configObj) {
+    constructor() {
+        this.m = new Map();
+    }
+    reset(configObj) {
         this.m = new Map(Object.entries(configObj));
     }
     get(key, fallback) {
@@ -24,26 +27,26 @@ export class Config {
         this.m.set(key, value);
     }
 }
-export function configFromSession() {
+export const config = /*@__PURE__*/ new Config();
+export const configFromSession = (win) => {
     try {
-        const configStr = window.sessionStorage.getItem(IONIC_SESSION_KEY);
+        const configStr = win.sessionStorage.getItem(IONIC_SESSION_KEY);
         return configStr !== null ? JSON.parse(configStr) : {};
     }
     catch (e) {
         return {};
     }
-}
-export function saveConfig(config) {
+};
+export const saveConfig = (win, c) => {
     try {
-        window.sessionStorage.setItem(IONIC_SESSION_KEY, JSON.stringify(config));
+        win.sessionStorage.setItem(IONIC_SESSION_KEY, JSON.stringify(c));
     }
     catch (e) {
         return;
     }
-}
-export function configFromURL() {
-    const config = {};
-    const win = window;
+};
+export const configFromURL = (win) => {
+    const configObj = {};
     win.location.search.slice(1)
         .split('&')
         .map(entry => entry.split('='))
@@ -51,12 +54,12 @@ export function configFromURL() {
         .filter(([key]) => startsWith(key, IONIC_PREFIX))
         .map(([key, value]) => [key.slice(IONIC_PREFIX.length), value])
         .forEach(([key, value]) => {
-        config[key] = value;
+        configObj[key] = value;
     });
-    return config;
-}
-function startsWith(input, search) {
+    return configObj;
+};
+const startsWith = (input, search) => {
     return input.substr(0, search.length) === search;
-}
+};
 const IONIC_PREFIX = 'ionic:';
 const IONIC_SESSION_KEY = 'ionic-persist-config';

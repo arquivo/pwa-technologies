@@ -4,4 +4,4 @@ export declare function readNavState(root: HTMLElement | undefined): Promise<{
     ids: RouteID[];
     outlet: NavOutletElement | undefined;
 }>;
-export declare function waitUntilNavNode(win: Window): Promise<void> | Promise<{}>;
+export declare function waitUntilNavNode(): Promise<unknown>;

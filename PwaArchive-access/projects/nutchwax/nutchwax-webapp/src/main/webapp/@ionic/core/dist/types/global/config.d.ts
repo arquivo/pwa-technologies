@@ -1,12 +1,13 @@
 import { IonicConfig } from '../interface';
 export declare class Config {
     private m;
-    constructor(configObj: IonicConfig);
+    reset(configObj: IonicConfig): void;
     get(key: keyof IonicConfig, fallback?: any): any;
     getBoolean(key: keyof IonicConfig, fallback?: boolean): boolean;
     getNumber(key: keyof IonicConfig, fallback?: number): number;
     set(key: keyof IonicConfig, value: any): void;
 }
-export declare function configFromSession(): any;
-export declare function saveConfig(config: any): void;
-export declare function configFromURL(): any;
+export declare const config: Config;
+export declare const configFromSession: (win: Window) => any;
+export declare const saveConfig: (win: Window, c: any) => void;
+export declare const configFromURL: (win: Window) => any;

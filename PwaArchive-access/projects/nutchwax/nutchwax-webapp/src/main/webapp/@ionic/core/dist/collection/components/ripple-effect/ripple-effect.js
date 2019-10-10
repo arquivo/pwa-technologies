@@ -1,10 +1,27 @@
+import { readTask, writeTask } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
 export class RippleEffect {
     constructor() {
+        /**
+         * Sets the type of ripple-effect:
+         *
+         * - `bounded`: the ripple effect expands from the user's click position
+         * - `unbounded`: the ripple effect expands from the center of the button and overflows the container.
+         *
+         * NOTE: Surfaces for bounded ripples should have the overflow property set to hidden,
+         * while surfaces for unbounded ripples should have it set to visible.
+         */
         this.type = 'bounded';
     }
-    async addRipple(pageX, pageY) {
+    /**
+     * Adds the ripple effect to the parent element.
+     *
+     * @param x The horizontal coordinate of where the ripple should start.
+     * @param y The vertical coordinate of where the ripple should start.
+     */
+    async addRipple(x, y) {
         return new Promise(resolve => {
-            this.queue.read(() => {
+            readTask(() => {
                 const rect = this.el.getBoundingClientRect();
                 const width = rect.width;
                 const height = rect.height;
@@ -13,22 +30,22 @@ export class RippleEffect {
                 const maxRadius = this.unbounded ? maxDim : hypotenuse + PADDING;
                 const initialSize = Math.floor(maxDim * INITIAL_ORIGIN_SCALE);
                 const finalScale = maxRadius / initialSize;
-                let posX = pageX - rect.left;
-                let posY = pageY - rect.top;
+                let posX = x - rect.left;
+                let posY = y - rect.top;
                 if (this.unbounded) {
                     posX = width * 0.5;
                     posY = height * 0.5;
                 }
-                const x = posX - initialSize * 0.5;
-                const y = posY - initialSize * 0.5;
+                const styleX = posX - initialSize * 0.5;
+                const styleY = posY - initialSize * 0.5;
                 const moveX = width * 0.5 - posX;
                 const moveY = height * 0.5 - posY;
-                this.queue.write(() => {
-                    const div = this.win.document.createElement('div');
+                writeTask(() => {
+                    const div = document.createElement('div');
                     div.classList.add('ripple-effect');
                     const style = div.style;
-                    style.top = y + 'px';
-                    style.left = x + 'px';
+                    style.top = styleY + 'px';
+                    style.left = styleX + 'px';
                     style.width = style.height = initialSize + 'px';
                     style.setProperty('--final-scale', `${finalScale}`);
                     style.setProperty('--translate-end', `${moveX}px, ${moveY}px`);
@@ -47,34 +64,80 @@ export class RippleEffect {
         return this.type === 'unbounded';
     }
     hostData() {
+        const mode = getIonMode(this);
         return {
             role: 'presentation',
             class: {
+                [mode]: true,
                 'unbounded': this.unbounded
             }
         };
     }
     static get is() { return "ion-ripple-effect"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "$": ["ripple-effect.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["ripple-effect.css"]
+    }; }
     static get properties() { return {
-        "addRipple": {
-            "method": true
-        },
-        "el": {
-            "elementRef": true
-        },
-        "queue": {
-            "context": "queue"
-        },
         "type": {
-            "type": String,
-            "attr": "type"
-        },
-        "win": {
-            "context": "window"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "'bounded' | 'unbounded'",
+                "resolved": "\"bounded\" | \"unbounded\"",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Sets the type of ripple-effect:\n\n- `bounded`: the ripple effect expands from the user's click position\n- `unbounded`: the ripple effect expands from the center of the button and overflows the container.\n\nNOTE: Surfaces for bounded ripples should have the overflow property set to hidden,\nwhile surfaces for unbounded ripples should have it set to visible."
+            },
+            "attribute": "type",
+            "reflect": false,
+            "defaultValue": "'bounded'"
         }
     }; }
-    static get style() { return "/**style-placeholder:ion-ripple-effect:**/"; }
+    static get methods() { return {
+        "addRipple": {
+            "complexType": {
+                "signature": "(x: number, y: number) => Promise<() => void>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "x The horizontal coordinate of where the ripple should start.",
+                                "name": "param"
+                            }],
+                        "text": "The horizontal coordinate of where the ripple should start."
+                    }, {
+                        "tags": [{
+                                "text": "y The vertical coordinate of where the ripple should start.",
+                                "name": "param"
+                            }],
+                        "text": "The vertical coordinate of where the ripple should start."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<() => void>"
+            },
+            "docs": {
+                "text": "Adds the ripple effect to the parent element.",
+                "tags": [{
+                        "name": "param",
+                        "text": "x The horizontal coordinate of where the ripple should start."
+                    }, {
+                        "name": "param",
+                        "text": "y The vertical coordinate of where the ripple should start."
+                    }]
+            }
+        }
+    }; }
+    static get elementRef() { return "el"; }
 }
 function removeRipple(ripple) {
     ripple.classList.add('fade-out');

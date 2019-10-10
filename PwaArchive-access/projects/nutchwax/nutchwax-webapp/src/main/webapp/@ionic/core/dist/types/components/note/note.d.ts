@@ -1,6 +1,8 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
-import { Color, Mode } from '../../interface';
+import { Color } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Note implements ComponentInterface {
     /**
      * The color to use from your application's color palette.
@@ -8,12 +10,8 @@ export declare class Note implements ComponentInterface {
      * For more information on colors, see [theming](/docs/theming/basics).
      */
     color?: Color;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     hostData(): {
-        class: import("../../interface").CssClassMap | undefined;
+        class: {};
     };
-    render(): JSX.Element;
+    render(): any;
 }

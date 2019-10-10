@@ -1,18 +1,15 @@
-import '../../stencil.core';
-import { ComponentInterface, EventEmitter, QueueApi } from '../../stencil.core';
-import { Color, Mode, StyleEventDetail, ToggleChangeEventDetail } from '../../interface';
+import { ComponentInterface, EventEmitter } from '../../stencil.core';
+import { Color, StyleEventDetail, ToggleChangeEventDetail } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Toggle implements ComponentInterface {
     private inputId;
     private gesture?;
     private buttonEl?;
     private lastDrag;
     el: HTMLElement;
-    queue: QueueApi;
     activated: boolean;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * The color to use from your application's color palette.
      * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
@@ -61,33 +58,14 @@ export declare class Toggle implements ComponentInterface {
     componentWillLoad(): void;
     componentDidLoad(): Promise<void>;
     componentDidUnload(): void;
-    onClick(): void;
     private emitStyle;
     private onStart;
     private onMove;
     private onEnd;
     private getValue;
     private setFocus;
+    private onClick;
     private onFocus;
     private onBlur;
-    hostData(): {
-        'role': string;
-        'aria-disabled': string | null;
-        'aria-checked': string;
-        'aria-labelledby': string;
-        class: {
-            'in-item': boolean;
-            'toggle-activated': boolean;
-            'toggle-checked': boolean;
-            'toggle-disabled': boolean;
-            'interactive': boolean;
-        } | {
-            'in-item': boolean;
-            'toggle-activated': boolean;
-            'toggle-checked': boolean;
-            'toggle-disabled': boolean;
-            'interactive': boolean;
-        };
-    };
-    render(): JSX.Element[];
+    render(): any;
 }

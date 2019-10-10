@@ -1,7 +1,5 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
 export declare class MenuToggle implements ComponentInterface {
-    doc: Document;
     visible: boolean;
     /**
      * Optional property that maps to a Menu's `menuId` prop.
@@ -20,13 +18,7 @@ export declare class MenuToggle implements ComponentInterface {
      */
     autoHide: boolean;
     componentDidLoad(): Promise<void>;
-    onClick(): Promise<void>;
     updateVisibility(): Promise<void>;
-    hostData(): {
-        'aria-hidden': string | null;
-        class: {
-            'menu-toggle-hidden': boolean;
-        };
-    };
-    render(): JSX.Element;
+    private onClick;
+    render(): any;
 }

@@ -1,18 +1,53 @@
+import { Host, h } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
 import { findItemLabel, renderHiddenInput } from '../../utils/helpers';
+import { actionSheetController, alertController, popoverController } from '../../utils/overlays';
 import { hostContext } from '../../utils/theme';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export class Select {
     constructor() {
         this.childOpts = [];
         this.inputId = `ion-sel-${selectIds++}`;
         this.didInit = false;
         this.isExpanded = false;
+        /**
+         * If `true`, the user cannot interact with the select.
+         */
         this.disabled = false;
+        /**
+         * The text to display on the cancel button.
+         */
         this.cancelText = 'Cancel';
+        /**
+         * The text to display on the ok button.
+         */
         this.okText = 'OK';
+        /**
+         * The name of the control, which is submitted with the form data.
+         */
         this.name = this.inputId;
+        /**
+         * If `true`, the select can accept multiple values.
+         */
         this.multiple = false;
+        /**
+         * The interface the select should use: `action-sheet`, `popover` or `alert`.
+         */
         this.interface = 'alert';
+        /**
+         * Any additional options that the `alert`, `action-sheet` or `popover` interface
+         * can take. See the [AlertController API docs](../../alert/AlertController/#create), the
+         * [ActionSheetController API docs](../../action-sheet/ActionSheetController/#create) and the
+         * [PopoverController API docs](../../popover/PopoverController/#create) for the
+         * create options for each interface.
+         */
         this.interfaceOptions = {};
+        this.onClick = (ev) => {
+            this.setFocus();
+            this.open(ev);
+        };
         this.onFocus = () => {
             this.ionFocus.emit();
         };
@@ -36,16 +71,26 @@ export class Select {
         await this.loadOptions();
         if (this.didInit) {
             this.updateOptions();
+            this.updateOverlayOptions();
+            this.emitStyle();
+            /**
+             * In the event that options
+             * are not loaded at component load
+             * this ensures that any value that is
+             * set is properly rendered once
+             * options have been loaded
+             */
+            if (this.value !== undefined) {
+                this.el.forceUpdate();
+            }
         }
-    }
-    onClick(ev) {
-        this.setFocus();
-        this.open(ev);
     }
     async componentDidLoad() {
         await this.loadOptions();
         if (this.value === undefined) {
             if (this.multiple) {
+                // there are no values set at this point
+                // so check to see who should be selected
                 const checked = this.childOpts.filter(o => o.selected);
                 this.value = checked.map(o => o.value);
             }
@@ -61,11 +106,17 @@ export class Select {
         this.el.forceUpdate();
         this.didInit = true;
     }
-    async open(ev) {
+    /**
+     * Open the select overlay. The overlay is either an alert, action sheet, or popover,
+     * depending on the `interface` property on the `ion-select`.
+     *
+     * @param event The user interface event that called the open.
+     */
+    async open(event) {
         if (this.disabled || this.isExpanded) {
             return undefined;
         }
-        const overlay = this.overlay = await this.createOverlay(ev);
+        const overlay = this.overlay = await this.createOverlay(event);
         this.isExpanded = true;
         overlay.onDidDismiss().then(() => {
             this.overlay = undefined;
@@ -93,30 +144,29 @@ export class Select {
         }
         return this.openAlert();
     }
-    async openPopover(ev) {
-        const interfaceOptions = this.interfaceOptions;
-        const popoverOpts = Object.assign({ mode: this.mode }, interfaceOptions, { component: 'ion-select-popover', cssClass: ['select-popover', interfaceOptions.cssClass], event: ev, componentProps: {
-                header: interfaceOptions.header,
-                subHeader: interfaceOptions.subHeader,
-                message: interfaceOptions.message,
-                value: this.value,
-                options: this.childOpts.map(o => {
-                    return {
-                        text: o.textContent,
-                        value: o.value,
-                        checked: o.selected,
-                        disabled: o.disabled,
-                        handler: () => {
-                            this.value = o.value;
-                            this.close();
-                        }
-                    };
-                })
-            } });
-        return this.popoverCtrl.create(popoverOpts);
+    updateOverlayOptions() {
+        if (!this.overlay) {
+            return;
+        }
+        const overlay = this.overlay;
+        switch (this.interface) {
+            case 'action-sheet':
+                overlay.buttons = this.createActionSheetButtons(this.childOpts);
+                break;
+            case 'popover':
+                const popover = overlay.querySelector('ion-select-popover');
+                if (popover) {
+                    popover.options = this.createPopoverOptions(this.childOpts);
+                }
+                break;
+            default:
+                const inputType = (this.multiple ? 'checkbox' : 'radio');
+                overlay.inputs = this.createAlertInputs(this.childOpts, inputType);
+                break;
+        }
     }
-    async openActionSheet() {
-        const actionSheetButtons = this.childOpts.map(option => {
+    createActionSheetButtons(data) {
+        const actionSheetButtons = data.map(option => {
             return {
                 role: (option.selected ? 'selected' : ''),
                 text: option.textContent,
@@ -125,6 +175,7 @@ export class Select {
                 }
             };
         });
+        // Add "cancel" button
         actionSheetButtons.push({
             text: this.cancelText,
             role: 'cancel',
@@ -132,24 +183,58 @@ export class Select {
                 this.ionCancel.emit();
             }
         });
+        return actionSheetButtons;
+    }
+    createAlertInputs(data, inputType) {
+        return data.map(o => {
+            return {
+                type: inputType,
+                label: o.textContent,
+                value: o.value,
+                checked: o.selected,
+                disabled: o.disabled
+            };
+        });
+    }
+    createPopoverOptions(data) {
+        return data.map(o => {
+            return {
+                text: o.textContent,
+                value: o.value,
+                checked: o.selected,
+                disabled: o.disabled,
+                handler: () => {
+                    this.value = o.value;
+                    this.close();
+                }
+            };
+        });
+    }
+    async openPopover(ev) {
         const interfaceOptions = this.interfaceOptions;
-        const actionSheetOpts = Object.assign({ mode: this.mode }, interfaceOptions, { buttons: actionSheetButtons, cssClass: ['select-action-sheet', interfaceOptions.cssClass] });
-        return this.actionSheetCtrl.create(actionSheetOpts);
+        const mode = getIonMode(this);
+        const popoverOpts = Object.assign({ mode }, interfaceOptions, { component: 'ion-select-popover', cssClass: ['select-popover', interfaceOptions.cssClass], event: ev, componentProps: {
+                header: interfaceOptions.header,
+                subHeader: interfaceOptions.subHeader,
+                message: interfaceOptions.message,
+                value: this.value,
+                options: this.createPopoverOptions(this.childOpts)
+            } });
+        return popoverController.create(popoverOpts);
+    }
+    async openActionSheet() {
+        const mode = getIonMode(this);
+        const interfaceOptions = this.interfaceOptions;
+        const actionSheetOpts = Object.assign({ mode }, interfaceOptions, { buttons: this.createActionSheetButtons(this.childOpts), cssClass: ['select-action-sheet', interfaceOptions.cssClass] });
+        return actionSheetController.create(actionSheetOpts);
     }
     async openAlert() {
         const label = this.getLabel();
         const labelText = (label) ? label.textContent : null;
         const interfaceOptions = this.interfaceOptions;
         const inputType = (this.multiple ? 'checkbox' : 'radio');
-        const alertOpts = Object.assign({ mode: this.mode }, interfaceOptions, { header: interfaceOptions.header ? interfaceOptions.header : labelText, inputs: this.childOpts.map(o => {
-                return {
-                    type: inputType,
-                    label: o.textContent,
-                    value: o.value,
-                    checked: o.selected,
-                    disabled: o.disabled
-                };
-            }), buttons: [
+        const mode = getIonMode(this);
+        const alertOpts = Object.assign({ mode }, interfaceOptions, { header: interfaceOptions.header ? interfaceOptions.header : labelText, inputs: this.createAlertInputs(this.childOpts, inputType), buttons: [
                 {
                     text: this.cancelText,
                     role: 'cancel',
@@ -165,9 +250,13 @@ export class Select {
                 }
             ], cssClass: ['select-alert', interfaceOptions.cssClass,
                 (this.multiple ? 'multiple-select-alert' : 'single-select-alert')] });
-        return this.alertCtrl.create(alertOpts);
+        return alertController.create(alertOpts);
     }
+    /**
+     * Close the select interface.
+     */
     close() {
+        // TODO check !this.overlay || !this.isFocus()
         if (!this.overlay) {
             return Promise.resolve(false);
         }
@@ -177,10 +266,13 @@ export class Select {
         this.childOpts = await Promise.all(Array.from(this.el.querySelectorAll('ion-select-option')).map(o => o.componentOnReady()));
     }
     updateOptions() {
+        // iterate all options, updating the selected prop
         let canSelect = true;
         for (const selectOption of this.childOpts) {
-            const selected = canSelect && isOptionSelected(this.value, selectOption.value);
+            const selected = canSelect && isOptionSelected(this.value, selectOption.value, this.compareWith);
             selectOption.selected = selected;
+            // if current option is selected and select is single-option, we can't select
+            // any option more
             if (selected && !this.multiple) {
                 canSelect = false;
             }
@@ -197,7 +289,7 @@ export class Select {
         if (selectedText != null && selectedText !== '') {
             return selectedText;
         }
-        return generateText(this.childOpts, this.value);
+        return generateText(this.childOpts, this.value, this.compareWith);
     }
     setFocus() {
         if (this.buttonEl) {
@@ -214,160 +306,394 @@ export class Select {
             'select-disabled': this.disabled
         });
     }
-    hostData() {
-        const labelId = this.inputId + '-lbl';
-        const label = findItemLabel(this.el);
-        if (label) {
-            label.id = labelId;
-        }
-        return {
-            'role': 'combobox',
-            'aria-disabled': this.disabled ? 'true' : null,
-            'aria-expanded': `${this.isExpanded}`,
-            'aria-haspopup': 'dialog',
-            'aria-labelledby': labelId,
-            class: {
-                'in-item': hostContext('ion-item', this.el),
-                'select-disabled': this.disabled,
-            }
-        };
-    }
     render() {
-        renderHiddenInput(true, this.el, this.name, parseValue(this.value), this.disabled);
+        const { placeholder, name, disabled, isExpanded, value, el } = this;
+        const mode = getIonMode(this);
         const labelId = this.inputId + '-lbl';
-        const label = findItemLabel(this.el);
+        const label = findItemLabel(el);
         if (label) {
             label.id = labelId;
         }
         let addPlaceholderClass = false;
         let selectText = this.getText();
-        if (selectText === '' && this.placeholder != null) {
-            selectText = this.placeholder;
+        if (selectText === '' && placeholder != null) {
+            selectText = placeholder;
             addPlaceholderClass = true;
         }
+        renderHiddenInput(true, el, name, parseValue(value), disabled);
         const selectTextClasses = {
             'select-text': true,
             'select-placeholder': addPlaceholderClass
         };
-        return [
+        return (h(Host, { onClick: this.onClick, role: "combobox", "aria-haspopup": "dialog", "aria-disabled": disabled ? 'true' : null, "aria-expanded": `${isExpanded}`, "aria-labelledby": labelId, class: {
+                [mode]: true,
+                'in-item': hostContext('ion-item', el),
+                'select-disabled': disabled,
+            } },
             h("div", { class: selectTextClasses }, selectText),
             h("div", { class: "select-icon", role: "presentation" },
                 h("div", { class: "select-icon-inner" })),
-            h("button", { type: "button", onFocus: this.onFocus, onBlur: this.onBlur, disabled: this.disabled, ref: (el => this.buttonEl = el) })
-        ];
+            h("button", { type: "button", onFocus: this.onFocus, onBlur: this.onBlur, disabled: disabled, ref: (btnEl => this.buttonEl = btnEl) })));
     }
     static get is() { return "ion-select"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "ios": ["select.ios.scss"],
+        "md": ["select.md.scss"]
+    }; }
+    static get styleUrls() { return {
+        "ios": ["select.ios.css"],
+        "md": ["select.md.css"]
+    }; }
     static get properties() { return {
-        "actionSheetCtrl": {
-            "connect": "ion-action-sheet-controller"
-        },
-        "alertCtrl": {
-            "connect": "ion-alert-controller"
+        "disabled": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the user cannot interact with the select."
+            },
+            "attribute": "disabled",
+            "reflect": false,
+            "defaultValue": "false"
         },
         "cancelText": {
-            "type": String,
-            "attr": "cancel-text"
-        },
-        "disabled": {
-            "type": Boolean,
-            "attr": "disabled",
-            "watchCallbacks": ["disabledChanged"]
-        },
-        "el": {
-            "elementRef": true
-        },
-        "interface": {
-            "type": String,
-            "attr": "interface"
-        },
-        "interfaceOptions": {
-            "type": "Any",
-            "attr": "interface-options"
-        },
-        "isExpanded": {
-            "state": true
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "multiple": {
-            "type": Boolean,
-            "attr": "multiple"
-        },
-        "name": {
-            "type": String,
-            "attr": "name"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The text to display on the cancel button."
+            },
+            "attribute": "cancel-text",
+            "reflect": false,
+            "defaultValue": "'Cancel'"
         },
         "okText": {
-            "type": String,
-            "attr": "ok-text"
-        },
-        "open": {
-            "method": true
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The text to display on the ok button."
+            },
+            "attribute": "ok-text",
+            "reflect": false,
+            "defaultValue": "'OK'"
         },
         "placeholder": {
-            "type": String,
-            "attr": "placeholder"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | null",
+                "resolved": "null | string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The text to display when the select is empty."
+            },
+            "attribute": "placeholder",
+            "reflect": false
         },
-        "popoverCtrl": {
-            "connect": "ion-popover-controller"
+        "name": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The name of the control, which is submitted with the form data."
+            },
+            "attribute": "name",
+            "reflect": false,
+            "defaultValue": "this.inputId"
         },
         "selectedText": {
-            "type": String,
-            "attr": "selected-text"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | null",
+                "resolved": "null | string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The text to display instead of the selected option's value."
+            },
+            "attribute": "selected-text",
+            "reflect": false
+        },
+        "multiple": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the select can accept multiple values."
+            },
+            "attribute": "multiple",
+            "reflect": false,
+            "defaultValue": "false"
+        },
+        "interface": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "SelectInterface",
+                "resolved": "\"action-sheet\" | \"alert\" | \"popover\"",
+                "references": {
+                    "SelectInterface": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The interface the select should use: `action-sheet`, `popover` or `alert`."
+            },
+            "attribute": "interface",
+            "reflect": false,
+            "defaultValue": "'alert'"
+        },
+        "interfaceOptions": {
+            "type": "any",
+            "mutable": false,
+            "complexType": {
+                "original": "any",
+                "resolved": "any",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "Any additional options that the `alert`, `action-sheet` or `popover` interface\ncan take. See the [AlertController API docs](../../alert/AlertController/#create), the\n[ActionSheetController API docs](../../action-sheet/ActionSheetController/#create) and the\n[PopoverController API docs](../../popover/PopoverController/#create) for the\ncreate options for each interface."
+            },
+            "attribute": "interface-options",
+            "reflect": false,
+            "defaultValue": "{}"
+        },
+        "compareWith": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | SelectCompareFn | null",
+                "resolved": "((currentValue: any, compareValue: any) => boolean) | null | string | undefined",
+                "references": {
+                    "SelectCompareFn": {
+                        "location": "import",
+                        "path": "./select-interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "A property name or function used to compare object values"
+            },
+            "attribute": "compare-with",
+            "reflect": false
         },
         "value": {
-            "type": "Any",
-            "attr": "value",
+            "type": "any",
             "mutable": true,
-            "watchCallbacks": ["valueChanged"]
+            "complexType": {
+                "original": "any | null",
+                "resolved": "any",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "the value of the select."
+            },
+            "attribute": "value",
+            "reflect": false
         }
     }; }
+    static get states() { return {
+        "isExpanded": {}
+    }; }
     static get events() { return [{
-            "name": "ionChange",
             "method": "ionChange",
+            "name": "ionChange",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the value has changed."
+            },
+            "complexType": {
+                "original": "SelectChangeEventDetail",
+                "resolved": "SelectChangeEventDetail",
+                "references": {
+                    "SelectChangeEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
         }, {
-            "name": "ionCancel",
             "method": "ionCancel",
+            "name": "ionCancel",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the selection is cancelled."
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionFocus",
             "method": "ionFocus",
+            "name": "ionFocus",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the select has focus."
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionBlur",
             "method": "ionBlur",
+            "name": "ionBlur",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the select loses focus."
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionStyle",
             "method": "ionStyle",
+            "name": "ionStyle",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": "Emitted when the styles change."
+            },
+            "complexType": {
+                "original": "StyleEventDetail",
+                "resolved": "StyleEventDetail",
+                "references": {
+                    "StyleEventDetail": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            }
+        }]; }
+    static get methods() { return {
+        "open": {
+            "complexType": {
+                "signature": "(event?: UIEvent | undefined) => Promise<any>",
+                "parameters": [{
+                        "tags": [{
+                                "text": "event The user interface event that called the open.",
+                                "name": "param"
+                            }],
+                        "text": "The user interface event that called the open."
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "UIEvent": {
+                        "location": "global"
+                    }
+                },
+                "return": "Promise<any>"
+            },
+            "docs": {
+                "text": "Open the select overlay. The overlay is either an alert, action sheet, or popover,\ndepending on the `interface` property on the `ion-select`.",
+                "tags": [{
+                        "name": "param",
+                        "text": "event The user interface event that called the open."
+                    }]
+            }
+        }
+    }; }
+    static get elementRef() { return "el"; }
+    static get watchers() { return [{
+            "propName": "disabled",
+            "methodName": "disabledChanged"
+        }, {
+            "propName": "value",
+            "methodName": "valueChanged"
         }]; }
     static get listeners() { return [{
             "name": "ionSelectOptionDidLoad",
-            "method": "selectOptionChanged"
+            "method": "selectOptionChanged",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }, {
             "name": "ionSelectOptionDidUnload",
-            "method": "selectOptionChanged"
-        }, {
-            "name": "click",
-            "method": "onClick"
+            "method": "selectOptionChanged",
+            "target": undefined,
+            "capture": false,
+            "passive": false
         }]; }
-    static get style() { return "/**style-placeholder:ion-select:**/"; }
-    static get styleMode() { return "/**style-id-placeholder:ion-select:**/"; }
 }
 function parseValue(value) {
     if (value == null) {
@@ -378,33 +704,46 @@ function parseValue(value) {
     }
     return value.toString();
 }
-function isOptionSelected(currentValue, optionValue) {
+function isOptionSelected(currentValue, compareValue, compareWith) {
     if (currentValue === undefined) {
         return false;
     }
     if (Array.isArray(currentValue)) {
-        return currentValue.includes(optionValue);
+        return currentValue.some(val => compareOptions(val, compareValue, compareWith));
     }
     else {
-        return currentValue === optionValue;
+        return compareOptions(currentValue, compareValue, compareWith);
     }
 }
-function generateText(opts, value) {
+function compareOptions(currentValue, compareValue, compareWith) {
+    if (typeof compareWith === 'function') {
+        return compareWith(currentValue, compareValue);
+    }
+    else if (typeof compareWith === 'string') {
+        return currentValue[compareWith] === compareValue[compareWith];
+    }
+    else {
+        return currentValue === compareValue;
+    }
+}
+function generateText(opts, value, compareWith) {
     if (value === undefined) {
         return '';
     }
     if (Array.isArray(value)) {
         return value
-            .map(v => textForValue(opts, v))
+            .map(v => textForValue(opts, v, compareWith))
             .filter(opt => opt !== null)
             .join(', ');
     }
     else {
-        return textForValue(opts, value) || '';
+        return textForValue(opts, value, compareWith) || '';
     }
 }
-function textForValue(opts, value) {
-    const selectOpt = opts.find(opt => opt.value === value);
+function textForValue(opts, value, compareWith) {
+    const selectOpt = opts.find(opt => {
+        return compareOptions(opt.value, value, compareWith);
+    });
     return selectOpt
         ? selectOpt.textContent
         : null;

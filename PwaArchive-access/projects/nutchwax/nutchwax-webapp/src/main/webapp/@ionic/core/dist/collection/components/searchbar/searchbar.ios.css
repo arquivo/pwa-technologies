@@ -22,28 +22,34 @@
   width: 100%;
   color: var(--color);
   font-family: var(--ion-font-family, inherit);
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 :host(.ion-color) {
-  color: var(--ion-color-contrast); }
+  color: var(--ion-color-contrast);
+}
 
 :host(.ion-color) .searchbar-input {
-  background: var(--ion-color-base); }
+  background: var(--ion-color-base);
+}
 
 :host(.ion-color) .searchbar-clear-button,
 :host(.ion-color) .searchbar-cancel-button,
 :host(.ion-color) .searchbar-search-icon {
-  color: inherit; }
+  color: inherit;
+}
 
 .searchbar-search-icon {
   color: var(--icon-color);
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 .searchbar-input-container {
   display: block;
   position: relative;
   flex-shrink: 1;
-  width: 100%; }
+  width: 100%;
+}
 
 .searchbar-input {
   font-family: inherit;
@@ -64,15 +70,18 @@
   outline: none;
   background: var(--background);
   font-family: inherit;
-  appearance: none; }
-  .searchbar-input::placeholder {
-    color: var(--placeholder-color);
-    font-family: inherit;
-    font-style: var(--placeholder-font-style);
-    font-weight: var(--placeholder-font-weight);
-    opacity: var(--placeholder-opacity); }
-  .searchbar-input::-webkit-search-cancel-button, .searchbar-input::-ms-clear {
-    display: none; }
+  appearance: none;
+}
+.searchbar-input::placeholder {
+  color: var(--placeholder-color);
+  font-family: inherit;
+  font-style: var(--placeholder-font-style);
+  font-weight: var(--placeholder-font-weight);
+  opacity: var(--placeholder-opacity);
+}
+.searchbar-input::-webkit-search-cancel-button, .searchbar-input::-ms-clear {
+  display: none;
+}
 
 .searchbar-cancel-button {
   margin-left: 0;
@@ -85,14 +94,16 @@
   outline: none;
   color: var(--cancel-button-color);
   cursor: pointer;
-  appearance: none; }
+  appearance: none;
+}
 
 .searchbar-cancel-button > div {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+}
 
 .searchbar-clear-button {
   margin-left: 0;
@@ -107,10 +118,18 @@
   min-height: 0;
   outline: none;
   color: var(--clear-button-color);
-  appearance: none; }
+  appearance: none;
+}
 
 :host(.searchbar-has-value.searchbar-has-focus) .searchbar-clear-button {
-  display: block; }
+  display: block;
+}
+
+:host(.searchbar-disabled) {
+  cursor: default;
+  opacity: 0.4;
+  pointer-events: none;
+}
 
 :host {
   --clear-button-color: var(--ion-color-step-600, #666666);
@@ -123,19 +142,23 @@
   padding-top: 12px;
   padding-bottom: 12px;
   height: 60px;
-  contain: strict; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 12px;
-      padding-inline-start: 12px;
-      -webkit-padding-end: 12px;
-      padding-inline-end: 12px; } }
+  contain: strict;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 12px;
+    padding-inline-start: 12px;
+    -webkit-padding-end: 12px;
+    padding-inline-end: 12px;
+  }
+}
 
 .searchbar-input-container {
   height: 36px;
-  contain: strict; }
+  contain: strict;
+}
 
 .searchbar-search-icon {
   margin-left: calc(50% - 60px);
@@ -144,14 +167,20 @@
   position: absolute;
   width: 16px;
   height: 100%;
-  contain: strict; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .searchbar-search-icon {
-      margin-left: unset;
-      -webkit-margin-start: calc(50% - 60px);
-      margin-inline-start: calc(50% - 60px); } }
-  :host-context([dir=rtl]) .searchbar-search-icon {
-    right: 8px; }
+  contain: strict;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .searchbar-search-icon {
+    margin-left: unset;
+    -webkit-margin-start: calc(50% - 60px);
+    margin-inline-start: calc(50% - 60px);
+  }
+}
+[dir=rtl] .searchbar-search-icon, :host-context([dir=rtl]) .searchbar-search-icon {
+  left: unset;
+  right: unset;
+  right: 8px;
+}
 
 .searchbar-input {
   padding-left: 28px;
@@ -162,15 +191,18 @@
   height: 100%;
   font-size: 14px;
   font-weight: 400;
-  contain: strict; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .searchbar-input {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 28px;
-      padding-inline-start: 28px;
-      -webkit-padding-end: 28px;
-      padding-inline-end: 28px; } }
+  contain: strict;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .searchbar-input {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 28px;
+    padding-inline-start: 28px;
+    -webkit-padding-end: 28px;
+    padding-inline-end: 28px;
+  }
+}
 
 .searchbar-clear-button {
   right: 0;
@@ -180,13 +212,18 @@
   width: 30px;
   height: 100%;
   border: 0;
-  background-color: transparent; }
-  :host-context([dir=rtl]) .searchbar-clear-button {
-    left: 0; }
+  background-color: transparent;
+}
+[dir=rtl] .searchbar-clear-button, :host-context([dir=rtl]) .searchbar-clear-button {
+  left: unset;
+  right: unset;
+  left: 0;
+}
 
 .searchbar-clear-icon {
   width: 18px;
-  height: 100%; }
+  height: 100%;
+}
 
 .searchbar-cancel-button {
   padding-left: 8px;
@@ -195,82 +232,107 @@
   padding-bottom: 0;
   flex-shrink: 0;
   background-color: transparent;
-  font-size: 16px; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    .searchbar-cancel-button {
-      padding-left: unset;
-      padding-right: unset;
-      -webkit-padding-start: 8px;
-      padding-inline-start: 8px;
-      -webkit-padding-end: 0;
-      padding-inline-end: 0; } }
+  font-size: 16px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  .searchbar-cancel-button {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 8px;
+    padding-inline-start: 8px;
+    -webkit-padding-end: 0;
+    padding-inline-end: 0;
+  }
+}
 
 :host(.searchbar-left-aligned) .searchbar-search-icon {
-  margin-left: 0; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host(.searchbar-left-aligned) .searchbar-search-icon {
-      margin-left: unset;
-      -webkit-margin-start: 0;
-      margin-inline-start: 0; } }
+  margin-left: 0;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host(.searchbar-left-aligned) .searchbar-search-icon {
+    margin-left: unset;
+    -webkit-margin-start: 0;
+    margin-inline-start: 0;
+  }
+}
 
 :host(.searchbar-left-aligned) .searchbar-input {
-  padding-left: 30px; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host(.searchbar-left-aligned) .searchbar-input {
-      padding-left: unset;
-      -webkit-padding-start: 30px;
-      padding-inline-start: 30px; } }
+  padding-left: 30px;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host(.searchbar-left-aligned) .searchbar-input {
+    padding-left: unset;
+    -webkit-padding-start: 30px;
+    padding-inline-start: 30px;
+  }
+}
 
 :host(.searchbar-has-focus) .searchbar-cancel-button,
+:host(.searchbar-should-show-cancel) .searchbar-cancel-button,
 :host(.searchbar-animated) .searchbar-cancel-button {
-  display: block; }
+  display: block;
+}
 
 :host(.searchbar-animated) .searchbar-search-icon,
 :host(.searchbar-animated) .searchbar-input {
-  transition: all 300ms ease; }
+  transition: all 300ms ease;
+}
 
-:host(.searchbar-animated.searchbar-has-focus) .searchbar-cancel-button {
+:host(.searchbar-animated.searchbar-has-focus) .searchbar-cancel-button,
+:host(.searchbar-animated.searchbar-should-show-cancel) .searchbar-cancel-button {
   opacity: 1;
-  pointer-events: auto; }
+  pointer-events: auto;
+}
 
 :host(.searchbar-animated) .searchbar-cancel-button {
   margin-right: -100%;
   transform: translate3d(0,  0,  0);
   transition: all 300ms ease;
   opacity: 0;
-  pointer-events: none; }
-  @supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
-    :host(.searchbar-animated) .searchbar-cancel-button {
-      margin-right: unset;
-      -webkit-margin-end: -100%;
-      margin-inline-end: -100%; } }
+  pointer-events: none;
+}
+@supports (margin-inline-start: 0) or (-webkit-margin-start: 0) {
+  :host(.searchbar-animated) .searchbar-cancel-button {
+    margin-right: unset;
+    -webkit-margin-end: -100%;
+    margin-inline-end: -100%;
+  }
+}
 
 :host(.searchbar-no-animate) .searchbar-search-icon,
 :host(.searchbar-no-animate) .searchbar-input,
 :host(.searchbar-no-animate) .searchbar-cancel-button {
-  transition-duration: 0ms; }
+  transition-duration: 0ms;
+}
 
 :host(.ion-color) .searchbar-cancel-button {
-  color: var(--ion-color-base); }
+  color: var(--ion-color-base);
+}
 
 @media (any-hover: hover) {
   :host(.ion-color) .searchbar-cancel-button:hover {
-    color: var(--ion-color-tint); } }
+    color: var(--ion-color-tint);
+  }
+}
+:host-context(ion-toolbar.ion-color):not(.ion-color) {
+  color: inherit;
+}
 
-:host-context(ion-toolbar.ion-color) {
-  color: inherit; }
-
-:host-context(ion-toolbar.ion-color) .searchbar-cancel-button {
-  color: currentColor; }
+:host-context(ion-toolbar.ion-color):not(.ion-color) .searchbar-cancel-button {
+  color: currentColor;
+}
 
 :host-context(ion-toolbar.ion-color) .searchbar-search-icon {
   color: currentColor;
-  opacity: 0.5; }
+  opacity: 0.5;
+}
 
-:host-context(ion-toolbar.ion-color) .searchbar-input {
+:host-context(ion-toolbar.ion-color):not(.ion-color) .searchbar-input {
   background: rgba(var(--ion-color-contrast-rgb), 0.07);
-  color: currentColor; }
-
-:host-context(ion-toolbar.ion-color) .searchbar-clear-button {
   color: currentColor;
-  opacity: 0.5; }
+}
+
+:host-context(ion-toolbar.ion-color):not(.ion-color) .searchbar-clear-button {
+  color: currentColor;
+  opacity: 0.5;
+}

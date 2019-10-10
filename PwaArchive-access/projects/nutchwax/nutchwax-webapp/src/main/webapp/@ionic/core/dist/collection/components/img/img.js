@@ -1,4 +1,14 @@
+import { h } from '@stencil/core';
+import { getIonMode } from '../../global/ionic-global';
 export class Img {
+    constructor() {
+        this.onLoad = () => {
+            this.ionImgDidLoad.emit();
+        };
+        this.onError = () => {
+            this.ionError.emit();
+        };
+    }
     srcChanged() {
         this.addIO();
     }
@@ -12,6 +22,9 @@ export class Img {
         if ('IntersectionObserver' in window) {
             this.removeIO();
             this.io = new IntersectionObserver(data => {
+                // because there will only ever be one instance
+                // of the element we are observing
+                // we can just use data[0]
                 if (data[0].isIntersecting) {
                     this.load();
                     this.removeIO();
@@ -20,12 +33,14 @@ export class Img {
             this.io.observe(this.el);
         }
         else {
+            // fall back to setTimeout for Safari and IE
             setTimeout(() => this.load(), 200);
         }
     }
     load() {
+        this.loadError = this.onError;
         this.loadSrc = this.src;
-        this.ionImgDidLoad.emit();
+        this.ionImgWillLoad.emit();
     }
     removeIO() {
         if (this.io) {
@@ -33,34 +48,114 @@ export class Img {
             this.io = undefined;
         }
     }
+    hostData() {
+        const mode = getIonMode(this);
+        return {
+            class: {
+                [mode]: true,
+            }
+        };
+    }
     render() {
-        return (h("img", { src: this.loadSrc, alt: this.alt, decoding: "async" }));
+        return (h("img", { src: this.loadSrc, alt: this.alt, decoding: "async", onLoad: this.onLoad, onError: this.loadError }));
     }
     static get is() { return "ion-img"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "$": ["img.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["img.css"]
+    }; }
     static get properties() { return {
         "alt": {
-            "type": String,
-            "attr": "alt"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "loadSrc": {
-            "state": true
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "This attribute defines the alternative text describing the image.\nUsers will see this text displayed if the image URL is wrong,\nthe image is not in one of the supported formats, or if the image is not yet downloaded."
+            },
+            "attribute": "alt",
+            "reflect": false
         },
         "src": {
-            "type": String,
-            "attr": "src",
-            "watchCallbacks": ["srcChanged"]
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string | undefined",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The image URL. This attribute is mandatory for the <img> element."
+            },
+            "attribute": "src",
+            "reflect": false
         }
     }; }
+    static get states() { return {
+        "loadSrc": {},
+        "loadError": {}
+    }; }
     static get events() { return [{
-            "name": "ionImgDidLoad",
-            "method": "ionImgDidLoad",
+            "method": "ionImgWillLoad",
+            "name": "ionImgWillLoad",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the img src has been set"
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
+        }, {
+            "method": "ionImgDidLoad",
+            "name": "ionImgDidLoad",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the image has finished loading"
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
+        }, {
+            "method": "ionError",
+            "name": "ionError",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": "Emitted when the img fails to load"
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }]; }
-    static get style() { return "/**style-placeholder:ion-img:**/"; }
+    static get elementRef() { return "el"; }
+    static get watchers() { return [{
+            "propName": "src",
+            "methodName": "srcChanged"
+        }]; }
 }

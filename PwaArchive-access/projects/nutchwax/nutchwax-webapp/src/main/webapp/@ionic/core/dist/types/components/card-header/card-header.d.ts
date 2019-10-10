@@ -1,6 +1,8 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
-import { Color, Mode } from '../../interface';
+import { Color } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class CardHeader implements ComponentInterface {
     /**
      * The color to use from your application's color palette.
@@ -9,10 +11,6 @@ export declare class CardHeader implements ComponentInterface {
      */
     color?: Color;
     /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
-    /**
      * If `true`, the card header will be translucent.
      */
     translucent: boolean;
@@ -20,8 +18,9 @@ export declare class CardHeader implements ComponentInterface {
         class: {
             'card-header-translucent': boolean;
         } | {
+            [x: string]: boolean;
             'card-header-translucent': boolean;
         };
     };
-    render(): JSX.Element;
+    render(): any;
 }

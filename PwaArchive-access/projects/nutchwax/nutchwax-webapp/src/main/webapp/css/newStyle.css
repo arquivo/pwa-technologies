@@ -1366,7 +1366,7 @@ input:active, input:focus{
 }
 
 body#home-search #conteudo-pesquisa-erro{    
-    margin-top: /*-8px*//*-11px*/-10px !important; 
+    margin-top: /*-8px*//*-11px*/-38px; 
 }
 
 #conteudo-pesquisa-erro{    
@@ -1401,7 +1401,8 @@ body#home-search #conteudo-pesquisa-erro{
 
 #years{
     /*margin-top: 30px;*/
-    padding-bottom: 40px;    
+    padding-bottom: 40px;
+    margin: 0 29px;
 }
 
 .clear-text{
@@ -2937,11 +2938,12 @@ and (min-device-width : 1024px)   {
   and (-webkit-min-device-pixel-ratio: 3)
  { 
 
-.imgClass {
+        .imgClass {
     padding-top:11% !important;
     width: 46% !important;
+    outline: 1px solid red;
 }
-.myButtonStyle {
+    .myButtonStyle {
     max-width: 46%;
   }
 }
@@ -2953,7 +2955,9 @@ and (min-device-width : 1024px)   {
   and (-webkit-min-device-pixel-ratio: 3)
   and (device-aspect-ratio: 2/3)
   and (orientation: landscape) { 
+
 }
+
 /* ----------- iPhone X ----------- */
 
 /* Portrait and Landscape */
@@ -3193,6 +3197,12 @@ and (device-height : 1366px)
   and (max-device-height: 834px)   
   and (-webkit-min-device-pixel-ratio: 2) {
 
+ 
+    div#flex-container {
+    width: 80.63% !important;
+    margin: 0 auto;
+    box-shadow: none;
+}
 
  .image-expanded-viewer {
 
@@ -3202,7 +3212,7 @@ and (device-height : 1366px)
     .sc-ion-card-ios-h {
     padding-left: 25% !important;
     padding-right: 25% !important;
-} 
+}    
 }
 
 /* Landscape */
@@ -3376,6 +3386,9 @@ and (device-height : 1366px)
     width: 47.9% !important; 
 }
 }
+
+
+
 
 
 

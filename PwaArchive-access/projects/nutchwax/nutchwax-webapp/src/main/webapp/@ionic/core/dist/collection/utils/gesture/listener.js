@@ -1,4 +1,6 @@
 export function addEventListener(el, eventName, callback, opts) {
+    // use event listener options when supported
+    // otherwise it's just a boolean for the "capture" arg
     const listenerOpts = supportsPassive(el) ? {
         'capture': !!opts.capture,
         'passive': !!opts.passive,

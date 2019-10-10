@@ -4,10 +4,12 @@
    */
   display: block;
   position: relative;
-  color: var(--color); }
+  color: var(--color);
+}
 
 :host(.ion-color) {
-  color: var(--ion-color-base); }
+  color: var(--ion-color-base);
+}
 
 :host {
   --color: var(--ion-color-step-550, #737373);
@@ -20,4 +22,5 @@
   padding-top: 0;
   padding-bottom: 0;
   font-size: 14px;
-  font-weight: 500; }
+  font-weight: 500;
+}

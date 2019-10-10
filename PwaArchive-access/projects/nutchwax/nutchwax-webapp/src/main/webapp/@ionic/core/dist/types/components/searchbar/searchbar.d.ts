@@ -1,13 +1,13 @@
-import '../../stencil.core';
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Color, Config, Mode, SearchbarChangeEventDetail } from '../../interface';
+import { Color, SearchbarChangeEventDetail } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Searchbar implements ComponentInterface {
     private nativeInput?;
     private isCancelVisible;
     private shouldAlignLeft;
-    el: HTMLElement;
-    config: Config;
-    doc: Document;
+    el: HTMLIonSearchbarElement;
     focused: boolean;
     noAnimate: boolean;
     /**
@@ -16,10 +16,6 @@ export declare class Searchbar implements ComponentInterface {
      * For more information on colors, see [theming](/docs/theming/basics).
      */
     color?: Color;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * If `true`, enable searchbar animation.
      */
@@ -50,7 +46,17 @@ export declare class Searchbar implements ComponentInterface {
     debounce: number;
     protected debounceChanged(): void;
     /**
+     * If `true`, the user cannot interact with the input.
+     */
+    disabled: boolean;
+    /**
      * Set the input's placeholder.
+     * `placeholder` can accept either plaintext or HTML as a string.
+     * To display characters normally reserved for HTML, they
+     * must be escaped. For example `<Ionic>` would become
+     * `&lt;Ionic&gt;`
+     *
+     * For more information: [Security Documentation](https://ionicframework.com/docs/faq/security)
      */
     placeholder: string;
     /**
@@ -58,9 +64,13 @@ export declare class Searchbar implements ComponentInterface {
      */
     searchIcon: string;
     /**
-     * If `true`, show the cancel button.
+     * Sets the behavior for the cancel button. Defaults to `"never"`.
+     * Setting to `"focus"` shows the cancel button on focus.
+     * Setting to `"never"` hides the cancel button.
+     * Setting to `"always"` shows the cancel button regardless
+     * of focus state.
      */
-    showCancelButton: boolean;
+    showCancelButton: boolean | string;
     /**
      * If `true`, enable spellcheck on the input.
      */
@@ -98,12 +108,13 @@ export declare class Searchbar implements ComponentInterface {
      */
     ionFocus: EventEmitter<void>;
     protected valueChanged(): void;
+    protected showCancelButtonChanged(): void;
     componentDidLoad(): void;
     /**
      * Sets focus on the specified `ion-searchbar`. Use this method instead of the global
      * `input.focus()`.
      */
-    setFocus(): void;
+    setFocus(): Promise<void>;
     /**
      * Returns the native `<input>` element used under the hood.
      */
@@ -145,20 +156,34 @@ export declare class Searchbar implements ComponentInterface {
      */
     private positionCancelButton;
     private getValue;
+    private hasValue;
+    /**
+     * Determines whether or not the cancel button should be visible onscreen.
+     * Cancel button should be shown if one of two conditions applies:
+     * 1. `showCancelButton` is set to `always`.
+     * 2. `showCancelButton` is set to `focus`, and the searchbar has been focused.
+     */
+    private shouldShowCancelButton;
     hostData(): {
+        'aria-disabled': string | null;
         class: {
             'searchbar-animated': boolean;
+            'searchbar-disabled': boolean;
             'searchbar-no-animate': boolean;
             'searchbar-has-value': boolean;
             'searchbar-left-aligned': boolean;
             'searchbar-has-focus': boolean;
+            'searchbar-should-show-cancel': boolean;
         } | {
+            [x: string]: boolean;
             'searchbar-animated': boolean;
+            'searchbar-disabled': boolean;
             'searchbar-no-animate': boolean;
             'searchbar-has-value': boolean;
             'searchbar-left-aligned': boolean;
             'searchbar-has-focus': boolean;
+            'searchbar-should-show-cancel': boolean;
         };
     };
-    render(): JSX.Element[];
+    render(): any[];
 }

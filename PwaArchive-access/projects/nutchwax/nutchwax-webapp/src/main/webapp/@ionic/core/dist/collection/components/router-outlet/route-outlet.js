@@ -1,7 +1,13 @@
+import { h } from '@stencil/core';
+import { config } from '../../global/config';
+import { getIonMode } from '../../global/ionic-global';
 import { attachComponent, detachComponent } from '../../utils/framework-delegate';
 import { transition } from '../../utils/transition';
 export class RouterOutlet {
     constructor() {
+        /**
+         * If `true`, the router-outlet should animate the transition of components.
+         */
         this.animated = true;
     }
     swipeHandlerChanged() {
@@ -13,7 +19,7 @@ export class RouterOutlet {
         this.ionNavWillLoad.emit();
     }
     async componentDidLoad() {
-        this.gesture = (await import('../../utils/gesture/swipe-back')).createSwipeBackGesture(this.el, this.queue, () => !!this.swipeHandler && this.swipeHandler.canStart(), () => this.swipeHandler && this.swipeHandler.onStart(), step => this.ani && this.ani.progressStep(step), (shouldComplete, step, dur) => {
+        this.gesture = (await import('../../utils/gesture/swipe-back')).createSwipeBackGesture(this.el, () => !!this.swipeHandler && this.swipeHandler.canStart(), () => this.swipeHandler && this.swipeHandler.onStart(), step => this.ani && this.ani.progressStep(step), (shouldComplete, step, dur) => {
             if (this.ani) {
                 this.ani.progressEnd(shouldComplete, step, dur);
             }
@@ -30,6 +36,7 @@ export class RouterOutlet {
             this.gesture = undefined;
         }
     }
+    /** @internal */
     async commit(enteringEl, leavingEl, opts) {
         const unlock = await this.lock();
         let changed = false;
@@ -42,6 +49,7 @@ export class RouterOutlet {
         unlock();
         return changed;
     }
+    /** @internal */
     async setRouteId(id, params, direction) {
         const changed = await this.setRoot(id, params, {
             duration: direction === 'root' ? 0 : undefined,
@@ -52,6 +60,7 @@ export class RouterOutlet {
             element: this.activeEl
         };
     }
+    /** @internal */
     async getRouteId() {
         const active = this.activeEl;
         return active ? {
@@ -63,10 +72,12 @@ export class RouterOutlet {
         if (this.activeComponent === component) {
             return false;
         }
+        // attach entering view to DOM
         const leavingEl = this.activeEl;
         const enteringEl = await attachComponent(this.delegate, this.el, component, ['ion-page', 'ion-page-invisible'], params);
         this.activeComponent = component;
         this.activeEl = enteringEl;
+        // commit animation
         await this.commit(enteringEl, leavingEl, opts);
         await detachComponent(this.delegate, leavingEl);
         return true;
@@ -75,17 +86,20 @@ export class RouterOutlet {
         if (leavingEl === enteringEl) {
             return false;
         }
+        // emit nav will change event
         this.ionNavWillChange.emit();
-        const { mode, queue, win, el } = this;
-        const animated = this.animated && this.config.getBoolean('animated', true);
-        const animationBuilder = this.animation || opts.animationBuilder || this.config.get('navAnimation');
+        const mode = getIonMode(this);
+        const { el } = this;
+        const animated = this.animated && config.getBoolean('animated', true);
+        const animationBuilder = this.animation || opts.animationBuilder || config.get('navAnimation');
         await transition(Object.assign({ mode,
-            queue,
             animated,
-            animationBuilder, window: win, enteringEl,
+            animationBuilder,
+            enteringEl,
             leavingEl, baseEl: el, progressCallback: (opts.progressAnimation
                 ? ani => this.ani = ani
                 : undefined) }, opts));
+        // emit nav changed event
         this.ionNavDidChange.emit();
         return true;
     }
@@ -103,68 +117,256 @@ export class RouterOutlet {
     }
     static get is() { return "ion-router-outlet"; }
     static get encapsulation() { return "shadow"; }
+    static get originalStyleUrls() { return {
+        "$": ["route-outlet.scss"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["route-outlet.css"]
+    }; }
     static get properties() { return {
+        "delegate": {
+            "type": "unknown",
+            "mutable": false,
+            "complexType": {
+                "original": "FrameworkDelegate",
+                "resolved": "FrameworkDelegate | undefined",
+                "references": {
+                    "FrameworkDelegate": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            }
+        },
         "animated": {
-            "type": Boolean,
-            "attr": "animated"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "If `true`, the router-outlet should animate the transition of components."
+            },
+            "attribute": "animated",
+            "reflect": false,
+            "defaultValue": "true"
         },
         "animation": {
-            "type": "Any",
-            "attr": "animation"
-        },
-        "commit": {
-            "method": true
-        },
-        "config": {
-            "context": "config"
-        },
-        "delegate": {
-            "type": "Any",
-            "attr": "delegate"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "getRouteId": {
-            "method": true
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "queue": {
-            "context": "queue"
-        },
-        "setRouteId": {
-            "method": true
+            "type": "unknown",
+            "mutable": false,
+            "complexType": {
+                "original": "AnimationBuilder",
+                "resolved": "((Animation: Animation, baseEl: any, opts?: any) => Promise<Animation>) | undefined",
+                "references": {
+                    "AnimationBuilder": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "By default `ion-nav` animates transition between pages based in the mode (ios or material design).\nHowever, this property allows to create custom transition using `AnimateBuilder` functions."
+            }
         },
         "swipeHandler": {
-            "type": "Any",
-            "attr": "swipe-handler",
-            "watchCallbacks": ["swipeHandlerChanged"]
-        },
-        "win": {
-            "context": "window"
+            "type": "unknown",
+            "mutable": false,
+            "complexType": {
+                "original": "SwipeGestureHandler",
+                "resolved": "SwipeGestureHandler | undefined",
+                "references": {
+                    "SwipeGestureHandler": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                }
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            }
         }
     }; }
     static get events() { return [{
-            "name": "ionNavWillLoad",
             "method": "ionNavWillLoad",
+            "name": "ionNavWillLoad",
             "bubbles": true,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionNavWillChange",
             "method": "ionNavWillChange",
+            "name": "ionNavWillChange",
             "bubbles": false,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }, {
-            "name": "ionNavDidChange",
             "method": "ionNavDidChange",
+            "name": "ionNavDidChange",
             "bubbles": false,
             "cancelable": true,
-            "composed": true
+            "composed": true,
+            "docs": {
+                "tags": [{
+                        "text": undefined,
+                        "name": "internal"
+                    }],
+                "text": ""
+            },
+            "complexType": {
+                "original": "void",
+                "resolved": "void",
+                "references": {}
+            }
         }]; }
-    static get style() { return "/**style-placeholder:ion-router-outlet:**/"; }
+    static get methods() { return {
+        "commit": {
+            "complexType": {
+                "signature": "(enteringEl: HTMLElement, leavingEl: HTMLElement | undefined, opts?: RouterOutletOptions | undefined) => Promise<boolean>",
+                "parameters": [{
+                        "tags": [],
+                        "text": ""
+                    }, {
+                        "tags": [],
+                        "text": ""
+                    }, {
+                        "tags": [],
+                        "text": ""
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "HTMLElement": {
+                        "location": "global"
+                    },
+                    "RouterOutletOptions": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                },
+                "return": "Promise<boolean>"
+            },
+            "docs": {
+                "text": "",
+                "tags": [{
+                        "name": "internal",
+                        "text": undefined
+                    }]
+            }
+        },
+        "setRouteId": {
+            "complexType": {
+                "signature": "(id: string, params: ComponentProps<null> | undefined, direction: RouterDirection) => Promise<RouteWrite>",
+                "parameters": [{
+                        "tags": [],
+                        "text": ""
+                    }, {
+                        "tags": [],
+                        "text": ""
+                    }, {
+                        "tags": [],
+                        "text": ""
+                    }],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "RouteWrite": {
+                        "location": "import",
+                        "path": "../../interface"
+                    },
+                    "ComponentProps": {
+                        "location": "import",
+                        "path": "../../interface"
+                    },
+                    "RouterDirection": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                },
+                "return": "Promise<RouteWrite>"
+            },
+            "docs": {
+                "text": "",
+                "tags": [{
+                        "name": "internal",
+                        "text": undefined
+                    }]
+            }
+        },
+        "getRouteId": {
+            "complexType": {
+                "signature": "() => Promise<RouteID | undefined>",
+                "parameters": [],
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    },
+                    "RouteID": {
+                        "location": "import",
+                        "path": "../../interface"
+                    }
+                },
+                "return": "Promise<RouteID | undefined>"
+            },
+            "docs": {
+                "text": "",
+                "tags": [{
+                        "name": "internal",
+                        "text": undefined
+                    }]
+            }
+        }
+    }; }
+    static get elementRef() { return "el"; }
+    static get watchers() { return [{
+            "propName": "swipeHandler",
+            "methodName": "swipeHandlerChanged"
+        }]; }
 }

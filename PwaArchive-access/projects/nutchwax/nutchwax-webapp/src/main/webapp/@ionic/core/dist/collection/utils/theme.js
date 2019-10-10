@@ -1,17 +1,14 @@
 export function hostContext(selector, el) {
     return el.closest(selector) !== null;
 }
+/**
+ * Create the mode and color classes for the component based on the classes passed in
+ */
 export function createColorClasses(color) {
     return (typeof color === 'string' && color.length > 0) ? {
         'ion-color': true,
         [`ion-color-${color}`]: true
     } : undefined;
-}
-export function createThemedClasses(mode, name) {
-    return {
-        [name]: true,
-        [`${name}-${mode}`]: mode !== undefined
-    };
 }
 export function getClassList(classes) {
     if (classes !== undefined) {
@@ -29,9 +26,9 @@ export function getClassMap(classes) {
     return map;
 }
 const SCHEME = /^[a-z][a-z0-9+\-.]*:/;
-export async function openURL(win, url, ev, direction) {
+export async function openURL(url, ev, direction) {
     if (url != null && url[0] !== '#' && !SCHEME.test(url)) {
-        const router = win.document.querySelector('ion-router');
+        const router = document.querySelector('ion-router');
         if (router) {
             if (ev != null) {
                 ev.preventDefault();

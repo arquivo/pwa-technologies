@@ -1,5 +1,8 @@
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Color, Mode, SegmentChangeEventDetail, StyleEventDetail } from '../../interface';
+import { Color, SegmentChangeEventDetail, StyleEventDetail } from '../../interface';
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
 export declare class Segment implements ComponentInterface {
     el: HTMLElement;
     /**
@@ -8,10 +11,6 @@ export declare class Segment implements ComponentInterface {
      * For more information on colors, see [theming](/docs/theming/basics).
      */
     color?: Color;
-    /**
-     * The mode determines which platform styles to use.
-     */
-    mode: Mode;
     /**
      * If `true`, the user cannot interact with the segment.
      */
@@ -44,6 +43,7 @@ export declare class Segment implements ComponentInterface {
             'segment-disabled': boolean;
             'segment-scrollable': boolean;
         } | {
+            [x: string]: boolean;
             'segment-disabled': boolean;
             'segment-scrollable': boolean;
         };

@@ -1,3 +1,4 @@
+import { writeTask } from '@stencil/core';
 import { GESTURE_CONTROLLER } from './gesture-controller';
 import { createPointerEvents } from './pointer-events';
 import { createPanRecognizer } from './recognizers';
@@ -10,7 +11,6 @@ export function createGesture(config) {
     const notCaptured = finalConfig.notCaptured;
     const onMove = finalConfig.onMove;
     const threshold = finalConfig.threshold;
-    const queue = finalConfig.queue;
     const detail = {
         type: 'pan',
         startX: 0,
@@ -50,10 +50,13 @@ export function createGesture(config) {
         detail.startTimeStamp = detail.timeStamp = timeStamp;
         detail.velocityX = detail.velocityY = detail.deltaX = detail.deltaY = 0;
         detail.event = ev;
+        // Check if gesture can start
         if (canStart && canStart(detail) === false) {
             return false;
         }
+        // Release fallback
         gesture.release();
+        // Start gesture
         if (!gesture.start()) {
             return false;
         }
@@ -65,14 +68,17 @@ export function createGesture(config) {
         return true;
     }
     function pointerMove(ev) {
+        // fast path, if gesture is currently captured
+        // do minimum job to get user-land even dispatched
         if (hasCapturedPan) {
             if (!isMoveQueued && hasFiredStart) {
                 isMoveQueued = true;
                 calcGestureData(detail, ev);
-                queue.write(fireOnMove);
+                writeTask(fireOnMove);
             }
             return;
         }
+        // gesture is currently being detected
         calcGestureData(detail, ev);
         if (pan.detect(detail.currentX, detail.currentY)) {
             if (!pan.isGesture() || !tryToCapturePan()) {
@@ -81,6 +87,8 @@ export function createGesture(config) {
         }
     }
     function fireOnMove() {
+        // Since fireOnMove is called inside a RAF, onEnd() might be called,
+        // we must double check hasCapturedPan
         if (!hasCapturedPan) {
             return;
         }
@@ -95,6 +103,12 @@ export function createGesture(config) {
         }
         hasCapturedPan = true;
         hasFiredStart = false;
+        // reset start position since the real user-land event starts here
+        // If the pan detector threshold is big, not resetting the start position
+        // will cause a jump in the animation equal to the detector threshold.
+        // the array of positions used to calculate the gesture velocity does not
+        // need to be cleaned, more points in the positions array always results in a
+        // more accurate value of the velocity.
         detail.startX = detail.currentX;
         detail.startY = detail.currentY;
         detail.startTimeStamp = detail.timeStamp;
@@ -126,6 +140,7 @@ export function createGesture(config) {
         hasFiredStart = true;
         gesture.release();
     }
+    // END *************************
     function pointerUp(ev) {
         const tmpHasCaptured = hasCapturedPan;
         const tmpHasFiredStart = hasFiredStart;
@@ -134,12 +149,14 @@ export function createGesture(config) {
             return;
         }
         calcGestureData(detail, ev);
+        // Try to capture press
         if (tmpHasCaptured) {
             if (onEnd) {
                 onEnd(detail);
             }
             return;
         }
+        // Not captured any event
         if (notCaptured) {
             notCaptured(detail);
         }
@@ -180,6 +197,8 @@ function calcGestureData(detail, ev) {
     detail.event = ev;
 }
 function updateDetail(ev, detail) {
+    // get X coordinates for either a mouse click
+    // or a touch depending on the given event
     let x = 0;
     let y = 0;
     if (ev) {

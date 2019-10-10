@@ -1,3 +1,6 @@
+/**
+ * Md Modal Leave Animation
+ */
 export function mdLeaveAnimation(AnimationC, baseEl) {
     const baseAnimation = new AnimationC();
     const backdropAnimation = new AnimationC();

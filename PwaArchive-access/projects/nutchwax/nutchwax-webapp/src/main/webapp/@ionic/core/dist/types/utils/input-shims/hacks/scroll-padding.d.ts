@@ -1,1 +1,1 @@
-export declare function enableScrollPadding(doc: Document, keyboardHeight: number): () => void;
+export declare function enableScrollPadding(keyboardHeight: number): () => void;

@@ -135,10 +135,10 @@ export interface IonicConfig {
     pickerLeave?: AnimationBuilder;
     keyboardHeight?: number;
     inputShims?: boolean;
-    scrollPadding?: string;
-    inputBlurring?: string;
+    scrollPadding?: boolean;
+    inputBlurring?: boolean;
     scrollAssist?: boolean;
-    hideCaretOnScroll?: string;
+    hideCaretOnScroll?: boolean;
     persistConfig?: boolean;
     _forceStatusbarPadding?: boolean;
     _testing?: boolean;

@@ -1,4 +1,4 @@
-.split-pane {
+ion-split-pane {
   /**
    * @prop --border: Border between panes
    */
@@ -10,7 +10,8 @@
   position: absolute;
   flex-direction: row;
   flex-wrap: nowrap;
-  contain: strict; }
+  contain: strict;
+}
 
 .split-pane-visible > .split-pane-side,
 .split-pane-visible > .split-pane-main {
@@ -22,33 +23,41 @@
   flex: 1;
   /* stylelint-disable-next-line declaration-no-important */
   box-shadow: none !important;
-  z-index: 0; }
+  z-index: 0;
+}
 
 .split-pane-visible > .split-pane-side:not(ion-menu),
 .split-pane-visible > ion-menu.split-pane-side.menu-enabled {
   display: flex;
-  flex-shrink: 0; }
+  flex-shrink: 0;
+}
 
 .split-pane-side:not(ion-menu) {
-  display: none; }
+  display: none;
+}
 
 .split-pane-visible > .split-pane-side {
-  order: -1; }
+  order: -1;
+}
 
 .split-pane-visible > .split-pane-side[side=end] {
-  order: 1; }
+  order: 1;
+}
 
 .split-pane-md {
-  --border: 1px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))); }
+  --border: 1px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+}
 
 .split-pane-md.split-pane-visible > .split-pane-side {
   min-width: 270px;
   max-width: 28%;
   border-right: var(--border);
-  border-left: 0; }
+  border-left: 0;
+}
 
 .split-pane-md.split-pane-visible > .split-pane-side[side=end] {
   min-width: 270px;
   max-width: 28%;
   border-right: 0;
-  border-left: var(--border); }
+  border-left: var(--border);
+}

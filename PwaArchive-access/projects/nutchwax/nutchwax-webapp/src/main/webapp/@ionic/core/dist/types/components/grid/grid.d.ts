@@ -1,4 +1,3 @@
-import '../../stencil.core';
 import { ComponentInterface } from '../../stencil.core';
 export declare class Grid implements ComponentInterface {
     /**
@@ -7,8 +6,9 @@ export declare class Grid implements ComponentInterface {
     fixed: boolean;
     hostData(): {
         class: {
+            [x: string]: boolean;
             'grid-fixed': boolean;
         };
     };
-    render(): JSX.Element;
+    render(): any;
 }

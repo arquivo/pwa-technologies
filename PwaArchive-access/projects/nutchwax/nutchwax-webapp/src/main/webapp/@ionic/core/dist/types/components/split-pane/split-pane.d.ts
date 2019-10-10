@@ -1,24 +1,12 @@
 import { ComponentInterface, EventEmitter } from '../../stencil.core';
-import { Mode } from '../../interface';
 export declare class SplitPane implements ComponentInterface {
     private rmL;
-    mode: Mode;
     el: HTMLElement;
     visible: boolean;
-    isServer: boolean;
-    win: Window;
     /**
      * The content `id` of the split-pane's main content.
      * This property can be used instead of the `[main]` attribute to select the `main`
      * content of the split-pane.
-     *
-     * ```html
-     * <ion-split-pane content-id="my-content">
-     *   <ion-menu></ion-menu>
-     *   <div id="my-content">
-     * </ion-split-pane>
-     * ```
-     *
      */
     contentId?: string;
     /**
@@ -45,6 +33,7 @@ export declare class SplitPane implements ComponentInterface {
     private styleChildren;
     hostData(): {
         class: {
+            [x: string]: boolean;
             'split-pane-visible': boolean;
         };
     };

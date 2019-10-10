@@ -37,7 +37,7 @@ export function assert(actual, reason) {
     if (!actual) {
         const message = 'ASSERT: ' + reason;
         console.error(message);
-        debugger;
+        debugger; // tslint:disable-line
         throw new Error(message);
     }
 }
@@ -45,6 +45,8 @@ export function now(ev) {
     return ev.timeStamp || Date.now();
 }
 export function pointerCoord(ev) {
+    // get X coordinates for either a mouse click
+    // or a touch depending on the given event
     if (ev) {
         const changedTouches = ev.changedTouches;
         if (changedTouches && changedTouches.length > 0) {
@@ -57,8 +59,15 @@ export function pointerCoord(ev) {
     }
     return { x: 0, y: 0 };
 }
-export function isEndSide(win, side) {
-    const isRTL = win.document.dir === 'rtl';
+/**
+ * @hidden
+ * Given a side, return if it should be on the end
+ * based on the value of dir
+ * @param side the side
+ * @param isRTL whether the application dir is rtl
+ */
+export function isEndSide(side) {
+    const isRTL = document.dir === 'rtl';
     switch (side) {
         case 'start': return isRTL;
         case 'end': return !isRTL;
