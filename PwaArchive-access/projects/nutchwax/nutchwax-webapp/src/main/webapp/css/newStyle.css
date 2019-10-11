@@ -264,6 +264,9 @@ ion-range#ual-range {
     .ml-smd-1p { margin-left: 1%; } 
 }
 
+.faded{
+    opacity: 0.6;
+}
 
 #resultados-lista {
     font-family: roboto !important;
@@ -271,7 +274,6 @@ ion-range#ual-range {
     margin-right: 1px !important;
     margin-top: 1px;
 }
-
 
 #resultados-lista ul{
     list-style-type: none;
@@ -449,7 +451,7 @@ div.omitted-results:hover {
 #conteudo-resultado{
     padding-left: 0px;
     padding-right: 0px;
-    padding-bottom: /*40px*/40px;
+    /*padding-bottom: /*40px*//*40px;*/
     margin-top: 30px;
 }
 
@@ -466,10 +468,19 @@ div.omitted-results:hover {
 
     /*margin-top: 20px;*/
     /*margin-bottom: 30px !important;*/
-    float: left;
+    /*float: left;*/
     width: 100%;
     padding: 0 8px;
     height: 100%;
+
+    margin-top: 20px; */
+    /* margin-bottom: 30px !important; */
+    /* float: left; */
+    width: 100%;
+    padding: 0 8px;
+    height: 100%;
+    max-width: 952px !important;
+    margin: 0 auto !important;
 }  
 
 .pagesNextPrevious a {
@@ -671,7 +682,7 @@ div.omitted-results:hover {
 .month-version-div{
     text-align: center;
     display: none;
-    background-color: #90caf9;
+    background-color: /*#90caf9*/#00b2fffc !important;
     color: white;
     cursor: pointer;
     margin-left: 0px!important;
@@ -691,7 +702,7 @@ div.omitted-results:hover {
     text-align: left;
     display: none;
     cursor: pointer;
-    background-color: #e3f2fd;
+    background-color: /*#e3f2fd*/#c0ebfe !important;
 }
 
 .yearA{
@@ -699,10 +710,16 @@ div.omitted-results:hover {
 }
 
 .yearUl a{
-    text-decoration: underline;
+    text-decoration: /*underline*/none;   
+    color: /*blue*/#007aff;
     font-size: 16px!important;
     width: 100%;
     border-bottom: 1px dashed;
+}
+
+.yearUl a:visited{     
+    color: black;  
+    text-decoration:inherit;
 }
 
 .day-version-div{
@@ -1154,6 +1171,10 @@ body#advanced .box-content,  body#advanced-images .box-content{
     display: none;
 }
 
+
+
+
+
 .calendar-anchor-advanced img{
    position: absolute;
    top: -23px;
@@ -1246,6 +1267,7 @@ body#advanced .box-content,  body#advanced-images .box-content{
     padding-right: 15px;    
     padding-top: 14px;
     cursor: pointer;
+    transition: background-color 0.5s;
 }
 
 .urlBlock:active{
@@ -1366,7 +1388,7 @@ input:active, input:focus{
 }
 
 body#home-search #conteudo-pesquisa-erro{    
-    margin-top: /*-8px*//*-11px*/-38px; 
+    margin-top: /*-8px*//*-11px*/-10px !important; 
 }
 
 #conteudo-pesquisa-erro{    
@@ -1401,8 +1423,26 @@ body#home-search #conteudo-pesquisa-erro{
 
 #years{
     /*margin-top: 30px;*/
-    padding-bottom: 40px;
-    margin: 0 29px;
+    padding-bottom: 40px;    
+}
+
+body#home-search #years {    
+    margin:-9px 28px 0 28px !important;   
+}
+
+body#home-search #conteudo-versoes {
+    margin: -10px 20px 0 20px !important; 
+}
+
+body#home-search #layoutTV {
+   margin: 11px 21px !important;
+   padding: 18px 0 15px 0 !important;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+   border-bottom: none !important;
+  /* max-width: 100% !important;
+   width: 89.6% !important;*/
+   background-color: #007AFF !important;   
 }
 
 .clear-text{
@@ -1439,13 +1479,18 @@ div#flex-container {
     background-color:white !important;
     /* New style */
     /*margin-top: -7px;*/
+    width: 100% !important;
+    max-width: 960px !important;
+    min-width: 320px !important;
+    margin:0 auto !important;
 }
 
 div#flex-container div:first-child { 
-    /*-webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
-    -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
-    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);*/
-    margin-bottom: 12px !important
+    margin-bottom: 12px !important;
+    float: none;
+    width: 96% !important;
+    margin: 9px auto 12px auto !important;
+    back
 }
 
 div#flex-container div:second-child { 
@@ -1456,15 +1501,14 @@ div#flex-container div:second-child {
 
 div#flex-container div {
     border-radius:10px;
-    margin: 7px 8px /*12px*/18px 8px !important;      
+    margin: 7px 8px /*12px*/24px 8px !important;      
     padding: 0px;
     /*height: auto !important;*/
     /*border:1px solid #ebebeb;*/
-    background-color:/*#f8f8f8*/#f2f2f2;  
-    /*-webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
-    -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18);
-    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.18); */
-
+    background-color:/*#f8f8f8*//*#f2f2f2*/#9e9e9e33 !important;      
+    /*-webkit-box-shadow: 0px 11px 10px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 11px 10px 0px rgba(0,0,0,0.1);
+    box-shadow:0px 11px 10px 0px rgba(0,0,0,0.1);*/
   }
 
 #flex-container a {
@@ -1479,9 +1523,13 @@ div#flex-container div div {
 div#flex-container h3 {
     margin: 5px 0 16px 10px;
     margin: 5px 0;
-    padding: 14px 6px 6px 14px;
-    font-size: 1.6em;  
-    color: black !important;
+    padding: 20px 6px 10px 14px;
+    font-size: /*1.7*/1.8em;  
+    color: black !important;  
+    font-weight: 500 !important;
+    line-height: 0.9em !important;
+    /*letter-spacing: -0.5px !important*/
+    display:/*none*/ block;
 }
 
 #archivePresentation-pt, #archivePresentation-en, #testimonials-en, #testimonials-pt  {
@@ -1872,7 +1920,7 @@ ion-button{
 
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
-   width: 100vw;
+   width: 89vw;
    margin-top: 0px!important;
    z-index:2;
    overflow-y: auto!important;
@@ -1907,14 +1955,21 @@ ion-button{
 }
 
 .image-mobile-expanded-div ion-card ion-row{
-    margin-left: 20px;
-    margin-right: 20px;
+    /*margin-left: 20px;
+    margin-right: 20px;*/
+    margin-left: 23px;
+    margin-right: 23px;
 }
 
 .hydrated h3 {
     margin-top: 30px;
     font-size: 2em;
     color: rgba(255,255,255,0.6) !important;
+}
+
+.hydrated h3 a {   
+    color: #00bcd4 !important;
+    font-size: 0.75em !important;
 }
 
 body#homeImages .hydrated h4 {
@@ -1924,7 +1979,7 @@ body#homeImages .hydrated h4 {
 
 body#home-landing.hydrated h3 {
     margin-top: 30px;
-    font-size: 2em;
+    font-size: 1.6em;
     color: #222 !important;
 }
 
@@ -1935,8 +1990,8 @@ body#home-landing.hydrated h3 {
 .image-mobile-expanded-div ion-list{    
     padding: 15px 0 8px 0;
     background: transparent;
-    border-top: 1px solid /*#607d8b*//*#435b66**/#435b6696;
-    border-bottom: 1px solid /*#607d8b*/#435b66;
+    border-top: 1px solid /*#607d8b*//*#435b66**//*#435b6696*//*#435b66*/#435b6685;
+    border-bottom: 1px solid /*#607d8b*//*#435b66*/#435b6685;
     margin-top: 5px !important;
     margin-bottom: -17px !important;
 }
@@ -1970,7 +2025,7 @@ body#home-landing.hydrated h3 {
     background: rgba(0,0,0,0.2);
     border-radius: 25px;
     top: 5px;
-    right: 6px;
+    right: calc(5vw + 6px);
     z-index: 2;
 }
   .closeItAbsolute
@@ -1978,7 +2033,7 @@ body#home-landing.hydrated h3 {
     display: none;
     position: absolute;
     top: 5px;
-    right: 6px;
+    right: calc(5vw + 6px);
     z-index: 2;
     color: rgba(255,255,255,0.6) !important;
     background: rgba(0,0,0,0.5);
@@ -2042,8 +2097,9 @@ h1,h2,h3,h4,h5{
     z-index: 4;
     width: 100%;
     margin: 0px;
-    font-family: Roboto, "Open Sans", sans-serif;
-    font-size: 1.4em;
+    font-family: "Roboto", "Open Sans", sans-serif;
+    font-size: 1.3em;
+    height: 48px;
     font-weight: normal !important;
     text-align: center;
     background-color: #007AFF !important;
@@ -2091,7 +2147,7 @@ h1,h2,h3,h4,h5{
 
 .list-versions-div a {color:#1a0dab !important} 
 
-#welcomeMessage {
+#flex-container #welcomeMessage {
     position:relative; 
     width: 96% ;
     padding: 15px 15px 5px 15px !important;;
@@ -2099,20 +2155,21 @@ h1,h2,h3,h4,h5{
     background-color: none;
     background-color: #007AFF !important;
     color: white;
-    margin-top:16px !important;
-    margin-bottom:-2px !important;
+    margin-top:7px !important;
+    margin-bottom:11px !important;
+    font-family: Roboto;
 }
 
 #welcomeMessage #closeMessage {
     cursor: pointer;
     position: absolute;
-    top: 0px;
-    right: -2px;
+    top: -3px;
+    right: 5px;
     width: auto !important;
     height: auto !important;
     padding: 3px 6px;
     border: 1px solid white;
-    background-color: white;
+    background-color: white !important;
     border-radius: 49px;
     font-size: 0.8em !important;
     color: #007aff;
@@ -2121,11 +2178,12 @@ h1,h2,h3,h4,h5{
 #welcomeMessage h2 {
     text-align: center !important;
     font-family: roboto !important;
-    font-size:5.6vw !important;
-    margin:0;
+    font-size: 5.5vw !important;
+    margin: 0;
     padding: 0 0 5px 0;
-    max-width:100%;
+    max-width: 100%;
     background-color: #007AFF;
+    font-weight: bold;
 }
 
 #welcomeMessage p {
@@ -2197,28 +2255,18 @@ a#BotaoPesquisaAvancada {
     margin-right: 0 !important;
     border: 1px solid #007AFF;
     color: #007AFF;   
-    font-size: 1.25em;
-    /*font-weight: 600;*/
+    font-size: 1.25em;   
 }
 
-/*a#BotaoPesquisaAvancada:hover {
-    background-color: #007AFF !important;
-    margin-right: none !important;
-    color: /*white*//*#757575 !important;
-    cursor: pointer;  
-    text-decoration: none;
-    border:1px solid transparent;
-}*/
-
 a#BotaoPesquisaAvancada:active {
-    background-color: #fff!important;   
-    border: 1px solid #777!important;
-    color: #777 !important;
+    background-color: #007AFF!important;   
+    border: 1px solid #007AFF!important;
+    color: #fff !important;
 }
 
 a#BotaoPaginas {
-    /*border: 1px solid /*#007AFF*//*#ccc;*/    
-    transition: background-color 0.5s ease 0s;
+   
+    /*transition: background-color 0.5s ease 0s;*/
     text-decoration: none !important;
     font-size: /*0.90em*//*1.11em*/1.25em;
     margin-right: /*6px*/6px !important; 
@@ -2509,10 +2557,17 @@ ion-list > ion-item > h5{
 }
 
 th.thTV, td.tdTV {
-  text-align: center!important;
+  /*text-align: center!important;
   padding: 4px!important;
-  min-width: 70px;
+  min-width: 50px;
+  border-right: 1px solid lightgray;*/
+
+  text-align: center !important;
+  padding: 4px !important;
+  min-width: 57px;
   border-right: 1px solid lightgray;
+  font-size: 1.2em !important;
+  padding: 10px 0px !important
 }
 
 tr.trTV:nth-child(even){background-color: #f2f2f2}
@@ -2521,12 +2576,45 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
     text-align: center;
     margin-top: 16px;
     margin-bottom: 15px;
+    position: relative;
 }
 #layoutTV h4{
     display: inline;
     padding-right: 15px;
     /* New code below */    
-    color: #007aff;
+    color: /*#007aff*/ white;
+    font-size: 1.3em !important;
+}
+
+.leftArrow{ 
+    position: absolute;
+    top: 15%;
+    margin: auto 0.50%; 
+    left: 11px;
+    border-radius: 50px !important;
+    padding: /*1% !important */1% 3% 1% 2.3% !important;
+
+    border: 1px solid white;
+    background-color: rgb(255, 255, 255);
+    color: #007AFF !important;  
+}
+
+.rightArrow{
+    margin: auto 0.50%; 
+    position: absolute;
+    top: 15%;
+    right: 12px;
+    border-radius: 50px !important;
+    padding:/* 1% */1% 2.3% 1% 3% !important;
+
+    border: 1px solid white;
+    background-color: rgb(255, 255, 255);
+    color: #007AFF !important;  
+}
+
+.tdTV a {
+  color: #007AFF !important;
+  text-decoration: none !important;
 }
 
 #intro .texto-1 { /*temporary removing number of versions to be displayed in mobile Table/List of versions */
@@ -2722,22 +2810,51 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 
 @media screen 
 and (device-width: 320px) and (device-height: 534px) and (-webkit-device-pixel-ratio: 1.5) {
-   /*a.advancedSearch {
-    font-size: /*0.90em*//*1.11em*//*0.8em;     
+   a.advancedSearch {
+    font-size: /*0.90em*//*1.11em*/0.8em;     
    font-size: 1em !important;     
    }
+
+   div#flex-container h3 {
+    font-size: 1.5em;   
+}
+
+#resultados-lista ul li h2 {
+    font-size: 15px;  
+}
+#resultados-lista ul li .resumo {
+    font-size: 14.5px !important;
+    
+}
+
+.list-versions-div .date {   
+    font-size: 14.2px !important;
+}
+
+.hydrated h3 {  
+    font-size: 1.2em;
+}
+
+body#homeImages .hydrated h4 {
+    font-size: 1.2em !important;  
+}
 
    #welcomeMessage #closeMessage {
     cursor: pointer;
     position: absolute;
     top: 0px;
-    right: 0px;
+    right: 8px;
     padding: 0px 4px;
     border: 1px solid white;
     background-color: white;
     border-radius: 49px;
-    font-size: 0.9em !important;
-    color: #007aff; */
+    font-size: 0.95em !important;
+    color: #007aff;    
+}
+.call-to-actions {
+
+    height: 300px !important;
+}
 }
 /* Responsivo Portrait and Landscape */
 @media only screen 
@@ -2755,7 +2872,7 @@ and (min-device-width : 1024px)   {
     }
 
     #searchBarButtonsDiv {
-    margin-top: -8px !important;   
+    margin-top: /*-8px*/ -26px!important;   
     }
 }
 /**************************************************************
@@ -2834,6 +2951,14 @@ and (min-device-width : 1024px)   {
   and (-webkit-min-device-pixel-ratio: 2)
   and (orientation: portrait) {
 
+.leftArrow {    
+    top: 28% !important; 
+}
+
+.rightArrow {    
+    top: 28% !important; 
+}
+
 #searchBarButtonsDiv .advancedSearch {
     font-size: 1em !important ;       
  }
@@ -2867,6 +2992,14 @@ and (min-device-width : 1024px)   {
   and (-webkit-min-device-pixel-ratio: 2)  
   and (orientation: portrait) {
   
+  .leftArrow {    
+    top: 26% !important; 
+}
+
+.rightArrow {    
+    top: 26% !important; 
+}
+
   #searchBarButtonsDiv .advancedSearch {
     font-size: 1em !important ;       
   }
@@ -2938,13 +3071,12 @@ and (min-device-width : 1024px)   {
   and (-webkit-min-device-pixel-ratio: 3)
  { 
 
-        .imgClass {
+.imgClass {
     padding-top:11% !important;
     width: 46% !important;
-    outline: 1px solid red;
 }
-    .myButtonStyle {
-    max-width: 46%;
+.myButtonStyle {
+   /* max-width: 46%;*/
   }
 }
 
@@ -2955,9 +3087,7 @@ and (min-device-width : 1024px)   {
   and (-webkit-min-device-pixel-ratio: 3)
   and (device-aspect-ratio: 2/3)
   and (orientation: landscape) { 
-
 }
-
 /* ----------- iPhone X ----------- */
 
 /* Portrait and Landscape */
@@ -3014,16 +3144,16 @@ and (min-device-width : 768px)
 and (max-device-height : 1024px) 
  { 
 
-.myButtonStyle {
+/*.myButtonStyle {
    max-width:100% !important;
 }
 
 body#home-search #conteudo-pesquisa-erro{    
-    margin-top: /*-8px*//*-11px*/-10px; 
+    margin-top: /*-8px*//*-11px*//*-10px; 
 }
 .image-expanded-viewer {
 
-    padding-top: /*10px*/61px;
+    padding-top: /*10px*//*61px;
 }
 
     .sc-ion-card-ios-h {
@@ -3038,7 +3168,7 @@ body#home-search #conteudo-pesquisa-erro{
     .imgClass {
     display: block;
     margin: auto;
-    padding-top: /*5%*//*50%*/53%;
+    padding-top: /*5%*//*50%*//*53%;
     width: 41%;
 }
     .myButtonStyle {
@@ -3077,7 +3207,7 @@ div#flex-container div#into-award {
 }
     
 #searchForm .form-control {
-    margin-top: /*25px*/12px;    
+    margin-top: /*25px*//*12px;    
 }
 
     span#buttonSearch button span {
@@ -3095,9 +3225,9 @@ div#flex-container div#into-award {
     width: 79.5% !important;
 }
     span#buttonSearch button span {
-    top: -32px !important;
-    right: 3px !important;
-    }
+    /*top: -32px !important;
+    right: 3px !important;*/
+   /* }
 
     #searchBarButtonsDiv {
     margin-top: -28px !important;   
@@ -3125,9 +3255,9 @@ div#flex-container div#into-award {
 
 /* iPad / iPad Mini in landscape  */
 @media only screen 
-and (device-width : 1024px) 
-and (device-height : 768px)
- { 
+and (min-device-width : 1024px) 
+and (max-device-height : 768px)
+ { /*
 
     div#flex-container div {
   }
@@ -3146,10 +3276,10 @@ and (device-height : 768px)
     }
     div#flex-container { 
     margin: 0 auto;
-    width: 63.9% !important;
+    /*width: 63.9% !important;*/
   }
 
-  #resultados-lista {
+ /* #resultados-lista {
     width: 96% !important;
     margin: 0px auto !important;
 }
@@ -3177,7 +3307,7 @@ and (device-height : 768px)
 and (device-width : 1024px) 
 and (device-height : 1366px) 
  {
-    div {outline: 1px solid red !important;}     
+     
 }
 
 /* ----------- iPad Pro 10.5" ----------- */
@@ -3196,23 +3326,6 @@ and (device-height : 1366px)
   and (min-device-width: 834px) 
   and (max-device-height: 834px)   
   and (-webkit-min-device-pixel-ratio: 2) {
-
- 
-    div#flex-container {
-    width: 80.63% !important;
-    margin: 0 auto;
-    box-shadow: none;
-}
-
- .image-expanded-viewer {
-
-    padding-top: /*10px*/61px;
-}
-
-    .sc-ion-card-ios-h {
-    padding-left: 25% !important;
-    padding-right: 25% !important;
-}    
 }
 
 /* Landscape */
@@ -3223,22 +3336,6 @@ and (device-height : 1366px)
   and (max-device-width: 1112px) 
   and (orientation: landscape) 
   and (-webkit-min-device-pixel-ratio: 2) {
-
-    div#flex-container {
-    width: 80.7% !important;
-    margin: 0 auto;
-    box-shadow: none;
-}
-
- .image-expanded-viewer {
-
-    padding-top: /*10px*//61px;
-}
-
-    .sc-ion-card-ios-h {
-    padding-left: 25% !important;
-    padding-right: 25% !important;
-} 
 }
 
 /* ----------- iPad Pro 12.9" ----------- */
@@ -3257,140 +3354,507 @@ and (device-height : 1366px)
   and (min-device-width: 1024px) 
   and (max-device-width: 1024px) 
   and (orientation: portrait) 
-  and (-webkit-min-device-pixel-ratio: 2) {
-
-    div#flex-container {
-    width: 63.9% !important;
-    margin: 0 auto;
-    box-shadow: none;
+  and (-webkit-min-device-pixel-ratio: 2) { 
 }
+
+@media (min-width:896px ) and (max-width: 414px) { 
+}
+
+@media (min-width:768px ) and (max-width:960px){
+.col-sm-offset-1 {
+width: 100% !important;
+max-width: /*1005px*/993px !important;
+margin: 0 auto !important;
+float: none !important;
+}
+span#buttonSearch button span {
+right: -15px !important;
+top: 14px !important;
+}
+
+#searchForm .form-control {
+margin-left: auto !important;
+margin-right: auto !important; 
+width: 100% !important;
+}
+}
+@media (min-width:768px ) and (max-width:960px){
 #photos {
-    margin: 0 auto;
-    width: 63.5% !important;   
+   max-width: 972px !important
+}
 }
 
+@media (min-width:768px ) and (max-width:3000px){
+span#buttonSearch button span {
+right: -15px !important;
+top: 14px !important;
+}
+.col-sm-offset-1 {
+margin-left: 9px !important;
+margin-right: 9px !important; 
+}
+.col-sm-offset-1 {
+width: 100% !important;
+max-width: 972px !important;
+margin: 0 auto !important;
+float: none !important;
 }
 
-/* Landscape */
-/* Declare the same value for min- and max-width to avoid colliding with desktops */
-/* Source: https://medium.com/connect-the-dots/css-media-queries-for-ipad-pro-8cad10e17106*/
-@media only screen 
-  and (min-device-width: 1366px) 
-  and (max-device-width: 1366px) 
-  and (orientation: landscape) 
-  and (-webkit-min-device-pixel-ratio: 2) {
-
+body#home-search #years {    
+    /*margin:0 30px !important;*/   
+    margin: 0 auto !important;
+    width: 92.5% !important;
+    max-width: 920px !important;        
+}
 }
 
-/**************************************************
-/* General styles for mobile, tablet and desktop */
-
-/* 
-  ##Device = Desktops
-  ##Screen = 1281px to higher resolution desktops
-*/
-
-@media (min-width: 1281px) {
-  
-  
-}
-
-/* 
-  ##Device = Laptops, Desktops
-  ##Screen = B/w 1025px to 1280px
-*/
-
-@media (min-width: 1025px) and (max-width: 1280px) {
-  
-  //CSS
-  
-}
-
-/* 
-  ##Device = Tablets, Ipads (portrait)
-  ##Screen = B/w 768px to 1024px
-*/
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  
-  //CSS
-  
-}
-
-/* 
-  ##Device = Tablets, Ipads (landscape)
-  ##Screen = B/w 768px to 1024px
-*/
-
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  
-  //CSS
-  
-}
-
-/* 
-  ##Device = Low Resolution Tablets, Mobiles (Landscape)
-  ##Screen = B/w 481px to 767px
-*/
-
-@media (min-width: 481px) and (max-width: 767px) {
-  
-  //CSS
-  
-}
-
-/* 
-  ##Device = Most of the Smartphones Mobiles (Portrait)
-  ##Screen = B/w 320px to 479px
-*/
-
-@media (min-width: 320px) and (max-width: 480px) {
-  
+@media (min-width:320px ) and (max-width:399px){
+body#home-search #layoutTV {  
+  padding: 18px 0 15px 0 !important;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: none !important;
  
+  background-color: #007AFF !important;
 }
-@media (min-width: 320px) and (max-width: 768px) {   
+}
+
+@media (min-width:320px ) and (max-width:399px){ 
+}
+
+.leftArrow{ 
+    position: absolute;
+    top: 26.5%;
+    margin: auto 0.50%; 
+    left: 11px;
+    border-radius: 50px !important;
+    padding: 1% !important;
+    border: 1px solid white;
+    background-color: rgb(255, 255, 255);
+    color: #007AFF !important;
+    font-size: 1.1em !important;
+
+}
+
+.rightArrow{
+    margin: auto 0.50%; 
+    position: absolute;
+    top: 26.5%;
+    right: 11px;
+    border-radius: 50px !important;
+    padding: 1% !important;
+    border: 1px solid white;
+    background-color: rgb(255, 255, 255);
+    color: #007AFF !important; 
+    font-size: 1.1em !important;  
+}
+
+.leftArrow:active, .rightArrow:active { 
+    background-color: #007AFF !important;
+    color: rgb(255, 255, 255)!important;  
+}
+}
+
+@media (min-width:400px ) and (max-width:767px){
+.call-to-actions {
+    height: 400px !important;  
 }
 
 
-
-@media (min-width:769px ) and (max-width: 1024px) {
-  div#flex-container {
-    margin: 0 auto;
-   /* width: 63.9% !important;*/
+.leftArrow{ 
+    position: absolute;
+    top: 26%;
+    margin: auto 0.50%; 
+    left: 11px;
+    border-radius: 50px !important;    
+    padding:1% 2.5% 0.95% 2% !important;
+    border: 1px solid white;
+    background-color: rgb(255, 255, 255);
+    color: #007AFF !important;  
 }
+
+.rightArrow{
+    margin: auto 0.50%; 
+    position: absolute;
+    top: 26%;
+    right: 11px;
+    border-radius: 50px !important;    
+    padding:1% 2% 0.95% 2.5% !important;
+    border: 1px solid white;
+    background-color: rgb(255, 255, 255);
+    color: #007AFF !important;   
+}
+
+.leftArrow:active, .rightArrow:active { 
+    background-color: #007AFF !important;
+    color: rgb(255, 255, 255)!important;  
+}
+}
+
+@media (min-width:768px ) and (max-width:3000px){
+
+.leftArrow {
+    position: absolute;
+    top: 20.5%;
+    margin: auto 0.50%;
+    left: 10px;
+    border-radius: 50px !important;   
+    padding: 1% 1.75% 1% 1.55% !important;
+    border: 1px solid white;
+    background-color: rgb(255, 255, 255);
+    color: #007AFF !important;
+    font-size: 1em !important;
+}
+
+
+.rightArrow {   
+    position: absolute;
+    top: 20.5%;
+    right: 10px;
+    border-radius: 50px !important;    
+    padding: 1% 1.45% 1% 1.75% !important;
+    border: 1px solid white;
+    background-color: rgb(255, 255, 255);
+    color: #007AFF !important;
+    font-size: 1em !important;
+
+}
+
+.call-to-actions {
+    height: 600px !important;
+}
+
+body#home-search #conteudo-versoes { 
+    margin: 0 auto !important;
+    width: 95.5% !important;
+    max-width: 915px !important;   
+}
+
+body#home-search #conteudo-versoes { 
+    margin: 0 auto !important;
+    width: 95.5% !important;
+    max-width: 915px !important;   
+}
+
+body#home-search #layoutTV {
+    width: 95.5% !important;
+    max-width: 915px !important;
+}
+
+}
+
+@media (min-width:768px ) and (max-width:3000px) {
+body#homepage-landing span#buttonSearch button span {
+    top: -39px;
+    right: -4px;
+}
+
+body#home-search .col-sm-offset-1 {
+    margin-left:none !important;
+}
+
+body#homeImages span#buttonSearch button span {
+    top: -41px !important;
+    right: -12px !important;
+}
+
+body#home-search .col-sm-offset-1 {
+    margin-left: none !important; 
+}
+
+body#home-search .col-sm-10 {
+    width: 100%;
+}
+
+body#home-search span#buttonSearch button span {
+    top: 13px !important;
+    right: -12px !important;
+}
+
+body#home-search #resultados-lista > ul > li {
+
+    border: 1px solid #dfe1e5;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    margin-left: 7px;
+    margin-right: 7px;  
+}
+
+.col-md-offset-2 {
+   margin-left: 0 !important;
+   margin:0 auto !important;
+}
+.col-md-8 {
+    width: 100% !important;
+    margin:0 auto !important;
+}
+
+body#home-search #searchBarButtonsDiv {
+    margin-bottom: /*32px*/35px !important;
+}
+body#home-search #searchBarButtonsDiv {
+    margin-top: -29px !important;
+}
+
+body#home-search .col-md-8 {
+    float:none !important;
+}
+body#home-search .col-md-8 {
+    float:none !important;
+}
+
+body#homeImages #photos {
+   width: 100% !important;
+    max-width: 945px !important;
+    margin: 0 auto  10px auto !important; 
+}
+
 #photos {
-    margin: 0 auto;
-    width: 63.9% !important; 
+max-width: 960px !important;
+}
+.pagesNextPrevious a {
+    margin-bottom: 5px !important;
+}
+
+.pagesNextPrevious a:second-child {
+    margin-bottom: 50px !important;
 }
 }
 
-@media (min-width:1025px ) and (max-width: 1440px) {
-  div#flex-container {
-    margin: 0 auto;
-    width: 47.9% !important;   
-}
-#photos {
-    margin: 0 auto;
-    width: 47.9% !important; 
-}
+@media (min-width:768px ) and (max-width:3000px) {
+ body#homeImages span#buttonSearch button span {
+    top: 13px !important;
+    right: -4px !important;
 }
 
-@media (min-width:1441px ) and (max-width: 2560px) {
-  div#flex-container {
-    margin: 0 auto;
-    width: 47.9% !important;   
+body#home-search #years {
+    margin: 3px auto 0 auto !important;
+    width: 93.3% !important;
+    max-width: 901px !important;
 }
 
-#photos {
-    margin: 0 auto;
-    width: 47.9% !important; 
+body#home-search #layoutTV {
+    margin: -20px auto 0 auto !important;
+    width: 95% !important;
+    max-width: 914px !important;
+}
+
+body#home-search #conteudo-versoes {
+    margin: 0 auto !important;
+    width: 95.1% !important;
+    max-width: 915px !important;
+    font-family: roboto !important;
+}
+
+body#home-search span#buttonSearch button span {
+    top: 13px !important;
+    right: -12px !important;
+}
+#resultados-lista > ul > li {
+    border: 1px solid #dfe1e5;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
 }
 }
 
 
+/* iPad Portrait */
+@media (device-width: 768px) and (device-height:1024px) {
+
+#ionSlider {  
+    margin-top: -13px;
+}
+div#flex-container {
+max-width: 747px !important;   
+}
+ .pagesNextPrevious {    
+    max-width: 744px !important;
+}
+#searchBarBlock {
+    max-width: 728px !important;
+    margin: -71px auto 0px auto !important;
+}
+#searchForm .form-control {
+    margin-bottom: 11px;
+}
+#buttonSearch button {    
+    right: 42px !important;   
+}
+#resultados-lista {
+  width: 100% !important;
+  max-width: 742px !important;
+  margin:0 auto !important;   
+}
+body#homeImages #photos {
+    max-width: 736px !important;   
+}
+}
+
+/* iPad Portrait */
+@media (device-width: 1024px) and (device-height:768px) {
+
+ #searchBarBlock {
+    position: relative !important;
+    z-index: 999999;
+    margin-top: /*-20px*//*-28px*//*-78px*/-78px !important;
+    display: block !important;
+    width: 100% !important;
+    font-family: 'Roboto', sans-serif !important;
+    max-width: 917px !important;
+    margin: -70px auto 0 auto !important;
+}
+#resultados-lista {
+    font-family: roboto !important;
+    margin-left: 1px !important;
+    margin-right: 1px !important;
+    margin-top: 1px;
+    width: 100% !important;
+    max-width: 930px !important;
+    margin: 0 auto !important;
+}
+.pagesNextPrevious {  
+    max-width: 932px !important;
+}
+body#homeImages #photos {
+    max-width: 926px !important;   
+}
+.leftArrow {   
+    top: 16.5%;
+    left: 8px;
+    padding: 1% 1.7% 1% 1.45% !important;
+}
+.rightArrow {   
+    top: 15.5%;
+    right: 8px;
+    padding: 1% 1.4% 1% 1.65% !important; 
+}
+div#flex-container {
+    width: 100% !important;
+    max-width: 933px !important;
+    margin-top: 19px !important;
+}
+span#buttonSearch {
+    right: 15px !important;
+    top: 0px;
+}
+}
+
+/* iPad Pro Landscape */
+@media (device-width: 1366px) and (device-height:1024px) {
+#searchForm .form-control {
+    margin-top: 10px;   
+    margin-bottom: 10px;
+}
+.input-group .form-control:first-child, .input-group-addon:first-child, .input-group-btn:first-child>.btn, .input-group-btn:first-child>.btn-group>.btn, .input-group-btn:first-child>.dropdown-toggle, .input-group-btn:last-child>.btn-group:not(:last-child)>.btn, .input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+div#form_container{
+    width: 100% !important;
+    max-width: 956px !important;
+    margin: 0 auto !important;
+}
+.leftArrow {   
+    top: 15.5%;  
+    padding: 1% 1.75% 1% 1.4% !important; 
+}
+.rightArrow {   
+    top: 15.5%;   
+    padding: 1% 1.4% 1% 1.75% !important;
+}
+body#homeImages span#buttonSearch button span {
+    top: 6px !important;
+    right: 3px !important;    
+}
+}
 
 
+/* iPad Pro Portrait */
+@media (device-width: 1024px) and (device-height:1366px) {
+    div#flex-container {
+    flex-direction: column;  
+    width: 100% !important;
+    max-width: none!important;
+    max-width: 956px!important;
+    min-width: 320px !important;
+    margin: 0 auto !important;   
+}
+span#buttonSearch button span {
+    top: -41px !important;
+    right: 22px !important;   
+}
+ div#form_container{
+    width: 100% !important;
+    max-width: 940px !important;
+    margin: 0 auto !important;
+}
+body#home-search span#buttonSearch button span {      
+    top: 0px !important;
+    right: -4px !important;
+}
 
+.leftArrow {   
+    top: 15.5%;  
+    padding: 1% 1.75% 1% 1.4% !important; 
+}
+.rightArrow {   
+    top: 15.5%;   
+    padding: 1% 1.4% 1% 1.75% !important;
+}
+}
 
+/* Image Gallery left and right arrows */
+.left-image-viewer-arrow{
+}
+
+.left-icon {
+    font-size: 2.5em !important;
+    position: absolute;
+    color: #00BCD4;
+    top: 0;
+    bottom: 0;
+    left: -8px;
+    bottom: 0;    
+    border-radius: 50px;       
+    z-index: 2;
+    border-radius: 50px;
+    padding: 1px;
+    background-color: rgba(0,0,0,0);    
+    margin: 0 !important;
+    height: 100vh;
+}
+.right-image-viewer-arrow{
+}
+
+.right-icon {
+    font-size: 2.5em !important;
+    position: absolute;     
+    color: #00BCD4;      
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    margin: 50% 0 !important;   
+    right: -8px;   
+    border-radius: 50px;
+    padding: 1px;
+    background-color: rgba(0,0,0,0);  
+    margin: 0 !important;
+    height: 100vh;
+}
+
+}/* Landscape */
+@media screen and (orientation:landscape) { 
+.left-icon {   
+    padding: 0px !important;
+    left: 0px !important;   
+    outline: 1px solid white;
+}
+.right-icon { 
+    padding: 0px !important; 
+    right: 0px !important;  
+    outline: 1px solid white;
+}
 
 

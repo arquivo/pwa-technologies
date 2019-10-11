@@ -416,6 +416,10 @@ String[] queryString_splitted=null;
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script src="/js/jquery-latest.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <!-- dual slider dependencies -->
     <script type="text/javascript" src="/js/nouislider.min.js"></script>
     <link rel="stylesheet" href="/css/nouislider.min.css">
@@ -704,11 +708,16 @@ function resizeResultsPageHeight(){
 }
 
 function createResultsTable(numberOfVersions, inputURL){
+    scrollLeftPosition = 0; 
+    /*where the scroll should start in left of table*/
+    scrollOffset = 200; /*distance in px of each scroll*/
 
     $('<div id="resultados-url"></div>'+
       '<div id="layoutTV">'+
-        '<h4 class="text-bold"><i class="fa fa-table"></i> Tabela </h4>'+
-        '<button class="clean-button-no-fill anchor-color" onclick="localStorage.setItem(\'isList\', \'true\');window.location.reload()"><h4><i class="fa fa-list"></i> Lista</h4></button>'+
+        '<h4 class="leftArrow"><button onclick="scrollTableLeft()" class="clean-button-no-fill"><i class="fa fa-caret-left" aria-hidden="true"></i></ion-icon></button></h4>'+      
+        '<h4 class="text-bold faded"><i class="fa fa-table"></i> Tabela </h4>'+
+        '<button class="clean-button-no-fill anchor-color " onclick="localStorage.setItem(\'isList\', \'true\');window.location.reload()"><h4><i class="fa fa-list"></i> Lista</h4></button>'+
+        '<h4 class="rightArrow"><button onclick="scrollTableRight()" class="clean-button-no-fill"><i class="fa fa-caret-right" aria-hidden="true"></i></ion-icon></button></h4>'+
       '</div>'+
       '<div class="wrap">' +
              '  <div id="intro">' +
@@ -719,7 +728,7 @@ function createResultsTable(numberOfVersions, inputURL){
              '  </div>' +
              '</div>' + 
        '<div id="conteudo-versoes" class="swiper-no-swiping">'+
-             '  <div id="resultados-lista" class="swiper-no-swiping" style="overflow: auto; min-height: 200px!important;">'+
+             '  <div id="resultados-lista" class="swiper-no-swiping" style="overflow: auto; min-height: 200px!important;">'+             
              '    <table id="resultsTable" class="tabela-principal swiper-no-swiping">'+
              '      <tbody id="tableBody" class="swiper-no-swiping">'+
                     '<tr id="years" class="swiper-no-swiping trTV"></tr>'+
@@ -739,6 +748,28 @@ function createResultsTable(numberOfVersions, inputURL){
     window.onresize = resizeResultsPageHeight;
 
 }
+
+function scrollTableLeft(){
+
+   scrollLeftPosition -= scrollOffset;
+   if(scrollLeftPosition <= 0) {scrollLeftPosition = 0;}
+   $('#resultados-lista').animate({scrollLeft: scrollLeftPosition}, 800);
+  console.log('scrolling left');
+  console.log('scrolling to position: '+scrollLeftPosition);
+}
+function scrollTableRight(){
+   scrollLeftPosition += scrollOffset;
+   /*Verify if scrollOffset+scrollLeftPosition is bigger than width of table*/
+   if(scrollOffset+scrollLeftPosition >  $('#resultsTable').width() ){
+     /*Maximum scroll right*/
+     scrollLeftPosition = $('#resultsTable').width() - scrollOffset;
+   }
+  
+   $('#resultados-lista').animate({scrollLeft: scrollLeftPosition}, 800);
+  console.log('scrolling right');
+  console.log('scrolling to position: '+scrollLeftPosition);
+}
+
 
 function createMatrixList(versionsArray, versionsURL){
   var today = new Date();
@@ -807,7 +838,7 @@ function createResultsList(numberOfVersions, inputURL){
     $('<div id="resultados-url">'+Content.resultsQuestion+' \'<a href="searchMobile.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>\'</div>'+
       '<div id="layoutTV">'+
         '<button class="clean-button-no-fill anchor-color" onclick="localStorage.setItem(\'isList\', \'false\');window.location.reload();"><h4><i class="fa fa-table"></i> Tabela </h4></button>'+
-        '<h4 class="text-bold"><i class="fa fa-list"></i> Lista</h4>'+
+        '<h4 class="text-bold  faded"><i class="fa fa-list"></i> Lista</h4>'+
       '</div>'+
           '<div class="wrap">' +
              '<div id="intro">' +
@@ -1086,8 +1117,7 @@ function attachClicks(){
       <ul class="suggestions-no-results">
         <li><fmt:message key='search.no-results.suggestions.well-written'/></li>
         <li><fmt:message key='search.no-results.suggestions.time-interval'/></li>
-        <li><fmt:message key='search.no-results.suggestions.keywords'/></li>
-        <li><fmt:message key='search.no-results.suggestions.generic-words'/></li>
+        <li><fmt:message key='search.no-results.suggestions.keywords'/></li>        
         <%-- Show specific suggestions for URL queries --%>
         <% if ( usedWayback) { %>
         <li><fmt:message key='search.no-results.suggestions.internet-archive'><c:out value = "${urlQuery}"/></fmt:message></li>
