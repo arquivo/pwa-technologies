@@ -159,11 +159,11 @@
 
                      <!-- starts Paginas and images links option -->
                      <div id="searchBarButtonsDiv"><br>
-                       <a id="BotaoPaginas" class="advancedSearch botao-selected" href="#"><span><fmt:message key='home.pages'/></span></a>
+                       <a id="PageButton" class="advancedSearch selected-button" href="#"><span><fmt:message key='home.pages'/></span></a>
                        <script type="text/javascript">
-                         document.write('<a id="BotaoImagens" class="advancedSearch" href="'+imagesHref+'"><span><fmt:message key='images.images'/></span></a>');
+                         document.write('<a id="ImageButton" class="advancedSearch" href="'+imagesHref+'"><span><fmt:message key='images.images'/></span></a>');
                        </script>
-                       <a id="BotaoPesquisaAvancada" class="advancedSearch "href="/advanced.jsp?l=pt"><span><fmt:message key='topbar.menu.advanced'/></span></a>                   
+                       <a id="advancedSearchButton" class="advancedSearch "href="/advanced.jsp?l=pt"><span><fmt:message key='topbar.menu.advanced'/></span></a>                   
                      </div>
                 </div>  
         </div>      

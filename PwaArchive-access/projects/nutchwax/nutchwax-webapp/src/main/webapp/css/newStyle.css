@@ -1936,14 +1936,14 @@ ion-button{
 .visit-page{
     --padding-start: 1em;
     margin-left: -1em;
-    color: #00bcd4 !important;
+    color: /*#00bcd4*/#007AFF !important;
     --padding-start: 0.45em;
 }
 
 .view-details{
     --padding-end: /*1em*/0.75em;
     margin-right:  -1em;
-    color: #00bcd4 !important
+    color: /*#00bcd4 */#007AFF !important
 }
 
 .image-mobile-expanded-div ion-list ion-item{
@@ -1968,7 +1968,7 @@ ion-button{
 }
 
 .hydrated h3 a {   
-    color: #00bcd4 !important;
+    color: /*#00bcd4 */ #007AFF !important;
     font-size: 0.75em !important;
 }
 
@@ -2009,7 +2009,7 @@ body#home-landing.hydrated h3 {
     word-wrap: break-word;
 }
 .image-mobile-expanded-div ion-list ion-item a{
-    color: #00bcd4 !important;
+    color: /*#00bcd4*/#007AFF !important;
     line-height: normal;
     padding-bottom: 9px !important;
     display: block;
@@ -2204,12 +2204,12 @@ a.advancedSearch {
     /*border:1px solid #ebebeb;*/
     border-radius: /*50px*/7px;     
     /*font-size:/*0.95em*//*1.7em; */   
-    transition: background-color 0.5s ease 0s;
+    /*transition: background-color 0.5s ease 0s;*/
     background-color:transparent;
     color:#007AFF;
     /*border: 1px solid #007AFF; */
     border: 1px solid /*#007AFF*//*#757575*/#eceff0;
-    transition: background-color 0.5s ease 0s; 
+    /*transition: background-color 0.5s ease 0s; */
     /*text-transform: uppercase !important;*/
 }
 
@@ -2247,7 +2247,7 @@ a.advancedSearch:hover {
 }
 
 /* New style for Advanced Search */
-a#BotaoPesquisaAvancada {
+a#advancedSearchButton {
     float: right !important;    
     background-color: #fff !important;
     margin-right: none !important;
@@ -2258,13 +2258,13 @@ a#BotaoPesquisaAvancada {
     font-size: 1.25em;   
 }
 
-a#BotaoPesquisaAvancada:active {
+a#advancedSearchButton:active {
     background-color: #007AFF!important;   
     border: 1px solid #007AFF!important;
     color: #fff !important;
 }
 
-a#BotaoPaginas {
+a#PageButton {
    
     /*transition: background-color 0.5s ease 0s;*/
     text-decoration: none !important;
@@ -2275,18 +2275,18 @@ a#BotaoPaginas {
     border: 1px solid #007Aff;
 }
 
-.botao-selected{
+.selected-button{
     background-color: /*#007AFF*/#ccc !important;
     color: white !important;  
 }
 
-a#BotaoPaginas:hover {
+a#PageButton:hover {
     background-color: #007AFF;
     color:white;
     border: 1px solid transparent;    
 }
 
-body#home-search a#BotaoImagens, a#BotaoImagens:active {
+body#home-search a#ImageButton, a#ImageButton:active {
     color: /*black*//*#757575 !important /*black*/#009688 !important;
     border: 1px solid /*#ccc*/#dfe1e5;
     transition: background-color 0.5s ease 0s;
@@ -2298,7 +2298,7 @@ body#home-search a#BotaoImagens, a#BotaoImagens:active {
     background-color: white !important;
 }
 
- a#BotaoPaginas:active {
+ a#PageButton:active {
     padding: 11px 0;
     background-color: #ffffff!important;
     border: none !important;
@@ -2307,7 +2307,7 @@ body#home-search a#BotaoImagens, a#BotaoImagens:active {
 
 }
 
-body#homeImages a#BotaoPaginas, a#BotaoPaginas:active {
+body#homeImages a#PageButton, a#PageButton:active {
     color: /*black*//*#757575 !important /*black*/#009688 !important;
     border: 1px solid /*#ccc*/#dfe1e5;
     transition: background-color 0.5s ease 0s;
@@ -2318,7 +2318,7 @@ body#homeImages a#BotaoPaginas, a#BotaoPaginas:active {
     background-color: white !important;
 }
 
-a#BotaoImagens, a#BotaoImagens:active { 
+a#ImageButton, a#ImageButton:active { 
     color: /*black*//*#757575 !important /*black*/#009688 !important;
     border: 1px solid #007AFF;
     transition: background-color 0.5s ease 0s;
@@ -2330,7 +2330,7 @@ a#BotaoImagens, a#BotaoImagens:active {
     background-color: #007AFF !important;
 }
 
-a#BotaoImagens:hover {
+a#ImageButton:hover {
     background-color: #007AFF;
     color:white;
     border: 1px solid transparent; 
@@ -2796,9 +2796,18 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
       padding-left: 0 !important
 
 }
-
 #swipeContainer {      
     background-color: black !important;
+}
+
+#home-tagline {
+    max-width: 100% !important;
+    text-align: center !important;
+    padding: 10px 2px !important;
+    margin: 0 !important;
+    font-size: 2.294em;
+    color: black;
+    font-weight: bold;  
 }
 /***************************************************************************/
 /***************************************************************************/
@@ -2890,14 +2899,14 @@ and (min-device-width : 1024px)   {
    a.advancedSearch {
     font-size: /*0.90em*//*1.11em*/0.8em;       
   }
-   a#BotaoPesquisaAvancada {
+   a#advancedSearchButton{
     font-size:0.8em;
     }   
 
-   a#BotaoPaginas {   
+   a#PageButton {   
     font-size: 0.8em ;      
    } 
-   a#BotaoImagens {   
+   a#ImageButton {   
     font-size: 0.8em;     
    }
 } 
@@ -3812,7 +3821,7 @@ body#home-search span#buttonSearch button span {
 .left-icon {
     font-size: 2.5em !important;
     position: absolute;
-    color: #00BCD4;
+    color: /*#00BCD4*/#007AFF;
     top: 0;
     bottom: 0;
     left: -8px;
@@ -3831,7 +3840,7 @@ body#home-search span#buttonSearch button span {
 .right-icon {
     font-size: 2.5em !important;
     position: absolute;     
-    color: #00BCD4;      
+    color: /*#00BCD4*/#007AFF !important;      
     z-index: 2;
     top: 0;
     bottom: 0;

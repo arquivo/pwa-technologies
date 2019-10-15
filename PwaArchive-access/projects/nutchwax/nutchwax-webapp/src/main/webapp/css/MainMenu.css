@@ -11,8 +11,8 @@ font-family: 'Roboto','HelveticaNeue','Arial', sans-serif !important;
 	height: 100%;	
 	padding:0;
 	margin:0;
-	/*float: right;*/
-
+	max-width:2044px !important;
+	margin: 0 auto !important;
 }
 
 body#adavanced .swiper-container {
