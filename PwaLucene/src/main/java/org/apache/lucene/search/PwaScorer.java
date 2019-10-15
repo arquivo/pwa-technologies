@@ -312,7 +312,6 @@ public class PwaScorer extends Scorer {
 
 		// set filter
 		filters.add(new PwaBlacklistFilter(reader)); // add the blacklist filter
-		filters.add(new PwaSpamFilter(reader)); // add spam filter
 		chainFilter=new PwaFilterChain(filters,joiner);   // set chain filter
 	}
 	
