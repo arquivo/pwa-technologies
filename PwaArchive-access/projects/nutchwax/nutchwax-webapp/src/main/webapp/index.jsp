@@ -50,6 +50,8 @@
 
     String dateStartYear = dateStartString.substring(dateStartString.length()-4);
 
+    String dateStartStringIonic =  dateStartYear + "-" + dateStartMonth + "-" + dateStartDay;
+    
     String dateEndString = inputDateFormatter.format( dateEnd.getTime() );
 
     String dateEndDay = dateEndString.substring(0,2);
@@ -57,6 +59,8 @@
     String dateEndMonth = dateEndString.substring(3,5);
 
     String dateEndYear = dateEndString.substring(dateEndString.length()-4);
+
+    String dateEndStringIonic =  dateEndYear + "-" + dateEndMonth + "-" + dateEndDay;
 
     String yearStartNoParameter = "1996";    
 
@@ -132,6 +136,12 @@
   <!-- iOS Safari -->   
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="#000000">  
+  <script type="text/javascript">
+    var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
+    var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
+    var minYear = minDate.getFullYear();
+    var maxYear = maxDate.getFullYear();
+  </script>     
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
@@ -161,7 +171,6 @@
   <!--Includes mobiscroll (calendars for setting day month and year)-->
   <link href="css/mobiscroll.custom-2.6.2.min.css" rel="stylesheet" type="text/css" />
   <script src="js/mobiscroll.custom-2.6.2.min.js" type="text/javascript"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
 	<!-- end addthis for sharing on social media --> 
@@ -183,6 +192,12 @@
  }); 
  </script>
  <!-- ends closing Welcome blue div on homepage -->
+<link href="css/csspin.css" rel="stylesheet" type="text/css">
+  
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
+
+  <script type="text/javascript" src="js/configs.js"></script>
+  <script type="text/javascript" src="/js/js.cookie.js"></script>
 
   <script src="@ionic/core/dist/ionic.js"></script>
   <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">
@@ -199,8 +214,12 @@
     pagesHref = window.location.href;
     imagesHref = "/images.jsp?l=<%=language%>"  /*TODO remove from this href parameters that are only appliable to text search*/
   </script>  
-  <%@ include file="include/homepageHeader.jsp" %>
-  <script type="text/javascript">$('#pagesTab').addClass('selected');$('#pagesTab').addClass('primary-underline');</script>
+  
+  <div class="container-fluid topcontainer" id="headerSearchDiv">
+    <%@ include file="include/searchHeaderMobile.jsp" %>
+    <script type="text/javascript">$('#pagesTab').addClass('selected');$('#pagesTab').addClass('primary-underline');</script>
+  </div>
+
   <%@ include file="include/intro.jsp" %>
 
   <%@include file="include/analytics.jsp" %>
