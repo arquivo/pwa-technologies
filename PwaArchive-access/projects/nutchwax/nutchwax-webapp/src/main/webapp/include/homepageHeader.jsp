@@ -23,7 +23,7 @@
                     </div>                                
                  </form>    
 
-<script src="/include/clearForm.js"></script>      
+                <script src="/include/clearForm.js"></script>      
             </div>
         </div>
 </div>
