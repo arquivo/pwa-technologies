@@ -465,6 +465,7 @@ Content = {
   showImage='<fmt:message key="images.showImage" />';
   imageUndefined='<fmt:message key="images.undefined" />';
   showDetails = '<fmt:message key="images.showDetails" />';
+  fieldDescription = '<fmt:message key="images.field.description" />';
   pageString =  '<fmt:message key="images.page" />';
   imageString = '<fmt:message key="images.image" />';
   titleString= '<fmt:message key="images.title" />';
@@ -502,7 +503,13 @@ Content = {
           $('#loadingDiv').hide();
           $('#conteudo-resultado').show();
         }
+        $("#txtSearch").on('mousedown touchstart', function (e) {
+          e.stopPropagation();
+        });            
       });
+
+
+
     </script>      
 
     <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
@@ -590,7 +597,7 @@ Content = {
     }
   </script>
   <script type="text/javascript">
-    $('<div id="showSlides"><ion-slides id="expandedImageViewers" onload=slidesLoaded();></ion-slides></div>').insertBefore('.curve-background');
+    $('<div id="showSlides"><button onclick="previousImage()" class="left-image-viewer-arrow clean-button-no-fill"> <ion-icon name="ios-arrow-back" class="left-icon"></ion-icon></button><button onclick="nextImage()" class="right-image-viewer-arrow clean-button-no-fill"><ion-icon name="ios-arrow-forward" class="right-icon"></ion-icon></button><ion-slides id="expandedImageViewers" onload=slidesLoaded();></ion-slides></div>').insertBefore('.curve-background');
 
     checkElement('#expandedImageViewers > .swiper-wrapper') 
     .then((element) => {      

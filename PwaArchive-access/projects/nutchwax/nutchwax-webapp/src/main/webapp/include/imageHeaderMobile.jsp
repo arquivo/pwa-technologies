@@ -27,9 +27,21 @@
                 </script>   
                 <form id="searchForm" action="/images.jsp">
                 <div id="form_container"> 
+                    <script type="text/javascript">
+                      function submitForm() {
+                        $('.search-button').click();
+                      }
+                    </script>
                     <div id="searchBarBlock" class="input-group stylish-input-group">
                         
                             <input name="query" id="txtSearch" value="<c:out value = "${htmlQueryString}"/>" type="search" class="form-control no-radius search-input swiper-no-swiping" placeholder="<fmt:message key='home.search.placeholder'/>" autocapitalize="off" autocomplete="off" autocorrect="off"> 
+                            <script type="text/javascript">
+                                  $('#txtSearch').keydown(function (e){
+                                    if(e.keyCode == 13){
+                                        submitForm(); /*TODO:: this code shouldn't be needed. I.e. the enter key should work and submit the input form without this code*/
+                                    }
+                                  })
+                            </script>
                             <input type="hidden" id="l" name="l" value="<%=language%>">
                     </div>
                     <!-- starts search lupe and "x" close button -->
@@ -137,9 +149,6 @@
                                                                         
                       </script>  
                       <script type="text/javascript">
-                      function submitForm() {
-                        $('.search-button').click();
-                      }
                       $('#dateStart_top').on("change", submitForm);                          
                       $('#dateEnd_top').on("change", submitForm);
                       </script> 
@@ -159,9 +168,9 @@
                      <!-- starts Paginas and images links option -->
                      <div id="searchBarButtonsDiv"><br>                       
                        <script type="text/javascript">
-                         document.write('<a id="BotaoPaginas" class="advancedSearch" href="'+pagesHref+'"><span><fmt:message key='home.pages'/></span></a>');
-                         document.write('<a id="BotaoImagens" class="advancedSearch botao-selected" href="'+imagesHref+'"><span><fmt:message key='images.images'/></span></a>');
-                         document.write('<a id="BotaoPesquisaAvancada" class="advancedSearch "href="'+advancedHref+'"><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
+                         document.write('<a id="PageButton" class="advancedSearch" href="'+pagesHref+'"><span><fmt:message key='home.pages'/></span></a>');
+                         document.write('<a id="ImageButton" class="advancedSearch selected-button" href="'+imagesHref+'"><span><fmt:message key='images.images'/></span></a>');
+                         document.write('<a id="advancedSearchButton" class="advancedSearch "href="'+advancedHref+'"><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
                        </script>                                                                
                      </div>
                 </div>  

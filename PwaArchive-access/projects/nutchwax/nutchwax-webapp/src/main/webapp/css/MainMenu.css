@@ -11,8 +11,8 @@ font-family: 'Roboto','HelveticaNeue','Arial', sans-serif !important;
 	height: 100%;	
 	padding:0;
 	margin:0;
-	/*float: right;*/
-
+	max-width:2044px !important;
+	margin: 0 auto !important;
 }
 
 body#adavanced .swiper-container {
@@ -23,7 +23,6 @@ body#adavanced .swiper-container {
 .swiper-wrapper {
 	/*background-color: #252525;*/	
 	/*width: 100% !important/*100%*/;
-
 }
 
 .menu {
@@ -101,7 +100,7 @@ body#adavanced .swiper-container {
 }
 /*End menu button*/
 .menu h4 {
-	border-top: 1px solid #3E3E3E;;
+	border-top: 1px solid #3E3E3E;
 	padding-top: /*15px*/20px;
 	margin-bottom: 0px;
 	padding-bottom: /*15px*/20px;
@@ -166,7 +165,7 @@ color: #ccc !important;
 	margin-top: 7px;
 }
 #menuButton.cross{
-	margin-left: -64px;
+	margin-left: -63px;
     top: 7px;
     right: 1px;
 }
@@ -312,3 +311,5 @@ body#advanced .myButtonStyle:active, body#advanced-images .myButtonStyle:active 
 body#advanced .glyphicon-search:before, body#advanced-images .glyphicon-search:before {
 	display: none !important
 }
+
+

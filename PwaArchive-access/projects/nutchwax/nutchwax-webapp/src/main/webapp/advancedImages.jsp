@@ -146,7 +146,7 @@
 		            <div class="expandable-div">   
 						<fieldset id="words">
 							<legend><fmt:message key='advanced.terms'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid ">
+							<div class="box-content container-fluid" id="wordsOptions">
 								<div id="label-palavras-1">
 									<label for="adv_and" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.terms.all'/></label>
 									<div class="withTip ">
@@ -269,20 +269,21 @@
     </div>    
 
 <script>
-
+$('#wordsOptions').show();	
 $(".expandable-div legend").click(function() {
 	$('fieldset > legend > i').removeClass('fa-caret-up').addClass('fa-caret-down')
 
     var isVisible =  $(this).next().is(':visible');
     
-	$('fieldset > .box-content').slideUp('fast');
+	$('.box-content').slideUp('fast');
 
 	if (isVisible){		
+		console.log('hiding element');
 		$(this).next().slideUp('fast');
 		$(this).children("i").removeClass('fa-caret-up').addClass('fa-caret-down');
 	}
 	else{
-		console.log('not visible')
+		console.log('showing element');
 		$(this).next().slideDown('fast').show().slideDown('fast');
 		$(this).children("i").removeClass('fa-caret-down').addClass('fa-caret-up');		
 	}
