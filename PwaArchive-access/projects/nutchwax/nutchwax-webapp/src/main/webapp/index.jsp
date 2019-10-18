@@ -143,16 +143,13 @@
     var maxYear = maxDate.getFullYear();
   </script>     
 
-	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+	
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
     <!-- font awesome -->
   <link rel="stylesheet" href="css/font-awesome.min.css">
 
-  <!-- Google fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <script src="/js/jquery-latest.min.js"></script>
