@@ -678,7 +678,7 @@ div.omitted-results:hover {
 .month-version-div{
     text-align: center;
     display: none;
-    background-color: /*#90caf9*//*#00b2fffc*/ #0f8abf !important;
+    background-color: /*#90caf9*//*#00b2fffc*/ #009cdf !important;
     color: white;
     cursor: pointer;
     margin-left: 0px!important;
@@ -2099,11 +2099,11 @@ h1,h2,h3,h4,h5{
     width: 100%;
     margin: 0px;
     font-family: "Roboto", "Open Sans", sans-serif;
-    font-size: 1.3em;
+    font-size: 1.3em !important;
     height: 48px;
     font-weight: normal !important;
     text-align: center;
-    background-color: #007AFF !important;
+    background-color: #1b65a2 !important;
     color:white !important;
     border:none !important;
     border-radius: none !important
