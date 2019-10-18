@@ -183,7 +183,7 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
 }
 
 .curve-background{
-	background-color: #000;
+	background-color: /*#000*/#1c75c0;
 	z-index: 9;
 	padding-top: 22px;
 }
@@ -195,7 +195,7 @@ body#advanced .logo-main-div, body#advanced-images .logo-main-div {
     padding-right: 23px;	
 	padding-top: 8px !important;
     padding-bottom: 16px !important;
-	background-color: #000;	
+	background-color: /*#000*/ /*#1a73ba*//*#25517a*/#1c75c0;	
 	text-align: center;
     z-index: 9;       
 }
@@ -296,8 +296,8 @@ padding-right: 42px !important;
 
 body#advanced .myButtonStyle, body#advanced-images .myButtonStyle  {
     padding: 11px 0;
-    background-color: #007AFF!important;   
-    border: 1px solid #007AFF!important;
+    background-color: /*#007AFF*/#1c75c0!important;   
+    border: 1px solid /*#007AFF*/#1c75c0!important;
     color: white !important;
 }
 

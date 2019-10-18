@@ -24,10 +24,10 @@ body {
     transition: ::-moz-placeholder 0.5s ease 0s;
     transition: :-ms-input-placeholder 0.5s ease 0s;
     transition: :-moz-placeholder 0.5s ease 0s;
-    background-color: #9e9e9e33 !important;
+    background-color: /*#9e9e9e33*/#eaeaea !important;
     padding-left: 15px;
     border: 1px solid /*#dfe1e5*/transparent !important;
-    border-top: none !important;
+   /* border-top: none !important;*/
     outline: none !important;
     font-size: 19px !important;
     font-family: 'Roboto', sans-serif !important;
@@ -106,7 +106,7 @@ body {
     height: /*92px*//*69px*/73px;
     height: /*92px*//*69px*/79px;
     padding-left: 36px;
-    color:/* #007AFF*/white;
+    color:/* #007AFF*//*white*/#1a73ba;
     z-index: -1;
 }
 
@@ -120,7 +120,7 @@ body {
     font-size: 1.15em !important;
     height: /*92px*/79px;
     padding-left: 7px;
-    color:/* #007AFF*/white;
+    color:/* #007AFF*//*white*/#1a73ba;
     z-index: -1;
 }
 
@@ -129,11 +129,12 @@ body {
  #calendarDayLeft {
     position: relative;
     top: /*12px*/29px;
-    left: -11px;
+    left: -9.8px;
     font-size: 1.1em;
     letter-spacing: -1px;
-    color: /* #007AFF*/white;
+    color: /* #007AFF*//*white*/#1a73ba;
     /* font-weight: 600; */
+    font-family: helvetica, arial !important;
 }
 
 #calendarMonthLeft {
@@ -142,19 +143,20 @@ body {
     left: 12px;
     font-size: 0.9em;
     letter-spacing: 0px;
-    color: /* #007AFF*/white;
+    color: /* #007AFF*//*white*/#1a73ba;
     /* font-weight: 600; */
-
+    font-family: helvetica, arial !important;
 }
 
 #calendarDayRight {    
-        position: relative;
+    position: relative;
     top: /*12px*/27px;
-    left: -9.4px;
+    left: -9.5px;
     font-size: 1.1em;
     letter-spacing: -1px;
-    color: /* #007AFF*/white;
+    color: /* #007AFF*//*white*/#1a73ba;
     /* font-weight: 600; */
+    font-family: helvetica, arial !important;
 }
 
 #calendarMonthRight {
@@ -163,38 +165,28 @@ body {
     left: 11px;
     font-size: 0.9em;
     letter-spacing: 0px;
-    color: /* #007AFF*/white;
-    /* font-weight: 600; */
-    
+    color: /* #007AFF*//*white*/#1a73ba;  
+    font-family: helvetica, arial !important;   
 }
 /* ends month and day */
 #calendarYearLeft {   
     position: relative;
     bottom: /*13px*/30px;
     /* border-top: 1px solid /*#007AFF; */
-    left: 1px;
+    left: 1.1px;
     padding-top: -2px !important;
     font-size: 1.2em;
-    font-weight: bold;
+    /*font-weight: bold;*/
+    font-family: helvetica, arial !important;   
 }
-
 #calendarYearRight {
     position: relative;
     bottom: /*11px*/29px;
-    /* border-top: 1px solid /*#007AFF; */
     left: 2px;
     padding-top: 1px !important;
     font-size: 1.2em;
-    font-weight: bold;
-
-}
-
-
-#sliderCircleRight span { 
-   /* margin: 0px 0 0 10px;
-    position: relative;
-    top: 15px;
-    font-size: 1.1em; */
+    /*font-weight: bold;*/
+    font-family: helvetica, arial !important; 
 }
 
 ion-item { 
@@ -304,7 +296,7 @@ ion-range#ual-range {
 
 
 #resultados-lista ul h2 a{
-  color: /*#1a0dab*//*#1967D2*/ #007aff!important;
+  color: /*#1a0dab*//*#1967D2*/ /*#007aff*/#1c75c0!important;
   font-size: 1.18em !important;
   font-family: 'Roboto', sans-serif;
   line-height: normal;
@@ -343,10 +335,14 @@ ion-range#ual-range {
         margin-right: 7px;
     }
 
-body#homepage-landing #searchBarButtonsDiv {
-    margin-top: -26px !important;
+body#homepage-landing a#ImageButton, body#homepage-landing a#ImageButton:active, body#homepage-landing a#PageButton, body#homepage-landing a#PageButton:active {
+    /*margin-top: -26px !important;*/
     margin-bottom: /*9px*/13px;
-   }
+    color: /*#007AFF*/ #1c75c0 !important;
+    background-color: white  !important;
+    border: 1px solid /*#007AFF*/#1c75c0;
+
+}
 
 a.advancedSearch {
     font-size: /*0.90em*//*1.11em*/1.2em;
@@ -485,9 +481,9 @@ div.omitted-results:hover {
 
 .pagesNextPrevious a {
     /*margin-top: 20px 0;*/
-    background-color:/* white*/ #007AFF /*transparent*/ !important;
+    background-color:/* white*/ /*#007AFF*/#1c75c0 /*transparent*/ !important;
     color: /*black*//* #007AFF*/ white !important;
-    border: 1px solid /*#ccc*//*#dfe1e5*/#007AFF !important;
+    border: 1px solid /*#ccc*//*#dfe1e5*//*#007AFF*/#1c75c0 !important;
     border-radius: /*100px*/5px !important;
     text-decoration: none !important;  
     padding: 9px !important;
@@ -501,8 +497,8 @@ div.omitted-results:hover {
 }
 
 .pagesNextPrevious a:hover {
-    background-color: #007AFF !important;
-    border: 1px solid #007AFF!important;
+    background-color: /*#007AFF*/#1c75c0 !important;
+    border: 1px solid /*#007AFF*/#1c75c0!important;
     color: white !important;
     text-decoration: none !important;
 }
@@ -643,7 +639,7 @@ div.omitted-results:hover {
 }
 
 .yearUl{
-    background: /*#42a5f5*/#007aff;
+    background: /*#42a5f5*//*#007aff*/#1c75c0;
     border-radius: 5px;
     text-align: left;
     padding-top: 5px;
@@ -682,7 +678,7 @@ div.omitted-results:hover {
 .month-version-div{
     text-align: center;
     display: none;
-    background-color: /*#90caf9*/#00b2fffc !important;
+    background-color: /*#90caf9*//*#00b2fffc*/ #0f8abf !important;
     color: white;
     cursor: pointer;
     margin-left: 0px!important;
@@ -1333,7 +1329,7 @@ span#buttonSearch button span{
 }
 
 span#buttonSearch button span{    
-    color: /*#777*/#007AFF;
+    color: /*#777*//*#007AFF*//*#000*/#1c75c0;
     background-color: transparent !important;
     font-size: 22px !important;
     transition:color 0.5s ease 0s;   
@@ -1343,8 +1339,8 @@ span#buttonSearch button span{
     right: -4px;
 } 
 
-span#buttonSearch button:hover span{    
-    color: #000 /*#007AFF*/;    
+span#buttonSearch button:active span{    
+    color: /*#000*/ #007AFF;    
 }
 /* ends NEW STYLING FOR SEARCH BUTTON */
 
@@ -1442,7 +1438,7 @@ body#home-search #layoutTV {
    border-bottom: none !important;
   /* max-width: 100% !important;
    width: 89.6% !important;*/
-   background-color: #007AFF !important;   
+   background-color: /*#007AFF*/#1c75c0 !important;   
 }
 
 .clear-text{
@@ -1505,7 +1501,7 @@ div#flex-container div {
     padding: 0px;
     /*height: auto !important;*/
     /*border:1px solid #ebebeb;*/
-    background-color:/*#f8f8f8*//*#f2f2f2*/#9e9e9e33 !important;      
+    background-color:/*#f8f8f8*//*#f2f2f2*//*#9e9e9e33*/#eaeaea !important;      
     /*-webkit-box-shadow: 0px 11px 10px 0px rgba(0,0,0,0.1);
     -moz-box-shadow: 0px 11px 10px 0px rgba(0,0,0,0.1);
     box-shadow:0px 11px 10px 0px rgba(0,0,0,0.1);*/
@@ -1524,9 +1520,9 @@ div#flex-container h3 {
     margin: 5px 0 16px 10px;
     margin: 5px 0;
     padding: 20px 6px 10px 14px;
-    font-size: /*1.7*/1.8em;  
+    font-size: /*1.7*/1.6em;  
     color: black !important;  
-    font-weight: 500 !important;
+    font-weight: bold !important;
     line-height: 0.9em !important;
     /*letter-spacing: -0.5px !important*/
     display:/*none*/ block;
@@ -1921,7 +1917,7 @@ ion-button{
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
    width: 89vw;
-   margin-top: 0px!important;
+   margin-top: 12px!important;
    z-index:2;
    overflow-y: auto!important;
    outline: none;   
@@ -1936,14 +1932,14 @@ ion-button{
 .visit-page{
     --padding-start: 1em;
     margin-left: -1em;
-    color: /*#00bcd4*/#007AFF !important;
+    color: #00bcd4 !important;
     --padding-start: 0.45em;
 }
 
 .view-details{
     --padding-end: /*1em*/0.75em;
     margin-right:  -1em;
-    color: /*#00bcd4 */#007AFF !important
+    color: #00bcd4 !important
 }
 
 .image-mobile-expanded-div ion-list ion-item{
@@ -2009,7 +2005,7 @@ body#home-landing.hydrated h3 {
     word-wrap: break-word;
 }
 .image-mobile-expanded-div ion-list ion-item a{
-    color: /*#00bcd4*/#007AFF !important;
+    color: #00bcd4 !important;
     line-height: normal;
     padding-bottom: 9px !important;
     display: block;
@@ -2024,7 +2020,7 @@ body#home-landing.hydrated h3 {
     color: rgba(255,255,255,0.7) !important;
     background: rgba(0,0,0,0.2);
     border-radius: 25px;
-    top: 5px;
+    top: /*5px*/16px;
     right: calc(5vw + 6px);
     z-index: 2;
 }
@@ -2150,14 +2146,20 @@ h1,h2,h3,h4,h5{
 #flex-container #welcomeMessage {
     position:relative; 
     width: 96% ;
-    padding: 15px 15px 5px 15px !important;;
+    padding: 0px !important;;
     text-align: center;
     background-color: none;
-    background-color: #007AFF !important;
+    /*background-color: #007AFF !important;*/
     color: white;
-    margin-top:7px !important;
+    margin-top:12px !important;
     margin-bottom:11px !important;
     font-family: Roboto;
+}
+
+#flex-container #welcomeMessage img {
+	max-width: 100%;
+	width:100%;
+	border-radius: 10px
 }
 
 #welcomeMessage #closeMessage {
@@ -2180,10 +2182,12 @@ h1,h2,h3,h4,h5{
     font-family: roboto !important;
     font-size: 5.5vw !important;
     margin: 0;
-    padding: 0 0 5px 0;
+    padding: 0;
     max-width: 100%;
-    background-color: #007AFF;
+    background-color: #ECECEC;
     font-weight: bold;
+    border-radius: 10px;
+    color: black;
 }
 
 #welcomeMessage p {
@@ -2242,7 +2246,7 @@ a.advancedSearch:hover {
     text-align: center;
     float: left;  
     margin-top: -29px;
-    margin-bottom: 1px;
+    margin-bottom: 3px;
     padding: 0 13px;
 }
 
@@ -2251,16 +2255,16 @@ a#advancedSearchButton {
     float: right !important;    
     background-color: #fff !important;
     margin-right: none !important;
-    color: #007AFF;    
+    color: /*#007AFF*/#1c75c0;    
     margin-right: 0 !important;
-    border: 1px solid #007AFF;
-    color: #007AFF;   
+    border: 1px solid /*#007AFF*/#1c75c0;
+    color: /*#007AFF*/#1c75c0;   
     font-size: 1.25em;   
 }
 
 a#advancedSearchButton:active {
-    background-color: #007AFF!important;   
-    border: 1px solid #007AFF!important;
+    background-color: #1c75c0!important;   
+    border: 1px solid #1c75c0!important;
     color: #fff !important;
 }
 
@@ -2271,8 +2275,8 @@ a#PageButton {
     font-size: /*0.90em*//*1.11em*/1.25em;
     margin-right: /*6px*/6px !important; 
     color: white !important;   
-    background-color: #007AFF !important;
-    border: 1px solid #007Aff;
+    background-color: /*#007AFF*/#1c75c0 !important;
+    border: 1px solid /*#007Aff*/#1c75c0;
 }
 
 .selected-button{
@@ -2287,12 +2291,12 @@ a#PageButton:hover {
 }
 
 body#home-search a#ImageButton, a#ImageButton:active {
-    color: /*black*//*#757575 !important /*black*/#009688 !important;
-    border: 1px solid /*#ccc*/#dfe1e5;
+    color: /*black*//*#757575 !important /*black*//*#009688*/#1c75c0 !important;
+    border: 1px solid /*#ccc*//*#dfe1e5*/#1c75c0;
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
-    color: /*#007AFF*/#007AFF !important;
-    border: 1px solid #007AFF;
+    color: /*#007AFF*//*#007AFF*/#1c75c0 !important;
+    border: 1px solid /*#007AFF*/#1c75c0;
     margin-right: 0 !important;
     font-size: /*0.90em*//*1.11em*/1.25em;
     background-color: white !important;
@@ -2308,12 +2312,12 @@ body#home-search a#ImageButton, a#ImageButton:active {
 }
 
 body#homeImages a#PageButton, a#PageButton:active {
-    color: /*black*//*#757575 !important /*black*/#009688 !important;
-    border: 1px solid /*#ccc*/#dfe1e5;
+    color: /*black*//*#757575 !important /*black*//*#009688*/#1c75c0 !important;
+    border: 1px solid /*#ccc*//*#dfe1e5*/#1c75c0;
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
-    color: /*#007AFF*/#007AFF !important;
-    border: 1px solid #007AFF;    
+    color: /*#007AFF*//*#007AFF*/#1c75c0 !important;
+    border: 1px solid /*#007AFF*/#1c75c0;    
     font-size: /*0.90em*//*1.11em*/1.25em;
     background-color: white !important;
 }
@@ -2324,10 +2328,10 @@ a#ImageButton, a#ImageButton:active {
     transition: background-color 0.5s ease 0s;
     text-decoration: none !important;
     color: /*#007AFF*/white !important;
-    border: 1px solid #007AFF;
+    border: 1px solid /*#007AFF*/#1c75c0;
     margin-right: 0 !important;
     font-size: /*0.90em*//*1.11em*/1.25em;   
-    background-color: #007AFF !important;
+    background-color: /*#007AFF*/#1c75c0 !important;
 }
 
 a#ImageButton:hover {
@@ -2596,7 +2600,7 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 
     border: 1px solid white;
     background-color: rgb(255, 255, 255);
-    color: #007AFF !important;  
+    color: /*#007AFF*/#1c75c0 !important;  
 }
 
 .rightArrow{
@@ -2609,11 +2613,11 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 
     border: 1px solid white;
     background-color: rgb(255, 255, 255);
-    color: #007AFF !important;  
+    color: /*#007AFF*/#1c75c0 !important;  
 }
 
 .tdTV a {
-  color: #007AFF !important;
+  color: /*#007AFF*/#1c75c0 !important;
   text-decoration: none !important;
 }
 
@@ -2683,7 +2687,7 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
   margin:42%;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #007AFF transparent transparent transparent;
+  border-color: /*#007AFF*/#1c75c0 transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
@@ -2803,9 +2807,9 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 #home-tagline {
     max-width: 100% !important;
     text-align: center !important;
-    padding: 10px 2px !important;
+    padding: 10px 10px !important;
     margin: 0 !important;
-    font-size: 2.294em;
+    font-size: 3.75vh;
     color: black;
     font-weight: bold;  
 }
@@ -3462,11 +3466,17 @@ body#home-search #layoutTV {
     background-color: #007AFF !important;
     color: rgb(255, 255, 255)!important;  
 }
+
+.call-to-actions {
+    height: 300px !important;  
 }
+}
+
+
 
 @media (min-width:400px ) and (max-width:767px){
 .call-to-actions {
-    height: 400px !important;  
+    height: 330px !important;  
 }
 
 
@@ -3821,7 +3831,7 @@ body#home-search span#buttonSearch button span {
 .left-icon {
     font-size: 2.5em !important;
     position: absolute;
-    color: /*#00BCD4*/#007AFF;
+    color: #00BCD4;
     top: 0;
     bottom: 0;
     left: -8px;
@@ -3840,7 +3850,7 @@ body#home-search span#buttonSearch button span {
 .right-icon {
     font-size: 2.5em !important;
     position: absolute;     
-    color: /*#00BCD4*/#007AFF !important;      
+    color: #00BCD4 !important;      
     z-index: 2;
     top: 0;
     bottom: 0;
