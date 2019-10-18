@@ -143,7 +143,7 @@
     var maxYear = maxDate.getFullYear();
   </script>     
 
-	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+	
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
@@ -153,6 +153,7 @@
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     
+
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <script src="/js/jquery-latest.min.js"></script>
@@ -184,12 +185,59 @@
 
  <!-- starts closing Welcome blue div on homepage -->
  <script type="text/javascript">
+ advancedHref = "advancedImages.jsp?l=<%=language%>";
+
  $(document).ready(function(){
   $("#closeMessage").click(function(){
     $('#welcomeMessage').hide();
     localStorage.setItem('welcomeMessage', 'false')
   });
- }); 
+
+  $('.pageLink, .imageLink ').click(function() {
+    
+    var pageClass = $(this).hasClass("pageLink");
+    var imageClass = $(this).hasClass("imageLink");
+    
+    var pagesHref = (imageClass === true ? "/images.jsp?l=<%=language%>" : "/search.jsp?l=<%=language%>");
+
+    var query = $('#txtSearch').val();
+    var dateStart = $('#dateStart_top').val();
+    var dateEnd = $('#dateEnd_top').val();
+    
+    var newUrl = addParameters(query, dateStart, dateEnd, pagesHref);
+
+    if(newUrl)
+      window.location.href = newUrl;
+
+  }); //end PageButton click 
+
+  });  //end document ready
+
+function addParameters(query, dateStart, dateEnd, pageToLink) {
+    var oldUrl =  location.protocol + '//' + location.host;
+    if( oldUrl.substr(oldUrl.length - 1) === '/') {
+      oldUrl = oldUrl.substr(0, oldUrl.length - 1);
+    }
+    
+    var newUrl = updateQueryStringParameter(oldUrl + pageToLink, "query", encodeURI(query));
+    newUrl = updateQueryStringParameter(newUrl, "dateStart", encodeURIComponent(dateStart));
+    newUrl = updateQueryStringParameter(newUrl, "dateEnd", encodeURIComponent(dateEnd));
+    
+    return newUrl;
+}
+
+
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
+
  </script>
  <!-- ends closing Welcome blue div on homepage -->
 <link href="css/csspin.css" rel="stylesheet" type="text/css">
@@ -210,13 +258,9 @@
 </head>
 <body id="homepage-landing">
   <%@ include file="include/topbar.jsp" %>
-  <script type="text/javascript">
-    pagesHref = window.location.href;
-    imagesHref = "/images.jsp?l=<%=language%>"  /*TODO remove from this href parameters that are only appliable to text search*/
-  </script>  
   
   <div class="container-fluid topcontainer" id="headerSearchDiv">
-    <%@ include file="include/searchHeaderMobile.jsp" %>
+    <%@ include file="include/homepageHeaderMobile.jsp" %>
     <script type="text/javascript">$('#pagesTab').addClass('selected');$('#pagesTab').addClass('primary-underline');</script>
   </div>
 

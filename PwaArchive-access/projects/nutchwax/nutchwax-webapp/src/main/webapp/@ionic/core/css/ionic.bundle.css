@@ -88,7 +88,7 @@ ion-backdrop{
 }
 
 .ion-color-dark {
-    --ion-color-base: var(--ion-color-dark,#007AFF)!important;
+    --ion-color-base: var(--ion-color-dark,#1c75c0)!important;
     --ion-color-base-rgb: var(--ion-color-dark-rgb, 34, 36, 40)!important;
     --ion-color-contrast: var(--ion-color-dark-contrast, #fff)!important;
     --ion-color-contrast-rgb: var(--ion-color-dark-contrast-rgb, 255, 255, 255)!important;
@@ -102,7 +102,7 @@ ion-backdrop{
 ion-range {   
    --knob-handle-size: 30px !important;     
    --knob-size: 21px !important;
-   --knob-background: #007AFF !important;
+   --knob-background: /*#007AFF*/#1c75c0 !important;
    --knob-height:30px !important;  
    --range-pin-color: black !important;      
    --padding-start:0px !important;
