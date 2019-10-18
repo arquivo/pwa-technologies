@@ -1908,20 +1908,25 @@ ion-button{
    background-color: /*white*//*#3d3c3c*/ /*#222*/#303a3f !important;
 
    /* Gradient */
-   background: #45484d; /* Old browsers */
-   background: -moz-linear-gradient(top,  #45484d 0%, #000000 100%); /* FF3.6-15 */
-   background: -webkit-linear-gradient(top,  #45484d 0%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
-   background: linear-gradient(to bottom,  #45484d 0%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+   background: #1a5f97ba; /* Old browsers */
+   background: -moz-linear-gradient(top,  #1a5f97ba 0%, #000000 100%); /* FF3.6-15 */
+   background: -webkit-linear-gradient(top,  #1a5f97ba 0%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
+   background: linear-gradient(to bottom,  #1a5f97ba 0%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1a5f97ba', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
    width: 89vw;
-   margin-top: 12px!important;
+   margin-top: 0px!important;
    z-index:2;
    overflow-y: auto!important;
    outline: none;   
    border-radius: 10px;
+
+-webkit-box-shadow: 0px 19px 26px -5px rgba(18,67,110,1);
+-moz-box-shadow: 0px 19px 26px -5px rgba(18,67,110,1);
+box-shadow: 0px 19px 26px -5px rgba(18,67,110,1);
+ 
 }
 
 #showSlides{    
@@ -2020,7 +2025,7 @@ body#home-landing.hydrated h3 {
     color: rgba(255,255,255,0.7) !important;
     background: rgba(0,0,0,0.2);
     border-radius: 25px;
-    top: /*5px*/16px;
+    top: 5px;
     right: calc(5vw + 6px);
     z-index: 2;
 }
@@ -3834,7 +3839,7 @@ body#home-search span#buttonSearch button span {
     color: #00BCD4;
     top: 0;
     bottom: 0;
-    left: -8px;
+    left: -1px;
     bottom: 0;    
     border-radius: 50px;       
     z-index: 2;
@@ -3855,7 +3860,7 @@ body#home-search span#buttonSearch button span {
     top: 0;
     bottom: 0;
     margin: 50% 0 !important;   
-    right: -8px;   
+    right: -1px;   
     border-radius: 50px;
     padding: 1px;
     background-color: rgba(0,0,0,0);  
