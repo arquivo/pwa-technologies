@@ -99,7 +99,7 @@ body {
     padding-right: 9px;
     padding-top: 0px;
     margin-left: 0px;
-    background: transparent url(../img/calendario.svg) no-repeat 30px 6px;
+    background: transparent url(../img/calendario.svg) no-repeat right 6px;
     background-size: /*46px*/52px;
     text-decoration: none !important;
     font-size: 1.15em !important;
@@ -446,9 +446,11 @@ div.omitted-results:hover {
 
 #conteudo-resultado{
     padding-left: 0px;
-    padding-right: 0px;
-    /*padding-bottom: /*40px*//*40px;*/
-    margin-top: 30px;
+    padding-right: 0px;   
+    margin-top: 30px;   
+    margin-left: -15px;
+    margin-right: -15px;
+}
 }
 
 .date{
@@ -1905,7 +1907,7 @@ ion-button{
 }
 
 .card-height{
-   background-color: /*white*//*#3d3c3c*/ /*#222*/#303a3f !important;
+   /*background-color: /*white*//*#3d3c3c*/ /*#222*//*#303a3f !important;*/
 
    /* Gradient */
    background: #1a5f97ba; /* Old browsers */
@@ -1913,6 +1915,7 @@ ion-button{
    background: -webkit-linear-gradient(top,  #1a5f97ba 0%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
    background: linear-gradient(to bottom,  #1a5f97ba 0%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1a5f97ba', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+   background:white !important;
 
    max-height: calc(100vh - 75px);
    min-height: calc(100vh - 75px);
@@ -1937,19 +1940,19 @@ box-shadow: 0px 19px 26px -5px rgba(18,67,110,1);
 .visit-page{
     --padding-start: 1em;
     margin-left: -1em;
-    color: #00bcd4 !important;
+    color: #1c75c0 !important;
     --padding-start: 0.45em;
 }
 
 .view-details{
     --padding-end: /*1em*/0.75em;
     margin-right:  -1em;
-    color: #00bcd4 !important
+    color: #1c75c0 !important;
 }
 
 .image-mobile-expanded-div ion-list ion-item{
     --min-height: 20px;
-    color: rgba(255,255,255,0.6) !important;
+    color: rgba(0,0,0,0.7) !important;
     --ion-background-color:/*#3d3c3c*//*#222*//*#303a3f*/ transparent !important;
     --ion-padding: 20px !important;
     --ion-padding-: 0 !important
@@ -1965,7 +1968,7 @@ box-shadow: 0px 19px 26px -5px rgba(18,67,110,1);
 .hydrated h3 {
     margin-top: 30px;
     font-size: 2em;
-    color: rgba(255,255,255,0.6) !important;
+    color: black !important;
 }
 
 .hydrated h3 a {   
@@ -1975,7 +1978,7 @@ box-shadow: 0px 19px 26px -5px rgba(18,67,110,1);
 
 body#homeImages .hydrated h4 {
     font-size: 1.6em !important;
-    color: rgba(255,255,255,0.6) !important;
+    color: black !important;
 }
 
 body#home-landing.hydrated h3 {
@@ -1991,8 +1994,8 @@ body#home-landing.hydrated h3 {
 .image-mobile-expanded-div ion-list{    
     padding: 15px 0 8px 0;
     background: transparent;
-    border-top: 1px solid /*#607d8b*//*#435b66**//*#435b6696*//*#435b66*/#435b6685;
-    border-bottom: 1px solid /*#607d8b*//*#435b66*/#435b6685;
+    border-top: 1px solid /*#607d8b*//*#435b66**//*#435b6696*//*#435b66*/#435b662e;
+    border-bottom: 1px solid /*#607d8b*//*#435b66*/#435b662e;
     margin-top: 5px !important;
     margin-bottom: -17px !important;
 }
@@ -2010,7 +2013,7 @@ body#home-landing.hydrated h3 {
     word-wrap: break-word;
 }
 .image-mobile-expanded-div ion-list ion-item a{
-    color: #00bcd4 !important;
+    color: #1c75c0 !important;
     line-height: normal;
     padding-bottom: 9px !important;
     display: block;
@@ -2022,23 +2025,25 @@ body#home-landing.hydrated h3 {
 
 .closeIt{   
     position: absolute;
-    color: rgba(255,255,255,0.7) !important;
-    background: rgba(0,0,0,0.2);
+    color: rgb(28, 117, 192) !important;
+    background: rgba(255, 255, 255, 0.7);
     border-radius: 25px;
-    top: 5px;
-    right: calc(5vw + 6px);
+    top: 6px;
+    right: calc(5vw + 8px);
     z-index: 2;
+    border: 1px solid rgb(28, 117, 192) !important;
 }
   .closeItAbsolute
   {
     display: none;
     position: absolute;
-    top: 5px;
-    right: calc(5vw + 6px);
+    color: rgb(28, 117, 192) !important;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 25px;
+    top: 6px;
+    right: calc(5vw + 8px);
     z-index: 2;
-    color: rgba(255,255,255,0.6) !important;
-    background: rgba(0,0,0,0.5);
-    border-radius: 25px;   
+    border: 1px solid rgb(28, 117, 192) !important;
   }
 
 @media (max-width: 500px) {
@@ -2202,8 +2207,6 @@ h1,h2,h3,h4,h5{
 #home-search #welcomeMessage {display: none !important}
 
 #home-search #searchBarButtonsDiv {margin-bottom: 4px}
-
-#home-search #flex-container {display: none !important}
 
 a.advancedSearch {
     float: left;   
@@ -2761,7 +2764,8 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 #pagesMenu .fa-caret-down:before {
     content: "\f0d7";
     font-size: 1.1em;
-    border: 1px solid #9e9e9e85;
+    border: 1px solid #e3e3e32e
+    ;
     padding: 5px 9px;
     border-radius: 50px;
     margin-top: 3px !important;
@@ -2773,7 +2777,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 }
 
 #pagesMenu .fa-caret-up:before {
-    border: 1px solid #ffffff4a;
+    border: 1px solid #e3e3e32e;
     background-color: /*#c0c0c096*/ /*#c0c0c069*/ #c0c0c024;
     top: -2px;
 }
@@ -2781,7 +2785,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 #imagesMenu .fa-caret-down:before {
     content: "\f0d7";
     font-size: 1.1em;
-    border: 1px solid #9e9e9e85;
+    border: 1px solid #e3e3e32e;
     padding: 5px 9px;
     border-radius: 50px;
     margin-top: 3px !important;
@@ -2793,7 +2797,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 }
 
 #imagesMenu .fa-caret-up:before {
-    border: 1px solid #ffffff4a;
+    border: 1px solid #e3e3e32e;
     background-color: /*#c0c0c096*/ /*#c0c0c069*/ #c0c0c024;
     top: -2px;
 }
@@ -3836,10 +3840,10 @@ body#home-search span#buttonSearch button span {
 .left-icon {
     font-size: 2.5em !important;
     position: absolute;
-    color: #00BCD4;
+    color: #fff;
     top: 0;
     bottom: 0;
-    left: -1px;
+    left: -4px;
     bottom: 0;    
     border-radius: 50px;       
     z-index: 2;
@@ -3855,12 +3859,12 @@ body#home-search span#buttonSearch button span {
 .right-icon {
     font-size: 2.5em !important;
     position: absolute;     
-    color: #00BCD4 !important;      
+    color: #fff !important;      
     z-index: 2;
     top: 0;
     bottom: 0;
     margin: 50% 0 !important;   
-    right: -1px;   
+    right: -4px;   
     border-radius: 50px;
     padding: 1px;
     background-color: rgba(0,0,0,0);  
