@@ -151,7 +151,7 @@ body {
 #calendarDayRight {    
     position: relative;
     top: /*12px*/27px;
-    left: -9.5px;
+    left: -8.5px;
     font-size: 1.1em;
     letter-spacing: -1px;
     color: /* #007AFF*//*white*/#1a73ba;
@@ -182,7 +182,7 @@ body {
 #calendarYearRight {
     position: relative;
     bottom: /*11px*/29px;
-    left: 2px;
+    left: 3px;
     padding-top: 1px !important;
     font-size: 1.2em;
     /*font-weight: bold;*/
@@ -1390,14 +1390,14 @@ body#home-search #conteudo-pesquisa-erro{
 }
 
 #conteudo-pesquisa-erro{    
-    margin-left: /*9px*/9px;
-    margin-right: /*9px*/9px;
+    margin-left: 9px;
+    margin-right: 9px;
     border: 1px solid /*#dfe1e5*/#ccc;
     float: left;
     background: /*#feefef*/transparent;
     padding: 20px;
     border-radius: 5px;
-    margin-top: /*-8px*/-37px; 
+    margin-top: 6px;
 }
 
 #conteudo-pesquisa-erro .alert-danger{    
@@ -1417,6 +1417,10 @@ body#home-search #conteudo-pesquisa-erro{
 .spell{
     padding-left: 15px;
     padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: block;
+    margin-top: -20px;
+    color: #9C27B0;
 }
 
 #years{
@@ -2031,7 +2035,7 @@ body#home-landing.hydrated h3 {
     top: 6px;
     right: calc(5vw + 8px);
     z-index: 2;
-    border: 1px solid rgb(28, 117, 192) !important;
+    /*border: 1px solid rgb(28, 117, 192) !important;*/
 }
   .closeItAbsolute
   {
@@ -2043,7 +2047,7 @@ body#home-landing.hydrated h3 {
     top: 6px;
     right: calc(5vw + 8px);
     z-index: 2;
-    border: 1px solid rgb(28, 117, 192) !important;
+    /*border: 1px solid rgb(28, 117, 192) !important;*/
   }
 
 @media (max-width: 500px) {
@@ -2601,27 +2605,25 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 .leftArrow{ 
     position: absolute;
     top: 15%;
-    margin: auto 0.50%; 
+    margin: auto 0.50%;
     left: 11px;
     border-radius: 50px !important;
     padding: /*1% !important */1% 3% 1% 2.3% !important;
-
-    border: 1px solid white;
-    background-color: rgb(255, 255, 255);
-    color: /*#007AFF*/#1c75c0 !important;  
+    /* border: 1px solid white; */
+    background-color: rgba(255, 255, 255,0.4);
+    color: /*#007AFF*/#1c75c0 !important;
 }
 
 .rightArrow{
-    margin: auto 0.50%; 
+    margin: auto 0.50%;
     position: absolute;
     top: 15%;
     right: 12px;
     border-radius: 50px !important;
-    padding:/* 1% */1% 2.3% 1% 3% !important;
-
-    border: 1px solid white;
-    background-color: rgb(255, 255, 255);
-    color: /*#007AFF*/#1c75c0 !important;  
+    padding: /* 1% */1% 2.3% 1% 3% !important;
+    /* border: 1px solid white; */
+    background-color: rgba(255, 255, 255,0.4);
+    color: /*#007AFF*/#1c75c0 !important;
 }
 
 .tdTV a {
@@ -2717,7 +2719,7 @@ tr.trTV:nth-child(even){background-color: #f2f2f2}
 /* Ionic Advsnced seach */
 body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     width: 100% !important;    
-    background-color: white;
+    background-color: white !important;
     border: 1px solid #ccc !important;
     border-radius: /*50px*/5px !important;
     height: 46px !important;
@@ -3492,25 +3494,25 @@ body#home-search #layoutTV {
 .leftArrow{ 
     position: absolute;
     top: 26%;
-    margin: auto 0.50%; 
+    margin: auto 0.50%;
     left: 11px;
-    border-radius: 50px !important;    
-    padding:1% 2.5% 0.95% 2% !important;
-    border: 1px solid white;
-    background-color: rgb(255, 255, 255);
-    color: #007AFF !important;  
+    border-radius: 50px !important;
+    padding: 1% 2.5% 0.95% 2% !important;
+    /* border: 1px solid white; */
+    background-color: rgba(255, 255, 255,0.4);
+    color: #1c75c0 !important;  
 }
 
 .rightArrow{
-    margin: auto 0.50%; 
+    margin: auto 0.50%;
     position: absolute;
     top: 26%;
     right: 11px;
-    border-radius: 50px !important;    
-    padding:1% 2% 0.95% 2.5% !important;
-    border: 1px solid white;
-    background-color: rgb(255, 255, 255);
-    color: #007AFF !important;   
+    border-radius: 50px !important;
+    padding: 1% 2% 0.95% 2.5% !important;
+    /* border: 1px solid white; */
+    background-color: rgba(255, 255, 255,0.4);
+    color: #1c75c0 !important;
 }
 
 .leftArrow:active, .rightArrow:active { 
@@ -3526,12 +3528,13 @@ body#home-search #layoutTV {
     top: 20.5%;
     margin: auto 0.50%;
     left: 10px;
-    border-radius: 50px !important;   
+    border-radius: 50px !important;
     padding: 1% 1.75% 1% 1.55% !important;
-    border: 1px solid white;
-    background-color: rgb(255, 255, 255);
-    color: #007AFF !important;
+    /* border: 1px solid white; */
+    background-color: rgba(255, 255, 255,0.4);
+    color: #1a73ba !important;
     font-size: 1em !important;
+    border: none !important;
 }
 
 
@@ -3539,13 +3542,13 @@ body#home-search #layoutTV {
     position: absolute;
     top: 20.5%;
     right: 10px;
-    border-radius: 50px !important;    
+    border-radius: 50px !important;
     padding: 1% 1.45% 1% 1.75% !important;
-    border: 1px solid white;
-    background-color: rgb(255, 255, 255);
-    color: #007AFF !important;
+    /* border: 1px solid white; */
+    background-color: rgba(255, 255, 255,0.4);
+    color: #1a73ba !important;
     font-size: 1em !important;
-
+    border: none !important;
 }
 
 .call-to-actions {
