@@ -3855,6 +3855,8 @@ body#home-search span#buttonSearch button span {
     background-color: rgba(0,0,0,0);    
     margin: 0 !important;
     height: 100vh;
+    padding: 20px 15px 20px 0;
+    display: block; 
 }
 .right-image-viewer-arrow{
 }
@@ -3873,6 +3875,8 @@ body#home-search span#buttonSearch button span {
     background-color: rgba(0,0,0,0);  
     margin: 0 !important;
     height: 100vh;
+    padding: 20px 0px 20px 10px;
+    display: block;
 }
 
 }/* Landscape */
