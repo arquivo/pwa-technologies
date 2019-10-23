@@ -152,7 +152,7 @@ var MENU = MENU || (function(){
         	document.write( '</div></div></div>');
         	$('.swiper-wrapper').prepend(
 			            	'<div id="menuSwiperSlide" class="swiper-slide menu swiper-slide-prev">' +       
-			            		'<button class="clean-button" onclick="MENU.copyLink();"><h4><i class="fa fa-link padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.copy'/></h4></button>' +
+			            		'<button id="cp-link" class="clean-button" onclick="MENU.copyLink();"><h4><i class="fa fa-link padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.copy'/></h4></button>' +
 	          					'<button class="clean-button" id="pagesMenu" onclick="MENU.pagesClick();"><h4><i class="fa fa-globe padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.pages'/><i id="pagesCarret" class="fa fa-caret-down iCarret shareCarret pull-right" aria-hidden="true"></i></h4></button>'+	 	
 	          					'<div id="pageOptions">'+	          							            		
 	          						'<a href="/index.jsp?l=<%=language%>" onclick=""><h4 class="submenu"><i class="fa fa-search padding-right-menu-icon" aria-hidden="true"></i> <fmt:message key='topbar.menu.home'/></h4></a>' +

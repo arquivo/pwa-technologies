@@ -118,11 +118,14 @@ body#adavanced .swiper-container {
 	text-decoration: none;
 }
 
-#menuSwiperSlide button:nth-of-type(1) h4{
-	border-top: none;
-	padding-top: 52px!important;	
+#menuSwiperSlide #cp-link {
+	border-top: red !important;
+	margin-top: 52px !important;	
 }
 
+#menuSwiperSlide button:nth-of-type(1) h4{
+	border-top: none !important;
+}
 
 font-size: 1.6em !important;
 color: #ccc !important;

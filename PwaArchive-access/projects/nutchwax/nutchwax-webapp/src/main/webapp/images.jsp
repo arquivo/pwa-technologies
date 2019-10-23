@@ -508,7 +508,7 @@ Content = {
         });            
       });
 
-
+    var displayResults;
 
     </script>   
 
@@ -535,7 +535,16 @@ Content = {
       </script>
     <% } %>
 
+  </section>    
     <div class="pagesNextPrevious text-center">
+    <script type="text/javascript">   
+      if(displayResults) {    
+        document.write("<div class=\"pagesNextPrevious text-center\" style=\"display:none\">");   
+      } else {    
+        document.write("<div class=\"pagesNextPrevious text-center\">");    
+      }   
+    </script>   
+
 
       <ul class="next-previous-ul">
       <%
