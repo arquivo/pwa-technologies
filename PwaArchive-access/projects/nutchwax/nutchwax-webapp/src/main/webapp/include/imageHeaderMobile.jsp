@@ -106,47 +106,64 @@
                         }
                       </script>
                       <script type="text/javascript">
-                      $('#ionDateStart').on("ionChange", function() {
+                        $('#ionDateStart').on("ionChange", function() {
                         console.log("changed");
                         var newStartDate = $('#ionDateStart').val();
                         var newStartDateTokens = newStartDate.split('-');
                         var newStartDateFormated =  newStartDateTokens[2].split('T')[0] + "/" + newStartDateTokens[1]+ "/"+ newStartDateTokens[0]; 
                         /*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
-                        $('#dateStart_top').val(newStartDateFormated);
+                        $('#dateStart_top').attr("value", newStartDateFormated);
+
+                        //update span with new date
+                        $('#calendarDayLeft').text( removeZeroInDay( newStartDateTokens[2].split('T')[0] ) );
+                        $('#calendarMonthLeft').text( getMonthShortName(newStartDateTokens[1]) );
+                        $('#calendarYearLeft').text( newStartDateTokens[0] );
+
+                        var currentDateEnd = $('#calendarYearRight').text();
+                        //update dual range
+                        dualRange.value = { lower: newStartDateTokens[0], upper: currentDateEnd };
                         $('#dateStart_top').change();
+
                       });                         
                       $('#ionDateEnd').on("ionChange", function() {
                         var newEndDate = $('#ionDateEnd').val();
                         var newEndDateTokens = newEndDate.split('-');
                         var newEndDateFormated =  newEndDateTokens[2].split('T')[0] + "/" + newEndDateTokens[1]+ "/"+ newEndDateTokens[0]; 
                         /*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
-                        $('#dateEnd_top').val(newEndDateFormated);
+                         $('#dateEnd_top').attr("value", newEndDateFormated);
+
+                                                //update span with new date
+                        $('#calendarDayRight').text( removeZeroInDay( newEndDateTokens[2].split('T')[0] ) );
+                        $('#calendarMonthRight').text( getMonthShortName(newEndDateTokens[1]) );
+                        $('#calendarYearRight').text( newEndDateTokens[0] );
+
+                        var currentDateStart = $('#calendarYearLeft').text();
+                        //update dual range
+                        dualRange.value = { lower: currentDateStart, upper: newEndDateTokens[0]  };
                         $('#dateEnd_top').change();
                       });                                             
 
 
-                     changed = false;
+                     changedDualRange = false;
                       $('#dual-range').on("ionChange", function() {
-                        changed = true;
+                        changedDualRange = true;
                         $('#calendarYearRight').text(document.querySelector('#dual-range').value.upper);
                         $('#calendarYearLeft').text(document.querySelector('#dual-range').value.lower);
                       }); 
 
                       setInterval(function(){
-                        if(changed == true && ! $('#dual-range').hasClass("range-pressed")){
-                            changed = false;
+                        if(changedDualRange == true && $('#dual-range').hasClass("range-pressed")){
+                            changedDualRange = false;
                             var newDateStart = '<%=dateStartString%>'.substr(0,6)+document.querySelector('#dual-range').value.lower;
                             var newDateEnd = '<%=dateEndString%>'.substr(0,6)+document.querySelector('#dual-range').value.upper;
                             $('#dateStart_top').val(newDateStart);
                             $('#dateStart_top').attr("value", newDateStart);
-                            /*updateIonYear(newDateStart,'#ionDateStart');*/
                             $('#dateEnd_top').val(newDateEnd);
                             $('#dateEnd_top').attr("value", newDateEnd);
-                            /*updateIonYear(newDateEnd,'#ionDateEnd');                            */
                             $('#dateStart_top').change();
                         }
                       },100) 
-                                                                        
+                      
                       </script>  
                       <script type="text/javascript">
                       $('#dateStart_top').on("change", submitForm);                          
@@ -222,4 +239,4 @@ async function presentModal() {
 
             </div>            
         </div>
-<!-- End SearchHeader -->
+<!-- End ImageHeaderMobile -->

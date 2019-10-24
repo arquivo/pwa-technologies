@@ -130,12 +130,12 @@
   <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
   <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#1a73ba">
   <!-- Windows Phone -->
-  <meta name="msapplication-navbutton-color" content="#000000">
+  <meta name="msapplication-navbutton-color" content="#1a73ba ">
   <!-- iOS Safari -->   
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="#000000">  
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">  
   <script type="text/javascript">
     var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
     var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
@@ -143,7 +143,7 @@
     var maxYear = maxDate.getFullYear();
   </script>     
 
-	
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
@@ -153,7 +153,6 @@
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     
-
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <script src="/js/jquery-latest.min.js"></script>
@@ -247,7 +246,11 @@ function updateQueryStringParameter(uri, key, value) {
   <script type="text/javascript" src="js/configs.js"></script>
   <script type="text/javascript" src="/js/js.cookie.js"></script>
 
-  <script src="@ionic/core/dist/ionic.js"></script>
+  <script type="module" src="@ionic/core/dist/ionic/ionic.esm.js"></script>
+  <script nomodule="" src="@ionic/core/dist/ionic/ionic.js"></script>
+
+  <!--<script src="@ionic/core/dist/ionic.js"></script>--> 
+
   <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">
   <!-- ends New style to override less styles -->
 

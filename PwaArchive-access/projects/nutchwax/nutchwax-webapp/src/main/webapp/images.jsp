@@ -508,13 +508,43 @@ Content = {
         });            
       });
 
+    var displayResults;
 
+    </script>   
 
-    </script>      
-    <section id="photos">
-    </section>  
+       
+    <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
+            (request.getParameter("adv_and") == null || request.getParameter("adv_and").equals("")) &&
+            (request.getParameter("adv_phr") == null || request.getParameter("adv_phr").equals("")) &&
+            (request.getParameter("adv_not") == null || request.getParameter("adv_not").equals("")) &&
+            (request.getParameter("type") == null || request.getParameter("type").equals("") || request.getParameter("type").toLowerCase().equals("all") ) &&
+            (request.getParameter("size") == null || request.getParameter("size").equals("") || request.getParameter("size").toLowerCase().equals("all") ) &&
+            (request.getParameter("safeSearch") == null || request.getParameter("safeSearch").equals("") || request.getParameter("safeSearch").toLowerCase().equals("on") ) &&
+            (request.getParameter("site") == null || request.getParameter("site").equals(""))
+     ){ 
+    %>
+      <%@ include file="include/intro.jsp" %>
+      <section id="photos" style="display:none;">
+      <script type="text/javascript">
+        displayResults = true;
+      </script>  
+    <% } else { %>
+      <section id="photos">
+      <script type="text/javascript">
+        displayResults = false;
+      </script>
+    <% } %>
 
+  </section>    
     <div class="pagesNextPrevious text-center">
+    <script type="text/javascript">   
+      if(displayResults) {    
+        document.write("<div class=\"pagesNextPrevious text-center\" style=\"display:none\">");   
+      } else {    
+        document.write("<div class=\"pagesNextPrevious text-center\">");    
+      }   
+    </script>   
+
 
       <ul class="next-previous-ul">
       <%
