@@ -16,41 +16,32 @@ import java.util.regex.Pattern;
 
 
 public class SpamBlacklistGenerator {
-    private String regexPatternString;
+    private Pattern regexPatternString;
 
     public SpamBlacklistGenerator() throws IOException {
+        this.regexPatternString = this.generateDomainsRegexPattern();
+    }
+
+    private Pattern generateDomainsRegexPattern() throws IOException{
+        StringBuilder stringBuilderPattern = new StringBuilder();
         InputStream inputStream = SpamBlacklistGenerator.class.getClassLoader().getResourceAsStream("config.properties");
 
         Properties prop = new Properties();
         prop.load(inputStream);
-        this.regexPatternString = prop.getProperty("spam.regex.pattern");
-    }
 
-    public static void main(String[] args){
-        if (args.length < 2){
-            System.err.println("Usage: SpamBlacklistGenerator -in <path1> -in <path2>;");
+        String domainStrList = prop.getProperty("spam.domains");
+        String[] domains = domainStrList.split(",");
+
+        stringBuilderPattern.append(SpamBlacklistGenerator.domainToRegexPattern(domains[0]));
+        for (int i = 1; i <= domains.length - 1; i++) {
+            stringBuilderPattern.append("|");
+            stringBuilderPattern.append(SpamBlacklistGenerator.domainToRegexPattern(domains[i]));
         }
-
-        SpamBlacklistGenerator blacklistGenerator = null;
-        try {
-            blacklistGenerator = new SpamBlacklistGenerator();
-            ArrayList<String> indexPaths = new ArrayList<String>();
-
-            for (int i = 0; i < args.length; i++){
-                if (args[i].equals("-in")){
-                    indexPaths.add(args[++i]);
-                }
-            }
-            blacklistGenerator.generateBlacklist(indexPaths);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(stringBuilderPattern.toString());
+        return Pattern.compile(stringBuilderPattern.toString());
     }
 
     public void generateBlacklist(ArrayList<String> indexPaths) {
-
-        Pattern pattern = Pattern.compile(this.regexPatternString);
-
         for (int i = 0; i < indexPaths.size(); i++){
             Directory idx;
             try {
@@ -65,7 +56,7 @@ public class SpamBlacklistGenerator {
 
                     try {
                         String domain = doc.getField("domain").stringValue();
-                        Matcher matcher = pattern.matcher(domain);
+                        Matcher matcher = this.regexPatternString.matcher(domain);
 
                         if (matcher.matches()) {
                             printStream.println(j);
@@ -78,6 +69,46 @@ public class SpamBlacklistGenerator {
                 printStream.close();
             } catch (IOException e) {
                 System.out.printf("Something went wrong on %s. Error: %n%s", indexPaths.get(i), e);
+            }
+        }
+    }
+
+    public static String domainToRegexPattern(String domain){
+        StringBuilder stringBuilder = new StringBuilder(domain);
+        stringBuilder.reverse();
+
+        ArrayList<Integer> dotIndexes = new ArrayList<Integer>();
+
+        int index = stringBuilder.indexOf(".");
+        while(index != -1){
+            dotIndexes.add(index);
+            stringBuilder.replace(index, index + 1, "\\.");
+
+            index = stringBuilder.indexOf(".", index + 2 );
+        }
+
+        stringBuilder.append("(\\..*)?");
+        return stringBuilder.toString();
+    }
+
+    public static void main(String[] args){
+        if (args.length < 2){
+            System.err.println("Usage: SpamBlacklistGenerator -in <path1> -in <path2>;");
+        }
+        else {
+            SpamBlacklistGenerator blacklistGenerator = null;
+            try {
+                blacklistGenerator = new SpamBlacklistGenerator();
+                ArrayList<String> indexPaths = new ArrayList<String>();
+
+                for (int i = 0; i < args.length; i++){
+                    if (args[i].equals("-in")){
+                        indexPaths.add(args[++i]);
+                    }
+                }
+                blacklistGenerator.generateBlacklist(indexPaths);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
