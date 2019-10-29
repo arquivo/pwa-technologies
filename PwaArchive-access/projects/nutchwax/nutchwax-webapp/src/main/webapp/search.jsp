@@ -444,6 +444,7 @@ String[] queryString_splitted=null;
     <%@ include file="include/topbar.jsp" %>
     <div class="container-fluid topcontainer" id="headerSearchDiv">
     <script type="text/javascript">
+      var language = localStorage.language;
       pagesHref = window.location.href;
       imagesHref = window.location.href.toString().replace("search.jsp", "images.jsp");  /*TODO remove from this href parameters that are only appliable to text search*/
     </script>

@@ -184,6 +184,7 @@
 
  <!-- starts closing Welcome blue div on homepage -->
  <script type="text/javascript">
+ var language =  localStorage.language;
  advancedHref = "advancedImages.jsp?l=<%=language%>";
 
  $(document).ready(function(){
