@@ -31,6 +31,12 @@
   <artifactId>nutchwax-webapp</artifactId>
   <packaging>war</packaging>
   <name>NutchWAX Webapp</name>
+
+  <properties>
+   <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+   <timestamp>${maven.build.timestamp}</timestamp>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.archive.nutchwax</groupId>

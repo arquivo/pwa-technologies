@@ -367,7 +367,7 @@ response.setHeader("Cache-Control","public, max-age=600");
     };    
   </script>
 
-  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?${initParam.buildTimeStamp}"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- bootstrap -->

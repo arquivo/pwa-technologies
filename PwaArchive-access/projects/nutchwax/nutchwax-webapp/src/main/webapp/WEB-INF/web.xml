@@ -66,6 +66,11 @@
 	<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
 	<param-value>pt</param-value>
 </context-param>
+<context-param>
+    <param-name>buildTimeStamp</param-name>
+    <param-value>${timestamp}</param-value>
+</context-param>
+
 <taglib>
 	<taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
 	<taglib-location>/WEB-INF/taglibs-c.tld</taglib-location>

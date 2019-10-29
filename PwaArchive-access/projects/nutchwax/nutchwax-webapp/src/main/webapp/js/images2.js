@@ -380,18 +380,18 @@ function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expan
     }
     else{
       var inserted = false;
-      for (var i = 0 ; i< lengthofUL; i ++){
-        var insertedPos = $('#photos .imageContent').eq(i).attr('position');
-        if(position < insertedPos ){
-          $('#resultsUl li:eq('+i+')').before(contentToInsert);
+
+      $('#photos .imageContent').each(function(i, obj) {
+        if( position < i ){
+          $( obj ).insertBefore(contentToInsert);
           /*add logic to new column layout*/
           inserted = true;
-          break;
+          return;
         }
-      }
+      });
+
       if(inserted === false){
-        $('#resultsUl').append(contentToInsert);
-        $('#photos').prepend(contentToInsert);
+        $('#photos').append(contentToInsert);
       }
     }
 }    
