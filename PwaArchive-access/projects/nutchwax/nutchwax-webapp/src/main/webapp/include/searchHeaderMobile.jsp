@@ -70,7 +70,7 @@
                     <script>
                      document.write('<ion-range ion-padding-start id="dual-range" dual-knobs pin color="dark" min="'+minYear+'" max="'+maxYear+'" step="1">');
                     </script>
-                        <button type="button" class="clean-button-no-fill" id="sliderCircleLeft" onclick="openDateEnd();" slot="end">
+                        <button type="button" class="clean-button-no-fill" id="sliderCircleRight" onclick="openDateEnd();" slot="end">
                           <script>
                             document.write('<span id="calendarDayRight">'+removeZeroInDay("<%=dateEndDay%>")+'</span>'+
                                           '<br>'+
@@ -83,7 +83,7 @@
                         <input size="10" class="display-none" type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
                       
 
-                        <button type="button" class="clean-button-no-fill" id="sliderCircleRight" slot="start" onclick="openDateStart()">
+                        <button type="button" class="clean-button-no-fill" id="sliderCircleLeft" slot="start" onclick="openDateStart()">
                           <script type="text/javascript">
                             document.write('<span id="calendarDayLeft">'+removeZeroInDay("<%=dateStartDay%>")+'</span><br>');
                             document.write('<span id="calendarMonthLeft">'+getMonthShortName("<%=dateStartMonth%>")+'</span>');

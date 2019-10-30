@@ -132,10 +132,12 @@
   <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
   <meta name="theme-color" content="#1a73ba">
   <!-- Windows Phone -->
-  <meta name="msapplication-navbutton-color" content="#1a73ba ">
+  <meta name="msapplication-navbutton-color" content="#1a73ba">
   <!-- iOS Safari -->   
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">  
+
+
   <script type="text/javascript">
     var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
     var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);

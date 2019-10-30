@@ -336,11 +336,11 @@ response.setHeader("Cache-Control","public, max-age=600");
   <meta http-equiv="Content-Language" content="pt-PT"/>
   <meta name="Keywords" content="resultado, pesquisa, buscar, arquivo, Web, português, portuguesa, Portugal"/>
   <meta name="Description" content="Página de resultados de uma pesquisa de imagens feita no Arquivo.pt."/>
-  <meta name="theme-color" content="#252525">
+  <meta name="theme-color" content="#1a73ba">
   <!-- Windows Phone -->
-  <meta name="msapplication-navbutton-color" content="#252525">
+  <meta name="msapplication-navbutton-color" content="#1a73ba">
   <!-- iOS Safari -->
-  <meta name="apple-mobile-web-app-status-bar-style" content="#252525">  
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">  
 
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon"/>
   <link href="css/csspin.css" rel="stylesheet" type="text/css"/>
@@ -384,7 +384,6 @@ response.setHeader("Cache-Control","public, max-age=600");
     <!-- end addthis for sharing on social media --> 
     <script type="text/javascript" src="js/configs.js"></script>
 
-
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
   <script type="text/javascript" src="js/ui.datepicker.js"></script>
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
@@ -392,7 +391,7 @@ response.setHeader("Cache-Control","public, max-age=600");
 
   <% String imageSearchAPI = nutchConf.get("wax.image.search.API", "https://arquivo.pt/imagesearch"); %>
   <script type="text/javascript">
-  	imageSearchAPI = "<%=imageSearchAPI%>";
+    imageSearchAPI = "<%=imageSearchAPI%>";
   </script>
   <script type="text/javascript" src="js/images2.js?imageSearch"></script>
   <script type="text/javascript">
@@ -523,7 +522,7 @@ Content = {
             (request.getParameter("site") == null || request.getParameter("site").equals(""))
      ){ 
     %>
-      <%@ include file="include/intro.jsp" %>
+      
       <section id="photos" style="display:none;">
       <script type="text/javascript">
         displayResults = true;
@@ -596,7 +595,24 @@ Content = {
 
 <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div>
 
-</div></div></div>
+
+</div>
+
+  <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
+            (request.getParameter("adv_and") == null || request.getParameter("adv_and").equals("")) &&
+            (request.getParameter("adv_phr") == null || request.getParameter("adv_phr").equals("")) &&
+            (request.getParameter("adv_not") == null || request.getParameter("adv_not").equals("")) &&
+            (request.getParameter("type") == null || request.getParameter("type").equals("") || request.getParameter("type").toLowerCase().equals("all") ) &&
+            (request.getParameter("size") == null || request.getParameter("size").equals("") || request.getParameter("size").toLowerCase().equals("all") ) &&
+            (request.getParameter("safeSearch") == null || request.getParameter("safeSearch").equals("") || request.getParameter("safeSearch").toLowerCase().equals("on") ) &&
+            (request.getParameter("site") == null || request.getParameter("site").equals(""))
+     ){ 
+    %>
+      <%@ include file="include/intro.jsp" %>
+
+    <% } %>
+
+</div></div>
 
   <script type="text/javascript">
     function rafAsync() {
@@ -626,6 +642,8 @@ Content = {
   <script type="text/javascript">
     $('#showSlides').hide();
   </script>
+
+
 
 <%@include file="include/analytics.jsp" %>
 <%@include file="include/footer.jsp" %>
