@@ -397,11 +397,11 @@ String[] queryString_splitted=null;
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
     <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
-    <meta name="theme-color" content="#252525">
+    <meta name="theme-color" content="#1a73ba">
     <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#252525">
+    <meta name="msapplication-navbutton-color" content="#1a73ba">
     <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#252525"> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba"> 
     <script type="text/javascript">
       var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
       var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
@@ -409,7 +409,7 @@ String[] queryString_splitted=null;
       var maxYear = maxDate.getFullYear();
     </script>     
 	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- bootstrap -->
@@ -444,6 +444,7 @@ String[] queryString_splitted=null;
     <%@ include file="include/topbar.jsp" %>
     <div class="container-fluid topcontainer" id="headerSearchDiv">
     <script type="text/javascript">
+      var language = localStorage.language;
       pagesHref = window.location.href;
       imagesHref = window.location.href.toString().replace("search.jsp", "images.jsp");  /*TODO remove from this href parameters that are only appliable to text search*/
     </script>
@@ -463,17 +464,6 @@ String[] queryString_splitted=null;
     </script>      
     <script type="text/javascript">$('#pagesTab').addClass('selected');$('#pagesTab').addClass('primary-underline');</script>
     <script type="text/javascript" src="/js/searchHeaderMobile.js"></script><!-- In progress-->
-    <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
-            (request.getParameter("adv_and") == null || request.getParameter("adv_and").equals("")) &&
-            (request.getParameter("adv_phr") == null || request.getParameter("adv_phr").equals("")) &&
-            (request.getParameter("adv_not") == null || request.getParameter("adv_not").equals("")) &&
-            (request.getParameter("format") == null || request.getParameter("format").equals("") ) &&
-            (request.getParameter("site") == null || request.getParameter("site").equals(""))
-     ){ 
-    %>
-      <%@ include file="include/intro.jsp" %>
-    <% } %>
-
 
   
         <%----------------------------------------------------------
@@ -715,8 +705,8 @@ function createResultsTable(numberOfVersions, inputURL){
     $('<div id="resultados-url"></div>'+
       '<div id="layoutTV">'+
         '<h4 class="leftArrow"><button onclick="scrollTableLeft()" class="clean-button-no-fill"><i class="fa fa-caret-left" aria-hidden="true"></i></ion-icon></button></h4>'+      
-        '<h4 class="text-bold faded"><i class="fa fa-table"></i> Tabela </h4>'+
-        '<button class="clean-button-no-fill anchor-color " onclick="localStorage.setItem(\'isList\', \'true\');window.location.reload()"><h4><i class="fa fa-list"></i> Lista</h4></button>'+
+        '<h4 class="text-bold"><i class="fa fa-table"></i> <fmt:message key='table'/> </h4>'+
+        '<button class="clean-button-no-fill anchor-color faded" onclick="localStorage.setItem(\'isList\', \'true\');window.location.reload()"><h4><i class="fa fa-list"></i> <fmt:message key='list'/></h4></button>'+
         '<h4 class="rightArrow"><button onclick="scrollTableRight()" class="clean-button-no-fill"><i class="fa fa-caret-right" aria-hidden="true"></i></ion-icon></button></h4>'+
       '</div>'+
       '<div class="wrap">' +
@@ -837,8 +827,8 @@ function createResultsList(numberOfVersions, inputURL){
 
     $('<div id="resultados-url">'+Content.resultsQuestion+' \'<a href="searchMobile.jsp?query=%22'+inputURL+'%22">'+inputURL+'</a>\'</div>'+
       '<div id="layoutTV">'+
-        '<button class="clean-button-no-fill anchor-color" onclick="localStorage.setItem(\'isList\', \'false\');window.location.reload();"><h4><i class="fa fa-table"></i> Tabela </h4></button>'+
-        '<h4 class="text-bold  faded"><i class="fa fa-list"></i> Lista</h4>'+
+        '<button class="clean-button-no-fill anchor-color faded" onclick="localStorage.setItem(\'isList\', \'false\');window.location.reload();"><h4><i class="fa fa-table"></i> <fmt:message key='table'/> </h4></button>'+
+        '<h4 class="text-bold"><i class="fa fa-list"></i> <fmt:message key='list'/></h4>'+
       '</div>'+
           '<div class="wrap">' +
              '<div id="intro">' +
@@ -1225,6 +1215,17 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
 <% } %>
 
 </div>
+    <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
+            (request.getParameter("adv_and") == null || request.getParameter("adv_and").equals("")) &&
+            (request.getParameter("adv_phr") == null || request.getParameter("adv_phr").equals("")) &&
+            (request.getParameter("adv_not") == null || request.getParameter("adv_not").equals("")) &&
+            (request.getParameter("format") == null || request.getParameter("format").equals("") ) &&
+            (request.getParameter("site") == null || request.getParameter("site").equals(""))
+     ){ 
+    %>
+      <%@ include file="include/intro.jsp" %>
+    <% } %>
+
 
       </div>  <!-- FIM #conteudo-resultado  --> 
     </div>

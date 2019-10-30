@@ -157,7 +157,7 @@ String shareImage = "https://arquivo.pt/wayback/"+imgTstamp+"/"+imgSrc;
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon"/>
   <link href="css/csspin.css" rel="stylesheet" type="text/css"/>
 
-  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- bootstrap -->

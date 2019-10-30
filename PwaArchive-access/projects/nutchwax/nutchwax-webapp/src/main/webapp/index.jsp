@@ -132,10 +132,12 @@
   <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
   <meta name="theme-color" content="#1a73ba">
   <!-- Windows Phone -->
-  <meta name="msapplication-navbutton-color" content="#1a73ba ">
+  <meta name="msapplication-navbutton-color" content="#1a73ba">
   <!-- iOS Safari -->   
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">  
+
+
   <script type="text/javascript">
     var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
     var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
@@ -146,7 +148,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css"  media="all" />
+	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
     <!-- font awesome -->
   <link rel="stylesheet" href="css/font-awesome.min.css">
 
@@ -184,6 +186,7 @@
 
  <!-- starts closing Welcome blue div on homepage -->
  <script type="text/javascript">
+ var language =  localStorage.language;
  advancedHref = "advancedImages.jsp?l=<%=language%>";
 
  $(document).ready(function(){

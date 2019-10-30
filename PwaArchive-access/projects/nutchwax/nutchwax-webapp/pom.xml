@@ -31,6 +31,10 @@
   <artifactId>nutchwax-webapp</artifactId>
   <packaging>war</packaging>
   <name>NutchWAX Webapp</name>
+  <properties>
+    <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+    <timestamp>${maven.build.timestamp}</timestamp>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.archive.nutchwax</groupId>
@@ -132,6 +136,23 @@
            <warSourceExcludes>**/wayback*jar,**/juniversalchardet*,**/archive-mapred*jar,**/commons-codec*jar,**/commons-collections*jar,**/commons-httpclient*jar,**/commons-pool*jar,**/je-*jar,**/junit*jar,**/libidn*jar,**/mg4j*jar,**/nutchwax-thirdparty*jar,**/servlet-api*.jar</warSourceExcludes>
          </configuration>       
       </plugin> 
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.4</version>
+          <configuration>      
+            <webResources>                        
+                <resource>                        
+                    <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                    <filtering>true</filtering>
+                    <targetPath>WEB-INF</targetPath>
+                    <includes>
+                        <include>**/web.xml</include>       
+                    </includes>
+                </resource>
+            </webResources>                      
+          </configuration>
+      </plugin>
     </plugins>
   </build>
     <distributionManagement>

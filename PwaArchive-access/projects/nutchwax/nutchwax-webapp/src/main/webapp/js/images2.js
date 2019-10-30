@@ -9,11 +9,30 @@
 })();
 
 
- imageObjs = []; /*Global array containing images*/
- imageDigests = []; /*Global array unique image digests*/
- noMoreResults = false; /*Global variable control if there are no more results*/
+imageObjs = []; /*Global array containing images*/
+imageDigests = []; /*Global array unique image digests*/
+noMoreResults = false; /*Global variable control if there are no more results*/
+hashBase64Img = "";
 
-function shortenURL( longURL) {
+function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
+    var img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = function() {
+      var canvas = document.createElement('CANVAS');
+      var ctx = canvas.getContext('2d');
+      var dataURL;
+      canvas.height = this.height;
+      canvas.width = this.width;
+      ctx.drawImage(this, 0, 0);
+      dataURL = canvas.toDataURL(outputFormat);
+      callback(dataURL);
+      canvas = null;
+    };
+    img.src = url;
+}
+
+
+function shortenURL( longURL ) {
     gapi.client.setApiKey('AIzaSyB7R8gTEu34CTfTBL8rolvjZOchKg2RyAA');
     gapi.client.load('urlshortener', 'v1', function() { 
         var request = gapi.client.urlshortener.url.insert({
@@ -45,6 +64,21 @@ $(function() {
         }
     });
 }); 
+
+/*Check if hash exists, if yes, hide the div. Logic for the browser back button.*/
+var checkShowSlides = false;
+setInterval(function() {
+  var lastHash = window.location.hash || "nothing";
+  if (lastHash != window.location.hash) {
+    if( checkShowSlides ) {
+      openImageViewer = false;
+      $('#showSlides').hide();  
+      checkShowSlides = false;
+    }
+  } else {
+    checkShowSlides = true;
+  }
+}, 100);
 
 function loadingFinished(showNextPageButton){
     if(showNextPageButton){
@@ -93,7 +127,7 @@ function truncateUrl(url, maxSize)
 
 function removeWWW(url){
     if(url.startsWith('www.')){
-    	return url.substring(4, url.length);
+      return url.substring(4, url.length);
     }
     return url;
 }
@@ -138,9 +172,9 @@ lastPosition = -1; /*Global var refers to the lastImage the user*/
 lastPress= -1; /*Global var refers to last time user pressed arrow in image viewer*/
 
 function openImage(position, animate){
-	console.log('open image');
-	openImageViewer = true;
-	imageHref = getCurrentImageHref();
+
+  openImageViewer = true;
+  imageHref = getCurrentImageHref();
     //var arrowWidth = 16; //width of the arrow
     if(lastPosition != -1){
         $('#testViewer'+lastPosition).hide();
@@ -148,9 +182,9 @@ function openImage(position, animate){
     }
     if(lastPosition === position){
         //you clicked twice in the same image, image closed no image selected
-         $('body').css('overflow', 'auto');
-         window.scrollTo( 0 , $("#imageResults"+lastPosition).offset().top);
-         lastPosition = -1;
+        $('body').css('overflow', 'auto');
+        window.scrollTo( 0 , $("#imageResults"+lastPosition).offset().top);
+        lastPosition = -1;
         return false;
     }
     
@@ -169,16 +203,12 @@ function openImage(position, animate){
     
     //$('#arrowWrapper'+position).show();
     lastPosition = position;
-    
+
     //$('#testViewer'+lastPosition +' ion-card').animate({ scrollTop: 0 }, "fast");
 
     window.scrollTo( 0 , 0);
 
-
-
     //$(window).scrollTop( $('#testViewer'+lastPosition +' ion-card').offset().top );
-
-
 
     //$('#testViewer'+position).focus();
  
@@ -188,18 +218,28 @@ function openImage(position, animate){
 
    if(event.keyCode == 37 && position > 0 ) {
         if(lastPress < 0 || (now - lastPress) > minimumTime ){
-		previousImage(''+position);
-		lastPress = Date.now();
-	}
+    previousImage(''+position);
+    lastPress = Date.now();
+  }
     } 
    else if (event.keyCode == 39 && position >= 0){
-	if(lastPress < 0 || (now - lastPress) > minimumTime ){
-		nextImage(''+position);
-		lastPress = Date.now();
-	}
+  if(lastPress < 0 || (now - lastPress) > minimumTime ){
+    nextImage(''+position);
+    lastPress = Date.now();
+  }
    }
  });*/
 return false;
+}
+
+
+function generateHash( position ){
+  window.location.hash = "card";
+}
+
+function removeHash( ) {
+  history.pushState(null, null, window.location.href.split('#')[0]);
+  window.location.hash = ''; 
 }
 
 const sleep = (milliseconds) => {
@@ -207,17 +247,17 @@ const sleep = (milliseconds) => {
 }
 
 async function getCurrentImageHref(){
-	var result = await document.querySelector('ion-slides').getActiveIndex().then(function(result){
-	    console.log('index: ' + result);
-		return $('ion-slide:nth-child('+(result+1)).find('.imageHref').attr('href');
-	});
-	return result;
+  var result = await document.querySelector('ion-slides').getActiveIndex().then(function(result){
+      console.log('index: ' + result);
+    return $('ion-slide:nth-child('+(result+1)).find('.imageHref').attr('href');
+  });
+  return result;
 }
 
 
 
 function openImage(position){
-  	console.log('opening position: ' + position);
+    console.log('opening position: ' + position);
     openImageViewer = true;
     imageHref = getCurrentImageHref();
     $('#showSlides').show();
@@ -251,8 +291,8 @@ var slides = document.getElementById('expandedImageViewers');
   
 }
 
-function closeImage(position){	
-  console.log('closing position: ' + position);
+
+function closeImage(position){  
   openImageViewer = false;
   $('#showSlides').hide();
 }
@@ -294,20 +334,24 @@ function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expan
     var maxImageExpandHeight = 400;
     var maxImageDivWidth =  ( ($(window).width() * 0.6) -70 ) * 0.95 ;
 
-    if(expandedImageHeight > maxImageExpandHeight){
+    if( expandedImageHeight > maxImageExpandHeight ) {
         expandedImageHeight = maxImageExpandHeight;
     } 
-    else if ( expandedImageWidth > maxImageDivWidth ){
+    else if ( expandedImageWidth > maxImageDivWidth ) {
         //resize height in porportion to resized width
         var ratio = maxImageDivWidth/expandedImageWidth;
         expandedImageHeight = expandedImageHeight * ratio;
+    }
+  
+    if(imageObj.currentImageURL.startsWith("http://m.p18") || imageObj.currentImageURL.startsWith("http://m.p51")){ //TODO wtf?! it's dangerous!
+      imageObj.currentImageURL = "https://"+imageObj.currentImageURL.substr(13,imageObj.currentImageURL.length);
     }
 
     var centerImage = maxImageExpandHeight/2 - expandedImageHeight/2 ;
     var liMarginTop = maxImageHeight - imageHeight;
     var contentToInsert = ''+
 
-        '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "openImage('+position+',false)">'+
+        '<div  class="imageContent" position='+position+' id="imageResults'+position+'" onclick = "openImage('+position+',false); generateHash(\''+position+'\');">'+
         '   <img  height="'+imageHeight.toString()+'" src="'+imageObj.src+'"/>'+
         '   <p class="green image-display-url" >→ '+removeWWW(truncateUrl(imageObj.pageURL, 20))+'</p>'+
         '   <p class="date image-display-date" id="date'+position+'">'+getDateSpaceFormated(imageObj.timestamp)+'</p>'+
@@ -336,18 +380,18 @@ function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expan
     }
     else{
       var inserted = false;
-      for (var i = 0 ; i< lengthofUL; i ++){
-        var insertedPos = $('#photos .imageContent').eq(i).attr('position');
-        if(position < insertedPos ){
-          $('#resultsUl li:eq('+i+')').before(contentToInsert);
+
+      $('#photos .imageContent').each(function(i, obj) {
+        if( position < i ){
+          $( obj ).insertBefore(contentToInsert);
           /*add logic to new column layout*/
           inserted = true;
-          break;
+          return;
         }
-      }
+      });
+
       if(inserted === false){
-        $('#resultsUl').append(contentToInsert);
-        $('#photos').prepend(contentToInsert);
+        $('#photos').append(contentToInsert);
       }
     }
 }    
@@ -357,7 +401,7 @@ function insertInPosition(position, imageObj, imageHeight, maxImageHeight, expan
 function  insertImageViewer(imageObj, position){
   /*this If should be removed in production*/
   /*due to lack of configurations and a proper test environment with images configured in solr for test purposes I had to load the images from Arquivo.pt directly*/
-  if(imageObj.currentImageURL.startsWith("http://m.p18")){
+  if(imageObj.currentImageURL.startsWith("http://m.p18") || imageObj.currentImageURL.startsWith("http://m.p51")){ //TODO wtf?! it's dangerous!
     imageObj.currentImageURL = "https://"+imageObj.currentImageURL.substr(13,imageObj.currentImageURL.length);
   }
 
@@ -366,7 +410,7 @@ return ''+
 /*If landscaped image show it full width on small screens*/
 
   '<ion-slide id="testViewer'+position+'" class="height-vh image-mobile-expanded-div no-outline" tabindex="1">'+
-      '<div onclick="closeImage('+position+',false)" class="image-mobile-expanded-viewer-mask no-outline"></div>'+
+      '<div onclick="closeImage('+position+',false); removeHash();" class="image-mobile-expanded-viewer-mask no-outline"></div>'+
       '<div class="row full-height no-outline">'+
           '<div id="insert-card-'+position+'" class="full-height text-right">'+
               '<ion-card id="card'+position+'" class="card-height">'+
@@ -402,7 +446,7 @@ return ''+
               '</ion-card> '+
            /*  (parseInt(imageObj.expandedWidth) > $( window ).width() ? ''+
              '<ion-icon id="close'+position+'" name="close" class="closeCard" size="large" onclick = "closeImage('+position+',false)"></ion-icon>' : '' +*/
-             '<ion-icon id="close'+position+'" name="close" class="closeIt" size="large" onclick = "closeImage('+position+',false)"></ion-icon>' +              /*change to closeIt*/
+             '<ion-icon id="close'+position+'" name="close" class="closeIt" size="large" onclick = "closeImage('+position+',false); removeHash();"></ion-icon>' +              /*change to closeIt*/
           '</div>'+
       '</div>'+    
   '</ion-slide>'; 
@@ -643,7 +687,7 @@ function encodeHtmlEntity(str) {
     return str;
 }
 
-$(document).ajaxStart(function(){	
+$(document).ajaxStart(function(){ 
     $('#loadingDiv').show();
 });
 
@@ -710,10 +754,10 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
             
             var currentResults
             if(totalResults > numrows){
-            	currentResults = responseJson.numberOfResponseItems;
+              currentResults = responseJson.numberOfResponseItems;
             }else{
-            	currentResults = totalResults;
-            	noMoreResults=true;
+              currentResults = totalResults;
+              noMoreResults=true;
             }
             var resultsToLoad = currentResults;
             
@@ -816,6 +860,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                 }
                 
             }
+
         }
 
         
@@ -850,6 +895,20 @@ $(document).ready(function() {
       $("#dialog").dialog('close'); 
       return false;
     }); 
+
+  /* TODO:: for shareable link 
+    if(window.location.hash != '') {
+      console.log('Hash exists! = ' + window.location.hash);
+      var urlImg = atob( window.location.hash.substring( 1 ) );
+      console.log('urlImg => ' + urlImg);
+      
+      convertImgToDataURLviaCanvas(urlImg, function(base64Img) {
+        hashBase64Img = base64Img;
+      });
+      //document.querySelector("#card11 > a > img");
+    }*/
+
+    removeHash();
    
 });
 
@@ -980,3 +1039,31 @@ function createErrorPage(){
     '').insertBefore("#photos");    
     $( window ).resize(function() {$('#conteudo-pesquisa-erro').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/$( window ).resize(function() {$('.spell').css('margin-left', $('#search-dateStart_top').offset().left)}); /*dirty hack to keep message aligned with not responsive searchbox*/ 
 }
+
+
+
+/* TODO:: logic for shareable link
+window.addEventListener("load", function(event) {
+    if( hashBase64Img !== "") {
+      sleep(1000).then(() => {
+      console.log(document.getElementsByClassName('imageContent').length);
+
+      var imageContentDivs = document.getElementsByClassName('imageContent'),
+          arr = [ ];
+
+      for (var i = 0; i < imageContentDivs.length; i++) {
+          var imgTag = imageContentDivs[ i ].getElementsByTagName( "img" )[ 0 ];
+          //console.log(imgTag.src);
+          console.log( "hashBase64Img => " + hashBase64Img );
+          if( imgTag.src === hashBase64Img) {
+            console.log("Position =>" + imageContentDivs.position);
+          //openImage(imageContentDivs.position,false);
+          }
+      }
+
+      });  
+    }
+
+});*/
+
+

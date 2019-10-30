@@ -6,7 +6,24 @@
                   document.write('<ion-datetime id="ionDateEnd" class="display-none" display-format="D/MMM/YYYY" min="'+minYear+'-01-01" max="'+maxYear+'-12-31" value="<%=dateEndStringIonic%>"></ion-datetime>');                 
                 </script>                              
                 <script type="text/javascript">
-                  monthShortNamesArray = ["<fmt:message key='smonth.0'/>",'<fmt:message key='smonth.1'/>','<fmt:message key='smonth.2'/>','<fmt:message key='smonth.3'/>','<fmt:message key='smonth.4'/>','<fmt:message key='smonth.5'/>','<fmt:message key='smonth.6'/>','<fmt:message key='smonth.7'/>','<fmt:message key='smonth.8'/>','<fmt:message key='smonth.9'/>','<fmt:message key='smonth.10'/>','<fmt:message key='smonth.11'/>'];
+                  if(language.toUpperCase() === 'EN') {
+                    monthShortNamesArray = ["<fmt:message key='smonth.0'/>".charAt(0).toUpperCase() + "<fmt:message key='smonth.0'/>".slice(1),
+                    '<fmt:message key='smonth.1'/>'.charAt(0).toUpperCase()  + '<fmt:message key='smonth.1'/>'.slice(1),
+                    '<fmt:message key='smonth.2'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.2'/>'.slice(1) ,
+                    '<fmt:message key='smonth.3'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.3'/>'.slice(1) ,
+                    '<fmt:message key='smonth.4'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.4'/>'.slice(1),
+                    '<fmt:message key='smonth.5'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.5'/>'.slice(1),
+                    '<fmt:message key='smonth.6'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.6'/>'.slice(1),
+                    '<fmt:message key='smonth.7'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.7'/>'.slice(1),
+                    '<fmt:message key='smonth.8'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.8'/>'.slice(1),
+                    '<fmt:message key='smonth.9'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.9'/>'.slice(1),
+                    '<fmt:message key='smonth.10'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.10'/>'.slice(1),
+                    '<fmt:message key='smonth.11'/>'.charAt(0).toUpperCase() + '<fmt:message key='smonth.11'/>'.slice(1)];
+                    
+                  } else {
+                     monthShortNamesArray = ["<fmt:message key='smonth.0'/>",'<fmt:message key='smonth.1'/>','<fmt:message key='smonth.2'/>','<fmt:message key='smonth.3'/>','<fmt:message key='smonth.4'/>','<fmt:message key='smonth.5'/>','<fmt:message key='smonth.6'/>','<fmt:message key='smonth.7'/>','<fmt:message key='smonth.8'/>','<fmt:message key='smonth.9'/>','<fmt:message key='smonth.10'/>','<fmt:message key='smonth.11'/>'];
+                  }
+
                   function removeZeroInDay(dayStr){
                     if(dayStr.length == 2 && dayStr.charAt(0) === "0"){
                       return dayStr.charAt(1);
@@ -59,7 +76,7 @@
                     <script>
                      document.write('<ion-range ion-padding-start id="dual-range" dual-knobs pin color="dark" min="'+minYear+'" max="'+maxYear+'" step="1">');
                     </script>
-                        <button type="button" class="clean-button-no-fill" id="sliderCircleLeft" onclick="openDateEnd();" slot="end">
+                        <button type="button" class="clean-button-no-fill" id="sliderCircleRight" onclick="openDateEnd();" slot="end">
                           <script>
                             document.write('<span id="calendarDayRight">'+removeZeroInDay("<%=dateEndDay%>")+'</span>'+
                                           '<br>'+
@@ -72,7 +89,7 @@
                         <input size="10" class="display-none" type="text" id="dateEnd_top" name="dateEnd" value="<%=dateEndString%>" />
                       
 
-                        <button type="button" class="clean-button-no-fill" id="sliderCircleRight" slot="start" onclick="openDateStart()">
+                        <button type="button" class="clean-button-no-fill" id="sliderCircleLeft" slot="start" onclick="openDateStart()">
                           <script type="text/javascript">
                             document.write('<span id="calendarDayLeft">'+removeZeroInDay("<%=dateStartDay%>")+'</span><br>');
                             document.write('<span id="calendarMonthLeft">'+getMonthShortName("<%=dateStartMonth%>")+'</span>');

@@ -298,7 +298,7 @@
             <% showSummary=true; //to show always summaries %>            
             <div class="summary"> 
               <% if (!"".equals(summary) && showSummary) { %>
-                <span class="resumo"><%=summary%></span><br />
+                  <a id="summayLink" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><span class="resumo"><%=summary%></span></a><br />
             <% } %>  
            
           </div>            
