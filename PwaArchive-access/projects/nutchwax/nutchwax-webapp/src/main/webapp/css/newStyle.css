@@ -1381,7 +1381,7 @@ ion-button {
   z-index: 2;
   overflow-y: auto !important;
   outline: none;
-  border-radius: 10px;
+  border-radius: 5px;
   -webkit-box-shadow: 0px 19px 26px -5px rgba(18, 67, 110, 1);
   -moz-box-shadow: 0px 19px 26px -5px rgba(18, 67, 110, 1);
   box-shadow: 0px 19px 26px -5px rgba(18, 67, 110, 1);
