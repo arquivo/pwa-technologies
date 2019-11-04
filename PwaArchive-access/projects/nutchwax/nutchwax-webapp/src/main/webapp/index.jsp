@@ -118,7 +118,7 @@
 <head>
 	<title><fmt:message key='home.meta.title'/></title>
     
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 viewport-fit=cover">-->
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 	<%-- TODO: define META lang --%>
@@ -130,12 +130,12 @@
   <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
   <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
-  <meta name="theme-color" content="#1a73ba">
+  <meta name="theme-color" content="#1a73ba" />
   <!-- Windows Phone -->
-  <meta name="msapplication-navbutton-color" content="#1a73ba">
+  <meta name="msapplication-navbutton-color" content="#1a73ba" />
   <!-- iOS Safari -->   
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba" />  
 
 
   <script type="text/javascript">
@@ -145,20 +145,20 @@
     var maxYear = maxDate.getFullYear();
   </script>     
 
-	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto&amp;display&equals;swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display&equals;swap" rel="stylesheet" />
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
     <!-- font awesome -->
-  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css" />
 
   <!-- Google fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
     
   <!-- bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <script src="/js/jquery-latest.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <script type="text/javascript" src="/js/jquery-latest.min.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="/js/js.cookie.js"></script>
   <script type="text/javascript" src="/js/swiper.min.js"></script>
   
@@ -167,7 +167,7 @@
   <!-- end slider dependencies -->
 
   <!-- left menu dependencies -->
-  <link rel="stylesheet" href="css/leftmenu.css">
+  <link rel="stylesheet" href="css/leftmenu.css" />
     <!-- end left menu dependencies -->
 
   <!--Includes mobiscroll (calendars for setting day month and year)-->
@@ -250,15 +250,15 @@ function updateQueryStringParameter(uri, key, value) {
   <script type="text/javascript" src="/js/js.cookie.js"></script>
 
   <script type="module" src="@ionic/core/dist/ionic/ionic.esm.js"></script>
-  <script nomodule="" src="@ionic/core/dist/ionic/ionic.js"></script>
+  <script type="text/javascript" nomodule="" src="@ionic/core/dist/ionic/ionic.js"></script>
 
   <!--<script src="@ionic/core/dist/ionic.js"></script>--> 
 
-  <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css">
+  <link rel="stylesheet" href="@ionic/core/css/ionic.bundle.css" />
   <!-- ends New style to override less styles -->
 
   <!-- starts sticky search bar styles -->
-  <link rel="stylesheet" href="/css/scroll-fixed-content.css">
+  <link rel="stylesheet" href="/css/scroll-fixed-content.css" />
   <!-- ends sticky search bar styles -->
 
 </head>

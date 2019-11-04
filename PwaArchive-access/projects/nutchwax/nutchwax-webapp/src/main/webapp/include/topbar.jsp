@@ -41,7 +41,7 @@
 <%String arquivoHost = nutchConfAlt.get("wax.webhost", "arquivo.pt"); %>
 <!-- Main Menu Dependencies -->
 <link rel="stylesheet" href="css/swiper.min.css">
-<link rel="stylesheet" href="css/MainMenu.css?build=<c:out value='${initParam.buildTimeStamp}'/>">
+<link rel="stylesheet" href="css/MainMenu.css?build=<c:out value='${initParam.buildTimeStamp}'/>" />
 <%@ include file="MainMenu.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
 <script type="text/javascript">MENU.init()</script> 
@@ -60,7 +60,7 @@
 									<div class="bar"></div>
 								</div>		                    	
 		                    </a>
-		                    <a href="/?l=<%=language%>"><img src="/img/arquivo-logo-white.svg" id="arquivoLogo" alt="Logotipo do Arquivo.pt" class="text-center logo-main"></a>
+		                    <a href="/?l=<%=language%>"><img src="/img/arquivo-logo-white.svg" id="arquivoLogo" alt="Logotipo do Arquivo.pt" class="text-center logo-main" /></a>
 		                    <!-- New code: starts Opções button ans Language selection-->                   
 		                    <!--<a href="#" class="opcoes-top-direita" title="choose your language">...</a>-->
 		                    <!-- ends select language button -->
