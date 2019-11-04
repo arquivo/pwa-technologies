@@ -47,7 +47,7 @@
                 </div>  
 </div>      
                
-<script src="/include/clearForm.js"></script> 
+<script type="text/javascript" src="/include/clearForm.js"></script> 
 
 <script type="text/javascript">
   $("#dateStart").change( function() {                                  

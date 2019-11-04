@@ -268,7 +268,7 @@
 		<!-- Fim formulário -->      
     </div>    
 
-<script>
+<script type="text/javascript">
 $('#wordsOptions').show();	
 $(".expandable-div legend").click(function() {
 	$('fieldset > legend > i').removeClass('fa-caret-up').addClass('fa-caret-down')
@@ -314,13 +314,13 @@ $(".expandable-div legend").click(function() {
 		$('#dateEnd_top').val(newEndDateFormated);
 	});   	
 </script>	
-<script>
+<script type="text/javascript">
 	$('#startDateCalendarAnchor').click( function(e) {
 	  e.preventDefault();
 	  $('#dateStart_top').trigger('click');
 	});    
 </script>		
-<script>
+<script type="text/javascript">
 	$('#endDateCalendarAnchor').click( function(e) {
 	  e.preventDefault();
 	  $('#dateEnd_top').trigger('click');

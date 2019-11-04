@@ -40,13 +40,13 @@
 %>
 <%String arquivoHost = nutchConfAlt.get("wax.webhost", "arquivo.pt"); %>
 <!-- Main Menu Dependencies -->
-<link rel="stylesheet" href="css/swiper.min.css">
-<link rel="stylesheet" href="css/MainMenu.css?build=<c:out value='${initParam.buildTimeStamp}'/>">
+<link rel="stylesheet" href="css/swiper.min.css" />
+<link rel="stylesheet" href="css/MainMenu.css?build=<c:out value='${initParam.buildTimeStamp}'/>" />
 <%@ include file="MainMenu.jsp" %>
-<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
 <script type="text/javascript">MENU.init()</script> 
 <script type="text/javascript" src="/js/js.cookie.js"></script>
-<script>
+<script type="text/javascript">
 	localStorage.setItem("language", "<%=language%>".toUpperCase());
 	/*Cookies.set("language", "<%=language%>".toUpperCase());*/
 </script>

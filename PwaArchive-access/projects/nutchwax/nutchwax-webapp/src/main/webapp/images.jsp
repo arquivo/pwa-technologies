@@ -495,7 +495,7 @@ Content = {
 
 
   <div class="row image-container">
-    <script>
+    <script type="text/javascript">
       document.write("<div id='loadingDiv' class='text-center lds-ring' style='text-align: center; margin-top: 10%; margin-bottom: 5%;display:block'><div></div><div></div><div></div><div></div></div>");
       $( document ).ready(function() {
         if(typeof(loading)=="undefined" || loading != true){
