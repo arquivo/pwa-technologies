@@ -1,6 +1,6 @@
 
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <%@ page
 	session="true"
 	contentType="text/html; charset=UTF-8"
@@ -126,7 +126,7 @@
 	<meta name="Keywords" content="<fmt:message key='home.meta.keywords'/>" />
 	<meta name="Description" content="<fmt:message key='home.meta.description'/>" />
 
-  <meta property="og:title" alt="" content="<fmt:message key='home.meta.title'/>"/>
+  <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
   <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
     <% String arquivoHostName = nutchConf.get("wax.webhost", "arquivo.pt"); %>
   <meta property="og:image" content="//<%=arquivoHostName%>/img/logoFace.png"/>
