@@ -197,7 +197,7 @@
 								</div>
 								<div id="label-data-2">
 									<label for="sort" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.sort'/></label>							
-    								<ion-select id="sort" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
+    								<ion-select id="sort" name="sort" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
 										<%
 										if (sortType == null) {		// use the default sorting behavior %>
 											<ion-select-option value="relevance" selected><fmt:message key="advanced.sort.relevance"/></ion-select-option>
@@ -227,7 +227,7 @@
 								<div id="label-format-1">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="formatType"><fmt:message key='advanced.format.label'/></label>
 									
-									<ion-select id="formatType" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
+									<ion-select id="formatType" name="format" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
 									<%
 										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
 										String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
