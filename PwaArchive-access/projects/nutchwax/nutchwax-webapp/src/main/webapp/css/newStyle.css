@@ -256,13 +256,13 @@ ion-item {
   background: white !important;
 }
 #conteudo-resultado {
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 9px;
+  padding-right: 9px;
   margin-top: 30px;
   margin-left: -15px;
   margin-right: -15px;
 }
-}
+
 .date {
   font-weight: bold;
   cursor: initial;
@@ -997,12 +997,25 @@ body#home-search #conteudo-pesquisa-erro {
   margin-left: 9px;
   margin-right: 9px;
   border: 1px solid #ccc;
-  float: left;
+  max-width: 918px;
   background: transparent;
   padding: 20px;
   border-radius: 5px;
-  margin-top: 6px;
+  margin: 0px auto !important;
+  margin-top: 4px !important;
 }
+
+body#home-search #conteudo-pesquisa-erro{
+  float:left !important;
+  padding-left: none !important;
+
+}
+
+body#homeImages #conteudo-pesquisa-erro{
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+}
+
 #conteudo-pesquisa-erro .alert-danger {
   color: black;
   text-align: center;
@@ -1017,11 +1030,12 @@ body#home-search #conteudo-pesquisa-erro {
 }
 .spell {
   padding-left: 15px;
-  padding-bottom: 10px;
+  padding-bottom: 19px;
   margin-bottom: 20px;
   display: block;
   margin-top: -20px;
   color: #9C27B0;
+  font-size: 1.2em;
 }
 #years {
   padding-bottom: 40px;
@@ -1629,7 +1643,6 @@ a.advancedSearch:hover {
   margin-left: 5px;
   margin-right: 5px;
   border: 1px solid #ccc;
-  float: left;
   background: transparent;
   padding: 20px;
   border-radius: 5px;
@@ -2231,8 +2244,8 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
     border: 1px solid #dfe1e5;
     margin-bottom: 10px;
     border-radius: 4px;
-    margin-left: 7px;
-    margin-right: 7px;
+    margin-left: 0px;
+    margin-right: 0px;
   }
   body#homepage-landing a#ImageButton, body#homepage-landing a#ImageButton:active, body#homepage-landing a#PageButton, body#homepage-landing a#PageButton:active {
     margin-bottom: /13px;
