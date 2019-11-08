@@ -73,10 +73,10 @@
       <includes>
         <include>commons-lang*</include>
         <include>lucene*</include>
-        <include>jakarta-oro*</include>
+        <include>oro*</include>
         <include>xerces*</include>
         <include>concurrent*</include>
-        <include>archive-commons*</include>
+        <include>webarchive-commons*</include>
       </includes>
     </fileSet>
     <!--
@@ -115,7 +115,6 @@
         <exclude>commons-pool:commons-pool</exclude>
         <exclude>commons-logging:commons-logging</exclude>
         <exclude>org.apache:hadoop</exclude>
-        <exclude>org.apache:nutch</exclude>
         <exclude>org.apache:nutch</exclude>
         <exclude>com.sleepycat:je</exclude>
         <exclude>junit:junit</exclude>
