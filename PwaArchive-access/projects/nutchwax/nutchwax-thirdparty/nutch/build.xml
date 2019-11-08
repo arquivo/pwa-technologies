@@ -608,6 +608,11 @@
   <!-- ================================================================== -->
   <target name="clean">
     <delete dir="${build.dir}"/>
+    <delete>
+      <fileset dir="${lib.dir}">
+        <exclude name="taglibs-*"/>
+      </fileset>
+    </delete>
   </target>
 
 </project>
