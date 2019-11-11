@@ -256,7 +256,7 @@ var contentToInsert = ''+
 '           <button onclick="previousImage('+position+')"  class="left__arrow" title="'+leftArrow+'"></button>'+
 '           <button onclick="nextImage('+position+')" class="right__arrow" title="'+rightArrow+'"></button>'+
 '           <div style="width: 60%; display: inline-block;float: left;">'+
-'               <a target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
+'               <a target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'im_/'+imageObj.pageURL+'">'+
 '                   <img style="max-width:'+maxImageDivWidth+'px; margin-left: 70px; margin-top:'+ centerImage+'px; margin-bottom:'+ centerImage+'px"class="imageExpanded" id="ExpandedImg'+position+'" src="'+imageObj.currentImageURL+'">'+
 '               </a>'+
 '           </div>'+
@@ -273,14 +273,14 @@ var contentToInsert = ''+
 '                   <div style="padding-top:20px; padding-bottom:50px;">'+
 '                   <h1 style="overflow: hidden;text-indent: initial;position: initial;word-wrap: break-word;color: #5e8400;font-size:2.1em;"> '+pageString+' </h1>'+
 '                   <div>'+
-'                       <h2 style="color:white; word-wrap: break-word;"><a style="color:white" target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+imageObj.pageTitle+'</a></h2><br/>'+
+'                       <h2 style="color:white; word-wrap: break-word;"><a style="color:white" target="_blank" href="//arquivo.pt/wayback/'+imageObj.pageTstamp+'im_/'+imageObj.pageURL+'">'+imageObj.pageTitle+'</a></h2><br/>'+
 '                       <h2 style="color:white; word-wrap: break-word;">'+truncateUrlRemoveProtocol(imageObj.pageURL, 60)+'</h2>'+
 '                       <br/>'+
 '                       <h2 style="color:white; font-weight:bold;word-wrap: break-word;" > '+getDateSpaceFormated(imageObj.pageTstamp)+' </h2>'+
 '                   </div>'+
 '                </div>'+
 '                   <div style="display: inline; white-space: nowrap; overflow: hidden;">'+
-'                       <a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.pageTstamp+'/'+imageObj.pageURL+'">'+
+'                       <a class="imageViewerAnchor" target="_blank" href="/wayback/'+imageObj.pageTstamp+'im_/'+imageObj.pageURL+'">'+
 '                           <span class="imageViewerButton">'+visitPage+'</span>'+
 '                       </a>'+
 '                       <a target="_blank" class="imageViewerAnchor" style="margin-left: 20px"  href="'+imageObj.currentImageURL+'">'+
@@ -536,7 +536,7 @@ function searchImagesJS(dateStartWithSlashes, dateEndWithSlashes, safeSearchOpti
                     continue;
                 }
 
-                var currentImageURL = '//arquivo.pt/wayback/'+ currentDocument.imgTstamp +'/'+currentDocument.imgSrc;
+                var currentImageURL = '//arquivo.pt/wayback/'+ currentDocument.imgTstamp +'im_/'+currentDocument.imgSrc;
                 var imageDigest = currentDocument.imgDigest;
                 
 
