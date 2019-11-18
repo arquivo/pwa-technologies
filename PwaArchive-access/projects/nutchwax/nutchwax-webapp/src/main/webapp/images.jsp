@@ -421,6 +421,9 @@ response.setHeader("Cache-Control","public, max-age=600");
    <script type="text/javascript" src="/js/swiper.min.js"></script>
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317" async="async"></script>
   <%@include file="include/analytics.jsp" %>
+
+  <script src="/js/uglipop.min.js"></script>
+  
 </head>
 <body id="homeImages">
 <!--?xml version="1.0" encoding="UTF-8"?-->

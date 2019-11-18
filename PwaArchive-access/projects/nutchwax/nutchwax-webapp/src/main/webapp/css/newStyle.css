@@ -2132,6 +2132,85 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
   color: black;
   font-weight: bold;
 }
+
+
+.modalReplay{
+  background: /*#252525*/white;
+  color: /*white*/black;
+  /*border: 1px solid #3E3E3E;*/
+  border-radius: /*10px*/10px;
+  text-align: center;
+  padding-bottom: 9px;
+  float:none;
+}
+
+#uglipop_content_fixed .modalReplay { 
+  background-color: white !important;
+  text-align: center;
+  font-size: 15px;
+  padding-top: 8px;
+  padding-bottom: 25px;
+}
+
+.modalReplay a, .modalReplay a:hover, .modalReplay a:visited, .modalReplay a:active {
+  text-decoration: underline;
+  color: white;
+  cursor: pointer;
+  border-top: 1px solid #3E3E3E;
+}
+
+#uglipop_overlay{
+  opacity: 0.6!important;
+  z-index: 1;
+  background-color:#000000 !important;
+}
+
+#uglipop_content_fixed{
+  z-index: 2;
+  min-width: 300px;
+  max-height: 100%;
+  position:fixed;
+  /*top: 2% !important;*/
+  /*margin-top: 10px;*/
+  border-radius: 5px;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  opacity: 1 !important;
+}
+
+h4.modalTitle {
+   color: black;
+   font-size: 14px;
+   padding: 0 16px 11px 16px;
+   line-height: 1.4em;
+}
+
+.modalReplay .modalOptions{ 
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: /*#007AFF*/#1c75c0;
+  border-radius: 5px /*10px /*100px*/;
+  margin: 10px 10px 0 10px;
+  width: 43%;
+  float: none;
+  margin-bottom: 11px;   
+  border: none;
+  text-decoration: none !important;
+  padding: 10px 57px;
+}
+
+.modalReplay .leftAnchor{
+  border-right: 1px solid #3E3E3E;
+}
+
+.modalReplay .row{
+  text-align: center;
+  margin: 0 auto !important;
+  float: none !important;
+}
+
+
 /***************************************************************************/
 /***************************************************************************/
 /**************          MEDIA   QUERIES          **************************/
