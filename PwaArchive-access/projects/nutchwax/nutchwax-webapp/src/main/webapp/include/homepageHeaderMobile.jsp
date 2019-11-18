@@ -47,6 +47,45 @@
                       function submitForm() {
                         $('.search-button').click();
                       }
+
+                      $('#searchForm').submit(function() {
+                        var dateStartInput = $( '#dateStart_top' ).val().trim();
+                        var dateEndInput = $( '#dateEnd_top' ).val().trim();
+                        var startTime = new Date( createDateJsFormat( dateStartInput ) );
+                        startTime.setHours(0,0,0,0);
+                        var endTime = new Date( createDateJsFormat( dateEndInput ) );
+                        endTime.setHours(0,0,0,0);
+                        
+                        if(startTime > endTime) {
+                          modalErrorDates();
+                          return false;
+                        }
+                        
+                        return true;
+                      });
+
+                      function createDateJsFormat( _date ){
+                        var day = _date.split('/')[0];
+                        var month = _date.split('/')[1];
+                        var year = _date.split('/')[2];
+
+                        return month + '/' + day + '/' + year;
+                      }
+
+                      function modalErrorDates(){
+                        uglipop({
+                          class:'modalReplay noprint', //styling class for Modal
+                          source:'html',
+                          content:'<h4 class="modalTitle"><i class="fa" aria-hidden="true"></i> <fmt:message key='datepicker.error.date'/></h4>'+
+                                  '<div class="row"><a id="errorDates" onclick="closeModalErrorDates()" class="col-xs-6 text-center leftAnchor modalOptions">OK</a></div>'});
+                      }
+
+                      function closeModalErrorDates() {
+                        $('#uglipop_content_fixed').fadeOut();
+                        $('#uglipop_overlay').fadeOut('fast');
+                      }
+
+
                     </script>
                     <div id="searchBarBlock" class="input-group stylish-input-group">
                         
@@ -184,11 +223,6 @@
                       },100) 
                                                                         
                       </script>  
-                      <script type="text/javascript">
-                      $('#dateStart_top').on("change", submitForm);
-                      $('#dateEnd_top').on("change", submitForm);
-
-                      </script> 
                       <script type="text/javascript">
                         $( document ).ready(function() {
                             $("#ionSlider").removeClass("hidden");

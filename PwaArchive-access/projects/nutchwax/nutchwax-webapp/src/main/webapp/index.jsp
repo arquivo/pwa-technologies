@@ -261,6 +261,9 @@ function updateQueryStringParameter(uri, key, value) {
   <link rel="stylesheet" href="/css/scroll-fixed-content.css" />
   <!-- ends sticky search bar styles -->
 
+  <script src="/js/uglipop.min.js"></script>
+
+  
 </head>
 <body id="homepage-landing">
   <%@ include file="include/topbar.jsp" %>

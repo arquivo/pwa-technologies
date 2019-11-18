@@ -125,7 +125,9 @@
   	<script src="../@ionic/core/dist/ionic.js"></script>
   	<link rel="stylesheet" href="../@ionic/core/css/ionic.bundle.css">    
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
-<!-- end addthis for sharing on social media --> 
+	<!-- end addthis for sharing on social media --> 
+	
+	<script src="/js/uglipop.min.js"></script>
 
 </head>
 <body id="advanced">
@@ -141,7 +143,7 @@
                   document.write('<ion-datetime id="ionDateStart" class="display-none" display-format="D/MMM/YYYY" min="'+minYear+'-01-01" max="'+maxYear+'-12-31" value="<%=dateStartStringIonic%>"></ion-datetime>');
                   document.write('<ion-datetime id="ionDateEnd" class="display-none" display-format="D/MMM/YYYY" min="'+minYear+'-01-01" max="'+maxYear+'-12-31" value="<%=dateEndStringIonic%>"></ion-datetime>');                 
                 </script>   
-				<form method="get" action="search.jsp">
+				<form  id="searchForm" method="get" action="search.jsp">
 					<input type="hidden" name="l" value="<%= language %>" />
 		            <div class="expandable-div">   
 						<fieldset id="words">
@@ -352,7 +354,48 @@ $(".expandable-div legend").click(function() {
 		var newEndDateFormated =  newEndDateTokens[2].split('T')[0] + "/" + newEndDateTokens[1]+ "/"+ newEndDateTokens[0]; 
 		/*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
 		$('#dateEnd_top').val(newEndDateFormated);
-	});   	
+	});  
+
+
+	/** Validade dates**/
+ 	$( '#searchForm' ).submit( function( ) {
+	    var dateStartInput = $( '#dateStart_top' ).val().trim();
+	    var dateEndInput = $( '#dateEnd_top' ).val().trim();
+	    var startTime = new Date( createDateJsFormat( dateStartInput ) );
+	    startTime.setHours(0,0,0,0);
+	    var endTime = new Date( createDateJsFormat( dateEndInput ) );
+	    endTime.setHours(0,0,0,0);
+	    
+	    if(startTime > endTime) {
+	      modalErrorDates();
+	      return false;
+	    }
+	  
+	    return true;
+	});
+
+	function createDateJsFormat( _date ){
+		var day = _date.split('/')[0];
+		var month = _date.split('/')[1];
+		var year = _date.split('/')[2];
+
+		return month + '/' + day + '/' + year;
+	}
+
+	function modalErrorDates(){
+		uglipop({
+		  class:'modalReplay noprint', //styling class for Modal
+		  source:'html',
+		  content:'<h4 class="modalTitle"><i class="fa" aria-hidden="true"></i> <fmt:message key='datepicker.error.date'/></h4>'+
+		          '<div class="row"><a id="errorDates" onclick="closeModalErrorDates()" class="col-xs-6 text-center leftAnchor modalOptions">OK</a></div>'});
+	}
+
+	function closeModalErrorDates() {
+		$('#uglipop_content_fixed').fadeOut();
+		$('#uglipop_overlay').fadeOut('fast');
+	}
+
+ 	
 </script>	
 <script type="text/javascript">
 	$('#startDateCalendarAnchor').click( function(e) {

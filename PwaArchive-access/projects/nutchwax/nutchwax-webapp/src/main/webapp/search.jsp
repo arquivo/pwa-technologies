@@ -437,6 +437,7 @@ String[] queryString_splitted=null;
   <script src="../@ionic/core/dist/ionic.js"></script>
   <link rel="stylesheet" href="../@ionic/core/css/ionic.bundle.css">
 
+  <script src="/js/uglipop.min.js"></script>
 
 </head>
 
