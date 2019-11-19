@@ -267,7 +267,7 @@
       %>
                 <% if (hitsPerDup > 0 && current_host.equals( previous_host )) {%>
       <%-- TODO: check if "grouped" style exist --%>
-                        <li class="grouped" > <!--onclick="redirecPage('<c:url value='${target}'></c:url>');"-->
+                        <li class="grouped" onclick="redirecPage('<c:url value='${target}'></c:url>');"> 
                 <% } else { %>
                           <li onclick="redirecPage('<c:url value='${target}'></c:url>');" >
 
