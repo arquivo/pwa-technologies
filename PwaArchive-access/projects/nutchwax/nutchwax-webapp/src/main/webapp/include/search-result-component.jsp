@@ -128,10 +128,10 @@
             SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMddHHmmss");
             TimeZone zone = TimeZone.getTimeZone("GMT");
             ft.setTimeZone(zone);
-	    // If the collectionsHost includes a path do not add archiveCollection.
+      // If the collectionsHost includes a path do not add archiveCollection.
             // See http://sourceforge.net/tracker/index.php?func=detail&aid=1288990&group_id=118427&atid=681140.
             //String target = "http://"+ collectionsHost +"/id"+ hit.getIndexDocNo() +"index"+ hit.getIndexNo();
-	    // Changed to return in wayback query format
+      // Changed to return in wayback query format
               String target = "//"+ collectionsHost +"/"+ ft.format(archiveDate)  +"/"+ url;
             pageContext.setAttribute("target", target);
             allVersions = "search.jsp?query="+ URLEncoder.encode(url, "UTF-8") +"&dateStart="+ dateStartString + "&dateEnd="+ dateEndString +"&pos="+ String.valueOf(position);
@@ -157,7 +157,7 @@
             final int TITLE_MAX_LENGTH = 60;
             int tagLengthCount = 0;
 
-	    outerLoop: // JN: spaghetti-code!!!
+      outerLoop: // JN: spaghetti-code!!!
             for ( String s : splittedTitle ) {
 
                 if (newTitle.length() > 0) {
@@ -192,7 +192,7 @@
 
             title = newTitle.toString();
 
-	    // Cut the title if it is too long
+      // Cut the title if it is too long
             if ( title.length() - tagLengthCount >= TITLE_MAX_LENGTH ) {
                 title = title.substring(0, TITLE_MAX_LENGTH + tagLengthCount) + "<b>...</b>";
             }
@@ -234,7 +234,7 @@
 
             String summary = sum.toString();
 
-	    // do not show unless we have something
+      // do not show unless we have something
             boolean showMore = false;
 
             // Content-Type
@@ -264,44 +264,47 @@
               lastModified = "";
             }
 
-	    %>
+      %>
                 <% if (hitsPerDup > 0 && current_host.equals( previous_host )) {%>
-			<%-- TODO: check if "grouped" style exist --%>
-                        <li class="grouped">
+      <%-- TODO: check if "grouped" style exist --%>
+                        <li class="grouped" > <!--onclick="redirecPage('<c:url value='${target}'></c:url>');"-->
                 <% } else { %>
-                        <li>
+                          <li onclick="redirecPage('<c:url value='${target}'></c:url>');" >
+
+                            <!--<a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>">-->
                 <% previous_host = current_host; } %>
 
             <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
             <!-- Changed to return in wayback query format -->
-            <div class="urlBlock">
-               <div class="url">&#x2192; <a class="url" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%= displayURL %></a></div>
-              <div class="border-bottom"></div>
-              <h2>
-                <% if (showMore) {
-                        if (!"text".equalsIgnoreCase(primaryType)) {
-                                if ( contentType.lastIndexOf('-') != -1) {
-                                        contentType = "[" + contentType.substring( contentType.lastIndexOf('-') + 1);
-                                }
-                                contentType = contentType.toUpperCase(); %>
-                                <span class="mime"><%=contentType%></span>
-                <%} }%>                
-                <a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><%=title%></a>
-              </h2>
-              <!-- New position for list versions -->
-              <div class="list-versions-div">
-              <span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span>              
-              </div>             
+              <div class="urlBlock">
+                 <div class="url">&#x2192; <%= displayURL %></div>
+                <div class="border-bottom"></div>
+                <h2>
+                  <% if (showMore) {
+                          if (!"text".equalsIgnoreCase(primaryType)) {
+                                  if ( contentType.lastIndexOf('-') != -1) {
+                                          contentType = "[" + contentType.substring( contentType.lastIndexOf('-') + 1);
+                                  }
+                                  contentType = contentType.toUpperCase(); %>
+                                  <span class="mime"><%=contentType%></span>
+                  <%} }%>                
+                  <%=title%>
+                </h2>
+                <!-- New position for list versions -->
+                <div class="list-versions-div">
+                <span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span>              
+                </div>             
 
-            </div>  
-	        	<%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
-            <% showSummary=true; //to show always summaries %>            
-            <div class="summary"> 
-              <% if (!"".equals(summary) && showSummary) { %>
-                  <a id="summayLink" onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>"><span class="resumo"><%=summary%></span></a><br />
-            <% } %>  
-           
-          </div>            
+              </div>  
+              <%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
+              <% showSummary=true; //to show always summaries %>            
+              <div class="summary"> 
+                <% if (!"".equals(summary) && showSummary) { %>
+                    <span class="resumo"><%=summary%></span>
+              <% } %>  
+             
+              </div>    
+         
             
 <%--
             -
@@ -313,13 +316,18 @@
 </ul>
 </div> <!-- FIM #resultados-lista  --> 
 <script type="text/javascript">
-  $('.urlBlock').on('click', function(e){
+  /*$('.urlBlock').on('click', function(e){
     window.location = $(this).find('h2 > a').attr('href');
-  });
+  });*/
   $('.date').on('click', function(e){
     e.preventDefault(); return false;
   });
+  /*
   $('.list-versions-div').on('click', function(e){
     window.location = $(this).find('a').attr('href');
-  });    
+  });
+  */    
+  function redirecPage( _url ){
+    window.location.href = _url;
+  }
 </script>
