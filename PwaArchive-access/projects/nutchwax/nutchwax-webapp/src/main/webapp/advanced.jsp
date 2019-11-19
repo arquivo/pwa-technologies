@@ -300,7 +300,6 @@ $(".expandable-div legend").click(function() {
 		$(this).children("i").removeClass('fa-caret-up').addClass('fa-caret-down');
 	}
 	else{
-		console.log('not visible')
 		$(this).next().slideDown('fast').show().slideDown('fast');
 		$(this).children("i").removeClass('fa-caret-down').addClass('fa-caret-up');		
 	}
@@ -408,7 +407,6 @@ $(".expandable-div legend").click(function() {
   $('#ionDateStart')[0].monthShortNames = monthShortNamesArray;
    $('#ionDateEnd')[0].monthShortNames = monthShortNamesArray;
 
-   $('#sort')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
    $('#formatType')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
    $('#num-result')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
    
