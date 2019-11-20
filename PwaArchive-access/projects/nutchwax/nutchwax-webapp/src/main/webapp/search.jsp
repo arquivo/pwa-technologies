@@ -904,19 +904,23 @@ function createErrorPage(){
        dataType: 'text',
        success: function(data) {
 
-        //top.alert("I received the versions");
-          versionsArray = []
-          var tokens = data.split('\n')
-          $.each(tokens, function(e){
-              if(this != ""){
-                  var version = JSON.parse(this);
+          versionsArray = [];
+          if( data ) {
+            var tokens = data.split('\n');
+            $.each(tokens, function(e){
+                if(this != ""){
+                    var version = JSON.parse(this);
                     versionsArray.push(version.timestamp);
                     versionsURL.push(version.url);                   
-              }
-              
-          }); 
-          createResultsPage(tokens.length-1, inputURL);
-          createMatrix(versionsArray, versionsURL);
+                }
+                
+            }); 
+            createResultsPage(tokens.length-1, inputURL);
+            createMatrix(versionsArray, versionsURL);            
+          } else {
+            createErrorPage();
+          }
+
        },
        async: false,
        type: 'GET'
