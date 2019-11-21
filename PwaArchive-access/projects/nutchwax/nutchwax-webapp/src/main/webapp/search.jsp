@@ -385,13 +385,13 @@ String[] queryString_splitted=null;
 <%-- TODO: define XML lang --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-PT" lang="pt-PT">
 <head>
-	<title><fmt:message key='home.meta.title'/></title>
+  <title><fmt:message key='home.meta.title'/></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-	<%-- TODO: define META lang --%>
-	<meta http-equiv="Content-Language" content="pt-PT" />
-	<meta name="Keywords" content="<fmt:message key='home.meta.keywords'/>" />
-	<meta name="Description" content="<fmt:message key='home.meta.description'/>" />
+  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+  <%-- TODO: define META lang --%>
+  <meta http-equiv="Content-Language" content="pt-PT" />
+  <meta name="Keywords" content="<fmt:message key='home.meta.keywords'/>" />
+  <meta name="Description" content="<fmt:message key='home.meta.description'/>" />
 
     <meta property="og:title" content="<fmt:message key='home.meta.title'/>"/>
     <meta property="og:description" content="<fmt:message key='home.meta.description'/>"/>
@@ -408,8 +408,8 @@ String[] queryString_splitted=null;
       var minYear = minDate.getFullYear();
       var maxYear = maxDate.getFullYear();
     </script>     
-	<link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
-	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
+  <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
+  <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- bootstrap -->
@@ -425,7 +425,7 @@ String[] queryString_splitted=null;
     <link rel="stylesheet" href="/css/nouislider.min.css">
     <script type="text/javascript" src="/js/wNumb.js"></script>
     <!-- CSS loading spiner -->
-	<link href="css/csspin.css" rel="stylesheet" type="text/css">
+  <link href="css/csspin.css" rel="stylesheet" type="text/css">
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
   <!-- end addthis for sharing on soc
     ial media --> 
@@ -745,8 +745,7 @@ function scrollTableLeft(){
    scrollLeftPosition -= scrollOffset;
    if(scrollLeftPosition <= 0) {scrollLeftPosition = 0;}
    $('#resultados-lista').animate({scrollLeft: scrollLeftPosition}, 800);
-  console.log('scrolling left');
-  console.log('scrolling to position: '+scrollLeftPosition);
+  
 }
 function scrollTableRight(){
    scrollLeftPosition += scrollOffset;
@@ -757,8 +756,7 @@ function scrollTableRight(){
    }
   
    $('#resultados-lista').animate({scrollLeft: scrollLeftPosition}, 800);
-  console.log('scrolling right');
-  console.log('scrolling to position: '+scrollLeftPosition);
+  
 }
 
 
@@ -863,7 +861,7 @@ function formatNumberOfVersions( numberofVersionsString){
 }
 
 function createErrorPage(){
-  $('<div id="conteudo-resultado" class="container-fluid col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">'+
+  $('<div id="conteudo-resultado-url" class="container-fluid col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">'+
            '  <div id="first-column">&nbsp;</div>'+
            '  <div id="second-column">'+
            '    <div id="search_stats"></div>'+
@@ -902,16 +900,17 @@ function createErrorPage(){
     var versionsURL = [];
 
     var inputURL = document.getElementById('txtSearch').value;
+    var notFoundURLSearch = false;
 
   loading = false;
-	$( document ).ajaxStart(function() {
+  $( document ).ajaxStart(function() {
     loading = true;
-	  $( "#loadingDiv").show();
-	});
-	$( document ).ajaxStop(function() {
+    $( "#loadingDiv").show();
+  });
+  $( document ).ajaxStop(function() {
     loading = false;
-	  $( "#loadingDiv").hide();
-	});
+    $( "#loadingDiv").hide();
+  });
   $( document ).ajaxComplete(function() {
     loading = false;
     $( "#loadingDiv").hide();
@@ -936,44 +935,51 @@ function createErrorPage(){
        dataType: 'text',
        success: function(data) {
           versionsArray = []
-          var tokens = data.split('\n')
-          $.each(tokens, function(e){
-              if(this != ""){
-                  var version = JSON.parse(this);
-                  if(version.status[0] === '4' || version.status[0] === '5'){ /*Ignore 400's and 500's*/
-                    /*empty on purpose*/ 
-                  } 
-                  else{
-                    versionsArray.push(version.timestamp);
-                    versionsURL.push(version.url);
-                  }
-                   
-              }
-              
-          }); 
-          
+          if( data ) { 
+             
+            var tokens = data.split('\n')
+            $.each(tokens, function(e){
+                if(this != ""){
+                    var version = JSON.parse(this);
+                    if(version.status[0] === '4' || version.status[0] === '5'){ /*Ignore 400's and 500's*/
+                      /*empty on purpose*/ 
+                    } 
+                    else{
+                      versionsArray.push(version.timestamp);
+                      versionsURL.push(version.url);
+                    }
+                     
+                }
+                
+            }); 
+            
 
-          if( localStorage.getItem('isList') === null){
-            if(isList()){
-              createResultsList(tokens.length-1, inputURL);
-              createMatrixList(versionsArray, versionsURL);     
+            if( localStorage.getItem('isList') === null){
+              if(isList()){
+                createResultsList(tokens.length-1, inputURL);
+                createMatrixList(versionsArray, versionsURL);     
+              }
+              else{
+                createResultsTable(tokens.length-1, inputURL);
+                createMatrixTable(versionsArray, versionsURL);    
+              }
             }
             else{
-              createResultsTable(tokens.length-1, inputURL);
-              createMatrixTable(versionsArray, versionsURL);    
+              if(localStorage.getItem('isList') == 'true'){
+                createResultsList(tokens.length-1, inputURL);
+                createMatrixList(versionsArray, versionsURL);               
+              }
+              else{
+                createResultsTable(tokens.length-1, inputURL);
+                createMatrixTable(versionsArray, versionsURL);                
+              }
             }
-          }
-          else{
-            if(localStorage.getItem('isList') == 'true'){
-              createResultsList(tokens.length-1, inputURL);
-              createMatrixList(versionsArray, versionsURL);               
-            }
-            else{
-              createResultsTable(tokens.length-1, inputURL);
-              createMatrixTable(versionsArray, versionsURL);                
-            }
-          }
-          attachClicks();
+            attachClicks();
+           
+          } else {
+              createErrorPage();
+          } 
+            
        },
       
        type: 'GET'
@@ -1093,11 +1099,10 @@ function attachClicks(){
 <%-- No results presentend --%>
 <%-- ---------------- --%>
 
-
-<% if ( hitsTotal == 0) { %>
+<% if ( hitsTotal == 0 ) { %>
   
 <%
-        if (! request.getAttribute("query").equals("") ) {
+  if (! request.getAttribute( "query" ).equals( "" ) ) {
 %>
   <div id="conteudo-pesquisa-erro">
     <div class="alert alert-danger break-word col-xs-12 my-alert">
@@ -1110,7 +1115,7 @@ function attachClicks(){
         <li><fmt:message key='search.no-results.suggestions.time-interval'/></li>
         <li><fmt:message key='search.no-results.suggestions.keywords'/></li>        
         <%-- Show specific suggestions for URL queries --%>
-        <% if ( usedWayback) { %>
+        <% if (usedWayback) { %>
         <li><fmt:message key='search.no-results.suggestions.internet-archive'><c:out value = "${urlQuery}"/></fmt:message></li>
         <li><fmt:message key='search.no-results.suggestions.suggest'><c:out value = "${urlQuery}"/></fmt:message></li>
         <% } %>

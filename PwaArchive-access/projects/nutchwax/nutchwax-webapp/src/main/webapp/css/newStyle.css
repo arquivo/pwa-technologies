@@ -291,6 +291,11 @@ ion-item {
   margin-right: -15px;
 }
 
+#conteudo-resultado-url {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
 .date {
   font-weight: bold;
   cursor: initial;
@@ -1019,6 +1024,7 @@ input:active, input:focus {
   -moz-appearance: none !important;
   appearance: none !important;
 }
+
 body#home-search #conteudo-pesquisa-erro {
   margin-top: -10px !important;
 }
@@ -2210,7 +2216,7 @@ body#advanced .formatTypeDropdown, body#advanced-images .formatTypeDropdown {
 
 h4.modalTitle {
    color: black;
-   font-size: 14px;
+   font-size: 15px;
    padding: 0 16px 11px 16px;
    line-height: 1.4em;
 }
