@@ -197,28 +197,7 @@
 										<input type="text" class="row  date-advanced no-padding-left" id="dateEnd_top" name="dateEnd" size="10" value="<%=dateEndString%>" /><a class="calendar-anchor-advanced" id="endDateCalendarAnchor"><img src="/img/calendario-drop-down.svg"/></a>
 									</div>
 								</div>
-								<div id="label-data-2">
-									<label for="sort" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.sort'/></label>							
-    								<ion-select id="sort" name="sort" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
-										<%
-										if (sortType == null) {		// use the default sorting behavior %>
-											<ion-select-option value="relevance" selected><fmt:message key="advanced.sort.relevance"/></ion-select-option>
-										<% } else{ %>
-											<ion-select-option value="relevance"><fmt:message key="advanced.sort.relevance"/></ion-select-option>
-										<% }
-										if ("date".equals(sortType) && sortReverse) { %>
-											<ion-select-option  value="new" selected><fmt:message key='advanced.sort.new'/></ion-select-option>
-										<%} else {%>
-											<ion-select-option  value="new"><fmt:message key='advanced.sort.new'/></ion-select-option>
-										<%}%>
-										<%
-										if ("date".equals(sortType) && !sortReverse) {%>
-											<ion-select-option  value="old" selected><fmt:message key='advanced.sort.old'/></ion-select-option>
-										<%} else {%>
-											<ion-select-option  value="old"><fmt:message key='advanced.sort.old'/></ion-select-option>
-										<%}%>    	
-  								  	</ion-select>									
-								</div>
+
 							</div>
 						</fieldset>
 					</div>	
@@ -321,7 +300,6 @@ $(".expandable-div legend").click(function() {
 		$(this).children("i").removeClass('fa-caret-up').addClass('fa-caret-down');
 	}
 	else{
-		console.log('not visible')
 		$(this).next().slideDown('fast').show().slideDown('fast');
 		$(this).children("i").removeClass('fa-caret-down').addClass('fa-caret-up');		
 	}
@@ -429,7 +407,6 @@ $(".expandable-div legend").click(function() {
   $('#ionDateStart')[0].monthShortNames = monthShortNamesArray;
    $('#ionDateEnd')[0].monthShortNames = monthShortNamesArray;
 
-   $('#sort')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
    $('#formatType')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
    $('#num-result')[0].cancelText =  "<fmt:message key='picker.cancel'/>";
    
