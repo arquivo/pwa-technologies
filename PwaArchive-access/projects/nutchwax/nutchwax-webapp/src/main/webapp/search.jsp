@@ -449,6 +449,7 @@ String[] queryString_splitted=null;
       pagesHref = window.location.href;
       imagesHref = window.location.href.toString().replace("search.jsp", "images.jsp");  /*TODO remove from this href parameters that are only appliable to text search*/
     </script>
+    <script type="text/javascript" src="/js/encodeHTML.js"></script> 
     <%@ include file="include/searchHeaderMobile.jsp" %>
 
     <script type="text/javascript">

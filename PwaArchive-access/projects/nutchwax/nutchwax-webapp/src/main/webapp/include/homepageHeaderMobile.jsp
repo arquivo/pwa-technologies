@@ -241,7 +241,7 @@
                        <script type="text/javascript">
                          document.write('<a id="PageButton" class="pageLink advancedSearch" href=javascript:void(0)><span><fmt:message key='home.pages'/></span></a>');
                          document.write('<a id="ImageButton" class="advancedSearch selected-button imageLink" href=javascript:void(0)><span><fmt:message key='images.images'/></span></a>');
-                         document.write('<a id="advancedSearchButton" class="advancedSearch "href="'+advancedHref+'"><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
+                         document.write('<a id="advancedSearchButton" class="advancedSearch" href=javascript:void(0)><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
                        </script>                                                                
                      </div>
                 </div>  

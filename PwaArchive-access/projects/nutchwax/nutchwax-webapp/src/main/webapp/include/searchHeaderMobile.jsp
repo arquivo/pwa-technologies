@@ -238,7 +238,7 @@
                        <script type="text/javascript">
                          document.write('<a id="ImageButton" class="advancedSearch" href="'+imagesHref+'"><span><fmt:message key='images.images'/></span></a>');
                        </script>
-                       <a id="advancedSearchButton" class="advancedSearch "href="/advanced.jsp?l=pt"><span><fmt:message key='topbar.menu.advanced'/></span></a>                   
+                       <a id="advancedSearchButton" class="advancedSearch" href=javascript:void(0)><span><fmt:message key='topbar.menu.advanced'/></span></a>                   
                      </div>
                 </div>  
         </div>      
@@ -256,6 +256,22 @@
                 default: return "th";
             }
         }
+        
+        $('#advancedSearchButton').click(function() {
+          var newURL = "";
+          var txtSearch = document.getElementById('txtSearch').value.toString();
+          if(txtSearch !='' && txtSearch != undefined){
+                   newURL = "/advanced.jsp?l=<%=language%>&query="+encodeHtmlEntities(txtSearch);
+                     
+          } else {
+            newURL = "/advanced.jsp?l=<%=language%>";
+          }
+
+          console.log('newURL => ' + newURL);
+          window.location.href = newURL;
+        
+        }); //end advancedSearchButton click 
+
       </script>
                 </form>                                
             </div>             

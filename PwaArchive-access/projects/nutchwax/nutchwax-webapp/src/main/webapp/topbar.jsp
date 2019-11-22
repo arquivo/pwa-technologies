@@ -48,7 +48,6 @@
 <script type="text/javascript" src="/js/js.cookie.js"></script>
 <script type="text/javascript">
 	localStorage.setItem("language", "<%=language%>".toUpperCase());
-	/*Cookies.set("language", "<%=language%>".toUpperCase());*/
 </script>
 <div class="main-content">
 	<div class="container-fluid">

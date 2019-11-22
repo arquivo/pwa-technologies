@@ -222,10 +222,6 @@
                       
                       </script>  
                       <script type="text/javascript">
-                      $('#dateStart_top').on("change", submitForm);                          
-                      $('#dateEnd_top').on("change", submitForm);
-                      </script> 
-                      <script type="text/javascript">
                         $( document ).ready(function() {
                             $("#ionSlider").removeClass("hidden");
                         });             
@@ -243,7 +239,7 @@
                        <script type="text/javascript">
                          document.write('<a id="PageButton" class="advancedSearch" href="'+pagesHref+'"><span><fmt:message key='home.pages'/></span></a>');
                          document.write('<a id="ImageButton" class="advancedSearch selected-button" href="'+imagesHref+'"><span><fmt:message key='images.images'/></span></a>');
-                         document.write('<a id="advancedSearchButton" class="advancedSearch "href="'+advancedHref+'"><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
+                         document.write('<a id="advancedSearchButton" class="advancedSearch" href=javascript:void(0)><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
                        </script>                                                                
                      </div>
                 </div>  
@@ -251,18 +247,34 @@
                
         <script src="/include/clearForm.js"></script> 
         <script type="text/javascript">
-        // Append a suffix to dates.
-        // Example: 23 => 23rd, 1 => 1st.
-        function nth (d) {
-          if(d>3 && d<21) return 'th';
-          switch (d % 10) {
-                case 1:  return "st";
-                case 2:  return "nd";
-                case 3:  return "rd";
-                default: return "th";
+          // Append a suffix to dates.
+          // Example: 23 => 23rd, 1 => 1st.
+          function nth (d) {
+            if(d>3 && d<21) return 'th';
+            switch (d % 10) {
+                  case 1:  return "st";
+                  case 2:  return "nd";
+                  case 3:  return "rd";
+                  default: return "th";
+              }
+          }
+
+          $('#advancedSearchButton').click(function() {
+            var newURL = "";
+            var txtSearch = document.getElementById('txtSearch').value.toString();
+            if(txtSearch !='' && txtSearch != undefined){
+                     newURL = "/advancedImages.jsp?l=<%=language%>&query="+encodeHtmlEntities(txtSearch);
+                       
+            } else {
+              newURL = "/advancedImages.jsp?l=<%=language%>";
             }
-        }
-      </script>
+
+            console.log('newURL => ' + newURL);
+            window.location.href = newURL;
+          
+          }); //end advancedSearchButton click 
+
+        </script>
                 </form>                                
                 <ion-modal-controller></ion-modal-controller>
 <script type="text/javascript">
