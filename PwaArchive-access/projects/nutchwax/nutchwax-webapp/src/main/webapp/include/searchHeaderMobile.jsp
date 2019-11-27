@@ -47,11 +47,11 @@
                         
                             <input name="query" id="txtSearch" value="<c:out value = "${htmlQueryString}"/>" type="search" class="form-control no-radius search-input swiper-no-swiping" placeholder="<fmt:message key='home.search.placeholder'/>" autocapitalize="off" autocomplete="off" autocorrect="off" > 
                             <script type="text/javascript">   
-                                  $('#txtSearch').keydown(function (e){   
+                                  /*$('#txtSearch').keydown(function (e){   
                                     if(e.keyCode == 13){    
-                                        submitForm(); /*TODO:: this code shouldn't be needed. I.e. the enter key should work and submit the input form without this code*/    
+                                        submitForm();   
                                     }   
-                                  })    
+                                  })   */ 
                             </script>
                             <input type="hidden" id="l" name="l" value="<%=language%>">
                     </div>
@@ -164,13 +164,17 @@
                       setInterval(function(){
                         if(changedDualRange == true && $('#dual-range').hasClass("range-pressed")){
                             changedDualRange = false;
-                            var newDateStart = '<%=dateStartString%>'.substr(0,6)+document.querySelector('#dual-range').value.lower;
-                            var newDateEnd = '<%=dateEndString%>'.substr(0,6)+document.querySelector('#dual-range').value.upper;
-                            $('#dateStart_top').val(newDateStart);
+                            var dateStartInput = $('#dateStart_top').val();
+                            var dateEndInput = $('#dateEnd_top').val();
+                            
+                            var newDateStart = dateStartInput.substr(0,6)+document.querySelector('#dual-range').value.lower;
+                            var newDateEnd = dateEndInput.substr(0,6)+document.querySelector('#dual-range').value.upper;
                             $('#dateStart_top').attr("value", newDateStart);
-                            $('#dateEnd_top').val(newDateEnd);
-                            $('#dateEnd_top').attr("value", newDateEnd);
                             $('#dateStart_top').change();
+                            
+                            $('#dateEnd_top').attr("value", newDateEnd);
+                            $('#dateEnd_top').change();
+                            
                         }
                       },100) 
                                                                         
