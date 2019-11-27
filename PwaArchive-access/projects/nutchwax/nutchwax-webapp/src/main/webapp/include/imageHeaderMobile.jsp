@@ -23,7 +23,6 @@
                   } else {
                      monthShortNamesArray = ["<fmt:message key='smonth.0'/>",'<fmt:message key='smonth.1'/>','<fmt:message key='smonth.2'/>','<fmt:message key='smonth.3'/>','<fmt:message key='smonth.4'/>','<fmt:message key='smonth.5'/>','<fmt:message key='smonth.6'/>','<fmt:message key='smonth.7'/>','<fmt:message key='smonth.8'/>','<fmt:message key='smonth.9'/>','<fmt:message key='smonth.10'/>','<fmt:message key='smonth.11'/>'];
                   }
-
                   function removeZeroInDay(dayStr){
                     if(dayStr.length == 2 && dayStr.charAt(0) === "0"){
                       return dayStr.charAt(1);
@@ -42,14 +41,14 @@
                   $('#ionDateStart')[0].monthShortNames = monthShortNamesArray;
                    $('#ionDateEnd')[0].monthShortNames = monthShortNamesArray;
                 </script>   
-                <form id="searchForm" action="/images.jsp">
+                <form id="searchForm" action="/search.jsp">
                 <div id="form_container"> 
                     <script type="text/javascript">
                       function submitForm() {
                         $('.search-button').click();
                       }
 
-                                            $( '#searchForm' ).submit( function( ) {
+                      $('#searchForm').submit(function() {
                         var dateStartInput = $( '#dateStart_top' ).val().trim();
                         var dateEndInput = $( '#dateEnd_top' ).val().trim();
                         var startTime = new Date( createDateJsFormat( dateStartInput ) );
@@ -61,7 +60,6 @@
                           modalErrorDates();
                           return false;
                         }
-                      
                         return true;
                       });
 
@@ -92,17 +90,17 @@
                         
                             <input name="query" id="txtSearch" value="<c:out value = "${htmlQueryString}"/>" type="search" class="form-control no-radius search-input swiper-no-swiping" placeholder="<fmt:message key='home.search.placeholder'/>" autocapitalize="off" autocomplete="off" autocorrect="off"> 
                             <script type="text/javascript">
-                                  $('#txtSearch').keydown(function (e){
+                                  /**$('#txtSearch').keydown(function (e){
                                     if(e.keyCode == 13){
-                                        submitForm(); /*TODO:: this code shouldn't be needed. I.e. the enter key should work and submit the input form without this code*/
+                                        submitForm(); 
                                     }
-                                  })
+                                  })**/
                             </script>
                             <input type="hidden" id="l" name="l" value="<%=language%>">
                     </div>
                     <!-- starts search lupe and "x" close button -->
                     <div>
-                      <span class="clear-text"><i class="fa fa-close"></i></span>                         
+                      <span class="clear-text"><i class="fa fa-close"></i></span>                    
                               <span id="buttonSearch" class="input-group-addon no-radius search-button-span">
                                    <button class="search-button" type="submit">
                                       <span class="glyphicon glyphicon-search white"></span>
@@ -162,11 +160,11 @@
                         }
                       </script>
                       <script type="text/javascript">
-                        $('#ionDateStart').on("ionChange", function() {
-                        console.log("changed");
+                      $('#ionDateStart').on("ionChange", function() {
                         var newStartDate = $('#ionDateStart').val();
                         var newStartDateTokens = newStartDate.split('-');
                         var newStartDateFormated =  newStartDateTokens[2].split('T')[0] + "/" + newStartDateTokens[1]+ "/"+ newStartDateTokens[0]; 
+
                         /*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
                         $('#dateStart_top').attr("value", newStartDateFormated);
 
@@ -179,16 +177,18 @@
                         //update dual range
                         dualRange.value = { lower: newStartDateTokens[0], upper: currentDateEnd };
                         $('#dateStart_top').change();
-
                       });                         
+
+
                       $('#ionDateEnd').on("ionChange", function() {
                         var newEndDate = $('#ionDateEnd').val();
                         var newEndDateTokens = newEndDate.split('-');
                         var newEndDateFormated =  newEndDateTokens[2].split('T')[0] + "/" + newEndDateTokens[1]+ "/"+ newEndDateTokens[0]; 
-                        /*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
-                         $('#dateEnd_top').attr("value", newEndDateFormated);
 
-                                                //update span with new date
+                        /*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
+                        $('#dateEnd_top').attr("value", newEndDateFormated);
+
+                        //update span with new date
                         $('#calendarDayRight').text( removeZeroInDay( newEndDateTokens[2].split('T')[0] ) );
                         $('#calendarMonthRight').text( getMonthShortName(newEndDateTokens[1]) );
                         $('#calendarYearRight').text( newEndDateTokens[0] );
@@ -197,6 +197,7 @@
                         //update dual range
                         dualRange.value = { lower: currentDateStart, upper: newEndDateTokens[0]  };
                         $('#dateEnd_top').change();
+                         
                       });                                             
 
 
@@ -210,21 +211,26 @@
                       setInterval(function(){
                         if(changedDualRange == true && $('#dual-range').hasClass("range-pressed")){
                             changedDualRange = false;
-                            var newDateStart = '<%=dateStartString%>'.substr(0,6)+document.querySelector('#dual-range').value.lower;
-                            var newDateEnd = '<%=dateEndString%>'.substr(0,6)+document.querySelector('#dual-range').value.upper;
-                            $('#dateStart_top').val(newDateStart);
+                            var dateStartInput = $('#dateStart_top').val();
+                            var dateEndInput = $('#dateEnd_top').val();
+                            
+                            var newDateStart = dateStartInput.substr(0,6)+document.querySelector('#dual-range').value.lower;
+                            var newDateEnd = dateEndInput.substr(0,6)+document.querySelector('#dual-range').value.upper;
+
                             $('#dateStart_top').attr("value", newDateStart);
-                            $('#dateEnd_top').val(newDateEnd);
-                            $('#dateEnd_top').attr("value", newDateEnd);
                             $('#dateStart_top').change();
+                         
+                            $('#dateEnd_top').attr("value", newDateEnd);
+                            $('#dateEnd_top').change();
+                           
                         }
                       },100) 
-                      
+                                                                        
                       </script>  
                       <script type="text/javascript">
                         $( document ).ready(function() {
                             $("#ionSlider").removeClass("hidden");
-                        });             
+                        });     
                       </script>
                                      
                       <script>
@@ -237,8 +243,8 @@
                      <!-- starts Paginas and images links option -->
                      <div id="searchBarButtonsDiv"><br>                       
                        <script type="text/javascript">
-                         document.write('<a id="PageButton" class="advancedSearch" href="'+pagesHref+'"><span><fmt:message key='home.pages'/></span></a>');
-                         document.write('<a id="ImageButton" class="advancedSearch selected-button" href="'+imagesHref+'"><span><fmt:message key='images.images'/></span></a>');
+                         document.write('<a id="PageButton" class="pageLink advancedSearch" href=javascript:void(0)><span><fmt:message key='home.pages'/></span></a>');
+                         document.write('<a id="ImageButton" class="advancedSearch selected-button imageLink" href=javascript:void(0)><span><fmt:message key='images.images'/></span></a>');
                          document.write('<a id="advancedSearchButton" class="advancedSearch" href=javascript:void(0)><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
                        </script>                                                                
                      </div>
@@ -247,34 +253,18 @@
                
         <script src="/include/clearForm.js"></script> 
         <script type="text/javascript">
-          // Append a suffix to dates.
-          // Example: 23 => 23rd, 1 => 1st.
-          function nth (d) {
-            if(d>3 && d<21) return 'th';
-            switch (d % 10) {
-                  case 1:  return "st";
-                  case 2:  return "nd";
-                  case 3:  return "rd";
-                  default: return "th";
-              }
-          }
-
-          $('#advancedSearchButton').click(function() {
-            var newURL = "";
-            var txtSearch = document.getElementById('txtSearch').value.toString();
-            if(txtSearch !='' && txtSearch != undefined){
-                     newURL = "/advancedImages.jsp?l=<%=language%>&query="+encodeHtmlEntities(txtSearch);
-                       
-            } else {
-              newURL = "/advancedImages.jsp?l=<%=language%>";
+        // Append a suffix to dates.
+        // Example: 23 => 23rd, 1 => 1st.
+        function nth (d) {
+          if(d>3 && d<21) return 'th';
+          switch (d % 10) {
+                case 1:  return "st";
+                case 2:  return "nd";
+                case 3:  return "rd";
+                default: return "th";
             }
-
-            console.log('newURL => ' + newURL);
-            window.location.href = newURL;
-          
-          }); //end advancedSearchButton click 
-
-        </script>
+        }  
+      </script>
                 </form>                                
                 <ion-modal-controller></ion-modal-controller>
 <script type="text/javascript">
@@ -307,4 +297,4 @@ async function presentModal() {
 
             </div>            
         </div>
-<!-- End ImageHeaderMobile -->
+<!-- End HomePageHeaderMobile -->

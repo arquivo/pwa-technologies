@@ -164,13 +164,17 @@
                       setInterval(function(){
                         if(changedDualRange == true && $('#dual-range').hasClass("range-pressed")){
                             changedDualRange = false;
-                            var newDateStart = '<%=dateStartString%>'.substr(0,6)+document.querySelector('#dual-range').value.lower;
-                            var newDateEnd = '<%=dateEndString%>'.substr(0,6)+document.querySelector('#dual-range').value.upper;
-                            $('#dateStart_top').val(newDateStart);
+                            var dateStartInput = $('#dateStart_top').val();
+                            var dateEndInput = $('#dateEnd_top').val();
+                            
+                            var newDateStart = dateStartInput.substr(0,6)+document.querySelector('#dual-range').value.lower;
+                            var newDateEnd = dateEndInput.substr(0,6)+document.querySelector('#dual-range').value.upper;
                             $('#dateStart_top').attr("value", newDateStart);
-                            $('#dateEnd_top').val(newDateEnd);
-                            $('#dateEnd_top').attr("value", newDateEnd);
                             $('#dateStart_top').change();
+                            
+                            $('#dateEnd_top').attr("value", newDateEnd);
+                            $('#dateEnd_top').change();
+                            
                         }
                       },100) 
                                                                         
