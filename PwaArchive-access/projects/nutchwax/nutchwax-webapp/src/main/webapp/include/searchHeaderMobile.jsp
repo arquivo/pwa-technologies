@@ -47,11 +47,11 @@
                         
                             <input name="query" id="txtSearch" value="<c:out value = "${htmlQueryString}"/>" type="search" class="form-control no-radius search-input swiper-no-swiping" placeholder="<fmt:message key='home.search.placeholder'/>" autocapitalize="off" autocomplete="off" autocorrect="off" > 
                             <script type="text/javascript">   
-                                  $('#txtSearch').keydown(function (e){   
+                                  /*$('#txtSearch').keydown(function (e){   
                                     if(e.keyCode == 13){    
-                                        submitForm(); /*TODO:: this code shouldn't be needed. I.e. the enter key should work and submit the input form without this code*/    
+                                        submitForm();   
                                     }   
-                                  })    
+                                  })   */ 
                             </script>
                             <input type="hidden" id="l" name="l" value="<%=language%>">
                     </div>
