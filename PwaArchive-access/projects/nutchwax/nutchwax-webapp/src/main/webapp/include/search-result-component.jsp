@@ -274,7 +274,7 @@
                             <!--<a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>">-->
                 <% previous_host = current_host; } %>
 
-            <!-- <h2><a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>"><%=title%></a></h2> -->
+            <a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>">
             <!-- Changed to return in wayback query format -->
               <div class="urlBlock">
                  <div class="url">&#x2192; <%= displayURL %></div>
@@ -290,12 +290,14 @@
                   <%} }%>                
                   <%=title%>
                 </h2>
+                </a>
                 <!-- New position for list versions -->
                 <div class="list-versions-div">
                 <span class="date"><fmt:message key='search.result.date'><fmt:param value='<%= archiveDate%>'/></fmt:message></span>              
                 </div>             
 
               </div>  
+
               <%-- TODO: don't use "archiveDisplayDate" delegate to FMT --%>
               <% showSummary=true; //to show always summaries %>            
               <div class="summary"> 
