@@ -266,7 +266,7 @@
 
       %>
                 <% if (hitsPerDup > 0 && current_host.equals( previous_host )) {%>
-      <%-- TODO: check if "grouped" style exist --%>
+                <%-- TODO: check if "grouped" style exist --%>
                         <li class="grouped" onclick="redirecPage('<c:url value='${target}'></c:url>');"> 
                 <% } else { %>
                           <li onclick="redirecPage('<c:url value='${target}'></c:url>');" >
@@ -274,7 +274,7 @@
                             <!--<a onclick="ga('send', 'event', 'Full-text search', 'Click on version', '<c:url value='${target}'></c:url>');" href="<c:url value='${target}'></c:url>">-->
                 <% previous_host = current_host; } %>
 
-            <a href="<c:url value='${target}'><c:param name='pos' value='${position}'/><c:param name='l' value='${language}'/><c:param name='sid' value='${pageContext.session.id}'/></c:url>">
+            <a href="<c:url value='${target}'></c:url>">
             <!-- Changed to return in wayback query format -->
               <div class="urlBlock">
                  <div class="url">&#x2192; <%= displayURL %></div>
