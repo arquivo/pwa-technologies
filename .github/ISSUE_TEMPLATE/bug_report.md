@@ -1,5 +1,6 @@
 ---
 name: Issue report
+about: Template for reporting issues related to Arquivo.pt
 title: 'What is the problem?'
 
 ---
