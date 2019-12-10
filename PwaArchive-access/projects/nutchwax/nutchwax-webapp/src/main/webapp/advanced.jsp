@@ -213,7 +213,7 @@
 									
 									<ion-select id="formatType" name="format" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
 									<%
-										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
+										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rtf"};
 										String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
 
 										if (format == null || "all".equals(format)) {%>
