@@ -417,8 +417,7 @@ String[] queryString_splitted=null;
     <script src="/js/jquery-latest.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
 
-  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <!-- dual slider dependencies -->
     <script type="text/javascript" src="/js/nouislider.min.js"></script>

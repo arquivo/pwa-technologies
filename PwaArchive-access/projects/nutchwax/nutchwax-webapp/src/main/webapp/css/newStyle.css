@@ -160,8 +160,9 @@ ion-item {
   margin-top: 25px;
 
 }
-/* NEW STYLE: Change placeholder */ ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #b1afaf !important;
+/* NEW STYLE: Change placeholder */ 
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #777 !important;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
   font-weight: 100 !important;
 }
@@ -178,7 +179,7 @@ ion-item {
 :-moz-placeholder { /* Firefox 18- */
   color: #b1afaf !important;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
-  font-weight: 100;
+  font-weight: 100 !important;
 }
 #form_container {
   margin-top: 10px;
@@ -270,7 +271,7 @@ ion-item {
 
 #resultados-lista > ul > li:nth-child(even) {
   background: white !important;
-  box-shadow: 0 3px 6px rgba(32, 33, 36, 0.18);
+  box-shadow: 0 3px 6px rgba(32, 33, 36, 0.05);
   transition: background-color 0.5s;
 }
 #resultados-lista > ul > li:nth-child(even):active {
@@ -288,7 +289,7 @@ ion-item {
 #conteudo-resultado {
   padding-left: 9px;
   padding-right: 9px;
-  margin-top: /*30*/25px;
+  margin-top: 30px;
   margin-left: -15px;
   margin-right: -15px;
 }
@@ -590,9 +591,11 @@ h5 {
 }
 input:focus:-webkit-input-placeholder {
   color: transparent;
+  font-weight: 100 !important;
 }
 input:focus:-moz-placeholder {
   color: transparent;
+  font-weight: 100 !important;
 }
 h5 {
   margin: 0 !important;
@@ -1295,9 +1298,7 @@ div.call-to-actions span {
   margin-left: -11px !important;
   margin-right: -11px !important;
 }
-#homeImages #homeImages {
-  display: none !important
-}
+
 #photos {
   line-height: 0;
   -webkit-column-count: 8;
@@ -1688,6 +1689,11 @@ a.advancedSearch:hover {
   margin-top: 6px;
   width: 97.5%;
 }
+
+body#homeImages #searchBarButtonsDiv {
+  margin-bottom: 9px !important; 
+}
+
 #searchBarButtonsDiv {
   position: relative;
   z-index: 999999;
