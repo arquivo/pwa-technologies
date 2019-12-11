@@ -385,17 +385,20 @@ response.setHeader("Cache-Control","public, max-age=600");
     <link href="css/csspin.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script>
     <!-- end addthis for sharing on social media -->
+	<script type="text/javascript">
+		imageSearchAPI = "<%= nutchConf.get("wax.image.search.API", "https://arquivo.pt/imagesearch") %>";
+	</script>
+	<% if (nutchConf.get("wax.query.suggestion.API") != null) { %>
+      <script type="text/javascript">
+        querySuggestionAPI = "<%= nutchConf.get("wax.query.suggestion.API") %>";
+      </script>
+    <% } %>
     <script type="text/javascript" src="js/configs.js"></script>
 
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
   <script type="text/javascript" src="js/ui.datepicker.js"></script>
   <script type="text/javascript" src="js/ui.datepicker-pt-BR.js"></script>
   <!--<script type="text/javascript" src="js/imageConfigs.js"></script>-->
-
-  <% String imageSearchAPI = nutchConf.get("wax.image.search.API", "https://arquivo.pt/imagesearch"); %>
-  <script type="text/javascript">
-    imageSearchAPI = "<%=imageSearchAPI%>";
-  </script>
   <script type="text/javascript" src="js/images2.js?imageSearch"></script>
   <script type="text/javascript">
     $(".border-mobile").click(function(e) {

@@ -5,7 +5,7 @@
 <%@ page
   session="true"
   contentType="text/html; charset=UTF-8"
-  pageEncoding="UTF-8"  
+  pageEncoding="UTF-8"
 
   import="java.io.File"
   import="java.io.IOException"
@@ -114,15 +114,15 @@ response.setHeader("Cache-Control","public, max-age=600");
 <%-- Handle the url parameters --%>
 <%
   // get query from request
-  
+
   String queryString = request.getParameter("query");
 String[] queryString_splitted=null;
 
-  
+
   if ( queryString != null ) {
         queryString = queryString.trim();
-        
-       
+
+
   } else {
         // Check if the 'query' params exists
         // else check if the advanced params exist and process them
@@ -177,7 +177,7 @@ String[] queryString_splitted=null;
                 bean.LOG.debug("\nQueryString : "+ queryString+"\n*****************************\n");
                 String aux_ ="exacturlexpand:http://"+aux;
                 aux = NutchwaxQuery.encodeExacturl(aux_);*/
-                
+
                 bean.LOG.debug("\nQueryString exactExpand URL: "+ siteParameter+"\n*****************************\n");
                 queryString += " ";
         }
@@ -277,7 +277,7 @@ String[] queryString_splitted=null;
   }
 
   /*** End date ***/
-  Calendar dateEnd = (Calendar)DATE_END.clone();  
+  Calendar dateEnd = (Calendar)DATE_END.clone();
 
   String dateEndNoParameter = inputDateFormatter.format( dateEnd.getTime() );
   String yearEndNoParameter =dateEndNoParameter.substring(dateEndNoParameter.length()-4);
@@ -301,7 +301,7 @@ String[] queryString_splitted=null;
     if(dateStart.getTime().compareTo(dateEnd.getTime())>0){
       Calendar auxCal = dateStart;
       dateStart = dateEnd;
-      dateEnd = auxCal; 
+      dateEnd = auxCal;
     }
   /**/
 
@@ -363,7 +363,7 @@ String[] queryString_splitted=null;
             collection;
       }
   }
-  
+
   // Prepare the query values to be presented on the page, preserving the session
   String htmlQueryString = "";
 
@@ -401,13 +401,13 @@ String[] queryString_splitted=null;
     <!-- Windows Phone -->
     <meta name="msapplication-navbutton-color" content="#1a73ba">
     <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba"> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">
     <script type="text/javascript">
       var minDate = new Date(<%=DATE_START.getTimeInMillis()%>);
       var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
       var minYear = minDate.getFullYear();
       var maxYear = maxDate.getFullYear();
-    </script>     
+    </script>
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon" />
   <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
     <!-- font awesome -->
@@ -425,12 +425,17 @@ String[] queryString_splitted=null;
     <script type="text/javascript" src="/js/wNumb.js"></script>
     <!-- CSS loading spiner -->
   <link href="css/csspin.css" rel="stylesheet" type="text/css">
-  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script>
   <!-- end addthis for sharing on soc
-    ial media --> 
+    ial media -->
+  <% if (nutchConf.get("wax.query.suggestion.API") != null) { %>
+  <script type="text/javascript">
+    querySuggestionAPI = "<%= nutchConf.get("wax.query.suggestion.API") %>";
+  </script>
+  <% } %>
   <script type="text/javascript" src="js/configs.js"></script>
   <script type="text/javascript" src="/js/js.cookie.js"></script>
-  <!-- swiper main menu --> 
+  <!-- swiper main menu -->
    <script type="text/javascript" src="/js/swiper.min.js"></script>
   <!-- NEW - 23.07.19: Call ionic -->
   <script src="../@ionic/core/dist/ionic.js"></script>
@@ -466,7 +471,7 @@ String[] queryString_splitted=null;
           return rtn;
       }
     </script>
-    <script type="text/javascript" src="/js/encodeHTML.js"></script> 
+    <script type="text/javascript" src="/js/encodeHTML.js"></script>
     <%@ include file="include/searchHeaderMobile.jsp" %>
 
     <script type="text/javascript">
@@ -478,16 +483,16 @@ String[] queryString_splitted=null;
         }
       $("#txtSearch").on('mousedown touchstart', function (e) {
             e.stopPropagation();
-       });          
+       });
       });
-    </script>      
+    </script>
     <script type="text/javascript">$('#pagesTab').addClass('selected');$('#pagesTab').addClass('primary-underline');</script>
     <script type="text/javascript" src="/js/searchHeaderMobile.js"></script><!-- In progress
   -->
 
 
 
-  
+
         <%----------------------------------------------------------
         // Check to see which of the 3 mode is presented:
         // (1) result list
@@ -512,17 +517,17 @@ String[] queryString_splitted=null;
         pageContext.setAttribute("collectionsHost", collectionsHost);
 
               String hostArquivo = nutchConf.get("wax.webhost", "arquivo.pt");
-        
+
         typeShowParam = request.getParameter("typeShow");
 
         if ( request.getAttribute("query") != null && !request.getAttribute("query").toString().equals("") ) {
 
                 if ( (urlMatch = URL_PATTERN.matcher( request.getAttribute("query").toString() )).matches() ) {
-                        
+
                         urlQuery = urlMatch.group(1);
                         String urlQueryParam = urlQuery;
                         int urlLength = urlQuery.length();
-          
+
                         if (!urlQuery.startsWith("http://") && !urlQuery.startsWith("https://") ) {
                                 urlQueryParam = "http://" + urlQueryParam;
                         }
@@ -560,17 +565,17 @@ String[] queryString_splitted=null;
                                 // option: (2)
                                 showList = false;
                                 usedWayback = true;
-                                
+
 
 
                             urlQueryParam= protocol+"://"+hostname+fileofUrl;
-                            
+
                           /*************************************/
                             queryString=urlQueryParam; //Querying wayback servlet
                             urlQuery=urlQueryParam; //Querying pyWB
                             urlQuery = StringEscapeUtils.escapeHtml(urlQuery);
                             request.setAttribute("urlQuery", urlQuery);
-                        
+
                             /*************************************************/
                     pageContext.setAttribute("urlQueryParam", urlQueryParam);
                     allVersions = "search.jsp?query="+ URLEncoder.encode(urlQueryParam, "UTF-8");
@@ -581,7 +586,7 @@ String[] queryString_splitted=null;
 %>
   <input type="hidden" id="typeShow" value="<%=typeShowParam%>" />
       </div> <%-- closes #main --%>
-    </div> <%-- closes .wrap --%> 
+    </div> <%-- closes .wrap --%>
                         <%-- #search_stats & #result_list for this case are generated by WB --%>
                         <%
                                 boolean seeHistory = false;             // This variable is used to indicate that link to see the history was clicked
@@ -652,7 +657,7 @@ function getShortDateSpaceFormated(ts){
   var day = ts.substring(6, 8);
   if(day.charAt(0) == '0'){
     day = day.charAt(1);
-  }  
+  }
   return day + " "+ month;
 }
 
@@ -675,9 +680,9 @@ function createMatrixTable(versionsArray, versionsURL){
     var url = versionsURL[i];
     var pos = getYearPosition(timestampStr);
     var dateFormated = getDateSpaceFormated(timestampStr);
-    var shortDateFormated= getShortDateSpaceFormated(timestampStr);       
+    var shortDateFormated= getShortDateSpaceFormated(timestampStr);
     var tdtoInsert = '<td class="tdTV"><a href="//<%=collectionsHost%>/'+timestampStr+'/'+url+'" title="'+dateFormated+'">'+shortDateFormated+'</a></td>';
-    matrix[pos].push(tdtoInsert);  
+    matrix[pos].push(tdtoInsert);
   }
 
   //find which is the biggest number of versions per year and create empty tds in the other years
@@ -712,7 +717,7 @@ function createMatrixTable(versionsArray, versionsURL){
     var rowId = (i+1).toString()
     $("#tableBody").append('<tr class="trTV" id="'+rowId+'">'+rowString+'<tr>');
   }
-  
+
   //if($('#1 td:nth-child('+String(matrix.length)+')').html() ==='&nbsp;'){ /*If last year in the table doesn't have versions show embargo message*/
   //  $('#1 td:nth-child('+String(matrix.length)+')').attr('rowspan', '999');
   //  $('#1 td:nth-child('+String(matrix.length)+')').attr('class', 'td-embargo')
@@ -724,27 +729,27 @@ function resizeResultsPageHeight(){
 }
 
 function createResultsTable(numberOfVersions, inputURL){
-    scrollLeftPosition = 0; 
+    scrollLeftPosition = 0;
     /*where the scroll should start in left of table*/
     scrollOffset = 200; /*distance in px of each scroll*/
 
     $('<div id="resultados-url"></div>'+
       '<div id="layoutTV">'+
-        '<h4 class="leftArrow"><button onclick="scrollTableLeft()" class="clean-button-no-fill"><i class="fa fa-caret-left" aria-hidden="true"></i></ion-icon></button></h4>'+      
+        '<h4 class="leftArrow"><button onclick="scrollTableLeft()" class="clean-button-no-fill"><i class="fa fa-caret-left" aria-hidden="true"></i></ion-icon></button></h4>'+
         '<h4 class="text-bold"><i class="fa fa-table"></i> <fmt:message key='table'/> </h4>'+
         '<button class="clean-button-no-fill anchor-color faded" onclick="redirectToTable(\'list\')"><h4><i class="fa fa-list"></i> <fmt:message key='list'/></h4></button>'+
         '<h4 class="rightArrow"><button onclick="scrollTableRight()" class="clean-button-no-fill"><i class="fa fa-caret-right" aria-hidden="true"></i></ion-icon></button></h4>'+
       '</div>'+
       '<div class="wrap">' +
              '  <div id="intro">' +
-             '    <h4 class="texto-1" style="text-align: center;padding-bottom: 15px;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+ 
+             '    <h4 class="texto-1" style="text-align: center;padding-bottom: 15px;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+
                (numberOfVersions===1 ?  Content.versionPage : Content.versionsPage )+
                ' '+ inputURL+
                 '</h4>' +
              '  </div>' +
-             '</div>' + 
+             '</div>' +
        '<div id="conteudo-versoes" class="swiper-no-swiping">'+
-             '  <div id="resultados-lista" class="swiper-no-swiping" style="overflow: auto; min-height: 200px!important;">'+             
+             '  <div id="resultados-lista" class="swiper-no-swiping" style="overflow: auto; min-height: 200px!important;">'+
              '    <table id="resultsTable" class="tabela-principal swiper-no-swiping">'+
              '      <tbody id="tableBody" class="swiper-no-swiping">'+
                     '<tr id="years" class="swiper-no-swiping trTV"></tr>'+
@@ -757,10 +762,10 @@ function createResultsTable(numberOfVersions, inputURL){
       resizeResultsPageHeight();
       $("table").on('mousedown touchstart', function (e) {
             e.stopPropagation();
-       });            
+       });
 
     });
-    
+
     window.onresize = resizeResultsPageHeight;
 
 }
@@ -786,7 +791,7 @@ function scrollTableLeft(){
    scrollLeftPosition -= scrollOffset;
    if(scrollLeftPosition <= 0) {scrollLeftPosition = 0;}
    $('#resultados-lista').animate({scrollLeft: scrollLeftPosition}, 800);
-  
+
 }
 function scrollTableRight(){
    scrollLeftPosition += scrollOffset;
@@ -795,9 +800,9 @@ function scrollTableRight(){
      /*Maximum scroll right*/
      scrollLeftPosition = $('#resultsTable').width() - scrollOffset;
    }
-  
+
    $('#resultados-lista').animate({scrollLeft: scrollLeftPosition}, 800);
-  
+
 }
 
 
@@ -836,7 +841,7 @@ function createMatrixList(versionsArray, versionsURL){
     if(currentMonthVersions === 0 ){
       currentMonthVersions = $('#'+currentYear+'_'+currentMonth + '> a').length;
       $('#month_'+currentYear+'_'+currentMonth).html(currentMonthVersions+ " <fmt:message key='search.versions'/>");
-     
+
     }
 
 
@@ -854,8 +859,8 @@ function createMatrixList(versionsArray, versionsURL){
       $("#th_"+yearStr+" div:first-child").after('<div class="col-xs-6 numberVersions no-padding-left text-right"><h4>'+numberOfVersionsCurrentYear.toString() + ' <fmt:message key='search.version'/>    <i class="fa fa-caret-down iCarret yearCarret" aria-hidden="true"></i></h4></div>');
     }else{
       /*Year with no versions maybe delete if we don't want to present empty years?*/
-      $("#th_"+yearStr+" div:first-child").after('<div class="numberVersions no-padding-left text-right"><h4>'+numberOfVersionsCurrentYear.toString() + ' <fmt:message key='search.versions'/>    <i class="fa fa-caret-down iCarretDisabled yearCarret" aria-hidden="true"></i></h4></div>'); 
-       $("#th_"+yearStr).addClass("noVersions");     
+      $("#th_"+yearStr+" div:first-child").after('<div class="numberVersions no-padding-left text-right"><h4>'+numberOfVersionsCurrentYear.toString() + ' <fmt:message key='search.versions'/>    <i class="fa fa-caret-down iCarretDisabled yearCarret" aria-hidden="true"></i></h4></div>');
+       $("#th_"+yearStr).addClass("noVersions");
     }
   }
 
@@ -872,19 +877,19 @@ function createResultsList(numberOfVersions, inputURL){
       '</div>'+
           '<div class="wrap">' +
              '<div id="intro">' +
-               '<h4 class="texto-1" style="text-align: center;padding-bottom: 15px;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+ 
+               '<h4 class="texto-1" style="text-align: center;padding-bottom: 15px;">'+ formatNumberOfVersions(numberOfVersions.toString()) +' '+
                    (numberOfVersions===1 ?  Content.versionPage : Content.versionsPage )+
                    ' '+ inputURL+
                '</h4>' +
              '</div>' +
-          '</div>' + 
+          '</div>' +
           '<div id="years" class="container-fluid col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4 ">' +
           '</div>' +
         '</div>' +
       '</div>').insertAfter("#headerSearchDiv");
 }
 
-function isList(){ 
+function isList(){
   if( $(window).width() < 1024 ){
     return true /*show horizontal list of versions for small screens*/
   }
@@ -912,13 +917,13 @@ function createErrorPage(){
                     '<p class="text-bold">'+Content.suggestions+'</p>'+
                   '<ul>'+
                     '<li>'+Content.checkSpelling+'</li>'+
-                    '<li><a class="no-padding-left" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+                    
-                    '<li><a class="no-padding-left" href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>">'+Content.mementoFind+'</a>.</li>'+                    
+                    '<li><a class="no-padding-left" href="'+Content.suggestUrl+'<%=urlQuery%>">'+Content.suggest+'</a> '+Content.suggestSiteArchived+'</li>'+
+                    '<li><a class="no-padding-left" href="http://timetravel.mementoweb.org/list/1996/<%=urlQuery%>">'+Content.mementoFind+'</a>.</li>'+
                   '</ul>'+
                 '</div>'+
                 '</div>'+
               '</div>'+
-           '</div>').insertAfter("#headerSearchDiv"); 
+           '</div>').insertAfter("#headerSearchDiv");
 }
 
 
@@ -933,7 +938,7 @@ function createErrorPage(){
     var endYear = endDate.substring(6,10)
     var endMonth = endDate.substring(3,5);
     var endDay = endDate.substring(0,2);
-    var endTs = endYear+endMonth+endDay+'000000';   
+    var endTs = endYear+endMonth+endDay+'000000';
 
     //var requestURL = "http://p27.arquivo.pt/wayback/-cdx";
     var requestURL = "//<%=collectionsHost%>/" + "cdx";
@@ -976,41 +981,41 @@ function createErrorPage(){
        dataType: 'text',
        success: function(data) {
           versionsArray = []
-          if( data ) { 
-             
+          if( data ) {
+
             var tokens = data.split('\n')
             $.each(tokens, function(e){
                 if(this != ""){
                     var version = JSON.parse(this);
                     if(version.status[0] === '4' || version.status[0] === '5'){ /*Ignore 400's and 500's*/
-                      /*empty on purpose*/ 
-                    } 
+                      /*empty on purpose*/
+                    }
                     else{
                       versionsArray.push(version.timestamp);
                       versionsURL.push(version.url);
                     }
-                     
+
                 }
-                
-            }); 
-            
+
+            });
+
             var typeShow = $('#typeShow').val().toString();
-      
+
             if(typeShow === "table") {
                 createResultsTable(tokens.length-1, inputURL);
-                createMatrixTable(versionsArray, versionsURL);    
+                createMatrixTable(versionsArray, versionsURL);
             } else {
                 createResultsList(tokens.length-1, inputURL);
                 createMatrixList(versionsArray, versionsURL);
             }
             attachClicks();
-           
+
           } else {
               createErrorPage();
-          } 
-            
+          }
+
        },
-      
+
        type: 'GET'
     });
 </script>
@@ -1037,10 +1042,10 @@ function attachClicks(){
         $(this).find(".yearCarret").toggleClass('fa-caret-up fa-caret-down');
         $(this).toggleClass("preventYear");
       }
-      touched=false;  
+      touched=false;
     });
 }
-</script> 
+</script>
 
 
         <c:if test="${not empty exception}">
@@ -1055,36 +1060,36 @@ function attachClicks(){
 
             } else {
               // option: (3)
-              showList = true;                    
+              showList = true;
               showTip = urlMatch.group(1);
               String queryString_expanded="";
               bean.LOG.debug("[search.jsp] query input: " + queryString );
               queryString_splitted = queryString.split(" ");
 
               if( queryString.contains( "site:" ) || queryString.contains( "date:" ) ) {
-                String buildTerm = ""; 
+                String buildTerm = "";
                 for ( int i =0 ; i < queryString_splitted.length ; i++ ){
                   buildTerm = queryString_splitted[ i ];
-                  queryString_expanded += " " + buildTerm; 
+                  queryString_expanded += " " + buildTerm;
                 }
               }
-              
+
               bean.LOG.debug( "[FRONT-END] query input: " + queryString_expanded );
               query = NutchwaxQuery.parse( queryString_expanded , nutchConf );    //create the query object
               bean.LOG.debug( "[FRONT-END] query output: " + query.toString( ) );
             }
           } else {
             // option: (1)
-            
+
                         query = NutchwaxQuery.parse(queryString, nutchConf);            //create the query object
                         bean.LOG.debug("query: " + query.toString());
-            
+
             showList = true;
           }
         }
         %>
-          
-      
+
+
 <% if (showList) { %>
 
 <div id="conteudo-resultado" class="container-fluid display-none col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4"> <%-- START OF: conteudo-resultado --%>
@@ -1096,7 +1101,7 @@ function attachClicks(){
 
 <% } %> <%-- END OF: showList --%>
 
-<% 
+<%
       if (hitsLength >= end || hitsLength > start) {
               long pagesAvailable = (long) (hitsTotal / hitsPerPage) ;
                       if ((hitsTotal % hitsPerPage) != 0) {
@@ -1110,15 +1115,15 @@ function attachClicks(){
                                       pagesAvailable++;
                               }
                       }
-      
+
           long currentPage = (long) ((start + 1) / hitsPerPage + 1) ;
           int maxPagesToShow = 10;
           long displayMin = (long) (currentPage - (0.5 * maxPagesToShow) );
-      
+
           if (displayMin < 1) {
-            displayMin = 1; 
+            displayMin = 1;
           }
-      
+
           long displayMax = displayMin + maxPagesToShow - 1 ;
           if (displayMax > pagesAvailable) {
             displayMax = pagesAvailable;
@@ -1130,7 +1135,7 @@ function attachClicks(){
 <%-- ---------------- --%>
 
 <% if ( hitsTotal == 0 ) { %>
-  
+
 <%
   if (! request.getAttribute( "query" ).equals( "" ) ) {
 %>
@@ -1143,7 +1148,7 @@ function attachClicks(){
       <ul class="suggestions-no-results">
         <li><fmt:message key='search.no-results.suggestions.well-written'/></li>
         <li><fmt:message key='search.no-results.suggestions.time-interval'/></li>
-        <li><fmt:message key='search.no-results.suggestions.keywords'/></li>        
+        <li><fmt:message key='search.no-results.suggestions.keywords'/></li>
         <%-- Show specific suggestions for URL queries --%>
         <% if (usedWayback) { %>
         <li><fmt:message key='search.no-results.suggestions.internet-archive'><c:out value = "${urlQuery}"/></fmt:message></li>
@@ -1172,7 +1177,7 @@ function attachClicks(){
       "&sort=" + sort +
       "&reverse=" + reverse;
     }
-  
+
   String noDupQuery = request.getContextPath() + "/search.jsp?" +
       "query=" + htmlQueryString +
       "&dateStart="+ dateStartString +
@@ -1206,7 +1211,7 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
       "query=" + URLEncoder.encode(request.getAttribute("query").toString(), "UTF-8") +
       "&dateStart="+ dateStartString +
       "&dateEnd="+ dateEndString +
-      "&pag=prev" +                             // mark as 'previous page' link 
+      "&pag=prev" +                             // mark as 'previous page' link
       "&start=" + previousPageStart +
       "&hitsPerPage=" + hitsPerPage +
       "&hitsPerDup=" + hitsPerDup +
@@ -1257,16 +1262,16 @@ long previousPageStart = (currentPage - 2) * hitsPerPage;
             (request.getParameter("adv_not") == null || request.getParameter("adv_not").equals("")) &&
             (request.getParameter("format") == null || request.getParameter("format").equals("") ) &&
             (request.getParameter("site") == null || request.getParameter("site").equals(""))
-     ){ 
+     ){
     %>
       <%@ include file="include/intro.jsp" %>
     <% } %>
 
 
-      </div>  <!-- FIM #conteudo-resultado  --> 
+      </div>  <!-- FIM #conteudo-resultado  -->
     </div>
   </div>
-           
+
 <%@include file="include/analytics.jsp" %>
 <%@include file="include/footer.jsp" %>
 </body>
