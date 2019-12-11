@@ -105,6 +105,9 @@
 		var minYear = minDate.getFullYear();
 		var maxYear = maxDate.getFullYear();		
 	</script>
+    <!-- starts google fonts links -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <!-- ends google fonts links -->
 	<link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
     <!-- font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -148,7 +151,7 @@
 		            <div class="expandable-div">   
 						<fieldset id="words">
 							<legend><fmt:message key='advanced.terms'/><i class="fa iCarret yearCarret fa-caret-down pull-right right-15" aria-hidden="true"></i></legend>
-							<div class="box-content container-fluid">
+							<div class="box-content container-fluid" style="display: block">
 								<div id="label-palavras-1">
 									<label for="adv_and" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.terms.all'/></label>
 									<div class="withTip ">
@@ -210,7 +213,7 @@
 									
 									<ion-select id="formatType" name="format" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
 									<%
-										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
+										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rtf"};
 										String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
 
 										if (format == null || "all".equals(format)) {%>

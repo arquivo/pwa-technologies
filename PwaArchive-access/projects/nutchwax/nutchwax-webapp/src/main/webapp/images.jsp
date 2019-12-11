@@ -341,7 +341,10 @@ response.setHeader("Cache-Control","public, max-age=600");
   <meta name="msapplication-navbutton-color" content="#1a73ba">
   <!-- iOS Safari -->
   <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">  
-
+  <!-- starts google fonts links -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+  <!-- ends google fonts links -->
   <link rel="shortcut icon" href="img/logo-16.png" type="image/x-icon"/>
   <link href="css/csspin.css" rel="stylesheet" type="text/css"/>
   <script type="text/javascript">

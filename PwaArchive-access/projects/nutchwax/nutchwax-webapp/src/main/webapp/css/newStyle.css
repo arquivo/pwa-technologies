@@ -62,8 +62,9 @@ body {
   background-color: transparent;
 }
 #ionSlider {
-  float: left;
+  float: left;  
   width: 100%;
+  height: 80px !important;
   margin-top: -3px;
   margin-bottom: 10px;
   font-size: 1em !important;
@@ -157,9 +158,11 @@ ion-item {
 }
 #searchForm {
   margin-top: 25px;
+
 }
-/* NEW STYLE: Change placeholder */ ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #b1afaf !important;
+/* NEW STYLE: Change placeholder */ 
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #777 !important;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
   font-weight: 100 !important;
 }
@@ -176,7 +179,7 @@ ion-item {
 :-moz-placeholder { /* Firefox 18- */
   color: #b1afaf !important;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
-  font-weight: 100;
+  font-weight: 100 !important;
 }
 #form_container {
   margin-top: 10px;
@@ -268,7 +271,7 @@ ion-item {
 
 #resultados-lista > ul > li:nth-child(even) {
   background: white !important;
-  box-shadow: 0 3px 6px rgba(32, 33, 36, 0.18);
+  box-shadow: 0 3px 6px rgba(32, 33, 36, 0.05);
   transition: background-color 0.5s;
 }
 #resultados-lista > ul > li:nth-child(even):active {
@@ -588,9 +591,11 @@ h5 {
 }
 input:focus:-webkit-input-placeholder {
   color: transparent;
+  font-weight: 100 !important;
 }
 input:focus:-moz-placeholder {
   color: transparent;
+  font-weight: 100 !important;
 }
 h5 {
   margin: 0 !important;
@@ -1032,7 +1037,7 @@ body#home-search #conteudo-pesquisa-erro {
   margin-left: 9px;
   margin-right: 9px;
   border: 1px solid #ccc;
-  max-width: 918px;
+  max-width: 955px;
   background: transparent;
   padding: 20px;
   border-radius: 5px;
@@ -1043,17 +1048,13 @@ body#home-search #conteudo-pesquisa-erro {
 body#home-search #conteudo-pesquisa-erro{
   float:left !important;
   padding-left: none !important;
-
 }
 
 body#homeImages #conteudo-pesquisa-erro{
-  margin-left: 5px !important;
-  margin-right: 5px !important;
-}
 
+}
 #conteudo-pesquisa-erro .alert-danger {
-  color: black;
-  text-align: center;
+  color: black; 
   background-color: transparent;
   border: none !important;
   font-size: 1.5em;
@@ -1293,13 +1294,11 @@ div.call-to-actions span {
 }
 #homeImages .image-container {
   background-color: white !important;
-  margin-top: 7px !important;
+  margin-top: /*7px*/0 !important;
   margin-left: -11px !important;
   margin-right: -11px !important;
 }
-#homeImages #homeImages {
-  display: none !important
-}
+
 #photos {
   line-height: 0;
   -webkit-column-count: 8;
@@ -1341,8 +1340,7 @@ div.call-to-actions span {
   display: block;
 }
 .imageContent {
-  border: 1px solid lightgray;
-  border-radius: 5px;
+    border-radius: 5px;
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 20px;
@@ -1512,13 +1510,20 @@ body#home-landing.hydrated h3 {
   z-index: 1;
 }
 .closeIt {
+  display: block !important;
   position: absolute;
   color: rgb(28, 117, 192) !important;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 25px;
   top: 6px;
   right: calc(5vw + 8px);
-  z-index: 2;
+  z-index: 2;  
+  padding: 6px
+}
+
+.closeIt a {
+ display: block;
+ cursor: pointer; 
 }
 .closeItAbsolute {
   display: none;
@@ -1679,10 +1684,16 @@ a.advancedSearch:hover {
   margin-right: 5px;
   border: 1px solid #ccc;
   background: transparent;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   border-radius: 5px;
   margin-top: 6px;
+  width: 97.5%;
 }
+
+body#homeImages #searchBarButtonsDiv {
+  margin-bottom: 9px !important; 
+}
+
 #searchBarButtonsDiv {
   position: relative;
   z-index: 999999;
