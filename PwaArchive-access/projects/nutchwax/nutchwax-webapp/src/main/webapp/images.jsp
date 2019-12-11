@@ -4,7 +4,7 @@
 <%@ page
   session="true"
   contentType="text/html; charset=UTF-8"
-  pageEncoding="UTF-8"  
+  pageEncoding="UTF-8"
 
   import="java.io.File"
   import="java.io.IOException"
@@ -54,7 +54,7 @@ response.setHeader("Cache-Control","public, max-age=600");
 <%@ include file="include/i18n.jsp" %>
 <fmt:setLocale value="<%=language%>"/>
 
-<%! //To please the compiler since logging need those 
+<%! //To please the compiler since logging need those
   private static Calendar DATE_START = new GregorianCalendar(1996, 1-1, 1);
   private static final DateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
   //TODO: remove dateStart & dateEnd ???
@@ -64,7 +64,7 @@ response.setHeader("Cache-Control","public, max-age=600");
   private static final Pattern OFFSET_PARAMETER = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
 
   //Remove http and https before testing against this url pattern
-  private static final Pattern URL_PATTERN = Pattern.compile("^. ?(([a-zA-Z\\d][-\\w\\.]+)\\.([a-zA-Z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");   
+  private static final Pattern URL_PATTERN = Pattern.compile("^. ?(([a-zA-Z\\d][-\\w\\.]+)\\.([a-zA-Z\\.]{2,6})([-\\/\\w\\p{L}\\.~,;:%&=?+$#*]*)*\\/?) ?.*$");
 %>
 
 <%
@@ -160,10 +160,10 @@ response.setHeader("Cache-Control","public, max-age=600");
       tools = "off";
     }
   }
-  
+
 
   if ( request.getParameter("query") != null ) {
-        htmlQueryString = request.getParameter("query").toString();   
+        htmlQueryString = request.getParameter("query").toString();
         query= htmlQueryString;
         query = URLEncoder.encode(query, "UTF-8");
   }
@@ -207,7 +207,7 @@ response.setHeader("Cache-Control","public, max-age=600");
                         String siteHost = siteURL.getHost();
                         siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
                         htmlQueryString += siteParameter;
-                }             
+                }
                 htmlQueryString += " ";
         }
         if (request.getParameter("type") != null && request.getParameter("type") != "" && !request.getParameter("type").toLowerCase().equals("all")) {
@@ -220,9 +220,9 @@ response.setHeader("Cache-Control","public, max-age=600");
             htmlQueryString += "size:" + sizeParam + " " ;
           }
         }
-        if (request.getParameter("safeSearch") != null && request.getParameter("safeSearch").toLowerCase().equals("off")) {        
+        if (request.getParameter("safeSearch") != null && request.getParameter("safeSearch").toLowerCase().equals("off")) {
           htmlQueryString += "safe:off ";
-        }                
+        }
 
     }
   //htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
@@ -241,7 +241,7 @@ response.setHeader("Cache-Control","public, max-age=600");
         }
   }
   /*** End date ***/
-  Calendar dateEnd = (Calendar)DATE_END.clone();  
+  Calendar dateEnd = (Calendar)DATE_END.clone();
 
   String dateEndNoParameter = inputDateFormatter.format( dateEnd.getTime() );
   String yearEndNoParameter =dateEndNoParameter.substring(dateEndNoParameter.length()-4);
@@ -259,7 +259,7 @@ response.setHeader("Cache-Control","public, max-age=600");
         } catch (NullPointerException e) {
                 bean.LOG.debug("Invalid End Date:"+ request.getParameter("dateEnd") +"|");
         }
-  }  
+  }
   String dateStartString = inputDateFormatter.format( dateStart.getTime() );
 
   String dateStartDay = dateStartString.substring(0,2);
@@ -296,31 +296,31 @@ response.setHeader("Cache-Control","public, max-age=600");
           }else if (word.startsWith("http://")){
             word = word.substring(7, word.length());
           }
-          
+
           Matcher matcher = URL_PATTERN.matcher(word);
 
           if (matcher.find()) {
-            
-            try {       
+
+            try {
               bean.LOG.debug("Attempting URL "+ word);
               URL myURL = new URL("http://" + word);
               String[] domainNameParts = myURL.getHost().split("\\.");
                   String tldString ="."+domainNameParts[domainNameParts.length-1].toUpperCase();
-                  bean.LOG.debug("TLD:"+ tldString);                        
+                  bean.LOG.debug("TLD:"+ tldString);
                   if(validTlds.contains(tldString)){
                     word = "site:" + word;
-                  } 
+                  }
                   else{
                     bean.LOG.debug("Invalid tld in word:"+ word);
-                  }                 
+                  }
             } catch (MalformedURLException e) {
 
-              //NOT a valid URL we will not consider it just add the word without the site:         
-            } 
+              //NOT a valid URL we will not consider it just add the word without the site:
+            }
           }
-          reconstructedInputString.append(word).append(" ");      
+          reconstructedInputString.append(word).append(" ");
         }
-        htmlQueryString = reconstructedInputString.toString().substring(0, reconstructedInputString.toString().length()-1);          
+        htmlQueryString = reconstructedInputString.toString().substring(0, reconstructedInputString.toString().length()-1);
         request.setAttribute("htmlQueryString", htmlQueryString);
   }
 
@@ -340,7 +340,7 @@ response.setHeader("Cache-Control","public, max-age=600");
   <!-- Windows Phone -->
   <meta name="msapplication-navbutton-color" content="#1a73ba">
   <!-- iOS Safari -->
-  <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">  
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1a73ba">
   <!-- starts google fonts links -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
@@ -351,7 +351,7 @@ response.setHeader("Cache-Control","public, max-age=600");
       var minDate = new Date(820450800000);
       var maxDate = new Date(<%=DATE_END.getTimeInMillis()%>);
       var minYear = minDate.getFullYear();
-      var maxYear = maxDate.getFullYear();                
+      var maxYear = maxDate.getFullYear();
   </script>
   <script type="text/javascript">
     calendarBegin = '<fmt:message key="calendar.begin" />'.replace("calendario", "calendário");
@@ -367,7 +367,7 @@ response.setHeader("Cache-Control","public, max-age=600");
       collection: '<fmt:message key="images.details.collection"/>',
       name: '<fmt:message key="images.details.name"/>',
       visit: '<fmt:message key="images.viewer.visit"/>'
-    };    
+    };
   </script>
 
   <link rel="stylesheet" title="Estilo principal" type="text/css" href="css/newStyle.css?build=<c:out value='${initParam.buildTimeStamp}'/>"  media="all" />
@@ -383,8 +383,8 @@ response.setHeader("Cache-Control","public, max-age=600");
     <script type="text/javascript" src="/js/wNumb.js"></script>
     <!-- CSS loading spiner -->
     <link href="css/csspin.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script> 
-    <!-- end addthis for sharing on social media --> 
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317"></script>
+    <!-- end addthis for sharing on social media -->
     <script type="text/javascript" src="js/configs.js"></script>
 
   <script src="https://apis.google.com/js/client.js" type="text/javascript"> </script>
@@ -402,13 +402,13 @@ response.setHeader("Cache-Control","public, max-age=600");
        // Do something
        e.stopPropagation();
        console.log("button clicked");
-    });    
+    });
   </script>
 
   <!-- NEW - 23.07.19: Call ionic -->
   <script src="../@ionic/core/dist/ionic.js"></script>
   <link rel="stylesheet" href="../@ionic/core/css/ionic.bundle.css">
- 
+
   <script type="text/javascript">
     clickToCopy = '<fmt:message key="images.clickToCopy" />';
     language = '<%= language %>'
@@ -420,13 +420,13 @@ response.setHeader("Cache-Control","public, max-age=600");
         addthis_config.data_track_addressbar = false;
         addthis_config.data_track_clickback = false;
   </script>
-      <!-- swiper main menu --> 
+      <!-- swiper main menu -->
    <script type="text/javascript" src="/js/swiper.min.js"></script>
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5645cdb2e22ca317" async="async"></script>
   <%@include file="include/analytics.jsp" %>
 
   <script src="/js/uglipop.min.js"></script>
-  
+
 </head>
 <body id="homeImages">
 <!--?xml version="1.0" encoding="UTF-8"?-->
@@ -444,7 +444,7 @@ function searchImages(startIndex){
 </script>
 <script type="text/javascript">
 Content = {
-    months: 
+    months:
     {  '01': "<fmt:message key="month.0" />",
        '02': "<fmt:message key="month.1" />",
        '03': "<fmt:message key="month.2" />",
@@ -458,7 +458,7 @@ Content = {
        '11': "<fmt:message key="month.10" />",
        '12': "<fmt:message key="month.11" />",
     },
-};  
+};
   share  = '<fmt:message key="images.share" />';
   close ='<fmt:message key="images.close"/>';
   leftArrow='<fmt:message key="images.leftArrow"/>';
@@ -495,11 +495,14 @@ Content = {
     imagesHref = window.location.href;
     pagesHref = window.location.href.toString().replace("images.jsp", "search.jsp"); /*TODO remove from this href parameters that are only appliable to image search*/
     advancedHref = window.location.href.toString().replace("images.jsp", "advancedImages.jsp");
-  </script>    
-  <script type="text/javascript" src="/js/encodeHTML.js"></script>  
+  </script>
+  <script type="text/javascript" src="/js/encodeHTML.js"></script>
   <%@ include file="include/imageHeaderMobile.jsp" %>
   <script type="text/javascript">$('#imagesTab').addClass('selected');$('#imagesTab').addClass('primary-underline');</script>
 
+  <div class="row">
+  	<div class="spell hidden"><fmt:message key="search.spellchecker"/> <span class="suggestion"></span></div>
+  </div>
 
   <div class="row image-container">
     <script type="text/javascript">
@@ -511,14 +514,14 @@ Content = {
         }
         $("#txtSearch").on('mousedown touchstart', function (e) {
           e.stopPropagation();
-        });            
+        });
       });
 
     var displayResults;
 
-    </script>   
+    </script>
 
-       
+
     <% if ( (request.getParameter("query") == null || request.getParameter("query").equals("")) &&
             (request.getParameter("adv_and") == null || request.getParameter("adv_and").equals("")) &&
             (request.getParameter("adv_phr") == null || request.getParameter("adv_phr").equals("")) &&
@@ -527,13 +530,13 @@ Content = {
             (request.getParameter("size") == null || request.getParameter("size").equals("") || request.getParameter("size").toLowerCase().equals("all") ) &&
             (request.getParameter("safeSearch") == null || request.getParameter("safeSearch").equals("") || request.getParameter("safeSearch").toLowerCase().equals("on") ) &&
             (request.getParameter("site") == null || request.getParameter("site").equals(""))
-     ){ 
+     ){
     %>
-      
+
       <section id="photos" style="display:none;">
       <script type="text/javascript">
         displayResults = true;
-      </script>  
+      </script>
     <% } else { %>
       <section id="photos">
       <script type="text/javascript">
@@ -541,15 +544,15 @@ Content = {
       </script>
     <% } %>
 
-  </section>    
+  </section>
     <div class="pagesNextPrevious text-center">
-    <script type="text/javascript">   
-      if(displayResults) {    
-        document.write("<div class=\"pagesNextPrevious text-center\" style=\"display:none\">");   
-      } else {    
-        document.write("<div class=\"pagesNextPrevious text-center\">");    
-      }   
-    </script>   
+    <script type="text/javascript">
+      if(displayResults) {
+        document.write("<div class=\"pagesNextPrevious text-center\" style=\"display:none\">");
+      } else {
+        document.write("<div class=\"pagesNextPrevious text-center\">");
+      }
+    </script>
 
 
       <ul class="next-previous-ul">
@@ -560,7 +563,7 @@ Content = {
           String previousPageUrl = "images.jsp?" + "query=" + query +
             "&dateStart="+ dateStartString +
             "&dateEnd="+ dateEndString +
-            "&pag=prev" +                             // mark as 'previous page' link 
+            "&pag=prev" +                             // mark as 'previous page' link
             "&start=" + previousPageStart +
             "&l="+ language;
           previousPageUrl = StringEscapeUtils.escapeHtml(previousPageUrl);
@@ -587,10 +590,10 @@ Content = {
 
       </ul>
 
-    </div>  
+    </div>
   </div>
 
-</div>  
+</div>
 
 
 
@@ -613,7 +616,7 @@ Content = {
             (request.getParameter("size") == null || request.getParameter("size").equals("") || request.getParameter("size").toLowerCase().equals("all") ) &&
             (request.getParameter("safeSearch") == null || request.getParameter("safeSearch").equals("") || request.getParameter("safeSearch").toLowerCase().equals("on") ) &&
             (request.getParameter("site") == null || request.getParameter("site").equals(""))
-     ){ 
+     ){
     %>
       <%@ include file="include/intro.jsp" %>
 
@@ -639,11 +642,11 @@ Content = {
   <script type="text/javascript">
     $('<div id="showSlides"><button onclick="previousImage()" class="left-image-viewer-arrow clean-button-no-fill"> <ion-icon name="ios-arrow-back" class="left-icon"></ion-icon></button><button onclick="nextImage()" class="right-image-viewer-arrow clean-button-no-fill"><ion-icon name="ios-arrow-forward" class="right-icon"></ion-icon></button><ion-slides id="expandedImageViewers" onload=slidesLoaded();></ion-slides></div>').insertBefore('.curve-background');
 
-    checkElement('#expandedImageViewers > .swiper-wrapper') 
-    .then((element) => {      
-      if($('#txtSearch').val().length){doInitialSearch();}     
+    checkElement('#expandedImageViewers > .swiper-wrapper')
+    .then((element) => {
+      if($('#txtSearch').val().length){doInitialSearch();}
     });
-  </script>  
+  </script>
 
 
   <script type="text/javascript">
