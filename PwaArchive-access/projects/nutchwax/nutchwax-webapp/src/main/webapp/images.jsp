@@ -209,6 +209,7 @@ response.setHeader("Cache-Control","public, max-age=600");
                         htmlQueryString += siteParameter;
                 }
                 htmlQueryString += " ";
+                query = htmlQueryString;
         }
         if (request.getParameter("type") != null && request.getParameter("type") != "" && !request.getParameter("type").toLowerCase().equals("all")) {
           htmlQueryString += "type:" + request.getParameter("type") + " " ;
