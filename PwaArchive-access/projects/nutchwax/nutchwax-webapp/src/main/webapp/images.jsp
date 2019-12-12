@@ -342,7 +342,6 @@ Content = {
 
 
   <%@ include file="include/topbar.jsp" %>
-  <script type="text/javascript">$('#switchMobile').hide();</script>
 
   <div class="wrap" id="firstWrap" style="min-height: 0">
     <div id="main">
