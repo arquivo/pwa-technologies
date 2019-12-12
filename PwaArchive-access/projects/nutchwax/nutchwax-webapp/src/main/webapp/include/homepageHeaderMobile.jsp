@@ -107,9 +107,10 @@
                                   </button>
                       </span>
 
-
+					<div style="min-height: 135px">
                      <!-- starts history range slider -->
                      <ion-item class="ion-no-padding hidden" id="ionSlider" lines="none">
+
                     <script>
                      document.write('<ion-range ion-padding-start id="dual-range" dual-knobs pin color="dark" min="'+minYear+'" max="'+maxYear+'" step="1">');
                     </script>
@@ -239,6 +240,7 @@
                       </script>
                       </ion-item>
                      <!-- ends history range slider -->
+                    </div>
 
                      <!-- starts Paginas and images links option -->
                      <div id="searchBarButtonsDiv"><br>
