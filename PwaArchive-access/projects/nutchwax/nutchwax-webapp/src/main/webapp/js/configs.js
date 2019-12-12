@@ -19,7 +19,7 @@ $(document).ready( function() {
 	/* Calendar configuration */
 	$(function() {
        // var min = minDate;
-       // var max = maxDate; 
+       // var max = maxDate;
 /*
                         $('#dateStart_top, #dateStart_bottom').datepicker(
                                 $.extend({
@@ -38,7 +38,7 @@ $(document).ready( function() {
                                         buttonText: 'Calendário - data inicial',
                 				})
                         );
-		
+
                         $('#dateEnd_top, #dateEnd_bottom').datepicker(
                                 $.extend({
                                         changeMonth: true,
@@ -84,8 +84,8 @@ $(document).ready( function() {
         var parsedDate = parseDate(monitoredDate);
         var matcher = changedDate.match(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/); // regex for dd/mm/yyyy
         var selector = $(target).attr('id');;
-        
-        
+
+
         if (matcher == null ){ // If the date is malformed fell up the input box with the standard date
             changedDate = parsedDate;
             if (selector === "dateStart_top"){
@@ -94,7 +94,7 @@ $(document).ready( function() {
             else if (selector === "dateEnd_top") {
                 document.getElementById('dateEnd_top').value = changedDate;
             }
-        }        
+        }
         if (changedDate !== parsedDate) {
             $(target).addClass("changed");
         } else {
@@ -122,7 +122,7 @@ $(document).ready( function() {
 	/**
      * Search feedback for slow searches/page views
      */
-	var timeout = 2000;	
+	var timeout = 2000;
 
 	$("h3 a").click( function(event){
 		$('.feedback').remove();	//remove existing feedback
@@ -165,7 +165,7 @@ $(document).ready( function() {
 	if ( params['query'] !== undefined && params['query'] !== '' ) {
 		var queryParam = escapeHtml(decodeURIComponent(params['query'].replace(/\+/g, ' ') ).trim());
 		var queryCleaned = $( "<div>"+ queryParam +"</div>").text().trim();/* 2nd trim needed to clean after tags are removed */
-		var spellchecker = location.protocol +"//"+ location.host +"/spellchecker/checker";
+		var spellchecker = typeof querySuggestionAPI === 'undefined' ? ( location.protocol +"//"+ location.host +"/spellchecker/checker" ) : querySuggestionAPI;
 		spellchecker += "?query="+ queryCleaned;
 		spellchecker += ( (params['l'] === undefined) ? '' : '&l='+ params['l']);
 
