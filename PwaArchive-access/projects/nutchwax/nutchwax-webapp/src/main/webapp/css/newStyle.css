@@ -112,7 +112,7 @@ body {
 }
 #calendarMonthLeft {
   position: relative;
-  top: 8px;
+  top: 8.3px;
   left: 12px;
   font-size: 0.9em;
   letter-spacing: 0px;
@@ -1123,7 +1123,7 @@ div#flex-container {
   margin: 0 auto !important;
 }
 body#homeImages div#flex-container {
-  margin: -6px auto 0 auto !important;
+  margin: -4px auto 0 auto !important;
 }
 
 div#flex-container div:first-child {
@@ -1155,6 +1155,7 @@ div#flex-container h3 {
   margin: 5px 0;
   padding: 20px 6px 10px 14px;
   font-size: 1.6em;
+  font-weight: normal;
   color: black !important;
   line-height: 0.9em !important;
   display: block;
@@ -1691,7 +1692,7 @@ a.advancedSearch:hover {
 }
 
 body#homeImages #searchBarButtonsDiv {
-  margin-bottom: 9px !important; 
+  margin-bottom: 8px !important; 
 }
 
 #searchBarButtonsDiv {
@@ -2631,7 +2632,7 @@ h4.modalTitle {
   #award-pt, #award-en, #pagesPreserved-pt, #pagesPreserved-en, #exhibitions-pt, #exhibitions-en {
     height: 230px !important;
   }
-}
+ }
 /* ----------- iPhone 5 and 5S ----------- */
 /* Portrait */
 @media only screen and (min-device-width: 320px) and (max-device-height: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
