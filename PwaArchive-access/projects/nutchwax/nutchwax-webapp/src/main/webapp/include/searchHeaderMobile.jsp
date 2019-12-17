@@ -64,7 +64,7 @@
                                   </button>
                       </span>
 
-				   <div style="min-height: 135px">
+					<div style="min-height: 135px">
                      <!-- starts history range slider -->
                      <ion-item class="ion-no-padding hidden" id="ionSlider" lines="none">
                     <script>
@@ -94,10 +94,18 @@
 
                         <script type="text/javascript">
                           function openDateStart(){
+                            var endDate = $('#dateEnd_top').attr("value");
+                            var endDateTokens = endDate.split('/');
+                            var endDateIonic = endDateTokens[2] + '-' + endDateTokens[1] + '-' + endDateTokens[0];
+                            $('#ionDateStart')[0].max = endDateIonic;
                             $('#ionDateStart').click();
                            return;
                           }
                           function openDateEnd(){
+                            var startDate = $('#dateStart_top').attr("value");
+                            var startDateTokens = startDate.split('/');
+                            var startDateIonic = startDateTokens[2] + '-' + startDateTokens[1] + '-' + startDateTokens[0];
+                            $('#ionDateEnd')[0].min = startDateIonic;
                             $('#ionDateEnd').click();
                            return;
                           }
@@ -117,7 +125,7 @@
                         }
                       </script>
                       <script type="text/javascript">
-                       $('#ionDateStart').on("ionChange", function() {
+                      $('#ionDateStart').on("ionChange", function() {
                         var newStartDate = $('#ionDateStart').val();
                         var newStartDateTokens = newStartDate.split('-');
                         var newStartDateFormated =  newStartDateTokens[2].split('T')[0] + "/" + newStartDateTokens[1]+ "/"+ newStartDateTokens[0];
@@ -155,7 +163,6 @@
 
                      changedDualRange = false;
                       $('#dual-range').on("ionChange", function() {
-                        console.log("Dual-range ionChange!");
                         changedDualRange = true;
                         $('#calendarYearRight').text(document.querySelector('#dual-range').value.upper);
                         $('#calendarYearLeft').text(document.querySelector('#dual-range').value.lower);
@@ -174,7 +181,6 @@
 
                             $('#dateEnd_top').attr("value", newDateEnd);
                             $('#dateEnd_top').change();
-
                         }
                       },100)
 
