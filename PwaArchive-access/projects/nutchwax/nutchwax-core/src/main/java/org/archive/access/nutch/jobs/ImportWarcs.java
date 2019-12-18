@@ -121,7 +121,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
     public static final String ARCFILENAME_KEY = "arcname";
     public static final String ARCFILEOFFSET_KEY = "arcoffset";
     private static final String CONTENT_TYPE_KEY = "content-type";
-    private static final String TRANSFER_ENCONDING_KEY = "Transfer-Encoding";
+    private static final String TRANSFER_ENCODING_KEY = "Transfer-Encoding";
     private static final String TEXT_TYPE = "text/";
     private static final String APPLICATION_TYPE = "application/";
     public static final String ARCCOLLECTION_KEY = "collection";
@@ -282,8 +282,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         WARCRecord rec = (WARCRecord)((ObjectWritable)value).get();
         WARCReporter reporter = (WARCReporter)r;
 
-        // Its null first time map is called on an ARC.
-
+        // Its null the first time map is called on an ARC.
         checkWArcName(rec);
         checkCollectionName();
 
@@ -389,11 +388,22 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         metaData.set("contentLength", recordLengthAsStr);
         reporter.setStatusIfElapse("read headers on " + url);
 
+        // verify transfer-encoding for chuncked content
+        InputStream payloadInputStream;
+        try {
+            payloadInputStream = wrapchunkedContent(rec, metaData);
+        }
+        catch (IOException e){
+            // something wrong skip record
+            LOG.error("Something wrong trying to wrap around chunked content. skipping record.");
+            return;
+        }
+
         // TODO: Skip if unindexable type.
         int total = 0;
 
         // Read in first block. If mimetype still null, look for MAGIC.
-        int len = rec.read(this.buffer, 0, this.buffer.length);
+        int len = payloadInputStream.read(this.buffer, 0, this.buffer.length);
 
         if (mimetype == null)
         {
@@ -424,13 +434,13 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         {
             total += len;
             this.contentBuffer.write(this.buffer, 0, len);
-            len = rec.read(this.buffer, 0, this.buffer.length);
+            len = payloadInputStream.read(this.buffer, 0, this.buffer.length);
             reporter.setStatusIfElapse("reading " + url);
         }
 
         // Close the Record.  We're done with it.  Side-effect is calculation
         // of digest -- if we're digesting.
-        rec.close();
+        payloadInputStream.close();
         reporter.setStatusIfElapse("closed " + url);
 
         final byte[] contentBytes = this.contentBuffer.toByteArray();
@@ -514,6 +524,20 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         }
         else {
             output.collect(Nutchwax.generateWaxKey(url, this.collectionName), v);
+        }
+    }
+
+    private InputStream wrapchunkedContent(InputStream rec, Metadata metadata) throws IOException {
+        // verify transfer-encoding for chuncked content
+        String transferEncoding = metadata.get(ImportWarcs.TRANSFER_ENCODING_KEY);
+        if (transferEncoding.equalsIgnoreCase("chunked")){
+            // wrap InputStream on a ChunkedInputStream
+            LOG.info("Chunked content found. Wrapping up InputStream..");
+            ChunkedInputStream payloadInputStream = new ChunkedInputStream(rec);
+            return payloadInputStream;
+        }
+        else {
+            return rec;
         }
     }
 
@@ -615,7 +639,7 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
 
 
     /**
-     * @param rec ARC Record to test.
+     * @param statusCode ARC Record to test.
      * @return True if we are to index this record.
      */
     protected boolean isIndex( int statusCode)
@@ -748,52 +772,6 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         return result;
     }
 
-    private boolean isPDF(String mimetype){
-        return (PDF_TYPE.equals(mimetype));
-    }
-
-    private static String getStringFromInputStreamChunkedBefore(InputStream is, Log LOG) {
-        /*Ignore first and last lines (number of bytes to read and 0)*/
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            String bytesToReadString = br.readLine();
-            int bytesToRead = Integer.parseInt(bytesToReadString, 16);
-            if(bytesToRead < 1) return null;
-            char [] bytesCbuf = new char[bytesToRead];
-            String bytesCbufString ="";
-            while (bytesToRead > 0) {
-                br.read(bytesCbuf, 0, bytesToRead);
-                bytesCbufString = String.valueOf(bytesCbuf);
-                LOG.info("\nWARC Chunk Bytes to Read: " + bytesToRead+"\n");
-                LOG.info("\nWARC Chunk: " + bytesCbufString+"\n");
-                sb.append(bytesCbufString);
-                /*Read next line if equals to 0 no more bytes to Read*/
-                bytesToReadString = br.readLine(); /*there is always a \n left to read*/
-                if (bytesToReadString.equals("")) {
-                    bytesToReadString = br.readLine();
-                }
-                bytesToRead = Integer.parseInt(bytesToReadString, 16);
-                bytesCbuf = new char[bytesToRead];
-                bytesCbufString ="";
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sb.toString();
-    }
 
     protected String getStatus(final String url, String oldUrl,
                                final String recordLengthAsStr, final String noSpacesMimetype)
@@ -906,27 +884,6 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         }
 
         return mimetype;
-    }
-
-    private static String tryUnzip(byte[] zipped) {
-        try {
-            ByteArrayInputStream is = new ByteArrayInputStream(zipped);
-            ChunkedInputStream cs = new ChunkedInputStream(is);
-            GZIPInputStream zs = new GZIPInputStream(cs);
-            BufferedReader r = new BufferedReader(new InputStreamReader(zs));
-            StringBuilder result = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                result.append(line).append("\n");
-            }
-            return result.toString();
-        }
-        catch (IOException e) {
-            if (!"Not in GZIP format".equals(e.getMessage())) {
-                e.printStackTrace();
-            }
-            return null;
-        }
     }
 
     /**
