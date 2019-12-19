@@ -35,6 +35,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.util.Progressable;
 import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.util.ToolBase;
@@ -65,23 +66,17 @@ import org.archive.io.warc.WARCRecord;
 import org.archive.mapred.WARCMapRunner;
 import org.archive.mapred.WARCRecordMapper;
 import org.archive.mapred.WARCReporter;
-import org.archive.util.Base32;
-import org.archive.util.LaxHttpParser;
-import org.archive.util.MimetypeUtils;
-import org.archive.util.TextUtils;
+import org.archive.util.*;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
+
 
 /**
  * Ingests WARCs writing WARC Record parse as Nutch FetcherOutputFormat.
@@ -312,69 +307,78 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         String warcRecordType = (String) warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE);
         LOG.info("WARC Record Type: " + warcRecordType);
 
-        if(warcRecordType == null || warcRecordMimetype == null) return;
-
-        // Check if WARC-TYPE=response and if this record is an http response
-        // Replacing string in WARCConstants.HTTP_RESPONSE_MIMETYPE because brozzler is writing WARCs mimetype this way: application/http;msgtype=response (no space)
-        if( !WARCConstants.WARCRecordType.response.toString().equals(warcRecordType.trim()) ||
-                !(warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE) ||
-                        warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE.replaceAll("\\s", ""))) ) {
+        if (!isValidRecordToIndex(warcRecordType, warcRecordMimetype)){
             LOG.info("Skipping WARC: "+ warcData.getHeaderValue(WARCConstants.HEADER_KEY_TYPE) + " MimeType " + warcRecordMimetype );
             return;
         }
 
-        // TODO: Skip if unindexable type.
-        int totalBytesRead = 0;
-
-        // handle as if it was a ARCRecordMetaData here
-        // parse HTTP Header to get metadata
-        String statusLinestr = LaxHttpParser.readLine(rec, WARCRecord.WARC_HEADER_ENCODING);
-
-        StatusLine statusLine;
-        int statusCode = -1;
-
-        try{
-            statusLine = new StatusLine(statusLinestr);
-            statusCode= statusLine.getStatusCode();
-        } catch (HttpException e ){
-            LOG.error("HttpException parsing statusCode isIndex " , e);
-        } catch (Exception e){
-            LOG.error("Exception parsing statusCode isIndex " , e);
-        }
-
-        if (!isIndex(statusCode)){
-            return;
-        }
-
-
-        // TODO read the first line before feeding to LaxHttpParser
-        Header[] headers = LaxHttpParser.parseHeaders(rec, WARCRecord.WARC_HEADER_ENCODING);
-        String mimetype = null;
-
         // Copy http headers to nutch metadata.
         final Metadata metaData = new Metadata();
-        for (int j = 0; j < headers.length; j++)
-        {
-            LOG.info("HTTP Header: " + headers[j].getName());
-            final Header header = headers[j];
+        String mimetype = null;
 
-            // Special handling. If mimetype is still null, try getting it
-            // from the http header. I've seen arc record lines with empty
-            // content-type and a MIME unparseable file ending; i.e. .MID.
-            if (header.getName().toLowerCase().equals(ImportWarcs.CONTENT_TYPE_KEY))
-            {
-                LOG.info("Validating Content-type header value: " + header.getValue());
-                mimetype = getMimetype(header.getValue(), null, null);
+        // if WARC-TYPE is resource skip HTTP header parsing
+        if (warcRecordType.equalsIgnoreCase(WARCConstants.WARCRecordType.resource.toString())){
+            LOG.info("Parsing WARC-TYPE: resource...");
+            mimetype = warcRecordMimetype;
 
-                if (skip(mimetype))
-                {
-                    LOG.info("Skipping Mimetype: " + mimetype);
-                    return;
-                }
+            if (skip(mimetype)){
+                LOG.info("Skipping Mimetype: " + mimetype);
+                return;
             }
 
-            metaData.set(header.getName(), header.getValue());
+            metaData.set(WARCConstants.CONTENT_LENGTH, String.valueOf(warcData.getContentLength()));
+            metaData.set(WARCConstants.CONTENT_TYPE , mimetype);
+
         }
+        else {
+            LOG.info("Parsing WARC-TYPE: response...");
+            // handle as if it was a ARCRecordMetaData here
+            // parse HTTP Header to get metadata
+            String statusLinestr = LaxHttpParser.readLine(rec, WARCRecord.WARC_HEADER_ENCODING);
+
+            StatusLine statusLine;
+            int statusCode = -1;
+
+            try{
+                statusLine = new StatusLine(statusLinestr);
+                statusCode= statusLine.getStatusCode();
+            } catch (HttpException e ){
+                LOG.error("HttpException parsing statusCode isIndex " , e);
+            } catch (Exception e){
+                LOG.error("Exception parsing statusCode isIndex " , e);
+            }
+
+            if (!isIndex(statusCode)){
+                return;
+            }
+
+
+            // TODO read the first line before feeding to LaxHttpParser
+            Header[] headers = LaxHttpParser.parseHeaders(rec, WARCRecord.WARC_HEADER_ENCODING);
+
+            for (int j = 0; j < headers.length; j++)
+            {
+                LOG.info("HTTP Header: " + headers[j].getName());
+                final Header header = headers[j];
+
+                // Special handling. If mimetype is still null, try getting it
+                // from the http header. I've seen arc record lines with empty
+                // content-type and a MIME unparseable file ending; i.e. .MID.
+                if (header.getName().toLowerCase().equals(ImportWarcs.CONTENT_TYPE_KEY))
+                {
+                    LOG.info("Validating Content-type header value: " + header.getValue());
+                    mimetype = getMimetype(header.getValue(), null, null);
+
+                    if (skip(mimetype)){
+                        LOG.info("Skipping Mimetype: " + mimetype);
+                        return;
+                    }
+                }
+
+                metaData.set(header.getName(), header.getValue());
+            }
+        }
+
 
         // This call to reporter setStatus pings the tasktracker telling it our
         // status and telling the task tracker we're still alive (so it doesn't
@@ -527,10 +531,23 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         }
     }
 
+    private boolean isValidRecordToIndex(String warcRecordType, String warcRecordMimetype){
+        // Check if WARC-TYPE=response and if this record is an http response OR if it is a resource record
+        // Replacing string in WARCConstants.HTTP_RESPONSE_MIMETYPE
+        // because brozzler is writing WARCs mimetype this way: application/http;msgtype=response (no space)
+        if ( WARCConstants.WARCRecordType.response.toString().equalsIgnoreCase(warcRecordType.trim()) &&
+                (warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE) ||
+                warcRecordMimetype.trim().equals(WARCConstants.HTTP_RESPONSE_MIMETYPE.replaceAll("\\s", ""))) ||
+                WARCConstants.WARCRecordType.resource.toString().equalsIgnoreCase(warcRecordType.trim())){
+            return true;
+        }
+        return false;
+    }
+
     private InputStream wrapchunkedContent(InputStream rec, Metadata metadata) throws IOException {
         // verify transfer-encoding for chuncked content
         String transferEncoding = metadata.get(ImportWarcs.TRANSFER_ENCODING_KEY);
-        if (transferEncoding.equalsIgnoreCase("chunked")){
+        if (transferEncoding != null && transferEncoding.equalsIgnoreCase("chunked")){
             // wrap InputStream on a ChunkedInputStream
             LOG.info("Chunked content found. Wrapping up InputStream..");
             ChunkedInputStream payloadInputStream = new ChunkedInputStream(rec);
@@ -539,22 +556,6 @@ public class ImportWarcs extends ToolBase implements WARCRecordMapper
         else {
             return rec;
         }
-    }
-
-    private byte[] readRemainingBytesPDF(int totalBytesRead, WARCRecord rec, WARCReporter reporter, int len ) throws IOException {
-        // Read in first block. If mimetype still null, look for MAGIC.
-        LOG.info("attempting to read more bytes from PDF");
-        final ByteArrayOutputStream pdfcontentBuffer =new ByteArrayOutputStream(1024 * 16);
-        while ( len != -1 && totalBytesRead < this.pdfContentLimit )
-        {
-            /*Reading more for PDF*/
-            LOG.info("extra reading for PDF file");
-            totalBytesRead += len;
-            pdfcontentBuffer.write(this.buffer, 0, len);
-            len = rec.read(this.buffer, 0, this.buffer.length);
-            reporter.setStatusIfElapse("reading ");
-        }
-        return pdfcontentBuffer.toByteArray();
     }
 
     public void setCollectionName(String collectionName)
