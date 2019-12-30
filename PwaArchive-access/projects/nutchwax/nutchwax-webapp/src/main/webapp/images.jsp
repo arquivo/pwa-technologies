@@ -192,23 +192,14 @@ response.setHeader("Cache-Control","public, max-age=600");
                 htmlQueryString += "site:";
                 String siteParameter = request.getParameter("site"); //here split hostname and put it to lowercase
 
-                if (siteParameter.startsWith("http://")) {
-                        URL siteURL = new URL(siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        htmlQueryString += siteParameter.substring("http://".length());
-                } else if (siteParameter.startsWith("https://")) {
-                        URL siteURL = new URL(siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        htmlQueryString += siteParameter.substring("https://".length());
-                } else {
-                        URL siteURL = new URL("http://"+siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        htmlQueryString += siteParameter;
+                if (! siteParameter.contains("://")) {
+                  siteParameter = "http://" + siteParameter;
                 }
-                htmlQueryString += " ";
+                URL siteURL = new URL(siteParameter);
+                String siteHost = siteURL.getHost();
+                // site parameter should have only the host on image search
+                siteParameter = siteHost.toLowerCase();
+                htmlQueryString += siteParameter + " ";
                 query = htmlQueryString;
         }
         if (request.getParameter("type") != null && request.getParameter("type") != "" && !request.getParameter("type").toLowerCase().equals("all")) {
@@ -227,7 +218,7 @@ response.setHeader("Cache-Control","public, max-age=600");
 
     }
   //htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
-  request.setAttribute("htmlQueryString", htmlQueryString);
+  //request.setAttribute("htmlQueryString", htmlQueryString);
 
  /*** Start date ***/
   Calendar dateStart = (Calendar)DATE_START.clone();
@@ -282,11 +273,11 @@ response.setHeader("Cache-Control","public, max-age=600");
   String dateEndStringIonic =  dateEndYear + "-" + dateEndMonth + "-" + dateEndDay;
 
   // Prepare the query values to be presented on the page, preserving the session
-  htmlQueryString = "";
+  //htmlQueryString = "";
 
   if ( request.getParameter("query") != null ) {
         bean.LOG.debug("Received Query input");
-        htmlQueryString = request.getParameter("query").toString();
+        //htmlQueryString = request.getParameter("query").toString();
         String [] inputWords = htmlQueryString.split("\\s+");
         StringBuilder reconstructedInputString = new StringBuilder();
 
@@ -305,15 +296,16 @@ response.setHeader("Cache-Control","public, max-age=600");
             try {
               bean.LOG.debug("Attempting URL "+ word);
               URL myURL = new URL("http://" + word);
-              String[] domainNameParts = myURL.getHost().split("\\.");
-                  String tldString ="."+domainNameParts[domainNameParts.length-1].toUpperCase();
-                  bean.LOG.debug("TLD:"+ tldString);
-                  if(validTlds.contains(tldString)){
-                    word = "site:" + word;
-                  }
-                  else{
-                    bean.LOG.debug("Invalid tld in word:"+ word);
-                  }
+              String host = myURL.getHost();
+              String[] domainNameParts = host.split("\\.");
+              String tldString ="."+domainNameParts[domainNameParts.length-1].toUpperCase();
+              bean.LOG.debug("TLD:"+ tldString);
+              if(validTlds.contains(tldString)){
+                word = "site:" + host.toLowerCase();
+              }
+              else{
+                bean.LOG.debug("Invalid tld in word:"+ word);
+              }
             } catch (MalformedURLException e) {
 
               //NOT a valid URL we will not consider it just add the word without the site:
@@ -322,8 +314,8 @@ response.setHeader("Cache-Control","public, max-age=600");
           reconstructedInputString.append(word).append(" ");
         }
         htmlQueryString = reconstructedInputString.toString().substring(0, reconstructedInputString.toString().length()-1);
-        request.setAttribute("htmlQueryString", htmlQueryString);
   }
+  request.setAttribute("htmlQueryString", htmlQueryString);
 
   int numrows = 25;
   String homeMessageClass= (htmlQueryString.equals("")) ? "" :  "hidden";
