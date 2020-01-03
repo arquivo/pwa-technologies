@@ -23,7 +23,6 @@
                   } else {
                      monthShortNamesArray = ["<fmt:message key='smonth.0'/>",'<fmt:message key='smonth.1'/>','<fmt:message key='smonth.2'/>','<fmt:message key='smonth.3'/>','<fmt:message key='smonth.4'/>','<fmt:message key='smonth.5'/>','<fmt:message key='smonth.6'/>','<fmt:message key='smonth.7'/>','<fmt:message key='smonth.8'/>','<fmt:message key='smonth.9'/>','<fmt:message key='smonth.10'/>','<fmt:message key='smonth.11'/>'];
                   }
-
                   function removeZeroInDay(dayStr){
                     if(dayStr.length == 2 && dayStr.charAt(0) === "0"){
                       return dayStr.charAt(1);
@@ -139,10 +138,18 @@
 
                         <script type="text/javascript">
                           function openDateStart(){
+                            var endDate = $('#dateEnd_top').attr("value");
+                            var endDateTokens = endDate.split('/');
+                            var endDateIonic = endDateTokens[2] + '-' + endDateTokens[1] + '-' + endDateTokens[0];
+                            $('#ionDateStart')[0].max = endDateIonic;
                             $('#ionDateStart').click();
                            return;
                           }
                           function openDateEnd(){
+                            var startDate = $('#dateStart_top').attr("value");
+                            var startDateTokens = startDate.split('/');
+                            var startDateIonic = startDateTokens[2] + '-' + startDateTokens[1] + '-' + startDateTokens[0];
+                            $('#ionDateEnd')[0].min = startDateIonic;
                             $('#ionDateEnd').click();
                            return;
                           }
@@ -162,8 +169,7 @@
                         }
                       </script>
                       <script type="text/javascript">
-                        $('#ionDateStart').on("ionChange", function() {
-                        console.log("changed");
+                      $('#ionDateStart').on("ionChange", function() {
                         var newStartDate = $('#ionDateStart').val();
                         var newStartDateTokens = newStartDate.split('-');
                         var newStartDateFormated =  newStartDateTokens[2].split('T')[0] + "/" + newStartDateTokens[1]+ "/"+ newStartDateTokens[0];
@@ -179,7 +185,6 @@
                         //update dual range
                         dualRange.value = { lower: newStartDateTokens[0], upper: currentDateEnd };
                         $('#dateStart_top').change();
-
                       });
                       $('#ionDateEnd').on("ionChange", function() {
                         var newEndDate = $('#ionDateEnd').val();
@@ -215,7 +220,6 @@
 
                             var newDateStart = dateStartInput.substr(0,6)+document.querySelector('#dual-range').value.lower;
                             var newDateEnd = dateEndInput.substr(0,6)+document.querySelector('#dual-range').value.upper;
-
                             $('#dateStart_top').attr("value", newDateStart);
                             $('#dateStart_top').change();
 

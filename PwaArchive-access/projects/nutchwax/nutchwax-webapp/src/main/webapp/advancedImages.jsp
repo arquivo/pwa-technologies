@@ -228,7 +228,7 @@
 									</ion-select>
 									<label for="size" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='images.size'/></label>
 									<ion-select id="size" name="size" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
-										<ion-select-option value="all" selected><fmt:message key='images.safeOffLabel'/></ion-select-option>
+										<ion-select-option value="all" selected><fmt:message key='images.showAll'/></ion-select-option>
 										<ion-select-option value="sm"><fmt:message key='images.tools.sm'/></ion-select-option>
 										<ion-select-option value="md"><fmt:message key='images.tools.md'/></ion-select-option>
 										<ion-select-option value="lg"><fmt:message key='images.tools.lg'/></ion-select-option>

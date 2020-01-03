@@ -110,7 +110,6 @@
 					<div style="min-height: 135px">
                      <!-- starts history range slider -->
                      <ion-item class="ion-no-padding hidden" id="ionSlider" lines="none">
-
                     <script>
                      document.write('<ion-range ion-padding-start id="dual-range" dual-knobs pin color="dark" min="'+minYear+'" max="'+maxYear+'" step="1">');
                     </script>
@@ -138,10 +137,18 @@
 
                         <script type="text/javascript">
                           function openDateStart(){
+                            var endDate = $('#dateEnd_top').attr("value");
+                            var endDateTokens = endDate.split('/');
+                            var endDateIonic = endDateTokens[2] + '-' + endDateTokens[1] + '-' + endDateTokens[0];
+                            $('#ionDateStart')[0].max = endDateIonic;
                             $('#ionDateStart').click();
                            return;
                           }
                           function openDateEnd(){
+                            var startDate = $('#dateStart_top').attr("value");
+                            var startDateTokens = startDate.split('/');
+                            var startDateIonic = startDateTokens[2] + '-' + startDateTokens[1] + '-' + startDateTokens[0];
+                            $('#ionDateEnd')[0].min = startDateIonic;
                             $('#ionDateEnd').click();
                            return;
                           }
@@ -179,13 +186,10 @@
                         dualRange.value = { lower: newStartDateTokens[0], upper: currentDateEnd };
                         $('#dateStart_top').change();
                       });
-
-
                       $('#ionDateEnd').on("ionChange", function() {
                         var newEndDate = $('#ionDateEnd').val();
                         var newEndDateTokens = newEndDate.split('-');
                         var newEndDateFormated =  newEndDateTokens[2].split('T')[0] + "/" + newEndDateTokens[1]+ "/"+ newEndDateTokens[0];
-
                         /*ionic uses the date format 1996-01-31T00:00:00+01:00  , we need to convert the date to our own date format i.e.  31/01/1996 */
                         $('#dateEnd_top').attr("value", newEndDateFormated);
 
@@ -198,7 +202,6 @@
                         //update dual range
                         dualRange.value = { lower: currentDateStart, upper: newEndDateTokens[0]  };
                         $('#dateEnd_top').change();
-
                       });
 
 
@@ -217,13 +220,11 @@
 
                             var newDateStart = dateStartInput.substr(0,6)+document.querySelector('#dual-range').value.lower;
                             var newDateEnd = dateEndInput.substr(0,6)+document.querySelector('#dual-range').value.upper;
-
                             $('#dateStart_top').attr("value", newDateStart);
                             $('#dateStart_top').change();
 
                             $('#dateEnd_top').attr("value", newDateEnd);
                             $('#dateEnd_top').change();
-
                         }
                       },100)
 
