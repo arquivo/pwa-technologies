@@ -71,8 +71,8 @@
 	<div class="wrap">
 		<div id="header-home">
                                 <div id="logo-home">                               
-                                    <a href="<fmt:message key='home.prizes.winners.href'/>" title="<fmt:message key='home.prizes.winners.title'/>">
-                                        <img src="img/banner-premiarquivo-<%=language%>.png?release=winnersArquivoaward2019" alt="<fmt:message key='home.title'/>" />                             
+                                    <a href="<fmt:message key='home.prizes.href'/>" title="<fmt:message key='home.prizes.title'/>">
+                                        <img src="img/banner-premio2020-arquivo-<%=language%>.jpg?release=winterfell" alt="<fmt:message key='home.title'/>" />                             
                                     </a>    
                                 </div>
                                 <div id="search-home">
