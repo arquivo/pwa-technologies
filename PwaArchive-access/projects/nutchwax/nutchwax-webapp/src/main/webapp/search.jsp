@@ -573,7 +573,6 @@ String[] queryString_splitted=null;
                           /*************************************/
                             queryString=urlQueryParam; //Querying wayback servlet
                             urlQuery=urlQueryParam; //Querying pyWB
-                            urlQuery = StringEscapeUtils.escapeHtml(urlQuery);
                             request.setAttribute("urlQuery", urlQuery);
 
                             /*************************************************/
@@ -940,7 +939,6 @@ function createErrorPage(){
     var endDay = endDate.substring(0,2);
     var endTs = endYear+endMonth+endDay+'000000';
 
-    //var requestURL = "http://p27.arquivo.pt/wayback/-cdx";
     var requestURL = "//<%=collectionsHost%>/" + "cdx";
     var versionsArray = [];
     var versionsURL = [];
