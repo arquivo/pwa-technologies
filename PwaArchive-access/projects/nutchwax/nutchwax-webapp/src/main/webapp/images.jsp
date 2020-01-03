@@ -135,11 +135,12 @@
             try {       
               bean.LOG.debug("Attempting URL "+ word);
               URL myURL = new URL("http://" + word);
-              String[] domainNameParts = myURL.getHost().split("\\.");
+              String host = myURL.getHost();
+              String[] domainNameParts = host.split("\\.");
                   String tldString ="."+domainNameParts[domainNameParts.length-1].toUpperCase();
                   bean.LOG.debug("TLD:"+ tldString);                        
                   if(validTlds.contains(tldString)){
-                    word = "site:" + word;
+                    word = "site:" + host.toLowerCase();
                   } 
                   else{
                     bean.LOG.debug("Invalid tld in word:"+ word);
@@ -179,24 +180,15 @@
                 htmlQueryString += "site:";
                 String siteParameter = request.getParameter("site"); //here split hostname and put it to lowercase
 
-                if (siteParameter.startsWith("http://")) {
-                        URL siteURL = new URL(siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        htmlQueryString += siteParameter.substring("http://".length());
-                } else if (siteParameter.startsWith("https://")) {
-                        URL siteURL = new URL(siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        htmlQueryString += siteParameter.substring("https://".length());
-                } else {
-                        URL siteURL = new URL("http://"+siteParameter);
-                        String siteHost = siteURL.getHost();
-                        siteParameter = siteParameter.replace(siteHost, siteHost.toLowerCase()); // hostname to lowercase
-                        htmlQueryString += siteParameter;
-                }             
-                htmlQueryString += " ";
-        }        
+                if (! siteParameter.contains("://")) {
+                  siteParameter = "http://" + siteParameter;
+                }
+                URL siteURL = new URL(siteParameter);
+                String siteHost = siteURL.getHost();
+                // site parameter should have only the host on image search
+                siteParameter = siteHost.toLowerCase();
+                htmlQueryString += siteParameter + " ";
+        }
     }
   //htmlQueryString= StringEscapeUtils.escapeHtml(htmlQueryString);
   request.setAttribute("htmlQueryString", htmlQueryString);
