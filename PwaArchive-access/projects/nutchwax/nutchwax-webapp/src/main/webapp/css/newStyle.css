@@ -5,8 +5,21 @@ body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
   outline: none;
   background-color: white !important;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /*padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);*/
 }
+
+body#home-search .urlBlock a:visited {
+color:#8b14d5 !important;
+}
+
+
+input:focus{
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+-o-user-select:none; 
+}
+
 .stylish-input-group button {
   border: 0;
   background: transparent;
@@ -231,9 +244,13 @@ ion-item {
   font-size: 20px;
   margin-bottom: 0px;
   padding-top: 0px;
-  margin-top: 0px;
-  color: #1967D2;
+  margin-top: 0px;  
 }
+
+#resultados-lista ul li h2 a {
+  color: #1c75c0;
+}
+
 #resultados-lista > ul > li {
   padding-bottom: 16px;
   border-top: solid 1px lightgrey;
@@ -1064,14 +1081,12 @@ body#homeImages #conteudo-pesquisa-erro{
 #sugerimos-que {
   margin-top: -12px;
 }
-.spell {
-  padding-left: 15px;
-  padding-bottom: 19px;
-  margin-bottom: 20px;
-  display: block;
-  margin-top: -20px;
-  color: #9C27B0;
-  font-size: 1.2em;
+.spell {  
+    color: #9C27B0;
+    font-size: 1.2em;   
+    width: 91%;
+    margin: 0 auto;
+    max-width: 914px;
 }
 #years {
   padding-bottom: 40px;
@@ -1148,13 +1163,13 @@ div#flex-container div {
 }
 div#flex-container div div {
   margin: 0;
-  padding: 0 box-shadow:none !important;
+  padding: 0; box-shadow:none !important;
 }
 div#flex-container h3 {
   margin: 5px 0 16px 10px;
   margin: 5px 0;
   padding: 20px 6px 10px 14px;
-  font-size: 1.6em;
+  font-size: 1.5em;
   font-weight: normal;
   color: black !important;
   line-height: 0.9em !important;
@@ -1192,11 +1207,12 @@ div#flex-container h3 {
   text-shadow: 1px 1px 4px #777777
 }
 #award-pt {
-  background: transparent url(../img/award-winners-2019-pt.jpg) no-repeat center center;
+  background: transparent url(../img/homepage-premio-card-pt.jpg) no-repeat center center;
   background-size: cover;
 }
 #award-en {
-  background: transparent url(../img/award-winners-2019-en.jpg) no-repeat center center;
+  /*background: transparent url(../img/award-winners-2019-en.jpg) no-repeat center center;*/
+  background: transparent url(../img/homepage-premio-card-en.jpg) no-repeat center center;
   background-size: cover;
 }
 #pagesPreserved-pt {
