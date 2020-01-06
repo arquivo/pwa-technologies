@@ -248,7 +248,7 @@
                        <script type="text/javascript">
                          document.write('<a id="PageButton" class="advancedSearch" href="'+pagesHref+'"><span><fmt:message key='home.pages'/></span></a>');
                          document.write('<a id="ImageButton" class="advancedSearch selected-button" href="'+imagesHref+'"><span><fmt:message key='images.images'/></span></a>');
-                         document.write('<a id="advancedSearchButton" class="advancedSearch" href=javascript:void(0)><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
+                         document.write('<a id="advancedSearchButton" class="advancedSearch" href=/advancedImages.jsp<%= request.getQueryString() != null ? "?" + request.getQueryString() : "" %>><span><fmt:message key='topbar.menu.advanced'/></span></a> ');
                        </script>
                      </div>
                 </div>
@@ -268,20 +268,6 @@
               }
           }
 
-          $('#advancedSearchButton').click(function() {
-            var newURL = "";
-            var txtSearch = document.getElementById('txtSearch').value.toString();
-            if(txtSearch !='' && txtSearch != undefined){
-                     newURL = "/advancedImages.jsp?l=<%=language%>&query="+encodeHtmlEntities(txtSearch);
-
-            } else {
-              newURL = "/advancedImages.jsp?l=<%=language%>";
-            }
-
-            console.log('newURL => ' + newURL);
-            window.location.href = newURL;
-
-          }); //end advancedSearchButton click
 
         </script>
                 </form>
