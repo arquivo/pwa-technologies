@@ -12,14 +12,6 @@ body#home-search .urlBlock a:visited {
 color:#8b14d5 !important;
 }
 
-
-input:focus{
--webkit-user-select:none;
--moz-user-select:none;
--ms-user-select:none;
--o-user-select:none; 
-}
-
 .stylish-input-group button {
   border: 0;
   background: transparent;
@@ -54,6 +46,8 @@ input:focus{
   box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.35);
   border-bottom: 1px solid transparent;
   background-color: white !important;
+  display: block;
+  visibility: visible !important;
 }
 /* NEW STYLE: forcing 100% width on the search bar */
 #searchBarBlock {
@@ -74,6 +68,9 @@ input:focus{
   border: none;
   background-color: transparent;
 }
+
+input{ -webkit-user-select:text;}
+
 #ionSlider {
   float: left;  
   width: 100%;
@@ -166,6 +163,7 @@ input:focus{
   font-size: 1.2em;
   font-family: helvetica, arial !important;
 }
+
 ion-item {
   --pin-display: none !important;
 }
@@ -227,11 +225,15 @@ ion-item {
   font-size: 16px !important;
   white-space: normal !important;
 }
-#resultados-lista ul h2 a {
+#resultados-lista ul li a {
   color: #1c75c0 !important;
   font-size: 1.18em !important;
   font-family: 'Roboto', sans-serif;
   line-height: normal;
+}
+
+#resultados-lista ul li a:visited h2 {
+  color: #9c27b0 !important;  
 }
 .url {
   word-wrap: break-word;
@@ -1210,8 +1212,7 @@ div#flex-container h3 {
   background: transparent url(../img/homepage-premio-card-pt.jpg) no-repeat center center;
   background-size: cover;
 }
-#award-en {
-  /*background: transparent url(../img/award-winners-2019-en.jpg) no-repeat center center;*/
+#award-en {  
   background: transparent url(../img/homepage-premio-card-en.jpg) no-repeat center center;
   background-size: cover;
 }
