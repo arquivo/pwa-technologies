@@ -361,7 +361,7 @@ Content = {
                 <input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" onclick="{document.getElementById('txtSearch').setAttribute('value','');}" />
                 
                 <button type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" ><fmt:message key='search.submit'/></button>
-                <a href="advancedImages.jsp?l=<%=language%>" onclick="{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='images.advancedSearch'/>" id="pesquisa-avancada"><fmt:message key='images.advancedSearch'/></a>
+                <a href="advancedImages.jsp<%= request.getQueryString() != null ? "?" + request.getQueryString() : "" %>" title="<fmt:message key='images.advancedSearch'/>" id="pesquisa-avancada"><fmt:message key='images.advancedSearch'/></a>
                 <script type="text/javascript">
                   String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
                       return this.split(needle).join(replacement);
