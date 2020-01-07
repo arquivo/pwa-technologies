@@ -410,7 +410,7 @@ String[] queryString_splitted=null;
                 <input class="search-inputtext" type="text" size="15"  value="<c:out value = "${htmlQueryString}"/>" placeholder="<fmt:message key='search.value'/>" onfocus="this.placeholder = ''" onblur="if(this.placeholder == ''){this.placeholder='<fmt:message key='search.value'/>'}" name="query" id="txtSearch" accesskey="t" />
                 <input type="reset" src="img/search-resetbutton.html" value="" alt="reset" class="search-resetbutton" name="btnReset" id="btnReset" accesskey="r" onclick="{document.getElementById('txtSearch').setAttribute('value','');}" />
                 <input type="submit" value="<fmt:message key='search.submit'/>" alt="<fmt:message key='search.submit'/>" class="search-submit" name="btnSubmit" id="btnSubmit" accesskey="e" />
-                <a href="advanced.jsp?l=<%=language%>" onclick="{document.getElementById('pesquisa-avancada').setAttribute('href',document.getElementById('pesquisa-avancada').getAttribute('href')+'&query='+encodeHtmlEntity(document.getElementById('txtSearch').value))}" title="<fmt:message key='search.advanced'/>" id="pesquisa-avancada"><fmt:message key='search.advanced'/></a>
+                <a href="advanced.jsp<%= request.getQueryString() != null ? "?" + request.getQueryString() : "" %>" onclick="ga('send', 'event', 'Homepage', 'pesquisa-avancada', 'Click on link (Pesquisa avancada)')" title="<fmt:message key='search.advanced'/>" id="pesquisa-avancada"><fmt:message key='search.advanced'/></a>
                 <script type="text/javascript">
                   String.prototype.replaceAll = String.prototype.replaceAll || function(needle, replacement) {
                       return this.split(needle).join(replacement);
