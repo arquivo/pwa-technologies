@@ -826,12 +826,12 @@ input[type=text] {
   border-radius: 0px !important;
 }
 .my-alert-images {
-  border-radius: 0px !important;
-  margin-top: 20px;
+  border-radius: 0px !important; 
 }
 #sugerimos-que .text-bold {
-  padding: 0 5.1%;
-  font-size: 1.3em;
+   padding: 0 5.1%;
+    font-size: 1.3em;
+    margin-top: 21px;
 }
 .suggestions-no-results {
   padding-bottom: 3px;
@@ -1033,7 +1033,7 @@ input:active, input:focus {
   appearance: none !important;
 }
 body#home-search #conteudo-pesquisa-erro {
-  margin-top: -10px !important;
+  margin-top: 0px !important;
 }
 #conteudo-pesquisa-erro {
   margin-left: 9px;
@@ -1041,10 +1041,10 @@ body#home-search #conteudo-pesquisa-erro {
   border: 1px solid #ccc;
   max-width: 955px;
   background: transparent;
-  padding: 20px;
+  padding: 0 0 20px 0;
   border-radius: 5px;
   margin: 0px auto !important;
-  margin-top: 4px !important;
+  margin-top: 6px !important;
 }
 body#home-search #conteudo-pesquisa-erro {
   float: left !important;
@@ -1052,37 +1052,33 @@ body#home-search #conteudo-pesquisa-erro {
 }
 body#homeImages #conteudo-pesquisa-erro {}
 #conteudo-pesquisa-erro .alert-danger {
-  color: #9C27B0;
-  font-size: 1.2em;
-  width: 91%;
-  margin: 0 auto;
-  max-width: 914px;
-  display: block;
-  position: relative;
-  top: -30px;
-  margin-top: 10px;
-  padding-left: -3px !important;
-  left: -23px;
+color: #9C27B0;
+    font-size: 1.2em;
+    width: 100%;   
+    display: block;  
+    padding-left: -3px !important;  
 }
 #sugerimos-que {
   margin-top: -12px;
 }
 body#home-search .spell {
-  color: #9C27B0;
-  font-size: 1.2em;
-  width: 91%;
-  margin: 6px auto 10px auto;
-  max-width: 914px;
-  position: relative;
-  top: -25px;
-  left: -23px;
+    color: #9C27B0;
+    font-size: 1.2em;
+    width: 91%;
+    margin: 6px auto 11px auto;
+    max-width: 914px;
+    position: relative;
+    top: -25px;
+    left: -23px;
+    display: block !important;
 }
 body#homeImages .spell {
-  color: #9C27B0;
-  font-size: 1.2em;
-  width: 91%;
-  margin: 8px auto;
-  max-width: 914px;
+color: #9C27B0;
+    font-size: 1.2em;
+    width: 91%;
+    margin: 9px auto 11px auto;
+    max-width: 914px;
+    display: block !important;
 }
 #years {
   padding-bottom: 40px;
@@ -1374,6 +1370,8 @@ div.call-to-actions span {
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0);
   break-inside: avoid-column;
   -webkit-column-break-inside: avoid;
+  padding: 15px 19px 25px 15px;
+  flex: auto;
 }
 .imageContent:hover {
   cursor: pointer;
@@ -1694,10 +1692,11 @@ a.advancedSearch:hover {
   margin-right: 5px;
   border: 1px solid #ccc;
   background: transparent;
-  padding: 0 20px 20px 20px;
+  padding: 0 0px 20px 0px;
   border-radius: 5px;
   margin-top: 6px;
   width: 97.5%;
+  margin-top: 20px;
 }
 body#homeImages #searchBarButtonsDiv {
   margin-bottom: 8px !important;
@@ -2308,16 +2307,16 @@ h4.modalTitle {
 }
 @media (max-width: 2400px) {
   #photos {
-    -moz-column-count: 5;
-    -webkit-column-count: 5;
-    column-count: 5;
+    -moz-column-count: 9;
+    -webkit-column-count: 9;
+    column-count: 9;
   }
 }
 @media (max-width: 2000px) {
   #photos {
-    -moz-column-count: 5;
-    -webkit-column-count: 5;
-    column-count: 5;
+    -moz-column-count: 9;
+    -webkit-column-count: 9;
+    column-count: 9;
   }
 }
 @media (max-width: 1600px) {
@@ -2369,7 +2368,7 @@ h4.modalTitle {
     margin-right: 0px;
   }
   body#homepage-landing a#ImageButton, body#homepage-landing a#ImageButton:active, body#homepage-landing a#PageButton, body#homepage-landing a#PageButton:active {
-    margin-bottom: /13px;
+    margin-bottom: 13px;
     color: #1c75c0 !important;
     background-color: transparent !important;
     border: 1px solid #1c75c0;
@@ -2908,11 +2907,15 @@ h4.modalTitle {
   }
   body#homeImages #photos {
     width: 100% !important;
-    max-width: 945px !important;
+    /*max-width: 945px !important;*/
     margin: 0 auto 10px auto !important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between
   }
   #photos {
-    max-width: 960px !important;
+    /*max-width: 960px !important;*/
   }
   .pagesNextPrevious a {
     margin-bottom: 5px !important;
