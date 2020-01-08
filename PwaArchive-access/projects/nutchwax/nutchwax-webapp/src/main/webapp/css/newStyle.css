@@ -1069,16 +1069,14 @@ body#home-search .spell {
     max-width: 914px;
     position: relative;
     top: -25px;
-    left: -23px;
-    display: block !important;
-}
+    left: -14px;
+   }
 body#homeImages .spell {
 color: #9C27B0;
     font-size: 1.2em;
     width: 91%;
     margin: 9px auto 11px auto;
-    max-width: 914px;
-    display: block !important;
+    max-width: 914px;   
 }
 #years {
   padding-bottom: 40px;
@@ -1370,8 +1368,8 @@ div.call-to-actions span {
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0);
   break-inside: avoid-column;
   -webkit-column-break-inside: avoid;
-  padding: 15px 19px 25px 15px;
-  flex: auto;
+  padding: 15px 19px 25px 15px;  
+  flex: auto;  
 }
 .imageContent:hover {
   cursor: pointer;
@@ -2402,7 +2400,7 @@ h4.modalTitle {
   }
   div.omitted-results {
     padding: 13px 14px 13px 14px;
-    margin: 10px 15px 15px 15px;
+    margin: 10px 8px 15px 8px;
     color: black;
     background-color: #fffbd6;
     border-radius: 5px;
