@@ -210,7 +210,6 @@
 							<div class="box-content container-fluid ">
 								<div id="label-format-1">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="formatType"><fmt:message key='advanced.format.label'/></label>
-									
 									<ion-select id="formatType" name="format" interface="action-sheet" placeholder="Select One"  class="row  col-xs-10 no-padding-left formatTypeDropdown">
 									<%
 										String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rtf"};
@@ -223,7 +222,7 @@
 										<%}
 
 										for (int i=0; i < mimeList.length; i++) {
-											if (mimeList[i].equals(format)) {
+											if (mimeList[i].trim().equals(format.trim())) {
 												out.print("<ion-select-option value=\""+ mimeList[i] +"\" selected>"+ mimeListDetail[i] +"</ion-select-option");
 											} else {
 												out.print("<ion-select-option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</ion-select-option>");
