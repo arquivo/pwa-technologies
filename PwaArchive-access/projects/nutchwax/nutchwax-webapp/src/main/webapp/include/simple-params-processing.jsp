@@ -10,7 +10,7 @@ StringBuilder not = new StringBuilder();
 int hitsPerPage = request.getParameter("hitsPerPage") != null ? Integer.parseInt(request.getParameter("hitsPerPage")) : 10;
 String format = request.getParameter("format") != null ? request.getParameter("format") : "";
 String imagesSize = request.getParameter("size") != null ? request.getParameter("size") : "";
-String site = "";
+String site = request.getParameter("site") != null ? request.getParameter("site") : "";
 String safeSearch = request.getParameter("safeSearch") != null ? request.getParameter("safeSearch") : "";
 
 String sortType = request.getParameter("sort") != null ? request.getParameter("sort") : null;

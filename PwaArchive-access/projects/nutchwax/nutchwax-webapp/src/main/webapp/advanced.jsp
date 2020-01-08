@@ -155,7 +155,7 @@
 								<div id="label-palavras-1">
 									<label for="adv_and" class="row  col-xs-12 no-padding-left label-padding-top"><fmt:message key='advanced.terms.all'/></label>
 									<div class="withTip ">
-										<input type="text" id="adv_and" class="row  col-xs-10" name="adv_and" value="<%=and.toString()%>" />
+										<input type="text" id="adv_and" class="row  col-xs-10" name="adv_and" value="<%= (request.getParameter("adv_and") != null && !(request.getParameter("adv_and").equals(""))) ? request.getParameter("adv_and") : and.toString()%>" />
 										<div class="row  col-xs-10 no-padding-left">
 											<span class="tip"><fmt:message key='advanced.terms.all.hint'/></span>
 										</div>										
@@ -165,7 +165,7 @@
 								<div id="label-palavras-2">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="adv_phr"><fmt:message key='advanced.terms.phrase'/></label>
 									<div class="withTip">
-										<input type="text" class="row  col-xs-10" id="adv_phr" name="adv_phr" value="<%=phrase.toString()%>" />
+										<input type="text" class="row  col-xs-10" id="adv_phr" name="adv_phr" value="<%= (request.getParameter("adv_phr") != null && !(request.getParameter("adv_phr").equals(""))) ? request.getParameter("adv_phr") : phrase.toString()%>" />
 										<div class="row  col-xs-10 no-padding-left">
 											<span class="tip"><fmt:message key='advanced.terms.phrase.hint'/></span>
 										</div>											
@@ -175,7 +175,7 @@
 								<div id="label-palavras-3">
 									<label class="row  col-xs-12 no-padding-left label-padding-top" for="adv_not"><fmt:message key='advanced.terms.not'/></label>
 									<div class="withTip">
-										<input type="text" class="row  col-xs-10" id="adv_not" name="adv_not" value="<%=not.toString()%>" />
+										<input type="text" class="row  col-xs-10" id="adv_not" name="adv_not" value="<%= (request.getParameter("adv_not") != null && !(request.getParameter("adv_not").equals(""))) ? request.getParameter("adv_not") : not.toString()%>" />
 										<div class="row  col-xs-10 no-padding-left">
 											<span class="tip"><fmt:message key='advanced.terms.not.hint'/></span>
 										</div>	
