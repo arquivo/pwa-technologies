@@ -170,10 +170,10 @@
 							<div id="label-format-1">
 								<label for="size"><fmt:message key='images.size'/></label>
 								<select id="size" name="size" class="advancedImageSearchSelect">
-									<option value="all" selected="selected"><fmt:message key='images.safeOffLabel'/></option>
-									<option value="sm"><fmt:message key='images.tools.sm'/></option>
-									<option value="md"><fmt:message key='images.tools.md'/></option>
-									<option value="lg"><fmt:message key='images.tools.lg'/></option>
+									<option value="all" <%= imagesSize.trim().equals("") || imagesSize.trim().equals("all") ? "selected" : "" %> ><fmt:message key='images.safeOffLabel'/></option>
+									<option value="sm" <%= imagesSize.trim().equals("sm") ? "selected" : "" %> ><fmt:message key='images.tools.sm'/></option>
+									<option value="md" <%= imagesSize.trim().equals("md") ? "selected" : "" %> ><fmt:message key='images.tools.md'/></option>
+									<option value="lg" <%= imagesSize.trim().equals("lg") ? "selected" : "" %> <fmt:message key='images.tools.lg'/></option>
 								</select>
 							</div>
 						</div>							
@@ -181,12 +181,12 @@
 							<div id="label-format-1">
 								<label for="formatType"><fmt:message key='images.type'/></label>
 								<select id="type" name="type" class="advancedImageSearchSelect">
-									<option value="all" selected="selected"><fmt:message key='images.tools.all'/></option>
-									<option value="jpg">Joint Photographic Experts Group (.jpeg)</option>
-									<option value="png">Portable Network Graphics (.png)</option>
-									<option value="gif">Graphics Interchange Format (.gif)</option>
-									<option value="bmp">Bitmap Image File (.bmp)</option>
-									<option value="webp">WEBP (.webp)</option>
+									<option value="all" <%= format.trim().equals("") || format.trim().equals("all") ? "selected" : "" %> ><fmt:message key='images.tools.all'/></option>
+									<option value="jpg" <%= format.trim().equals("jpg") ? "selected" : "" %> >Joint Photographic Experts Group (.jpeg)</option>
+									<option value="png" <%= format.trim().equals("png") ? "selected" : "" %> >Portable Network Graphics (.png)</option>
+									<option value="gif" <%= format.trim().equals("gif") ? "selected" : "" %> >Graphics Interchange Format (.gif)</option>
+									<option value="bmp" <%= format.trim().equals("bmp") ? "selected" : "" %> >Bitmap Image File (.bmp)</option>
+									<option value="webp" <%= format.trim().equals("webp") ? "selected" : "" %> >WEBP (.webp)</option>
 								</select>
 							</div>
 						</div>
@@ -194,8 +194,8 @@
 							<div id="label-format-1">
 								<label for="safeSearch"><fmt:message key='images.safeSearch'/></label>
 								<select id="safeSearch" name="safeSearch" class="advancedImageSearchSelect">
-									<option value="on" selected="selected"><fmt:message key='images.safeOnLabel'/></option>
-									<option value="off"><fmt:message key='images.safeOffLabel'/></option>
+									<option value="on" <%= safeSearch.equals("") || safeSearch.equals("on") ? "selected" : "" %> ><fmt:message key='images.safeOnLabel'/></option>
+									<option value="off" <%= safeSearch.equals("off") ? "selected" : "" %> ><fmt:message key='images.safeOffLabel'/></option>
 								</select>
 							</div>
 						</div>																

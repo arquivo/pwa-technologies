@@ -201,14 +201,14 @@
 									String[] mimeList = {"pdf", "ps", "html", "xls", "ppt", "doc", "rft"};
 									String[] mimeListDetail = {"Adobe PDF (.pdf)", "Adobe PostScript (.ps)", "HTML (.htm, .html)", "Microsoft Excel (.xls)", "Microsoft PowerPoint (.ppt)", "Microsoft Word (.doc)", "Rich Text Format (.rtf)"};
 
-									if (format == null || "all".equals(format)) {%>
+									if (format == null || "all".equals(format.trim())) {%>
 										<option value="all" selected="selected"><fmt:message key='advanced.format.all'/></option>
 									<%} else {%>
 										<option value="all"><fmt:message key='advanced.format.all'/></option>
 									<%}
 
 									for (int i=0; i < mimeList.length; i++) {
-										if (mimeList[i].equals(format)) {
+										if (mimeList[i].equals(format.trim())) {
 											out.print("<option value=\""+ mimeList[i] +"\" selected=\"selected\">"+ mimeListDetail[i] +"</option>");
 										} else {
 											out.print("<option value=\""+ mimeList[i] +"\">"+ mimeListDetail[i] +"</option>");
