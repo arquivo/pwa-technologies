@@ -37,11 +37,11 @@ if (queryString != null) {
 					}
 					not.append( parcel.substring(1));
 				}
-			} else if ( parcel.contains(" ")) {					//check for phrase
+			} else if ( parcel.contains("\"")) {					//check for phrase
 				if (phrase.length() != 0) {
 					phrase.append(" ");
 				}
-				parcel = parcel.replaceAll("&quot;", "");
+				parcel = parcel.replaceAll("\"", "");
 				phrase.append(parcel);
 			} else if (parcel.contains(":")) {				//check for option
 				if (parcel.startsWith("site:")) {
