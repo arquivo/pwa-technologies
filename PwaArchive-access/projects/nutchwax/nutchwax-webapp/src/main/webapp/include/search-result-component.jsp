@@ -29,7 +29,11 @@
 
 %>
 
+
 <div id="resultados">
+
+  <p id="estimated-results">About <%= hitsTotal %> results since <%= dateStart.get(Calendar.YEAR) %></p>
+
   <span  class="search-span"><em><fmt:message key='tabs.pages'/></em></span>
   <script type="text/javascript">
     document.write('<a href="/images.jsp?l=<%=language%>&query='+"<c:out value = "${htmlQueryString}"/>"+'&dateStart='+$('#dateStart_top').attr("value")+'&dateEnd='+$('#dateEnd_top').attr("value")+'" class="image-anchor"><fmt:message key='images.images'/></a>')

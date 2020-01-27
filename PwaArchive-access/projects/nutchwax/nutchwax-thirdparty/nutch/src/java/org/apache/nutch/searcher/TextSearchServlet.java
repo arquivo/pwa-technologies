@@ -619,7 +619,7 @@ public class TextSearchServlet extends HttpServlet {
                 //** end **
 
                 if (totalItems != null)
-                    responseObject.setTotalItems(totalItems);
+                    responseObject.setEstimatedNumberResults(totalItems);
 
                 //if( sortParameter != null && !"".equals( sortParameter ) )
                 //requestParameters.setSort( sortParameter );

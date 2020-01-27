@@ -582,8 +582,22 @@ hr { border-top: 1px solid #cccccc; clear: both; display: block;  padding-bottom
 #conteudo-pesquisa fieldset#date img { padding-left: 5px; vertical-align: middle; }
 #conteudo-pesquisa .withTip { float: left; }
 
+/* Estimated results */
+p#estimated-results {
+    font-family: arial, sans-serif;
+    font-size: 14px;
+    color: #70757a;
+    line-height: 43px;
+    margin-top: 0;
+    position: relative;
+    top: 0;
+    -webkit-transition: all 220ms ease-in-out;
+    padding-bottom: 8px;
+    padding-top: 2px;
+}
+
 /* Resultado pesquisa */
-#conteudo-resultado { max-width: 778px; padding-top: 38px; clear: both; }
+#conteudo-resultado { max-width: 778px; padding-top: 5px; clear: both; }
 
 #conteudo-resultado .spell { font-size: 1.4em; color: #f44800; margin-top: 1em; margin-bottom: 0.5em; }
 
