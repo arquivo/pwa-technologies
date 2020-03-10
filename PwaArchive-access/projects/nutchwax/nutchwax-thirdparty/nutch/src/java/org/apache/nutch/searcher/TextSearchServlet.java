@@ -134,6 +134,7 @@ public class TextSearchServlet extends HttpServlet {
 
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Methods", "GET, HEAD");
+        response.setCharacterEncoding("UTF-8");
 
         Calendar DATE_END = currentDate();
         String dateEndString = FORMAT.format(DATE_END.getTime());
@@ -157,7 +158,6 @@ public class TextSearchServlet extends HttpServlet {
         boolean fulltextQuery = false;
 
         // get parameters from request
-        request.setCharacterEncoding("UTF-8");
         StringBuilder queryString = new StringBuilder();
         String q = request.getParameter("q");
 
