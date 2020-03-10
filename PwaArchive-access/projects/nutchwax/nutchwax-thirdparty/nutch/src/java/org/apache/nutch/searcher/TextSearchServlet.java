@@ -410,7 +410,7 @@ public class TextSearchServlet extends HttpServlet {
             if (prettyOutput)
                 jsonObject = toPrettyFormat(responseObject);
             else {
-                Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+                Gson gson = new GsonBuilder().create();
                 jsonObject = gson.toJson(responseObject);
             }
 
@@ -1299,7 +1299,7 @@ public class TextSearchServlet extends HttpServlet {
      * @return
      */
     private static String toPrettyFormat(TextSearchResponse responseObject) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String prettyJson = gson.toJson(responseObject);
 
         return prettyJson;
