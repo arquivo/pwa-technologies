@@ -20,13 +20,13 @@ package org.apache.nutch.searcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.lucene.search.PwaFunctionsWritable;
 import org.apache.nutch.global.Global;
 import org.apache.nutch.html.Entities;
-import org.apache.nutch.searcher.Item;
 import org.apache.nutch.searcher.Summary.Fragment;
 import org.apache.nutch.util.NutchConfiguration;
 
@@ -41,8 +41,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -78,7 +76,6 @@ public class TextSearchServlet extends HttpServlet {
     private static String collectionsProtocol = null;
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
-    Calendar DATE_END = new GregorianCalendar();
     private static final String noFrame = "/noFrame/replay";
     private static final String screenShotURL = "/screenshot/?url";
     private static final String textExtracted = "/textextracted?m";
@@ -136,14 +133,9 @@ public class TextSearchServlet extends HttpServlet {
         response.addHeader("Access-Control-Allow-Methods", "GET, HEAD");
         response.setCharacterEncoding("UTF-8");
 
-        Calendar DATE_END = currentDate();
-        String dateEndString = FORMAT.format(DATE_END.getTime());
         int start = 0;
         int limit = 50;
         Hits hits;
-        LuceneParser luceneProcessor = new LuceneParser();
-        MessageDigest md = null;
-        String urlQuery = "";
         String queryLang = "";
         String versionHistory = "";
         String metadataParam = "";
@@ -161,17 +153,9 @@ public class TextSearchServlet extends HttpServlet {
         StringBuilder queryString = new StringBuilder();
         String q = request.getParameter("q");
 
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            LOG.error("Failed to get md5 digester: " + e.getMessage());
-        }
-
         if (q == null)
             q = "";
         queryString.append(q);
-
-        urlQuery = URLEncoder.encode(q, "UTF-8"); //Encode query  in utf8
 
         queryLang = request.getParameter("lang"); // the query language
         versionHistory = request.getParameter("versionHistory"); // get versiobnHistory parameter
@@ -238,73 +222,27 @@ public class TextSearchServlet extends HttpServlet {
             dateEnd = null;
         }
 
-        //Set the timestamp based on the input parameters from and to
-        if (dateStart == null && dateEnd != null) {
-            dateStart = "19960101000000"; /*If datestart is not specified set it to 1996*/
-        }
-        if (dateStart != null && dateEnd == null) {
-            Calendar dateEND = currentDate();
-            dateEnd = FORMAT.format(dateEND.getTime());
-        }
-
-        if (dateStart != null && dateEnd != null) { //Logic to accept pages with yyyy and yyyyMMddHHmmss format
-
-            try {
-                DateFormat dOutputFormatTimestamp = new SimpleDateFormat("yyyyMMddHHmmss");
-                dOutputFormatTimestamp.setLenient(false);
-                DateFormat dOutputFormatYear = new SimpleDateFormat("yyyy");
-                dOutputFormatYear.setLenient(false);
-                String dateFinal = "";
-                if (tryParse(dOutputFormatTimestamp, dateStart)) {
-                    Date dStart = dOutputFormatTimestamp.parse(dateStart);
-                    dateStart = dOutputFormatTimestamp.format(dStart.getTime());
-                } else if (tryParse(dOutputFormatYear, dateStart)) {
-                    String extensionStart = "0101000000";
-                    dateStart = dateStart.concat(extensionStart);
-                    if (tryParse(dOutputFormatTimestamp, dateStart)) {
-                        Date dStart = dOutputFormatTimestamp.parse(dateStart);
-                        dateStart = dOutputFormatTimestamp.format(dStart.getTime());
-                    }
-                } else {
-                    dateStart = "19960101000000";
-                }
-
-                if (tryParse(dOutputFormatTimestamp, dateEnd)) {
-                    Date dEnd = dOutputFormatTimestamp.parse(dateEnd);
-                    dateEnd = dOutputFormatTimestamp.format(dEnd.getTime());
-                } else if (tryParse(dOutputFormatYear, dateEnd)) {
-                    String extensionEnd = "1231235959";
-                    dateEnd = dateEnd.concat(extensionEnd);
-                    if (tryParse(dOutputFormatTimestamp, dateEnd)) {
-                        Date dEnd = dOutputFormatTimestamp.parse(dateEnd);
-                        dateEnd = dOutputFormatTimestamp.format(dEnd.getTime());
-                    }
-                } else {
-                    Calendar dateEND = currentDate();
-                    dateEnd = FORMAT.format(dateEND.getTime());
-                }
-
-                if (dateStart == null && dateEnd != null) {
-                    dateStart = "19960101000000";
-                }
-
-                if (dateStart != null && dateEnd == null) {
-                    Calendar dateEND = currentDate();
-                    dateEnd = FORMAT.format(dateEND.getTime());
-                }
-
-                if (dateStart != null && dateEnd != null) {
-                    dateFinal = " date:".concat(dateStart).concat("-").concat(dateEnd);
-                    queryString.append(dateFinal);
-                }
-
-            } catch (ParseException e) {
-                // ignore
-                LOG.error("Parse Exception: ", e);
-            } catch (IndexOutOfBoundsException e) {
-                // ignore
-                LOG.error("Parse Exception: ", e);
+        // if it is a timebounded query
+        if (dateStart != null || dateEnd != null) {
+            if (dateStart == null && dateEnd != null) {
+                dateStart = "19960101000000"; /*If datestart is not specified set it to 1996*/
             }
+            else {
+                if (dateStart.length() != 14) {
+                    dateStart = StringUtils.rightPad(dateStart, 14, "0");
+                }
+            }
+            //Set the timestamp based on the input parameters from and to
+            if (dateStart != null && dateEnd == null) {
+                Date endDate = new Date();
+                dateEnd = FORMAT.format(endDate);
+            }
+            else {
+                if (dateEnd.length() != 14) {
+                    dateEnd = StringUtils.rightPad(dateEnd, 14, "0");
+                }
+            }
+            queryString.append(" date:".concat(dateStart).concat("-").concat(dateEnd));
         }
 
         //Full-text search on specified web site only/multiple
@@ -1295,7 +1233,7 @@ public class TextSearchServlet extends HttpServlet {
 
     /**
      * Convert a JSON string to pretty print version
-     * @param jsonString
+     * @param responseObject
      * @return
      */
     private static String toPrettyFormat(TextSearchResponse responseObject) {
