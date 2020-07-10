@@ -148,7 +148,7 @@ TOKEN : {					  // token regular expressions
                                                   // as whitespace
 // primitive, non-token patterns
 
-| <#WORD_PUNCT: ("_"|"&")>                        // allowed anywhere in words
+| <#WORD_PUNCT: ("_"|"&"|"*")>                        // allowed anywhere in words
 
 | < #LETTER:					  // alphabets
     [
