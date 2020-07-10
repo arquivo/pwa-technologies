@@ -46,11 +46,12 @@ import java.util.*;
 public class NutchAnalysis {
 
   private static final String[] STOP_WORDS = {
-    "a", "and", "are", "as", "at", "be", "but", "by",
+    /* "a", "and", "are", "as", "at", "be", "but", "by",
     "for", "if", "in", "into", "is", "it",
     "no", "not", "of", "on", "or", "s", "such",
     "t", "that", "the", "their", "then", "there", "these",
     "they", "this", "to", "was", "will", "with"
+    */
   };
 
   private static final Set STOP_SET = StopFilter.makeStopSet(STOP_WORDS);

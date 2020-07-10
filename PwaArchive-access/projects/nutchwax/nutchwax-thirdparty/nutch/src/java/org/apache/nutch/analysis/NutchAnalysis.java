@@ -18,11 +18,12 @@ import java.util.*;
 public class NutchAnalysis implements NutchAnalysisConstants {
 
   private static final String[] STOP_WORDS = {
-    "a", "and", "are", "as", "at", "be", "but", "by",
+    /* "a", "and", "are", "as", "at", "be", "but", "by",
     "for", "if", "in", "into", "is", "it",
     "no", "not", "of", "on", "or", "s", "such",
     "t", "that", "the", "their", "then", "there", "these",
     "they", "this", "to", "was", "will", "with"
+    */
   };
 
   private static final Set STOP_SET = StopFilter.makeStopSet(STOP_WORDS);
@@ -491,18 +492,6 @@ public class NutchAnalysis implements NutchAnalysisConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_1() {
-    if (jj_scan_token(WORD)) return true;
-    if (jj_scan_token(COLON)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_8()) {
-    jj_scanpos = xsp;
-    if (jj_3R_9()) return true;
-    }
-    return false;
-  }
-
   private boolean jj_3R_16() {
     Token xsp;
     xsp = jj_scanpos;
@@ -699,6 +688,18 @@ public class NutchAnalysis implements NutchAnalysisConstants {
     }
     }
     }
+    }
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_scan_token(WORD)) return true;
+    if (jj_scan_token(COLON)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_8()) {
+    jj_scanpos = xsp;
+    if (jj_3R_9()) return true;
     }
     return false;
   }
