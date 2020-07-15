@@ -31,7 +31,7 @@ public class SiteQueryFilter extends RawFieldQueryFilter {
   
   public void setConf(Configuration conf) {
     this.conf = conf;
-    setBoost(conf.getFloat("query.site.boost", 0.0f));
+    setBoost(conf.getFloat("query.site.boost", 0.01f));
   }
 
   public Configuration getConf() {
