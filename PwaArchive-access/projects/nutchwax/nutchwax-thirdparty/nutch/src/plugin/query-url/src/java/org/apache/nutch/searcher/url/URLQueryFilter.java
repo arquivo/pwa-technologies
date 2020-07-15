@@ -27,7 +27,7 @@ import org.apache.hadoop.conf.Configuration;
 public class URLQueryFilter extends FieldQueryFilter {
 
   public URLQueryFilter() {
-    super("url");
+    super("url", 0.01f);
   }
 
   public void setConf(Configuration conf) {
