@@ -181,6 +181,7 @@ class LuceneQueryOptimizer {
   public TopDocs optimize(BooleanQuery original, Searcher searcher, int numHits, String sortField, boolean reverse) throws IOException {
     BooleanQuery query = new BooleanQuery(); 
     Filter filter = null;
+    LOG.info("Before Optimizer Query:"+query.toString());
 
     BooleanClause[] clauses = original.getClauses();
     for (int i = 0; i < clauses.length; i++) {
@@ -206,7 +207,7 @@ class LuceneQueryOptimizer {
     }
     
     // print query
-    LOG.info("Query:"+query.toString());   
+    LOG.info("After Optimizer Query:"+query.toString());
     
     // no hit limit
     if (this.maxFulltextMatchesRanked <= 0 && timerThread == null)  {
