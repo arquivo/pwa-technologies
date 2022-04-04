@@ -1,5 +1,16 @@
 # pwa-technologies
 
-The Portuguese Web Archive (PWA) main goal is the preservation and access of web contents that are no longer available online. During the developing of the PWA IR (information retrieval) system we faced limitations in searching speed, quality of results, scalability and usability. To cope with this, we modified the archive-access project (http://archive-access.sourceforge.net/) to support our web archive IR requirements. Nutchwax, Nutch and Wayback’s code were adapted to meet the requirements. Several optimizations were added, such as simplifications in the way document versions are searched and several bottlenecks were resolved. The PWA search engine is a public service at http://archive.pt and a research platform for web archiving. As it predecessor Nutch, it runs over Hadoop clusters for distributed computing following the map-reduce paradigm. Its major features include fast full-text search, URL search, phrase search, faceted search (date, format, site), and sorting by relevance and date. The PWA search engine is highly scalable and its architecture is flexible enough to enable the deployment of different configurations to respond to the different needs. Currently, it serves an archive collection searchable by full-text with billions of documents since 1996.
+# Arquivo.pt web archive: open source and API
 
-Latest release: Francisco
+The main goal of the [Arquivo.pt](http://www.arquivo.pt) web archive is to preserve and provide access to web content that is longer available online on their original websites. Arquivo.pt was formerly known as the Portuguese web-archive (PWA), this the name "pwa-technologies" for our main repository.
+
+The search services provided by Arquivo.pt include full-text and image search, version history listing, advanced search and application programming interfaces (API) that facilitate the development of added-value applications by third parties. 
+
+Our [GitHub account arquivo](https://github.com/arquivo/) aggregates source code and technical documentation about the several components of our service. We are a public service funded by public grants and all the output is publicly available in open-access.
+
+## Learn more:
+* [Overview of all the services and activities of Arquivo.pt](https://github.com/arquivo/pwa-technologies/wiki/Arquivo.pt-in-a-nutshell:-overview-of-services-and-activities)
+* [All our open-source projects](https://github.com/arquivo?tab=repositories)
+* [Arquivo.pt API](http://arquivo.pt/api)
+* [Informative site with general documentation about the Arquivo.pt service](http://sobre.arquivo.pt/en/)
+* [Search pages from the Past now!](http://arquivo.pt/?l=en)
