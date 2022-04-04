@@ -11,6 +11,8 @@ Our [GitHub account arquivo](https://github.com/arquivo/) aggregates source code
 ## Learn more:
 * [Overview of all the services and activities of Arquivo.pt](https://github.com/arquivo/pwa-technologies/wiki/Arquivo.pt-in-a-nutshell:-overview-of-services-and-activities)
 * [All our open-source projects](https://github.com/arquivo?tab=repositories)
+* [Technical documentation (Wiki)](https://github.com/arquivo/pwa-technologies/wiki)
+* [Issues](https://github.com/arquivo/pwa-technologies/issues)
 * [Arquivo.pt API](http://arquivo.pt/api)
 * [Informative site with general documentation about the Arquivo.pt service](http://sobre.arquivo.pt/en/)
 * [Search pages from the Past now!](http://arquivo.pt/?l=en)
