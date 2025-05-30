@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="index-basic1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/plugins/index-basic/index-basic.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="archive-commons-1.12.0">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/src/plugin/index-wax/lib/archive-commons-1.12.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

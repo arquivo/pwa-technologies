@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="scoring-opic">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/scoring-opic/scoring-opic.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

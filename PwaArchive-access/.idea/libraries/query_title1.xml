@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="query-title1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/query-title/query-title.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

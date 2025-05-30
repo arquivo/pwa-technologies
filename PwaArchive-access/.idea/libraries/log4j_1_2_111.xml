@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="log4j-1.2.111">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/plugins/lib-log4j/log4j-1.2.11.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

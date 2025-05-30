@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="protocol-http2">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/protocol-http/protocol-http.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

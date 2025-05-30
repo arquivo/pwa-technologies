@@ -1,39 +1,6 @@
-[submodule "functional-tests"]
-	path = functional-tests
-	url = git@github.com:arquivo/functional-tests.git
-[submodule "Plone"]
-	path = Plone
-	url = git@github.com:arquivo/Plone
-[submodule "PrototypeReplayBarHTML"]
-	path = PrototypeReplayBarHTML
-	url = git@github.com:arquivo/PrototypeReplayBarHTML
-[submodule "scripts"]
-	path = scripts
-	url = git@github.com:arquivo/scripts
-[submodule "TestCollection"]
-	path = TestCollection
-	url = git@github.com:arquivo/TestCollection
-[submodule "PwaLogsMiner"]
-	path = PwaLogsMiner
-	url = git@github.com:arquivo/PwaLogsMiner
 [submodule "PwaLucene"]
 	path = PwaLucene
 	url = git@github.com:arquivo/PwaLucene.git
 [submodule "PwaArchive-access"]
 	path = PwaArchive-access
 	url = git@github.com:arquivo/PwaArchive-access.git
-[submodule "PwaProcessor"]
-	path = PwaProcessor
-	url = git@github.com:arquivo/PwaProcessor.git
-[submodule "pywb-opensearch-cdx"]
-	path = pywb-opensearch-cdx
-	url = git@github.com:arquivo/pywb-opensearch-cdx.git
-[submodule "PrintServer"]
-	path = PrintServer
-	url = git@github.com:arquivo/PrintServer.git
-[submodule "ScreenShotServer"]
-	path = ScreenShotServer
-	url = git@github.com:arquivo/ScreenShotServer.git
-[submodule "Heritrix"]
-	path = Heritrix
-	url = git@github.com:arquivo/Heritrix.git

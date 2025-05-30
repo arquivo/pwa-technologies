@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="je-3.3.74">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/com/sleepycat/je/3.3.74/je-3.3.74.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

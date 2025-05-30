@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="parse-default4">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-plugins/target/wax-plugins/parse-default/parse-default.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

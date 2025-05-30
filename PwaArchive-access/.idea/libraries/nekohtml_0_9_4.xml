@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="nekohtml-0.9.4">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/nutchwax-thirdparty/nutch/build/lib-nekohtml/nekohtml-0.9.4.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

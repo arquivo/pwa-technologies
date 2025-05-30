@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="clustering-carrot25">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/projects/nutchwax/target/classes/nutch/build/clustering-carrot2/clustering-carrot2.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
