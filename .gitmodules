@@ -1,6 +1,0 @@
-[submodule "PwaLucene"]
-	path = PwaLucene
-	url = git@github.com:arquivo/PwaLucene.git
-[submodule "PwaArchive-access"]
-	path = PwaArchive-access
-	url = git@github.com:arquivo/PwaArchive-access.git
