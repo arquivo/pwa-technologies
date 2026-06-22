@@ -1,14 +1,35 @@
 # Arquivo.pt web archive: open source and API
 
-The main goal of the [Arquivo.pt](http://www.arquivo.pt) web archive is to preserve and provide access to web content that is longer available online on their original websites. Arquivo.pt was formerly known as the Portuguese web-archive (PWA), this the name "pwa-technologies" for our main repository.
+[Arquivo.pt](http://www.arquivo.pt) is a public web archive whose main goal is to preserve and provide access to web content that is no longer available online on their original websites. Arquivo.pt was formerly known as the Portuguese Web Archive (PWA), hence the name "pwa-technologies" for this repository.
 
-The search services provided by Arquivo.pt include full-text and image search, version history listing, advanced search and application programming interfaces (API) that facilitate the development of added-value applications by third parties. 
+This repository aims to be the primary central way to register issues. Because some changes are cross repository.
 
-Our [GitHub account arquivo](https://github.com/arquivo/) aggregates source code and technical documentation about the several components of our service. 
+The search services provided by Arquivo.pt include full-text and image search, version history listing, advanced search, and application programming interfaces (APIs) that facilitate the development of added-value applications by third parties.
 
-We are a public service funded by public grants and all the output is publicly available in open-access.
+We are a public service funded by public grants and all output is publicly available in open-access. All open-source contributions are welcome!
+
+## Table of Contents
+
+- [Arquivo.pt web archive: open source and API](#arquivopt-web-archive-open-source-and-api)
+  - [Table of Contents](#table-of-contents)
+  - [Collaborate](#collaborate)
+  - [Learn more](#learn-more)
+  - [About](#about)
+  - [News](#news)
+  - [Help](#help)
+
+## Collaborate
+
+*   [Arquivo.pt Awards](https://arquivo.pt/awards)
+*   [Suggest a website](https://arquivo.pt/suggest)
+*   [Fix broken links](https://arquivo.pt/arquivo404en)
+*   [Memorial](https://arquivo.pt/memorialen)
+*   [Recommendations](https://arquivo.pt/recommendations)
+*   [Archive page now!](https://arquivo.pt/savepagenow)
+*   [Preserve citations](https://arquivo.pt/citationsaver?l=en)
 
 ## Learn more
+
 * [Overview of all the services and activities of Arquivo.pt](https://github.com/arquivo/pwa-technologies/wiki/Arquivo.pt-in-a-nutshell:-overview-of-services-and-activities)
 * [All our open-source projects](https://github.com/arquivo?tab=repositories)
 * [Technical documentation (Wiki)](https://github.com/arquivo/pwa-technologies/wiki)
@@ -31,20 +52,9 @@ We are a public service funded by public grants and all the output is publicly a
 
 *   [Subscribe mailing list](https://arquivo.pt/subscribe)
 *   [Latest news](https://arquivo.pt/news)
-*   [Twitter](https://twitter.com/PT_WebArchive)
 *   [Facebook](https://www.facebook.com/PortugueseWebArchive/)
 *   [Videos](https://arquivo.pt/videos)
 *   [Dissemination material](https://arquivo.pt/disseminate)
-
-## Collaborate
-
-*   [Arquivo.pt Awards](https://arquivo.pt/awards)
-*   [Suggest a website](https://arquivo.pt/suggest)
-*   [Fix broken links](https://arquivo.pt/arquivo404en)
-*   [Memorial](https://arquivo.pt/memorialen)
-*   [Recommendations](https://arquivo.pt/recommendations)
-*   [Archive page now!](https://arquivo.pt/savepagenow)
-*   [Preserve citations](https://arquivo.pt/citationsaver?l=en)
 
 ## Help
 
@@ -55,4 +65,3 @@ We are a public service funded by public grants and all the output is publicly a
 *   [Training courses](https://arquivo.pt/training)
 *   [Catalog](https://arquivo.pt/catalog)
 *   [Contact](https://sobre.arquivo.pt/en/contact/)
-*   
