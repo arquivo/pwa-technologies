@@ -94,7 +94,7 @@ Refs: arquivo/pwa-technologies#123
 
 - The `Refs:` footer is **required** on every commit
 - Use `#XXX` when the issue is in the same repository
-- Use `owner/repo#XXX` when the issue is tracked in a different repository
+- Use `arquivo/repo#XXX` when the issue is tracked in a different repository
 - Multiple issues may be listed: `Refs: #123, arquivo/other-repo#456`
 - If the commit fully resolves the issue, you may use `Closes: #123` instead — GitHub will close the issue automatically on merge
 
