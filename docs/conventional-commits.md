@@ -9,6 +9,7 @@ Arquivo.pt adopts [Conventional Commits](https://www.conventionalcommits.org/) a
 - [Commit message format](#commit-message-format)
 - [Commit types](#commit-types)
 - [Breaking changes](#breaking-changes)
+- [Issue references](#issue-references)
 - [Examples](#examples)
 - [Enforcement](#enforcement)
 - [Automated releases](#automated-releases)
@@ -69,22 +70,63 @@ Both forms are equivalent and will trigger a **major** version bump in automated
 
 ---
 
+## Issue references
+
+Every commit **must** reference the issue that motivates the change. This creates a bidirectional traceability link between code and intent — you can navigate from a commit to its requirements, and from an issue to the code that implements it.
+
+Use a `Refs:` footer with the issue number:
+
+```
+<type>[optional scope]: <subject>
+
+[optional body]
+
+Refs: #123
+```
+
+If the issue lives in a different repository, use the full cross-repo reference:
+
+```
+Refs: arquivo/pwa-technologies#123
+```
+
+**Rules:**
+
+- The `Refs:` footer is **required** on every commit
+- Use `#XXX` when the issue is in the same repository
+- Use `owner/repo#XXX` when the issue is tracked in a different repository
+- Multiple issues may be listed: `Refs: #123, arquivo/other-repo#456`
+- If the commit fully resolves the issue, you may use `Closes: #123` instead — GitHub will close the issue automatically on merge
+
+---
+
 ## Examples
 
 ```
 feat(search): add date-range filter to full-text search
 
+Refs: #42
+
 fix: correct URL encoding for special characters in query string
+
+Refs: arquivo/pwa-technologies#87
 
 docs: update README with Docker Compose setup instructions
 
+Refs: #101
+
 ci: add commitlint workflow to validate PR commit messages
 
+Refs: arquivo/.github#15
+
 chore: upgrade express from 4.18 to 4.19
+
+Refs: #99
 
 feat!: drop support for Node.js 16
 
 BREAKING CHANGE: Node.js 18 or later is now required.
+Refs: #110
 ```
 
 ---
