@@ -14,6 +14,7 @@ We are a public service funded by public grants and all output is publicly avail
   - [Table of Contents](#table-of-contents)
   - [Collaborate](#collaborate)
   - [Learn more](#learn-more)
+  - [Contributing](#contributing)
   - [About](#about)
   - [News](#news)
   - [Help](#help)
@@ -37,6 +38,11 @@ We are a public service funded by public grants and all output is publicly avail
 * [Arquivo.pt API](http://arquivo.pt/api)
 * [Informative site with general documentation about the Arquivo.pt service](http://sobre.arquivo.pt/en/)
 * [Search pages from the Past now!](http://arquivo.pt/?l=en)
+
+## Contributing
+
+*   [Components and labels](docs/component-labels.md) — the component/label taxonomy used to organize issues across repositories
+*   [Conventional Commits at Arquivo.pt](docs/conventional-commits.md) — commit message convention adopted across repositories
 
 ## About
 
